@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.12 $
- * $Date: 2010/11/28 16:06:16 $
- * $Id: CWmClient.cpp,v 1.12 2010/11/28 16:06:16 pafe Exp $
+ * $Revision: 1.15 $
+ * $Date: 2011/05/24 18:55:11 $
+ * $Id: CWmClient.cpp,v 1.15 2011/05/24 18:55:11 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -64,6 +64,7 @@ CWmClient::CWmClient()
 	LatestPurchaseDate=QDate::currentDate();
 	Hashes.wm=this;
 	UpdateChecker=new CUpdateChecker(NULL,this);
+	initLetterReplacements();
 }
 
 CWmClient::~CWmClient()
@@ -1228,16 +1229,19 @@ int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 int CWmClient::PlayFile(ppl6::CString &Filename)
 {
 #ifdef _WIN32
-	ppl6::CString f=Filename;
+	ppl6::CWString f=Filename;
 	// Windows mag keine Vorwärts-Slashes
 	f.Replace("/","\\");
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","PlayFile",__FILE__,__LINE__,"Datei abspielen: %s",(const char*)f);
 	if (conf.MP3Player.IsEmpty()) {
-		ShellExecuteA(NULL,"open", (const char*)f,
-			"","", SW_SHOWNORMAL);
+		ShellExecuteW(NULL,L"open", (const wchar_t*)f,
+			L"",L"", SW_SHOWNORMAL);
 	} else {
-		ShellExecuteA(NULL,"open", (const char*)conf.MP3Player,(const char*)f,
-			"", SW_SHOWNORMAL);
+		f="\""+f;
+		f+="\"";
+		ppl6::CWString prog=conf.MP3Player;
+		ShellExecuteW(NULL,L"open", (const wchar_t*)prog,(const wchar_t*)f,
+			L"", SW_SHOWNORMAL);
 	}
 #else
 	if (conf.MP3Player.IsEmpty()) {
@@ -1457,60 +1461,96 @@ static void SubstituteLetter(ppl6::CWString &Text, const ppl6::CWString &Letters
 }
 */
 
+void CWmClient::initLetterReplacements()
+{
+	addLetterReplacement(ppl6::CWString(L"&+()_,"),L' ');
+	addLetterReplacement(ppl6::CWString(L".:''`"),0);
+	addLetterReplacement(ppl6::CWString(L"°"),L'o');
+	addLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
+	addLetterReplacement(ppl6::CWString(L"þ"),L'b');
+	addLetterReplacement(ppl6::CWString(L"çćĉċč"),L'c');
+	addLetterReplacement(ppl6::CWString(L"ďđ"),L'd');
+	addLetterReplacement(ppl6::CWString(L"èéêëēĕėęě"),L'e');
+	addLetterReplacement(ppl6::CWString(L"ĝğġģ"),L'g');
+	addLetterReplacement(ppl6::CWString(L"ĥħ"),L'h');
+	addLetterReplacement(ppl6::CWString(L"ìíîïĩīĭįı"),L'i');
+	addLetterReplacement(ppl6::CWString(L"ĵ"),L'j');
+	addLetterReplacement(ppl6::CWString(L"ķĸ"),L'k');
+	addLetterReplacement(ppl6::CWString(L"ĺļľŀł"),L'l');
+	addLetterReplacement(ppl6::CWString(L"ñńņňŉŋ"),L'n');
+	addLetterReplacement(ppl6::CWString(L"òóôõöøōŏőœ"),L'o');
+	addLetterReplacement(ppl6::CWString(L"ŕŗř"),L'r');
+	addLetterReplacement(ppl6::CWString(L"śŝşš"),L's');
+	addLetterReplacement(ppl6::CWString(L"ţťŧ"),L't');
+	addLetterReplacement(ppl6::CWString(L"ùúûüũūŭůűų"),L'u');
+	addLetterReplacement(ppl6::CWString(L"ŵ"),L'w');
+	addLetterReplacement(ppl6::CWString(L"ýÿŷ"),L'y');
+	addLetterReplacement(ppl6::CWString(L"źżž"),L'z');
+}
+
+void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
+{
+	letterReplacements[letter]=replacement;
+}
+
+void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
+{
+	for (size_t i=0;i<letters.Size();i++) {
+		addLetterReplacement(letters[i],replacement);
+	}
+}
+
+static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, const ppl6::CWString &replace)
+{
+	wchar_t *buffer=(wchar_t*)s.GetBuffer();
+	if (wcsstr(buffer,search)) {
+		ppl6::CWString ss;
+		ss.Set(search);
+		s.Replace(ss,replace);
+	}
+}
+
 void CWmClient::NormalizeTerm(ppl6::CString &term)
 {
 	ppl6::CWString s=term;
-
+	ppl6::CWString search,replace;
 	s.LCase();
-	s.Replace("&"," ");
-	s.Replace("+"," ");
-	s.Replace("("," ");
-	s.Replace(")"," ");
-	s.Replace("_"," ");
-	s.Replace(".","");
-	s.Replace(":","");
-	s.Replace(","," ");
-	s.Replace(" - "," ");
-	s.Replace("'","");
-	s.Replace("`","");
-	s.Replace("'","");
-	s.Replace("°","o");
-
-	s.Replace("æ","ae");
-	s.Replace("œ","oe");
-	s.ReplaceLetterList(L"àáâãäåāăą",L'a');
-	s.ReplaceLetterList(L"þ",L'b');
-	s.ReplaceLetterList(L"çćĉċč",L'c');
-	s.ReplaceLetterList(L"ďđ",L'd');
-	s.ReplaceLetterList(L"èéêëēĕėęě",L'e');
-	s.ReplaceLetterList(L"ĝğġģ",L'g');
-	s.ReplaceLetterList(L"ĥħ",L'h');
-	s.ReplaceLetterList(L"ìíîïĩīĭįı",L'i');
-	s.ReplaceLetterList(L"ĵ",L'j');
-	s.ReplaceLetterList(L"ķĸ",L'k');
-	s.ReplaceLetterList(L"ĺļľŀł",L'l');
-	s.ReplaceLetterList(L"ñńņňŉŋ",L'n');
-	s.ReplaceLetterList(L"òóôõöøōŏő",L'o');
-	s.ReplaceLetterList(L"ŕŗř",L'r');
-	s.ReplaceLetterList(L"śŝşš",L's');
-	s.ReplaceLetterList(L"ţťŧ",L't');
-	s.ReplaceLetterList(L"ùúûüũūŭůűų",L'u');
-	s.ReplaceLetterList(L"ŵ",L'w');
-	s.ReplaceLetterList(L"ýÿŷ",L'y');
-	s.ReplaceLetterList(L"źżž",L'z');
-
-
-	s.Replace(" versus "," ");
-	s.Replace(" pres. "," ");
-	s.Replace(" presents "," ");
-	s.Replace(" vs. "," ");
-	s.Replace(" ft. "," ");
-	s.Replace(" feat. "," ");
-	s.Replace(" featuring "," ");
-	s.Replace(" und "," ");
-	s.Replace(" and "," ");
-	s.Replace("DJ ","");
+	replace.Set(L" ");
+	wchar_t *buffer;
+	ReplaceIfExists(s,L" versus ",replace);
+	ReplaceIfExists(s,L" pres. ",replace);
+	ReplaceIfExists(s,L" presents ",replace);
+	ReplaceIfExists(s,L" vs. ",replace);
+	ReplaceIfExists(s,L" ft. ",replace);
+	ReplaceIfExists(s,L" feat. ",replace);
+	ReplaceIfExists(s,L" featuring ",replace);
+	ReplaceIfExists(s,L" und ",replace);
+	ReplaceIfExists(s,L" and ",replace);
+	ReplaceIfExists(s,L" - ",replace);
+	ReplaceIfExists(s,L"DJ ",replace);
 	s.Trim();
+	std::map<wchar_t,wchar_t>::iterator it;
+	size_t ss=s.Len();
+	size_t target=0;
+	buffer=(wchar_t*)s.GetBuffer();
+	wchar_t c;
+	for (size_t i=0;i<ss;i++) {
+		c=buffer[i];
+		if (c<L'A' || c>L'z' || (c>L'Z' && c<L'a')) {
+			it=letterReplacements.find(c);
+			if (it!=letterReplacements.end()) {
+				if (it->second!=(wchar_t)0) {
+					buffer[target++]=it->second;
+				}
+			} else {
+				buffer[target++]=c;
+			}
+		} else {
+			buffer[target++]=c;
+		}
+	}
+	//printf ("ss=%zi, target=%zi\n",ss,target);
+	s.Cut(target);
 	term=s;
 }
 

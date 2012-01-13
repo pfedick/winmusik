@@ -1,9 +1,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.7 $
-# $Date: 2010/11/28 15:47:58 $
-# $Id: WinMusik3.pro,v 1.7 2010/11/28 15:47:58 pafe Exp $
+# $Revision: 1.8 $
+# $Date: 2010/12/23 13:09:56 $
+# $Id: WinMusik3.pro,v 1.8 2010/12/23 13:09:56 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -58,7 +58,8 @@ HEADERS += include/coverprinter.h \
     include/playlists.h \
     include/devicelist.h \
     include/wmtoolbutton.h \
-    include/asynchronousMessage.h
+    include/asynchronousMessage.h \
+    include/droparea.h
 SOURCES += src/CTrackList.cpp \ 
 	src/coverprinter.cpp \
 	src/shortcutdialog.cpp \
@@ -98,7 +99,9 @@ SOURCES += src/CTrackList.cpp \
     src/playlists.cpp \
     src/devicelist.cpp \
     src/wmtoolbutton.cpp \
-    src/asynchronousMessage.cpp
+    src/asynchronousMessage.cpp \
+    src/DropArea.cpp
+    
 FORMS += forms/coverprinter.ui \
 	forms/shortcutdialog.ui \
 	forms/updater.ui \

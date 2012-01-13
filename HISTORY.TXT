@@ -2,6 +2,18 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)
+	- Im Suchergebnis wird jetzt die Gesamtlänge aller gefundenen
+	  Tracks angezeigt
+	- Beim Erfassen von Titeln wird beim neuen Track das Tags-Eingabefeld
+	  nicht mehr gelöscht
+	- Bugfix in der Suchfunktion. Bei Angabe mehrerer Suchwörter kam es
+	  vor, dass ein Ergebnis angezeigt wurde, auch wenn eins der Wörter
+	  nicht gefunden wurde
+	- Bugfix: Unter Windows funktioniert Drag- und Drop nun auch bei
+	  Dateien mit Umlauten oder anderen Nicht-US-ASCII-Zeichen.
+	- Aufbau der Suchbäume beim Start um etwa 75% beschleunigt.
+
 Version 3.0.3, Releasedate: 28.11.2010	(CVS-Tag: REL_3_0_3)
 	- Debian-Pakete korrigiert, zwei überflüssige Dateien wurden im
 	  Root-Verzeichnis installiert

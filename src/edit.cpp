@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.22 $
- * $Date: 2010/11/28 16:17:11 $
- * $Id: edit.cpp,v 1.22 2010/11/28 16:17:11 pafe Exp $
+ * $Revision: 1.26 $
+ * $Date: 2010/12/23 14:25:40 $
+ * $Id: edit.cpp,v 1.26 2010/12/23 14:25:40 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -1289,6 +1289,17 @@ bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 		else if (wm->conf.ReadId3Tag==2) ret=CopyFromID3v2Tag(Path,File);
 		else ret=CopyFromFilename(Path);
 		if (ret) {
+			// Version automatisch setzen
+			if (ui.versionId->text()=="*") {
+				if (pmp3.length<5*60) {
+					ui.version->setText("Single");
+					DataVersion *dv=(DataVersion*)wm->VersionStore.Find("Single");
+					if (dv) {
+						Tmp.Setf("%u",dv->Id);
+						ui.versionId->setText(Tmp);
+					}
+				}
+			}
 			// Interpret und Titel
 			ppl6::CString Artist, Title;
 			Artist=ui.artist->text();
@@ -1538,7 +1549,11 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 		}
 		File=wm->MP3Filename(DeviceId,Page,item->Track);
 		if (File.NotEmpty()) {
+#ifdef _WIN32
 			list.append(QUrl::fromLocalFile(File));
+#else
+			list.append(QUrl::fromLocalFile(File));
+#endif
 		}
 	}
     QDrag *drag = new QDrag(this);
@@ -1962,7 +1977,7 @@ void Edit::ClearEditFields()
 	ui.length->clear();
 	ui.bpm->clear();
 	ui.remarks->clear();
-	ui.tags->clear();
+	//ui.tags->clear();
 	ui.album->clear();
 	ui.filename->clear();
 	ui.filesize->clear();

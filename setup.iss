@@ -2,9 +2,9 @@
 ; * This file is part of WinMusik 3.0 by Patrick Fedick
 ; *
 ; * $Author: pafe $
-; * $Revision: 1.4 $
-; * $Date: 2010/10/10 08:10:08 $
-; * $Id: setup.iss,v 1.4 2010/10/10 08:10:08 pafe Exp $
+; * $Revision: 1.5 $
+; * $Date: 2010/12/23 14:25:40 $
+; * $Id: setup.iss,v 1.5 2010/12/23 14:25:40 pafe Exp $
 ; *
 ; *
 ; * Copyright (c) 2009 Patrick Fedick
@@ -30,10 +30,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{611E500A-4D60-400C-9829-0114ADE682D5}}
 AppName=WinMusik
-AppVerName=WinMusik 3.0.1
+AppVerName=WinMusik 3.0.2
 AppCopyright=Copyright (C) 2010 Patrick Fedick
-AppVersion=3.0.1
-VersionInfoVersion=3.0.1
+AppVersion=3.0.2
+VersionInfoVersion=3.0.2
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -42,7 +42,7 @@ DefaultDirName={pf}\Patrick F.-Productions\WinMusik3
 DefaultGroupName=Patrick F.-Productions\WinMusik 3
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=WinMusik-3.0.1-Setup
+OutputBaseFilename=WinMusik-3.0.2-Setup
 SetupIconFile=resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
