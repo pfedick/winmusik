@@ -2,6 +2,19 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.0.1, Releasedate: 16.10.2010	(CVS-Tag: REL_3_0_1)
+	- Update auf PPL 6.4.3
+	- Dokumentation angepasst auf neue Versionen, Download-Links angepasst auf Sourceforge.net
+	- MP3-Pfad kann nun für jeden Datenträger festgelegt werden
+	- Unter der Trackliste im Editor wird nun eine Summenzeile angezeigt,
+	  die bei MP3-File auch die Dateigröße aufführt
+	- Beim Einlesen von ID3-Tags mit F6 wird nun automatisch auch eine Suche
+	  nach dem Titel gestartet. TODO: Das sollte konfigurierbar sein
+	- Drückt man beim Editieren eines Tracks "Strg & F6", wird der Track gelöscht
+	  und wie bei F6 das nächste File eingelesen
+	- Länge von MP3-Dateien mit variabler Bitrate wird nun korrekt berechnet
+	- Unterstützung von MP3-Cover und ID3v2 APIC-Tag
+	- Framegröße bei ID3v2-Tags Version 2.3 wird nun korrekt interpretiert.
 
 Version 3.0.0, Releasedate: 04.12.2009	(CVS-Tag: REL_3_0_0)
 	- Kompletter Rewrite des Programmcodes in C++

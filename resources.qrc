@@ -1,10 +1,10 @@
 <RCC>
-  <qresource prefix="/translation" >
+  <qresource prefix="/translation">
     <file>qt_de.qm</file>
     <file>winmusik_de.qm</file>
     <file>winmusik_en.qm</file>
   </qresource>
-  <qresource prefix="/cover" >
+  <qresource prefix="/cover">
     <file>resources/coverdruck/type-dvd.png</file>
     <file>resources/coverdruck/type-dvd2.png</file>
     <file>resources/coverdruck/coverprinter16.png</file>
@@ -24,7 +24,7 @@
     <file>resources/coverdruck/print-dvd.png</file>
     <file>resources/coverdruck/print-dvd2.png</file>
   </qresource>
-  <qresource prefix="/bewertung" >
+  <qresource prefix="/bewertung">
     <file>resources/sterne-unbewertet.png</file>
     <file>resources/sterne0.png</file>
     <file>resources/sterne1.png</file>
@@ -34,7 +34,7 @@
     <file>resources/sterne5.png</file>
     <file>resources/sterne6.png</file>
   </qresource>
-  <qresource prefix="/channels" >
+  <qresource prefix="/channels">
     <file>resources/sound-dolby-surround.png</file>
     <file>resources/sound-dolbydigital-1.0.png</file>
     <file>resources/sound-dolbydigital-2.0.png</file>
@@ -46,7 +46,7 @@
     <file>resources/sound-stereo.png</file>
     <file>resources/sound-unknown.png</file>
   </qresource>
-  <qresource prefix="/devices16" >
+  <qresource prefix="/devices16">
     <file>resources/tr16x16-0001.png</file>
     <file>resources/tr16x16-0002.png</file>
     <file>resources/tr16x16-0003.png</file>
@@ -57,7 +57,7 @@
     <file>resources/tr16x16-0008.png</file>
     <file>resources/tr16x16-0009.png</file>
   </qresource>
-  <qresource prefix="/devices25" >
+  <qresource prefix="/devices25">
     <file>resources/home.png</file>
     <file>resources/tr25x25-0001.png</file>
     <file>resources/tr25x25-0002.png</file>
@@ -75,7 +75,7 @@
     <file>resources/tr25x25-0014.png</file>
     <file>resources/tr25x25-0015.png</file>
   </qresource>
-  <qresource prefix="/devices48" >
+  <qresource prefix="/devices48">
     <file>resources/tr48x48-0001.png</file>
     <file>resources/tr48x48-0002.png</file>
     <file>resources/tr48x48-0003.png</file>
@@ -92,7 +92,7 @@
     <file>resources/tr48x48-0014.png</file>
     <file>resources/tr48x48-0015.png</file>
   </qresource>
-  <qresource prefix="/fkeys" >
+  <qresource prefix="/fkeys">
     <file>resources/fkeys/f-key-2009.png</file>
     <file>resources/fkeys/f-key-0000.png</file>
     <file>resources/fkeys/f-key-0001.png</file>
@@ -125,7 +125,9 @@
     <file>resources/fkeys/f-key-2006.png</file>
     <file>resources/fkeys/f-key-3005.png</file>
   </qresource>
-  <qresource prefix="/icons" >
+  <qresource prefix="/icons">
+    <file>resources/cover16.png</file>
+    <file>resources/server.png</file>
     <file>resources/harddisk.png</file>
     <file>resources/harddisk2.png</file>
     <file>resources/devices.png</file>
@@ -165,7 +167,7 @@
     <file>resources/viewmag.png</file>
     <file>resources/printer16.png</file>
   </qresource>
-  <qresource prefix="/other" >
+  <qresource prefix="/other">
     <file>resources/pfp-logo-48x25.png</file>
     <file>resources/pfp-logo.png</file>
     <file>resources/aboutbg.png</file>
@@ -174,7 +176,7 @@
     <file>resources/setup.bmp</file>
     <file>resources/splashscreen.png</file>
   </qresource>
-  <qresource prefix="/quality" >
+  <qresource prefix="/quality">
     <file>resources/quali-1.png</file>
     <file>resources/quali-2.png</file>
     <file>resources/quali-3.png</file>
