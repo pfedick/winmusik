@@ -1,0 +1,66 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wm20", "wm20.vcproj", "{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}"
+	ProjectSection(ProjectDependencies) = postProject
+		{444AB0EF-5091-437D-A63B-91FC0C626645} = {444AB0EF-5091-437D-A63B-91FC0C626645}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wmtest", "..\wmtest\wmtest.vcproj", "{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mp3test", "..\mp3test\mp3test.vcproj", "{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ppl6", "..\..\..\ppl\ppl6\ppl6-vc71.vcproj", "{444AB0EF-5091-437D-A63B-91FC0C626645}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ppl6 - Test - CpplMutex", "..\..\..\ppl\ppl6-test\CpplMutex\CpplMutex.vcproj", "{4C73F51F-EA69-4E06-81AC-334F6358D011}"
+	ProjectSection(ProjectDependencies) = postProject
+		{444AB0EF-5091-437D-A63B-91FC0C626645} = {444AB0EF-5091-437D-A63B-91FC0C626645}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug-NoLibs = Debug-NoLibs
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Debug.ActiveCfg = Debug|Win32
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Debug.Build.0 = Debug|Win32
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Debug-NoLibs.ActiveCfg = Debug|Win32
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Debug-NoLibs.Build.0 = Debug|Win32
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Release.ActiveCfg = Release|Win32
+		{6EC76A28-6C5B-4621-A9FC-2EC601E5DA93}.Release.Build.0 = Release|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Debug.ActiveCfg = Debug|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Debug.Build.0 = Debug|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Debug-NoLibs.ActiveCfg = Debug|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Debug-NoLibs.Build.0 = Debug|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Release.ActiveCfg = Release|Win32
+		{278CA0C6-14D9-46AA-BB64-D7DAFA824D06}.Release.Build.0 = Release|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Debug.ActiveCfg = Debug|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Debug.Build.0 = Debug|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Debug-NoLibs.ActiveCfg = Debug|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Debug-NoLibs.Build.0 = Debug|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Release.ActiveCfg = Release|Win32
+		{C9822B3C-913F-46C9-A9DD-7F743AA7AAEF}.Release.Build.0 = Release|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Debug.ActiveCfg = Debug|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Debug.Build.0 = Debug|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Debug-NoLibs.ActiveCfg = Debug-NoLibs|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Debug-NoLibs.Build.0 = Debug-NoLibs|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Release.ActiveCfg = Release|Win32
+		{444AB0EF-5091-437D-A63B-91FC0C626645}.Release.Build.0 = Release|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Debug.ActiveCfg = Debug|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Debug.Build.0 = Debug|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Debug-NoLibs.ActiveCfg = Debug|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Debug-NoLibs.Build.0 = Debug|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Release.ActiveCfg = Release|Win32
+		{4C73F51F-EA69-4E06-81AC-334F6358D011}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
