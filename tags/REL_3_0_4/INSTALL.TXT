@@ -1,0 +1,181 @@
+WinMusik 3 - Installation
+=========================
+
+Die nachfolgende Anleitung beschreibt, wie WinMusik unter Unix kompiliert
+wird.
+
+
+Voraussetzungen
+===============
+
+Folgende Pakete oder Bibliotheken werden zum Kompilieren benötigt:
+	- GCC Version 3 oder Version 4
+	- QT Version 4.5.0 oder höher
+	- zlib
+	- bzip2
+	- pcre
+	- openssl
+	- libcurl
+	- iconv (nur wenn Daten von WinMusik 2 importiert werden sollen)
+	- PPL 6.4.0 oder höher (siehe nächstes Kapitel)
+
+Bis auf PPL können alle Pakete auf dem üblichen Weg installiert werden. Es
+muss jedoch darauf geachtet werden, dass die Developer-Pakete ebenfalls
+installiert werden. Unter Debian oder Ubuntu sieht das dann beispielsweise
+so aus:
+
+	apt-get install libqt4-dev
+	apt-get install libpcre3-dev
+	apt-get install libcurl4-openssl-dev
+	...
+
+
+Installation von PPL
+====================
+
+PPL steht für "Patrick's Programming Library" und ist eine Sammlung nützlicher
+Funktionen und Klassen für C++-Anwendungen, geschrieben von Patrick Fedick.
+Sie beinhaltet Funktionen aus verschiedenen Bereichen, wie Datei- und
+Verzeichniss-Zugriff, Speicherverwaltung, Strings, Trees, Multithreading und
+vieles mehr. Der Quellcode steht unter einer BSD-Lizenz, läßt sich also
+problemlos auch in closed Source-Projekten verwenden.
+
+WinMusik verwendet die PPL-Library neben Qt als Basis, daher muss sie zuerst
+installiert werden. Der Quellcode ist unter folgender URL zu finden:
+
+	http://www.pfp.de/ppl/
+	
+bzw. bei Sourceforge:
+
+	https://sourceforge.net/projects/pplib
+
+WinMusik ist meist an eine bestimmte Version der PPL-Library gebunden. Diese
+Version benötigt Version 6.4.0 oder höher. Laden Sie daher folgende Datei
+herunter: 
+
+	https://sourceforge.net/projects/pplib/files/ppl-6.4.0.tar.bz2/download
+
+Die Datei ist mit bzip2 gepackt, das heißt sie benötigen entweder bzip2
+oder ein "Tar", was bzip2 unterstützt (zum Beispiel gtar von GNU). Dies ist
+gewöhnlich am Paremeter "-j" erkennbar:
+
+	tar -xjf ppl-6.4.0.tar.bz2
+	
+oder
+
+	bunzip2 ppl-6.4.0.tar.bz2
+	tar -xf ppl-6.4.0.tar
+
+Beim Auspacken wird automatisch ein Unterverzeichnis mit dem Namen
+"ppl-6.4.0" erstellt.
+
+Die Library wird mit einem Autoconf configure-Script ausgeliefert, in dem
+alle optionalen Features ausgewählt werden können. Um eine Basisversion zu
+erhalten reicht oftmals ein einfaches configure aus:
+
+	./configure
+
+Das Configure untersucht das System und setzt entsprechende Defines für
+den Kompiler. Optionale Features werden zum Teil automatisch eingebunden,
+wenn sie gefunden werden. Am Ende gibt das configure-Script eine Zusammen-
+fassung aus:
+
+****************************************************************************** 
+** Configuration summary for ppl Version 6.4.0 
+** Target: freebsd7.2        CPU: i386 
+** 
+** Byteorder: LITTLE ENDIAN 
+**   Size of char         1     Size of float        4 
+**   Size of short        2     Size of double       8 
+**   Size of int          4     Size of void*        4 
+**   Size of long         4     Size of wchar_t      4 
+**   Size of long long    8 
+**   Size of size_t       4 
+****************************************************************************** 
+** Supported Libraries:       		Databases: 
+**   ZLIB library:         yes		  MySQL:                yes 
+**   BZIP2 library:        yes		  Postgres:             no 
+**   PNG library:          yes		  Sybase Open Client:   no 
+**   JPEG library:         yes 
+**   Freetype 2.x library: yes		Nasm (x86 assembler): yes 
+**   SDL library:          yes 
+**   Lame library:         yes 
+**   Libmad library:       yes 
+**   Curl library:         yes 
+**   OpenSSL:              yes		Threads: 
+**   PCRE:                 yes		  pthreads:             yes 
+**   ICONV:                yes 
+**   MCrypt library:       yes 
+**   MHash:                yes 
+******************************************************************************
+
+Hier sollte mindestens in folgenden Zeilen ein "yes" stehen:
+
+	- ZLIB library
+	- BZIP2 library
+	- Curl library
+	- OpenSSL
+	- PCRE
+	
+Falls Daten von WinMusik 2 importiert werden sollen, wird auch "ICONV"
+benötigt. Alle weiteren Bibliotheken sind optional.
+
+Wenn eine der benötigten Libraries zwar installiert aber nicht gefunden wurde,
+kann deren Pfad über einen Parameter beim Aufruf des configure-Scripts
+angegeben werden. Beispiel:
+
+	./configure --with-pcre=/usr/local
+
+Alle möglichen Paremeter werden bei Aufruf von "./configure --help" angezeigt.
+
+Nach dem Configure kann die Library kompiliert und installiert werden:
+
+	make
+	make install
+
+Für das "make install" sind ggfs. Root-Rechte erforderlich.
+
+
+
+Installation von WinMusik
+=========================
+
+Der Quellcode von WinMusik ist unter folgender URL zu finden:
+
+	http://www.winmusik.de/
+	
+bzw. bei Sourceforge:
+
+	https://sourceforge.net/projects/winmusik
+
+Laden sie die gewünschte Version herunter und packen Sie sie aus. Wie auch PPL
+ist der Quellcode mit bzip2 gepackt:
+
+	tar -xjf WinMusik-3.0.1.tar.bz2
+	
+oder
+
+	bunzip2 WinMusik-3.0.1.tar.bz2
+	tar -xf WinMusik-3.0.1.tar
+
+Beim Auspacken wird automatisch ein Unterverzeichnis mit dem Namen
+"WinMusik-3.0.1" erstellt.
+
+Anders als bei der PPL-Library gibt es hier kein Configure sondern nur ein
+Qt-Project-File. Dieses verwendet zum Auffinden der PPL-Library das Script
+"ppl6-config", daher muss dieses im Suchpfad zu finden sein.
+
+	qmake
+	make release
+
+Auf einigen Systemen gibt es Parallel-Installationen von Qt Version 3 und
+Version 4. Bitte achten Sie darauf, dass Sie "qmake" von Qt4 verwenden!
+Manchmal heisst das Programm auch "qmake-qt4". Nach Eingabe der zweiten Zeile
+sollte ein neues Verzeichnis "release" angelegt werden, in dem WinMusik
+kompiliert wird. Am Ende sollten Sie dort eine Datei namens "WinMusik3"
+finden. Dies ist die ausführbare Datei. Diese können Sie entweder an Ort und
+Stelle starten, oder dorthin kopieren, wo sich Ihre übrigen Anwendungen
+befinden (z.B. /usr/local/bin).
+
+
+*/
