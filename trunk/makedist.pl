@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.2 $
-# $Date: 2010/05/16 12:40:40 $
-# $Id: makedist.pl,v 1.2 2010/05/16 12:40:40 pafe Exp $
+# $Revision: 1.3 $
+# $Date: 2010/10/16 14:25:09 $
+# $Id: makedist.pl,v 1.3 2010/10/16 14:25:09 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -25,7 +25,7 @@
 #
 
 
-my $CVSTREE="WinMusik/wm30";
+my $CVSTREE="client";
 my $PACKAGE="WinMusik";
 my $TAG=$ARGV[0];
 
@@ -52,7 +52,9 @@ chomp($PWD);
 my $err=`mkdir -p tmp
 cd tmp
 rm -rf $CVSTREE
-cvs -d :ext:patrick\@cvs.pfp.de:/var/cvsroot checkout -r $TAG $CVSTREE 2>&1`;
+
+cvs -z3 -d:pserver:anonymous\@winmusik.cvs.sourceforge.net:/cvsroot/winmusik co -P -r $TAG $CVSTREE `;
+
 
 if ($? != 0 ) {
 	print "ERROR: Version konnte nicht aus dem CVS geholt werden!\n";

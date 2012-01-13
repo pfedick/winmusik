@@ -2,6 +2,12 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.0.2, Releasedate: 17.10.2010	(CVS-Tag: REL_3_0_2)
+	- Lokalisierung überabeitet: Es gab Probleme bei der Übersetzung von
+	  deutschen Default-Texten mit Umlauten, daher wurden alle Default-Text
+	  in Englisch übersetzt.
+	- Englische Doku begonnen
+
 Version 3.0.1, Releasedate: 16.10.2010	(CVS-Tag: REL_3_0_1)
 	- Update auf PPL 6.4.3
 	- Dokumentation angepasst auf neue Versionen, Download-Links angepasst auf Sourceforge.net

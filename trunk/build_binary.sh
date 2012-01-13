@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.6 $
-# $Date: 2010/10/10 16:41:26 $
-# $Id: build_binary.sh,v 1.6 2010/10/10 16:41:26 pafe Exp $
+# $Revision: 1.8 $
+# $Date: 2010/10/17 11:55:53 $
+# $Id: build_binary.sh,v 1.8 2010/10/17 11:55:53 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -27,14 +27,15 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.1"
+VERSION="3.0.2"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
 DISTFILES=$MYPWD
-
+MAKE="make"
+QMAKE="qmake-qt4"
 
 if [ -f /etc/lsb-release ] ; then
 	. /etc/lsb-release
@@ -118,6 +119,7 @@ then
                         --with-libmhash=no \
                         --with-libmcrypt-prefix=no \
                         --without-openssl --with-libcurl
+		MAKE=gmake
 		;;
 	*)
 		./configure --prefix=$BUILD \
@@ -133,11 +135,11 @@ then
 fi
 PATH=$BUILD/bin:$PATH
 
-make -j2 release
+$MAKE -j2 release
 if [ $? -ne 0 ] ; then
 	exit 1
 fi
-make -j2 install
+$MAKE -j2 install
 if [ $? -ne 0 ] ; then
 	exit 1
 fi
@@ -148,13 +150,21 @@ which ppl6-config
 
 cd $BUILD/src/winmusik
 
-echo "INCLUDEPATH += $BUILD/include" >> WinMusik3.pro
-echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik3.pro
-echo "LIBPATH += $BUILD/lib" >> WinMusik3.pro
-echo "LIBPATH += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
+case "$DISTRIB_ID:$DISTRIB_RELEASE" in
+	MINGW32*)
+		echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik3.pro
+		echo "LIBPATH += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
+		;;
+	*)
+		echo "INCLUDEPATH += $BUILD/include" >> WinMusik3.pro
+		echo "LIBPATH += $BUILD/lib" >> WinMusik3.pro
+		;;
+esac
 
-qmake-qt4
-qmake-qt4
+
+
+$QMAKE
+$QMAKE
 if [ $? -ne 0 ] ; then
 	exit 1
 fi

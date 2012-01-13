@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.2 $
-# $Date: 2010/10/10 16:41:26 $
-# $Id: build_source.sh,v 1.2 2010/10/10 16:41:26 pafe Exp $
+# $Revision: 1.4 $
+# $Date: 2010/10/17 11:55:54 $
+# $Id: build_source.sh,v 1.4 2010/10/17 11:55:54 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -27,7 +27,7 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.1"
+VERSION="3.0.2"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
@@ -197,12 +197,13 @@ build_ubuntu() {
 }
 
 build_specfile() {
+	COMMENT=`cat $MYPWD/README_en.TXT| grep -v "^===.*" `
 	cd $WORK
 	(
 	echo "Name:		$NAME"
 	echo "Version:	$VERSION"
 	echo "Release:	1%{?dist}"
-	echo "Summary:	$COMMENT"
+	echo "Summary:	$DESCRIPTION"
 	echo ""
 	echo "Group:		Applications/Office"
 	echo "License:	GPL"

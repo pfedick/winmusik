@@ -3,73 +3,6 @@
 <TS version="2.0" language="de" sourcelanguage="en">
 <defaultcodec>UTF-8</defaultcodec>
 <context>
-    <name></name>
-    <message>
-        <source>close</source>
-        <translation type="obsolete">schließen</translation>
-    </message>
-    <message>
-        <source>new</source>
-        <translation type="obsolete">Neu</translation>
-    </message>
-    <message>
-        <source>back</source>
-        <translation type="obsolete">zurück</translation>
-    </message>
-    <message>
-        <source>master data</source>
-        <translation type="obsolete">Stammdaten</translation>
-    </message>
-    <message>
-        <source>search</source>
-        <translation type="obsolete">Suchen</translation>
-    </message>
-    <message>
-        <source>print</source>
-        <translation type="obsolete">Drucken</translation>
-    </message>
-    <message>
-        <source>save</source>
-        <translation type="obsolete">Speichern</translation>
-    </message>
-    <message>
-        <source>delete</source>
-        <translation type="obsolete">Löschen</translation>
-    </message>
-    <message>
-        <source>insert</source>
-        <translation type="obsolete">Einfügen</translation>
-    </message>
-    <message>
-        <source>first letter</source>
-        <translation type="obsolete">Initialen</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation type="obsolete">Unbekannt</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Version</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="obsolete">Genre</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="obsolete">Label</translation>
-    </message>
-    <message>
-        <source>Recording Source</source>
-        <translation type="obsolete">Aufnahmequelle</translation>
-    </message>
-    <message>
-        <source>Recording Device</source>
-        <translation type="obsolete">Aufnahmegerät</translation>
-    </message>
-</context>
-<context>
     <name>About</name>
     <message>
         <location filename="src/about.cpp" line="36"/>
@@ -159,10 +92,6 @@ Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Prog
         <source>ok</source>
         <translation>ok</translation>
     </message>
-    <message>
-        <source>This program makes use of the following Open Source Libraries:</source>
-        <translation type="obsolete">Dieses Programm verwendet folgende Open Source Bibliotheken:</translation>
-    </message>
 </context>
 <context>
     <name>CUpdateChecker</name>
@@ -198,84 +127,84 @@ Sie arbeiten bereits mit der aktuellsten Version.</translation>
 <context>
     <name>CWmClient</name>
     <message>
-        <location filename="src/CWmClient.cpp" line="323"/>
+        <location filename="src/CWmClient.cpp" line="326"/>
         <source>Could not load the WinMusik configuration!</source>
         <translation>WinMusik Konfiguration konnte nicht geladen werden!</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="326"/>
+        <location filename="src/CWmClient.cpp" line="329"/>
         <source>WinMusik - Error</source>
         <translation>WinMusik - Fehler</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="480"/>
+        <location filename="src/CWmClient.cpp" line="483"/>
         <source>Loading Database...</source>
         <translation>Lade Datenbank...</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="511"/>
+        <location filename="src/CWmClient.cpp" line="514"/>
         <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="513"/>
+        <location filename="src/CWmClient.cpp" line="516"/>
         <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="515"/>
+        <location filename="src/CWmClient.cpp" line="518"/>
         <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="517"/>
+        <location filename="src/CWmClient.cpp" line="520"/>
         <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="519"/>
+        <location filename="src/CWmClient.cpp" line="522"/>
         <source>VHS-Tape</source>
         <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="521"/>
+        <location filename="src/CWmClient.cpp" line="524"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="523"/>
+        <location filename="src/CWmClient.cpp" line="526"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="525"/>
+        <location filename="src/CWmClient.cpp" line="528"/>
         <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="527"/>
+        <location filename="src/CWmClient.cpp" line="530"/>
         <source>Audio DVD</source>
         <translation>Musik DVD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="891"/>
+        <location filename="src/CWmClient.cpp" line="894"/>
         <source>Track: %i</source>
         <translation>Track: %i</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1154"/>
+        <location filename="src/CWmClient.cpp" line="1157"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Achtung</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1155"/>
+        <location filename="src/CWmClient.cpp" line="1158"/>
         <source>There is no MP3 player specified.
 Please go to preferences and open the MP3 page. There you can specify your favorite player.</source>
         <translation>Es ist kein MP3-Player definiert.
 Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können Sie Ihren Lieblingsplayer angeben.</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="278"/>
+        <location filename="src/CWmClient.cpp" line="281"/>
         <source>unknown</source>
         <translation>Unbekannt</translation>
     </message>
@@ -305,64 +234,64 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
         <translation>WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1009"/>
+        <location filename="src/CWmClient.cpp" line="1012"/>
         <source>min</source>
         <comment>Minutes in Tracklisting of Playlist</comment>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1031"/>
+        <location filename="src/CWmClient.cpp" line="1034"/>
         <source>Tracklisting MP3-Medium</source>
         <comment>Subject of Playlist</comment>
         <translation>Trackliste MP3-Tonträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1044"/>
+        <location filename="src/CWmClient.cpp" line="1047"/>
         <source>Playlist created by WinMusik</source>
         <translation>Playlist erstellt mit WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="591"/>
+        <location filename="src/CWmClient.cpp" line="594"/>
         <source>CAS</source>
         <translation>KAS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="593"/>
+        <location filename="src/CWmClient.cpp" line="596"/>
         <source>CD</source>
         <translation>CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="595"/>
+        <location filename="src/CWmClient.cpp" line="598"/>
         <source>DATA</source>
         <translation>DATA</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="597"/>
+        <location filename="src/CWmClient.cpp" line="600"/>
         <source>RECORD</source>
         <translation>PLATTE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="599"/>
+        <location filename="src/CWmClient.cpp" line="602"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="601"/>
+        <location filename="src/CWmClient.cpp" line="604"/>
         <source>OTHER</source>
         <translation>SONST</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="603"/>
+        <location filename="src/CWmClient.cpp" line="606"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="605"/>
+        <location filename="src/CWmClient.cpp" line="608"/>
         <source>TAPE</source>
         <translation>TAPE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="607"/>
+        <location filename="src/CWmClient.cpp" line="610"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
@@ -389,11 +318,6 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
         <location filename="src/Print.cpp" line="395"/>
         <source>Length:</source>
         <translation>Länge:</translation>
-    </message>
-    <message>
-        <source>min.</source>
-        <comment>Shortcut fÃ¼r Minutes on Cover</comment>
-        <translation type="obsolete">Min.</translation>
     </message>
     <message>
         <location filename="src/Print.cpp" line="296"/>
@@ -473,8 +397,8 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
     <name>CoverPrinter</name>
     <message>
         <location filename="src/coverprinter.cpp" line="101"/>
-        <source>Cover auswählen</source>
-        <oldsource>Cover auswÃ¤hlen</oldsource>
+        <source>Select cover</source>
+        <oldsource>Cover auswählen</oldsource>
         <translation>Cover auswählen</translation>
     </message>
     <message>
@@ -568,33 +492,22 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
         <translation>Text:</translation>
     </message>
     <message>
+        <location filename="forms/coverprinter.ui" line="279"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="forms/coverprinter.ui" line="279"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="forms/coverprinter.ui" line="295"/>
-        <source>Font-Größe:</source>
+        <source>Font-Size:</source>
+        <oldsource>Font-Größe:</oldsource>
         <translation>Font-Größe:</translation>
     </message>
     <message>
@@ -744,7 +657,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="forms/coverprinter.ui" line="955"/>
-        <source>Länge:</source>
+        <source>Length:</source>
+        <oldsource>Länge:</oldsource>
         <translation>Länge:</translation>
     </message>
     <message>
@@ -864,10 +778,16 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="src/edit.cpp" line="1190"/>
-        <source>Es sind keine weiteren Titel ohne Index im Verzeichnis
-des Tonträgers vorhanden</source>
+        <source>There are no further titles without an index in the directory of this device</source>
+        <oldsource>Es sind keine weiteren Titel ohne Index im Verzeichnis
+des Tonträgers vorhanden</oldsource>
         <translation>Es sind keine weiteren Titel ohne Index im Verzeichnis
 des Tonträgers vorhanden</translation>
+    </message>
+    <message>
+        <location filename="src/edit.cpp" line="1308"/>
+        <source>Could not create playlists</source>
+        <translation>Playlists konnten nicht erstellt werden</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="1504"/>
@@ -918,14 +838,6 @@ des Tonträgers vorhanden</translation>
         <location filename="src/edit.cpp" line="190"/>
         <source>Label</source>
         <translation>Label</translation>
-    </message>
-    <message>
-        <source>Recording Source</source>
-        <translation type="obsolete">Aufnahmequelle</translation>
-    </message>
-    <message>
-        <source>Recording Device</source>
-        <translation type="obsolete">Aufnahmegerät</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="586"/>
@@ -1031,24 +943,14 @@ des Tonträgers vorhanden</translation>
         <location filename="src/edit.cpp" line="1189"/>
         <location filename="src/edit.cpp" line="1304"/>
         <location filename="src/edit.cpp" line="1509"/>
-        <source>WinMusik: Hinweis</source>
+        <source>WinMusik: Notice</source>
+        <oldsource>WinMusik: Hinweis</oldsource>
         <translation>WinMusik: Hinweis</translation>
-    </message>
-    <message>
-        <source>Es sind keine weiteren Titel ohne Index im Verzeichnis
-des TontrÃ¤gers vorhanden</source>
-        <translation type="obsolete">Es sind keine weiteren Titel ohne Index im Verzeichnis
-des Tonträgers vorhanden</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="1305"/>
         <source>Playlists wurden erfolgreich erstellt</source>
         <translation>Playlists wurden erfolgreich erstellt</translation>
-    </message>
-    <message>
-        <location filename="src/edit.cpp" line="1308"/>
-        <source>Playlists konnten nicht erstellt werden</source>
-        <translation>Playlists konnten nicht erstellt werden</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="2226"/>
@@ -1112,12 +1014,14 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="2324"/>
-        <source>Konnte Titel nicht in TitleStore speichern</source>
+        <source>Could not save Title in TitleStore</source>
+        <oldsource>Konnte Titel nicht in TitleStore speichern</oldsource>
         <translation>Konnte Titel nicht in TitleStore speichern</translation>
     </message>
     <message>
         <location filename="src/edit.cpp" line="2336"/>
-        <source>Konnte Track nicht in TrackList speichern</source>
+        <source>Could not save Track in TrackList</source>
+        <oldsource>Konnte Track nicht in TrackList speichern</oldsource>
         <translation>Konnte Track nicht in TrackList speichern</translation>
     </message>
     <message>
@@ -1137,22 +1041,14 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     <message>
         <location filename="forms/edit.ui" line="71"/>
         <location filename="forms/edit.ui" line="937"/>
-        <source>Länge:</source>
+        <source>Length:</source>
+        <oldsource>Länge:</oldsource>
         <translation>Länge:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="56"/>
         <source>Index:</source>
         <translation>Index:</translation>
-    </message>
-    <message>
-        <source>0:00</source>
-        <translation type="obsolete">0:00</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="113"/>
-        <source>Seite:</source>
-        <translation>Seite:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="120"/>
@@ -1162,32 +1058,29 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Min.</translation>
     </message>
     <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="191"/>
-        <source>Seiten:</source>
-        <translation>Seiten:</translation>
-    </message>
-    <message>
         <location filename="forms/edit.ui" line="220"/>
         <source>Tracks:</source>
         <translation>Tracks:</translation>
     </message>
     <message>
-        <source>Rest:</source>
-        <translation type="obsolete">Rest:</translation>
-    </message>
-    <message>
         <location filename="forms/edit.ui" line="264"/>
-        <location filename="forms/edit.ui" line="825"/>
         <source>Titel:</source>
         <translation>Titel:</translation>
     </message>
     <message>
+        <location filename="forms/edit.ui" line="442"/>
+        <source>Total length:</source>
+        <translation>Gesamtlänge:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="509"/>
+        <source>Filesize:</source>
+        <translation>Dateigröße:</translation>
+    </message>
+    <message>
         <location filename="forms/edit.ui" line="612"/>
-        <source>Titeleingabe</source>
+        <source>Title edit</source>
+        <oldsource>Titeleingabe</oldsource>
         <translation>Titeleingabe</translation>
     </message>
     <message>
@@ -1201,25 +1094,26 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>TitelID:</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="801"/>
-        <source>Interpret:</source>
-        <translation>Interpret:</translation>
-    </message>
-    <message>
         <location filename="forms/edit.ui" line="744"/>
         <location filename="forms/edit.ui" line="849"/>
         <source>Version:</source>
         <translation>Version:</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="385"/>
-        <source>Anzahl Tracks:</source>
-        <translation>Anzahl Tracks:</translation>
+        <location filename="forms/edit.ui" line="113"/>
+        <source>Page:</source>
+        <translation>Seite:</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="442"/>
-        <source>Gesamtlänge:</source>
-        <translation>Gesamtlänge:</translation>
+        <location filename="forms/edit.ui" line="191"/>
+        <source>Pages:</source>
+        <translation>Seiten:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="385"/>
+        <source>Number of Tracks:</source>
+        <oldsource>Anzahl Tracks:</oldsource>
+        <translation>Anzahl Tracks:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="502"/>
@@ -1227,20 +1121,10 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="509"/>
-        <source>Dateigröße:</source>
-        <translation>Dateigröße:</translation>
-    </message>
-    <message>
         <location filename="forms/edit.ui" line="569"/>
-        <location filename="forms/edit.ui" line="1393"/>
+        <location filename="forms/edit.ui" line="1409"/>
         <source>MB</source>
         <translation>MB</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="898"/>
-        <source>Musikart:</source>
-        <translation>Musikart:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="977"/>
@@ -1248,22 +1132,12 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Bpm:</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="1044"/>
-        <source>Erscheinungsjahr:</source>
-        <translation>Erscheinungsjahr:</translation>
-    </message>
-    <message>
         <location filename="forms/edit.ui" line="1061"/>
         <source>yyyy</source>
         <translation>yyyy</translation>
     </message>
     <message>
-        <location filename="forms/edit.ui" line="1078"/>
-        <source>Aufnahmedatum:</source>
-        <translation>Aufnahmedatum:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1085"/>
+        <location filename="forms/edit.ui" line="1098"/>
         <source>dd.MM.yyyy</source>
         <translation>dd.MM.yyyy</translation>
     </message>
@@ -1271,11 +1145,6 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <location filename="forms/edit.ui" line="1139"/>
         <source>Label:</source>
         <translation>Label:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1333"/>
-        <source>Größe:</source>
-        <translation>Größe:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="1488"/>
@@ -1306,21 +1175,6 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <location filename="forms/edit.ui" line="1620"/>
         <source>save</source>
         <translation>speichern</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1659"/>
-        <source>vollständig</source>
-        <translation>vollständig</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1675"/>
-        <source>echter Musiktitel</source>
-        <translation>echter Musiktitel</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1706"/>
-        <source>Ton:</source>
-        <translation>Ton:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="1741"/>
@@ -1354,7 +1208,8 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="1823"/>
-        <source>Qualität:</source>
+        <source>Quality:</source>
+        <oldsource>Qualität:</oldsource>
         <translation>Qualität:</translation>
     </message>
     <message>
@@ -1383,33 +1238,14 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>sehr schlecht</translation>
     </message>
     <message>
+        <location filename="forms/edit.ui" line="1706"/>
+        <source>Sound:</source>
+        <translation>Ton:</translation>
+    </message>
+    <message>
         <location filename="forms/edit.ui" line="1910"/>
-        <source>Bewertung:</source>
+        <source>Rating:</source>
         <translation>Bewertung:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1176"/>
-        <source>Aufnahmequelle:</source>
-        <translation>Aufnahmequelle:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1209"/>
-        <source>Aufnahmegerät:</source>
-        <translation>Aufnahmegerät:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1252"/>
-        <source>Bemerkung:</source>
-        <translation>Bemerkung:</translation>
-    </message>
-    <message>
-        <location filename="forms/edit.ui" line="1282"/>
-        <source>Dateiname:</source>
-        <translation>Dateiname:</translation>
-    </message>
-    <message>
-        <source>Speichern</source>
-        <translation type="obsolete">Speichern</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="2044"/>
@@ -1482,41 +1318,70 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Album:</translation>
     </message>
     <message>
+        <location filename="forms/edit.ui" line="801"/>
+        <source>Artist:</source>
+        <translation>Interpret:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="825"/>
+        <source>Title:</source>
+        <translation>Titel:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="898"/>
+        <source>Genre:</source>
+        <translation>Genre:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1044"/>
+        <source>Year of publication:</source>
+        <translation>Erscheinungsjahr:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1091"/>
+        <source>Recording date:</source>
+        <translation>Aufnahmedatum:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1176"/>
+        <source>Recording source:</source>
+        <translation>Aufnahmequelle:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1209"/>
+        <source>Recording device:</source>
+        <translation>Aufnahmegerät:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1252"/>
+        <source>Remarks:</source>
+        <translation>Bemerkung:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1298"/>
+        <source>Filename:</source>
+        <translation>Dateiname:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1349"/>
+        <source>Size:</source>
+        <translation>Größe:</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1659"/>
+        <source>complete</source>
+        <translation>vollständig</translation>
+    </message>
+    <message>
+        <location filename="forms/edit.ui" line="1675"/>
+        <source>real title</source>
+        <translation>echter Titel</translation>
+    </message>
+    <message>
         <location filename="forms/edit.ui" line="1685"/>
-        <source>reingeredet oder Jingle im Song</source>
+        <source>voiceover or jingle in song</source>
+        <oldsource>reingeredet oder Jingle im Song</oldsource>
         <translation>reingeredet oder Jingle im Song</translation>
-    </message>
-    <message>
-        <source>master data</source>
-        <translation type="obsolete">Stammdaten</translation>
-    </message>
-    <message>
-        <source>Track</source>
-        <translation type="obsolete">Track</translation>
-    </message>
-    <message>
-        <source>Artist - Title</source>
-        <translation type="obsolete">Interpret - Titel</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Version</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="obsolete">Genre</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="obsolete">Länge</translation>
-    </message>
-    <message>
-        <source>06:22</source>
-        <translation type="obsolete">06:22</translation>
-    </message>
-    <message>
-        <source>Record Version:</source>
-        <translation type="obsolete">Datensatz Version:</translation>
     </message>
     <message>
         <location filename="forms/edit.ui" line="1732"/>
@@ -1601,18 +1466,6 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Kaufpreis:</translation>
     </message>
     <message>
-        <source>Purchase date:</source>
-        <translation type="obsolete">Kaufdatum:</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-    <message>
         <location filename="forms/editdevice.ui" line="26"/>
         <source>EditDevice</source>
         <translation>Tonträger editieren</translation>
@@ -1678,57 +1531,54 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>WinMusik</translation>
     </message>
     <message>
-        <location filename="src/firststart.cpp" line="120"/>
-        <source>Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?</source>
-        <translation>Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?</translation>
-    </message>
-    <message>
         <location filename="src/firststart.cpp" line="93"/>
         <location filename="src/firststart.cpp" line="124"/>
         <location filename="src/firststart.cpp" line="137"/>
         <location filename="src/firststart.cpp" line="170"/>
         <location filename="src/firststart.cpp" line="186"/>
-        <source>WinMusik - Fehler!</source>
+        <source>WinMusik - Error!</source>
+        <oldsource>WinMusik - Fehler!</oldsource>
         <translation>WinMusik - Fehler!</translation>
-    </message>
-    <message>
-        <source>Das gewÃ¼nschte Verzeichnis konnte nicht angelegt werden. Entweder ist der Pfad ungÃ¼ltig oder Sie haben keine Zugriffsrechte</source>
-        <translation type="obsolete">Das gewünschte Verzeichnis konnte nicht angelegt werden. Entweder ist der Pfad ungültig oder Sie haben keine Zugriffsrechte</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="90"/>
         <location filename="src/firststart.cpp" line="167"/>
         <location filename="src/firststart.cpp" line="183"/>
-        <source>Konfiguration konnte nicht gespeichert werden!
+        <source>Configuration could not be saved!
 </source>
+        <oldsource>Konfiguration konnte nicht gespeichert werden!
+</oldsource>
         <translation>Konfiguration konnte nicht gespeichert werden!
 </translation>
     </message>
     <message>
+        <location filename="src/firststart.cpp" line="120"/>
+        <source>The specified directory does not exist. Should WinMusik create it?</source>
+        <translation>Das angegebene Verzeichnis existiert nicht. Soll es angelegt werden?</translation>
+    </message>
+    <message>
         <location filename="src/firststart.cpp" line="125"/>
-        <source>Das gewünschte Verzeichnis konnte nicht angelegt werden. Entweder ist der Pfad ungültig oder Sie haben keine Zugriffsrechte</source>
+        <source>Could not create the requested directory. Please check, if the name of the directory is correct and that you have the rights to create it</source>
+        <oldsource>Das gewünschte Verzeichnis konnte nicht angelegt werden. Entweder ist der Pfad ungültig oder Sie haben keine Zugriffsrechte</oldsource>
         <translation>Das gewünschte Verzeichnis konnte nicht angelegt werden. Entweder ist der Pfad ungültig oder Sie haben keine Zugriffsrechte</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="138"/>
-        <source>Der angegebene Pfad enthält bereits Daten von WinMusik 3. Möchten Sie diese verwenden?</source>
+        <source>The selected path already contains a WinMusik 3 database. Do you want to use it?</source>
+        <oldsource>Der angegebene Pfad enthält bereits Daten von WinMusik 3. Möchten Sie diese verwenden?</oldsource>
         <translation>Der angegebene Pfad enthält bereits Daten von WinMusik 3. Möchten Sie diese verwenden?</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="211"/>
-        <source>Fertig</source>
-        <translation>Fertig</translation>
-    </message>
-    <message>
         <location filename="src/firststart.cpp" line="218"/>
         <location filename="src/firststart.cpp" line="220"/>
         <location filename="src/firststart.cpp" line="349"/>
-        <source>fertig</source>
+        <source>finish</source>
         <translation>fertig</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="230"/>
-        <source>weiter</source>
+        <source>next</source>
         <translation>weiter</translation>
     </message>
     <message>
@@ -1738,62 +1588,43 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="246"/>
-        <source>Möchten Sie die Installation wirklich abbrechen?</source>
+        <source>Do you really want to cancel the installation?</source>
+        <oldsource>Möchten Sie die Installation wirklich abbrechen?</oldsource>
         <translation>Möchten Sie die Installation wirklich abbrechen?</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="255"/>
-        <source>Bitte das Verzeichnis mit einer früheren WinMusik-Installation auswählen</source>
+        <source>Please select the directory of a former WinMusik installation</source>
+        <oldsource>Bitte das Verzeichnis mit einer früheren WinMusik-Installation auswählen</oldsource>
         <translation>Bitte das Verzeichnis mit einer früheren WinMusik-Installation auswählen</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="265"/>
-        <source>Bitte das Datenverzeichnis von WinMusik 2.x auswählen</source>
+        <source>Please select the directory of the WinMusik 2 database</source>
+        <oldsource>Bitte das Datenverzeichnis von WinMusik 2.x auswählen</oldsource>
         <translation>Bitte das Datenverzeichnis von WinMusik 2.x auswählen</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="277"/>
-        <source>Bitte das Verzeichnis auswählen, in dem WinMusik seine Daten speichern soll</source>
+        <source>Please select the directory in which WinMusik should save it&apos;s database</source>
+        <oldsource>Bitte das Verzeichnis auswählen, in dem WinMusik seine Daten speichern soll</oldsource>
         <translation>Bitte das Verzeichnis auswählen, in dem WinMusik seine Daten speichern soll</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="309"/>
-        <source>Der angegebene Pfad ist ungültig oder existiert nicht</source>
+        <source>The selected path is invalid or does not exist</source>
         <translation>Der angegebene Pfad ist ungültig oder existiert nicht</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="314"/>
-        <source>Der angegebene Pfad enthält keine gültigen WinMusik-Daten</source>
+        <source>The selected path does not contain any valid WinMusik database</source>
+        <oldsource>Der angegebene Pfad enthält keine gültigen WinMusik-Daten</oldsource>
         <translation>Der angegebene Pfad enthält keine gültigen WinMusik-Daten</translation>
     </message>
     <message>
         <location filename="src/firststart.cpp" line="341"/>
         <source>Import failed</source>
         <translation>Import fehlgeschlagen</translation>
-    </message>
-    <message>
-        <source>MÃ¶chten Sie die Installation wirklich abbrechen?</source>
-        <translation type="obsolete">Möchten Sie die Installation wirklich abbrechen?</translation>
-    </message>
-    <message>
-        <source>Bitte das Verzeichnis mit einer frÃ¼heren WinMusik-Installation auswÃ¤hlen</source>
-        <translation type="obsolete">Bitte das Verzeichnis mit einer früheren WinMusik-Installation auswählen</translation>
-    </message>
-    <message>
-        <source>Bitte das Datenverzeichnis von WinMusik 2.x auswÃ¤hlen</source>
-        <translation type="obsolete">Bitte das Datenverzeichnis von WinMusik 2.x auswählen</translation>
-    </message>
-    <message>
-        <source>Bitte das Verzeichnis auswÃ¤hlen, in dem WinMusik seine Daten speichern soll</source>
-        <translation type="obsolete">Bitte das Verzeichnis auswählen, in dem WinMusik seine Daten speichern soll</translation>
-    </message>
-    <message>
-        <source>Der angegebene Pfad ist ungÃ¼ltig oder existiert nicht</source>
-        <translation type="obsolete">Der angegebene Pfad ist ungültig oder existiert nicht</translation>
-    </message>
-    <message>
-        <source>Der angegebene Pfad enthÃ¤lt keine gÃ¼ltigen WinMusik-Daten</source>
-        <translation type="obsolete">Der angegebene Pfad enthält keine gültigen WinMusik-Daten</translation>
     </message>
 </context>
 <context>
@@ -1805,154 +1636,198 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
         <location filename="forms/firststart.ui" line="148"/>
-        <source>Neuinstallation oder Wiederherstellung?</source>
+        <source>New installation or recovery?</source>
+        <oldsource>Neuinstallation oder Wiederherstellung?</oldsource>
         <translation>Neuinstallation oder Wiederherstellung?</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="210"/>
-        <location filename="forms/firststart.ui" line="318"/>
-        <location filename="forms/firststart.ui" line="423"/>
-        <source>Pfad:</source>
-        <translation>Pfad:</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="259"/>
-        <source>Lokales Datenverzeichnis</source>
-        <translation>Lokales Datenverzeichnis</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="367"/>
-        <location filename="forms/firststart.ui" line="654"/>
-        <source>Daten importieren</source>
-        <translation>Daten importieren</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="462"/>
+        <location filename="forms/firststart.ui" line="461"/>
         <source>Charset:</source>
         <translation>Zeichensatz:</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="531"/>
-        <location filename="forms/firststart.ui" line="580"/>
-        <location filename="forms/firststart.ui" line="1154"/>
-        <source>Konfiguration komplett</source>
-        <translation>Konfiguration komplett</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="627"/>
-        <source>Klicken Sie auf &quot;weiter&quot;, um die Konfigurationsdaten zu Speichern und die Daten von WinMusik Version 2.x zu importieren.</source>
-        <translation>Klicken Sie auf &quot;weiter&quot;, um die Konfigurationsdaten zu Speichern und die Daten von WinMusik Version 2.x zu importieren.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="689"/>
-        <source>Titeldatei</source>
-        <translation>Titeldatei</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="712"/>
-        <source>Kassetten</source>
-        <translation>Kassetten</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="748"/>
-        <source>Träger-Titel</source>
-        <translation>Träger-Titel</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="771"/>
+        <location filename="forms/firststart.ui" line="770"/>
         <source>CDs</source>
         <translation>CDs</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="794"/>
-        <source>Versionen</source>
-        <translation>Versionen</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="817"/>
-        <source>Platten</source>
-        <translation>Platten</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="840"/>
-        <source>Musikarten / Genres</source>
-        <translation>Musikarten / Genres</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="863"/>
+        <location filename="forms/firststart.ui" line="862"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="886"/>
-        <source>Aufnahmequellen</source>
-        <translation>Aufnahmequellen</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="909"/>
-        <source>Daten-CDs</source>
-        <translation>Daten-CDs</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="932"/>
-        <source>Kaufquellen</source>
-        <translation>Kaufquellen</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="955"/>
-        <source>Video-Kassetten</source>
-        <translation>Video-Kassetten</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="978"/>
+        <location filename="forms/firststart.ui" line="977"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="991"/>
-        <source>Tonband</source>
+        <location filename="forms/firststart.ui" line="209"/>
+        <location filename="forms/firststart.ui" line="317"/>
+        <location filename="forms/firststart.ui" line="422"/>
+        <source>Path:</source>
+        <translation>Pfad:</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="258"/>
+        <source>Database directory</source>
+        <translation>Lokales Datenverzeichnis</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="280"/>
+        <source>Please select the directory in which WinMusik should save it&apos;s database.</source>
+        <translation>Bitte geben Sie den Pfad an, in dem WinMusik seine Daten speichern soll.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="366"/>
+        <source>Import data from old version</source>
+        <translation>Daten importieren</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="388"/>
+        <source>If you used WinMusik version 2.x before, you can import it&apos;s database. Please select the directory of the old database, if you want to do that. Click on &quot;next&quot; if you don&apos;t want to import anything.</source>
+        <translation>Falls Sie zuvor mit WinMusik 2.x gearbeitet haben, können Sie dessen Daten importieren. Geben Sie dazu den Pfad des Datenverzeichnisses an. Klicken Sie auf &quot;weiter&quot;, wenn Sie keine Daten importieren möchten.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="505"/>
+        <location filename="forms/firststart.ui" line="601"/>
+        <source>The configuration parameters are complete now. You can change a lot more options in the options dialog after starting WinMusik.</source>
+        <translation>Die Konfigurationsdaten sind nun vollständig. Über die Menüoption &quot;Einstellungen&quot; können Sie weitere Einstellungen vornehmen.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="530"/>
+        <location filename="forms/firststart.ui" line="579"/>
+        <location filename="forms/firststart.ui" line="1153"/>
+        <source>Configuration completed</source>
+        <translation>Konfiguration komplett</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="552"/>
+        <source>Click on &quot;finish&quot; to save the configuration parameters and start WinMusik.</source>
+        <translation>Klicken Sie auf &quot;fertig&quot;, um die Konfigurationsdaten zu Speichern und WinMusik zu starten.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="626"/>
+        <source>Please click on &quot;next&quot; to save your configuration parameters and start importing the WinMusik 2.x database.</source>
+        <translation>Klicken Sie auf &quot;weiter&quot;, um die Konfigurationsdaten zu Speichern und die Daten von WinMusik Version 2.x zu importieren.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="653"/>
+        <source>Import data</source>
+        <translation>Daten importieren</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="688"/>
+        <source>Title database</source>
+        <translation>Titeldatei</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="711"/>
+        <source>Cassettes</source>
+        <translation>Kassetten</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="747"/>
+        <source>Device names</source>
+        <translation>Träger-Titel</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="793"/>
+        <source>Versions</source>
+        <translation>Versionen</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="816"/>
+        <source>Records</source>
+        <translation>Platten</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="839"/>
+        <source>Music genres</source>
+        <translation>Musik Genres</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="885"/>
+        <source>Recording sources</source>
+        <translation>Aufnahmequellen</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="908"/>
+        <source>Data CDs</source>
+        <translation>Daten CDs</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="931"/>
+        <source>Purchase sources</source>
+        <translation>Kaufquellen</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="954"/>
+        <source>Video tapes</source>
+        <translation>Video-Kassetten</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="990"/>
+        <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1014"/>
-        <source>Sonstige</source>
-        <translation>Sonstige</translation>
+        <location filename="forms/firststart.ui" line="1013"/>
+        <source>Other</source>
+        <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1050"/>
-        <source>Aufnahmegeräte</source>
-        <translation>Aufnahmegeräte</translation>
+        <location filename="forms/firststart.ui" line="1049"/>
+        <source>Record lables</source>
+        <translation>Platten Labels</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1079"/>
+        <location filename="forms/firststart.ui" line="1078"/>
         <source>Current:</source>
         <translation>Aktuell:</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1086"/>
+        <location filename="forms/firststart.ui" line="1085"/>
         <source>Total:</source>
         <translation>Gesamt:</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1233"/>
+        <location filename="forms/firststart.ui" line="1128"/>
+        <source>The configuration parameters of the former WinMusik installation will be used. Click on &quot;finish&quot; to start WinMusik now.</source>
+        <translation>Die Daten der früheren WinMusik-Installation werden verwendet. Bitte klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="1177"/>
+        <source>Import completed</source>
+        <translation>Import komplett</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="1199"/>
+        <source>The WinMusik 2.x database has been imported completely. Please click on &quot;finish&quot; to start WinMusik now.</source>
+        <translation>Die Daten von WinMusik 2 sind nun vollständig importiert. Klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</translation>
+    </message>
+    <message>
+        <location filename="forms/firststart.ui" line="1232"/>
         <source>back</source>
         <translation>zurück</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1266"/>
+        <location filename="forms/firststart.ui" line="1265"/>
         <source>next</source>
         <translation>weiter</translation>
     </message>
     <message>
-        <location filename="forms/firststart.ui" line="1299"/>
+        <location filename="forms/firststart.ui" line="1298"/>
         <source>cancel</source>
         <translation>abbrechen</translation>
     </message>
     <message>
         <location filename="forms/firststart.ui" line="91"/>
-        <source>Dies ist das erste mal, dass Sie WinMusik gestartet haben. Der Setup-Assistent wird Ihnen helfen das Programm nach Ihren Bedürfnissen einzurichten. Alle Einstellungen können Sie auch später noch über das Setup-Menü anpassen.
+        <source>This is the first time you started WinMusik. The setup assistant will help you to configure the application after your requirements. All preferences can be changed afterwards within the setup menu.
 
-Klicken Sie auf &quot;weiter&quot; um fortzufahren.</source>
+Please click &quot;next&quot; to continue.</source>
+        <oldsource>Dies ist das erste mal, dass Sie WinMusik gestartet haben. Der Setup-Assistent wird Ihnen helfen das Programm nach Ihren Bedürfnissen einzurichten. Alle Einstellungen können Sie auch später noch über das Setup-Menü anpassen.
+
+Klicken Sie auf &quot;weiter&quot; um fortzufahren.</oldsource>
         <translation>Dies ist das erste mal, dass Sie WinMusik gestartet haben. Der Setup-Assistent wird Ihnen helfen das Programm nach Ihren Bedürfnissen einzurichten. Alle Einstellungen können Sie auch später noch über das Setup-Menü anpassen.
 
 Klicken Sie auf &quot;weiter&quot; um fortzufahren.</translation>
@@ -1964,54 +1839,17 @@ Klicken Sie auf &quot;weiter&quot; um fortzufahren.</translation>
     </message>
     <message>
         <location filename="forms/firststart.ui" line="170"/>
-        <source>Falls WinMusik 3.x bereits zuvor auf Ihrem Rechner installiert war, können Sie die alten Daten übernehmen. Geben Sie dazu einfach das Datenverzeichnis der alten Installation an, dann werden sämtliche Einstellungen und Daten übernommen.
+        <source>If WinMusik 3.x was installed previously on your computer, you can use the old database. If you want to do that, please select the database directory of the old installation. All options and data will be reused.
+
+If this should be a new installation, simply click on &quot;next&quot;.</source>
+        <oldsource>Falls WinMusik 3.x bereits zuvor auf Ihrem Rechner installiert war, können Sie die alten Daten übernehmen. Geben Sie dazu einfach das Datenverzeichnis der alten Installation an, dann werden sämtliche Einstellungen und Daten übernommen.
 
 Handelt es sich um eine Neuinstallation, klicken Sie einfach auf &quot;weiter&quot;.
-</source>
+</oldsource>
         <translation>Falls WinMusik 3.x bereits zuvor auf Ihrem Rechner installiert war, können Sie die alten Daten übernehmen. Geben Sie dazu einfach das Datenverzeichnis der alten Installation an, dann werden sämtliche Einstellungen und Daten übernommen.
 
 Handelt es sich um eine Neuinstallation, klicken Sie einfach auf &quot;weiter&quot;.
 </translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="389"/>
-        <source>Falls Sie zuvor mit WinMusik 2.x gearbeitet haben, können Sie dessen Daten importieren. Geben Sie dazu den Pfad des Datenverzeichnisses an. Klicken Sie auf &quot;weiter&quot;, wenn Sie keine Daten importieren möchten.</source>
-        <translation>Falls Sie zuvor mit WinMusik 2.x gearbeitet haben, können Sie dessen Daten importieren. Geben Sie dazu den Pfad des Datenverzeichnisses an. Klicken Sie auf &quot;weiter&quot;, wenn Sie keine Daten importieren möchten.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="506"/>
-        <location filename="forms/firststart.ui" line="602"/>
-        <source>Die Konfigurationsdaten sind nun vollständig. Über die Menüoption &quot;Einstellungen&quot; können Sie weitere Einstellungen vornehmen.</source>
-        <translation>Die Konfigurationsdaten sind nun vollständig. Über die Menüoption &quot;Einstellungen&quot; können Sie weitere Einstellungen vornehmen.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="553"/>
-        <source>Klicken Sie auf &quot;fertig&quot;, um die Konfigurationsdaten zu Speichern und WinMusik zu starten.</source>
-        <translation>Klicken Sie auf &quot;fertig&quot;, um die Konfigurationsdaten zu Speichern und WinMusik zu starten.</translation>
-    </message>
-    <message>
-        <source>Klicken Sie auf &quot;fertig&quot;, um die Konfigurationsdaten zu Speichern und die Daten von WinMusik Version 2.x zu importieren.</source>
-        <translation type="obsolete">Klicken Sie auf &quot;fertig&quot;, um die Konfigurationsdaten zu Speichern und die Daten von WinMusik Version 2.x zu importieren.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="1178"/>
-        <source>Import komplett</source>
-        <translation>Import komplett</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="1129"/>
-        <source>Die Daten der früheren WinMusik-Installation werden verwendet. Bitte klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</source>
-        <translation>Die Daten der früheren WinMusik-Installation werden verwendet. Bitte klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="1200"/>
-        <source>Die Daten von WinMusik 2 sind nun vollständig importiert. Klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</source>
-        <translation>Die Daten von WinMusik 2 sind nun vollständig importiert. Klicken Sie auf &quot;fertig&quot;, um WinMusik zu starten.</translation>
-    </message>
-    <message>
-        <location filename="forms/firststart.ui" line="281"/>
-        <source>Bitte geben Sie den Pfad an, in dem WinMusik seine Daten speichern soll.</source>
-        <translation>Bitte geben Sie den Pfad an, in dem WinMusik seine Daten speichern soll.</translation>
     </message>
 </context>
 <context>
@@ -2033,12 +1871,13 @@ Handelt es sich um eine Neuinstallation, klicken Sie einfach auf &quot;weiter&qu
     </message>
     <message>
         <location filename="forms/langselect.ui" line="73"/>
-        <source>Bitte wählen Sie die gewünschte Sprache aus.
-Please select your prefered language.</source>
-        <translation></translation>
+        <source>Please select your prefered language.</source>
+        <oldsource>Bitte wählen Sie die gewünschte Sprache aus.
+Please select your prefered language.</oldsource>
+        <translation>Bitte wählen Sie die gewünschte Sprache aus.</translation>
     </message>
     <message>
-        <location filename="forms/langselect.ui" line="109"/>
+        <location filename="forms/langselect.ui" line="108"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -2054,72 +1893,72 @@ Please select your prefered language.</source>
 <context>
     <name>MenueClass</name>
     <message>
-        <location filename="forms/menue.ui" line="31"/>
+        <location filename="forms/menue.ui" line="32"/>
         <source>WinMusik 3.0</source>
         <translation>WinMusik 3.0</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="77"/>
-        <source>Musikkassette</source>
+        <location filename="forms/menue.ui" line="78"/>
+        <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="103"/>
-        <source>Musik CD</source>
+        <location filename="forms/menue.ui" line="104"/>
+        <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="129"/>
-        <source>Datenträger</source>
+        <location filename="forms/menue.ui" line="130"/>
+        <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="155"/>
-        <source>Schallplatte</source>
+        <location filename="forms/menue.ui" line="156"/>
+        <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="181"/>
-        <source>VHS-Band</source>
-        <translation>VHS-Band</translation>
+        <location filename="forms/menue.ui" line="182"/>
+        <source>VHS-Tape</source>
+        <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="207"/>
-        <source>Sonstiges</source>
+        <location filename="forms/menue.ui" line="208"/>
+        <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="233"/>
+        <location filename="forms/menue.ui" line="260"/>
+        <source>Tape</source>
+        <translation>Tonband</translation>
+    </message>
+    <message>
+        <location filename="forms/menue.ui" line="286"/>
+        <source>Audio DVD</source>
+        <translation>Musik DVD</translation>
+    </message>
+    <message>
+        <location filename="forms/menue.ui" line="358"/>
+        <source>Search</source>
+        <translation>Suchen</translation>
+    </message>
+    <message>
+        <location filename="forms/menue.ui" line="387"/>
+        <source>Properties</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="forms/menue.ui" line="416"/>
+        <source>Print Cover</source>
+        <translation>Cover drucken</translation>
+    </message>
+    <message>
+        <location filename="forms/menue.ui" line="234"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="forms/menue.ui" line="259"/>
-        <source>Tonband</source>
-        <translation>Tonband</translation>
-    </message>
-    <message>
-        <location filename="forms/menue.ui" line="285"/>
-        <source>Musik-DVD</source>
-        <translation>Musik-DVD</translation>
-    </message>
-    <message>
-        <location filename="forms/menue.ui" line="357"/>
-        <source>Suchen</source>
-        <translation>Suchen</translation>
-    </message>
-    <message>
-        <location filename="forms/menue.ui" line="386"/>
-        <source>Einstellungen</source>
-        <translation>Einstellungen</translation>
-    </message>
-    <message>
-        <location filename="forms/menue.ui" line="415"/>
-        <source>Cover drucken</source>
-        <translation>Cover drucken</translation>
-    </message>
-    <message>
-        <location filename="forms/menue.ui" line="444"/>
+        <location filename="forms/menue.ui" line="445"/>
         <source>about WinMusik</source>
         <translation>Über WinMusik</translation>
     </message>
@@ -2277,10 +2116,6 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation>Datei mit dem privaten SSL-Schlüssel des Servers auswählen</translation>
     </message>
     <message>
-        <source>Select directory with your MP3 files</source>
-        <translation type="obsolete">Bitte geben Sie das Verzeichnis an, in dem sich Ihre MP3-Dateien befinden</translation>
-    </message>
-    <message>
         <location filename="src/properties.cpp" line="378"/>
         <source>Select the program with which you want to use for playing MP3-Files</source>
         <translation>Bitte wählen Sie einen Player aus, mit dem Sie MP3-Dateien abspielen wollen</translation>
@@ -2304,16 +2139,6 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <location filename="src/properties.cpp" line="177"/>
         <source>Are you sure you want to change the directory of the database? This could result in loss of data!</source>
         <translation>Sind Sie sicher, dass Sie das Datenbank-Verzeichnis ändern wollen? Dies kann zu Datenverlust führen!</translation>
-    </message>
-    <message>
-        <source>WinMusik</source>
-        <translation type="obsolete">WinMusik</translation>
-    </message>
-    <message>
-        <source>You have changed the language.
-You need to restart the Application to enable the new language.</source>
-        <translation type="obsolete">Sie haben die Sprache geändert.
-Die Anwendung muss neu gestartet werden, damit die Änderung aktiv wird.</translation>
     </message>
     <message>
         <location filename="src/properties.cpp" line="408"/>
@@ -2369,10 +2194,6 @@ Die Anwendung muss neu gestartet werden, damit die Änderung aktiv wird.</transl
         <translation>automatisch Titel vorschlagen</translation>
     </message>
     <message>
-        <source>Directories</source>
-        <translation type="obsolete">Verzeichnisse</translation>
-    </message>
-    <message>
         <location filename="forms/properties.ui" line="60"/>
         <source>WinMusik data path:</source>
         <translation>WinMusik Datenpfad:</translation>
@@ -2383,10 +2204,6 @@ Die Anwendung muss neu gestartet werden, damit die Änderung aktiv wird.</transl
         <translation>Pfad für temporäre Daten:</translation>
     </message>
     <message>
-        <source>MP3 path:</source>
-        <translation type="obsolete">MP3 Pfad:</translation>
-    </message>
-    <message>
         <location filename="forms/properties.ui" line="572"/>
         <source>User</source>
         <translation>Benutzer</translation>
@@ -2395,10 +2212,6 @@ Die Anwendung muss neu gestartet werden, damit die Änderung aktiv wird.</transl
         <location filename="forms/properties.ui" line="580"/>
         <source>Language:</source>
         <translation>Sprache:</translation>
-    </message>
-    <message>
-        <source>deutsch</source>
-        <translation type="obsolete">deutsch</translation>
     </message>
     <message>
         <location filename="forms/properties.ui" line="595"/>
@@ -2431,77 +2244,77 @@ Die Anwendung muss neu gestartet werden, damit die Änderung aktiv wird.</transl
         <translation>Registrieren</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1286"/>
+        <location filename="forms/properties.ui" line="1342"/>
         <source>Harddisk search</source>
         <translation>Festplattensuche</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1292"/>
+        <location filename="forms/properties.ui" line="1348"/>
         <source>cache directories</source>
         <translation>Verzeichnissinhalt zwischenspeichern</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1362"/>
+        <location filename="forms/properties.ui" line="1418"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1371"/>
+        <location filename="forms/properties.ui" line="1427"/>
         <source>start as server</source>
         <translation>als Server starten</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1391"/>
+        <location filename="forms/properties.ui" line="1447"/>
         <source>Hostname or IP:</source>
         <translation>Servername oder IP:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1401"/>
+        <location filename="forms/properties.ui" line="1457"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1414"/>
+        <location filename="forms/properties.ui" line="1470"/>
         <source>00009; </source>
         <translation>00000;  {00009;?}</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1421"/>
+        <location filename="forms/properties.ui" line="1477"/>
         <source>Encryption:</source>
         <translation>Verschlüsselung:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1428"/>
+        <location filename="forms/properties.ui" line="1484"/>
         <source>Enable SSL</source>
         <translation>SSL aktivieren</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1442"/>
+        <location filename="forms/properties.ui" line="1498"/>
         <source>Private Keyfile:</source>
         <translation>Privater Schlüssel:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1449"/>
+        <location filename="forms/properties.ui" line="1505"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1494"/>
+        <location filename="forms/properties.ui" line="1550"/>
         <source>Manage User</source>
         <translation>Benutzer verwalten</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1550"/>
+        <location filename="forms/properties.ui" line="1606"/>
         <source>ok</source>
         <translation>ok</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1580"/>
+        <location filename="forms/properties.ui" line="1636"/>
         <source>accept</source>
         <translation>übernehmen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1604"/>
+        <location filename="forms/properties.ui" line="1660"/>
         <source>cancel</source>
         <translation>abbrechen</translation>
     </message>
@@ -2879,23 +2692,6 @@ p, li { white-space: pre-wrap; }
         <location filename="forms/registration.ui" line="273"/>
         <source>Inform me about Updates</source>
         <translation>Bitte informieren Sie mich über Updates</translation>
-    </message>
-    <message>
-        <source>Privacy note:</source>
-        <translation type="obsolete">Hinweis zum Datenschutz:</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;By clicking on &quot;continue&quot;, you accept the following terms of registration:&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;Your name, email address, country and operation system are send to the registration server over a secure internet connection (SSL encrypted). They will be stored in a database together with your personal registration key and date of registration. This information is only stored for registration purpose, keeping track of how many users there are and optionally to inform you about updates.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;img src=&quot;:/icons/resources/encrypted.png&quot; /&gt; &lt;span style=&quot; font-weight:600;&quot;&gt;All information about your registration is kept secret and is not shared or sold to others!&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:600;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Bitstream Vera Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;Wenn Sie auf &quot;weiter&quot; klicken, akzeptieren Sie die folgenden Registrierungsbedingungen:&lt;/p&gt;￼&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;/p&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;Ihr Name, Emailadresse, Land und Betriebssystem werden über eine verschlüsselte SSL-Verbindung an den Registrierungsserver geschickt. Die Daten werden dort zusammen mit Ihrem persönlichen Registrierungsschlüssel und dem Datum der Registrierung gespeichert. Diese Informationen werden nur zum Zweck der Verwaltung der registrierten Nutzer gespeichert, und - sofern gewünscht - um Sie über Updates zu informieren (dazu muss die Checkbox oben aktiviert sein).&lt;/p&gt;￼&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;/p&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt;&quot;&gt;&lt;img src=&quot;:/icons/resources/encrypted.png&quot; /&gt; &lt;span style=&quot; font-weight:600;&quot;&gt;Sämtliche Daten werden von uns geheim gehalten und nicht an andere weitergegeben oder verkauft!&lt;/span&gt;&lt;/p&gt;￼&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8pt; font-weight:600;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="forms/registration.ui" line="385"/>
@@ -3324,10 +3120,6 @@ p, li { white-space: pre-wrap; }
         <translation>Änderungen:</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation type="obsolete">TextLabel</translation>
-    </message>
-    <message>
         <location filename="forms/updater.ui" line="14"/>
         <source>WinMusik - Update</source>
         <translation>WinMusik - Update</translation>
@@ -3341,17 +3133,6 @@ p, li { white-space: pre-wrap; }
         <location filename="forms/updater.ui" line="195"/>
         <source>ok</source>
         <translation>ok</translation>
-    </message>
-    <message>
-        <source>cancel</source>
-        <translation type="obsolete">abbrechen</translation>
-    </message>
-</context>
-<context>
-    <name>ppl6</name>
-    <message>
-        <source>unknown</source>
-        <translation type="obsolete">Unbekannt</translation>
     </message>
 </context>
 <context>
@@ -3408,34 +3189,6 @@ p, li { white-space: pre-wrap; }
         <translation>Tonträger</translation>
     </message>
     <message>
-        <source>Pos.</source>
-        <translation type="obsolete">Pos.</translation>
-    </message>
-    <message>
-        <source>Artist</source>
-        <translation type="obsolete">Interpret</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="obsolete">Titel</translation>
-    </message>
-    <message>
-        <source>Version</source>
-        <translation type="obsolete">Version</translation>
-    </message>
-    <message>
-        <source>Genre</source>
-        <translation type="obsolete">Genre</translation>
-    </message>
-    <message>
-        <source>Length</source>
-        <translation type="obsolete">Länge</translation>
-    </message>
-    <message>
-        <source>Medium</source>
-        <translation type="obsolete">Tonträger</translation>
-    </message>
-    <message>
         <location filename="forms/search.ui" line="616"/>
         <source>select all</source>
         <translation>alle auswählen</translation>
@@ -3444,14 +3197,6 @@ p, li { white-space: pre-wrap; }
         <location filename="forms/search.ui" line="630"/>
         <source>unselect all</source>
         <translation>Auswahl aufheben</translation>
-    </message>
-    <message>
-        <source>delete results</source>
-        <translation type="obsolete">Tabelle löschen</translation>
-    </message>
-    <message>
-        <source>print results</source>
-        <translation type="obsolete">Ergebnisse drucken</translation>
     </message>
     <message>
         <location filename="forms/search.ui" line="660"/>
