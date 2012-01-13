@@ -14,6 +14,6 @@ audio devices.
     unixes
 
 Author: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
-Copyright (c) 2009 by Patrick Fedick
+Copyright (c) 2010 by Patrick Fedick
 
  

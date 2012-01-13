@@ -1,16 +1,39 @@
 #!/bin/sh
+#
+# This file is part of WinMusik 3 by Patrick Fedick
+#
+# $Author: pafe $
+# $Revision: 1.6 $
+# $Date: 2010/10/10 16:41:26 $
+# $Id: build_binary.sh,v 1.6 2010/10/10 16:41:26 pafe Exp $
+#
+#
+# Copyright (c) 2010 Patrick Fedick
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.0"
+VERSION="3.0.1"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
-COMMENT=`cat README_en.TXT`
-DISTFILES=$MYPWD/distfiles
+DISTFILES=$MYPWD
 
 
 if [ -f /etc/lsb-release ] ; then
@@ -21,6 +44,14 @@ elif [ -f /etc/system-release ] ; then
 else
 	DISTRIB_ID=`uname -s`
 	DISTRIB_RELEASE=`uname -r`
+
+	case "$DISTRIB_ID:$DISTRIB_RELEASE" in
+		MINGW32*:1.0.11*)
+			DISTRIB_ID="MINGW32";
+			DISTRIB_RELEASE="1.0.11";
+			TESTGUI=TestGUI.exe
+			;;
+	esac
 fi
 
 # Wir haben nun unter anderem:
@@ -30,41 +61,28 @@ fi
 echo "Baue WinMusik für: $DISTRIB_ID, $DISTRIB_RELEASE..."
 echo ""
 
+
 build_binary() {
 
-mkdir -p tmp/build
-if [ ! -d tmp/build ] ; then
-	echo "Could not create temporary directory tmp/build"
-	exit 1
-fi
-
-cd tmp/build
-#rm -rf *
-mkdir -p include lib bin src
-cd src
-mkdir -p ppl6 wm30
-
-echo "Kopiere PPL6 in temporäres Build-Verzeichnis"
-cd ~/cvs-pfp/ppl/ppl6
-if [ $? -ne 0 ] ; then
-	echo "PPL6 not found in ~/cvs-pfp/ppl/ppl6"
-	exit 1
-fi
-
-find *.m4 configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
+case "$DISTRIB_ID:$DISTRIB_RELEASE" in
+	MINGW32*:1.0.11*)
+		MAKE=gmake
+		QMAKE=qmake
+		;;
+esac
 
 cd $BUILD/src/ppl6
 
 if [ ! -f Makefile ]
 then
-	echo "Konfiguriere PPL6..."
+	echo "Konfiguriere PPL6 fuer $DISTRIB_ID:$DISTRIB_RELEASE..."
 
 	case "$DISTRIB_ID:$DISTRIB_RELEASE" in
 	FreeBSD:*)
         export CPPFLAGS=-I/usr/local/include
 		export LDLAGS=-L/usr/local/lib
 		./configure --prefix=$BUILD \
-			--with-pcre=/usr/local --with-openssl --wit-libmhash=no --with-libiconv-prefix=/usr/local --with-nasm \
+			--with-pcre=/usr/local --with-openssl --with-libmhash=no --with-libiconv-prefix=/usr/local --with-nasm \
 			--with-libmcrypt-prefix=no --with-libiconv-prefix=/usr/local \
 			--without-pgsql --without-png --without-lame --without-ft-prefix \
 			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
@@ -87,10 +105,27 @@ then
 			--with-libcurl --with-sdl-prefix=$BUILD
 		;;	
 	
-	*)
-		echo "Unknown system"
-		exit 1
+	MINGW32*:1.0.11*)
+                export CPPFLAGS="-DCURL_STATICLIB -I/usr/local/include -I/sdk/WindowsSDK/include"
+                export LDLAGS="-DCURL_STATICLIB -L/usr/local/lib -L/sdk/WindowsSDK/lib"
+                export CFLAGS="-DCURL_STATICLIB"
+                ./configure --prefix=$BUILD \
+			--with-pcre=/usr/local --with-bzip2=/usr/local --with-zlib=/usr/local \
+                        --with-nasm --with-libiconv-prefix=/usr/local \
+                        --without-pgsql --without-png --without-lame --without-ft-prefix \
+						--without-libmad --without-lame --without-x --without-mysql --without-sybase \
+						--with-libcurl --with-sdl-prefix=$BUILD \
+                        --with-libmhash=no \
+                        --with-libmcrypt-prefix=no \
+                        --without-openssl --with-libcurl
 		;;
+	*)
+		./configure --prefix=$BUILD \
+			--with-pcre=/usr --with-openssl --with-libiconv-prefix --with-nasm \
+			--with-libmcrypt-prefix=no --with-libmhash=no \
+			--without-pgsql --without-png --without-lame --without-ft-prefix \
+			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
+			--with-libcurl=/usr --with-sdl-prefix=$BUILD		;;
 	esac
 	if [ $? -ne 0 ] ; then
 		exit 1
@@ -111,18 +146,13 @@ fi
 echo -n "ppl6-config liegt in "
 which ppl6-config
 
-echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
-cd ~/cvs-pfp/WinMusik/wm30
-if [ $? -ne 0 ] ; then
-	echo "WinMusik not found in ~/cvs-pfp/WinMusik/wm30"
-	exit 1
-fi
-find docs forms include resources src *.TXT *.qm *.ts *.pro *.rc *.qrc | cpio -pdmv $BUILD/src/wm30
-cat WinMusik3.pro | sed -e "s/--libs/--archive/" > $BUILD/src/wm30/WinMusik3.pro
-
-cd $BUILD/src/wm30
+cd $BUILD/src/winmusik
 
 echo "INCLUDEPATH += $BUILD/include" >> WinMusik3.pro
+echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik3.pro
+echo "LIBPATH += $BUILD/lib" >> WinMusik3.pro
+echo "LIBPATH += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
+
 qmake-qt4
 qmake-qt4
 if [ $? -ne 0 ] ; then
@@ -150,7 +180,7 @@ ubuntu_write_control() {
 		echo "Architecture: $PLATFORM"
 		echo "Depends: $DEPENDS"
 		echo "Description: $DESCRIPTION"
-		cat $MYPWD/README_en.TXT | while read line
+		cat $BUILD/src/winmusik/README_en.TXT | while read line
 		do
 			if [ -n "$line" ] ; then
 				echo " $line"
@@ -181,7 +211,7 @@ build_ubuntu() {
 	fi
 	mkdir -p DEBIAN usr/bin usr/share/applications usr/share/pixmaps
 	cp $BUILD/bin/WinMusik3 usr/bin
-	cp $MYPWD/resources/icon48.png usr/share/pixmaps/WinMusik3.png
+	cp $BUILD/src/winmusik/resources/icon48.png usr/share/pixmaps/WinMusik3.png
 
 	cd $WORK
 	DEPENDS=""
@@ -222,50 +252,35 @@ build_ubuntu() {
 		echo "ERROR: Fehler beim Erstellen des Pakets"
 		exit
 	fi
+	cp $DISTFILES/$DISTNAME-Ubuntu-$DISTRIB_RELEASE-$PLATFORM.deb /ftp/winmusik
 	
 }
 
 
-build_rpm() {
-	cd $WORK
-	(
-		echo "Summary: Grafische Oberfläche des ITStt-Testsystems"
-		echo "Name: $NAME"
-		echo "Version: $VERSION"
-		echo "Release: 1"
-		echo "Copyright: GPL"
-		echo "Packager: $MAINTAINER"
-		echo "Group: Applications/Productivity"
-		echo "Source: http://test2.opsblau.de/index.html?&CURPATH=&downloadfile=%2FDENIC-ITStt-TestGUI-1.0.0.tar.gz"
-		echo "BuildRoot: /home/patrickf/cvs/testsystem/testgui/tmp/rpm/tmp"
-		echo ""
-		echo "%description"
-		echo "$COMMENT"
-		echo ""
-		echo "%prep"
-		echo ""
-		echo "%build"
-		echo ""
-		echo "%install"
-		echo "rm -rf \$RPM_BUILD_ROOT"
-		echo "mkdir -p \$RPM_BUILD_ROOT/usr/bin"
-		echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/pixmaps"
-		echo ""
-		echo "install -s -m 755 $BUILD/bin/TestGUI \$RPM_BUILD_ROOT/usr/bin/TestGUI"
-		echo "install -m 644  $MYPWD/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/pixmaps/testgui.png"
-		echo ""
-		echo "#%cleancd"
-		echo "#rm -rf $RPM_BUILD_ROOT"
-		echo ""
-		echo "%files"
-		echo "%defattr(-,root,root)"
-		echo "/usr/bin/TestGUI"
-		echo "/usr/share/pixmaps/testgui.png"
-		echo ""
-		echo "%changelog"
-		echo ""
-	) > testgui-$VERSION.spec
+
+build_mingw32()
+{
+	echo "*******************************************************"
+	echo "Erstelle Windows-Setup Programm"
+	cd $BUILD/src/winmusik
+	cat setup.iss | sed -e "s/OutputBaseFilename=.*/OutputBaseFilename=$NAME-$VERSION-Win32Setup/" \
+		| sed -e "s/AppVerName=.*/AppVerName=WinMusik $VERSION/" \
+		| sed -e "s/AppVersion=.*/AppVersion=$VERSION/" \
+		| sed -e "s/VersionInfoVersion=.*/VersionInfoVersion=$VERSION/" \
+		> setup2.iss
+
+	"$INNOSETUP" setup2.iss
+	if [ $? -ne 0 ] ; then
+		echo "Inno-Setup fehlgeschlagen"
+		exit 1
+	fi
+	cd $BUILD/src/winmusik
+	cp distfiles/$NAME-$VERSION-Win32Setup.exe ../../../
+	//cp distfiles/$NAME-$VERSION-Win32Setup.exe g:/gui
+	
 }
+
+
 
 ##############################################################################################
 
@@ -277,17 +292,18 @@ if [ "$ARCH" = "x86_64" ] ; then
 fi
 
 ##############################################################################################
-# Libs und Binary bauen
+WORK=$MYPWD
+BUILD=$MYPWD/build
+
 build_binary
 
 ##############################################################################################
 # Pakete bauen
 if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
 	build_ubuntu
-elif [ "$DISTRIB_ID" = "Fedora" ] ; then
-	build_rpm
+elif [ "$DISTRIB_ID" = "MINGW32" ] ; then
+	build_mingw32
 fi
-
 
 ##############################################################################################
 # Aufräumen

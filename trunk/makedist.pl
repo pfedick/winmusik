@@ -1,14 +1,29 @@
 #!/usr/bin/perl
-# $Id: makedist.pl,v 1.1 2010/05/16 12:23:30 pafe Exp $
+#
+# This file is part of WinMusik 3 by Patrick Fedick
+#
+# $Author: pafe $
+# $Revision: 1.2 $
+# $Date: 2010/05/16 12:40:40 $
+# $Id: makedist.pl,v 1.2 2010/05/16 12:40:40 pafe Exp $
+#
+#
+# Copyright (c) 2010 Patrick Fedick
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
-#  
-# CONTACT     : patrick@pfp.de 
-# AUTHOR      : Patrick Fedick <patrick@pfp.de> 
-# 
-# CREATED     : 2009/05/30 16:56:00 
-# REVISION    : $Revision: 1.1 $  
-# DATE        : $Date: 2010/05/16 12:23:30 $ 
-# 
 
 my $CVSTREE="WinMusik/wm30";
 my $PACKAGE="WinMusik";
@@ -65,6 +80,7 @@ cd distfiles/$DISTNAME
 tar -xf ../tmp.tar
 cd ..
 tar -cjf $DISTNAME.tar.bz2 $DISTNAME
+cp $DISTNAME/docs/Userguide_de.pdf $DISTNAME-Userguide_de.pdf
 rm -rf tmp.tar $DISTNAME
 cd $PWD
 rm -rf tmp
