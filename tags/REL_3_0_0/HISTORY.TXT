@@ -1,0 +1,517 @@
+/*!\page WM3History WinMusik Historie
+
+\section WM3History_ WinMusik 3 Historie
+
+
+Version 3.0.0, Releasedate: 04.12.2009	(CVS-Tag: REL_3_0_0)
+	- Kompletter Rewrite des Programmcodes in C++
+	- Open Source unter GPL Lizenz (siehe http://www.gnu.de/documents/gpl.de.html)
+	- Sourcecode teilweise dokumentiert
+	- Verwendung von Patrick's Programming Library PPL, Version 6.3.0 als
+	  Basis (siehe http://www.pfp.de/ppl/)
+	- Verwendung von Qt als Oberfläche (siehe http://www.qtsoftware.com)
+	- Läuft unter Windows (XP, Vista, Windows 7) und Unix (Linux, FreeBSD)
+	- Bei einem Titel können nun zusätzliche Daten gespeichert werden:
+		- Album
+		- Bitrate
+		- Label
+	- Angabe der Bewertung ist nun ein formales Feld mit einer Skala von
+	  1-6 Sternen, kein Freitext mehr. Der Wert kann dadurch aber nicht
+	  von WinMusik 2 importiert werden.
+	- Angabe der Qualität ist ebenfalls ein formales Feld und kein
+	  Freitext mehr. Auch hier ist daher der Import von WinMusik 2
+	  nicht möglich
+	- Daten werden nun im UTF-8-Format gespeichert statt ISO-8859-1
+	  bzw. dem nativen Windows-Format.
+	- GUI unterstützt Unicode
+	- Sämtliche Daten werden in einer einzigen Datei gespeichert
+	- Jeder Datensatz hat eine Format-Version. Bei Änderungen im Format
+	  müssen die vorhandenen Datensätze in der Datenbank nicht angepaßt
+	  werden.
+	- Komplette Übersetzung in Deutsch und Englisch, mit der Möglichkeit
+	  weitere Sprachen einzubauen (Qt-Linguist)
+	- Setup-Programm "Inno Setup" aktualisiert auf Version 5.3.1-beta mit
+	  Unicode unterstützung. Siehe http://www.jrsoftware.org/
+	- Speichern der Original-Daten (ID3v1, ID3v2 und Dateiname) beim Import
+	  von MP3-Dateien
+	- Anzeigemöglichkeit der Originaldaten (Popup)
+	- MP3-Dateinamen werden nun auf Wunsch automatisch "normalisiert"
+	- xspf Playlist-Export
+	- Context-abhängige Menüs mit rechter Maustaste im Editor
+	  und in der Suche
+	- Multiple Editor- und Suchfenster
+	- Ausdrucke können nun auch als PDF oder Postscript gespeichert werden
+	- Interface zum Registrieren von WinMusik
+	- Dupe-Checker: Bei Eingabe eines neuen Titels wird geprüft, ob
+	  der gleiche Titel in der gleichen Version schon in der Datenbank
+	  vorhanden ist
+	- Allgemeiner Tracklist-Ausdruck eines Tonträgers als Tabelle
+	- Interpreten-Abkürzungen (Shortcuts) können nun beliebig angelegt,
+	  verändert und gelöscht werden.
+	- CoverPrinter integriert
+
+  
+
+\section WM2History WinMusik 2.0 - Historie
+
+
+
+2.0 Build 96:
+	- F3 konvertiert den aktuellen Text in Kleinbuchstaben und
+	  macht die Anfangsbuchstaben jeden Wortes groß.
+
+2.0 Build 95: 03.05.2009
+	- Beim Import von MP3-Dateien wird nun der ID3v2-Tag statt
+	  dem ID3v1-Tag gelesen
+	- Ist kein ID3-Tag vorhanden werden Interpret, Titel und
+	  Version anhand des Dateinamens übernommen
+	- Genre und Version werden nun ebenfalls beim Einlesen
+	  von MP3-Titeln übernommen. Sofern bekannt, wird automatisch
+	  die ID vorgegeben, andernfalls ein Sternchen zum
+	  Kontrollieren und Neuanlegen
+
+2.0 Build 85: 17.10.2008
+	- Änderung des MP3-Pfads, es wurde eine Verzeichnisebene
+          hinzugefügt
+
+2.0 Build 79: 28.07.2007
+	- DLL verwendet nun PPL6
+	- ID3-Tags werden nun mittels der neuen PPL6-Klasse CID3Tag
+	  geschrieben, nicht mehr über VisualBasic
+	- Unterstützung von ID3v2-Tags
+
+2.0 Build 69:
+	- Drag & Drop bei Dateiname in Tooltip
+	- Mit Strg & k werden alle Anfangsbuchstaben groß gemacht
+
+2.0 Build 68:
+	- Falls beim Drücken von F6 (Einlesen der MP3-Daten) noch
+	  kein Track vorhanden ist, der auf TRCK.mp3 oder TRACK-*.mp3
+	  matched, wird geprüft, ob es noch Dateien ohne TRACK-Nummer
+	  am Anfang gibt. Ist das der Fall, wird die erste gefundene
+	  Datei automatisch umbenannt und verwendet.
+
+2.0 Build 67: 07.05.2004
+	- INI-Datei wurde umbenannt in winmusik2.ini und liegt jetzt
+	  in den Anwendungsdaten des Users, also
+	  x:/Dokumente und Einstellungen/USER/Anwendungsdaten/pfp
+	- Mutex eingebaut, damit Setup feststellen kann, ob WinMusik
+	  noch läuft
+	- Aktualisiert auf VisualBasic 6, SP6
+	- Setup-Programm aktualisiert auf Version 4.2.2 ("Inno Setup"
+	  von Jordan Russel, http://www.jrsoftware.org/ )
+
+
+2.0 Build 66: 23.12.2003
+	- Titeldatei wird jetzt im RAM gecached, dadurch schnellere
+	  Suche (caching innerhalb der DLL)
+	- Speichern und Laden von Titeln erfolgt jetzt zentral
+	  innerhalb der DLL (CTitel-Klasse)
+	- Temporäre Dateien für Titelerfassung tragen jetzt
+	  Tonträger-ID, Index und Seite im Namen. Dadurch ist es
+	  möglich WinMusik mehrfach zu starten, um parallel an
+	  verschiedenen Tonträgern zu arbeiten
+
+2.0 Build 64: 17.05.2003
+	- MP3-Header-Erkennung wurde deutlich verbessert
+
+2.0 Build 63: 27.04.2003
+	- DLL verwendet jetzt PPL5 statt PPL4
+	- DLL verwendet jetzt die MPEG-Erkennung aus PPL5
+	- Bei drücken von F3 im Interpretenfeld der Eingabe, erscheint
+	  jetzt ein MP3-Infofenster mit der Möglichkeit ein MP3-File
+	  mit defektem Header (ungueltige Daten) zu reparieren.
+
+2.0 Build 62: 01.12.2002
+	- MP3-Headererkennung verbessert
+	- Diverse Bugfixes und Verbesserungen
+
+2.0 Build 52: 01.11.2002
+	- Funktion um ID3-Tags zu entfernen, hat allerdings noch einen
+	  Bug. Bei einigen Titeln scheint die Routine in einer Endlos-
+	  schleife haengen zu bleiben
+
+2.0 Build 46: 24.08.2002
+	- Drag & Drop-Unterstuetzung der Titellisten im Eingabe- und
+	  Suchformular bei MP3-Dateien, die im MP3-Verzeichnis vorhanden
+	  sind
+	- Doppelklick in der Titelliste des Eingabeformulars bei MP3-
+	  Dateien startet MP3-Player mit diesem Titel
+	- Beim laden eines Tracks wird jetzt geprüft, ob der Titel auch
+	  mit dem geladenen Track übereinstimmt. Wenn nicht, wird der
+	  Titel korrigiert und mit neuer ID gespeichert. Tritt auf,
+	  wenn ein Titel mit dem undokumentierten "c####"-Befehl kopiert
+	  wurde.
+
+2.0 Build 45: 10.08.2002
+	- Verbesserte Suche, der Tonträger kann jetzt ausgewählt werden
+
+
+2.0 Build 44: 17.11.2001
+	- Bugfix zur Tontraeger Referenzierung: Neu angelegte Titel wurden
+	  im Quicksearch nicht mehr gefunden, da ein Flag beim Anlegen nicht
+	  richtig gesetzt wurde
+	- Beim Kopieren eines Titels aus dem Quicksearch-Ergebnis in die
+	  Eingabemaske wird nun ein neuer Titel angelegt, statt den alten
+	  zu überschreiben
+	- Bugfix bei Quicksearch aus der Eingabemaske heraus. Unter be-
+	  stimmten Umständen konnte die Suche doppelt gestartet werden,
+	  wodurch sich das Quicksearchmodul in einer Endlosschleife auf-
+	  haengen konnte
+
+	  
+
+2.0 Build 40: 14.11.2001
+	- Beim Starten dieser Version werden alle Titel ueberprueft, ob
+	  sie durch Tontraeger referenziert sind. Dabei wird gleichzeitig
+	  auch der Tontraegerindex und die Tracknummer im Titel korrigiert,
+	  sofern sie falsch ist
+	- Quicksearch zeigt nun nurnoch Titel an, die das Referenzierungs-
+	  Flag gesetzt haben 
+
+2.0 Build 36:
+	- Beim Klick auf einen Titel im Suchergebnis oder in der
+	  Uebersicht der Eingabe, wird dieser in die Zwischenablage
+	  uebertragen, so dass er in anderen Anwendungen kopiert werden
+	  kann. Sehr praktisch, wenn man sich eine Playlist machen
+	  will oder eine CD zusammenstellen will.
+
+2.0 Build 35: 08.11.2001
+	- einfache Funktion zum Drucken von Covern für Video-CDs
+
+2.0 Build 34: 07.11.2001
+	- Coverdruck für MP3-Datenträger Vorderseite
+	- Bugfixes im Zusammenhang mit der Numlock-Taste, es gibt
+	  aber noch immer Probleme
+	- Datenträger wird nun sofort beim Erfassen oder Ändern eines
+	  Tracks gespeichert, so daß bei einem eventuellen Absturz keine
+	  Daten mehr verloren gehen
+	- Nach dem Drucken oder Abbrechen des selbigen, kann man ganz
+	  normal weiter Titel erfassen, ohne den Datenträger neu zu
+	  laden
+	- Beim Drücken von "F4" in den Feldern "Interpret" und "Titel"
+	  im Eingabeformular, wird nun automatisch die Titelsuche
+	  geöffnet und gestartet. Durch einen Doppelklick auf einen
+	  der gefundenen Titel, wird dieser automatisch in die Eingabe-
+	  maske übernommen
+
+2.0 Build 33: 06.11.2001
+	- Coverdruck für MP3-Datenträger implementiert (Rückseite mit
+	  Titellisting)
+	- Gesamtzeitanzeige korrigiert, wurde vorher falsch berechnet
+
+2.0 Build 32: 22.09.2001
+	- Alte ThreeD.ocx Controlls in Eingabeformular ersetzt
+	- Status Bar eingebaut
+	- Progress von "MP3-Längen einlesen" wird jetzt in StatusBar
+	  angezeigt
+
+
+2.0 Build 31: 13.12.2000
+	- Bug behoben: Der "Abbrechen"-Button beim Umbenennen von
+	  Files enthielt ein falsches Object, wodruch WM mit einer
+	  Fehlermeldung beendet wurde
+	- Beim Umbenennen von Files in Index und Interpret/Titel wurde
+	  ein evtl. enthaltenes Fragezeichen nicht umgewandelt, wodurch
+	  die Datei nicht umbenannt werden konnte.
+	- Außerdem wurde nicht berücksichtigt, daß unter Umständen
+	  einige Tracks noch nicht eingegeben wurden. In diesem Fall
+	  kam es zu einer Verschiebung der Tracknamen
+
+2.0 Build 30: 16.07.2000
+	- Neue Methode, um den Anfang einer MP3-Datei zu finden. Es
+	  gab noch Probleme mit Dateien, die Textinformationen ohne
+	  gueltigen ID3v2-Header am Anfang der Datei hatten
+	- Bei der Umbenennung kann man jetzt auswaehlen, ob Spaces oder
+	  Unterstriche als Space verwendet werden sollen
+	- Anfuehrungszeichen in Dateinamen werden jetzt durch zwei
+	  Hochkommata abgefangen
+	- Setup-Programm aktualisiert auf Version 1.3.16 ("Inno Setup"
+	  von Jordan Russel, http://www.jrsoftware.org/ )
+
+2.0 Build 29: 15.07.2000
+	- MP3-Dateien können jetzt umbenannt werden von xxx.mp3 in
+	  xxx-Interpret-Titel(Version).mp3
+	- Fehler im Quicksearch beseitigt, der in bestimmten Faellen dafuer
+	  sorgte, dass man eine laufende Suche nicht abbrechen konnte. Der
+	  Fehler hatte sich in Build 28 eingeschlichen
+	- Track 0 kann jetzt nicht mehr ausgewaehlt werden
+	- Bei Fehlerhaften MP3-Files konnte beim Einlesen ein "Division
+	  durch Null"-Fehler auftreten. Dieser wird jetzt abgefangen.
+
+2.0 Build 28: 16.01.2000
+	- Im Titel kann man jetzt neben "Stereo" und "Dolby" auch "Surround"
+	  und "5.1" auswaehlen. Dafuer musste das Coverbild entfallen.
+	- Beim Druecken der F6-Taste (ID3-Tag holen), wird der vollstaendige
+	  Dateiname nun in einem Quickinfo-Feld angezeigt, so dass man bei
+	  ueberlangen Titeln leichter korrigieren kann. Ausserdem wird der
+	  Dateiname automatisch in die Zwischenablage kopiert, so dass man
+	  ihn leicht in das Interpreten- oder Titelfeld einfuegen kann.
+	- ID3v2-Tags werden nun erkannt und ignoriert. Zuvor wurde eine mit
+	  diesem Tag versehene MP3-Datei nicht als MP3 erkannt. In einer
+	  spaeteren Version wird der ID3v2-Tag dem ID3v1-Tag vorgezogen,
+	  wenn er vorhanden ist.
+	- Weitere Grafiken erneuert
+	- Neues Menue beim Druecken von F6 im Trackfeld zur Bearbeitung
+	  von MP3-Dateien: "Laengen einlesen", "ID3-Tags einlesen", "Files
+	  umbenennen", "ID3-Tags schreiben", "Playlist schreiben". Alle
+	  Menuepunkte beziehen sich auf den den kompletten Tontraeger bzw.
+	  Verzeichnis. "ID3-Tags einlesen" funktioniert in diser Version
+	  noch nicht.
+	- Die Tracklaengen aller MP3-Titel koennen nun mit dem F6-Menue
+	  "Laengen einlesen" komplett in einem Rutsch eingelesen werden.
+	- MP3-Dateien in einem Verzeichnis koennen nun mit dem F6-Menue
+	  "Files umbenennen" in einem Rutsch umbenannt werden, entweder
+	  von "Dateiname.mp3" in "001-Dateiname.mp3"
+	  oder "001-Dateiname.mp3" in "001.mp3"
+	- Funktionsleiste kann nun nicht mehr angeklickt werden, wenn kein
+	  Tontraeger geladen ist. Es koennte sonst zu unvorhersehbaren
+	  Fehlern kommen.
+
+2.0 Build 27: 05.01.2000
+        - Weitere Icons erneuert
+        - Bug entfernt: Beim Aufruf der Eingabemaske wurde automatisch ein
+          ungueltiger Titel gespeichert.
+        - MP3-Files koennen nun neben der Track-Nummer auch weitere
+          Informationen im Dateinamen enthalten. Das Format ist dabei:
+          "TRACK-Weitere_Daten.mp3"
+          TRACK muss eine dreistellige Zahl sein, die mit Nullen aufgefuellt
+          ist (Track 1 = 001). Danach folgt ein Minuszeichen und beliebige
+          weitere Zeichen. Der Dateiname muss mit ".mp3" enden.
+        - Beim Einlesen des ID3-Tags von MP3-Files (F6) wird nun auch die
+          Laenge des  Titels errechnet.
+        - Durch Druecken von Shift&F6 wird nur die Laenge des Titel einge-
+          lesen, aber nicht der ID3-Tag.
+
+2.0 Build 26: 09.12.1999
+        - Icons im Editor erneuert
+        - Setup-Programm aktualisiert, es wird jetzt "Inno Setup" von Jordan
+          Russel verwendet: http://www.jordanr.dhs.org/isdl.htm
+        - Einige Anpassungen an das Setup-Programm gemacht
+        - Internet-Update Funktion deaktiviert, da nicht funktionsfähig.
+
+2.0 Build 25: 21.11.1999
+        - An den MPEG-Pfad wird jetzt die Indexnummer des Tontraegers hinzuge-
+          fuegt
+        - Markierungen in der Titelliste werden jetzt richtig erkannt und
+          angezeigt
+        - Icon fuer F6-Taste bei MPEG-Eingabe erstellt
+        - Weiteren veralteten Code entfernt
+        - Suchfenster fuer Versionen kann jetzt in der Groesse veraendert werden
+        - Neue Icons in der Menueleiste, Menueleiste etwas verkleinert
+        - Auf Systemen ohne Drucker wurde das Programm beim Aufruf des Options-
+          fensters abgebrochen. Ist mir erst nach einer Neuinstallation ohne
+          Drucker aufgefallen.
+
+2.0 Build 24: 29.10.1999
+        - Entfernen von nicht mehr benoetigten Formularen, darunter ein
+          defektes, wodurch der Code nicht mehr compiliert werden konnte
+
+2.0 Build 23: 29.04.1999
+        - MySQL-Exportfunktion fuer Titeldatenbank
+          Umlaute, andere Sonderzeichen und ' werden dabei in HTML-Tags
+          umgewandelt
+
+2.0 Build 22: 19.12.1998
+        - GetID3-Tag-Funktion auf F6
+          Sucht im MPEG-Verzeichnis eine Datei passend zur aktuellen Track-
+          Nummer, liest den ID3-Tag ein und uebertraegt den Inhalt in das
+          Eingabeformular
+
+2.0 Build 21: 13.12.1998
+        - CD-Player fordert nicht mehr automatisch nach der Eingabe der
+          CD-Nummer auf, wenn CD unbekannt ist
+        - Aus dem Suchprogramm kommt man jetzt jederzeit mit ESC heraus
+        - Das Suchprogramm kann man jederzeit mit F3 aufrufen oder beenden
+        - ID3-Tags werden nur noch geschrieben, wenn die mp3-Datei noch keinen
+          Tag hat oder wenn sich der Inhalt des Tags veraendert hat. Die
+          uebrigen Dateien werden nicht angefasst und behalten daher auch ihre
+          urspruenglichen Timestamps.
+
+2.0 Build 20: 23.05.1998
+        - Bug in Titeleingabe beseitigt
+        - Build-Version wird jetzt in den Optionen angezeigt
+
+2.0 final (Build 19): 17.05.1998
+        - Neues Setup-Programm
+        - Automatisches Update ueber das Internet funktioniert jetzt, es fehlt
+          aber noch eine Fortschrittsanzeige während des Downloads.
+
+2.0 Beta 18: 14.12.1997
+        - Bug beim Anlegen von neuen Verzeichnissen behoben
+        - Tool-Tip-Texte im Hauptmenue hinzugefuegt
+        - Fehler im Pfad bei MPEG ID3-Tags und Playlists behoben.
+
+2.0 Beta 17: 06.10.1997
+        - Neues Formular fuer die Optionen erstellt
+        - Diverse Fehler beim Erststart des Programms beseitigt
+
+2.0 Beta 16: 30.09.1997
+        - Layout der Startleiste veraendert (30.08.1997)
+        - Neue Tontraeger hinzugefuegt: Tonband, MPEG-Files (30.08.1997)
+        - Titelliste bei Eingabe wird nun automatisch gescrolled, wenn der
+          ausgewaehlte Track nicht sichtbar ist (12.09.1997)
+        - Funktion um in MPEG-Layer3-Files (.mp3) automatisch das ID3-TAG zu
+          generieren. Voraussetzung ist, dass die Dateinamen im Format
+          "001.mp3" - "999.mp3" sind, wobei die Nummer dem WinMusik-Track
+          entspricht. (20.09.1997)
+        - Funktion, um bei MPEG-Tontraeger automatisch Playlists (.pls und
+          .m3u) und Titeldateien (.wmt und .txt) erstellen zu lassen.
+          (20.09.1997)
+        - Kleinere Anpassungen im Code gemacht, damit mit VisualBasic 5
+          lauffaehig
+
+2.0 Beta 15: 14.07.1997
+        - Suchfunktion im CD-Player beschleunigt. Die Gesamtlaenge der 2000
+          zuletzt erfassten CD's werden in den Hauptspeicher geladen, wodurch
+          eine extrem schnelle Identifizierung erfolgen kann. Anschliessend
+          erfolgt dann noch eine genauere ueberpruefung der Tracklaengen, um
+          sicherzustellen, dass die richtige CD erkannt wurde
+        - Funktionstasten fuer noch nicht fertig gestellte Programmteile
+          entfernt
+        - Im Titellisting wird jetzt die Gesamtlaenge angezeigt
+        - Select fuer bestimmten Titel wird jetzt beim Auswaehlen eines neuen
+          Tontraegers oder einer anderen Seite entfernt
+        - Abgelaufene Beta-Version des FTP-Controlls durch aktuelle Version
+          ohne "Verfallsdatum" ersetzt. Wurde bisher aber noch nicht gebraucht.
+
+2.0 Beta 14: 09.05.1997
+        - Auswahlfeld fuer Coverdruck neu erstellt, da alte Version bei
+          Plattencrash verlorengegangen ist :-(
+        - Backup gemacht ;-)
+        - Bug beim Auswaehlen eines nicht vorhandenen Traegers entfernt
+        - Automatischer Interpretenvorschlag verbessert, es wird jetzt zuerst
+          auf dem aktuellen Tontraeger geprueft, ob ein passender Interpret
+          vorhanden ist, und erst dann in der Interpretendatenbank gesucht
+        - Automatischer Titelvorschlag eingebaut, sehr nuetzlich bei Maxi-CD's
+        - Automatischer Interpreten- und Titelvorschlag kann im Setup aktiviert/
+          deaktiviert werden
+        - Updatefunktion ueber Internet deaktiviert, da noch nicht fertig-
+          gestellt
+
+2.0 Beta 13: 02.03.1997
+        - Bug in der Cover-Druckfunktion entfernt
+
+2.0 Beta 12a: 01.03.1997
+        - Bug im Interpretenvorschlag beseitigt. Wenn kein Interpret in der
+          Datenbank gefunden wurde, wurde das Eingabefeld faelschlicherweise
+          geloescht.  (Man sollte doch mehr testen ;-)  )
+
+2.0 Beta 12: 01.03.1997
+        - Unfertige Programmteile aus dem Menue entfernt (Mixer und Hitparaden)
+        - Automatischer Interpretenvorschlag in der Eingabemaske
+
+2.0 Beta 11: 14.12.1996
+        - Der Bug, der bis Beta 7 auch in der Loeschfunktion bei der Titel-
+          eingabe vorhanden war, war auch in der Einfuegefunktion - jetzt
+          nichtmehr ;-)
+        - Stammdateneingabe der Charts hinzugefuegt
+
+             21.12.1996
+        - Automatische Updatefunktion via Internet hinzugefuegt aber noch
+          nicht fertiggestellt
+
+2.0 Beta 10: 09.12.1996
+        - Es werden keine externen Grafiken mehr nachgeladen, alle benoetigten
+          Grafiken befinden sich nun in der Programmdatei
+
+             10.12.1996
+        - Bug bei der erstmaligen Indizierung entfernt
+
+2.0 Beta 9: 07.12.1996
+        - Automatische Indizierung der Interpreten hinzugefuegt
+        - Suchfunktion auf Indizierung angepasst, Interpreten werden jetzt
+          schneller gefunden
+
+2.0 Beta 8: 23.11.1996
+        - Beim Erstaufruf der Eingaberoutine werden alle Index-Felder vorbelegt
+        - In der Versions-Tabelle kann man jetzt mit Shift & Return die im
+          Suchfeld stehende Indexnummer in die Eingabemaske uebernehmen
+        - Bildschirmmaske fuer Chart-Eingabe erstellt
+        - Im Titellisting des Eingabefensters kann man jetzt bei der Anzeige des
+          vorletzten Feldes zwischen Version, Musikart, bpm, Aufnahmedatum,
+          Aufnahmequelle Bemerkung und Titelnummer waehlen. Voreingestellt ist
+          "Version"
+
+2.0 Beta 7: 22.11.1996
+        - Bug in der Loeschfunktion beseitigt. Es wurde zwar der Track
+          geloescht, nicht aber der Titelindex, der dadurch beim naechsten
+          Speichern ueberschrieben wurde.
+        - Beim Aufruf eines Tontraeger wird jetzt immer Seite 1 vorgegeben,
+          nicht mehr die
+          zuletzt ausgewaehlte. Ausserdem wird direkt der Inhalt der Seite im
+          ListFeld angezeigt
+        - Das Feld "Seite" ist nun immer zum ueberschreiben markiert
+        - Im Feld "Track" findet eine Ueberpruefung statt, ob die zuvor
+          eingegebene Seite erlaubt ist (Seite>0 und Seite<=TrV.Seiten)
+        - Bug entdeckt: Wird waehrend der Quicksearchsuche ein Titel eingegeben
+          und dabei eine Tabelle (z.B. Versionen) geoeffnet, wird in der
+          Quicksearchroutine ein Fehler ausgeloest. Scheinbar wurde die
+          Suchdatei unrechtmaessig geschlossen.  Der Ausloeser des Fehlers
+          konnte noch nicht gefunden werden, der Fehler wird aber abgefangen,
+          indem die Suchroutine sofort beendet wird.
+
+2.0 Beta 6: 17.11.1996
+        - Diverse Bugs beim Aufrufen eines neuen Tontraegers (hoffentlich)
+          entfernt
+        - Loeschfunktion erweitert. Beim loeschen eines leeren Tracks wird
+          dieser komplett entfernt und die nachfolgenden Titel rutschen nach
+          oben
+        - Einfuegefunktion fuer Tracks auf F8 programmiert
+        - Druckfunktion fuer Kassetten-Standardcovers hinzugefuegt
+        - Bug in der Speicherfunktion entfernt. Die Anzahl Tracks wurde nicht
+          gezaehlt, wodurch es zu Problemen in der Druckroutine kam. Gleiches
+          gilt fuer Aufnahmestart und -ende
+        - Einfuege- und Loeschfunktion funktionieren jetzt auch mit markierten
+          Titeln.  Dazu muss ein Titel markiert sein und mit der Maus der
+          entsprechende Button gedrueckt werden. Man kann aber auch Shift und
+          die F-Taste benutzen
+        - Abkuerzungen koennen nun mit F5 benutzt werden
+
+2.0 Beta 5: 16.11.1996
+        - Noch einen Bug im CD-Player entfernt. Bei erfolgloser Suche nach
+          einer CD geriet die Suchroutine in eine Endlosschleife. Ausserdem
+          wurden noch ein paar optische Verbesserungen gemacht.
+        - Diverse Bugs in der Traeger Lade- und Eingaberoutine korrigiert
+        - Tabellen-Suchfunktion fuer Eingabe hinzugefuegt
+        - Loeschfunktion fuer Tracks auf F7
+
+        Ab dieser Version ist es moeglich neue Titel einzugeben oder alte zu
+        korrigieren
+
+2.0 Beta 4: 20.10.1996
+        - Bug im CD-Player entfernt (nach einlegen einer neuen CD wurde nicht
+          automatisch die Titelliste gesucht)
+        - Startmenue verkleinert. Hilfszeile wird nur nach klicken auf die
+          Help-Taste angezeigt.
+        - Startmenue bleibt jetzt immer Sichtbar (always stay on top)
+        - Mischpult hinzugefuegt
+        - CD-Nummer wird jetzt in der Titelzeile des CD-Players angezeigt
+
+2.0 Beta 3: 15.09.1996
+        - Bugs im CD-Player entfernt:
+          - Aenderung einer CD-Index-Nummer wurde einen Datensatz zu niedrig
+            gespeichert und dadurch nicht erkannt, bzw. ein anderer ueber-
+            schrieben.
+          - Bei geoeffnetem oder leerem CD-Player wird nun nichtmehr 2 mal
+            pro Sekunde die StatusUpdate-Funktion aufgerufen.
+
+        - Fortschrittsbalken in den CD-Player eingebaut. Beim Anklicken wird zur
+          entsprechenden Position des Tracks gesprungen. Wird die Maustaste
+          festgehalten, wird der Zeitindex angezeigt, zu dem beim Loslassen
+          gesprungen wird. Wird Beim Loslassen auch die rechte Maustaste
+          gedrueckt, passiert nichts. Der Step-Button wurde dafuer entfernt.
+
+            17.09.1996
+        - Druckfunktion fuer Suchergebnis hinzugefuegt
+
+2.0 Beta 2: 28.07.1996
+        Suchfunktion hinzugefuegt
+
+2.0 Beta 1: 30.04.1996
+        Grundgeruest des Programms mit Eingabemenue, Stammdatenfenster und
+        CD-Player, sowie Update-Funktion von WinMusik 1.0 auf 2.0 (Die erste
+        Version wurde nicht veroeffentlicht)
+
+
+*/

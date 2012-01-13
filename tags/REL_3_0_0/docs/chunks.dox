@@ -1,0 +1,447 @@
+/*!\page WM3File_Chunk_TITL Chunk: TITL - Titel
+
+Ein Titel Chunk besteht aus einem 60-Byte langem Datenblock mit verschiedenen Informationen,
+gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
+ist folgendermassen: 
+
+\code
+Byte 0:  Chunkname: TITL                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>TitelId</td><td>Eindeutige ID des Titels</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>Flags</td><td>Ein Bitfeld mit folgender Bedeutung:
+\code
+Bit 0: Titel ist komplett                                            (1)
+Bit 1: Es handelt sich um einen Musiktitel                           (2)
+Bit 2: MP3-Datei mit variabler Bitrate                               (4)
+Bit 3: Titel enthält Jingle oder es wurde reingeredet                (8)
+\endcode
+</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 5</td><td>DeviceId</td><td>ID des Tonträgers</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 9</td><td>Length</td><td>Länge des Titels in Sekunden</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 13</td><td>VersionId</td><td>Verknüpfung mit der Versions-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 17</td><td>LableId</td><td>Verknüpfung mit der Plattenlable-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 21</td><td>BPM</td><td>Beats per Minute mit 1000 multipliziert</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 25</td><td>RecordDate</td><td>Aufnahmedatum als Integer im Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 29</td><td>ReleaseDate</td><td>Veröffentlichungsdatum des Titels als Integer um Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 33</td><td>SourceId</td><td>Verknüpfung mit der Tabelle der Aufnahmequellen</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 35</td><td>Track</td><td>Track-Nummer</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 37</td><td>Bitrate</td><td>Bitrate in KBit, 0 = unbekannt</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 39</td><td>GenreId</td><td>Verknüpfung mit der Genre-Tabelle</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 41</td><td>RecordDeviceId</td><td>Verknüpfung mit der Tabelle der Aufnahmegeräte</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 43</td><td>DeviceType</td><td>\ref WM3File_Devices "Tonträger-Art"</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 44</td><td>Page</td><td>Seite auf dem Tonträger</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 45</td><td>Channels</td><td>Tonkanäle-Index mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = Mono
+2 = Stereo
+3 = Dolby Stereo
+4 = Dolby Surround
+5 = Dolby Digital 5.1
+6 = Dolby Digital 5.1EX
+7 = DTS
+\endverbatim
+</td><td>1 Byte</td></tr>
+<tr valign="top">         
+<td>Byte 46</td><td>Quality</td><td>Bewertung der Tonqualität mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = sehr gut
+2 = gut
+3 = mittelmäßig
+4 = schlecht
+5 = sehr schlecht
+\endverbatim
+</td><td>1 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 47</td><td>Rating</td><td>Bewertung des Titels mit folgender Bedeutung:
+\verbatim
+0 = keine Bewertung
+1 = 1 Stern (sehr schlecht)
+2 = 2 Sterne (schlecht)
+3 = 3 Sterne (mittelmäßig)
+4 = 4 Sterne (gut)
+5 = 5 Sterne (sehr gut)
+6 = 6 Sterne (absoluter Knaller)
+\endverbatim
+</td><td>1 Byte</td></tr> 
+<tr valign="top">
+<td>Byte 48</td><td>importData</td><td>Verweis auf Original-Importdaten (nur MP3, siehe DataTitle::ImportData,
+bzw. \ref WM3File_Chunk_OIMP)
+</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 52</td><td>lenArtist</td><td>Anzahl Byte des Interpretennamens. Ist 0, wenn kein Interpret angegeben ist.
+</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 54</td><td>Artist</td><td>String mit dem Namen des Interpreten im UTF-8 Format ohne schließendes 0-Byte</td><td>n Bytes</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenTitle</td><td>Länge des Titels oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Title</td><td>String mit dem Titel im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenRemarks</td><td>Länge der Bemerkung oder 0 </td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Remarks</td><td>String mit einer zusätzlichen Bemerkung im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenAlbum</td><td>Länge des Album-Namens oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Album</td><td>String mit dem Namen des Albums im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+
+*/
+
+
+/*!\page WM3File_Chunk_VERS Chunk: VERS - Versionen
+
+\code
+Byte 0:  Chunkname: VERS                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID der Version</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name der Version im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+*/
+
+/*!\page WM3File_Chunk_TABL Allgemeines Format für Tabellendatensätze
+
+\code
+Byte 0:  Chunkname: xxxx                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID des Datensatzes</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Text</td><td>Inhalt des Datensatzes im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+*/
+
+/*!\page WM3File_Chunk_DEVI Chunk: DEVI - Tonträger
+<b>Chunk-Header:</b>
+\code
+Byte 0:  Chunkname: DEVI                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Medium</td><td>Art des \ref WM3File_Devices "Tonträgers"
+
+\copydoc WM3File_Devices
+</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 1</td><td>Index</td><td>ID des Tonträgers</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 5</td><td>Pages</td><td>Anzahl Seiten, die der Tonträger hat</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 6</td><td>Length</td><td>Gesamt-Länge bzw. Maximale Aufnahmelänge des Tonträgers in Sekunden</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 10</td><td>Recorded</td><td>Bespielte Länge des Tonträgers in Sekunden</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 14</td><td>LabelId</td><td>Verknüpfung mit der Tabelle der Plattenlabels/Hersteller</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 18</td><td>PurchaseId</td><td>Verknüpfung mit der Tabelle der Kaufquellen</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 20</td><td>PurchaseDate</td><td>Kaufdatum als Long-Integer im Format yyyymmdd. Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 24</td><td>PurchasePrice</td><td>Kaufpreis des Tonträgers als Float</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 28</td><td>DateCreated</td><td>Datum, wann der Tonträger angelegt wurde als Long-Integer im Format yyyymmdd</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 32</td><td>FirstDate</td><td>Aufnahmedatum des ältesten Tracks als Long-Integer im Format yyyymmdd</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 36</td><td>LastDate</td><td>Aufnahmedatum des neusten Tracks als Long-Integer im Format yyyymmdd</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 40</td><td>NumTracks</td><td>Anzahl Tracks auf diesem Tonträger</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 44</td><td>lenTitle</td><td>Länge des Titels oder 0, wenn kein Titel vorhanden ist</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 46</td><td>Title</td><td>Titel des Tonträgers im UTF-8 Format ohne schließendes 0-Byte</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenSubTitle</td><td>Länge des Untertitels oder 0, wenn kein Untertitel vorhanden ist</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>SubTitle</td><td>Untertitel des Tonträgers im UTF-8 Format ohne schließendes 0-Byte</td><td>n Byte</td></tr>
+</table>
+
+Dem Tonträger können pro Seite bis zu 65535 \ref WM3File_Chunk_TRAK "Tracks" zugeordnet werden. 
+
+*/
+
+/*!\page WM3File_Chunk_TRAK Chunk: TRAK - Tracks
+\code
+Byte 0:  Chunkname: TRAK                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Medium</td><td>Art des \ref WM3File_Devices "Tonträgers"</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 1</td><td>MediumIndex</td><td>ID des \ref WM3File_Chunk_DEVI "Tonträgers"</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 5</td><td>Page</td><td>Seite des Tonträgers</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 6</td><td>Track</td><td>Track-Nummer</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>TitleId</td><td>ID des \ref WM3File_Chunk_TITL "Titels"</td><td>4 Byte</td></tr>
+</table>
+
+*/
+
+/*!\page WM3File_Chunk_LABL Chunk: LABL - Plattenlables
+\code
+Byte 0:  Chunkname: LABL                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID des Lables</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name des Lables im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+
+*/
+
+/*!\page WM3File_Chunk_RSRC Chunk: RSRC - Aufnahmequellen
+\code
+Byte 0:  Chunkname: RSRC                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID der Aufnahmequelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name der Aufnahmequelle im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+
+*/
+
+
+/*!\page WM3File_Chunk_GENR Chunk: GENR - Musik Genres
+\code
+Byte 0:  Chunkname: GENR                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID des Genres</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name des Genres im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+*/
+
+/*!\page WM3File_Chunk_RDEV Chunk: RDEV - Aufnahmegeräte
+\code
+Byte 0:  Chunkname: RDEV                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID des Aufnahmegeräts</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name des Aufnahmegeräts im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+
+*/
+
+/*!\page WM3File_Chunk_PCHS Chunk: PCHS - Kaufquelle
+\code
+Byte 0:  Chunkname: PCHS                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID der Kaufquelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>References</td><td>Anzahl Referenzierungen</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 8</td><td>Name</td><td>Name der Kaufquelle im UTF-8 Format</td><td>n Byte</td></tr>
+</table>
+
+*/
+
+/*!\page WM3File_Chunk_FREE Chunk: FREE - gelöschter Datensatz
+Ein als FREE gekennzeichneter Chunk enthielt einen Datensatz, der aktualisiert wurde und nicht mehr
+in den zur Verfügung stehenden Platz passte. Der neue Datensatz wurde daher an eine andere Position
+gespeichert und der alte als FREE gekennzeichnet. Er wird beim Einlesen der Datei überlesen, bzw.
+kann zum Speichern eines neuen Datensatzes verwendet werden.
+
+Der FREE-Chunk enthält außer dem Header keine weiteren Nutzdaten.
+
+\code
+Byte 0:  Chunkname: FREE                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung: 0              4 Byte
+Byte 12: Versionsnummer: 0                              4 Byte
+Byte 16: Datensatz-Format: 0							1 Byte 
+\endcode
+
+
+*/
+
+/*!\page WM3File_Chunk_SHRT Chunk: SHRT - Interpreten Abkürzungen
+\code
+Byte 0:  Chunkname: SHRT                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>lenAbkuerzung</td><td>Länge der Abkuerzung</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 2</td><td>Abkuerzung</td><td>Name der Abkürzung im UTF-8 Format ohne schließendes 0-Byte</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenInterpret</td><td>Länge des Interpreten</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Interpret</td><td>Name des Interpreten im UTF-8 Format ohne schließendes 0-Byte</td><td>n Byte</td></tr>
+</table>
+
+
+*/
+
+
+/*!\page WM3File_Chunk_OIMP Chunk: OIMP - Original Import Daten
+\code
+Byte 0:  Chunkname: OIMP                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+<b>Nutzdaten:</b>
+
+Die unkomprimierten Daten haben folgendes Format:
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>Id</td><td>ID des Datensatzes</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>lenFilename</td><td>Länge des Dateinamens</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 6</td><td>Filename</td><td>Der Dateiname im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenID3v1</td><td>Länge des ID3v1-Tags oder 0, wenn keiner vorhanden war. Ist in der Regel 128 Byte lang.</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Filename</td><td>ID3v1-Tag</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenID3v2Data</td><td>Länge der ID3v2-Daten im ppl6::CAssocArray-Format oder 0, wenn keiner vorhanden war.</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Filename</td><td>ID3v2-Daten</td><td>n Byte</td></tr>
+</table>
+
+*/
