@@ -1057,18 +1057,18 @@
                 <day>1</day>
                </datetime>
               </property>
-              <property name="displayFormat">
-               <string>yyyy</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>false</bool>
-              </property>
               <property name="date">
                <date>
                 <year>2008</year>
                 <month>1</month>
                 <day>1</day>
                </date>
+              </property>
+              <property name="displayFormat">
+               <string>yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -1094,18 +1094,18 @@
             </item>
             <item>
              <widget class="QDateEdit" name="recordDate">
-              <property name="displayFormat">
-               <string>dd.MM.yyyy</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
-              </property>
               <property name="date">
                <date>
                 <year>2008</year>
                 <month>1</month>
                 <day>1</day>
                </date>
+              </property>
+              <property name="displayFormat">
+               <string>dd.MM.yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -2031,463 +2031,19 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="margin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QToolButton" name="esc">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>ESC</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0000.png</normaloff>:/fkeys/resources/f-key-0000.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f1">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F1</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0001.png</normaloff>:/fkeys/resources/f-key-0001.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f2">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F2</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0002.png</normaloff>:/fkeys/resources/f-key-0002.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f3">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F3</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0003.png</normaloff>:/fkeys/resources/f-key-0003.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f4">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F4</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0004.png</normaloff>:/fkeys/resources/f-key-0004.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f5">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F5</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0005.png</normaloff>:/fkeys/resources/f-key-0005.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f6">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F6</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0006.png</normaloff>:/fkeys/resources/f-key-0006.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f7">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F7</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0007.png</normaloff>:/fkeys/resources/f-key-0007.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f8">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F8</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0008.png</normaloff>:/fkeys/resources/f-key-0008.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f9">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F9</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0009.png</normaloff>:/fkeys/resources/f-key-0009.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f10">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F10</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0010.png</normaloff>:/fkeys/resources/f-key-0010.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f11">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F11</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0011.png</normaloff>:/fkeys/resources/f-key-0011.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="f12">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>F12</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/fkeys/resources/f-key-0012.png</normaloff>:/fkeys/resources/f-key-0012.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>50</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="FKeys" name="fkeys" native="true"/>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>FKeys</class>
+   <extends>QWidget</extends>
+   <header>forms/fkeys.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>index</tabstop>
   <tabstop>page</tabstop>
@@ -2518,19 +2074,6 @@
   <tabstop>channels</tabstop>
   <tabstop>quality</tabstop>
   <tabstop>rating</tabstop>
-  <tabstop>f12</tabstop>
-  <tabstop>esc</tabstop>
-  <tabstop>f1</tabstop>
-  <tabstop>f2</tabstop>
-  <tabstop>f3</tabstop>
-  <tabstop>f4</tabstop>
-  <tabstop>f5</tabstop>
-  <tabstop>f6</tabstop>
-  <tabstop>f7</tabstop>
-  <tabstop>f8</tabstop>
-  <tabstop>f9</tabstop>
-  <tabstop>f10</tabstop>
-  <tabstop>f11</tabstop>
   <tabstop>filename</tabstop>
   <tabstop>filesize</tabstop>
   <tabstop>statsTracks</tabstop>

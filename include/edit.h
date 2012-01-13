@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.6 $
- * $Date: 2010/11/28 15:47:58 $
- * $Id: edit.h,v 1.6 2010/11/28 15:47:58 pafe Exp $
+ * $Revision: 1.7 $
+ * $Date: 2012/01/13 19:45:01 $
+ * $Id: edit.h,v 1.7 2012/01/13 19:45:01 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -34,8 +34,10 @@
 #include <QKeyEvent>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include "forms/fkeys.h"
 #include "ui_edit.h"
 #include "oimpinfo.h"
+
 
 class Edit;
 

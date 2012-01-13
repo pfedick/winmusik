@@ -2,9 +2,9 @@
 ; * This file is part of WinMusik 3.0 by Patrick Fedick
 ; *
 ; * $Author: pafe $
-; * $Revision: 1.5 $
-; * $Date: 2010/12/23 14:25:40 $
-; * $Id: setup.iss,v 1.5 2010/12/23 14:25:40 pafe Exp $
+; * $Revision: 1.7 $
+; * $Date: 2012/01/09 21:00:00 $
+; * $Id: setup.iss,v 1.7 2012/01/09 21:00:00 pafe Exp $
 ; *
 ; *
 ; * Copyright (c) 2009 Patrick Fedick
@@ -70,11 +70,10 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.6.2\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.6.2\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.6.2\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.7.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.7.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.7.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "c:\mingw\bin\libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 [Icons]

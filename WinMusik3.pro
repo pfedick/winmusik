@@ -1,27 +1,19 @@
 # This file is part of WinMusik 3 by Patrick Fedick
-#
 # $Author: pafe $
-# $Revision: 1.8 $
-# $Date: 2010/12/23 13:09:56 $
-# $Id: WinMusik3.pro,v 1.8 2010/12/23 13:09:56 pafe Exp $
-#
-#
+# $Revision: 1.10 $
+# $Date: 2012/01/13 19:45:03 $
+# $Id: WinMusik3.pro,v 1.10 2012/01/13 19:45:03 pafe Exp $
 # Copyright (c) 2010 Patrick Fedick
-#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#
 TEMPLATE = app
 TARGET = WinMusik3
 QT += core \
@@ -35,10 +27,12 @@ else {
     win32:TARGET = WinMusik3
     unix:TARGET = release/WinMusik3
 }
-HEADERS += include/coverprinter.h \
-	include/shortcutdialog.h \
-	include/updater.h \
-	include/registration.h \
+HEADERS += forms/fkeys.h \
+    forms/edittrack.h \
+    include/coverprinter.h \
+    include/shortcutdialog.h \
+    include/updater.h \
+    include/registration.h \
     include/printdevicedialog.h \
     include/oimpinfo.h \
     include/wmstorage.h \
@@ -60,11 +54,13 @@ HEADERS += include/coverprinter.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h
-SOURCES += src/CTrackList.cpp \ 
-	src/coverprinter.cpp \
-	src/shortcutdialog.cpp \
-	src/updater.cpp \
-	src/registration.cpp \
+SOURCES += forms/fkeys.cpp \
+    forms/edittrack.cpp \
+    src/CTrackList.cpp \
+    src/coverprinter.cpp \
+    src/shortcutdialog.cpp \
+    src/updater.cpp \
+    src/registration.cpp \
     src/CHashes.cpp \
     src/printdevicedialog.cpp \
     src/Print.cpp \
@@ -101,11 +97,12 @@ SOURCES += src/CTrackList.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
     src/DropArea.cpp
-    
-FORMS += forms/coverprinter.ui \
-	forms/shortcutdialog.ui \
-	forms/updater.ui \
-	forms/registration.ui \
+FORMS += forms/fkeys.ui \
+    forms/edittrack.ui \
+    forms/coverprinter.ui \
+    forms/shortcutdialog.ui \
+    forms/updater.ui \
+    forms/registration.ui \
     forms/printdevicedialog.ui \
     forms/oimpinfo.ui \
     forms/tablesearch.ui \
@@ -126,9 +123,9 @@ RC_FILE = resource.rc
 INCLUDEPATH += include
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:\mingw\msys\1.0\local\include \
-	C:\mingw\msys\1.0\local\ssl\include
+    C:\mingw\msys\1.0\local\ssl\include
 win32:LIBPATH += C:\mingw\msys\1.0\local\lib \
-	C:\mingw\msys\1.0\local\ssl\lib
+    C:\mingw\msys\1.0\local\ssl\lib
 CONFIG(debug, debug|release) { 
     # Debug
     unix:LIBS += `ppl6-config \
@@ -137,31 +134,6 @@ CONFIG(debug, debug|release) {
     win32:LIBS += -lppl6-debug \
         -lpcre \
         -liconv \
-        -lmp3lame \
-        -lmad \
-        -lz \
-        -lbz2 \
-        -lcurl \
-        -lidn \
-        -lssl \
-        -lmcrypt \
-        -lcrypto \
-        -lws2_32 \
-        -ldnsapi \
-        -lz \
-        -lbz2 \
-        -lgdi32      
-}
-else { 
-    # Release
-    unix:LIBS += `ppl6-config \
-        --libs \
-        release`
-    win32:LIBS += -lppl6 \
-        -lpcre \
-        -liconv \
-        -lmp3lame \
-        -lmad \
         -lz \
         -lbz2 \
         -lcurl \
@@ -174,7 +146,27 @@ else {
         -lz \
         -lbz2 \
         -lgdi32
-        
+}
+else { 
+    # Release
+    unix:LIBS += `ppl6-config \
+        --libs \
+        release`
+    win32:LIBS += -lppl6 \
+        -lpcre \
+        -liconv \
+        -lz \
+        -lbz2 \
+        -lcurl \
+        -lidn \
+        -lssl \
+        -lmcrypt \
+        -lcrypto \
+        -lws2_32 \
+        -ldnsapi \
+        -lz \
+        -lbz2 \
+        -lgdi32
 }
 CODECFORSRC = UTF-8
 CODECFORTR = UTF-8
