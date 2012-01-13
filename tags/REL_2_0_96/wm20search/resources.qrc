@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/new/prefix1" />
+    <qresource prefix="/resources" >
+        <file>resources/folder-open-20.png</file>
+        <file>resources/lupe-20.png</file>
+        <file>resources/traeger0001.bmp</file>
+        <file>resources/traeger0002.bmp</file>
+        <file>resources/traeger0003.bmp</file>
+        <file>resources/traeger0004.bmp</file>
+        <file>resources/traeger0005.bmp</file>
+        <file>resources/traeger0006.bmp</file>
+        <file>resources/traeger0007.bmp</file>
+        <file>resources/traeger0008.bmp</file>
+    </qresource>
+</RCC>

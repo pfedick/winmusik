@@ -1,0 +1,7 @@
+TODO:
+	- Komplette Verzeichnisse mit MP3-Files oder nur bestimmte Dateien
+	  daraus koennen nun in einem Rutsch importiert werden (F6 druecken,
+	  wenn der Cursor im Track-Feld steht). Dabei koennen die Dateinamen
+	  auch direkt um die Tracknummer ergaenzt oder komplett umbenannt
+	  werden.
+	- ID3v2-Tag auswerten, wenn vorhanden
