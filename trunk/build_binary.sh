@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.13 $
-# $Date: 2011/05/15 10:55:57 $
-# $Id: build_binary.sh,v 1.13 2011/05/15 10:55:57 pafe Exp $
+# $Revision: 1.15 $
+# $Date: 2012/01/09 20:44:54 $
+# $Id: build_binary.sh,v 1.15 2012/01/09 20:44:54 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -36,7 +36,8 @@ DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
 COMMENT=`cat README_en.TXT`
 DISTFILES=$MYPWD
 MAKE="make"
-PPLPATH=~/sourceforge/ppl6/lib
+PPLPATH=~/sourceforge/ppl6
+QTVERSION=4.7.4
 QMAKE="qmake-qt4"
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
 if [ -f /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe ] ; then
@@ -56,7 +57,14 @@ else
 		MINGW32*:1.0.11*)
 			DISTRIB_ID="MINGW32";
 			DISTRIB_RELEASE="1.0.11";
-			TESTGUI=TestGUI.exe
+			;;
+		MINGW32*:1.0.17*)
+			DISTRIB_ID="MINGW32";
+			DISTRIB_RELEASE="1.0.17";
+			QTDIR=/c/Qt/$QTVERSION
+			QMAKESPEC=win32-g++
+			PATH=$PATH:/c/Qt/$QTVERSION/bin
+			echo "PATH=$PATH"
 			;;
 	esac
 fi
@@ -119,8 +127,12 @@ rm -rf WinMusik-$VERSION-src-complete
 build_binary() {
 
 case "$DISTRIB_ID:$DISTRIB_RELEASE" in
-	MINGW32*:1.0.11*)
+	MINGW32*:1.0.11)
 		MAKE=gmake
+		QMAKE=qmake
+		;;
+	MINGW32*:1.0.17)
+		MAKE=make
 		QMAKE=qmake
 		;;
 esac
@@ -136,7 +148,7 @@ then
         export CPPFLAGS=-I/usr/local/include
 		export LDLAGS=-L/usr/local/lib
 		./configure --prefix=$BUILD \
-			--with-pcre=/usr/local --with-openssl --with-libmhash --with-libiconv-prefix=/usr/local --with-nasm \
+			--with-pcre=/usr/local --with-libmhash --with-libiconv-prefix=/usr/local --with-nasm \
 			--with-libmcrypt-prefix --with-libiconv-prefix=/usr/local \
 			--without-pgsql --without-png --without-lame --without-ft-prefix \
 			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
@@ -159,7 +171,7 @@ then
 			--with-libcurl --with-sdl-prefix=$BUILD
 		;;	
 	
-	MINGW32*:1.0.11*)
+	MINGW32*:1.0.*)
                 export CPPFLAGS="-DCURL_STATICLIB -I/usr/local/include -I/sdk/WindowsSDK/include"
                 export LDLAGS="-DCURL_STATICLIB -L/usr/local/lib -L/sdk/WindowsSDK/lib"
                 export CFLAGS="-DCURL_STATICLIB"
@@ -171,12 +183,11 @@ then
 						--with-libcurl --with-sdl-prefix=$BUILD \
                         --with-libmhash \
                         --with-libmcrypt-prefix \
-                        --without-openssl --with-libcurl
-		MAKE=gmake
+                        --with-libcurl
 		;;
 	*)
 		./configure --prefix=$BUILD \
-			--with-pcre=/usr --with-openssl --with-libiconv-prefix --with-nasm \
+			--with-pcre=/usr --with-libiconv-prefix --with-nasm \
 			--with-libmcrypt-prefix=no --with-libmhash=no \
 			--without-pgsql --without-png --without-lame --without-ft-prefix \
 			--without-libmad --without-lame --without-x --without-mysql --without-sybase \

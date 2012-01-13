@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.26 $
- * $Date: 2010/12/23 14:25:40 $
- * $Id: edit.cpp,v 1.26 2010/12/23 14:25:40 pafe Exp $
+ * $Revision: 1.27 $
+ * $Date: 2012/01/13 19:45:04 $
+ * $Id: edit.cpp,v 1.27 2012/01/13 19:45:04 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -542,7 +542,7 @@ void Edit::on_DupeTimer_update()
 	if (count&1) DupeCheckIcon=":/fkeys/resources/fkeys/f-key-3005.png";
 	else DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	if (position>7) {
-		SetFkey(ui.f5,DupeCheckIcon,"");
+		ui.fkeys->setFkey(5,DupeCheckIcon,"");
 	}
 }
 
@@ -598,9 +598,10 @@ void Edit::SetFkey(QToolButton *button,const char *Icon, QString Text, bool enab
 	button->setEnabled(enabled);
 }
 
+
 void Edit::UpdateFkeys()
 {
-	SetFkey(ui.esc,":/fkeys/resources/fkeys/f-key-0000.png"," ",false);
+	ui.fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-0000.png"," ",false);
 	SetFkey(ui.f1,":/fkeys/resources/fkeys/f-key-0001.png"," ",false);
 	SetFkey(ui.f2,":/fkeys/resources/fkeys/f-key-0002.png"," ",false);
 	SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-0003.png"," ",false);
