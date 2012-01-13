@@ -1,0 +1,80 @@
+/*!\mainpage WinMusik 3
+
+\section WM3Main_Introduction Einleitung
+WinMusik ist ein Plattform-unabhängiges Programm zum Verwalten von Musiktiteln auf Audio-CDs, DVDs,
+Musikkassetten, Schallplatten, MP3-Datenträgern und anderer Tonträger.
+
+  - Komfortable Oberfläche zum Eingeben und Editieren
+    Ihrer Musiktitel.
+  - Import von MP3-Dateien
+  - ID3v2-Tag-Support
+  - Umfangreiche Suchfunktionen zum Auffinden bestimmter
+    Titel oder Interpreten.
+  - OpenSource unter der GNU GENERAL PUBLIC LICENSE
+  - Läuft unter Windows, Linux, FreeBSD und anderen Unixen
+
+WinMusik ist komplett in C++ geschrieben und steht ab Version 3.0.0 unter der Open Source Lizenz
+"GPL 3" (http://www.gnu.org/licenses/gpl.html).
+
+Neben Qt4 (http://qt.nokia.com/) als grafische Oberfläche verwendet es auch meine Programmbibliothek
+PPL6 (siehe http://www.pfp.de/ppl/). Es läuft neben Windows XP, Vista und Windows 7 auch auf allen
+Unixen, auf denen Qt4 und PPL6 verfügbar sind. Ich selbst teste und entwickle unter Windows XP, FreeBSD und Ubuntu.
+Mac OS wird leider mangels Mac noch nicht unterstützt.
+  
+\section WM3Main_Index Inhalt:
+Diese Anleitung enthält die Dokumentation des Quellcodes, ist zum jetzigen Zeitpunkt aber noch nicht vollständig.
+
+- \subpage WM3Install
+- \ref WM3File
+- \ref WM3File_Devices
+- \ref WM3DataTypes
+- \ref WM3StorageClasses
+- <a class="el" href="annotated.html">Übersicht aller Klassen</a>
+- \subpage WM3History
+- \subpage WM3License
+- \subpage WM3TODO
+
+*/
+
+
+
+/*!\page WM3License Copyright
+
+WinMusik steht seit der Version 3 unter GPL.
+
+\verbinclude LICENSE.TXT
+
+*/
+
+/*!\page WM3Install Installation
+\verbinclude INSTALL.TXT
+*/
+
+/*!\page WM3Images
+This page only contains the images required for the layout
+\image html pfp-logo-80x48.png
+\image html dokubanner.jpg
+\image html dokubanner-repeat.png
+
+*/
+
+/*!\page WM3File_Devices Tonträger
+
+WinMusik 3 kennt folgende Tonträger:
+
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Id</th><th>Beschreibung</th></tr>
+<tr valign="top"><td>1</td><td>Musikkassette</td></tr>
+<tr valign="top"><td>2</td><td>CD</td></tr>
+<tr valign="top"><td>3</td><td>Daten</td></tr>
+<tr valign="top"><td>4</td><td>Schallplatte</td></tr>
+<tr valign="top"><td>5</td><td>Video</td></tr>
+<tr valign="top"><td>6</td><td>Sonstiges</td></tr>
+<tr valign="top"><td>7</td><td>MP3</td></tr>
+<tr valign="top"><td>8</td><td>Band</td></tr>
+<tr valign="top"><td>9</td><td>DVD</td></tr>
+</table>
+
+
+*/
