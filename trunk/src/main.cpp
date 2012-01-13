@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: main.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
+ * $Revision: 1.4 $
+ * $Date: 2011/05/15 10:55:57 $
+ * $Id: main.cpp,v 1.4 2011/05/15 10:55:57 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -38,6 +38,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    if (setlocale(LC_CTYPE,"")==NULL) {
+		printf ("setlocale fehlgeschlagen\n");
+		throw std::exception();
+    }
+    //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
+
     CWmClient Client;
     if (!Client.Init(argc,argv,&a)) {
     	Client.RaiseError();

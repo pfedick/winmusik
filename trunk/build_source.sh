@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.5 $
-# $Date: 2010/11/17 23:14:35 $
-# $Id: build_source.sh,v 1.5 2010/11/17 23:14:35 pafe Exp $
+# $Revision: 1.6 $
+# $Date: 2011/05/15 09:50:36 $
+# $Id: build_source.sh,v 1.6 2011/05/15 09:50:36 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -27,7 +27,7 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.3"
+VERSION="3.0.4"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"

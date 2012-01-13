@@ -3,9 +3,9 @@
 # This file is part of WinMusik 3 by Patrick Fedick
 #
 # $Author: pafe $
-# $Revision: 1.11 $
-# $Date: 2010/11/21 15:00:55 $
-# $Id: build_binary.sh,v 1.11 2010/11/21 15:00:55 pafe Exp $
+# $Revision: 1.13 $
+# $Date: 2011/05/15 10:55:57 $
+# $Id: build_binary.sh,v 1.13 2011/05/15 10:55:57 pafe Exp $
 #
 #
 # Copyright (c) 2010 Patrick Fedick
@@ -27,7 +27,7 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.3"
+VERSION="3.0.4"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
@@ -36,6 +36,7 @@ DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
 COMMENT=`cat README_en.TXT`
 DISTFILES=$MYPWD
 MAKE="make"
+PPLPATH=~/sourceforge/ppl6/lib
 QMAKE="qmake-qt4"
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
 if [ -f /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe ] ; then
@@ -81,9 +82,9 @@ cd src
 mkdir -p ppl6 winmusik
 
 echo "Kopiere PPL6 in temporäres Build-Verzeichnis"
-cd ~/cvs-sourceforge/pplib/lib
+cd $PPLPATH
 if [ $? -ne 0 ] ; then
-	echo "PPL6 not found in ~/cvs-sourceforge/pplib/lib"
+	echo "PPL6 not found in $PPLPATH"
 	exit 1
 fi
 

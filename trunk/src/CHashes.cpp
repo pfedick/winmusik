@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.8 $
- * $Date: 2010/11/28 19:29:12 $
- * $Id: CHashes.cpp,v 1.8 2010/11/28 19:29:12 pafe Exp $
+ * $Revision: 1.10 $
+ * $Date: 2011/05/15 09:39:40 $
+ * $Id: CHashes.cpp,v 1.10 2011/05/15 09:39:40 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -67,27 +67,19 @@ void CHashes::Clear()
 	Mutex.Unlock();
 }
 
-int CHashes::GetWords(const ppl6::CString &str, ppl6::CAssocArray &words)
+int CHashes::GetWords(const ppl6::CString &str, ppl6::CArray &words)
 {
 	words.Clear();
 	ppl6::CString s=str;
 	s.Trim();
 	if (s.IsEmpty()) return 0;
-	// Wir nehmen nur Kleinbuchstaben
-	s.LCase();
 	// Bestimmte Zeichen filtern wir raus
 	wm->NormalizeTerm(s);
-	ppl6::CArray a;
-	a.Explode(s," ",0,true);
-	a.Reset();
-	const char *tmp;
-	while ((tmp=a.GetNext())) {
-		words.Set(tmp,"1");
-	}
+	words.Explode(s," ",0,true);
 	return 1;
 }
 
-int CHashes::GetTags(const ppl6::CString &str, ppl6::CAssocArray &words)
+int CHashes::GetTags(const ppl6::CString &str, ppl6::CArray &words)
 {
 	words.Clear();
 	ppl6::CString s=str;
@@ -97,22 +89,19 @@ int CHashes::GetTags(const ppl6::CString &str, ppl6::CAssocArray &words)
 	s.LCase();
 	ppl6::CArray a;
 	s.Replace(",",";");
-	a.Explode(s,";",0,true);
-	a.Reset();
-	const char *tmp;
-	while ((tmp=a.GetNext())) {
-		words.Set(tmp,"1");
-	}
+	words.Explode(s,";",0,true);
 	return 1;
 }
 
-void CHashes::AddWords(CWordTree &Tree, ppl6::CAssocArray &words, const DataTitle *title)
+void CHashes::AddWords(CWordTree &Tree, ppl6::CArray &words, const DataTitle *title)
 {
-	ppl6::CString key,value;
+	const char *tmp;
+	ppl6::CString key;
 	CWord find, *item;
 	if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","AddWords",__FILE__,__LINE__,"Hash=%s, Title=%i",(const char*)Tree.Name,title->TitleId);
 	words.Reset();
-	while (words.GetNext(&key,&value)) {
+	while ((tmp=words.GetNext())) {
+		key=tmp;
 		//printf ("Word: %s",(char*)key);
 		if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","AddWords",__FILE__,__LINE__,"Searching word: %s",(const char*)key);
 		find.Word=key;
@@ -148,13 +137,15 @@ void CHashes::Add(CTitleHashTree &Result, CTitleHashTree &src)
 	while ((v=src.GetNext())) Result.Add(v);
 }
 
-void CHashes::FindWords(CWordTree &Tree, ppl6::CAssocArray &words, CTitleHashTree &Result)
+void CHashes::FindWords(CWordTree &Tree, ppl6::CArray &words, CTitleHashTree &Result)
 {
-	ppl6::CString key,value;
+	const char *tmp;
+	ppl6::CString key;
 	CWord find, *item;
 	words.Reset();
 	int wordnum=0;
-	while (words.GetNext(&key,&value)) {
+	while ((tmp=words.GetNext())) {
+		key=tmp;
 		//printf ("Word: %s",(char*)key);
 		if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","FindWords",__FILE__,__LINE__,"Search Word: %s in %s",(const char*)key,(const char*)Tree.Name);
 		if (key.Instr("*")>=0) {
@@ -247,13 +238,15 @@ void CHashes::FindSingleWord(CWordTree &Tree, const ppl6::CString &Word, CTitleH
 }
 
 
-void CHashes::RemoveWords(CWordTree &Tree, ppl6::CAssocArray &words, const DataTitle *title)
+void CHashes::RemoveWords(CWordTree &Tree, ppl6::CArray &words, const DataTitle *title)
 {
-	ppl6::CString key,value;
+	const char *tmp;
+	ppl6::CString key;
 	CWord find, *item;
 
 	words.Reset();
-	while (words.GetNext(&key,&value)) {
+	while ((tmp=words.GetNext())) {
+		key=tmp;
 		//printf ("Word: %s",(char*)key);
 		find.Word=key;
 		item=(CWord*)Tree.Find(&find);
@@ -267,7 +260,7 @@ void CHashes::RemoveWords(CWordTree &Tree, ppl6::CAssocArray &words, const DataT
 int CHashes::AddTitleInternal(ppluint32 TitleId, const DataTitle *title)
 {
 	ppl6::CString Tmp;
-	ppl6::CAssocArray words;
+	ppl6::CArray words;
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
 	if (GetWords(title->Artist,words)) {
@@ -336,7 +329,7 @@ int CHashes::AddTitle(ppluint32 TitleId, const DataTitle *title)
 int CHashes::RemoveTitle(ppluint32 TitleId, const DataTitle *title)
 {
 	ppl6::CString Tmp;
-	ppl6::CAssocArray words;
+	ppl6::CArray words;
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
 	Mutex.Lock();
@@ -457,11 +450,11 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitl
 {
 	Result.Clear();
 	// Zuerst die Wortlisten erstellen
-	ppl6::CAssocArray WordsArtist;
-	ppl6::CAssocArray WordsTitle;
+	ppl6::CArray WordsArtist;
+	ppl6::CArray WordsTitle;
 	GetWords(Artist,WordsArtist);
 	GetWords(Title,WordsTitle);
-	if (WordsArtist.Count()==0 && WordsTitle.Count()==0) {
+	if (WordsArtist.Num()==0 && WordsTitle.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;
 	}
@@ -469,19 +462,19 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitl
 	//WordsArtist.List("WordsArtist");
 	//WordsTitle.List("WordsTitle");
 	CTitleHashTree res1, res2, res;
-	if (WordsArtist.Count()) {
+	if (WordsArtist.Num()) {
 		FindWords(this->Artist,WordsArtist,res1);
 		//printf ("Result enthält %i Titel\n",res1.Num());
 	}
-	if (WordsTitle.Count()) {
+	if (WordsTitle.Num()) {
 		FindWords(this->Title,WordsTitle,res2);
 		//printf ("Result enthält %i Titel\n",res2.Num());
 	}
 	Mutex.Unlock();
 
-	if (WordsArtist.Count()>0 && WordsTitle.Count()>0) {
+	if (WordsArtist.Num()>0 && WordsTitle.Num()>0) {
 		Union(Result,res1,res2);
-	} else if (WordsArtist.Count()>0) {
+	} else if (WordsArtist.Num()>0) {
 		Copy(Result,res1);
 	} else {
 		Copy(Result,res2);
@@ -494,21 +487,21 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 {
 	Result.Clear();
 	// Zuerst die Wortlisten erstellen
-	ppl6::CAssocArray WordsArtist;
-	ppl6::CAssocArray WordsTitle;
-	ppl6::CAssocArray WordsVersion;
-	ppl6::CAssocArray WordsGenre;
-	ppl6::CAssocArray WordsTags;
+	ppl6::CArray WordsArtist;
+	ppl6::CArray WordsTitle;
+	ppl6::CArray WordsVersion;
+	ppl6::CArray WordsGenre;
+	ppl6::CArray WordsTags;
 	GetWords(Artist,WordsArtist);
 	GetWords(Title,WordsTitle);
 	GetWords(Version,WordsVersion);
 	GetWords(Genre,WordsGenre);
 	GetTags(Tags,WordsTags);
-	if (WordsArtist.Count()==0
-			&& WordsTitle.Count()==0
-			&& WordsVersion.Count()==0
-			&& WordsGenre.Count()==0
-			&& WordsTags.Count()==0) {
+	if (WordsArtist.Num()==0
+			&& WordsTitle.Num()==0
+			&& WordsVersion.Num()==0
+			&& WordsGenre.Num()==0
+			&& WordsTags.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;
 	}
@@ -516,43 +509,43 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	//WordsArtist.List("WordsArtist");
 	//WordsTitle.List("WordsTitle");
 	CTitleHashTree res1, res2, res3, res4, res5, res;
-	if (WordsArtist.Count()) {
+	if (WordsArtist.Num()) {
 		FindWords(this->Artist,WordsArtist,res1);
 		//printf ("Result enthält %i Titel\n",res1.Num());
 	}
-	if (WordsTitle.Count()) {
+	if (WordsTitle.Num()) {
 		FindWords(this->Title,WordsTitle,res2);
 		//printf ("Result enthält %i Titel\n",res2.Num());
 	}
-	if (WordsVersion.Count()) {
+	if (WordsVersion.Num()) {
 		FindWords(this->Version,WordsVersion,res3);
 	}
-	if (WordsGenre.Count()) {
+	if (WordsGenre.Num()) {
 		FindWords(this->Genre,WordsGenre,res4);
 	}
-	if (WordsTags.Count()) {
+	if (WordsTags.Num()) {
 		FindWords(this->Tags,WordsTags,res5);
 	}
 	Mutex.Unlock();
-	if (WordsArtist.Count()>0) Copy(Result,res1);
-	else if (WordsTitle.Count()>0) Copy(Result,res2);
-	else if (WordsVersion.Count()>0) Copy(Result,res3);
-	else if (WordsGenre.Count()>0) Copy(Result,res4);
-	else if (WordsTags.Count()>0) Copy(Result,res5);
+	if (WordsArtist.Num()>0) Copy(Result,res1);
+	else if (WordsTitle.Num()>0) Copy(Result,res2);
+	else if (WordsVersion.Num()>0) Copy(Result,res3);
+	else if (WordsGenre.Num()>0) Copy(Result,res4);
+	else if (WordsTags.Num()>0) Copy(Result,res5);
 
-	if (WordsTitle.Count()>0 ) {
+	if (WordsTitle.Num()>0 ) {
 		Copy(res,Result);
 		Union(Result,res,res2);
 	}
-	if (WordsVersion.Count()>0 ) {
+	if (WordsVersion.Num()>0 ) {
 		Copy(res,Result);
 		Union(Result,res,res3);
 	}
-	if (WordsGenre.Count()>0 ) {
+	if (WordsGenre.Num()>0 ) {
 		Copy(res,Result);
 		Union(Result,res,res4);
 	}
-	if (WordsTags.Count()>0 ) {
+	if (WordsTags.Num()>0 ) {
 		Copy(res,Result);
 		Union(Result,res,res5);
 	}
@@ -586,9 +579,9 @@ int CHashes::FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int 
 	Result.Clear();
 	if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,"Query=%s",(const char*)Query);
 	// Zuerst die Wortliste erstellen
-	ppl6::CAssocArray WordsQuery;
+	ppl6::CArray WordsQuery;
 	GetWords(Query,WordsQuery);
-	if (WordsQuery.Count()==0) {
+	if (WordsQuery.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;
 	}
@@ -605,14 +598,16 @@ int CHashes::FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int 
 		}
 	}
 
-	if (log) log->PrintArraySingleLine(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,&WordsQuery,"Words: ");
+	//if (log) log->PrintArraySingleLine(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,&WordsQuery,"Words: ");
 	//WordsQuery.List("words");
 
 	CTitleHashTree TmpResult;
 	WordsQuery.Reset();
-	ppl6::CString key,value;
+	ppl6::CString key;
 	int wordnum=0;
-	while (WordsQuery.GetNext(&key,&value)) {
+	const char*tmp;
+	while ((tmp=WordsQuery.GetNext())) {
+		key=tmp;
 		TmpResult.Clear();
 		if (Flags&SearchArtist) FindSingleWord(Artist,key,TmpResult);
 		if (Flags&SearchTitle) FindSingleWord(Title,key,TmpResult);
@@ -631,6 +626,7 @@ int CHashes::FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int 
 			wordnum++;
 		} else {
 			Result.Clear();
+			break;
 		}
 
 	}

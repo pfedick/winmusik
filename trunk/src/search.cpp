@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.11 $
- * $Date: 2010/11/28 19:29:12 $
- * $Id: search.cpp,v 1.11 2010/11/28 19:29:12 pafe Exp $
+ * $Revision: 1.15 $
+ * $Date: 2010/12/23 18:04:40 $
+ * $Id: search.cpp,v 1.15 2010/12/23 18:04:40 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -400,9 +400,12 @@ void Search::PresentResults()
 	ppl6::CString Tmp;
 	Tmp.Setf("%u",Results.Num());
 	ui.numTracks->setText(Tmp);
+	ui.totalLength->setText("");
 	DefaultTracklistHeader();
     Resize();
     trackList->update();
+
+    ppluint64 totalLength=0;
 
 	Results.Reset();
 	ppluint32 i=0;
@@ -442,9 +445,19 @@ void Search::PresentResults()
 		Icon.addFile(Tmp);
 		item->setIcon(6,Icon);
 
+		totalLength+=ti->Length;
 
 		trackList->addTopLevelItem(item);
 	}
+
+	int h=(int)(totalLength/3600);
+	int m=totalLength-(h*3600);
+	int s=m%60;
+	m=m/60;
+	Tmp.Setf("%0i:%02i:%02i",h,m,s);
+	ui.totalLength->setText(Tmp);
+
+
 }
 
 void Search::on_searchButton_clicked()
@@ -770,7 +783,12 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 
 			File=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
 			if (File.NotEmpty()) {
+#ifdef _WIN32
+				if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,10,"Search","on_trackList_MouseMove",__FILE__,__LINE__,"Add File to Drag: %s",(const char*)File);
 				list.append(QUrl::fromLocalFile(File));
+#else
+				list.append(QUrl::fromLocalFile(File));
+#endif
 				count++;
 			}
 		}

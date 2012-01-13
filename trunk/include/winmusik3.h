@@ -2,9 +2,9 @@
  * This file is part of WinMusik 3 by Patrick Fedick
  *
  * $Author: pafe $
- * $Revision: 1.18 $
- * $Date: 2010/11/28 19:29:12 $
- * $Id: winmusik3.h,v 1.18 2010/11/28 19:29:12 pafe Exp $
+ * $Revision: 1.21 $
+ * $Date: 2011/10/30 20:14:30 $
+ * $Id: winmusik3.h,v 1.21 2011/10/30 20:14:30 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -38,6 +38,7 @@
 #include <QTranslator>
 #include <QApplication>
 #include <QDate>
+#include <map>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
@@ -47,9 +48,9 @@
 #define __unused__ __attribute__ ((unused))
 #endif
 
-#define WM_VERSION	"3.0.3"
-#define WM_RELEASEDATE	20101128
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2010"
+#define WM_VERSION	"3.0.4"
+#define WM_RELEASEDATE	20111030
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2011"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
@@ -411,10 +412,10 @@ class CHashes : public ppl6::CThread
 		ppl6::CLog		*log;
 
 		int AddTitleInternal(ppluint32 TitleId, const DataTitle *title=NULL);
-		void AddWords(CWordTree &Tree, ppl6::CAssocArray &words,const DataTitle *title);
-		void FindWords(CWordTree &Tree, ppl6::CAssocArray &words, CTitleHashTree &Result);
+		void AddWords(CWordTree &Tree, ppl6::CArray &words,const DataTitle *title);
+		void FindWords(CWordTree &Tree, ppl6::CArray &words, CTitleHashTree &Result);
 		void FindSingleWord(CWordTree &Tree, const ppl6::CString &Word, CTitleHashTree &Result);
-		void RemoveWords(CWordTree &Tree, ppl6::CAssocArray &words,const DataTitle *title);
+		void RemoveWords(CWordTree &Tree, ppl6::CArray &words,const DataTitle *title);
 		void Union(CTitleHashTree &Result, CTitleHashTree &Tree1,CTitleHashTree &Tree2);
 		void Copy(CTitleHashTree &Result, CTitleHashTree &src);
 		void Add(CTitleHashTree &Result, CTitleHashTree &src);
@@ -435,8 +436,8 @@ class CHashes : public ppl6::CThread
 		virtual void ThreadMain(void *param);
 
 		void Clear();
-		int GetWords(const ppl6::CString &str, ppl6::CAssocArray &words);
-		int GetTags(const ppl6::CString &str, ppl6::CAssocArray &words);
+		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
+		int GetTags(const ppl6::CString &str, ppl6::CArray &words);
 		int AddTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 		int RemoveTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 
@@ -501,6 +502,9 @@ class CWmClient
 		int PrintTracklistHeader(QFont &Font, QPainter &painter,int x, int y);
 		int PrintTracklistDeviceHeader(QFont &Font, QPainter &painter,int x, int y,DataDevice *device);
 		int PrintTracklistDisclaimer(QFont &Font, QPainter &painter);
+		void initLetterReplacements();
+		void addLetterReplacement(wchar_t letter, wchar_t replacement);
+		void addLetterReplacement(const ppl6::CWString &letters, wchar_t replacement);
 		void *MainMenue;
 		ppl6::CGenericList EditorWindows;
 		ppl6::CGenericList SearchWindows;
@@ -510,6 +514,8 @@ class CWmClient
 		ppl6::CGenericList DeviceListWindows;
 
 		QDate					LatestPurchaseDate;
+
+		std::map<wchar_t, wchar_t> letterReplacements;
 
 
 	public:
