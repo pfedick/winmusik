@@ -1,0 +1,4 @@
+[InternetShortcut]
+URL=http://www.winmusik.de/
+IconIndex=0
+

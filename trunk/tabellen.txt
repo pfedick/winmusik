@@ -1,0 +1,35 @@
+Type Titeldatei
+  InfoByte As Integer
+  interpret As String * 80
+  titel As String * 80
+  version As Long
+  musikart As Long
+  Laenge As Single
+  bpm As Integer
+  Quelle As Long
+  Erscheinungsjahr As Integer
+  Aufnahmedatum As Long
+  Bewertung As String * 2
+  Qualitaet As String * 2
+  Bemerkung As Long
+  Aufnahmegeraet As Long
+  Soundfile As Long
+  traeger As Byte
+  Index As Long
+  Seite As Byte
+  track As Integer
+  Nummer As Long
+End Type
+
+
+InfoByte:
+	Bit 0 (  1): Gueltiger Titel
+	Bit 1 (  2):
+	Bit 2 (  4): Stereo
+	Bit 3 (  8): Dolby
+	Bit 4 ( 16): Surround
+	Bit 5 ( 32): vollstaendiger Titel
+	Bit 6 ( 64): echter Musiktitel
+	Bit 7 (128): Dolby Digital 5.1
+	Bit 8 (256):
+	Bit 9 (512):
