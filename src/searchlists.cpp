@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "../include/searchlists.h"
+#include "csearchlist.h"
 
 Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
     : QWidget(parent)
@@ -39,7 +40,39 @@ Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
 	this->wm=wm;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 
+    QString Style="QTreeView::item {\n"
+    		"border-right: 1px solid #b9b9b9;\n"
+    		"border-bottom: 1px solid #b9b9b9;\n"
+    		"}\n"
+    		"QTreeView::item:selected {\n"
+    		//"border-top: 1px solid #80c080;\n"
+    		//"border-bottom: 1px solid #80c080;\n"
+    		"background: #000070;\n"
+    		"color: rgb(255, 255, 255);\n"
+    		"}\n"
+    		"";
+    ui.treeWidget->setStyleSheet(Style);
+
 	// vorhandene Suchlisten anzeigen
+    CSearchlist sl;
+	ppl6::CDir Dir;
+	if (Dir.Open(wm->conf.DataPath)) {
+		ppl6::CDirEntry *entry;
+		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
+		while (entry) {
+			if (sl.load(entry->File)) {
+				SearchlistTreeItem *item=new SearchlistTreeItem;
+				item->Filename=entry->File;
+				item->setText(0,sl.name());
+				item->setText(1,ppl6::ToString("%i",sl.size()));
+				item->setText(2,sl.dateCreated().get("%Y-%m-%d"));
+				item->setText(3,sl.dateUpdated().get("%Y-%m-%d"));
+
+				ui.treeWidget->addTopLevelItem(item);
+			}
+			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
+		}
+	}
 
 }
 
@@ -53,7 +86,11 @@ Searchlists::~Searchlists()
 
 void Searchlists::Resize()
 {
-
+	int s=ui.treeWidget->width();
+	ui.treeWidget->setColumnWidth(3,100);
+	ui.treeWidget->setColumnWidth(2,100);
+	ui.treeWidget->setColumnWidth(1,50);
+	ui.treeWidget->setColumnWidth(0,s-102-102-52);
 }
 
 void Searchlists::showEvent(QShowEvent * event)
@@ -81,6 +118,14 @@ void Searchlists::on_newSearchlistButton_clicked()
 
 void Searchlists::on_deleteSearchlistButton_clicked()
 {
+
+}
+
+void Searchlists::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column )
+{
+	SearchlistTreeItem *it=(SearchlistTreeItem*) item;
+	if (!it) return;
+	wm->OpenSearchlistDialog(it->Filename);
 
 }
 

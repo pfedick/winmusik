@@ -29,8 +29,16 @@
 
 #include <QtGui/QWidget>
 #include <QTimer>
+#include <QTreeWidgetItem>
 #include "ui_searchlists.h"
 #include "winmusik3.h"
+
+class SearchlistTreeItem : public QTreeWidgetItem
+{
+	public:
+		ppl6::CString	Filename;
+};
+
 
 class Searchlists : public QWidget
 {
@@ -52,6 +60,7 @@ private:
 public slots:
 	void on_newSearchlistButton_clicked();
 	void on_deleteSearchlistButton_clicked();
+	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
 
 
 };

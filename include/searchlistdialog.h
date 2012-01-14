@@ -37,7 +37,7 @@ class SearchlistDialog : public QWidget
     Q_OBJECT
 
 public:
-    SearchlistDialog(QWidget *parent = 0, CWmClient *wm=NULL);
+    SearchlistDialog(QWidget *parent = 0, CWmClient *wm=NULL, const ppl6::CString &Filename="");
     ~SearchlistDialog();
     void ReloadTranslation();
 

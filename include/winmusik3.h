@@ -568,7 +568,7 @@ class CWmClient
 		void OpenCoverPrinter();
 		void OpenPlaylistDialog();
 		void OpenSearchlistOverview();
-		void OpenSearchlistDialog();
+		void OpenSearchlistDialog(const ppl6::CString Filename);
 
 		QWidget *OpenSearch(const char *artist=NULL, const char *title=NULL);
 		QWidget *OpenOrReuseSearch(QWidget *q, const char *artist=NULL, const char *title=NULL);

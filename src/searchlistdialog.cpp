@@ -32,7 +32,7 @@
 #include <QMouseEvent>
 #include "../include/searchlistdialog.h"
 
-SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm)
+SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::CString &Filename)
     : QWidget(parent)
 {
 	ui.setupUi(this);

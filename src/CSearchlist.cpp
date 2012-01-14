@@ -86,7 +86,8 @@ ppl6::CString SearchlistItem::exportXML() const
 
 CSearchlist::CSearchlist()
 {
-
+	DateUpdated.setCurrentTime();
+	DateCreated.setCurrentTime();
 }
 
 CSearchlist::~CSearchlist()
@@ -105,6 +106,17 @@ const ppl6::CString &CSearchlist::name() const
 	return Name;
 }
 
+const ppl6::CDateTime &CSearchlist::dateCreated() const
+{
+	return DateCreated;
+}
+
+const ppl6::CDateTime &CSearchlist::dateUpdated() const
+{
+	return DateUpdated;
+}
+
+
 size_t CSearchlist::size() const
 {
 	return list.size();
@@ -114,11 +126,14 @@ void CSearchlist::clear()
 {
 	Name.Clear();
 	list.clear();
+	DateUpdated.setCurrentTime();
+	DateCreated.setCurrentTime();
 }
 
 void CSearchlist::add(const SearchlistItem &item)
 {
 	list.push_back(item);
+	DateUpdated.setCurrentTime();
 }
 
 void CSearchlist::insert(size_t pos, const SearchlistItem &item)
@@ -130,12 +145,14 @@ void CSearchlist::insert(size_t pos, const SearchlistItem &item)
 	std::vector<SearchlistItem>::iterator it;
 	it=list.begin();
 	list.insert(it+pos,item);
+	DateUpdated.setCurrentTime();
 }
 
 void CSearchlist::replace(size_t pos, const SearchlistItem &item)
 {
 	SearchlistItem &old=list.at(pos);
 	old=item;
+	DateUpdated.setCurrentTime();
 }
 
 void CSearchlist::remove(size_t pos)
@@ -144,6 +161,7 @@ void CSearchlist::remove(size_t pos)
 	std::vector<SearchlistItem>::iterator it;
 	it=list.begin();
 	list.erase(it+pos);
+	DateUpdated.setCurrentTime();
 }
 
 const SearchlistItem& CSearchlist::get(size_t pos) const
@@ -173,6 +191,9 @@ ppl6::CString CSearchlist::toXML() const
 	s+="<searchlist>\n";
 	s+="<header>\n";
 	s+="   <name>"+ppl6::EscapeHTMLTags(Name)+"</name>\n";
+	s+="   <tracks>"+ppl6::ToString("%zu",list.size())+"</tracks>\n";
+	s+="   <dateCreated>"+DateCreated.getISO8601()+"</dateCreated>\n";
+	s+="   <dateUpdated>"+DateUpdated.getISO8601()+"</dateUpdated>\n";
 	s+="</header>\n";
 	for (size_t i=0;i<list.size();i++) {
 		s+=list.at(i).exportXML();
@@ -199,6 +220,8 @@ int CSearchlist::load(const ppl6::CString &filename, bool headerOnly)
 	if (content.PregMatch("/\\<header\\>(.*?)\\<\\/header\\>/s")) {
 		ppl6::CString header=content.GetMatch(1);
 		if (header.PregMatch("/\\<name\\>(.*)\\<\\/name\\>/s")) Name=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
+		if (header.PregMatch("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s")) DateCreated=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
+		if (header.PregMatch("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s")) DateUpdated=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
 
 	}
 	if (headerOnly) return 1;

@@ -45,6 +45,8 @@ class CSearchlist
 	private:
 		std::vector<SearchlistItem> list;
 		ppl6::CString Name;
+		ppl6::CDateTime DateCreated;
+		ppl6::CDateTime DateUpdated;
 
 	public:
 		CSearchlist();
@@ -52,6 +54,8 @@ class CSearchlist
 
 		void setName(const ppl6::CString &name);
 		const ppl6::CString &name() const;
+		const ppl6::CDateTime &dateCreated() const;
+		const ppl6::CDateTime &dateUpdated() const;
 		size_t size() const;
 		void clear();
 		void add(const SearchlistItem &item);

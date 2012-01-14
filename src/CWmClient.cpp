@@ -523,10 +523,10 @@ void CWmClient::SearchlistOverviewClosed(void *object)
 
 }
 
-void CWmClient::OpenSearchlistDialog()
+void CWmClient::OpenSearchlistDialog(const ppl6::CString Filename)
 {
 	//printf ("Open Playlists\n");
-	SearchlistDialog *w=new SearchlistDialog((Menue*)MainMenue,this);
+	SearchlistDialog *w=new SearchlistDialog((Menue*)MainMenue,this,Filename);
 	w->setWindowFlags(Qt::Window);
 	w->show();
 	Mutex.Lock();
