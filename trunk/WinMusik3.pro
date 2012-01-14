@@ -29,7 +29,10 @@ else {
 }
 HEADERS += widgets/fkeys.h \
     widgets/edittrack.h \
+    include/csearchlist.h \
     include/coverprinter.h \
+    include/searchlists.h \
+    include/searchlistdialog.h \
     include/shortcutdialog.h \
     include/updater.h \
     include/registration.h \
@@ -56,8 +59,11 @@ HEADERS += widgets/fkeys.h \
     include/droparea.h
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
+    src/CSearchlist.cpp \
     src/CTrackList.cpp \
     src/coverprinter.cpp \
+    src/searchlists.cpp \
+    src/searchlistdialog.cpp \
     src/shortcutdialog.cpp \
     src/updater.cpp \
     src/registration.cpp \
@@ -99,6 +105,8 @@ SOURCES += widgets/fkeys.cpp \
     src/DropArea.cpp
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
+    forms/searchlists.ui \
+    forms/searchlistdialog.ui \
     forms/coverprinter.ui \
     forms/shortcutdialog.ui \
     forms/updater.ui \
@@ -123,10 +131,10 @@ RC_FILE = resource.rc
 INCLUDEPATH += include
 INCLUDEPATH += widgets
 unix:INCLUDEPATH += /usr/local/include
-win32:INCLUDEPATH += C:\mingw\msys\1.0\local\include \
-    C:\mingw\msys\1.0\local\ssl\include
-win32:LIBPATH += C:\mingw\msys\1.0\local\lib \
-    C:\mingw\msys\1.0\local\ssl\lib
+win32:INCLUDEPATH += C:/mingw/msys/1.0/local/include \
+    C:/mingw/msys/1.0/local/ssl/include
+win32:QMAKE_LIBDIR += C:/mingw/msys/1.0/local/lib \
+    C:/mingw/msys/1.0/local/ssl/lib
 CONFIG(debug, debug|release) { 
     # Debug
     unix:LIBS += `ppl6-config \

@@ -42,6 +42,8 @@
 #include "playlists.h"
 #include "updater.h"
 #include "devicelist.h"
+#include "searchlists.h"
+#include "searchlistdialog.h"
 #include <QMessageBox>
 #include <QLocale>
 #include <QDesktopWidget>
@@ -429,6 +431,19 @@ int CWmClient::CloseDatabase()
 		delete devicelist;
 		Mutex.Lock();
 	}
+	Searchlists *searchlists;
+	while ((searchlists=(Searchlists *)SearchlistOverviewWindows.GetFirst())) {
+		Mutex.Unlock();
+		delete searchlists;
+		Mutex.Lock();
+	}
+
+	SearchlistDialog *searchlistdialog;
+	while ((searchlistdialog=(SearchlistDialog *)SearchlistWindows.GetFirst())) {
+		Mutex.Unlock();
+		delete searchlistdialog;
+		Mutex.Lock();
+	}
 
 	Mutex.Unlock();
 	return 1;
@@ -489,6 +504,43 @@ void CWmClient::PlaylistOverviewClosed(void *object)
 
 }
 
+void CWmClient::OpenSearchlistOverview()
+{
+	//printf ("Open Playlists\n");
+	Searchlists *w=new Searchlists((Menue*)MainMenue,this);
+	w->setWindowFlags(Qt::Window);
+	w->show();
+	Mutex.Lock();
+	SearchlistOverviewWindows.Add(w);
+	Mutex.Unlock();
+}
+
+void CWmClient::SearchlistOverviewClosed(void *object)
+{
+	Mutex.Lock();
+	SearchlistOverviewWindows.Delete(object);
+	Mutex.Unlock();
+
+}
+
+void CWmClient::OpenSearchlistDialog()
+{
+	//printf ("Open Playlists\n");
+	SearchlistDialog *w=new SearchlistDialog((Menue*)MainMenue,this);
+	w->setWindowFlags(Qt::Window);
+	w->show();
+	Mutex.Lock();
+	SearchlistWindows.Add(w);
+	Mutex.Unlock();
+}
+
+void CWmClient::SearchlistDialogClosed(void *object)
+{
+	Mutex.Lock();
+	SearchlistWindows.Delete(object);
+	Mutex.Unlock();
+
+}
 
 QWidget *CWmClient::OpenSearch(const char *artist, const char *title)
 {

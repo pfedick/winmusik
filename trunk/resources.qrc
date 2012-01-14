@@ -70,6 +70,7 @@
     <file>resources/tr16x16-0009.png</file>
   </qresource>
   <qresource prefix="/devices25">
+    <file>resources/wanted.png</file>
     <file>resources/tr25x25-0016.png</file>
     <file>resources/home.png</file>
     <file>resources/tr25x25-0001.png</file>
