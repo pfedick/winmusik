@@ -34,7 +34,7 @@
 #include <QKeyEvent>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include "forms/fkeys.h"
+#include "fkeys.h"
 #include "ui_edit.h"
 #include "oimpinfo.h"
 
@@ -172,7 +172,6 @@ private:
     bool on_album_FocusOut();
     bool on_length_FocusOut();
     bool on_FocusIn(QLineEdit *widget);
-    bool on_f12_FocusIn();
     bool on_f4_Pressed(int position);
     bool on_f5_ShortCut(int modifier);
     bool on_f5_CheckDupes(QObject *target);
@@ -182,6 +181,21 @@ private:
     bool on_f9_UpdateAllID3Tags();
     bool on_f10_WritePlaylist();
 
+
+
+	void on_esc_clicked();
+	void on_f1_clicked();
+	void on_f2_clicked();
+	void on_f3_clicked();
+	void on_f4_clicked();
+	void on_f5_clicked();
+	void on_f6_clicked();
+	void on_f7_clicked();
+	void on_f8_clicked();
+	void on_f9_clicked();
+	void on_f10_clicked();
+	void on_f11_clicked();
+	void on_f12_clicked();
 
     bool on_trackList_MousePress(QMouseEvent *event);
     bool on_trackList_MouseRelease(QMouseEvent *event);
@@ -221,19 +235,8 @@ public slots:
 	void on_contextInsertTrack_triggered();
 	void on_DupeTimer_update();
 
-	void on_esc_clicked();
-	void on_f1_clicked();
-	void on_f2_clicked();
-	void on_f3_clicked();
-	void on_f4_clicked();
-	void on_f5_clicked();
-	void on_f6_clicked();
-	void on_f7_clicked();
-	void on_f8_clicked();
-	void on_f9_clicked();
-	void on_f10_clicked();
-	void on_f11_clicked();
-	void on_f12_clicked();
+	void on_fkeys_clicked(int num);
+
 
 	void on_coverCopyButton_clicked();
 	void on_coverInsertButton_clicked();

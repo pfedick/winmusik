@@ -2,6 +2,22 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.0.5
+	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
+	  dadurch in anderen Dialogen wiederverwendet werden
+	- Bugfix: Absturz behoben, der in der Suche auftrat, wenn die
+	  Zwischenablage beobachtet wurde und eine Grafik in die Zwischenablage
+	  kopiert wurde.
+	  
+	TODO
+	- Track editieren ist jetzt in einem eigenen Widget untergebracht
+	- Eigenes Fenster zum editieren eines Tracks aus einem anderen Dialog
+	  heraus, z.B. Suchergebnis
+	- Suchlisten
+	- Matchlisten
+	- Playlists über MySQL?
+	
+
 Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)
 	- Im Suchergebnis wird jetzt die Gesamtlänge aller gefundenen
 	  Tracks angezeigt

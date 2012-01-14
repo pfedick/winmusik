@@ -170,8 +170,6 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.channels,26);
 	InstallFilter(ui.quality,27);
 	InstallFilter(ui.rating,28);
-	InstallFilter(ui.f12,30);
-	InstallFilter(ui.f10,0);
 
 
 	/*
@@ -492,8 +490,6 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 	} else if (target==ui.album) {
 		if (type==QEvent::FocusIn && focusEvent->reason()!=Qt::PopupFocusReason) return on_album_FocusIn();
 		if (type==QEvent::FocusOut) return on_album_FocusOut();
-	} else if (target==ui.f12) {
-		if (type==QEvent::FocusIn) return on_f12_FocusIn();
 	} else if (target==ui.length) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.length);
 	} else if (target==ui.bpm) {
@@ -506,8 +502,6 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.remarks);
 	} else if (target==ui.tags) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.tags);
-	} else if (target==ui.f10) {
-		if (type==QEvent::MouseButtonPress) on_f10_WritePlaylist();
 	}
 
 
@@ -602,18 +596,18 @@ void Edit::SetFkey(QToolButton *button,const char *Icon, QString Text, bool enab
 void Edit::UpdateFkeys()
 {
 	ui.fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-0000.png"," ",false);
-	SetFkey(ui.f1,":/fkeys/resources/fkeys/f-key-0001.png"," ",false);
-	SetFkey(ui.f2,":/fkeys/resources/fkeys/f-key-0002.png"," ",false);
-	SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-0003.png"," ",false);
-	SetFkey(ui.f4,":/fkeys/resources/fkeys/f-key-0004.png"," ",false);
-	SetFkey(ui.f5,":/fkeys/resources/fkeys/f-key-0005.png"," ",false);
-	SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-0006.png"," ",false);
-	SetFkey(ui.f7,":/fkeys/resources/fkeys/f-key-0007.png"," ",false);
-	SetFkey(ui.f8,":/fkeys/resources/fkeys/f-key-0008.png"," ",false);
-	SetFkey(ui.f9,":/fkeys/resources/fkeys/f-key-0009.png"," ",false);
-	SetFkey(ui.f10,":/fkeys/resources/fkeys/f-key-0010.png"," ",false);
-	SetFkey(ui.f11,":/fkeys/resources/fkeys/f-key-0011.png"," ",false);
-	SetFkey(ui.f12,":/fkeys/resources/fkeys/f-key-0012.png"," ",false);
+	ui.fkeys->setFkey(1,":/fkeys/resources/fkeys/f-key-0001.png"," ",false);
+	ui.fkeys->setFkey(2,":/fkeys/resources/fkeys/f-key-0002.png"," ",false);
+	ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-0003.png"," ",false);
+	ui.fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-0004.png"," ",false);
+	ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-0005.png"," ",false);
+	ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-0006.png"," ",false);
+	ui.fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-0007.png"," ",false);
+	ui.fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-0008.png"," ",false);
+	ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-0009.png"," ",false);
+	ui.fkeys->setFkey(10,":/fkeys/resources/fkeys/f-key-0010.png"," ",false);
+	ui.fkeys->setFkey(11,":/fkeys/resources/fkeys/f-key-0011.png"," ",false);
+	ui.fkeys->setFkey(12,":/fkeys/resources/fkeys/f-key-0012.png"," ",false);
 
 	QString t[20];
 	t[0]=tr("close");
@@ -637,75 +631,75 @@ void Edit::UpdateFkeys()
 
 	switch (position) {
 		case 1:		// Device Index
-			SetFkey(ui.esc,":/fkeys/resources/fkeys/f-key-1000.png",t[0]);
-			SetFkey(ui.f2,":/fkeys/resources/fkeys/f-key-1002.png",t[1]);
-			SetFkey(ui.f4,":/fkeys/resources/fkeys/f-key-2004.png",t[17]);
+			ui.fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-1000.png",t[0]);
+			ui.fkeys->setFkey(2,":/fkeys/resources/fkeys/f-key-1002.png",t[1]);
+			ui.fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-2004.png",t[17]);
 			break;
 		case 2:		// Device Page
 			break;
 		case 3:		// Device Track
 			//if (DeviceType==7) SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-2006.png",t[15]);
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) SetFkey(ui.f9,":/fkeys/resources/fkeys/f-key-2009.png",t[16]);
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",t[16]);
 			break;
 		case 4:		// Interpret
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-			SetFkey(ui.f5,":/fkeys/resources/fkeys/f-key-1005.png",t[11]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-1005.png",t[11]);
 			break;
 		case 5:		// Titel
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 6:		// VersionId
 			break;
 		case 7:		// Version
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 9:		// Genre
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 14:		// Album
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 16:		// Label
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 18:		// Aufnahmequelle
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 20:		// Aufnahmegerät
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 		case 21:		// Bemerkung
-			SetFkey(ui.f3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
 			break;
 	}
 	if (position>1) {
-		SetFkey(ui.esc,":/fkeys/resources/fkeys/f-key-2000.png",t[2]);
-		SetFkey(ui.f2,":/fkeys/resources/fkeys/f-key-2002.png",t[3]);
+		ui.fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-2000.png",t[2]);
+		ui.fkeys->setFkey(2,":/fkeys/resources/fkeys/f-key-2002.png",t[3]);
 	}
 	if (position>2) {
-		SetFkey(ui.f11,":/fkeys/resources/fkeys/f-key-1011.png",t[5]);
+		ui.fkeys->setFkey(11,":/fkeys/resources/fkeys/f-key-1011.png",t[5]);
 		if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
-			SetFkey(ui.f10,":/fkeys/resources/fkeys/f-key-1010.png",t[14]);
+			ui.fkeys->setFkey(10,":/fkeys/resources/fkeys/f-key-1010.png",t[14]);
 		}
 	}
 	if (position>3) {
-		SetFkey(ui.f7,":/fkeys/resources/fkeys/f-key-1007.png",t[7]);
-		SetFkey(ui.f8,":/fkeys/resources/fkeys/f-key-1008.png",t[8]);
-		SetFkey(ui.f12,":/fkeys/resources/fkeys/f-key-1012.png",t[6]);
+		ui.fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-1007.png",t[7]);
+		ui.fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-1008.png",t[8]);
+		ui.fkeys->setFkey(12,":/fkeys/resources/fkeys/f-key-1012.png",t[6]);
 		if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
-			SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-1006.png",t[10]);
-			if (Ti.ImportData>0) SetFkey(ui.f9,":/fkeys/resources/fkeys/f-key-1009.png",t[12]);
+			ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-1006.png",t[10]);
+			if (Ti.ImportData>0) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-1009.png",t[12]);
 		}
 	}
 	if (position>7) {
 		// DupeCheck
-		SetFkey(ui.f5,DupeCheckIcon,t[13]);
+		ui.fkeys->setFkey(5,DupeCheckIcon,t[13]);
 	}
 
 	// Suchbutton
 	if (position==4 || position==5 || position==6 || position==8
 			||position==15 || position==17 || position==19) {
-		SetFkey(ui.f4,":/fkeys/resources/fkeys/f-key-1004.png",t[4]);
+		ui.fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-1004.png",t[4]);
 	}
 }
 
@@ -739,14 +733,14 @@ void Edit::MoveToNextWidget()
 		case 19: ui.recordDevice->setFocus(); break;
 		case 20: ui.remarks->setFocus(); break;
 		case 21: ui.tags->setFocus(); break;
-		case 22: ui.f12->setFocus(); break;
+		case 22: ui.artist->setFocus(); break;
 		//case 21: ui.complete->setFocus(); break;
 		case 24: ui.realTitle->setFocus(); break;
 		case 25: ui.interrupted->setFocus(); break;
 		case 26: ui.channels->setFocus(); break;
 		case 27: ui.quality->setFocus(); break;
 		case 28: ui.rating->setFocus(); break;
-		case 30: ui.f12->setFocus(); break;
+		case 30: ui.artist->setFocus(); break;
 	};
 }
 
@@ -832,7 +826,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		if (ret==DeviceId) UpdateDevice();
 		return true;
 		// *************************************************************************** F3
-	} else if (key==Qt::Key_F3 && modifier==Qt::NoModifier && ui.f3->isEnabled()==true) {
+	} else if (key==Qt::Key_F3 && modifier==Qt::NoModifier && ui.fkeys->isEnabled(3)==true) {
 		QLineEdit *LineEdit=(QLineEdit*)target;
 		ppl6::CWString Tmp=LineEdit->text().toLower();
 		Tmp.UCWords();
@@ -851,11 +845,11 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 	} else if (key==Qt::Key_F5 && position>7) {
 		return on_f5_CheckDupes(target);
 		// *************************************************************************** F6
-	} else if (DeviceType==7 && key==Qt::Key_F6 && modifier==Qt::ControlModifier && ui.f6->isEnabled()==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (DeviceType==7 && key==Qt::Key_F6 && modifier==Qt::ControlModifier && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		wm->TrashMP3File(DeviceId,Page,Track.Track);
 		return on_f6_Pressed(target,Qt::NoModifier);
 
-	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.f6->isEnabled()==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f6_Pressed(target,modifier);
 
 		// *************************************************************************** F7
@@ -885,7 +879,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		return true;
 		// *************************************************************************** F12
 	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier && position>3) {
-		ui.f12->setFocus();
+		SaveTrack();
 		return true;
 		// *************************************************************************** Alt & b
 	} else if (key==Qt::Key_B && modifier==Qt::AltModifier && position>3) {
@@ -1162,14 +1156,6 @@ bool Edit::on_FocusIn(QLineEdit *widget)
 	return false;
 }
 
-// *****************************************************************************************************
-// EVENT: f12
-bool Edit::on_f12_FocusIn()
-{
-	SaveTrack();
-	return true;
-}
-
 
 bool Edit::on_f4_Pressed(int position)
 {
@@ -1378,6 +1364,40 @@ bool Edit::on_f10_WritePlaylist()
 	return true;
 }
 
+
+void Edit::on_fkeys_clicked(int num)
+{
+	switch (num) {
+		case 0: on_esc_clicked();
+			break;
+		case 1: on_f1_clicked();
+			break;
+		case 2: on_f2_clicked();
+			break;
+		case 3: on_f3_clicked();
+			break;
+		case 4: on_f4_clicked();
+			break;
+		case 5: on_f5_clicked();
+			break;
+		case 6: on_f6_clicked();
+			break;
+		case 7: on_f7_clicked();
+			break;
+		case 8: on_f8_clicked();
+			break;
+		case 9: on_f9_clicked();
+			break;
+		case 10: on_f10_clicked();
+			break;
+		case 11: on_f11_clicked();
+			break;
+		case 12: on_f12_clicked();
+			break;
+	}
+}
+
+
 void Edit::on_esc_clicked()
 {
 	if (position<2) {
@@ -1478,7 +1498,7 @@ void Edit::on_f11_clicked()
 
 void Edit::on_f12_clicked()
 {
-	if (position>3) ui.f12->setFocus();
+	SaveTrack();
 }
 
 bool Edit::on_trackList_MousePress(QMouseEvent * event)

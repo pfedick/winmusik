@@ -47,7 +47,7 @@ void Fkeys::setEnabled(int num, bool flag)
 	button[num]->setEnabled(flag);
 }
 
-bool Fkeys::enabled(int num) const
+bool Fkeys::isEnabled(int num) const
 {
 	if (num<0 || num>12) return (false);
 	return (button[num]->isEnabled());

@@ -15,7 +15,7 @@ public:
     void setFkey(int num, const QString &Icon, const QString &Text, bool enabled=true);
     void setFkey(int num, const QIcon &Icon, const QString &Text, bool enabled=true);
     void setEnabled(int num, bool flag);
-    bool enabled(int num) const;
+    bool isEnabled(int num) const;
 
 private:
     Ui::FkeysClass ui;
