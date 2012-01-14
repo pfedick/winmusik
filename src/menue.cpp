@@ -139,6 +139,11 @@ void Menue::OpenPlaylistDialog()
 	if (wm) wm->OpenPlaylistDialog();
 }
 
+void Menue::OpenSearchlistDialog()
+{
+	if (wm) wm->OpenSearchlistOverview();
+}
+
 
 void Menue::on_TimerUpdate()
 {

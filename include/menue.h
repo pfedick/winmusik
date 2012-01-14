@@ -59,6 +59,7 @@ private:
     void OpenAboutDialog();
     void OpenCoverPrinterDialog();
     void OpenPlaylistDialog();
+    void OpenSearchlistDialog();
 
 private slots:
 	void on_toolButton_1_clicked() {OpenEditDialog(1);};
@@ -87,6 +88,7 @@ private slots:
 	void on_aboutButton_clicked() {OpenAboutDialog();};
 	void on_coverButton_clicked() {OpenCoverPrinterDialog();};
 	void on_playlistButton_clicked() {OpenPlaylistDialog();};
+	void on_searchlistButton_clicked() {OpenSearchlistDialog();};
 
 	void on_TimerUpdate();
 

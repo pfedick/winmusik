@@ -511,6 +511,8 @@ class CWmClient
 		ppl6::CGenericList CoverPrinterWindows;
 		ppl6::CGenericList PlaylistOverviewWindows;
 		ppl6::CGenericList PlaylistEditWindows;
+		ppl6::CGenericList SearchlistOverviewWindows;
+		ppl6::CGenericList SearchlistWindows;
 		ppl6::CGenericList DeviceListWindows;
 
 		QDate					LatestPurchaseDate;
@@ -565,11 +567,15 @@ class CWmClient
 		void OpenDeviceList(int devicetype);
 		void OpenCoverPrinter();
 		void OpenPlaylistDialog();
+		void OpenSearchlistOverview();
+		void OpenSearchlistDialog();
 
 		QWidget *OpenSearch(const char *artist=NULL, const char *title=NULL);
 		QWidget *OpenOrReuseSearch(QWidget *q, const char *artist=NULL, const char *title=NULL);
 		void EditorClosed(void *object);
 		void SearchClosed(void *object);
+		void SearchlistOverviewClosed(void *object);
+		void SearchlistDialogClosed(void *object);
 		void CoverPrinterClosed(void *object);
 		void PlaylistOverviewClosed(void *object);
 		void DeviceListClosed(void *object);
