@@ -244,6 +244,8 @@ public slots:
 	void on_coverLoadButton_clicked();
 	void on_coverSaveButton_clicked();
 
+	void on_coverSearchAmazon_clicked();
+
 
 };
 
