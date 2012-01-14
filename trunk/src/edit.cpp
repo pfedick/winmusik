@@ -39,6 +39,7 @@
 #include <QTimer>
 #include <QPixmap>
 #include <QBuffer>
+#include <QDesktopServices>
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -2734,6 +2735,7 @@ void Edit::on_contextInsertTrack_triggered()
 
 void Edit::on_coverCopyButton_clicked()
 {
+	if (position<3) return;
 	QClipboard *clipboard = QApplication::clipboard();
 	if (!clipboard) return;
 	clipboard->setPixmap(Cover);
@@ -2742,6 +2744,7 @@ void Edit::on_coverCopyButton_clicked()
 
 void Edit::on_coverInsertButton_clicked()
 {
+	if (position<3) return;
 	QClipboard *clipboard = QApplication::clipboard();
 	if (!clipboard) return;
 	if (clipboard->pixmap().isNull()) return;
@@ -2772,6 +2775,7 @@ void Edit::on_coverInsertButton_clicked()
 void Edit::on_coverDeleteButton_clicked()
 {
 	FixFocus();
+	if (position<3) return;
 	if (Cover.isNull()) return;
 	if (QMessageBox::question(this, tr("WinMusik: delete MP3-Cover"),
 		tr("Do you want to remove the cover from the mp3 file?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
@@ -2794,11 +2798,37 @@ void Edit::on_coverDeleteButton_clicked()
 void Edit::on_coverLoadButton_clicked()
 {
 	FixFocus();
+	if (position<3) return;
 }
 
 void Edit::on_coverSaveButton_clicked()
 {
 	FixFocus();
+	if (position<3) return;
 	if (Cover.isNull()) return;
 
+}
+
+
+
+void Edit::on_coverSearchAmazon_clicked()
+{
+	FixFocus();
+	if (position<3) return;
+	ppl6::CString Url;
+	// Interpret und Titel
+	ppl6::CString Artist=ui.artist->text();
+	Artist.Trim();
+	ppl6::CString Title=ui.title->text();
+	Title.Trim();
+
+	// Version
+
+	// http://www.amazon.de/s/ref=nb_sb_ss_i_0_16?__mk_de_DE=%C5M%C5Z%D5%D1&url=search-alias%3Ddigital-music&field-keywords=armin+van+buuren+mirage&x=0&y=0&sprefix=Armin+van+Buuren%2Cdigital-music%2C148
+	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&hs=3fV&rls=org.mozilla:de-DE:official&prmd=imvnsol&source=lnms&tbm=isch&ei=K-ERT8m9KMrsOdDn2YYD&sa=X&oi=mode_link&ct=mode&cd=2&ved=0CCcQ_AUoAQ&biw=971&bih=532#hl=de&client=firefox-a&hs=m0&rls=org.mozilla:de-DE%3Aofficial&tbm=isch&sa=1&q=Armin+van+buuren+mirage+cover&pbx=1&oq=Armin+van+buuren+mirage+cover&aq=f&aqi=g1&aql=&gs_sm=e&gs_upl=1037l2111l0l2973l6l6l0l3l3l0l314l610l1.1.0.1l3l0&bav=on.2,or.r_gc.r_pw.,cf.osb&fp=89a7740a921e9709&biw=971&bih=532
+	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&rls=org.mozilla:de-DE:official&tbm=vid&source=lnms&ei=E-IRT5TMHIqfOpnU1dQG&sa=X&oi=mode_link&ct=mode&cd=4&ved=0CDEQ_AUoAw&biw=971&bih=532
+
+	Url="http://www.google.com/search?q=cover+"+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title)+"&tbm=isch";
+	//Url="http://www.pfp.de/";
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
