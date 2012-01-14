@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>809</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
   <widget class="QPushButton" name="newSearchlistButton">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>20</y>
+     <x>650</x>
+     <y>250</y>
      <width>131</width>
      <height>25</height>
     </rect>
