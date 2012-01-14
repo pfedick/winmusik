@@ -27,8 +27,8 @@ else {
     win32:TARGET = WinMusik3
     unix:TARGET = release/WinMusik3
 }
-HEADERS += forms/fkeys.h \
-    forms/edittrack.h \
+HEADERS += widgets/fkeys.h \
+    widgets/edittrack.h \
     include/coverprinter.h \
     include/shortcutdialog.h \
     include/updater.h \
@@ -54,8 +54,8 @@ HEADERS += forms/fkeys.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h
-SOURCES += forms/fkeys.cpp \
-    forms/edittrack.cpp \
+SOURCES += widgets/fkeys.cpp \
+    widgets/edittrack.cpp \
     src/CTrackList.cpp \
     src/coverprinter.cpp \
     src/shortcutdialog.cpp \
@@ -97,8 +97,8 @@ SOURCES += forms/fkeys.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
     src/DropArea.cpp
-FORMS += forms/fkeys.ui \
-    forms/edittrack.ui \
+FORMS += widgets/fkeys.ui \
+    widgets/edittrack.ui \
     forms/coverprinter.ui \
     forms/shortcutdialog.ui \
     forms/updater.ui \
@@ -121,6 +121,7 @@ FORMS += forms/fkeys.ui \
 RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include
+INCLUDEPATH += widgets
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:\mingw\msys\1.0\local\include \
     C:\mingw\msys\1.0\local\ssl\include

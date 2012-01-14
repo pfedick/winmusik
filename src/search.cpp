@@ -836,28 +836,30 @@ void Search::on_ClipBoardTimer_update()
 {
 	QString originalText = QApplication::clipboard()->text();
 	if (originalText.length()>512) return;
+	if (originalText.length()==0) return;
 	ppl6::CString s;
 	s=originalText;
+	if (s==LastClipboardString) return;
+	LastClipboardString=s;
 	if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 	if (s.Instr("\n")>=0) return;
 	wm->NormalizeTerm(s);
-	if (s!=LastClipboardString) {
-		ClipBoardTimer.stop();
-		printf ("Update\n");
-		LastClipboardString=s;
-		if (ui.watchClipboardHarddisk->isChecked()) {
-			ui.tabWidget->setCurrentIndex(2);
-			ui.query_harddisk->setText(originalText);
-			on_hardDiskSearchButton_clicked();
+	ClipBoardTimer.stop();
+	printf ("Update\n");
 
-		}
-		if (ui.watchClipboard->isChecked()) {
-			ui.tabWidget->setCurrentIndex(1);
-			ui.query->setText(originalText);
-			on_quicksearchButton_clicked();
-		}
-		ClipBoardTimer.start(200);
+	if (ui.watchClipboardHarddisk->isChecked()) {
+		ui.tabWidget->setCurrentIndex(2);
+		ui.query_harddisk->setText(originalText);
+		on_hardDiskSearchButton_clicked();
+
 	}
+	if (ui.watchClipboard->isChecked()) {
+		ui.tabWidget->setCurrentIndex(1);
+		ui.query->setText(originalText);
+		on_quicksearchButton_clicked();
+	}
+	ClipBoardTimer.start(200);
+
 }
 
 void Search::on_hardDiskSearchButton_clicked()

@@ -2031,7 +2031,7 @@
     </widget>
    </item>
    <item>
-    <widget class="FKeys" name="fkeys" native="true"/>
+    <widget class="Fkeys" name="fkeys" native="true"/>
    </item>
   </layout>
  </widget>
@@ -2040,7 +2040,7 @@
   <customwidget>
    <class>FKeys</class>
    <extends>QWidget</extends>
-   <header>forms/fkeys.h</header>
+   <header>fkeys.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
