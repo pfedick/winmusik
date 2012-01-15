@@ -575,6 +575,7 @@ class CWmClient
 		void EditorClosed(void *object);
 		void SearchClosed(void *object);
 		void SearchlistOverviewClosed(void *object);
+		void UpdateSearchlistOverviews();
 		void SearchlistDialogClosed(void *object);
 		void CoverPrinterClosed(void *object);
 		void PlaylistOverviewClosed(void *object);

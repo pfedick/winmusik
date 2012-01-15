@@ -33,6 +33,7 @@ HEADERS += widgets/fkeys.h \
     include/coverprinter.h \
     include/searchlists.h \
     include/searchlistdialog.h \
+    include/searchlisttrackdialog.h \
     include/shortcutdialog.h \
     include/updater.h \
     include/registration.h \
@@ -64,6 +65,7 @@ SOURCES += widgets/fkeys.cpp \
     src/coverprinter.cpp \
     src/searchlists.cpp \
     src/searchlistdialog.cpp \
+    src/searchlisttrackdialog.cpp \
     src/shortcutdialog.cpp \
     src/updater.cpp \
     src/registration.cpp \
@@ -107,6 +109,7 @@ FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
     forms/searchlists.ui \
     forms/searchlistdialog.ui \
+    forms/searchlisttrackdialog.ui \
     forms/coverprinter.ui \
     forms/shortcutdialog.ui \
     forms/updater.ui \

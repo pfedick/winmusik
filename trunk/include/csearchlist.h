@@ -29,6 +29,7 @@ class SearchlistItem : public GenericListItem
 		ppl6::CString Genre;
 		ppl6::CString Comment;
 		ppl6::CDateTime DateAdded;
+		int Length;
 		bool found;
 
 		SearchlistItem();
