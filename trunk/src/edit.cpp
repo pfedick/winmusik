@@ -2827,11 +2827,11 @@ void Edit::on_coverSearchAmazon_clicked()
 	// http://www.amazon.de/s/ref=nb_sb_ss_i_0_16?__mk_de_DE=%C5M%C5Z%D5%D1&url=search-alias%3Ddigital-music&field-keywords=armin+van+buuren+mirage&x=0&y=0&sprefix=Armin+van+Buuren%2Cdigital-music%2C148
 	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&hs=3fV&rls=org.mozilla:de-DE:official&prmd=imvnsol&source=lnms&tbm=isch&ei=K-ERT8m9KMrsOdDn2YYD&sa=X&oi=mode_link&ct=mode&cd=2&ved=0CCcQ_AUoAQ&biw=971&bih=532#hl=de&client=firefox-a&hs=m0&rls=org.mozilla:de-DE%3Aofficial&tbm=isch&sa=1&q=Armin+van+buuren+mirage+cover&pbx=1&oq=Armin+van+buuren+mirage+cover&aq=f&aqi=g1&aql=&gs_sm=e&gs_upl=1037l2111l0l2973l6l6l0l3l3l0l314l610l1.1.0.1l3l0&bav=on.2,or.r_gc.r_pw.,cf.osb&fp=89a7740a921e9709&biw=971&bih=532
 	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&rls=org.mozilla:de-DE:official&tbm=vid&source=lnms&ei=E-IRT5TMHIqfOpnU1dQG&sa=X&oi=mode_link&ct=mode&cd=4&ved=0CDEQ_AUoAw&biw=971&bih=532
-
+	//s/?ie=UTF8&keywords=amazon+suchen&tag=googhydr08-21&index=aps&hvadid=9259989001&ref=pd_sl_4uh4d1aa33_b
 
 	//Url="http://www.google.com/search?q=cover+"+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title)+"&tbm=isch";
 
-	Url="http://www.amazon.de/s/url=search-alias%3Ddigital-music&field-keywords="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
+	Url="http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
 
 	//Url="http://www.pfp.de/";
 	ppl6::CString Cmd;
