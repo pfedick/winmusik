@@ -31,6 +31,8 @@
 #include <QTimer>
 #include "ui_searchlistdialog.h"
 #include "winmusik3.h"
+#include "csearchlist.h"
+
 
 class SearchlistDialog : public QWidget
 {
@@ -40,17 +42,53 @@ public:
     SearchlistDialog(QWidget *parent = 0, CWmClient *wm=NULL, const ppl6::CString &Filename="");
     ~SearchlistDialog();
     void ReloadTranslation();
+    void addTrack(const SearchlistItem &track);
+
+protected:
+    bool eventFilter(QObject *target, QEvent *event);
 
 private:
+    class SearchlistTreeItem : public QTreeWidgetItem
+    {
+    	public:
+    		SearchlistItem	Track;
+    };
+    SearchlistTreeItem *currentTrackListItem;
+
     Ui::SearchlistDialogClass ui;
     CWmClient *wm;
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     void Resize();
+    void editTrack(SearchlistTreeItem *item);
+    void deleteTrack(SearchlistTreeItem *item);
+    void renderTrack(SearchlistTreeItem *item);
+    int save();
+
+    SearchlistItem	copyItem;
+    bool			haveCopyItem;
+
+    CSearchlist List;
+    ppl6::CString	Filename;
+    QWidget *searchWindow;
+
 
 
 public slots:
+	void on_trackList_customContextMenuRequested ( const QPoint & pos );
+	void on_trackList_itemClicked ( QTreeWidgetItem * item, int column );
+	void on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column );
 
+	void on_contextEditTrack_triggered();
+	void on_contextInsertTrack_triggered();
+	void on_contextDeleteTrack_triggered();
+	void on_contextFind_triggered();
+
+	void on_newTrackButton_clicked();
+	void on_deleteTrackButton_clicked();
+	void on_saveExitButton_clicked();
+	void on_saveButton_clicked();
+	void on_cancelButton_clicked();
 
 };
 

@@ -4,7 +4,7 @@
  * $Author: pafe $
  * $Revision: 1.1 $
  * $Date: 2010/11/14 13:20:11 $
- * $Id: Searchlists.h,v 1.1 2010/11/14 13:20:11 pafe Exp $
+ * $Id: SearchlistDialog.h,v 1.1 2010/11/14 13:20:11 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -24,47 +24,43 @@
  */
 
 
-#ifndef SEARCHLISTS_H
-#define SEARCHLISTS_H
+#ifndef SEARCHLISTTRACKDIALOG_H
+#define SEARCHLISTTRACKDIALOG_H
 
 #include <QtGui/QWidget>
 #include <QTimer>
-#include <QTreeWidgetItem>
-#include "ui_searchlists.h"
+#include "ui_searchlisttrackdialog.h"
 #include "winmusik3.h"
-
-class SearchlistTreeItem : public QTreeWidgetItem
-{
-	public:
-		ppl6::CString	Filename;
-};
+#include "csearchlist.h"
 
 
-class Searchlists : public QWidget
+class SearchlistTrackDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    Searchlists(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~Searchlists();
-    void ReloadTranslation();
-    void Update();
+    SearchlistTrackDialog(QWidget *parent = 0);
+    ~SearchlistTrackDialog();
+
+    void set(const SearchlistItem &track);
+    SearchlistItem get() const;
+
 
 private:
-    Ui::SearchlistsClass ui;
+    SearchlistItem Track;
+    Ui::SearchlistTrackDialogClass ui;
     CWmClient *wm;
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     void Resize();
 
 
-public slots:
-	void on_newSearchlistButton_clicked();
-	void on_deleteSearchlistButton_clicked();
-	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
 
+public slots:
+	void on_saveButton_clicked();
+	void on_cancelButton_clicked();
 
 };
 
 
-#endif // SEARCHLISTS_H
+#endif // SEARCHLISTTRACKDIALOG_H

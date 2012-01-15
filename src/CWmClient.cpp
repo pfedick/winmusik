@@ -327,7 +327,21 @@ void CWmClient::ReloadTranslation()
 		devicelist->ReloadTranslation();
 	}
 
+	{
+		Searchlists *list;
+		SearchlistOverviewWindows.Reset();
+		while ((list=(Searchlists *)SearchlistOverviewWindows.GetFirst())) {
+			list->ReloadTranslation();
+		}
+	}
 
+	{
+		SearchlistDialog *list;
+		SearchlistWindows.Reset();
+		while ((list=(SearchlistDialog *)SearchlistWindows.GetFirst())) {
+			list->ReloadTranslation();
+		}
+	}
 
 	Mutex.Unlock();
 
@@ -449,6 +463,16 @@ int CWmClient::CloseDatabase()
 	return 1;
 }
 
+void CWmClient::UpdateSearchlistOverviews()
+{
+	Mutex.Lock();
+	Searchlists *list;
+	SearchlistOverviewWindows.Reset();
+	while ((list=(Searchlists *)SearchlistOverviewWindows.GetNext())) {
+		list->Update();
+	}
+	Mutex.Unlock();
+}
 
 void CWmClient::MainMenueClosed()
 {

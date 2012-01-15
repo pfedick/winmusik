@@ -144,67 +144,67 @@ you are running the latest version.</translation>
         <translation>WinMusik - Error</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="618"/>
+        <location filename="src/CWmClient.cpp" line="628"/>
         <source>Loading Database...</source>
         <translation>Loading Database...</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="668"/>
+        <location filename="src/CWmClient.cpp" line="678"/>
         <source>Music Cassette</source>
         <translation>Music Cassette</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="670"/>
+        <location filename="src/CWmClient.cpp" line="680"/>
         <source>Audio CD</source>
         <translation>Audio CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="672"/>
+        <location filename="src/CWmClient.cpp" line="682"/>
         <source>Data Storage</source>
         <translation>Data Storage</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="674"/>
+        <location filename="src/CWmClient.cpp" line="684"/>
         <source>Record</source>
         <translation>Record</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="676"/>
+        <location filename="src/CWmClient.cpp" line="686"/>
         <source>VHS-Tape</source>
         <translation>VHS-Tape</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="678"/>
+        <location filename="src/CWmClient.cpp" line="688"/>
         <source>Other</source>
         <translation>Other</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="680"/>
+        <location filename="src/CWmClient.cpp" line="690"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="682"/>
+        <location filename="src/CWmClient.cpp" line="692"/>
         <source>Tape</source>
         <translation>Tape</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="684"/>
+        <location filename="src/CWmClient.cpp" line="694"/>
         <source>Audio DVD</source>
         <translation>Audio DVD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1048"/>
+        <location filename="src/CWmClient.cpp" line="1058"/>
         <source>Track: %i</source>
         <translation>Track: %i</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1314"/>
+        <location filename="src/CWmClient.cpp" line="1324"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Attention</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1315"/>
+        <location filename="src/CWmClient.cpp" line="1325"/>
         <source>There is no MP3 player specified.
 Please go to preferences and open the MP3 page. There you can specify your favorite player.</source>
         <translation>There is no MP3 player specified.
@@ -241,64 +241,64 @@ Please go to preferences and open the MP3 page. There you can specify your favor
         <translation>WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1166"/>
+        <location filename="src/CWmClient.cpp" line="1176"/>
         <source>min</source>
         <comment>Minutes in Tracklisting of Playlist</comment>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1188"/>
+        <location filename="src/CWmClient.cpp" line="1198"/>
         <source>Tracklisting MP3-Medium</source>
         <comment>Subject of Playlist</comment>
         <translation>Tracklisting MP3-Medium</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1201"/>
+        <location filename="src/CWmClient.cpp" line="1211"/>
         <source>Playlist created by WinMusik</source>
         <translation>Playlist created by WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="748"/>
+        <location filename="src/CWmClient.cpp" line="758"/>
         <source>CAS</source>
         <translation>CAS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="750"/>
+        <location filename="src/CWmClient.cpp" line="760"/>
         <source>CD</source>
         <translation>CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="752"/>
+        <location filename="src/CWmClient.cpp" line="762"/>
         <source>DATA</source>
         <translation>DATA</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="754"/>
+        <location filename="src/CWmClient.cpp" line="764"/>
         <source>RECORD</source>
         <translation>RECORD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="756"/>
+        <location filename="src/CWmClient.cpp" line="766"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="758"/>
+        <location filename="src/CWmClient.cpp" line="768"/>
         <source>OTHER</source>
         <translation>OTHER</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="760"/>
+        <location filename="src/CWmClient.cpp" line="770"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="762"/>
+        <location filename="src/CWmClient.cpp" line="772"/>
         <source>TAPE</source>
         <translation>TAPE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="764"/>
+        <location filename="src/CWmClient.cpp" line="774"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
@@ -3345,6 +3345,33 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>SearchlistDialog</name>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="138"/>
+        <source>Edit Track</source>
+        <comment>trackList Context Menue</comment>
+        <translation>Edit Track</translation>
+    </message>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="139"/>
+        <source>Delete Track</source>
+        <comment>trackList Context Menue</comment>
+        <translation>Delete Track</translation>
+    </message>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="140"/>
+        <source>Insert Track</source>
+        <comment>trackList Context Menue</comment>
+        <translation>Insert Track</translation>
+    </message>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="142"/>
+        <source>Search track in Database</source>
+        <comment>trackList Context Menue</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SearchlistDialogClass</name>
     <message>
         <location filename="forms/searchlistdialog.ui" line="14"/>
@@ -3419,6 +3446,64 @@ p, li { white-space: pre-wrap; }
         <location filename="forms/searchlistdialog.ui" line="206"/>
         <source>Delete Track</source>
         <translation>Delete Track</translation>
+    </message>
+</context>
+<context>
+    <name>SearchlistTrackDialogClass</name>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="14"/>
+        <source>Searchlist Edit</source>
+        <translation>Edit Searchlist Track</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="26"/>
+        <source>Artist:</source>
+        <translation>Artist:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="33"/>
+        <source>Title:</source>
+        <translation>Title:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="40"/>
+        <source>Version:</source>
+        <translation>Version:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="56"/>
+        <source>Genre:</source>
+        <translation>Genre:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="66"/>
+        <source>Length:</source>
+        <translation>Length:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="81"/>
+        <source>0009:99; </source>
+        <translation type="unfinished">00000; {0009:99;?}</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="88"/>
+        <source>min.</source>
+        <translation>min.</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="110"/>
+        <source>Comment:</source>
+        <translation>Comment:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="137"/>
+        <source>Save</source>
+        <translation>Save</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="167"/>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>

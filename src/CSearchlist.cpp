@@ -12,6 +12,7 @@
 SearchlistItem::SearchlistItem()
 {
 	found=false;
+	Length=0;
 	DateAdded.setCurrentTime();
 }
 
@@ -65,6 +66,7 @@ void SearchlistItem::importXML(const ppl6::CString &xml)
 	if (xml.PregMatch("/\\<genre\\>(.*)\\<\\/genre\\>/s",Matches)) Genre=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<comment\\>(.*)\\<\\/comment\\>/s",Matches)) Comment=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s",Matches)) DateAdded=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
+	if (xml.PregMatch("/\\<length\\>(.*)\\<\\/length\\>/s",Matches)) Length=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<found\\>(.*)\\<\\/found\\>/s",Matches)) found=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
 }
 
@@ -78,6 +80,7 @@ ppl6::CString SearchlistItem::exportXML() const
 			"	<genre>"+ppl6::EscapeHTMLTags(Genre)+"</genre>\n"
 			"	<comment>"+ppl6::EscapeHTMLTags(Comment)+"</comment>\n"
 			"	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n"
+			"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
 			"	<found>"+(found?"true":"false")+"</found>\n"
 			"</searchlistitem>\n";
 	return s;
@@ -127,7 +130,7 @@ void CSearchlist::clear()
 	Name.Clear();
 	list.clear();
 	DateUpdated.setCurrentTime();
-	DateCreated.setCurrentTime();
+	//DateCreated.setCurrentTime();	// Das bleibt, wie es war
 }
 
 void CSearchlist::add(const SearchlistItem &item)

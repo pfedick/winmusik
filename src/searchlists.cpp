@@ -52,6 +52,20 @@ Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
     		"}\n"
     		"";
     ui.treeWidget->setStyleSheet(Style);
+    Update();
+}
+
+Searchlists::~Searchlists()
+{
+	if (wm) {
+		wm->SearchlistOverviewClosed(this);
+	}
+}
+
+
+void Searchlists::Update()
+{
+	ui.treeWidget->clear();
 
 	// vorhandene Suchlisten anzeigen
     CSearchlist sl;
@@ -73,16 +87,7 @@ Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
 			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
 		}
 	}
-
 }
-
-Searchlists::~Searchlists()
-{
-	if (wm) {
-		wm->SearchlistOverviewClosed(this);
-	}
-}
-
 
 void Searchlists::Resize()
 {

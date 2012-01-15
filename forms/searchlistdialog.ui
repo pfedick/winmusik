@@ -37,7 +37,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QTreeWidget" name="treeWidget">
+        <widget class="QTreeWidget" name="trackList">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -129,6 +129,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="deleteMarkedTracksButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Delete marked tracks</string>
            </property>
@@ -243,7 +246,7 @@
   <tabstop>searchlistName</tabstop>
   <tabstop>newTrackButton</tabstop>
   <tabstop>deleteTrackButton</tabstop>
-  <tabstop>treeWidget</tabstop>
+  <tabstop>trackList</tabstop>
   <tabstop>saveExitButton</tabstop>
   <tabstop>deleteMarkedTracksButton</tabstop>
   <tabstop>cancelButton</tabstop>
