@@ -144,6 +144,14 @@
   </qresource>
   <qresource prefix="/icons">
     <file>resources/cover16.png</file>
+    <file>resources/application-exit.png</file>
+    <file>resources/edit-delete.png</file>
+    <file>resources/edit-find.png</file>
+    <file>resources/edit-paste.png</file>
+    <file>resources/edit-redo.png</file>
+    <file>resources/edit-undo.png</file>
+    <file>resources/list-add.png</file>
+    <file>resources/list-remove.png</file>
     <file>resources/server.png</file>
     <file>resources/harddisk.png</file>
     <file>resources/harddisk2.png</file>
