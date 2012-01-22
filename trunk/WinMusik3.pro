@@ -30,6 +30,7 @@ else {
 HEADERS += widgets/fkeys.h \
     widgets/edittrack.h \
     include/csearchlist.h \
+    include/massimport.h \
     include/coverprinter.h \
     include/searchlists.h \
     include/searchlistdialog.h \
@@ -62,6 +63,7 @@ SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     src/CSearchlist.cpp \
     src/CTrackList.cpp \
+    src/massimport.cpp \
     src/coverprinter.cpp \
     src/searchlists.cpp \
     src/searchlistdialog.cpp \
@@ -108,6 +110,7 @@ SOURCES += widgets/fkeys.cpp \
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
     forms/searchlists.ui \
+    forms/massimport.ui \
     forms/searchlistdialog.ui \
     forms/searchlisttrackdialog.ui \
     forms/coverprinter.ui \
