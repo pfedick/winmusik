@@ -40,13 +40,20 @@ public:
     MassImport(QWidget *parent = 0, CWmClient *wm=NULL);
     ~MassImport();
     void ReloadTranslation();
+    int load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint16 StartTrack);
 
 private:
     Ui::massimportClass ui;
     CWmClient *wm;
+	ppluint8 DeviceType;
+	ppluint32 DeviceId;
+	ppluint8 Page;
+	ppluint16 StartTrack;
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     void Resize();
+
+    void addTrack(const ppl6::CString Filename);
 
 
 public slots:
