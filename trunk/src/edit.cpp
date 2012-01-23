@@ -29,6 +29,7 @@
 #include "editdevice.h"
 #include "tablesearch.h"
 #include "shortcutdialog.h"
+#include "massimport.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -52,7 +53,7 @@ AsynchronousTrackUpdate::~AsynchronousTrackUpdate()
 
 }
 
-void AsynchronousTrackUpdate::ThreadMain(void *data)
+void AsynchronousTrackUpdate::ThreadMain(void *)
 {
 
 }
@@ -629,6 +630,7 @@ void Edit::UpdateFkeys()
 	t[15]=tr("autoimport");
 	t[16]=tr("save all ID3");
 	t[17]=tr("list devices");
+	t[18]=tr("mass import");
 
 	switch (position) {
 		case 1:		// Device Index
@@ -641,6 +643,8 @@ void Edit::UpdateFkeys()
 		case 3:		// Device Track
 			//if (DeviceType==7) SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-2006.png",t[15]);
 			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",t[16]);
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-0006.png",t[18]);
+
 			break;
 		case 4:		// Interpret
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
@@ -853,6 +857,8 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f6_Pressed(target,modifier);
 
+	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+		return on_f6_MassImport();
 		// *************************************************************************** F7
 	} else if (key==Qt::Key_F7 && position>3 && modifier==Qt::NoModifier) {
 		return on_f7_DeleteTrack();
@@ -1047,6 +1053,31 @@ bool Edit::on_track_FocusIn()
 	ui.track->selectAll();
 	return false;
 
+}
+
+void Edit::ReloadTracks()
+{
+	if (TrackList) delete TrackList;
+	TrackList=wm->GetTracklist(DeviceType,DeviceId,Page);
+	if (!TrackList) {
+		// TODO: Ein Bug, darf nicht vorkommen
+		ui.index->setFocus();
+		return;
+	}
+	UpdateTrackListing();
+	ppl6::CString a;
+	a.Setf("%u",TrackList->GetMax()+1);
+	ui.track->setText(a);
+	UpdateFkeys();
+	UpdateCompleters();
+	if (oimpInfo) {
+		delete oimpInfo;
+		oimpInfo=NULL;
+	}
+	this->setFocus();
+	ui.track->setFocus();
+	ui.track->deselect();
+	ui.track->selectAll();
 }
 
 // *****************************************************************************************************
@@ -1460,7 +1491,8 @@ void Edit::on_f5_clicked()
 }
 void Edit::on_f6_clicked()
 {
-	if (DeviceType==7 && position>3) on_f6_Pressed(GetWidgetFromPosition(position),Qt::NoModifier);
+	if (DeviceType==7 && position==3) on_f6_MassImport();
+	else if (DeviceType==7 && position>3) on_f6_Pressed(GetWidgetFromPosition(position),Qt::NoModifier);
 }
 
 void Edit::on_f7_clicked()
@@ -1529,7 +1561,7 @@ bool Edit::on_trackList_MousePress(QMouseEvent * event)
 	*/
 }
 
-bool Edit::on_trackList_MouseRelease(QMouseEvent * event)
+bool Edit::on_trackList_MouseRelease(QMouseEvent *)
 {
 	//printf ("MouseRelease\n");
 	startPos.setX(0);
@@ -2838,4 +2870,20 @@ void Edit::on_coverSearchAmazon_clicked()
 	Cmd="firefox \""+Url+"\" &";
 	system(Cmd);
 	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+}
+
+bool Edit::on_f6_MassImport()
+{
+	MassImport Import(this,wm);
+	if (!Import.load(DeviceType,DeviceId,Page,TrackList->GetMax()+1)) {
+		return true;
+	}
+
+	int ret=Import.exec();
+	if (ret==1) {
+		// Tonträger muss neugeladen werden
+		ReloadTracks();
+	}
+
+	return true;
 }

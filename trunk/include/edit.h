@@ -102,6 +102,7 @@ public:
     void FillEditFields();
     void ReloadTranslation();
     void OpenTrack(ppluint32 deviceId, ppluint8 page=0, ppluint16 track=0);
+    void ReloadTracks();
 
 
 private:
@@ -176,6 +177,7 @@ private:
     bool on_f5_ShortCut(int modifier);
     bool on_f5_CheckDupes(QObject *target);
     bool on_f6_Pressed(QObject *target, int modifier);
+    bool on_f6_MassImport();
     bool on_f7_DeleteTrack();
     bool on_f8_InsertTrack();
     bool on_f9_UpdateAllID3Tags();
