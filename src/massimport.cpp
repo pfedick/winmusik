@@ -333,7 +333,7 @@ void MassImport::on_treeWidget_customContextMenuRequested ( const QPoint & pos )
     currentTrackListItem=(TreeItem*)ui.treeWidget->itemAt(pos);
     if (!currentTrackListItem) return;
 	QMenu *m=new QMenu(this);
-	QAction *a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+	QAction *a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("search track","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
 	m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
 	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
 	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
