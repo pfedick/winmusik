@@ -55,7 +55,7 @@ class CStorageItem
 		CStorageItem();
 		~CStorageItem();
 		void Clear();
-		void CopyStorageFrom(CStorageItem *item);
+		void CopyStorageFrom(const CStorageItem *item);
 		void CopyStorageFrom(CWMFileChunk *chunk);
 		ppluint32 GetVersion();
 		ppluint32 GetLastChange();
@@ -192,10 +192,12 @@ class DataTitle : public CStorageItem
 		//void operator delete (void *ptr, size_t size);
 
 		DataTitle();
+		DataTitle(const DataTitle &other);
 		~DataTitle();
 		void Clear();
 
-		int CopyFrom(DataTitle *t);
+		int CopyFrom(const DataTitle *t);
+		int CopyFrom(const DataTitle &other);
 		void SetTitle(const char *title);
 		void SetArtist(const char *artist);
 		void SetRemarks(const char *remarks);

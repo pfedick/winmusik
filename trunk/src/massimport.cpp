@@ -40,6 +40,7 @@ MassImport::MassImport(QWidget *parent, CWmClient *wm)
 	searchWindow=NULL;
 	currentTrackListItem=NULL;
 	position=oldposition=0;
+	TrackList=NULL;
 
 	ui.treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -89,6 +90,7 @@ MassImport::MassImport(QWidget *parent, CWmClient *wm)
 
 MassImport::~MassImport()
 {
+	if (TrackList) delete TrackList;
 }
 
 void MassImport::setSearchWindow(QWidget *widget)
@@ -195,6 +197,9 @@ int MassImport::load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppl
 	this->DeviceId=DeviceId;
 	this->Page=Page;
 	this->StartTrack=StartTrack;
+
+	TrackList=wm->GetTracklist(DeviceType,DeviceId,Page);
+
 
 	ppl6::CString Path, Filename, Pattern;
 	ppl6::CString MP3Path=wm->conf.DevicePath[DeviceType];
@@ -488,12 +493,59 @@ void MassImport::on_markIgnoreSelectedTracksButton_clicked()
 
 void MassImport::on_deleteSelectedTracksButton_clicked()
 {
-
+	QList<QTreeWidgetItem *> list;
+	TreeItem *item;
+	list=ui.treeWidget->selectedItems();
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item) {
+			int	index=ui.treeWidget->indexOfTopLevelItem(item);
+			if (index>=0) ui.treeWidget->takeTopLevelItem(index);
+			delete item;
+		}
+	}
 }
 
 void MassImport::on_importSelectedTracksButton_clicked()
 {
-
+	QList<QTreeWidgetItem *> list;
+	TreeItem *item;
+	list=ui.treeWidget->selectedItems();
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item!=NULL && item->import==true) {
+			int	index=ui.treeWidget->indexOfTopLevelItem(item);
+			if (index>=0) ui.treeWidget->takeTopLevelItem(index);
+			if (importTrack(item)) {
+				delete item;
+			} else {
+				return;
+			}
+		}
+	}
 }
 
 
+bool MassImport::importTrack(TreeItem *item)
+{
+	DataTitle Ti;
+	Ti.TitleId=0;
+	Ti.DeviceId=DeviceId;
+	Ti.DeviceType=DeviceType;
+	Ti.Page=Page;
+	Ti.SetArtist(item->info.Artist);
+	Ti.SetTitle(item->info.Title);
+	Ti.SetRemarks(item->info.Comment);
+	Ti.SetTags(item->info.Tags);
+	Ti.SetAlbum(item->info.Album);
+	Ti.Length=item->info.Length;
+	Ti.Bitrate=item->info.Bitrate;
+	Ti.Size=item->info.FileSize;
+
+
+
+	// Tonträger aktualisieren
+	wm->DeviceStore.Update(DeviceType,DeviceId);
+
+	return false;
+}

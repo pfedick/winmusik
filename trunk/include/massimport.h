@@ -70,6 +70,8 @@ private:
 	TreeItem	*currentTrackListItem;
 	int			position, oldposition;
 
+	CTrackList	*TrackList;
+
     CTableControl TCVersion;
     CTableControl TCGenre;
     CTableControl TCLabel;
@@ -84,6 +86,8 @@ private:
     void addTrack(const ppl6::CString Filename);
 
     void renderTrack(TreeItem *item);
+
+    bool importTrack(TreeItem *item);
 
 protected:
     void InstallFilter(QObject *object, int id);
