@@ -2875,15 +2875,15 @@ void Edit::on_coverSearchAmazon_clicked()
 bool Edit::on_f6_MassImport()
 {
 	MassImport Import(this,wm);
+	Import.setSearchWindow(searchWindow);
+	Import.show();
 	if (!Import.load(DeviceType,DeviceId,Page,TrackList->GetMax()+1)) {
 		return true;
 	}
+	Import.exec();
+	searchWindow=Import.getSearchWindow();
+	ReloadTracks();
 
-	int ret=Import.exec();
-	if (ret==1) {
-		// Tonträger muss neugeladen werden
-		ReloadTracks();
-	}
 
 	return true;
 }
