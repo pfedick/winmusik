@@ -251,6 +251,18 @@ void MassImport::addTrack(const ppl6::CString Filename)
 	item->dupePresumption=0;
 	item->import=true;
 	getTrackInfoFromFile(item->info,Filename,wm->conf.ReadId3Tag);
+	checkDupes(item);
+	Tmp.Setf("%5i",ui.treeWidget->topLevelItemCount()+1);
+	item->setText(0,Tmp);
+	renderTrack(item);
+
+
+	ui.treeWidget->addTopLevelItem(item);
+	qApp->processEvents();
+}
+
+void MassImport::checkDupes(TreeItem *item)
+{
 	ppl6::CString Key;
 	Key=item->info.Artist+" "+item->info.Title+" "+item->info.Version;
 	Key.LCase();
@@ -282,13 +294,6 @@ void MassImport::addTrack(const ppl6::CString Filename)
 			}
 		}
 	}
-	Tmp.Setf("%5i",ui.treeWidget->topLevelItemCount()+1);
-	item->setText(0,Tmp);
-	renderTrack(item);
-
-
-	ui.treeWidget->addTopLevelItem(item);
-	qApp->processEvents();
 }
 
 void MassImport::renderTrack(TreeItem *item)
@@ -300,8 +305,7 @@ void MassImport::renderTrack(TreeItem *item)
 	if (item->info.Cover.GetSize()>0) {
 		QPixmap pix, icon;
 		pix.loadFromData((const uchar*)item->info.Cover.GetPtr(),item->info.Cover.GetSize());
-		icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-		item->setIcon(1,icon.copy(0,0,64,16));
+		item->setIcon(1,pix.copy(0,0,64,16));
 	} else {
 		item->setIcon(1,QIcon());
 	}
@@ -388,6 +392,7 @@ void MassImport::on_versionApplyButton_clicked()
 		item=(TreeItem*)list.at(i);
 		if (item) {
 			item->info.Version=ui.version->text();
+			checkDupes(item);
 			renderTrack(item);
 		}
 	}
@@ -496,11 +501,17 @@ void MassImport::on_deleteSelectedTracksButton_clicked()
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
+	if (list.size()==0) return;
+	if (QMessageBox::question(this, tr("WinMusik: Delete selected Tracks"),
+		tr("Do you really want to delete the selected tracks from your harddisk?\nYou won't be able to restore them!"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
+		==QMessageBox::No) return;
+
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
 			int	index=ui.treeWidget->indexOfTopLevelItem(item);
 			if (index>=0) ui.treeWidget->takeTopLevelItem(index);
+			ppl6::CFile::DeleteFile("%s",(const char*)item->Filename);
 			delete item;
 		}
 	}
@@ -514,20 +525,62 @@ void MassImport::on_importSelectedTracksButton_clicked()
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item!=NULL && item->import==true) {
-			int	index=ui.treeWidget->indexOfTopLevelItem(item);
-			if (index>=0) ui.treeWidget->takeTopLevelItem(index);
 			if (importTrack(item)) {
+				int	index=ui.treeWidget->indexOfTopLevelItem(item);
+				if (index>=0) ui.treeWidget->takeTopLevelItem(index);
 				delete item;
 			} else {
 				return;
 			}
+			qApp->processEvents();
 		}
 	}
 }
 
+void MassImport::on_selectAllButton_clicked()
+{
+	ui.treeWidget->selectAll();
+}
+
+void MassImport::on_selectNoneButton_clicked()
+{
+	TreeItem * item;
+	for (int i=0;i<ui.treeWidget->topLevelItemCount ();i++) {
+		item=(TreeItem *)ui.treeWidget->topLevelItem (i);
+		if (item) item->setSelected(false);
+	}
+}
+
+void MassImport::on_exitButton_clicked()
+{
+	this->close();
+}
+
+void MassImport::on_startImportButton_clicked()
+{
+	QList<QTreeWidgetItem *> list;
+	for (int i=0;i<ui.treeWidget->topLevelItemCount();i++) {
+		list.push_back(ui.treeWidget->topLevelItem(i));
+	}
+	TreeItem *item;
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item!=NULL && item->import==true) {
+			if (importTrack(item)) {
+				int	index=ui.treeWidget->indexOfTopLevelItem(item);
+				if (index>=0) ui.treeWidget->takeTopLevelItem(index);
+				delete item;
+			} else {
+				return;
+			}
+			qApp->processEvents();
+		}
+	}
+}
 
 bool MassImport::importTrack(TreeItem *item)
 {
+	ppl6::CString Tmp;
 	DataTitle Ti;
 	Ti.TitleId=0;
 	Ti.DeviceId=DeviceId;
@@ -541,11 +594,55 @@ bool MassImport::importTrack(TreeItem *item)
 	Ti.Length=item->info.Length;
 	Ti.Bitrate=item->info.Bitrate;
 	Ti.Size=item->info.FileSize;
+	Ti.VersionId=wm->VersionStore.FindOrAdd(item->info.Version);
+	Ti.GenreId=wm->GenreStore.FindOrAdd(item->info.Genre);
+	Ti.LabelId=wm->LabelStore.FindOrAdd(item->info.Label);
+	Ti.RecordSourceId=wm->RecordSourceStore.FindOrAdd(item->info.RecordingSource);
 
+	// Aufnahmedatum
+	ppl6::CDateTime now;
+	now.setCurrentTime();
+	Ti.RecordDate=now.get("%Y%m%d").ToInt();
 
+	// Erscheinungsjahr
+	Ti.ReleaseDate=item->info.Year*10000;
 
+	// Flags
+	Ti.Flags=1+2;
+	Ti.Channels=2;
+
+	// Cover
+	if (item->info.Cover.Size()>0) {
+		Ti.CoverPreview=item->info.Cover;
+	}
+
+	if (!wm->TitleStore.Put(&Ti)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return false;
+	}
+	DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
+	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
+
+	// Track speichern
+	DataTrack Track;
+	Track.TitleId=Ti.TitleId;
+	Track.Device=DeviceType;
+	Track.DeviceId=DeviceId;
+	Track.Page=Page;
+	Track.Track=TrackList->GetMax()+1;	// Wo kommt die Tracknummer her?
+
+	if (!TrackList->Put(&Track)) {
+		wm->RaiseError(this,tr("Could not save Track in TrackList"));
+		return false;
+	}
+	// Datei muss umbenannt werden
+
+	if (!wm->SaveID3Tags(Track.DeviceId, Page, Track.Track,Ti,item->Filename)) {
+		wm->RaiseError(this,tr("Could not save ID3 Tags"));
+		return false;
+	}
 	// Tonträger aktualisieren
 	wm->DeviceStore.Update(DeviceType,DeviceId);
 
-	return false;
+	return true;
 }

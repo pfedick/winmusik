@@ -27,6 +27,10 @@
 #include "winmusik3.h"
 #include <ppl6-sound.h>
 
+#include <QPixmap>
+#include <QBuffer>
+
+
 static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename);
 static bool CopyFromID3v1Tag(TrackInfo &info, const ppl6::CString &Filename, ppl6::CFile &File);
 static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl6::CFile &File);
@@ -205,7 +209,18 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		info.Label=Tmp;
 
 		// Cover?
-		Tag.GetPicture(3,info.Cover);
+		ppl6::CBinary Cover;
+		Tag.GetPicture(3,Cover);
+		if (Cover.Size()>0) {
+			QPixmap pix, icon;
+			pix.loadFromData((const uchar*)Cover.GetPtr(),Cover.GetSize());
+			icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+			QByteArray bytes;
+			QBuffer buffer(&bytes);
+			buffer.open(QIODevice::WriteOnly);
+			icon.save(&buffer, "JPEG",70);
+			info.Cover.Copy(bytes.data(),bytes.size());
+		}
 
 		// Falls die Version auch im Titel vorhanden ist, entfernen wir sie
 		Title.Replace(Version,"");
@@ -266,8 +281,8 @@ void getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	}
 	ppl6::PPL_MPEG_HEADER pmp3;
 	ppl6::CFile File;
-	//printf ("Oeffne File: %s\n",(const char*)Path);
-	if (!File.Open(Filename,"rb")) return;
+	printf ("Oeffne File: %s\n",(const char*)Filename);
+	if (!File.Open("%s","rb", (const char*) Filename)) return;
 	//printf ("Ok. rufe Ident auf\n");
 	if (!ppl6::IdentMPEG(&File,&pmp3)) return;
 	info.Length=pmp3.length;

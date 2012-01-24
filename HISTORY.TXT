@@ -9,16 +9,17 @@ Version 3.0.5
 	  Zwischenablage beobachtet wurde und eine Grafik in die Zwischenablage
 	  kopiert wurde.
 	- Suchlisten eingeführt
+	- Massenimport eingeführt
 	  
 	TODO
 	- Track editieren ist jetzt in einem eigenen Widget untergebracht
 	- Eigenes Fenster zum editieren eines Tracks aus einem anderen Dialog
 	  heraus, z.B. Suchergebnis
-	- Suchlisten
 	- Matchlisten
 	- Playlists über MySQL?
 	
 	- DOKU: Suchlisten
+	- DOKU: Massenimport
 	
 
 Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)

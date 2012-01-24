@@ -614,6 +614,21 @@ CSimpleTable *CTableStore::Find(const char *value)
 	return t;
 }
 
+int CTableStore::FindOrAdd(const char *value)
+{
+	if (!value) return 0;
+	if (strlen(value)==0) return 0;
+	CSimpleTable *t=Find(value);
+	if (t) return t->Id;
+	// Neu anlegen
+	CSimpleTable item;
+	item.Id=0;
+	item.References=1;
+	item.SetValue(value);
+	if (Put(&item)) return item.Id;
+	return 0;
+}
+
 int CTableStore::FindAll(ppl6::CWString &value, ppl6::CTree &Result)
 {
 	Result.Clear(true);

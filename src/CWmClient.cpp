@@ -1050,11 +1050,13 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	return Filename;
 }
 
-int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti)
+int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename)
 {
-	ppl6::CString Filename=MP3Filename(DeviceId, Page, Track);
+	ppl6::CString InternalFilename;
 	ppl6::CString Tmp;
-	if (Filename.IsEmpty()) {
+	if (Filename.NotEmpty()) InternalFilename=Filename;
+	else InternalFilename=MP3Filename(DeviceId, Page, Track);
+	if (InternalFilename.IsEmpty()) {
 		Tmp=tr("Track: %i");
 		ppl6::SetError(20022,Tmp,Track);
 		return 0;
@@ -1091,7 +1093,7 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	Tmp.Setf("%u",Ti.ReleaseDate);
 	Tmp.Cut(4);
 	Job.Set("year",Tmp);
-	ID3TagSaver.Add(Filename,&Job,conf.bRemoveOriginalId3Tags,
+	ID3TagSaver.Add(InternalFilename,&Job,conf.bRemoveOriginalId3Tags,
 			conf.bWriteId3v1,conf.bWriteId3v2);
 	return 1;
 }
