@@ -120,6 +120,23 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="selectNoneButton">
+         <property name="text">
+          <string>select none</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/icons/resources/eraser.png</normaloff>:/icons/resources/eraser.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

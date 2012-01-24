@@ -661,7 +661,7 @@ class CWmClient
 		int TrashMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 		int RenameMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack);
 		ppl6::CString NextMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-		int SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti);
+		int SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename="");
 		ppl6::CString NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti);
 
 		int SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp);

@@ -88,6 +88,7 @@ private:
     void renderTrack(TreeItem *item);
 
     bool importTrack(TreeItem *item);
+    void checkDupes(TreeItem *item);
 
 protected:
     void InstallFilter(QObject *object, int id);
@@ -117,6 +118,10 @@ public slots:
 	void on_deleteSelectedTracksButton_clicked();
 	void on_importSelectedTracksButton_clicked();
 
+	void on_selectAllButton_clicked();
+	void on_selectNoneButton_clicked();
+	void on_exitButton_clicked();
+	void on_startImportButton_clicked();
 
 
 };

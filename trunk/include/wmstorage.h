@@ -443,6 +443,7 @@ class CTableStore : public CStorageType
 		int Put(CSimpleTable *entry);
 		CSimpleTable *Get(ppluint32 id);
 		CSimpleTable *Find(const char *value);
+		int FindOrAdd(const char *value);
 		int FindAll(ppl6::CWString &value, ppl6::CTree &Result);
 		int GetCopy(ppluint32 id, CSimpleTable *t);
 };
