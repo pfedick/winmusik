@@ -176,6 +176,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="markImportSelectedTracksButton">
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
             <property name="text">
              <string>Mark as Import</string>
             </property>
@@ -188,6 +191,9 @@
               <width>16</width>
               <height>16</height>
              </size>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
