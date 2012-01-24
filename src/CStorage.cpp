@@ -119,7 +119,7 @@ void CStorageItem::Clear()
 	formatversion=0;
 }
 
-void CStorageItem::CopyStorageFrom(CStorageItem *item)
+void CStorageItem::CopyStorageFrom(const CStorageItem *item)
 /*!\brief Storage Daten kopieren
  *
  * Diese Funktion übernimmt die Storage Daten des angegebenen Datensatzes.

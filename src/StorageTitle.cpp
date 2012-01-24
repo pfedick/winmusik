@@ -232,6 +232,19 @@ DataTitle::DataTitle()
 	formatversion=3;
 }
 
+DataTitle::DataTitle(const DataTitle &other)
+: CStorageItem()
+{
+	Artist=NULL;
+	Title=NULL;
+	Remarks=NULL;
+	Album=NULL;
+	Tags=NULL;
+	Clear();
+	formatversion=3;
+	CopyFrom(&other);
+}
+
 DataTitle::~DataTitle()
 /*!\brief Destruktor der Klasse
  *
@@ -328,7 +341,13 @@ void DataTitle::Clear()
 	formatversion=3;
 }
 
-int DataTitle::CopyFrom(DataTitle *t)
+
+int DataTitle::CopyFrom(const DataTitle &other)
+{
+	return CopyFrom(&other);
+}
+
+int DataTitle::CopyFrom(const DataTitle *t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataTitle Datensatzes in diesen hineinkopiert.
