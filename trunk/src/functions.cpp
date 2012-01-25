@@ -78,36 +78,41 @@ ppl6::CString Long2Date(ppl6::CString &Format, ppluint32 Date)
 
 static bool CopyFromID3v1Tag(TrackInfo &info, const ppl6::CString &Filename, ppl6::CFile &File)
 {
-	ppl6::CString Tmp;
+	ppl6::CString Tmp,Title;
 	// ID3v1-Tag einlesen falls vorhanden
 	const char *buffer=File.Map(File.Lof()-128,128);
 	if (buffer[0]=='T' && buffer[1]=='A' && buffer[2]=='G') {
 		ID3TAG id3;
 		memcpy (&id3,buffer,128);
-		info.Artist.Set(id3.Artist,30);
-		info.Artist.Trim();
+		Tmp.Set(id3.Artist,30);
+		Tmp.Trim();
+		info.Ti.SetArtist(Tmp);
 		Tmp.Set(id3.SongName,30);
 		Tmp.Trim();
 		// Sind Klammern enthalten?
 		if (Tmp.PregMatch("/^(.*)\\((.*)\\).*$/")) {
-			info.Title=Tmp.GetMatch(1);
-			info.Title.Trim();
+			Title=Tmp.GetMatch(1);
+			Title.Trim();
+			info.Ti.SetTitle(Title);
 			info.Version=Tmp.GetMatch(2);
 			info.Version.Trim();
 		} else if (Tmp.PregMatch("/^(.*)\\[(.*)\\].*$/")) {
-			info.Title=Tmp.GetMatch(1);
-			info.Title.Trim();
+			Title=Tmp.GetMatch(1);
+			Title.Trim();
+			info.Ti.SetTitle(Title);
 			info.Version=Tmp.GetMatch(2);
 			info.Version.Trim();
 		} else {
-			info.Title=Tmp;
+			info.Ti.SetTitle(Tmp);
 		}
-		info.Album=id3.Album;
-		info.Album.Trim();
+		Tmp=id3.Album;
+		Tmp.Trim();
+		info.Ti.SetAlbum(Tmp);
 		// ReleaseDate
-		info.Year=ppl6::atoi(id3.Year);
-		info.Comment=id3.Comment;
-		info.Comment.Trim();
+		info.Ti.ReleaseDate=ppl6::atoi(id3.Year)*10000;
+		Tmp=id3.Comment;
+		Tmp.Trim();
+		info.Ti.SetRemarks(Tmp);
 		info.Genre=ppl6::GetID3GenreName(id3.Genre);
 		info.Genre.Trim();
 		return true;
@@ -129,26 +134,26 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		Artist.Replace("_"," ");
 		Artist.Trim();
 
-		info.Artist=Artist;
+		info.Ti.SetArtist(Artist);
 
 		// Album
 		Tmp=Tag.GetAlbum();
 		Tmp.Replace("_"," ");
 		Tmp.Trim();
-		info.Album=Tmp;
+		info.Ti.SetAlbum(Tmp);
 
 		// BPM
 		Tmp=Tag.GetBPM();
 		Tmp.Replace("_"," ");
 		Tmp.Trim();
-		info.Bpm=Tmp.ToInt();
+		info.Ti.BPM=Tmp.ToInt();
 
 		// ReleaseDate
 		QDate Date;
 		Tmp=Tag.GetYear();
 		Tmp.Replace("_"," ");
 		Tmp.Trim();
-		info.Year=Tmp.ToInt();
+		info.Ti.ReleaseDate=Tmp.ToInt()*10000;
 
 		// Comment
 		Comment=Tag.GetComment();
@@ -219,7 +224,7 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 			QBuffer buffer(&bytes);
 			buffer.open(QIODevice::WriteOnly);
 			icon.save(&buffer, "JPEG",70);
-			info.Cover.Copy(bytes.data(),bytes.size());
+			info.Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 		}
 
 		// Falls die Version auch im Titel vorhanden ist, entfernen wir sie
@@ -230,8 +235,8 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		Comment.Replace(Version,"");
 		Comment.Replace("()","");
 		Comment.Trim();
-		info.Title=Title;
-		info.Comment=Comment;
+		info.Ti.SetTitle(Title);
+		info.Ti.SetRemarks(Comment);
 		if (Title.Len()>0 && Artist.Len()>0) return true;
 	}
 	return CopyFromFilename(info,Filename);
@@ -250,23 +255,27 @@ static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename)
 	if (Name.PregMatch("/^[0-9]{3}-/")) {
 		Name.Shl(0,4);
 		if (Name.PregMatch("/^(.*)-(.*)$/u")) {
-			info.Artist=Name.GetMatch(1);
-			info.Artist.Trim();
+			Tmp=Name.GetMatch(1);
+			Tmp.Trim();
+			info.Ti.SetArtist(Tmp);
 			Title=Name.GetMatch(2);
 			// Hier könnte die Version drinstehen
 			if (Title.PregMatch("/^(.*)\\((.*)\\)")) {
-				info.Title=Title.GetMatch(1);
-				info.Title.Trim();
+				Tmp=Title.GetMatch(1);
+				Tmp.Trim();
+				info.Ti.SetTitle(Tmp);
 				info.Version=Title.GetMatch(2);
 				info.Version.Trim();
 			} else if (Title.PregMatch("/^(.*)\\[(.*)\\]")) {
-				info.Title=Title.GetMatch(1);
-				info.Title.Trim();
+				Tmp=Title.GetMatch(1);
+				Tmp.Trim();
+				info.Ti.SetTitle(Tmp);
 				info.Version=Title.GetMatch(2);
 				info.Version.Trim();
 			} else {
-				info.Title=Name.GetMatch(2);
-				info.Title.Trim();
+				Tmp=Title.GetMatch(2);
+				Tmp.Trim();
+				info.Ti.SetTitle(Tmp);
 			}
 		}
 	}
@@ -277,23 +286,27 @@ void getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 {
 	ppl6::CDirEntry de;
 	if (ppl6::CFile::Stat(Filename,de)) {
-		info.FileSize=de.Size;
+		info.Ti.Size=de.Size;
 	}
+	info.Ti.Channels=2;
+	info.Ti.Flags=1+2;
+
 	ppl6::PPL_MPEG_HEADER pmp3;
 	ppl6::CFile File;
-	printf ("Oeffne File: %s\n",(const char*)Filename);
+	//printf ("Oeffne File: %s\n",(const char*)Filename);
 	if (!File.Open("%s","rb", (const char*) Filename)) return;
 	//printf ("Ok. rufe Ident auf\n");
 	if (!ppl6::IdentMPEG(&File,&pmp3)) return;
-	info.Length=pmp3.length;
-	info.Bitrate=pmp3.bitrate;
+	info.Ti.Length=pmp3.length;
+	info.Ti.Bitrate=pmp3.bitrate;
+	//info.Ti.Channels=pmp3.
 	int ret=0;
 	if (preferedId3Version==1) ret=CopyFromID3v1Tag(info,Filename,File);
 	else if (preferedId3Version==2) ret=CopyFromID3v2Tag(info,Filename,File);
 	else ret=CopyFromFilename(info,Filename);
 	if (ret) {
 		if (info.Version.IsEmpty()) {
-			if (info.Length<5*60) info.Version="Single";
+			if (info.Ti.Length<5*60) info.Version="Single";
 		}
 	}
 }

@@ -110,6 +110,7 @@ public slots:
 	void on_genreApplyButton_clicked();
 	void on_labelApplyButton_clicked();
 	void on_recordingSourceApplyButton_clicked();
+	void on_recordDeviceApplyButton_clicked();
 	void on_albumApplyButton_clicked();
 	void on_tagsApplyButton_clicked();
 

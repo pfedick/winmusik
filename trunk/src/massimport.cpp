@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "../include/massimport.h"
+#include "../include/edittrackdialog.h"
 
 MassImport::MassImport(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
@@ -72,6 +73,10 @@ MassImport::MassImport(QWidget *parent, CWmClient *wm)
 	TCRecordSource.Title=tr("Record Source");
 	TCRecordSource.Init(this,wm,ui.recordSourceId,ui.recordSource,&wm->RecordSourceStore);
 	TCRecordSource.SetNextWidget(ui.recordingSourceApplyButton);
+
+	TCRecordDevice.Title=tr("Record Device");
+	TCRecordDevice.Init(this,wm,ui.recordDeviceId,ui.recordDevice,&wm->RecordDeviceStore);
+	TCRecordDevice.SetNextWidget(ui.recordDeviceApplyButton);
 
 	InstallFilter(ui.versionId,6);
 	InstallFilter(ui.version,7);
@@ -251,6 +256,12 @@ void MassImport::addTrack(const ppl6::CString Filename)
 	item->dupePresumption=0;
 	item->import=true;
 	getTrackInfoFromFile(item->info,Filename,wm->conf.ReadId3Tag);
+	item->info.Ti.VersionId=wm->VersionStore.GetId(item->info.Version);
+	item->info.Ti.GenreId=wm->GenreStore.GetId(item->info.Genre);
+	item->info.Ti.LabelId=wm->LabelStore.GetId(item->info.Label);
+	item->info.Ti.RecordSourceId=wm->RecordSourceStore.GetId(item->info.RecordingSource);
+	item->info.Ti.RecordDeviceId=wm->RecordDeviceStore.GetId(item->info.RecordingDevice);
+
 	checkDupes(item);
 	Tmp.Setf("%5i",ui.treeWidget->topLevelItemCount()+1);
 	item->setText(0,Tmp);
@@ -263,8 +274,11 @@ void MassImport::addTrack(const ppl6::CString Filename)
 
 void MassImport::checkDupes(TreeItem *item)
 {
-	ppl6::CString Key;
-	Key=item->info.Artist+" "+item->info.Title+" "+item->info.Version;
+	ppl6::CString Key, Version;
+	if (item->info.Ti.VersionId>0) Version=wm->GetVersionText(item->info.Ti.VersionId);
+	else Version=item->info.Version;
+	Key.Setf("%s %s ",item->info.Ti.Artist,item->info.Ti.Title);
+	Key+=Version;
 	Key.LCase();
 
 	std::set<ppl6::CString>::iterator it;
@@ -276,7 +290,7 @@ void MassImport::checkDupes(TreeItem *item)
 	} else {
 		LocalDupeCheck.insert(Key);
 		CTitleHashTree Result;
-		wm->Hashes.Find(item->info.Artist,item->info.Title,item->info.Version,"","",Result);
+		wm->Hashes.Find(item->info.Ti.Artist,item->info.Ti.Title,Version,"","",Result);
 		if (Result.Num()>1) {
 			item->dupePresumption=100;
 			item->import=false;
@@ -284,7 +298,7 @@ void MassImport::checkDupes(TreeItem *item)
 			item->dupePresumption=90;
 			item->import=false;
 		} else {
-			wm->Hashes.Find(item->info.Artist,item->info.Title,Result);
+			wm->Hashes.Find(item->info.Ti.Artist,item->info.Ti.Title,Result);
 			if (Result.Num()>3) {
 				item->dupePresumption=70;
 				item->import=true;
@@ -300,25 +314,37 @@ void MassImport::renderTrack(TreeItem *item)
 {
 	QBrush Brush(Qt::SolidPattern);
 	Brush.setColor("red");
-
 	ppl6::CString Tmp;
-	if (item->info.Cover.GetSize()>0) {
+
+	// Cover
+	if (item->info.Ti.CoverPreview.GetSize()>0) {
 		QPixmap pix, icon;
-		pix.loadFromData((const uchar*)item->info.Cover.GetPtr(),item->info.Cover.GetSize());
+		pix.loadFromData((const uchar*)item->info.Ti.CoverPreview.GetPtr(),item->info.Ti.CoverPreview.GetSize());
 		item->setIcon(1,pix.copy(0,0,64,16));
 	} else {
 		item->setIcon(1,QIcon());
 	}
 
-	Tmp=item->info.Artist+" - "+item->info.Title;
+	// Interpret - Titel
+	Tmp.Setf("%s - %s",item->info.Ti.Artist,item->info.Ti.Title);
 	item->setText(2,Tmp);
-	item->setText(3,item->info.Version);
-	item->setForeground(3,Brush);
-	item->setText(4,item->info.Genre);
 
-	Tmp.Setf("%4i:%02i",(int)(item->info.Length/60),item->info.Length%60);
+	// Version
+	if (item->info.Ti.VersionId>0) Tmp=wm->GetVersionText(item->info.Ti.VersionId);
+	else Tmp=item->info.Version;
+	item->setText(3,Tmp);
+	item->setForeground(3,Brush);
+
+	// Genre
+	if (item->info.Ti.GenreId>0) Tmp=wm->GetGenreText(item->info.Ti.GenreId);
+	else Tmp=item->info.Genre;
+	item->setText(4,Tmp);
+
+	// Länge
+	Tmp.Setf("%4i:%02i",(int)(item->info.Ti.Length/60),item->info.Ti.Length%60);
 	item->setText(5,Tmp);
 
+	// Dupes
 	Tmp.Setf("%i %%",item->dupePresumption);
 	item->setText(6,Tmp);
 	if (item->import) item->setIcon(7,QIcon(":/icons/resources/button_ok.png"));
@@ -363,8 +389,8 @@ void MassImport::on_treeWidget_itemClicked ( QTreeWidgetItem * item, int column)
 void MassImport::on_contextFindMoreVersions_triggered()
 {
 	if (!currentTrackListItem) return;
-	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTrackListItem->info.Artist,
-			currentTrackListItem->info.Title);
+	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTrackListItem->info.Ti.Artist,
+			currentTrackListItem->info.Ti.Title);
 }
 
 void MassImport::on_contextPlayTrack_triggered()
@@ -376,22 +402,41 @@ void MassImport::on_contextPlayTrack_triggered()
 void MassImport::on_contextEditTrack_triggered()
 {
 	if (!currentTrackListItem) return;
+	EditTrackDialog dialog(this,wm);
+	dialog.setData(currentTrackListItem->info);
+	dialog.setFilename(currentTrackListItem->Filename);
+	int ret=dialog.exec();
+	if (ret==1) {
+		currentTrackListItem->info=dialog.getData();
+		renderTrack(currentTrackListItem);
+	}
 }
 
 void MassImport::on_contextDeleteTrack_triggered()
 {
 	if (!currentTrackListItem) return;
+	if (QMessageBox::question(this, tr("WinMusik: Delete this Tracks"),
+		tr("Do you really want to delete this track from your harddisk?\nYou won't be able to restore it!"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
+		==QMessageBox::No) return;
+	int	index=ui.treeWidget->indexOfTopLevelItem(currentTrackListItem);
+	if (index>=0) ui.treeWidget->takeTopLevelItem(index);
+	ppl6::CFile::DeleteFile("%s",(const char*)currentTrackListItem->Filename);
+	delete currentTrackListItem;
+	currentTrackListItem=NULL;
 }
 
 void MassImport::on_versionApplyButton_clicked()
 {
+	ppl6::CString Value=ui.version->text();
+	int id=wm->VersionStore.GetId(Value);
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.Version=ui.version->text();
+			item->info.Version=Value;
+			item->info.Ti.VersionId=id;
 			checkDupes(item);
 			renderTrack(item);
 		}
@@ -400,13 +445,16 @@ void MassImport::on_versionApplyButton_clicked()
 
 void MassImport::on_genreApplyButton_clicked()
 {
+	ppl6::CString Value=ui.genre->text();
+	int id=wm->GenreStore.GetId(Value);
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.Genre=ui.genre->text();
+			item->info.Genre=Value;
+			item->info.Ti.GenreId=id;
 			renderTrack(item);
 		}
 	}
@@ -414,13 +462,17 @@ void MassImport::on_genreApplyButton_clicked()
 
 void MassImport::on_labelApplyButton_clicked()
 {
+	ppl6::CString Value=ui.label->text();
+	int id=wm->LabelStore.GetId(Value);
+
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.Label=ui.label->text();
+			item->info.Label=Value;
+			item->info.Ti.LabelId=id;
 			renderTrack(item);
 		}
 	}
@@ -428,13 +480,35 @@ void MassImport::on_labelApplyButton_clicked()
 
 void MassImport::on_recordingSourceApplyButton_clicked()
 {
+	ppl6::CString Value=ui.recordSource->text();
+	int id=wm->RecordSourceStore.GetId(Value);
+
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.RecordingSource=ui.recordSource->text();
+			item->info.RecordingSource=Value;
+			item->info.Ti.RecordSourceId=id;
+			renderTrack(item);
+		}
+	}
+}
+
+void MassImport::on_recordDeviceApplyButton_clicked()
+{
+	ppl6::CString Value=ui.recordDevice->text();
+	int id=wm->RecordDeviceStore.GetId(Value);
+
+	QList<QTreeWidgetItem *> list;
+	TreeItem *item;
+	list=ui.treeWidget->selectedItems();
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item) {
+			item->info.RecordingDevice=Value;
+			item->info.Ti.RecordDeviceId=id;
 			renderTrack(item);
 		}
 	}
@@ -448,7 +522,7 @@ void MassImport::on_albumApplyButton_clicked()
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.Album=ui.album->text();
+			item->info.Ti.SetAlbum(ui.album->text());
 			renderTrack(item);
 		}
 	}
@@ -462,7 +536,7 @@ void MassImport::on_tagsApplyButton_clicked()
 	for (int i = 0; i < list.size(); ++i) {
 		item=(TreeItem*)list.at(i);
 		if (item) {
-			item->info.Tags=ui.tags->text();
+			item->info.Ti.SetTags(ui.tags->text());
 			renderTrack(item);
 		}
 	}
@@ -586,18 +660,25 @@ bool MassImport::importTrack(TreeItem *item)
 	Ti.DeviceId=DeviceId;
 	Ti.DeviceType=DeviceType;
 	Ti.Page=Page;
-	Ti.SetArtist(item->info.Artist);
-	Ti.SetTitle(item->info.Title);
-	Ti.SetRemarks(item->info.Comment);
-	Ti.SetTags(item->info.Tags);
-	Ti.SetAlbum(item->info.Album);
-	Ti.Length=item->info.Length;
-	Ti.Bitrate=item->info.Bitrate;
-	Ti.Size=item->info.FileSize;
-	Ti.VersionId=wm->VersionStore.FindOrAdd(item->info.Version);
-	Ti.GenreId=wm->GenreStore.FindOrAdd(item->info.Genre);
-	Ti.LabelId=wm->LabelStore.FindOrAdd(item->info.Label);
-	Ti.RecordSourceId=wm->RecordSourceStore.FindOrAdd(item->info.RecordingSource);
+	Ti.SetArtist(item->info.Ti.Artist);
+	Ti.SetTitle(item->info.Ti.Title);
+	Ti.SetRemarks(item->info.Ti.Remarks);
+	Ti.SetTags(item->info.Ti.Tags);
+	Ti.SetAlbum(item->info.Ti.Album);
+	Ti.Length=item->info.Ti.Length;
+	Ti.Bitrate=item->info.Ti.Bitrate;
+	Ti.Size=item->info.Ti.Size;
+	Ti.VersionId=item->info.Ti.VersionId;
+	Ti.GenreId=item->info.Ti.GenreId;
+	Ti.LabelId=item->info.Ti.LabelId;
+	Ti.RecordSourceId=item->info.Ti.RecordSourceId;
+	Ti.RecordDeviceId=item->info.Ti.RecordDeviceId;
+
+	if (!Ti.VersionId) Ti.VersionId=wm->VersionStore.FindOrAdd(item->info.Version);
+	if (!Ti.GenreId) Ti.GenreId=wm->GenreStore.FindOrAdd(item->info.Genre);
+	if (!Ti.LabelId) Ti.LabelId=wm->LabelStore.FindOrAdd(item->info.Label);
+	if (!Ti.RecordSourceId) Ti.RecordSourceId=wm->RecordSourceStore.FindOrAdd(item->info.RecordingSource);
+	if (!Ti.RecordDeviceId) Ti.RecordDeviceId=wm->RecordDeviceStore.FindOrAdd(item->info.RecordingDevice);
 
 	// Aufnahmedatum
 	ppl6::CDateTime now;
@@ -605,15 +686,15 @@ bool MassImport::importTrack(TreeItem *item)
 	Ti.RecordDate=now.get("%Y%m%d").ToInt();
 
 	// Erscheinungsjahr
-	Ti.ReleaseDate=item->info.Year*10000;
+	Ti.ReleaseDate=item->info.Ti.ReleaseDate;
 
 	// Flags
-	Ti.Flags=1+2;
-	Ti.Channels=2;
+	Ti.Flags=item->info.Ti.Flags;
+	Ti.Channels=item->info.Ti.Channels;
 
 	// Cover
-	if (item->info.Cover.Size()>0) {
-		Ti.CoverPreview=item->info.Cover;
+	if (item->info.Ti.CoverPreview.Size()>0) {
+		Ti.CoverPreview=item->info.Ti.CoverPreview;
 	}
 
 	if (!wm->TitleStore.Put(&Ti)) {

@@ -629,6 +629,15 @@ int CTableStore::FindOrAdd(const char *value)
 	return 0;
 }
 
+int CTableStore::GetId(const char *value)
+{
+	if (!value) return 0;
+	if (strlen(value)==0) return 0;
+	CSimpleTable *t=Find(value);
+	if (t) return t->Id;
+	return 0;
+}
+
 int CTableStore::FindAll(ppl6::CWString &value, ppl6::CTree &Result)
 {
 	Result.Clear(true);

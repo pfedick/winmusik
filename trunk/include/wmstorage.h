@@ -203,6 +203,13 @@ class DataTitle : public CStorageItem
 		void SetRemarks(const char *remarks);
 		void SetTags(const char *tags);
 		void SetAlbum(const char *album);
+
+		void SetTitle(const ppl6::CString &title);
+		void SetArtist(const ppl6::CString &artist);
+		void SetRemarks(const ppl6::CString &remarks);
+		void SetTags(const ppl6::CString &tags);
+		void SetAlbum(const ppl6::CString &album);
+
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
 };
@@ -443,6 +450,7 @@ class CTableStore : public CStorageType
 		int Put(CSimpleTable *entry);
 		CSimpleTable *Get(ppluint32 id);
 		CSimpleTable *Find(const char *value);
+		int GetId(const char *value);
 		int FindOrAdd(const char *value);
 		int FindAll(ppl6::CWString &value, ppl6::CTree &Result);
 		int GetCopy(ppluint32 id, CSimpleTable *t);
