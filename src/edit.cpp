@@ -1995,7 +1995,7 @@ bool Edit::EditTrack()
 				Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
 				ui.filesize->setText(Tmp);
 				ppl6::CID3Tag Tag;
-				if (Tag.Load(&Path)) {
+				if (Tag.Load(Path)) {
 					// Cover?
 					ppl6::CBinary cover;
 					if (Tag.GetPicture(3,cover)) {

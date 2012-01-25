@@ -31,6 +31,7 @@ HEADERS += widgets/fkeys.h \
     widgets/edittrack.h \
     include/csearchlist.h \
     include/massimport.h \
+    include/edittrackdialog.h \
     include/coverprinter.h \
     include/searchlists.h \
     include/searchlistdialog.h \
@@ -62,6 +63,7 @@ HEADERS += widgets/fkeys.h \
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     src/CSearchlist.cpp \
+    src/edittrackdialog.cpp \
     src/CTrackList.cpp \
     src/massimport.cpp \
     src/coverprinter.cpp \
@@ -109,6 +111,7 @@ SOURCES += widgets/fkeys.cpp \
     src/DropArea.cpp
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
+    forms/edittrackdialog.ui \
     forms/searchlists.ui \
     forms/massimport.ui \
     forms/searchlistdialog.ui \

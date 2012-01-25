@@ -470,6 +470,80 @@ void DataTitle::SetAlbum(const char *album)
 	if (album!=NULL && strlen(album)>0) Album=strdup(album);
 }
 
+void DataTitle::SetTitle(const ppl6::CString &title)
+/*!\brief Songtitel setzen
+ *
+ * Mit dieser Funktion wird der Titel des Songs gesetzt.
+ *
+ * \param[in] title Pointer auf einen String mit dem Titel.
+ * \returns Liefert 1 zurück, wenn der Titel erfolgreich gesetzt werden konnte.
+ */
+{
+	if (Title) free(Title);
+	Title=NULL;
+	if (title.NotEmpty()) Title=strdup((const char*)title);
+}
+
+void DataTitle::SetArtist(const ppl6::CString &artist)
+/*!\brief Interpreten setzen
+ *
+ * Mit dieser Funktion wird der Interpret des Songs gesetzt.
+ *
+ * \param[in] artist Pointer auf einen String mit dem Namen des Interpreten.
+ * \returns Liefert 1 zurück, wenn der Interpret erfolgreich gesetzt werden konnte.
+ */
+{
+	if (Artist) free(Artist);
+	Artist=NULL;
+	if (artist.NotEmpty()) Artist=strdup((const char*)artist);
+}
+
+void DataTitle::SetRemarks(const ppl6::CString &remarks)
+/*!\brief Bemerkung setzen
+ *
+ * Mit dieser Funktion kann eine Bemerkung zu dem Titel hinterlegt werden.
+ *
+ * \param[in] remarks Pointer auf einen String mit der Bemerkung.
+ * \returns Liefert 1 zurück, wenn die Bemerkung erfolgreich gesetzt werden konnte.
+ */
+
+{
+	if (Remarks) free(Remarks);
+	Remarks=NULL;
+	if (remarks.NotEmpty()) Remarks=strdup((const char*)remarks);
+}
+
+void DataTitle::SetTags(const ppl6::CString &tags)
+/*!\brief Suchtags setzen
+ *
+ * Mit dieser Funktion können optionale Suchtags gesetzt werden.
+ *
+ * \param[in] tags Pointer auf einen String mit den Suchtags
+ * \returns Liefert 1 zurück, wenn die Tags erfolgreich gesetzt werden konnte.
+ */
+
+{
+	if (Tags) free(Tags);
+	Tags=NULL;
+	if (tags.NotEmpty()) Tags=strdup((const char*)tags);
+}
+
+
+
+void DataTitle::SetAlbum(const ppl6::CString &album)
+/*!\brief Album setzen
+ *
+ * Mit dieser Funktion kann der Name des Albums gesetzt werden, von dem dieser Titel stammt.
+ *
+ * \param[in] album Pointer auf einen String mit dem Namen des Albums.
+ * \returns Liefert 1 zurück, wenn das Album erfolgreich gesetzt werden konnte.
+ */
+{
+	if (Album) free(Album);
+	Album=NULL;
+	if (album.NotEmpty()) Album=strdup((const char*)album);
+}
+
 ppl6::CBinary *DataTitle::Export()
 /*!\brief Binäre Exportfunktion
  *

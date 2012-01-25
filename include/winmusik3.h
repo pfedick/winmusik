@@ -236,45 +236,22 @@ class CTrackList
 class TrackInfo
 {
 	public:
-		ppl6::CString	Artist;
-		ppl6::CString	Title;
+		DataTitle		Ti;
 		ppl6::CString	Version;
 		ppl6::CString	Genre;
-		ppl6::CString	Album;
 		ppl6::CString	Label;
-		ppl6::CString	Comment;
-		ppl6::CString	Tags;
 		ppl6::CString	RecordingSource;
-		ppl6::CBinary	Cover;
-		ppluint64		FileSize;
-		int				Bitrate;
-		int				Length;
-		int				Year;
-		int				Bpm;
+		ppl6::CString	RecordingDevice;
 
 		TrackInfo() {
-			FileSize=0;
-			Bitrate=0;
-			Length=0;
-			Year=0;
-			Bpm=0;
 		}
 		void clear() {
-			Artist.Clear();
-			Title.Clear();
+			Ti.Clear();
 			Version.Clear();
 			Genre.Clear();
-			Album.Clear();
 			Label.Clear();
-			Comment.Clear();
-			Cover.Clear();
-			Tags.Clear();
 			RecordingSource.Clear();
-			FileSize=0;
-			Bitrate=0;
-			Length=0;
-			Year=0;
-			Bpm=0;
+			RecordingDevice.Clear();
 		}
 };
 
