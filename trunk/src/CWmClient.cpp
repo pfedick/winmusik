@@ -1288,7 +1288,6 @@ int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 		ppl6::SetError(20042);
 		return 0;
 	}
-	int count=0;
 	int min=list->GetMin();
 	int max=list->GetMax();
 	for (int i=min;i<=max;i++) {

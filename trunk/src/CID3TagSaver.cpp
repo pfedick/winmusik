@@ -214,7 +214,7 @@ void CID3TagSaver::SetRetryIntervall(int seconds)
 }
 
 
-void CID3TagSaver::ThreadMain(void *param)
+void CID3TagSaver::ThreadMain(void *)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"ThreadMain");
 	ppl6::CAssocArray *Job;

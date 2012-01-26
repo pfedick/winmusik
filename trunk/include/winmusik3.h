@@ -100,6 +100,7 @@ class CCallback
 	public:
 		int progress;
 
+		virtual ~CCallback();
 		virtual void Update();
 };
 

@@ -45,7 +45,7 @@ EditTrackDialog::EditTrackDialog(QWidget *parent, CWmClient *wm)
 
 EditTrackDialog::~EditTrackDialog()
 {
-
+	//printf ("EditTrackDialog::~EditTrackDialog\n");
 }
 
 void EditTrackDialog::setSearchWindow(QWidget *widget)
