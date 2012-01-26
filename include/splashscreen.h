@@ -37,7 +37,7 @@ class SplashScreen : public QDialog, public CCallback
 
 public:
     SplashScreen(QWidget *parent = 0);
-    ~SplashScreen();
+    virtual ~SplashScreen();
 
     virtual void Update();
     void setMessage(QString msg);

@@ -470,7 +470,7 @@ ppluint32 CWMFile::GetFilePosition()
 	return pos;
 }
 
-int CWMFile::CopyDatabase(CWMFile &oldfile, CWMFile &newfile, CCallback *callback)
+int CWMFile::CopyDatabase(CWMFile &oldfile, CWMFile &newfile, CCallback *)
 {
 	oldfile.Reset();
 	CWMFileChunk chunk;

@@ -14,6 +14,7 @@
 class GenericListItem
 {
 	public:
+		virtual ~GenericListItem() {};
 		virtual void clear()=0;
 		virtual void importXML(const ppl6::CString &xml)=0;
 		virtual ppl6::CString exportXML() const=0;

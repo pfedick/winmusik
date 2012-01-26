@@ -23,7 +23,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "winmusik3.h"
 #include "edit.h"
 #include "editdevice.h"

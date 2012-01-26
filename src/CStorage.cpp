@@ -33,6 +33,12 @@
  * Userinterface zu geben.
  */
 
+
+CCallback::~CCallback()
+{
+
+}
+
 void CCallback::Update()
 /*!\brief Callback-Funktion
  *
@@ -251,7 +257,7 @@ int CStorageType::CompareValue(void *value)
 	return -1;
 }
 
-int CStorageType::LoadChunk(CWMFileChunk *chunk)
+int CStorageType::LoadChunk(CWMFileChunk *)
 /*!\brief Datensatz laden
  *
  * Mit dieser Funktion wird ein Chunk aus der Datenbank in den Speicher geladen.

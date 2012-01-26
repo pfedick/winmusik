@@ -99,7 +99,7 @@ DeviceList::DeviceList(QWidget *parent, CWmClient *wm, int typ)
     ui.list->setStyleSheet(Style);
     ui.list->setSortingEnabled(false);
 
-	for (ppluint32 i=1;i<=highest;i++) {
+	for (int i=1;i<=highest;i++) {
 		DataDevice d;
 		if (wm->DeviceStore.GetCopy(DeviceType,i,&d)) {
 			totalDevices++;
@@ -212,7 +212,7 @@ void DeviceList::ReloadTranslation()
 }
 
 
-void DeviceList::on_list_itemDoubleClicked ( QTreeWidgetItem * item, int column)
+void DeviceList::on_list_itemDoubleClicked ( QTreeWidgetItem * item, int )
 {
 	DeviceItem *d=(DeviceItem*)item;
 	if (!d) return;
@@ -245,7 +245,7 @@ bool DeviceList::consumeEvent(QObject *target, QEvent *event)
 }
 
 // Globale Events, Fkeys
-bool DeviceList::on_KeyPress(QObject *target, int key, int modifier)
+bool DeviceList::on_KeyPress(QObject *, int key, int )
 {
 	// ******************************************************************************* ESC
 	if (key==Qt::Key_Escape) {

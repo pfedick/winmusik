@@ -91,7 +91,7 @@ static const char* chan[]=
 		""
 };
 
-void CoverPrinter::on_type_currentIndexChanged(int i)
+void CoverPrinter::on_type_currentIndexChanged(int )
 {
 	if (ui.type->currentIndex()<6) {
 		ui.InfoBox->setEnabled(true);

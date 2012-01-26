@@ -375,7 +375,7 @@ int CHashes::RemoveTitle(ppluint32 TitleId, const DataTitle *title)
 	return 1;
 }
 
-void CHashes::ThreadMain(void *param)
+void CHashes::ThreadMain(void *)
 {
 	if (!wm) return;
 	Mutex.Lock();
