@@ -103,6 +103,19 @@ CStorageItem::CStorageItem()
 	formatversion=0;
 }
 
+CStorageItem::CStorageItem(const CStorageItem &other)
+/*!\brief Copy-Konstruktor der Klasse
+ *
+ * Copy-Konstruktor der Klasse
+ */
+{
+	filepos=other.filepos;
+	fileid=other.fileid;
+	lastchange=other.lastchange;
+	version=other.version;
+	formatversion=other.formatversion;
+}
+
 CStorageItem::~CStorageItem()
 /*!\brief Destruktor der Klasse
  *
@@ -139,6 +152,21 @@ void CStorageItem::CopyStorageFrom(const CStorageItem *item)
 	lastchange=item->lastchange;
 	version=item->version;
 	formatversion=item->formatversion;
+}
+
+void CStorageItem::CopyStorageFrom(const CStorageItem &other)
+/*!\brief Storage Daten kopieren
+ *
+ * Diese Funktion übernimmt die Storage Daten des angegebenen Datensatzes.
+ *
+ * \param[in] item Pointer auf einen anderen Datensatz
+ */
+{
+	filepos=other.filepos;
+	fileid=other.fileid;
+	lastchange=other.lastchange;
+	version=other.version;
+	formatversion=other.formatversion;
 }
 
 void CStorageItem::CopyStorageFrom(CWMFileChunk *chunk)

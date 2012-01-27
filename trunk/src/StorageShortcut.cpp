@@ -63,6 +63,22 @@ DataShortcut::DataShortcut()
 	formatversion=1;
 }
 
+DataShortcut::DataShortcut(const DataShortcut &other)
+{
+	shortcut=NULL;
+	artist=NULL;
+	formatversion=1;
+	CopyFrom(&other);
+}
+
+DataShortcut & DataShortcut::operator = (const DataShortcut &other)
+{
+	CopyFrom(&other);
+	return *this;
+}
+
+
+
 DataShortcut::~DataShortcut()
 /*!\brief Destruktor der Klasse
  *
@@ -132,7 +148,7 @@ int DataShortcut::CompareValue(void *value)
 	return 0;
 }
 
-int DataShortcut::CopyFrom(DataShortcut *t)
+int DataShortcut::CopyFrom(const DataShortcut *t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataShortcut Datensatzes in diesen hineinkopiert.
@@ -167,6 +183,11 @@ int DataShortcut::CopyFrom(DataShortcut *t)
 	}
 	CopyStorageFrom(t);
 	return 1;
+}
+
+int DataShortcut::CopyFrom(const DataShortcut &t)
+{
+	return CopyFrom(&t);
 }
 
 int DataShortcut::SetValue(const char *shortcut, const char *artist)

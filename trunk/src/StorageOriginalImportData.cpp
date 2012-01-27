@@ -86,7 +86,7 @@ void DataOimp::Clear()
 	formatversion=1;
 }
 
-int DataOimp::CopyFrom(DataOimp *t)
+int DataOimp::CopyFrom(const DataOimp *t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataOimp Datensatzes in diesen hineinkopiert.

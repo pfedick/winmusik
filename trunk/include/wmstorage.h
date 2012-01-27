@@ -53,8 +53,10 @@ class CStorageItem
 
 	public:
 		CStorageItem();
+		CStorageItem(const CStorageItem &other);
 		~CStorageItem();
 		void Clear();
+		void CopyStorageFrom(const CStorageItem &other);
 		void CopyStorageFrom(const CStorageItem *item);
 		void CopyStorageFrom(CWMFileChunk *chunk);
 		ppluint32 GetVersion();
@@ -212,6 +214,8 @@ class DataTitle : public CStorageItem
 
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
+
+		DataTitle & operator=(const DataTitle &other);
 };
 
 
@@ -359,12 +363,16 @@ class DataShortcut : public CStorageItem, public ppl6::CTreeItem
 
 	public:
 		DataShortcut();
+		DataShortcut(const DataShortcut &other);
+		DataShortcut & operator = (const DataShortcut &other);
+
 		virtual ~DataShortcut();
 		virtual int CompareNode(CTreeItem *item);
 		virtual int CompareValue(void *value);
 
 		void Clear();
-		int CopyFrom(DataShortcut *t);
+		int CopyFrom(const DataShortcut *t);
+		int CopyFrom(const DataShortcut &t);
 		int SetValue(const char *shortcut, const char *artist);
 		const char *GetShortcut();
 		const char *GetArtist();
@@ -408,12 +416,15 @@ class CSimpleTable : public CStorageItem, public ppl6::CTreeItem
 		ppluint32		References;
 		char			*Value;
 		CSimpleTable();
+		CSimpleTable(const CSimpleTable &other);
+		CSimpleTable & operator = (const CSimpleTable &other);
 		virtual ~CSimpleTable();
 		virtual int CompareNode(CTreeItem *item);
 		virtual int CompareValue(void *value);
 
 		void Clear();
-		int CopyFrom(CSimpleTable *t);
+		int CopyFrom(const CSimpleTable *t);
+		int CopyFrom(const CSimpleTable &other);
 		int SetValue(const char *value);
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
@@ -509,7 +520,7 @@ class DataOimp : public CStorageItem
 		virtual ~DataOimp();
 
 		void Clear();
-		int CopyFrom(DataOimp *t);
+		int CopyFrom(const DataOimp *t);
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
 		int ImportId(ppl6::CBinary *bin, int version);
