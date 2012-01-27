@@ -98,6 +98,25 @@ CSimpleTable::CSimpleTable()
 	formatversion=1;
 }
 
+CSimpleTable::CSimpleTable(const CSimpleTable &other)
+/*!\brief Konstruktor der Klasse
+ *
+ * Konstruktor der Klasse
+ */
+{
+	Id=0;
+	References=0;
+	Value=NULL;
+	formatversion=1;
+	CopyFrom(&other);
+}
+
+CSimpleTable & CSimpleTable::operator = (const CSimpleTable &other)
+{
+	CopyFrom(&other);
+	return *this;
+}
+
 CSimpleTable::~CSimpleTable()
 /*!\brief Destruktor der Klasse
  *
@@ -168,7 +187,7 @@ void CSimpleTable::Clear()
 	formatversion=1;
 }
 
-int CSimpleTable::CopyFrom(CSimpleTable *t)
+int CSimpleTable::CopyFrom(const CSimpleTable *t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen CSimpleTable Datensatzes in diesen hineinkopiert.
@@ -209,6 +228,12 @@ int CSimpleTable::CopyFrom(CSimpleTable *t)
 	CopyStorageFrom(t);
 	return 1;
 }
+
+int CSimpleTable::CopyFrom(const CSimpleTable &other)
+{
+	return CopyFrom(&other);
+}
+
 
 int CSimpleTable::SetValue(const char *value)
 /*!\brief Wert setzen

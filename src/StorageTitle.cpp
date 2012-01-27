@@ -26,6 +26,22 @@
 
 #include "winmusik3.h"
 
+
+TrackInfo::TrackInfo()
+{
+
+}
+
+void TrackInfo::clear()
+{
+	Ti.Clear();
+	Version.Clear();
+	Genre.Clear();
+	Label.Clear();
+	RecordingSource.Clear();
+	RecordingDevice.Clear();
+}
+
 /*!\class DataTitle
  * \ingroup WM3DataTypes
  * \brief Speicherklasse für einen Titel
@@ -233,14 +249,13 @@ DataTitle::DataTitle()
 }
 
 DataTitle::DataTitle(const DataTitle &other)
-: CStorageItem()
+: CStorageItem(other)
 {
 	Artist=NULL;
 	Title=NULL;
 	Remarks=NULL;
 	Album=NULL;
 	Tags=NULL;
-	Clear();
 	formatversion=3;
 	CopyFrom(&other);
 }
@@ -294,6 +309,13 @@ void DataTitle::operator delete (void *ptr, size_t size)
 	free(ptr);
 }
 #endif
+
+
+DataTitle & DataTitle::operator=(const DataTitle &other)
+{
+	CopyFrom(&other);
+	return *this;
+}
 
 void DataTitle::Clear()
 /*!\brief Inhalt der Klasse löschen
@@ -358,7 +380,7 @@ int DataTitle::CopyFrom(const DataTitle *t)
  * \returns Konnten die Daten erfolgreich kopiert werden, liefert die Funktion 1 zurück, im Fehlerfall 0.
  *
  * \attention
- * Auch die Storage-Datenm werden von \p t übernommen.
+ * Auch die Storage-Daten werden von \p t übernommen.
  */
 {
 	if (!t) {

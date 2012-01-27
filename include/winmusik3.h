@@ -244,16 +244,9 @@ class TrackInfo
 		ppl6::CString	RecordingSource;
 		ppl6::CString	RecordingDevice;
 
-		TrackInfo() {
-		}
-		void clear() {
-			Ti.Clear();
-			Version.Clear();
-			Genre.Clear();
-			Label.Clear();
-			RecordingSource.Clear();
-			RecordingDevice.Clear();
-		}
+		TrackInfo();
+		void clear();
+
 };
 
 void getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int preferedId3Version=2);
