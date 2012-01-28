@@ -47,7 +47,7 @@ public:
 
     void setFilename(const ppl6::CString &Filename);
     void setData(const TrackInfo &data);
-    const TrackInfo &getData() const;
+    const TrackInfo &getData();
 
 private:
     Ui::edittrackdialogClass ui;
@@ -64,7 +64,8 @@ protected:
 
 
 public slots:
-
+	void on_editor_escPressed();
+	void on_editor_save();
 
 
 };
