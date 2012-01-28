@@ -27,7 +27,7 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.4"
+VERSION="3.0.5"
 NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
@@ -121,7 +121,7 @@ mv src WinMusik-$VERSION-src-complete/build
 tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz WinMusik-$VERSION-src-complete
 mv WinMusik-$VERSION-src-complete/build/src ./
 rm -rf WinMusik-$VERSION-src-complete
-	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH
+	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH/src
 
 }
 
@@ -473,6 +473,8 @@ if [ "$ARCH" = "x86_64" ] ; then
 	PLATFORM="amd64"
 fi
 
+mkdir -p $MYPWD/distfiles
+
 ##############################################################################################
 # Sourcen zusammenfassen, sofern wir im Sourceverzeichnis der GUI sind
 if [ -f WinMusik3.pro ] ; then
@@ -504,6 +506,9 @@ if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
 	
 elif [ "$DISTRIB_ID" = "MINGW32" ] ; then
 	build_mingw32
+else
+	build_specfile
+	build_srpm
 fi
 
 ##############################################################################################
