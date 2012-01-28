@@ -37,6 +37,8 @@ COMMENT=`cat README_en.TXT`
 DISTFILES=$MYPWD
 MAKE="make"
 PPLPATH=~/sourceforge/ppl6
+WINMUSIKPATH=~/svn/winmusik/client
+TARGETPATH=/ftp/build
 QTVERSION=4.7.4
 QMAKE="qmake-qt4"
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
@@ -99,9 +101,9 @@ fi
 find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
 
 echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
-cd ~/cvs-sourceforge/winmusik/client
+cd $WINMUSIKPATH
 if [ $? -ne 0 ] ; then
-	echo "WinMusik not found in ~/cvs-sourceforge/winmusik/client"
+	echo "WinMusik not found in $WINMUSIKPATH"
 	exit 1
 fi
 find setup.iss docs forms include resources src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
@@ -113,13 +115,13 @@ cd WinMusik-$VERSION-src-complete/build
 mkdir -p include lib bin src
 cd $BUILD
 
-cp ~/cvs-sourceforge/winmusik/client/build_binary.sh WinMusik-$VERSION-src-complete
+cp $WINMUSIKPATH/build_binary.sh WinMusik-$VERSION-src-complete
 
 mv src WinMusik-$VERSION-src-complete/build
 tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz WinMusik-$VERSION-src-complete
 mv WinMusik-$VERSION-src-complete/build/src ./
 rm -rf WinMusik-$VERSION-src-complete
-	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz /ftp/winmusik
+	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH
 
 }
 
@@ -330,7 +332,7 @@ build_ubuntu() {
 		echo "ERROR: Fehler beim Erstellen des Pakets"
 		exit
 	fi
-	cp $DISTFILES/$DISTNAME-Ubuntu-$DISTRIB_RELEASE-$PLATFORM.deb /ftp/winmusik
+	cp $DISTFILES/$DISTNAME-Ubuntu-$DISTRIB_RELEASE-$PLATFORM.deb $TARGETPATH
 	
 }
 
@@ -434,7 +436,7 @@ build_srpm() {
 		exit 1
 	fi
 	cp $TOPDIR/SRPMS/WinMusik-$VERSION-1.src.rpm $DISTFILES
-	cp $TOPDIR/SRPMS/WinMusik-$VERSION-1.src.rpm /ftp/winmusik
+	cp $TOPDIR/SRPMS/WinMusik-$VERSION-1.src.rpm $TARGETPATH
 }
 
 
@@ -456,7 +458,7 @@ build_mingw32()
 	fi
 	cd $BUILD/src/winmusik
 	cp distfiles/$NAME-$VERSION-Win32Setup.exe ../../../
-	cp distfiles/$NAME-$VERSION-Win32Setup.exe /ftp/winmusik
+	cp distfiles/$NAME-$VERSION-Win32Setup.exe $TARGETPATH
 	
 }
 
@@ -506,5 +508,7 @@ fi
 
 ##############################################################################################
 # Aufräumen
-# rm -rf $WORK
+#rm -rf $WORK
+echo "rm -rf $WORK"
+
 
