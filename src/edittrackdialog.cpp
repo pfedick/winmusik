@@ -40,6 +40,8 @@ EditTrackDialog::EditTrackDialog(QWidget *parent, CWmClient *wm)
 	searchWindow=NULL;
 	position=oldposition=0;
 	ui.editor->setWinMusikClient(wm);
+	ui.editor->setFkeys(ui.fkeys);
+	ui.editor->setFocus();
 
 }
 
@@ -92,8 +94,18 @@ void EditTrackDialog::setData(const TrackInfo &data)
 	ui.editor->setData(data);
 }
 
-const TrackInfo & EditTrackDialog::getData() const
+const TrackInfo & EditTrackDialog::getData()
 {
 	return ui.editor->getData();
+}
+
+void EditTrackDialog::on_editor_escPressed()
+{
+	done(0);
+}
+
+void EditTrackDialog::on_editor_save()
+{
+	done(1);
 }
 
