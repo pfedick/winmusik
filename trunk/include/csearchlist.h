@@ -9,6 +9,7 @@
 #define CSEARCHLIST_H_
 
 #include <vector>
+#include <map>
 
 
 class GenericListItem
@@ -30,6 +31,7 @@ class SearchlistItem : public GenericListItem
 		ppl6::CString Genre;
 		ppl6::CString Comment;
 		ppl6::CDateTime DateAdded;
+		ppl6::CString ReleaseDate;
 		int Length;
 		bool found;
 
@@ -41,18 +43,24 @@ class SearchlistItem : public GenericListItem
 		virtual ppl6::CString exportXML() const;
 };
 
+class CWmClient;
 
 class CSearchlist
 {
 	private:
 		std::vector<SearchlistItem> list;
+		std::map<ppl6::CString, int> Words;
 		ppl6::CString Name;
 		ppl6::CDateTime DateCreated;
 		ppl6::CDateTime DateUpdated;
 
+		CWmClient *wm;
+
 	public:
 		CSearchlist();
 		~CSearchlist();
+
+		void setWmClient(CWmClient *wm);
 
 		void setName(const ppl6::CString &name);
 		const ppl6::CString &name() const;

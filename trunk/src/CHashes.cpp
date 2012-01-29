@@ -67,18 +67,6 @@ void CHashes::Clear()
 	Mutex.Unlock();
 }
 
-int CHashes::GetWords(const ppl6::CString &str, ppl6::CArray &words)
-{
-	words.Clear();
-	ppl6::CString s=str;
-	s.Trim();
-	if (s.IsEmpty()) return 0;
-	// Bestimmte Zeichen filtern wir raus
-	wm->NormalizeTerm(s);
-	words.Explode(s," ",0,true);
-	return 1;
-}
-
 int CHashes::GetTags(const ppl6::CString &str, ppl6::CArray &words)
 {
 	words.Clear();
@@ -263,19 +251,19 @@ int CHashes::AddTitleInternal(ppluint32 TitleId, const DataTitle *title)
 	ppl6::CArray words;
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
-	if (GetWords(title->Artist,words)) {
+	if (wm->GetWords(title->Artist,words)) {
 		AddWords(Artist,words,title);
 		//AddWords(Global,words,title);
 	}
-	if (GetWords(title->Title,words)) {
+	if (wm->GetWords(title->Title,words)) {
 		AddWords(Title,words,title);
 		//AddWords(Global,words,title);
 	}
-	if (GetWords(title->Album,words)) {
+	if (wm->GetWords(title->Album,words)) {
 		AddWords(Album,words,title);
 		//AddWords(Global,words,title);
 	}
-	if (GetWords(title->Remarks,words)) {
+	if (wm->GetWords(title->Remarks,words)) {
 		AddWords(Remarks,words,title);
 		//AddWords(Global,words,title);
 	}
@@ -289,14 +277,14 @@ int CHashes::AddTitleInternal(ppluint32 TitleId, const DataTitle *title)
 	const char *tmp;
 	tmp=wm->GetVersionText(title->VersionId);
 	if (tmp) {
-		if (GetWords(tmp,words)) {
+		if (wm->GetWords(tmp,words)) {
 			AddWords(Version,words,title);
 			//AddWords(Global,words,title);
 		}
 	}
 	tmp=wm->GetGenreText(title->GenreId);
 	if (tmp) {
-		if (GetWords(tmp,words)) {
+		if (wm->GetWords(tmp,words)) {
 			AddWords(Genre,words,title);
 			//AddWords(Global,words,title);
 		}
@@ -333,16 +321,16 @@ int CHashes::RemoveTitle(ppluint32 TitleId, const DataTitle *title)
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
 	Mutex.Lock();
-	if (GetWords(title->Artist,words)) {
+	if (wm->GetWords(title->Artist,words)) {
 		RemoveWords(Artist,words,title);
 	}
-	if (GetWords(title->Title,words)) {
+	if (wm->GetWords(title->Title,words)) {
 		RemoveWords(Title,words,title);
 	}
-	if (GetWords(title->Album,words)) {
+	if (wm->GetWords(title->Album,words)) {
 		RemoveWords(Album,words,title);
 	}
-	if (GetWords(title->Remarks,words)) {
+	if (wm->GetWords(title->Remarks,words)) {
 		RemoveWords(Remarks,words,title);
 	}
 
@@ -355,13 +343,13 @@ int CHashes::RemoveTitle(ppluint32 TitleId, const DataTitle *title)
 	const char *tmp;
 	tmp=wm->GetVersionText(title->VersionId);
 	if (tmp) {
-		if (GetWords(tmp,words)) {
+		if (wm->GetWords(tmp,words)) {
 			RemoveWords(Version,words,title);
 		}
 	}
 	tmp=wm->GetGenreText(title->GenreId);
 	if (tmp) {
-		if (GetWords(tmp,words)) {
+		if (wm->GetWords(tmp,words)) {
 			RemoveWords(Genre,words,title);
 		}
 		MyTags.Concatf("%s;",tmp);
@@ -452,8 +440,8 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitl
 	// Zuerst die Wortlisten erstellen
 	ppl6::CArray WordsArtist;
 	ppl6::CArray WordsTitle;
-	GetWords(Artist,WordsArtist);
-	GetWords(Title,WordsTitle);
+	wm->GetWords(Artist,WordsArtist);
+	wm->GetWords(Title,WordsTitle);
 	if (WordsArtist.Num()==0 && WordsTitle.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;
@@ -492,10 +480,10 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	ppl6::CArray WordsVersion;
 	ppl6::CArray WordsGenre;
 	ppl6::CArray WordsTags;
-	GetWords(Artist,WordsArtist);
-	GetWords(Title,WordsTitle);
-	GetWords(Version,WordsVersion);
-	GetWords(Genre,WordsGenre);
+	wm->GetWords(Artist,WordsArtist);
+	wm->GetWords(Title,WordsTitle);
+	wm->GetWords(Version,WordsVersion);
+	wm->GetWords(Genre,WordsGenre);
 	GetTags(Tags,WordsTags);
 	if (WordsArtist.Num()==0
 			&& WordsTitle.Num()==0
@@ -580,7 +568,7 @@ int CHashes::FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int 
 	if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,"Query=%s",(const char*)Query);
 	// Zuerst die Wortliste erstellen
 	ppl6::CArray WordsQuery;
-	GetWords(Query,WordsQuery);
+	wm->GetWords(Query,WordsQuery);
 	if (WordsQuery.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;

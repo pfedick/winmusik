@@ -74,7 +74,9 @@ void Searchlists::Update()
 		ppl6::CDirEntry *entry;
 		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
 		while (entry) {
+			//printf ("%s\n",(const char*)entry->File);
 			if (sl.load(entry->File)) {
+				//printf ("%s\n",(const char*)entry->File);
 				SearchlistTreeItem *item=new SearchlistTreeItem;
 				item->Filename=entry->File;
 				item->setText(0,sl.name());
@@ -83,6 +85,8 @@ void Searchlists::Update()
 				item->setText(3,sl.dateUpdated().get("%Y-%m-%d"));
 
 				ui.treeWidget->addTopLevelItem(item);
+			} else {
+				ppl6::PrintError();
 			}
 			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
 		}

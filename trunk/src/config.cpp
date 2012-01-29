@@ -164,7 +164,7 @@ int Config::Load()
 {
 	ppl6::CString Tmp;
 	ppl6::CConfig c;
-	if (!c.Load(ConfigFile)) return 0;
+	if (!c.Load("%s",(const char *)ConfigFile)) return 0;
 	Locale=c.Get("client","locale","en");
 	Tmp=QDir::tempPath();
 	DataPath=c.Get("client","datapath",Tmp);
