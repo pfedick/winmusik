@@ -54,6 +54,7 @@ void SearchlistItem::clear()
 	Version.Clear();
 	Genre.Clear();
 	Comment.Clear();
+	ReleaseDate.Clear();
 	DateAdded.clear();
 }
 
@@ -65,6 +66,7 @@ void SearchlistItem::importXML(const ppl6::CString &xml)
 	if (xml.PregMatch("/\\<version\\>(.*)\\<\\/version\\>/s",Matches)) Version=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<genre\\>(.*)\\<\\/genre\\>/s",Matches)) Genre=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<comment\\>(.*)\\<\\/comment\\>/s",Matches)) Comment=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
+	if (xml.PregMatch("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s",Matches)) ReleaseDate=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s",Matches)) DateAdded=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<length\\>(.*)\\<\\/length\\>/s",Matches)) Length=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<found\\>(.*)\\<\\/found\\>/s",Matches)) found=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
@@ -79,6 +81,7 @@ ppl6::CString SearchlistItem::exportXML() const
 			"	<version>"+ppl6::EscapeHTMLTags(Version)+"</version>\n"
 			"	<genre>"+ppl6::EscapeHTMLTags(Genre)+"</genre>\n"
 			"	<comment>"+ppl6::EscapeHTMLTags(Comment)+"</comment>\n"
+			"	<releasedate>"+ppl6::EscapeHTMLTags(ReleaseDate)+"</releasedate>\n"
 			"	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n"
 			"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
 			"	<found>"+(found?"true":"false")+"</found>\n"
@@ -91,6 +94,7 @@ CSearchlist::CSearchlist()
 {
 	DateUpdated.setCurrentTime();
 	DateCreated.setCurrentTime();
+	wm=NULL;
 }
 
 CSearchlist::~CSearchlist()
@@ -98,6 +102,10 @@ CSearchlist::~CSearchlist()
 
 }
 
+void CSearchlist::setWmClient(CWmClient *wm)
+{
+	this->wm=wm;
+}
 
 void CSearchlist::setName(const ppl6::CString &name)
 {

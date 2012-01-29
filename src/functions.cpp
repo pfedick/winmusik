@@ -294,7 +294,7 @@ void getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	ppl6::PPL_MPEG_HEADER pmp3;
 	ppl6::CFile File;
 	//printf ("Oeffne File: %s\n",(const char*)Filename);
-	if (!File.Open("%s","rb", (const char*) Filename)) return;
+	if (!File.Open(Filename,"rb")) return;
 	//printf ("Ok. rufe Ident auf\n");
 	if (!ppl6::IdentMPEG(&File,&pmp3)) return;
 	info.Ti.Length=pmp3.length;

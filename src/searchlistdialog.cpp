@@ -40,6 +40,7 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	List.setWmClient(wm);
 	ui.trackList->installEventFilter(this);
 	currentTrackListItem=NULL;
 	searchWindow=NULL;
@@ -328,5 +329,28 @@ void SearchlistDialog::on_contextFind_triggered()
 	if (!currentTrackListItem) return;
 	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTrackListItem->Track.Artist,currentTrackListItem->Track.Title);
 	this->setFocus();
+}
+
+void SearchlistDialog::on_newTrackButton2_clicked()
+{
+	ppl6::CString Term=ui.searchTerm->text();
+	Term.Trim();
+	SearchlistTrackDialog dialog;
+	dialog.set(SearchlistItem(Term));
+	int ret=dialog.exec();
+	if (ret==1) {
+		addTrack(dialog.get());
+	}
+}
+
+void SearchlistDialog::on_searchButton_clicked()
+{
+	ppl6::CString Term=ui.searchTerm->text();
+	Term.Trim();
+	SearchlistItem Item(Term);
+
+	searchWindow=wm->OpenOrReuseSearch(searchWindow,Item.Artist,Item.Title);
+	this->setFocus();
+
 }
 

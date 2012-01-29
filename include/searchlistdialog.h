@@ -85,6 +85,8 @@ public slots:
 	void on_contextFind_triggered();
 
 	void on_newTrackButton_clicked();
+	void on_newTrackButton2_clicked();
+	void on_searchButton_clicked();
 	void on_deleteTrackButton_clicked();
 	void on_saveExitButton_clicked();
 	void on_saveButton_clicked();

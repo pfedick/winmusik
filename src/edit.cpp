@@ -1286,7 +1286,7 @@ bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 		ppl6::PPL_MPEG_HEADER pmp3;
 		ppl6::CFile File;
 		//printf ("Oeffne File: %s\n",(const char*)Path);
-		if (!File.Open("%s","rb", (const char*)Path)) return false;
+		if (!File.Openf("%s","rb", (const char*)Path)) return false;
 		//printf ("Ok. rufe Ident auf\n");
 		if (!ppl6::IdentMPEG(&File,&pmp3)) return false;	// Kein MPEG-File
 		//printf ("MP3-File erkannt\n");

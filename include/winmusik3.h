@@ -452,7 +452,6 @@ class CHashes : public ppl6::CThread
 		virtual void ThreadMain(void *param);
 
 		void Clear();
-		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
 		int GetTags(const ppl6::CString &str, ppl6::CArray &words);
 		int AddTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 		int RemoveTitle(ppluint32 TitleId, const DataTitle *title=NULL);
@@ -648,6 +647,7 @@ class CWmClient
 
 
 		void NormalizeTerm(ppl6::CString &term);
+		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
 
 		ppl6::CString DeCrypt(const ppl6::CString &str);
 		ppl6::CString Crypt(const ppl6::CString &str);

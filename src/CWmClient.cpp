@@ -1102,7 +1102,7 @@ int CWmClient::SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp)
 {
 	ppl6::CFile ff;
 	ppl6::CString Tmp;
-	if (!ff.Open(&File,"rb")) return 0;
+	if (!ff.Open(File,"rb")) return 0;
 	// Alte Daten löschen
 	oimp.Filename=ppl6::GetFilename(File);
 	memset(&oimp.ID3v1,0,sizeof(ID3TAG));
@@ -1183,16 +1183,16 @@ int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 
 
 	ppl6::CFile m3u;
-	if (!m3u.Open("%s/000index.m3u","wb",(const char*)Path)) return 0;
+	if (!m3u.Openf("%s/000index.m3u","wb",(const char*)Path)) return 0;
 
 	ppl6::CFile pls;
-	if (!pls.Open("%s/000index.pls","wb",(const char*)Path)) return 0;
+	if (!pls.Openf("%s/000index.pls","wb",(const char*)Path)) return 0;
 
 	ppl6::CFile txt;
-	if (!txt.Open("%s/000index.txt","wb",(const char*)Path)) return 0;
+	if (!txt.Openf("%s/000index.txt","wb",(const char*)Path)) return 0;
 
 	ppl6::CFile xspf;
-	if (!xspf.Open("%s/000index.xspf","wb",(const char*)Path)) return 0;
+	if (!xspf.Openf("%s/000index.xspf","wb",(const char*)Path)) return 0;
 
 	m3u.Puts("#EXTM3U\n");
 	pls.Puts("[playlist]\n");
@@ -1629,6 +1629,18 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	//printf ("ss=%zi, target=%zi\n",ss,target);
 	s.Cut(target);
 	term=s;
+}
+
+int CWmClient::GetWords(const ppl6::CString &str, ppl6::CArray &words)
+{
+	words.Clear();
+	ppl6::CString s=str;
+	s.Trim();
+	if (s.IsEmpty()) return 0;
+	// Bestimmte Zeichen filtern wir raus
+	NormalizeTerm(s);
+	words.Explode(s," ",0,true);
+	return 1;
 }
 
 const char *key="HJnD8Kj$/SDbu910LqAb§doHqc";

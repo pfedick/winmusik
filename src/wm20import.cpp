@@ -92,7 +92,7 @@ Cwm20TraegerTitel::Cwm20TraegerTitel()
 
 int Cwm20TraegerTitel::Load(const char *path)
 {
-	if (!ff.Open("%s/traeger.tit","rb",path)) {
+	if (!ff.Openf("%s/traeger.tit","rb",path)) {
 		ppl6::SetError(10012,"%s/traeger.tit",path);
 		return 0;
 	}
@@ -140,7 +140,7 @@ Cwm20TraegerVerzeichnis::Cwm20TraegerVerzeichnis()
 
 int Cwm20TraegerVerzeichnis::Load(const char *path, const char *file)
 {
-	if (!ff.Open("%s/%s","rb",path,file)) {
+	if (!ff.Openf("%s/%s","rb",path,file)) {
 		WMLOG(ppl6::LOG::DEBUG,2) "Import: %i Traeger in %s...",0, file);
 		return 1;
 		ppl6::SetError(10012,"%s/%s",path,file);
@@ -173,7 +173,7 @@ Cwm20TraegerDaten::Cwm20TraegerDaten()
 
 int Cwm20TraegerDaten::Load(const char *path, const char *file)
 {
-	if (!ff.Open("%s/%s","rb",path,file)) {
+	if (!ff.Openf("%s/%s","rb",path,file)) {
 		WMLOG(ppl6::LOG::DEBUG,2) "Import: %i Tracks in TraegerDaten of %s...",0, file);
 		return 1;
 		ppl6::SetError(10012,"%s/%s",path,file);
@@ -358,7 +358,7 @@ int Cwm20Import::ImportTable(const char *path, const char *file, int width, cons
 	s=(CTableStore*)Storage->FindStorageType(chunktype);
 	if (!s) return 0;
 	ppl6::CFile ff;
-	if (!ff.Open("%s/%s","rb",path,file)) {
+	if (!ff.Openf("%s/%s","rb",path,file)) {
 		ppl6::SetError(10012,"%s/%s",path,file);
 		return 0;
 	}
@@ -395,7 +395,7 @@ int Cwm20Import::ImportTable(const char *path, const char *file, int width, cons
 int Cwm20Import::ImportShortcuts(const char *path)
 {
 	ppl6::CFile ff;
-	if (!ff.Open("%s/abk.dat","rb",path)) {
+	if (!ff.Openf("%s/abk.dat","rb",path)) {
 		ppl6::SetError(10012,"%s/abk.dat",path);
 		return 0;
 	}
@@ -451,12 +451,12 @@ int Cwm20Import::ImportTitle(const char *path)
 	s=(CTitleStore*)Storage->FindStorageType("TITL");
 	if (!s) return 0;
 	// Titeldatei
-	if (!ff.Open("%s/titel20.dat","rb",path)) {
+	if (!ff.Openf("%s/titel20.dat","rb",path)) {
 		ppl6::SetError(10012,"%s/titel20.dat",path);
 		return 0;
 	}
 	// Bemerkungen
-	if (!bff.Open("%s/bemerk.dat","rb",path)) {
+	if (!bff.Openf("%s/bemerk.dat","rb",path)) {
 		ppl6::SetError(10012,"%s/bemerk.dat",path);
 		return 0;
 	}
@@ -558,7 +558,7 @@ int Cwm20Import::ImportDevices(const char *path, const char *fileprefix, ppluint
 	ds=(CDeviceStore*)Storage->FindStorageType("DEVI");
 	if (!ds) return 0;
 	ppl6::CFile ff;
-	if (!ff.Open("%s/%s.dir","rb",path,fileprefix)) {
+	if (!ff.Openf("%s/%s.dir","rb",path,fileprefix)) {
 		ppl6::SetError(10012,"%s/%s.dir",path,fileprefix);
 		return 0;
 	}
@@ -566,7 +566,7 @@ int Cwm20Import::ImportDevices(const char *path, const char *fileprefix, ppluint
 
 	// Träger Titel
 	ppl6::CFile tff;
-	if (!tff.Open("%s/traeger.tit","rb",path)) {
+	if (!tff.Openf("%s/traeger.tit","rb",path)) {
 		ppl6::SetError(10012,"%s/traeger.tit",path);
 		return 0;
 	}
@@ -648,7 +648,7 @@ int Cwm20Import::ImportTracks(const char *path, const char *fileprefix, DataDevi
 	DataTitle *title;
 	*/
 	ppl6::CFile ff;
-	if (!ff.Open("%s/%s.dat","rb",path,fileprefix)) {
+	if (!ff.Openf("%s/%s.dat","rb",path,fileprefix)) {
 		ppl6::SetError(10012,"%s/%s.dat",path,fileprefix);
 		return 0;
 	}

@@ -69,6 +69,7 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 	ui.versionEdit->setText(track.Version);
 	ui.genreEdit->setText(track.Genre);
 	ui.commentEdit->setText(track.Comment);
+	ui.releaseDateEdit->setText(track.ReleaseDate);
 	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02",track.Length/60,track.Length%60));
 }
 
@@ -81,6 +82,7 @@ SearchlistItem SearchlistTrackDialog::get() const
 	track.Version=ppl6::Trim(ppl6::CString(ui.versionEdit->text()));
 	track.Genre=ppl6::Trim(ppl6::CString(ui.genreEdit->text()));
 	track.Comment=ppl6::Trim(ppl6::CString(ui.commentEdit->text()));
+	track.ReleaseDate=ppl6::Trim(ppl6::CString(ui.releaseDateEdit->text()));
 	ppl6::CString Tmp=ppl6::Trim(ppl6::CString(ui.lengthEdit->text()));
 	if (Tmp.PregMatch("/^([0-9]+):([0-9]{2})$/")) {
 		track.Length=ppl6::atoi(Tmp.GetMatch(1))*60+ppl6::atoi(Tmp.GetMatch(2));
