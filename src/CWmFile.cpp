@@ -420,10 +420,13 @@ int CWMFile::DeleteChunk(CWMFileChunk *chunk)
 	if (!IsValidChunkName(chunk->chunkname)) return 0;
 	if (chunk->filepos) {
 		ff.SetMapReadAhead(0);
-		char *oldchunk=ff.MapRW(chunk->filepos,17);
+		ff.Read(header,4,chunk->filepos);
+
+		//char *oldchunk=ff.MapRW(chunk->filepos,17);
 		// Wir kennzeichnen den alten Datensatz als gelöscht
-		strncpy(oldchunk,"FREE",4);
-		ff.Unmap();
+		strncpy(header,"FREE",4);
+		ff.Write(header,4,chunk->filepos);
+		//ff.Unmap();
 	}
 	chunk->filepos=0;
 	chunk->size=0;

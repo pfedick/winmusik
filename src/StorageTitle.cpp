@@ -1017,6 +1017,7 @@ int CTitleStore::LoadChunk(CWMFileChunk *chunk)
 	if (!bin.Set((void*)chunk->GetChunkData(),chunk->GetChunkDataSize())) return 0;
 	if (!data.Import(&bin,chunk->GetFormatVersion())) return 0;
 	data.CopyStorageFrom(chunk);
+	//if (data.Track==0) return 1; 	// Workaround für einen vorherigen Bug
 	return Put(&data);
 }
 
