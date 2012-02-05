@@ -34,7 +34,7 @@ HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
 COMMENT=`cat README_en.TXT`
-DISTFILES=$MYPWD
+DISTFILES=$MYPWD/distfiles
 MAKE="make"
 PPLPATH=~/sourceforge/ppl6
 WINMUSIKPATH=~/svn/winmusik/client
@@ -77,6 +77,7 @@ fi
 
 echo "Baue WinMusik für: $DISTRIB_ID, $DISTRIB_RELEASE..."
 echo ""
+mkdir -p $WORK
 
 build_sources() {
 mkdir -p tmp/build
@@ -106,7 +107,7 @@ if [ $? -ne 0 ] ; then
 	echo "WinMusik not found in $WINMUSIKPATH"
 	exit 1
 fi
-find setup.iss docs forms include resources src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
+find setup.iss docs forms include resources widgets src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
 cat WinMusik3.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik3.pro
 
 cd $BUILD
@@ -158,7 +159,7 @@ then
 		;;
 	Ubuntu:*)
 		./configure --prefix=$BUILD \
-			--with-pcre=/usr --without-openssl --with-libiconv-prefix --with-nasm \
+			--with-pcre=/usr --with-libiconv-prefix --with-nasm \
 			--with-libmcrypt-prefix --with-libmhash \
 			--without-pgsql --without-png --without-lame --without-ft-prefix \
 			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
@@ -166,7 +167,7 @@ then
 		;;	
 	Fedora:*)
 		./configure --prefix=$BUILD \
-			--with-pcre=/usr --without-openssl --with-libiconv-prefix --with-nasm \
+			--with-pcre=/usr  --with-libiconv-prefix --with-nasm \
 			--with-libmcrypt-prefix --with-libmhash \
 			--without-pgsql --without-png --without-lame --without-ft-prefix \
 			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
@@ -219,11 +220,11 @@ cd $BUILD/src/winmusik
 case "$DISTRIB_ID:$DISTRIB_RELEASE" in
 	MINGW32*)
 		echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik3.pro
-		echo "LIBPATH += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
+		echo "QMAKE_LIBDIR += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
 		;;
 	*)
 		echo "INCLUDEPATH += $BUILD/include" >> WinMusik3.pro
-		echo "LIBPATH += $BUILD/lib" >> WinMusik3.pro
+		echo "QMAKE_LIBDIR += $BUILD/lib" >> WinMusik3.pro
 		;;
 esac
 
