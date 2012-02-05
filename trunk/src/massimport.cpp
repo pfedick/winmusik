@@ -697,6 +697,10 @@ bool MassImport::importTrack(TreeItem *item)
 		Ti.CoverPreview=item->info.Ti.CoverPreview;
 	}
 
+	DataTrack Track;
+	Track.Track=TrackList->GetMax()+1;	// Wo kommt die Tracknummer her?
+	Ti.Track=Track.Track;
+
 	if (!wm->TitleStore.Put(&Ti)) {
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		return false;
@@ -705,13 +709,10 @@ bool MassImport::importTrack(TreeItem *item)
 	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
 
 	// Track speichern
-	DataTrack Track;
 	Track.TitleId=Ti.TitleId;
 	Track.Device=DeviceType;
 	Track.DeviceId=DeviceId;
 	Track.Page=Page;
-	Track.Track=TrackList->GetMax()+1;	// Wo kommt die Tracknummer her?
-
 	if (!TrackList->Put(&Track)) {
 		wm->RaiseError(this,tr("Could not save Track in TrackList"));
 		return false;
