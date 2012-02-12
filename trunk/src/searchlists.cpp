@@ -122,12 +122,41 @@ void Searchlists::ReloadTranslation()
 
 void Searchlists::on_newSearchlistButton_clicked()
 {
-
+	int highest=1;
+	int id;
+	ppl6::CArray Matches;
+	ppl6::CDir Dir;
+	if (Dir.Open(wm->conf.DataPath)) {
+		ppl6::CDirEntry *entry;
+		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
+		while (entry) {
+			//printf ("%s\n",(const char*)entry->File);
+			if (entry->Filename.PregMatch("/searchlist([0-9]+)\\.xml$/",Matches)) {
+				id=ppl6::atoi(Matches[1]);
+				if (id>highest) highest=id;
+			}
+			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
+		}
+	}
+	ppl6::CString Filename=wm->conf.DataPath;
+	Filename.RTrim("/");
+	Filename.RTrim("\\");
+	Filename.Concatf("/searchlist%05i.xml",highest+1);
+	wm->OpenSearchlistDialog(Filename);
 }
 
 void Searchlists::on_deleteSearchlistButton_clicked()
 {
-
+	SearchlistTreeItem *it=(SearchlistTreeItem*)ui.treeWidget->currentItem();
+	if (!it) return;
+	if (QMessageBox::question(this, tr("WinMusik: Delete searchlist"),
+		tr("Are you sure you want to delete this searchlist?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
+		==QMessageBox::No) return;
+	::unlink((const char*)it->Filename);
+	int index=ui.treeWidget->indexOfTopLevelItem(it);
+	if (index<0) return;
+	ui.treeWidget->topLevelItem(index);
+	delete it;
 }
 
 void Searchlists::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column )

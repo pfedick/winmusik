@@ -43,6 +43,7 @@ public:
     ~SearchlistTrackDialog();
 
     void set(const SearchlistItem &track);
+    void setFromClipboard();
     SearchlistItem get() const;
 
 

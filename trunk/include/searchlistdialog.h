@@ -90,7 +90,6 @@ public slots:
 	void on_deleteTrackButton_clicked();
 	void on_saveExitButton_clicked();
 	void on_saveButton_clicked();
-	void on_cancelButton_clicked();
 
 };
 
