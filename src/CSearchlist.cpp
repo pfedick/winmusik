@@ -19,14 +19,61 @@ SearchlistItem::SearchlistItem()
 SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 {
 	found=false;
+	Length=0;
 	DateAdded.setCurrentTime();
 	ppl6::CArray Matches;
 	// Mike Koglin - Dyno (Original Mix, 8:05 min, Trance) [MP3 542 A-8]
-	if (Misc.PregMatch("/^(.*?)\\-(.*?)\\((.*?),\\s[0-9:\\smin]+,\\s(.*)\\).*$/",Matches)) {
+
+	/* 1 Exemplar(e) von: So Out Of Reach (Original) [MP3-Download]
+	Von: Space RockerZ feat. Ellie Lawson
+	Zustand: Neu
+	Verkauf durch: Amazon Media EU S.\xc3\xa0 r.l.
+	*/
+	if (Misc.PregMatch("/Exemplar.*?von: (.*?)\\((.*?)\\).*?MP3-Download.*?Von: (.*?)\\n/s",Matches)) {
+		Artist=ppl6::Trim(Matches[3]);
+		Title=ppl6::Trim(Matches[1]);
+		Version=ppl6::Trim(Matches[2]);
+	} else if (Misc.PregMatch("/Exemplar.*?von: (.*?).*?MP3-Download.*?Von: (.*?)\\n/s",Matches)) {
+			Artist=ppl6::Trim(Matches[2]);
+			Title=ppl6::Trim(Matches[1]);
+
+			/*
+			 *     Helion (Original Mix)
+    Genix, Mike Koglin
+    2011-12-067:08AnjunabeatsTrance
+    */
+			// Beatport Player
+	} else if (Misc.PregMatch("/^\\s*(.*?)\\s\\((.*?)\\)\\n\\s*(.*?)\\n/s",Matches)) {
+		Title=ppl6::Trim(Matches[1]);
+		Version=ppl6::Trim(Matches[2]);
+		Artist=ppl6::Trim(Matches[3]);
+	} else if (Misc.PregMatch("/^(.*?)\\-(.*?)\\((.*?),\\s[0-9:\\smin]+,\\s(.*)\\).*$/",Matches)) {
 		Artist=ppl6::Trim(Matches[1]);
 		Title=ppl6::Trim(Matches[2]);
 		Version=ppl6::Trim(Matches[3]);
 		Genre=ppl6::Trim(Matches[4]);
+		// Beatport Liste
+		// Eclipse (Broning Remix) 	Sequentia 	Broning 	Perfecto Records 	Trance 	2012-01-27 	2,17 €
+	} else if (Misc.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t(.*?)\\t(.*?)\\t(.*?)\\t*/",Matches)) {
+		Artist=ppl6::Trim(Matches[3]);
+		Title=ppl6::Trim(Matches[1]);
+		Version=ppl6::Trim(Matches[2]);
+		Genre=ppl6::Trim(Matches[6]);
+		Comment=ppl6::Trim(Matches[5]);
+	// PFP-Webpage ASOT Playlist
+	} else if (Misc.PregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/",Matches)) {
+		//printf ("Match ASOT\n");
+		Artist=ppl6::Trim(Matches[1]);
+		Title=ppl6::Trim(Matches[2]);
+		Version=ppl6::Trim(Matches[3]);
+	} else if (Misc.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/",Matches)) {
+		Artist=ppl6::Trim(Matches[3]);
+		Title=ppl6::Trim(Matches[1]);
+		Version=ppl6::Trim(Matches[2]);
+	} else if (Misc.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/",Matches)) {
+		Artist=ppl6::Trim(Matches[3]);
+		Title=ppl6::Trim(Matches[1]);
+		Version=ppl6::Trim(Matches[2]);
 	} else if (Misc.PregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/",Matches)) {
 		Artist=ppl6::Trim(Matches[1]);
 		Title=ppl6::Trim(Matches[2]);
@@ -34,6 +81,19 @@ SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 	} else if (Misc.PregMatch("/^(.*?)\\-(.*?)$/",Matches)) {
 		Artist=ppl6::Trim(Matches[1]);
 		Title=ppl6::Trim(Matches[2]);
+	}
+	if (Title.PregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
+		Title=Matches[1];
+		Artist+=Matches[2];
+	} else if (Title.PregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
+			Title=Matches[1];
+			Artist+=Matches[2];
+	} else if (Title.PregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
+			Title=Matches[1];
+			Artist+=Matches[2];
+	} else if (Title.PregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
+			Title=Matches[1];
+			Artist+=Matches[2];
 	}
 }
 

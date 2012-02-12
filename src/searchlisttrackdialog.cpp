@@ -70,7 +70,24 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 	ui.genreEdit->setText(track.Genre);
 	ui.commentEdit->setText(track.Comment);
 	ui.releaseDateEdit->setText(track.ReleaseDate);
-	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02",track.Length/60,track.Length%60));
+	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",track.Length/60,track.Length%60));
+}
+
+void SearchlistTrackDialog::setFromClipboard()
+{
+	QString originalText = QApplication::clipboard()->text();
+	if (originalText.length()>512) return;
+	if (originalText.length()==0) return;
+	ppl6::CString s;
+	s=originalText;
+	SearchlistItem track(s);
+	ui.artistEdit->setText(track.Artist);
+	ui.titleEdit->setText(track.Title);
+	ui.versionEdit->setText(track.Version);
+	ui.genreEdit->setText(track.Genre);
+	ui.commentEdit->setText(track.Comment);
+	ui.releaseDateEdit->setText(track.ReleaseDate);
+	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",track.Length/60,track.Length%60));
 }
 
 SearchlistItem SearchlistTrackDialog::get() const

@@ -137,16 +137,25 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 		item->setText(3,Tmp);
 	}
 	item->setText(4,item->Track.DateAdded.get("%Y-%m-%d"));
+	if (item->Track.found==true) {
+		item->setIcon(5,QIcon(":/icons/resources/button_ok.png"));
+		item->setText(5,tr("yes"));
+	} else {
+		item->setIcon(5,QIcon(":/icons/resources/edit-find.png"));
+		item->setText(5,tr("no"));
+	}
+
+
 }
 
 void SearchlistDialog::Resize()
 {
 	int s=ui.trackList->width();
-	ui.trackList->setColumnWidth(5,40);
+	ui.trackList->setColumnWidth(5,60);
 	ui.trackList->setColumnWidth(4,80);
 	ui.trackList->setColumnWidth(3,80);
 	ui.trackList->setColumnWidth(2,100);
-	s=s-42-82-82-102;
+	s=s-62-82-82-108;
 	if (s<300) s=300;
 	ui.trackList->setColumnWidth(1,s*30/100);
 	ui.trackList->setColumnWidth(0,s*70/100);
@@ -214,7 +223,12 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
 	} else if (column==5) {
-
+		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
+		if (it.found==true) it.found=false;
+		else it.found=true;
+		((SearchlistTreeItem*)item)->Track=it;
+		renderTrack((SearchlistTreeItem*)item);
+		save();
 	}
 }
 
@@ -242,6 +256,7 @@ void SearchlistDialog::editTrack(SearchlistTreeItem *item)
 	if (ret==1) {
 		item->Track=dialog.get();
 		renderTrack(item);
+		save();
 	}
 }
 
@@ -256,11 +271,13 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 	item->Track=track;
 	renderTrack(item);
 	ui.trackList->addTopLevelItem(item);
+	save();
 }
 
 void SearchlistDialog::on_newTrackButton_clicked()
 {
 	SearchlistTrackDialog dialog;
+	dialog.setFromClipboard();
 	int ret=dialog.exec();
 	if (ret==1) {
 		addTrack(dialog.get());
@@ -279,6 +296,7 @@ void SearchlistDialog::deleteTrack(SearchlistTreeItem *item)
 	if (index<0) return;
 	item=(SearchlistTreeItem*) ui.trackList->takeTopLevelItem(index);
 	if (item) delete item;
+	save();
 }
 
 void SearchlistDialog::on_deleteTrackButton_clicked()
@@ -286,21 +304,17 @@ void SearchlistDialog::on_deleteTrackButton_clicked()
 	currentTrackListItem=(SearchlistTreeItem*)ui.trackList->currentItem();
 	deleteTrack(currentTrackListItem);
 	currentTrackListItem=NULL;
+	save();
 }
 
 void SearchlistDialog::on_saveExitButton_clicked()
 {
-	if (save())	close();
+	close();
 }
 
 void SearchlistDialog::on_saveButton_clicked()
 {
 	save();
-}
-
-void SearchlistDialog::on_cancelButton_clicked()
-{
-	close();
 }
 
 int SearchlistDialog::save()
@@ -335,6 +349,12 @@ void SearchlistDialog::on_newTrackButton2_clicked()
 {
 	ppl6::CString Term=ui.searchTerm->text();
 	Term.Trim();
+	if (Term.IsEmpty()) {
+		QString originalText = QApplication::clipboard()->text();
+		if (originalText.length()>0 && originalText.length()<512) {
+			Term=originalText;
+		}
+	}
 	SearchlistTrackDialog dialog;
 	dialog.set(SearchlistItem(Term));
 	int ret=dialog.exec();
