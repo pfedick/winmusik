@@ -137,12 +137,33 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 		item->setText(3,Tmp);
 	}
 	item->setText(4,item->Track.DateAdded.get("%Y-%m-%d"));
-	if (item->Track.found==true) {
-		item->setIcon(5,QIcon(":/icons/resources/button_ok.png"));
-		item->setText(5,tr("yes"));
+
+	// Titel in Datenbank suchen
+	CTitleHashTree Result;
+	int dupePresumption=0;
+	wm->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","",Result);
+	if (Result.Num()>1) {
+		dupePresumption=100;
+	} else if (Result.Num()>0) {
+		dupePresumption=90;
 	} else {
-		item->setIcon(5,QIcon(":/icons/resources/edit-find.png"));
-		item->setText(5,tr("no"));
+		wm->Hashes.Find(item->Track.Artist,item->Track.Title,Result);
+		if (Result.Num()>3) {
+			dupePresumption=70;
+		} else if (Result.Num()>0) {
+			dupePresumption=40;
+		}
+	}
+	Tmp.Setf("%3i %%",dupePresumption);
+	item->setText(5,Tmp);
+
+
+	if (item->Track.found==true) {
+		item->setIcon(6,QIcon(":/icons/resources/button_ok.png"));
+		item->setText(6,tr("yes"));
+	} else {
+		item->setIcon(6,QIcon(":/icons/resources/edit-find.png"));
+		item->setText(6,tr("no"));
 	}
 
 
@@ -151,11 +172,12 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 void SearchlistDialog::Resize()
 {
 	int s=ui.trackList->width();
+	ui.trackList->setColumnWidth(6,60);
 	ui.trackList->setColumnWidth(5,60);
 	ui.trackList->setColumnWidth(4,80);
 	ui.trackList->setColumnWidth(3,80);
 	ui.trackList->setColumnWidth(2,100);
-	s=s-62-82-82-108;
+	s=s-62-62-82-82-108;
 	if (s<300) s=300;
 	ui.trackList->setColumnWidth(1,s*30/100);
 	ui.trackList->setColumnWidth(0,s*70/100);
@@ -215,14 +237,14 @@ void SearchlistDialog::on_trackList_customContextMenuRequested ( const QPoint & 
 void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int column )
 {
 	if (!item) return;
-	if (column<5) {
+	if (column<6) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
 		Text=it.Artist+" "+it.Title;
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
-	} else if (column==5) {
+	} else if (column==6) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		if (it.found==true) it.found=false;
 		else it.found=true;
@@ -237,6 +259,9 @@ void SearchlistDialog::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, 
 	if (!item) return;
 	if (column<5) {
 		editTrack((SearchlistTreeItem*)item);
+	} else if (column==5) {
+		currentTrackListItem=(SearchlistTreeItem*)item;
+		on_contextFind_triggered();
 	}
 
 }
