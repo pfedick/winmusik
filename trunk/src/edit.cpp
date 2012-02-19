@@ -331,6 +331,7 @@ void Edit::SetupTrackList()
     trackList->headerItem()->setText(TRACKLIST_VERSION_ROW, tr("Version","trackList"));
     trackList->headerItem()->setText(TRACKLIST_GENRE_ROW, tr("Genre","trackList"));
     trackList->headerItem()->setText(TRACKLIST_LENGTH_ROW, tr("Length","trackList"));
+    trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
     connect(trackList,SIGNAL(customContextMenuRequested(const QPoint &)),
     		this,SLOT(on_trackList_customContextMenuRequested(const QPoint &)));
@@ -359,8 +360,8 @@ void Edit::SetupTrackList()
     		"QTreeView::item:selected {\n"
     		//"border-top: 1px solid #80c080;\n"
     		//"border-bottom: 1px solid #80c080;\n"
-    		"background: #000070;\n"
-    		"color: rgb(255, 255, 255);\n"
+    		"background: #d0d0ff;\n"
+    		"color: #000000;\n"
     		"}\n"
     		"";
     trackList->setStyleSheet(Style);
@@ -553,7 +554,8 @@ void Edit::resizeEvent ( QResizeEvent * event )
 	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,60);
 	trackList->setColumnWidth(TRACKLIST_COVER_ROW,64);
 	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,80);
-	w=w-140-64;
+	trackList->setColumnWidth(TRACKLIST_RATING_ROW,64);
+	w=w-140-64-64-30;
 	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100);
 	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100);
 	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100);
@@ -1537,6 +1539,7 @@ bool Edit::on_trackList_MousePress(QMouseEvent * event)
 {
 	//printf ("MousePress\n");
 	if (event->buttons() == Qt::LeftButton) startPos=event->pos();
+	ratePos=event->pos();
 	return false;
 	/*
 	QTreeWidget::mousePressEvent(event);
@@ -1576,6 +1579,9 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 		return false;
 	}
 	if (DeviceType!=7) return false;
+	if (event->pos().x()> trackList->columnViewportPosition (TRACKLIST_RATING_ROW)) return false;
+	//QTreeWidgetItem *	itemAt ( const QPoint & p ) const
+
 	int distance=(event->pos()-startPos).manhattanLength();
 	//printf ("distance=%i\n", distance);
 	if (distance<QApplication::startDragDistance()) {
@@ -2246,6 +2252,31 @@ void Edit::UpdateTrackListing()
 					item->setText(TRACKLIST_GENRE_ROW,Text);
 					Text.Setf("%4i:%02i",(int)(title->Length/60),title->Length%60);
 					item->setText(TRACKLIST_LENGTH_ROW,Text);
+					// Rating
+					switch (title->Rating) {
+						case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));
+							item->setText(TRACKLIST_RATING_ROW,"0");
+							break;
+						case 1: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-1.png"));
+							item->setText(TRACKLIST_RATING_ROW,"1");
+							break;
+						case 2: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-2.png"));
+							item->setText(TRACKLIST_RATING_ROW,"2");
+							break;
+						case 3: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-3.png"));
+							item->setText(TRACKLIST_RATING_ROW,"3");
+							break;
+						case 4: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-4.png"));
+							item->setText(TRACKLIST_RATING_ROW,"4");
+							break;
+						case 5: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-5.png"));
+							item->setText(TRACKLIST_RATING_ROW,"5");
+							break;
+						case 6: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-6.png"));
+							item->setText(TRACKLIST_RATING_ROW,"6");
+							break;
+					}
+
 					if (title->DeviceType==7) {
 						if (title->Size==0) {
 							//printf ("title->Size ist Null, führe Stat durch\n");
@@ -2593,7 +2624,7 @@ void Edit::FixFocus()
 	if (widget) widget->setFocus();
 }
 
-void Edit::on_trackList_itemClicked (__unused__ QTreeWidgetItem * item, __unused__ int column )
+void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 {
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
@@ -2605,6 +2636,45 @@ void Edit::on_trackList_itemClicked (__unused__ QTreeWidgetItem * item, __unused
 				t->DeviceId,(t->Page+'A'-1),t->Track);
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
+
+		if (column==TRACKLIST_RATING_ROW) {
+			int x=ratePos.x()-trackList->columnViewportPosition (TRACKLIST_RATING_ROW);
+			if (x<0) x=0;
+			int r=x/10.666666;
+			if (r!=t->Rating) {
+				DataTitle tUpdate=*t;
+				tUpdate.Rating=r;
+				if (!wm->TitleStore.Put(&tUpdate)) {
+					wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+					return;
+				}
+				switch (r) {
+					case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));
+						item->setText(TRACKLIST_RATING_ROW,"0");
+						break;
+					case 1: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-1.png"));
+						item->setText(TRACKLIST_RATING_ROW,"1");
+						break;
+					case 2: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-2.png"));
+						item->setText(TRACKLIST_RATING_ROW,"2");
+						break;
+					case 3: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-3.png"));
+						item->setText(TRACKLIST_RATING_ROW,"3");
+						break;
+					case 4: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-4.png"));
+						item->setText(TRACKLIST_RATING_ROW,"4");
+						break;
+					case 5: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-5.png"));
+						item->setText(TRACKLIST_RATING_ROW,"5");
+						break;
+					case 6: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-6.png"));
+						item->setText(TRACKLIST_RATING_ROW,"6");
+						break;
+				}
+			}
+			//printf ("Rating: %i, %i\n",ratePos.x(),x);
+		}
+
 
 		/* // Zu langsam
 		if (position==3) {

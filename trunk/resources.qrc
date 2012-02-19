@@ -37,6 +37,21 @@
     <file>resources/coverdruck/print-dvd2.png</file>
   </qresource>
   <qresource prefix="/bewertung">
+    <file>resources/rating-0.png</file>
+    <file>resources/rating-1.png</file>
+    <file>resources/rating-2.png</file>
+    <file>resources/rating-3.png</file>
+    <file>resources/rating-4.png</file>
+    <file>resources/rating-5.png</file>
+    <file>resources/rating-6.png</file>
+    <file>resources/sterne64x16-0.png</file>
+    <file>resources/sterne64x16-1.png</file>
+    <file>resources/sterne64x16-2.png</file>
+    <file>resources/sterne64x16-3.png</file>
+    <file>resources/sterne64x16-4.png</file>
+    <file>resources/sterne64x16-5.png</file>
+    <file>resources/sterne64x16-6.png</file>
+    <file>resources/sterne64x16-unbewertet.png</file>
     <file>resources/sterne-unbewertet.png</file>
     <file>resources/sterne0.png</file>
     <file>resources/sterne1.png</file>

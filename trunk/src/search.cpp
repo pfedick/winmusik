@@ -88,13 +88,14 @@ void Search::Resize()
 	int w=trackList->width();
 	trackList->setColumnWidth(0,50);
 	if (resultmode==0) {
-		w=w-230;
+		w=w-230-40-10;
 		trackList->setColumnWidth(1,w*35/100);
 		trackList->setColumnWidth(2,w*30/100);
 		trackList->setColumnWidth(3,w*25/100);
 		trackList->setColumnWidth(4,w*10/100);
 		trackList->setColumnWidth(5,50);
-		trackList->setColumnWidth(6,120);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_RATING_ROW,40);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_SOURCE_ROW,120);
 	} else {
 		printf ("resultmpode=%i\n",resultmode);
 		trackList->setColumnWidth(1,w-100);
@@ -167,7 +168,8 @@ void Search::DefaultTracklistHeader()
     trackList->headerItem()->setText(3, tr("Version","trackList"));
     trackList->headerItem()->setText(4, tr("Genre","trackList"));
     trackList->headerItem()->setText(5, tr("Length","trackList"));
-    trackList->headerItem()->setText(6, tr("Medium","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_SOURCE_ROW, tr("Medium","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
 }
 
@@ -436,14 +438,39 @@ void Search::PresentResults()
 		Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
 		item->setText(5,Tmp);
 
-		Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
-		item->setText(6,Tmp);
-
 		// Tonträger
+		Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
+		item->setText(SEARCH_TRACKLIST_SOURCE_ROW,Tmp);
 		QIcon Icon;
 		Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",ti->DeviceType);
 		Icon.addFile(Tmp);
-		item->setIcon(6,Icon);
+		item->setIcon(SEARCH_TRACKLIST_SOURCE_ROW,Icon);
+
+		// Bewertung
+		switch (ti->Rating) {
+			case 0: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-0.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"0");
+				break;
+			case 1: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-1.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"1");
+				break;
+			case 2: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-2.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"2");
+				break;
+			case 3: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-3.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"3");
+				break;
+			case 4: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-4.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"4");
+				break;
+			case 5: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-5.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"5");
+				break;
+			case 6: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-6.png"));
+				item->setText(SEARCH_TRACKLIST_RATING_ROW,"6");
+				break;
+		}
+
 
 		totalLength+=ti->Length;
 

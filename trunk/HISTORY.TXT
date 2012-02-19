@@ -10,14 +10,14 @@ Version 3.0.5
 	  kopiert wurde.
 	- Suchlisten eingeführt
 	- Massenimport eingeführt
-	  
-	TODO
 	- Track editieren ist jetzt in einem eigenen Widget untergebracht
-	- Eigenes Fenster zum editieren eines Tracks aus einem anderen Dialog
-	  heraus, z.B. Suchergebnis
-	- Matchlisten
-	- Playlists über MySQL?
+	- Titelbewertung wird jetzt in der Trackliste des Editors angezeigt und
+	  kann dort auch direkt per Mausklick geändert werden
+	- Titelbewertung wird im Suchergebnis angezeigt
 	
+	TODO
+
+
 	- DOKU: Suchlisten
 	- DOKU: Massenimport
 	
