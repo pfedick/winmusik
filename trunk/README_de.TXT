@@ -15,6 +15,6 @@ Tonträger.
   - Läuft unter Windows, Linux, FreeBSD und anderen Unixen
 
 Autor: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
-Copyright (c) 2010 by Patrick Fedick
+Copyright (c) 2012 by Patrick Fedick
 
  

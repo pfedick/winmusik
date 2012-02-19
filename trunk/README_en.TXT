@@ -1,8 +1,8 @@
 Patrick F.-Productions - WinMusik 3
 ===================================
 
-WinMusik is a program for managing you music titles on
-audio CDs, DVDs, audi tapes, vinyl records and other
+WinMusik is a program for managing your music titles on
+audio CDs, DVDs, audio tapes, vinyl records and other
 audio devices.
 
   - smart graphical user interface for editing your music titles
@@ -14,6 +14,6 @@ audio devices.
     unixes
 
 Author: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
-Copyright (c) 2010 by Patrick Fedick
+Copyright (c) 2012 by Patrick Fedick
 
  
