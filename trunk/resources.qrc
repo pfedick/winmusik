@@ -156,6 +156,7 @@
     <file>resources/fkeys/f-key-2005.png</file>
     <file>resources/fkeys/f-key-2006.png</file>
     <file>resources/fkeys/f-key-3005.png</file>
+    <file>resources/fkeys/f-key-3006.png</file>
   </qresource>
   <qresource prefix="/icons">
     <file>resources/cover16.png</file>
