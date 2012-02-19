@@ -17,7 +17,7 @@ Folgende Pakete oder Bibliotheken werden zum Kompilieren benötigt:
 	- openssl
 	- libcurl
 	- iconv (nur wenn Daten von WinMusik 2 importiert werden sollen)
-	- PPL 6.4.0 oder höher (siehe nächstes Kapitel)
+	- PPL 6.4.11 oder höher (siehe nächstes Kapitel)
 
 Bis auf PPL können alle Pakete auf dem üblichen Weg installiert werden. Es
 muss jedoch darauf geachtet werden, dass die Developer-Pakete ebenfalls
@@ -50,24 +50,24 @@ bzw. bei Sourceforge:
 	https://sourceforge.net/projects/pplib
 
 WinMusik ist meist an eine bestimmte Version der PPL-Library gebunden. Diese
-Version benötigt Version 6.4.0 oder höher. Laden Sie daher folgende Datei
+Version benötigt Version 6.4.11 oder höher. Laden Sie daher folgende Datei
 herunter: 
 
-	https://sourceforge.net/projects/pplib/files/ppl-6.4.0.tar.bz2/download
+	https://sourceforge.net/projects/pplib/files/ppl-6.4.11.tar.bz2/download
 
 Die Datei ist mit bzip2 gepackt, das heißt sie benötigen entweder bzip2
 oder ein "Tar", was bzip2 unterstützt (zum Beispiel gtar von GNU). Dies ist
 gewöhnlich am Paremeter "-j" erkennbar:
 
-	tar -xjf ppl-6.4.0.tar.bz2
+	tar -xjf ppl-6.4.11.tar.bz2
 	
 oder
 
-	bunzip2 ppl-6.4.0.tar.bz2
-	tar -xf ppl-6.4.0.tar
+	bunzip2 ppl-6.4.11.tar.bz2
+	tar -xf ppl-6.4.11.tar
 
 Beim Auspacken wird automatisch ein Unterverzeichnis mit dem Namen
-"ppl-6.4.0" erstellt.
+"ppl-6.4.11" erstellt.
 
 Die Library wird mit einem Autoconf configure-Script ausgeliefert, in dem
 alle optionalen Features ausgewählt werden können. Um eine Basisversion zu
@@ -81,8 +81,8 @@ wenn sie gefunden werden. Am Ende gibt das configure-Script eine Zusammen-
 fassung aus:
 
 ****************************************************************************** 
-** Configuration summary for ppl Version 6.4.0 
-** Target: freebsd7.2        CPU: i386 
+** Configuration summary for ppl Version 6.4.11 
+** Target: freebsd8.2        CPU: i386 
 ** 
 ** Byteorder: LITTLE ENDIAN 
 **   Size of char         1     Size of float        4 
@@ -151,15 +151,15 @@ bzw. bei Sourceforge:
 Laden sie die gewünschte Version herunter und packen Sie sie aus. Wie auch PPL
 ist der Quellcode mit bzip2 gepackt:
 
-	tar -xjf WinMusik-3.0.1.tar.bz2
+	tar -xjf WinMusik-3.0.5.tar.bz2
 	
 oder
 
-	bunzip2 WinMusik-3.0.1.tar.bz2
-	tar -xf WinMusik-3.0.1.tar
+	bunzip2 WinMusik-3.0.5.tar.bz2
+	tar -xf WinMusik-3.0.5.tar
 
 Beim Auspacken wird automatisch ein Unterverzeichnis mit dem Namen
-"WinMusik-3.0.1" erstellt.
+"WinMusik-3.0.5" erstellt.
 
 Anders als bei der PPL-Library gibt es hier kein Configure sondern nur ein
 Qt-Project-File. Dieses verwendet zum Auffinden der PPL-Library das Script
