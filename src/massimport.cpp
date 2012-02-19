@@ -345,10 +345,16 @@ void MassImport::renderTrack(TreeItem *item)
 	item->setText(5,Tmp);
 
 	// Dupes
-	Tmp.Setf("%i %%",item->dupePresumption);
+	Tmp.Setf("%3i %%",item->dupePresumption);
 	item->setText(6,Tmp);
-	if (item->import) item->setIcon(7,QIcon(":/icons/resources/button_ok.png"));
-	else item->setIcon(7,QIcon(":/icons/resources/edit-delete.png"));
+
+	if (item->import) {
+		item->setIcon(7,QIcon(":/icons/resources/button_ok.png"));
+		item->setText(7,"");
+	}	else {
+		item->setIcon(7,QIcon(":/icons/resources/edit-delete.png"));
+		item->setText(7," ");
+	}
 
 
 }
