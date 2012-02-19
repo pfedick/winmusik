@@ -644,7 +644,7 @@ void Edit::UpdateFkeys()
 		case 3:		// Device Track
 			//if (DeviceType==7) SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-2006.png",t[15]);
 			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",t[16]);
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-0006.png",t[18]);
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",t[18]);
 
 			break;
 		case 4:		// Interpret
