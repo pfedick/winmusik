@@ -25,7 +25,6 @@
 #
 
 
-my $CVSTREE="client";
 my $PACKAGE="WinMusik";
 my $TAG=$ARGV[0];
 
@@ -34,16 +33,30 @@ if (!$TAG) {
 	exit;
 }
 
-$TAG =~ /^REL_(.*)$/;
-
-my $VERSION=lc($1);
-$VERSION =~ s/_/\./g;
-if ($TAG eq "HEAD") {
+if (($TAG =~ /^SNAP_(.*)$/)) {
+	my $DATE=$1;
+	$VERSION=$ARGV[1];
+	if (!$VERSION) {
+		print "Aufruf: makedist.pl SNAP_yyyymmdd VERSION\n";
+		print ("Bei einem Snapshot muss als zweiter Parameter die Version angegegen werden.");
+		exit;		
+	}
+	$VERSION.="-SNAP";
+	$VERSION.=$DATE;
+} elsif ($TAG eq "HEAD") {
 	$VERSION="HEAD";
+	$TAG="trunk";
+} else {
+	$TAG =~ /^REL_(.*)$/;
+	$VERSION=lc($1);
+	$VERSION =~ s/_/\./g;
+	$TAG="tags/$TAG";
 }
+
+
 my $DISTNAME="$PACKAGE-$VERSION";
 
-print "Packe $PACKAGE mit dem Tag \"$TAG\" aus dem CVS aus...\n";
+print "Packe $PACKAGE mit dem Tag \"$TAG\" aus dem SVN aus...\n";
 print "Version:  $VERSION\n";
 print "Distname: $DISTNAME\n";
 
@@ -51,32 +64,28 @@ my $PWD=`pwd`;
 chomp($PWD);
 my $err=`mkdir -p tmp
 cd tmp
-rm -rf $CVSTREE
+svn co svn://server.pfp.de/winmusik/client/$TAG . 2>&1`;
 
-cvs -z3 -d:pserver:anonymous\@winmusik.cvs.sourceforge.net:/cvsroot/winmusik co -P -r $TAG $CVSTREE `;
 
 
 if ($? != 0 ) {
-	print "ERROR: Version konnte nicht aus dem CVS geholt werden!\n";
+	print "ERROR: Version konnte nicht aus dem SVN geholt werden!\n";
 	print $err;
 	print "\n";
 	exit;
 }
 
 print "Aktualisiere Dokumentation...\n";
-`doxygen Doxyfile`;
+`cd tmp; doxygen Doxyfile`;
 print " ok\n";
-print "Kopiere Doku...\n";
-`mkdir -p tmp/$CVSTREE/documentation; cd documentation; find html | cpio -pdmv ../tmp/$CVSTREE/documentation`;
-print " done\n";
 
 print "Erstelle Distribution fuer Version: $VERSION\n";
 print "PWD=$PWD\n";
 print `mkdir -p distfiles
 rm -f distfiles/$DISTNAME*
 mkdir -p distfiles/$DISTNAME
-cd tmp/$CVSTREE
-tar -cf $PWD/distfiles/tmp.tar --exclude *.core --exclude CVS --exclude .cvsignore resources src docs forms documentation include *.TXT Doxyfile *.qm *.rc *.qrc *.pro *.ts
+cd tmp
+tar -cf $PWD/distfiles/tmp.tar --exclude *.core --exclude .svn resources src docs forms documentation include *.TXT Doxyfile *.qm *.rc *.qrc *.pro *.ts
 cd $PWD
 cd distfiles/$DISTNAME
 tar -xf ../tmp.tar
@@ -85,6 +94,6 @@ tar -cjf $DISTNAME.tar.bz2 $DISTNAME
 cp $DISTNAME/docs/Userguide_de.pdf $DISTNAME-Userguide_de.pdf
 rm -rf tmp.tar $DISTNAME
 cd $PWD
-rm -rf tmp
+#rm -rf tmp
 `;
 print "\n";
