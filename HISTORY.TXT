@@ -13,14 +13,7 @@ Version 3.0.5
 	- Track editieren ist jetzt in einem eigenen Widget untergebracht
 	- Titelbewertung wird jetzt in der Trackliste des Editors angezeigt und
 	  kann dort auch direkt per Mausklick geändert werden
-	- Titelbewertung wird im Suchergebnis angezeigt
-	
-	TODO
-
-
-	- DOKU: Suchlisten
-	- DOKU: Massenimport
-	
+	- Titelbewertung wird im Suchergebnis angezeigt	
 
 Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)
 	- Im Suchergebnis wird jetzt die Gesamtlänge aller gefundenen
