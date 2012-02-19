@@ -36,6 +36,8 @@
 class Search;
 class CSearchTrackList;
 
+#define SEARCH_TRACKLIST_RATING_ROW	6
+#define SEARCH_TRACKLIST_SOURCE_ROW 7
 
 class Search : public QWidget
 {

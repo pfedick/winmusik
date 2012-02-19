@@ -47,6 +47,7 @@ class Edit;
 #define TRACKLIST_VERSION_ROW		3
 #define TRACKLIST_GENRE_ROW		4
 #define TRACKLIST_LENGTH_ROW		5
+#define TRACKLIST_RATING_ROW		6
 
 class CTitleList : public QTreeWidget
 {
@@ -142,6 +143,7 @@ private:
     CTitleList	*trackList;
     WMTreeItem	*currentTrackListItem;
     QPoint startPos;	// Für Drag/Drop und multiple Markierungen
+    QPoint	ratePos;	// Für Rating-Spalte
 
     QWidget *searchWindow;
 
