@@ -32,7 +32,7 @@ NAME="WinMusik"
 PACKAGENAME="WinMusik3"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
-DESCRIPTION="Datenbank zur Verwaltung von Musik-Tonträgern"
+DESCRIPTION="Music database to maintain songs on various devices"
 COMMENT=`cat README_en.TXT`
 DISTFILES=$MYPWD/distfiles
 MAKE="make"
@@ -119,7 +119,7 @@ cd $BUILD
 cp $WINMUSIKPATH/build_binary.sh WinMusik-$VERSION-src-complete
 
 mv src WinMusik-$VERSION-src-complete/build
-tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz WinMusik-$VERSION-src-complete
+tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz --exclude .svn WinMusik-$VERSION-src-complete
 mv WinMusik-$VERSION-src-complete/build/src ./
 rm -rf WinMusik-$VERSION-src-complete
 	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH/src
@@ -256,12 +256,11 @@ ubuntu_write_control() {
 		echo "Homepage: $HOMEPAGE"
 		echo "Architecture: $PLATFORM"
 		echo "Depends: $DEPENDS"
+		echo "Installed-Size: 1000"
 		echo "Description: $DESCRIPTION"
 		cat $BUILD/src/winmusik/README_en.TXT | while read line
 		do
-			if [ -n "$line" ] ; then
-				echo " $line"
-			fi
+			echo " $line"
 		done
 		
 	) > debian/control
@@ -302,7 +301,7 @@ build_ubuntu() {
 		echo "Terminal=false"
 		echo "Type=Application"
 		echo "Categories=GTK;GNOME;AudioVideo;"
-		echo "Icon=/WinMusik3.png"
+		echo "Icon=/usr/share/pixmaps/WinMusik3.png"
 	) > debian/usr/share/applications/$NAME.desktop
 	(
 		echo "WinMusik ($VERSION) unstable; urgency=low"
@@ -372,23 +371,25 @@ build_specfile() {
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
 	echo "cp build/bin/WinMusik3 \$RPM_BUILD_ROOT/usr/bin"
-	echo "cp build/src/winmusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik3.png"
+	echo "cp build/src/winmusik/resources/icon48.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik3.png"
 	echo ""
 	echo "# Desktop menu entry"
 	echo "cat > %{name}.desktop << EOF"
 	echo "[Desktop Entry]"
 	echo "Name=$NAME"
-	echo "Comment=$COMMENT"
+	echo "Comment=$DESCRIPTION"
 	echo "Exec=WinMusik3"
 	echo "Icon=WinMusik3.png"
 	echo "Terminal=0"
 	echo "Type=Application"
+	echo "Categories=Qt;AudioVideo;Database"
 	echo "EOF"
 	echo ""
-	echo "desktop-file-install --vendor DENIC \\"
+	echo "desktop-file-install --vendor \"Patrick F.-Productions\" \\"
   	echo "  --dir \$RPM_BUILD_ROOT/usr/share/applications \\"
-  	echo "  --add-category Application \\"
-  	echo "  --add-category Office \\"
+  	echo "  --add-category Qt \\"
+  	echo "  --add-category AudioVideo \\"
+  	echo "  --add-category Database \\"
   	echo "%{name}.desktop"
   	echo ""
 	echo "%clean"
