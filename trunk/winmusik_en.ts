@@ -807,7 +807,7 @@ p, li { white-space: pre-wrap; }
         <translation>Edit Audio DVD</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="616"/>
+        <location filename="src/edit.cpp" line="618"/>
         <source>back</source>
         <translation>back</translation>
     </message>
@@ -843,144 +843,150 @@ p, li { white-space: pre-wrap; }
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="614"/>
+        <location filename="src/edit.cpp" line="334"/>
+        <source>Rating</source>
+        <comment>trackList</comment>
+        <translation>Rating</translation>
+    </message>
+    <message>
+        <location filename="src/edit.cpp" line="616"/>
         <source>close</source>
         <translation>close</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="615"/>
+        <location filename="src/edit.cpp" line="617"/>
         <source>new</source>
         <translation>new</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="617"/>
+        <location filename="src/edit.cpp" line="619"/>
         <source>master data</source>
         <translation>master data</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="618"/>
+        <location filename="src/edit.cpp" line="620"/>
         <source>search</source>
         <translation>search</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="619"/>
+        <location filename="src/edit.cpp" line="621"/>
         <source>print</source>
         <translation>print</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="620"/>
+        <location filename="src/edit.cpp" line="622"/>
         <source>save</source>
         <translation>save</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="621"/>
+        <location filename="src/edit.cpp" line="623"/>
         <source>delete</source>
         <translation>delete</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="622"/>
+        <location filename="src/edit.cpp" line="624"/>
         <source>insert</source>
         <translation>insert</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="623"/>
+        <location filename="src/edit.cpp" line="625"/>
         <source>first letter</source>
         <translation>first letter</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="624"/>
+        <location filename="src/edit.cpp" line="626"/>
         <source>read ID3</source>
         <translation>read ID3</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="625"/>
+        <location filename="src/edit.cpp" line="627"/>
         <source>shortcut</source>
         <translation>shortcut</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="630"/>
+        <location filename="src/edit.cpp" line="632"/>
         <source>save all ID3</source>
         <translation>save all ID3</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="631"/>
+        <location filename="src/edit.cpp" line="633"/>
         <source>list devices</source>
         <translation>list devices</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="632"/>
+        <location filename="src/edit.cpp" line="634"/>
         <source>mass import</source>
         <translation>mass import</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1265"/>
+        <location filename="src/edit.cpp" line="1267"/>
         <source>There are no further titles without an index in the directory of this device</source>
         <oldsource>Es sind keine weiteren Titel ohne Index im Verzeichnis
 des Tonträgers vorhanden</oldsource>
         <translation>There are no further titles without an index in the directory of this device</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1394"/>
+        <location filename="src/edit.cpp" line="1396"/>
         <source>Could not create playlists</source>
         <translation>Could not create playlists</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1629"/>
+        <location filename="src/edit.cpp" line="1635"/>
         <source>WinMusik: update all ID3-Tags</source>
         <translation>WinMusik: update all ID3-Tags</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1630"/>
+        <location filename="src/edit.cpp" line="1636"/>
         <source>Update ID3-Tags of all tracks?</source>
         <translation>Update ID3-Tags of all tracks?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1635"/>
+        <location filename="src/edit.cpp" line="1641"/>
         <source>Update of ID3-Tags on all tracks has been started</source>
         <translation>Update of ID3-Tags on all tracks has been started</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1638"/>
+        <location filename="src/edit.cpp" line="1644"/>
         <source>Update of ID3-Tags failed</source>
         <translation>Update of ID3-Tags failed</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2187"/>
+        <location filename="src/edit.cpp" line="2193"/>
         <source>unknown</source>
         <translation>unknown</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2810"/>
+        <location filename="src/edit.cpp" line="2880"/>
         <source>WinMusik: delete MP3-Cover</source>
         <translation>WinMusik: delete MP3-Cover</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2811"/>
+        <location filename="src/edit.cpp" line="2881"/>
         <source>Do you want to remove the cover from the mp3 file?</source>
         <translation>Do you want to remove the cover from the mp3 file?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="626"/>
+        <location filename="src/edit.cpp" line="628"/>
         <source>original Tags</source>
         <translation>original Tags</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="627"/>
+        <location filename="src/edit.cpp" line="629"/>
         <source>dupes?</source>
         <translation>dupes?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="628"/>
+        <location filename="src/edit.cpp" line="630"/>
         <source>playlist</source>
         <translation>playlist</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="629"/>
+        <location filename="src/edit.cpp" line="631"/>
         <source>autoimport</source>
         <translation>autoimport</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2481"/>
+        <location filename="src/edit.cpp" line="2512"/>
         <source>Could not save ID3 Tags</source>
         <translation>Could not save ID3 Tags</translation>
     </message>
@@ -1015,92 +1021,93 @@ des Tonträgers vorhanden</oldsource>
         <translation>Length</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1264"/>
-        <location filename="src/edit.cpp" line="1390"/>
-        <location filename="src/edit.cpp" line="1634"/>
+        <location filename="src/edit.cpp" line="1266"/>
+        <location filename="src/edit.cpp" line="1392"/>
+        <location filename="src/edit.cpp" line="1640"/>
         <source>WinMusik: Notice</source>
         <oldsource>WinMusik: Hinweis</oldsource>
         <translation>WinMusik: Notice</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1391"/>
+        <location filename="src/edit.cpp" line="1393"/>
         <source>Playlists wurden erfolgreich erstellt</source>
         <translation>Playlists have been successfully created</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2357"/>
+        <location filename="src/edit.cpp" line="2388"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Attention</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2358"/>
+        <location filename="src/edit.cpp" line="2389"/>
         <source>Artist and title are empty!
 Do you realy want to save this track?</source>
         <translation>Artist and title are empty!
 Do you realy want to save this track?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2651"/>
+        <location filename="src/edit.cpp" line="2721"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other versions</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2652"/>
+        <location filename="src/edit.cpp" line="2722"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Find more of artist</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2654"/>
+        <location filename="src/edit.cpp" line="2724"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Play Track</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2655"/>
+        <location filename="src/edit.cpp" line="2725"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Edit Track</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2656"/>
+        <location filename="src/edit.cpp" line="2726"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy Artist and Title</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2657"/>
+        <location filename="src/edit.cpp" line="2727"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy MP3-File</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2659"/>
+        <location filename="src/edit.cpp" line="2729"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Delete Track</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2660"/>
+        <location filename="src/edit.cpp" line="2730"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Insert Track</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2459"/>
+        <location filename="src/edit.cpp" line="2490"/>
+        <location filename="src/edit.cpp" line="2648"/>
         <source>Could not save Title in TitleStore</source>
         <oldsource>Konnte Titel nicht in TitleStore speichern</oldsource>
         <translation>Could not save Title in TitleStore</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2471"/>
+        <location filename="src/edit.cpp" line="2502"/>
         <source>Could not save Track in TrackList</source>
         <oldsource>Konnte Track nicht in TrackList speichern</oldsource>
         <translation>Could not save Track in TrackList</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2653"/>
+        <location filename="src/edit.cpp" line="2723"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other artists of this title</translation>
@@ -1593,134 +1600,134 @@ Do you realy want to save this track?</translation>
     <message>
         <location filename="widgets/edittrack.cpp" line="72"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="76"/>
         <source>Genre</source>
-        <translation type="unfinished">Genre</translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="80"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Label</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="84"/>
         <source>Record Source</source>
-        <translation type="unfinished">Record Source</translation>
+        <translation>Record Source</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="88"/>
         <source>Record Device</source>
-        <translation type="unfinished">Record Device</translation>
+        <translation>Record Device</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="294"/>
         <source>WinMusik: Attention</source>
-        <translation type="unfinished">WinMusik: Attention</translation>
+        <translation>WinMusik: Attention</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="295"/>
         <source>Artist and title are empty!
 Do you realy want to save this track?</source>
-        <translation type="unfinished">Artist and title are empty!
+        <translation>Artist and title are empty!
 Do you realy want to save this track?</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="515"/>
         <source>close</source>
-        <translation type="unfinished">close</translation>
+        <translation>close</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="516"/>
         <source>new</source>
-        <translation type="unfinished">new</translation>
+        <translation>new</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="517"/>
         <source>back</source>
-        <translation type="unfinished">back</translation>
+        <translation>back</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="518"/>
         <source>master data</source>
-        <translation type="unfinished">master data</translation>
+        <translation>master data</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="519"/>
         <source>search</source>
-        <translation type="unfinished">search</translation>
+        <translation>search</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="520"/>
         <source>print</source>
-        <translation type="unfinished">print</translation>
+        <translation>print</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="521"/>
         <source>save</source>
-        <translation type="unfinished">save</translation>
+        <translation>save</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="522"/>
         <source>delete</source>
-        <translation type="unfinished">delete</translation>
+        <translation>delete</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="523"/>
         <source>insert</source>
-        <translation type="unfinished">insert</translation>
+        <translation>insert</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="524"/>
         <source>first letter</source>
-        <translation type="unfinished">first letter</translation>
+        <translation>first letter</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="525"/>
         <source>read ID3</source>
-        <translation type="unfinished">read ID3</translation>
+        <translation>read ID3</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="526"/>
         <source>shortcut</source>
-        <translation type="unfinished">shortcut</translation>
+        <translation>shortcut</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="527"/>
         <source>original Tags</source>
-        <translation type="unfinished">original Tags</translation>
+        <translation>original Tags</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="528"/>
         <source>dupes?</source>
-        <translation type="unfinished">dupes?</translation>
+        <translation>dupes?</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="529"/>
         <source>playlist</source>
-        <translation type="unfinished">playlist</translation>
+        <translation>playlist</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="530"/>
         <source>autoimport</source>
-        <translation type="unfinished">autoimport</translation>
+        <translation>autoimport</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="531"/>
         <source>save all ID3</source>
-        <translation type="unfinished">save all ID3</translation>
+        <translation>save all ID3</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="532"/>
         <source>list devices</source>
-        <translation type="unfinished">list devices</translation>
+        <translation>list devices</translation>
     </message>
     <message>
         <location filename="widgets/edittrack.cpp" line="533"/>
         <source>mass import</source>
-        <translation type="unfinished">mass import</translation>
+        <translation>mass import</translation>
     </message>
 </context>
 <context>
@@ -2431,7 +2438,7 @@ Please select your prefered language.</oldsource>
     <message>
         <location filename="src/massimport.cpp" line="77"/>
         <source>Record Device</source>
-        <translation type="unfinished">Record Device</translation>
+        <translation>Record Device</translation>
     </message>
     <message>
         <location filename="src/massimport.cpp" line="244"/>
@@ -2475,13 +2482,14 @@ Please select your prefered language.</oldsource>
     <message>
         <location filename="src/massimport.cpp" line="418"/>
         <source>WinMusik: Delete this Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>WinMusik: Delete this Tracks</translation>
     </message>
     <message>
         <location filename="src/massimport.cpp" line="419"/>
         <source>Do you really want to delete this track from your harddisk?
 You won&apos;t be able to restore it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Do you really want to delete this track from your harddisk?
+You won&apos;t be able to restore it!</translation>
     </message>
     <message>
         <location filename="src/massimport.cpp" line="579"/>
@@ -2496,17 +2504,17 @@ You won&apos;t be able to restore them!</source>
 You won&apos;t be able to restore them!</translation>
     </message>
     <message>
-        <location filename="src/massimport.cpp" line="701"/>
+        <location filename="src/massimport.cpp" line="705"/>
         <source>Could not save Title in TitleStore</source>
         <translation>Could not save Title in TitleStore</translation>
     </message>
     <message>
-        <location filename="src/massimport.cpp" line="716"/>
+        <location filename="src/massimport.cpp" line="717"/>
         <source>Could not save Track in TrackList</source>
         <translation>Could not save Track in TrackList</translation>
     </message>
     <message>
-        <location filename="src/massimport.cpp" line="722"/>
+        <location filename="src/massimport.cpp" line="723"/>
         <source>Could not save ID3 Tags</source>
         <translation>Could not save ID3 Tags</translation>
     </message>
@@ -3472,118 +3480,124 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Search</name>
     <message>
-        <location filename="src/search.cpp" line="164"/>
+        <location filename="src/search.cpp" line="165"/>
         <source>Pos</source>
         <comment>trackList</comment>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="165"/>
+        <location filename="src/search.cpp" line="166"/>
         <source>Artist</source>
         <comment>trackList</comment>
         <translation>Artist</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="166"/>
+        <location filename="src/search.cpp" line="167"/>
         <source>Title</source>
         <comment>trackList</comment>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="167"/>
+        <location filename="src/search.cpp" line="168"/>
         <source>Version</source>
         <comment>trackList</comment>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="168"/>
+        <location filename="src/search.cpp" line="169"/>
         <source>Genre</source>
         <comment>trackList</comment>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="169"/>
+        <location filename="src/search.cpp" line="170"/>
         <source>Length</source>
         <comment>trackList</comment>
         <translation>Length</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="170"/>
+        <location filename="src/search.cpp" line="171"/>
         <source>Medium</source>
         <comment>trackList</comment>
         <translation>Medium</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="588"/>
+        <location filename="src/search.cpp" line="172"/>
+        <source>Rating</source>
+        <comment>trackList</comment>
+        <translation>Rating</translation>
+    </message>
+    <message>
+        <location filename="src/search.cpp" line="615"/>
         <source>select all</source>
         <comment>trackList Context Menue</comment>
         <translation>select all</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="589"/>
+        <location filename="src/search.cpp" line="616"/>
         <source>select none</source>
         <comment>trackList Context Menue</comment>
         <translation>select none</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="592"/>
+        <location filename="src/search.cpp" line="619"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other versions</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="593"/>
+        <location filename="src/search.cpp" line="620"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Find more of artist</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="595"/>
+        <location filename="src/search.cpp" line="622"/>
         <source>All tracks on this medium</source>
         <comment>trackList Context Menue</comment>
         <translation>All tracks on this medium</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="597"/>
+        <location filename="src/search.cpp" line="624"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Play Track</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="598"/>
+        <location filename="src/search.cpp" line="625"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Edit Track</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="599"/>
+        <location filename="src/search.cpp" line="626"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy artist and title to clipboard</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="600"/>
+        <location filename="src/search.cpp" line="627"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy filename to clipboard</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="874"/>
+        <location filename="src/search.cpp" line="901"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="875"/>
+        <location filename="src/search.cpp" line="902"/>
         <source>Filename</source>
         <translation>Filename</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="876"/>
+        <location filename="src/search.cpp" line="903"/>
         <source>Size</source>
         <translation>Size</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="594"/>
+        <location filename="src/search.cpp" line="621"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other artists of this title</translation>
@@ -3592,46 +3606,56 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistDialog</name>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="182"/>
+        <location filename="src/searchlistdialog.cpp" line="163"/>
+        <source>yes</source>
+        <translation>yes</translation>
+    </message>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="166"/>
+        <source>no</source>
+        <translation>no</translation>
+    </message>
+    <message>
+        <location filename="src/searchlistdialog.cpp" line="214"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Edit Track</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="182"/>
+        <location filename="src/searchlistdialog.cpp" line="214"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="183"/>
+        <location filename="src/searchlistdialog.cpp" line="215"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Delete Track</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="183"/>
+        <location filename="src/searchlistdialog.cpp" line="215"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="184"/>
+        <location filename="src/searchlistdialog.cpp" line="216"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Insert Track</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="184"/>
+        <location filename="src/searchlistdialog.cpp" line="216"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="186"/>
+        <location filename="src/searchlistdialog.cpp" line="218"/>
         <source>Search track in Database</source>
         <comment>trackList Context Menue</comment>
         <translation>Search track in Database</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="186"/>
+        <location filename="src/searchlistdialog.cpp" line="218"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
@@ -3649,66 +3673,85 @@ p, li { white-space: pre-wrap; }
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="64"/>
+        <location filename="forms/searchlistdialog.ui" line="60"/>
+        <source>Search:</source>
+        <translation>Search:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlistdialog.ui" line="70"/>
+        <source>Search</source>
+        <translation>Search</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlistdialog.ui" line="141"/>
         <source>Artist - Title</source>
         <translation>Artist - Title</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="69"/>
+        <location filename="forms/searchlistdialog.ui" line="146"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="74"/>
+        <location filename="forms/searchlistdialog.ui" line="151"/>
         <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="79"/>
+        <location filename="forms/searchlistdialog.ui" line="156"/>
         <source>Length</source>
         <translation>Length</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="84"/>
+        <location filename="forms/searchlistdialog.ui" line="161"/>
         <source>Added</source>
         <translation>Added</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="89"/>
+        <location filename="forms/searchlistdialog.ui" line="166"/>
+        <source>Existing</source>
+        <translation>Existing</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlistdialog.ui" line="171"/>
         <source>Done</source>
         <translation>Done</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="99"/>
         <source>Save and Exit</source>
-        <translation>Save and Exit</translation>
+        <translation type="obsolete">Save and Exit</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="116"/>
         <source>Save changes</source>
-        <translation>Save changed</translation>
+        <translation type="obsolete">Save changed</translation>
     </message>
     <message>
+        <location filename="forms/searchlistdialog.ui" line="36"/>
         <source>Save</source>
-        <translation type="obsolete">Save</translation>
+        <translation>Save</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="136"/>
+        <location filename="forms/searchlistdialog.ui" line="181"/>
+        <source>Exit</source>
+        <translation>Exit</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlistdialog.ui" line="201"/>
         <source>Delete marked tracks</source>
         <translation>Delete marked tracks</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="166"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation type="obsolete">Cancel</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="189"/>
+        <location filename="forms/searchlistdialog.ui" line="90"/>
+        <location filename="forms/searchlistdialog.ui" line="237"/>
         <source>New Track</source>
         <translation>New Track</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="209"/>
+        <location filename="forms/searchlistdialog.ui" line="257"/>
         <source>Delete Track</source>
         <translation>Delete Track</translation>
     </message>
@@ -3746,29 +3789,46 @@ p, li { white-space: pre-wrap; }
         <translation>Length:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="81"/>
         <source>0009:99; </source>
-        <translation>00000; {0009:99;?}</translation>
+        <translation type="obsolete">00000; {0009:99;?}</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="88"/>
+        <location filename="forms/searchlisttrackdialog.ui" line="91"/>
         <source>min.</source>
         <translation>min.</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="110"/>
+        <location filename="forms/searchlisttrackdialog.ui" line="113"/>
         <source>Comment:</source>
         <translation>Comment:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="137"/>
+        <location filename="forms/searchlisttrackdialog.ui" line="123"/>
+        <source>Releasedate:</source>
+        <translation>Releasedate:</translation>
+    </message>
+    <message>
+        <location filename="forms/searchlisttrackdialog.ui" line="186"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="167"/>
+        <location filename="forms/searchlisttrackdialog.ui" line="216"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>Searchlists</name>
+    <message>
+        <location filename="src/searchlists.cpp" line="152"/>
+        <source>WinMusik: Delete searchlist</source>
+        <translation>WinMusik: Delete searchlist</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists.cpp" line="153"/>
+        <source>Are you sure you want to delete this searchlist?</source>
+        <translation>Are you sure you want to delete this searchlist?</translation>
     </message>
 </context>
 <context>
@@ -4008,7 +4068,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>asynchronousMessage</name>
     <message>
-        <location filename="src/CHashes.cpp" line="591"/>
+        <location filename="src/CHashes.cpp" line="579"/>
         <source>search trees are created, please wait...</source>
         <translation>Search trees are created, please wait...</translation>
     </message>
@@ -4104,7 +4164,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="forms/edittrackdialog.ui" line="14"/>
         <source>Edit Track</source>
-        <translation type="unfinished">Edit Track</translation>
+        <translation>Edit Track</translation>
     </message>
 </context>
 <context>
@@ -4243,7 +4303,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="forms/massimport.ui" line="575"/>
         <source>Record device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Record device:</translation>
     </message>
 </context>
 <context>
