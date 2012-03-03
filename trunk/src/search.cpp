@@ -870,19 +870,21 @@ void Search::on_ClipBoardTimer_update()
 	LastClipboardString=s;
 	if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 	if (s.Instr("\n")>=0) return;
+	s.Replace("\t"," ");
+	s.PregReplace("/\\(.*?\\)/","");
 	wm->NormalizeTerm(s);
 	ClipBoardTimer.stop();
-	printf ("Update\n");
+	//printf ("Update\n");
 
 	if (ui.watchClipboardHarddisk->isChecked()) {
 		ui.tabWidget->setCurrentIndex(2);
-		ui.query_harddisk->setText(originalText);
+		ui.query_harddisk->setText(s);
 		on_hardDiskSearchButton_clicked();
 
 	}
 	if (ui.watchClipboard->isChecked()) {
 		ui.tabWidget->setCurrentIndex(1);
-		ui.query->setText(originalText);
+		ui.query->setText(s);
 		on_quicksearchButton_clicked();
 	}
 	ClipBoardTimer.start(200);

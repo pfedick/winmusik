@@ -2,6 +2,8 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+    - Filter für Schnellsuche über Zwischenablage
+
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
 	  dadurch in anderen Dialogen wiederverwendet werden
