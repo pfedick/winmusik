@@ -1310,7 +1310,7 @@ bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 		else ret=CopyFromFilename(Path);
 		if (ret) {
 			// Version automatisch setzen
-			if (ui.versionId->text()=="*") {
+			if (ui.versionId->text()=="*" && ui.version->text().isEmpty()==true) {
 				if (pmp3.length<5*60) {
 					ui.version->setText("Single");
 					DataVersion *dv=(DataVersion*)wm->VersionStore.Find("Single");

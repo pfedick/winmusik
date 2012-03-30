@@ -2,7 +2,13 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.0.6
     - Filter für Schnellsuche über Zwischenablage
+    
+    TODO:
+    - Titel in den Suchliste sollen suchbar sein
+    - Titel in der Suchliste sollen automatisch in der Datenbank gesucht werden
+      (analog zum Massenimport)
 
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
