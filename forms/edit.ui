@@ -1667,6 +1667,44 @@
                    <property name="text">
                     <string/>
                    </property>
+                   <property name="icon">
+                    <iconset resource="../resources.qrc">
+                     <normaloff>:/icons/resources/logo_amazon16x16.png</normaloff>:/icons/resources/logo_amazon16x16.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="coverSearchGoogle">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../resources.qrc">
+                     <normaloff>:/icons/resources/logo_google16x16.png</normaloff>:/icons/resources/logo_google16x16.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="coverSearchBeatport">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../resources.qrc">
+                     <normaloff>:/icons/resources/logo_beatport16x16.png</normaloff>:/icons/resources/logo_beatport16x16.png</iconset>
+                   </property>
                    <property name="iconSize">
                     <size>
                      <width>16</width>
@@ -1682,7 +1720,7 @@
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
-                     <width>40</width>
+                     <width>5</width>
                      <height>20</height>
                     </size>
                    </property>
