@@ -4,6 +4,7 @@
 
 Version 3.0.6
     - Filter für Schnellsuche über Zwischenablage
+    - Suchbuttons für Amazon, Google und Beatport
     
     TODO:
     - Titel in den Suchliste sollen suchbar sein
