@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include "ui_coverviewer.h"
+#include "winmusik3.h"
 
 class CoverViewer : public QWidget
 {

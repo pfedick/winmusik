@@ -171,6 +171,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.channels,26);
 	InstallFilter(ui.quality,27);
 	InstallFilter(ui.rating,28);
+	InstallFilter(ui.cover,100);
 
 
 	/*
@@ -504,9 +505,11 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.remarks);
 	} else if (target==ui.tags) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.tags);
+	} else if (target==ui.cover && type==QEvent::MouseButtonDblClick) {
+		wm->OpenCoverViewer(Cover);	
+	} else if (target==ui.cover && type==QEvent::MouseButtonPress) {
+		wm->OpenCoverViewer(Cover);	
 	}
-
-
 	return false;
 }
 
@@ -1843,7 +1846,7 @@ bool Edit::CopyFromID3v2Tag(ppl6::CString &Filename, ppl6::CFile &File)
 		if (Tag.GetPicture(3,cover)) {
 			Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
 			ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-
+			wm->UpdateCoverViewer(Cover);
 		}
 
 
@@ -2006,6 +2009,7 @@ bool Edit::EditTrack()
 					if (Tag.GetPicture(3,cover)) {
 						Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
 						ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+						wm->UpdateCoverViewer(Cover);
 					}
 				}
 			}
@@ -2851,6 +2855,7 @@ void Edit::on_coverInsertButton_clicked()
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	Cover=clipboard->pixmap();
 	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	wm->UpdateCoverViewer(Cover);
 	FixFocus();
 	if (DeviceType==7) {
 		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
@@ -2882,6 +2887,7 @@ void Edit::on_coverDeleteButton_clicked()
 		==QMessageBox::No) return;
 	Cover=QPixmap();
 	ui.cover->setPixmap(Cover);
+	wm->UpdateCoverViewer(Cover);
 	if (DeviceType==7) {
 		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
@@ -2975,11 +2981,6 @@ void Edit::on_coverSearchBeatport_clicked()
 	Cmd="firefox \""+Url+"\" &";
 	system(Cmd);
 	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
-}
-
-void Edit::on_cover_doubleClicked()
-{
-	wm->OpenCoverViewer(Cover);
 }
 
 bool Edit::on_f6_MassImport()

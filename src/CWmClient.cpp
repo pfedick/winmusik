@@ -465,6 +465,12 @@ int CWmClient::CloseDatabase()
 		Mutex.Lock();
 	}
 
+	if (CoverViewerWindow) {
+		Mutex.Unlock();
+		delete (CoverViewer*) CoverViewerWindow;
+		Mutex.Lock();
+	}
+
 	Mutex.Unlock();
 	return 1;
 }
@@ -626,15 +632,26 @@ void CWmClient::OpenCoverViewer(const QPixmap &pix)
 {
 	Mutex.Lock();
 	if (CoverViewerWindow==NULL) {
-		CoverViewerWindow=new CoverViewer(MainMenue,this);
+		CoverViewerWindow=new CoverViewer(NULL,this);
 		if (!CoverViewerWindow) {
 			Mutex.Unlock();
 			return;
 		}
+		((CoverViewer*)CoverViewerWindow)->show();
 	}
 	((CoverViewer*)CoverViewerWindow)->setCover(pix);
 	Mutex.Unlock();
 }
+
+void CWmClient::UpdateCoverViewer(const QPixmap &pix)
+{
+	Mutex.Lock();
+	if (CoverViewerWindow!=NULL) {
+		((CoverViewer*)CoverViewerWindow)->setCover(pix);
+	}
+	Mutex.Unlock();
+}
+
 
 
 void CWmClient::SearchClosed(void *object)
