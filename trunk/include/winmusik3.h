@@ -38,6 +38,7 @@
 #include <QTranslator>
 #include <QApplication>
 #include <QDate>
+#include <QPixmap>
 #include <map>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
@@ -529,6 +530,7 @@ class CWmClient
 		ppl6::CGenericList SearchlistOverviewWindows;
 		ppl6::CGenericList SearchlistWindows;
 		ppl6::CGenericList DeviceListWindows;
+		void *CoverViewerWindow;
 
 		QDate					LatestPurchaseDate;
 
@@ -595,6 +597,8 @@ class CWmClient
 		void CoverPrinterClosed(void *object);
 		void PlaylistOverviewClosed(void *object);
 		void DeviceListClosed(void *object);
+		void OpenCoverViewer(const QPixmap &pix);
+		void CoverViewerClosed();
 
 		int CurlTalk(ppl6::CCurl &Curl, ppl6::CAssocArray &cmd, ppl6::CAssocArray &answer);
 		ppl6::CString GetOperatingSystem();

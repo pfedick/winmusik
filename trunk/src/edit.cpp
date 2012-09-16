@@ -2977,6 +2977,10 @@ void Edit::on_coverSearchBeatport_clicked()
 	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
+void Edit::on_cover_doubleClicked()
+{
+	wm->OpenCoverViewer(Cover);
+}
 
 bool Edit::on_f6_MassImport()
 {

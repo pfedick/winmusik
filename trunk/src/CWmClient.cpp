@@ -44,6 +44,7 @@
 #include "devicelist.h"
 #include "searchlists.h"
 #include "searchlistdialog.h"
+#include "coverviewer.h"
 #include <QMessageBox>
 #include <QLocale>
 #include <QDesktopWidget>
@@ -63,6 +64,7 @@ CWmClient::CWmClient()
 	wm_main=this;
 	InitErrors();
 	MainMenue=NULL;
+	CoverViewerWindow=NULL;
 	LatestPurchaseDate=QDate::currentDate();
 	Hashes.wm=this;
 	UpdateChecker=new CUpdateChecker(NULL,this);
@@ -75,6 +77,10 @@ CWmClient::~CWmClient()
 	Hashes.Clear();
 	ID3TagSaver.ThreadStop();
 	CloseDatabase();
+	if (CoverViewerWindow) {
+		delete (CoverViewer*)CoverViewerWindow;
+		CoverViewerWindow=NULL;
+	}
 	if (MainMenue) delete (Menue*)MainMenue;
 	MainMenue=NULL;
 	if (wmlog) delete wmlog;
@@ -608,6 +614,28 @@ void CWmClient::EditorClosed(void *object)
 	EditorWindows.Delete(object);
 	Mutex.Unlock();
 }
+
+void CWmClient::CoverViewerClosed()
+{
+	Mutex.Lock();
+	CoverViewerWindow=NULL;
+	Mutex.Unlock();
+}
+
+void CWmClient::OpenCoverViewer(const QPixmap &pix)
+{
+	Mutex.Lock();
+	if (CoverViewerWindow==NULL) {
+		CoverViewerWindow=new CoverViewer(MainMenue,this);
+		if (!CoverViewerWindow) {
+			Mutex.Unlock();
+			return;
+		}
+	}
+	((CoverViewer*)CoverViewerWindow)->setCover(pix);
+	Mutex.Unlock();
+}
+
 
 void CWmClient::SearchClosed(void *object)
 {
