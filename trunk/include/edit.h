@@ -252,9 +252,6 @@ public slots:
 	void on_coverSearchGoogle_clicked();
 	void on_coverSearchBeatport_clicked();
 
-	void on_cover_doubleClicked();
-
-
 };
 
 #endif // EDIT_H

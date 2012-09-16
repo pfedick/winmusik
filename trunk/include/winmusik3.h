@@ -49,8 +49,8 @@
 #define __unused__ __attribute__ ((unused))
 #endif
 
-#define WM_VERSION	"3.0.5"
-#define WM_RELEASEDATE	20120114
+#define WM_VERSION	"3.0.6"
+#define WM_RELEASEDATE	20120916
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2012"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
@@ -598,6 +598,7 @@ class CWmClient
 		void PlaylistOverviewClosed(void *object);
 		void DeviceListClosed(void *object);
 		void OpenCoverViewer(const QPixmap &pix);
+		void UpdateCoverViewer(const QPixmap &pix);
 		void CoverViewerClosed();
 
 		int CurlTalk(ppl6::CCurl &Curl, ppl6::CAssocArray &cmd, ppl6::CAssocArray &answer);

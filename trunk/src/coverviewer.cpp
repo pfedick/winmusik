@@ -11,7 +11,7 @@ CoverViewer::CoverViewer(QWidget *parent, CWmClient *wm)
 
 CoverViewer::~CoverViewer()
 {
-	if (wm) wm->CoverViewerClosed(this);
+	if (wm) wm->CoverViewerClosed();
 }
 
 
@@ -21,14 +21,10 @@ void CoverViewer::setCover(const QPixmap &pix)
 }
 
 
-void Edit::closeEvent(QCloseEvent *event)
+void CoverViewer::closeEvent(QCloseEvent *event)
 {
 	if (wm) {
 		wm->SaveGeometry("CoverViewer",this->saveGeometry());
-	}
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
 	}
     QWidget::closeEvent(event);
 }
