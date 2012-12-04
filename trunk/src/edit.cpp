@@ -296,7 +296,7 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 }
 
 void Edit::SetupTrackList()
-/*!\brief Trackliste einrichten
+/*!\brief Trackliste einrichten/
  *
  * Die Trackliste besteht aus einem QTreeWidget. Dieses hat das Problem, wenn es mit dem Designer erstellt wurde,
  * dass die Mouse-Events nicht abgefangen werden können. Daher müssen wir eine eigene Instanz ableiten (siehe
@@ -1801,21 +1801,20 @@ bool Edit::CopyFromID3v2Tag(ppl6::CString &Filename, ppl6::CFile &File)
 				ui.genreId->setText("*");
 			}
 		}
-		Tmp=Tag.GetRemixer();
-		Tmp.Replace("_"," ");
-		Tmp.Trim();
-		// Falls wir keinen Remixer haben, schauen wir im Titel nach
-		if (!Tmp.Len()) {
-			if (Title.PregMatch("/^(.*)\\((.*)\\).*$/")) {
-				Tmp=Title.GetMatch(2);
-				Tmp.Trim();
-				Title=Title.GetMatch(1);
-			} else if (Title.PregMatch("/^(.*)\\[(.*)\\].*$/")) {
-				Tmp=Title.GetMatch(2);
-				Tmp.Trim();
-				Title=Title.GetMatch(1);
-			}
+		if (Title.PregMatch("/^(.*)\\((.*)\\).*$/")) {
+			Tmp=Title.GetMatch(2);
+			Tmp.Trim();
+			Title=Title.GetMatch(1);
+		} else if (Title.PregMatch("/^(.*)\\[(.*)\\].*$/")) {
+			Tmp=Title.GetMatch(2);
+			Tmp.Trim();
+			Title=Title.GetMatch(1);
+		} else {
+			Tmp=Tag.GetRemixer();
+			Tmp.Replace("_"," ");
+			Tmp.Trim();
 		}
+
 		Tmp.PregReplace("/\\brmx\\b/i"," Remix");
 		Tmp.Trim();
 		Version=Tmp;
