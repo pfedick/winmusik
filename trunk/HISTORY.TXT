@@ -6,6 +6,7 @@ Version 3.0.6
     - Filter für Schnellsuche über Zwischenablage
     - Suchbuttons für Amazon, Google und Beatport
     - Bugfix beim Einlesen von MP3-Covern
+    - Fehlende DLL "libstdc++-6.dll" im Windows-Setup ergänzt
     
     TODO:
     - Titel in den Suchliste sollen suchbar sein

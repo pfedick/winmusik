@@ -74,6 +74,7 @@ Source: "C:\Qt\4.7.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\4.7.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\4.7.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 [Icons]
