@@ -45,6 +45,9 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	currentTrackListItem=NULL;
 	searchWindow=NULL;
 	haveCopyItem=false;
+	ClipBoardTimer.setParent(this);
+	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
+
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	QString Style="QTreeView::item {\n"
 	    		"border-right: 1px solid #b9b9b9;\n"
@@ -74,6 +77,7 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 		renderTrack(item);
 		ui.trackList->addTopLevelItem(item);
 	}
+	ClipBoardTimer.start(200);
 }
 
 SearchlistDialog::~SearchlistDialog()
@@ -399,3 +403,55 @@ void SearchlistDialog::on_searchButton_clicked()
 
 }
 
+static int matchWords(const ppl6::CArray &needle, const ppl6::CArray &stack)
+{
+	int matches=0;
+	for (int i=0;i<needle.Num();i++) {
+		ppl6::CString word=needle[i];
+		for (int z=0;z<stack.Num();z++) {
+			ppl6::CString comp=stack[z];
+			if (word==comp) {
+				matches++;
+				break;
+			}
+		}
+	}
+	if (!matches) return 0;
+	return matches*100/needle.Num();
+}
+
+
+void SearchlistDialog::on_ClipBoardTimer_update()
+{
+	QString originalText = QApplication::clipboard()->text();
+	if (originalText.length()>512) return;
+	if (originalText.length()==0) return;
+	ppl6::CString s;
+	s=originalText;
+	if (s==LastClipboardString) return;
+	LastClipboardString=s;
+	if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+	if (s.Instr("\n")>=0) return;
+	s.Replace("\t"," ");
+	s.PregReplace("/\\(.*?\\)/","");
+	s.LCase();
+	ppl6::CArray searchwords;
+	if (!wm->GetWords(s,searchwords)) return;
+
+	ClipBoardTimer.stop();
+	SearchlistTreeItem *item;
+	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
+		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
+		if (item) {
+			s=item->Track.Artist+" "+item->Track.Title;
+			s.LCase();
+			ppl6::CArray words;
+			if (wm->GetWords(s,words)) {
+				if (matchWords(searchwords,words)>70) ui.trackList->setCurrentItem(item);
+			}
+		}
+	}
+
+	ClipBoardTimer.start(200);
+
+}
