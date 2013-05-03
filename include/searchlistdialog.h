@@ -72,6 +72,9 @@ private:
     ppl6::CString	Filename;
     QWidget *searchWindow;
 
+    QTimer		ClipBoardTimer;
+    ppl6::CString	LastClipboardString;
+
 
 
 public slots:
@@ -90,6 +93,8 @@ public slots:
 	void on_deleteTrackButton_clicked();
 	void on_saveExitButton_clicked();
 	void on_saveButton_clicked();
+
+	void on_ClipBoardTimer_update();
 
 };
 
