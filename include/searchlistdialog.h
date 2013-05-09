@@ -33,6 +33,16 @@
 #include "winmusik3.h"
 #include "csearchlist.h"
 
+#define SL_COLUMN_ARTIST		0
+#define SL_COLUMN_VERSION		1
+#define SL_COLUMN_GENRE			2
+#define SL_COLUMN_LENGTH		3
+#define SL_COLUMN_RATING		4
+#define SL_COLUMN_DATEADDED		5
+#define SL_COLUMN_EXISTING		6
+#define SL_COLUMN_DONE			7
+
+
 
 class SearchlistDialog : public QWidget
 {
@@ -86,9 +96,8 @@ public slots:
 	void on_contextInsertTrack_triggered();
 	void on_contextDeleteTrack_triggered();
 	void on_contextFind_triggered();
-
+	void on_newTrackFromClipboardButton_clicked();
 	void on_newTrackButton_clicked();
-	void on_newTrackButton2_clicked();
 	void on_searchButton_clicked();
 	void on_deleteTrackButton_clicked();
 	void on_saveExitButton_clicked();

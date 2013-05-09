@@ -132,15 +132,15 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 {
 	ppl6::CString Tmp;
 	Tmp=item->Track.Artist+" - "+item->Track.Title;
-	item->setText(0,Tmp);
-	item->setText(1,item->Track.Version);
-	item->setText(2,item->Track.Genre);
-	item->setTextAlignment(3,Qt::AlignRight);
+	item->setText(SL_COLUMN_ARTIST,Tmp);
+	item->setText(SL_COLUMN_VERSION,item->Track.Version);
+	item->setText(SL_COLUMN_GENRE,item->Track.Genre);
+	item->setTextAlignment(SL_COLUMN_LENGTH,Qt::AlignRight);
 	if (item->Track.Length>0) {
 		Tmp.Setf("%i:%02i",item->Track.Length/60,item->Track.Length%60);
-		item->setText(3,Tmp);
+		item->setText(SL_COLUMN_LENGTH,Tmp);
 	}
-	item->setText(4,item->Track.DateAdded.get("%Y-%m-%d"));
+	item->setText(SL_COLUMN_DATEADDED,item->Track.DateAdded.get("%Y-%m-%d"));
 
 	// Titel in Datenbank suchen
 	CTitleHashTree Result;
@@ -159,15 +159,40 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 		}
 	}
 	Tmp.Setf("%3i %%",dupePresumption);
-	item->setText(5,Tmp);
+	item->setText(SL_COLUMN_EXISTING,Tmp);
 
 
 	if (item->Track.found==true) {
-		item->setIcon(6,QIcon(":/icons/resources/button_ok.png"));
-		item->setText(6,tr("yes"));
+		item->setIcon(SL_COLUMN_DONE,QIcon(":/icons/resources/button_ok.png"));
+		item->setText(SL_COLUMN_DONE,tr("yes"));
 	} else {
-		item->setIcon(6,QIcon(":/icons/resources/edit-find.png"));
-		item->setText(6,tr("no"));
+		item->setIcon(SL_COLUMN_DONE,QIcon(":/icons/resources/edit-find.png"));
+		item->setText(SL_COLUMN_DONE,tr("no"));
+	}
+
+	// Rating
+	switch (item->Track.Rating) {
+		case 0: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-0.png"));
+			item->setText(SL_COLUMN_RATING,"0");
+			break;
+		case 1: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-1.png"));
+			item->setText(SL_COLUMN_RATING,"1");
+			break;
+		case 2: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-2.png"));
+			item->setText(SL_COLUMN_RATING,"2");
+			break;
+		case 3: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-3.png"));
+			item->setText(SL_COLUMN_RATING,"3");
+			break;
+		case 4: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-4.png"));
+			item->setText(SL_COLUMN_RATING,"4");
+			break;
+		case 5: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-5.png"));
+			item->setText(SL_COLUMN_RATING,"5");
+			break;
+		case 6: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-6.png"));
+			item->setText(SL_COLUMN_RATING,"6");
+			break;
 	}
 
 
@@ -176,15 +201,18 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 void SearchlistDialog::Resize()
 {
 	int s=ui.trackList->width();
-	ui.trackList->setColumnWidth(6,60);
-	ui.trackList->setColumnWidth(5,60);
-	ui.trackList->setColumnWidth(4,80);
-	ui.trackList->setColumnWidth(3,80);
-	ui.trackList->setColumnWidth(2,100);
-	s=s-62-62-82-82-108;
+	ui.trackList->setColumnWidth(SL_COLUMN_DONE,60);
+	ui.trackList->setColumnWidth(SL_COLUMN_EXISTING,60);
+	ui.trackList->setColumnWidth(SL_COLUMN_DATEADDED,90);
+	ui.trackList->setColumnWidth(SL_COLUMN_LENGTH,70);
+	ui.trackList->setColumnWidth(SL_COLUMN_GENRE,100);
+
+	ui.trackList->setColumnWidth(SL_COLUMN_RATING,64);
+
+	s=s-62-62-92-72-108-66;
 	if (s<300) s=300;
-	ui.trackList->setColumnWidth(1,s*30/100);
-	ui.trackList->setColumnWidth(0,s*70/100);
+	ui.trackList->setColumnWidth(SL_COLUMN_VERSION,s*30/100);
+	ui.trackList->setColumnWidth(SL_COLUMN_ARTIST,s*70/100);
 }
 
 void SearchlistDialog::showEvent(QShowEvent * event)
@@ -246,8 +274,10 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
 		Text=it.Artist+" "+it.Title;
+		LastClipboardString=Text;		// Verhindern, dass eine Suche ausgelöst wird
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
+
 	} else if (column==6) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		if (it.found==true) it.found=false;
@@ -303,7 +333,7 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 	save();
 }
 
-void SearchlistDialog::on_newTrackButton_clicked()
+void SearchlistDialog::on_newTrackFromClipboardButton_clicked()
 {
 	SearchlistTrackDialog dialog;
 	dialog.setFromClipboard();
@@ -374,7 +404,7 @@ void SearchlistDialog::on_contextFind_triggered()
 	this->setFocus();
 }
 
-void SearchlistDialog::on_newTrackButton2_clicked()
+void SearchlistDialog::on_newTrackButton_clicked()
 {
 	ppl6::CString Term=ui.searchTerm->text();
 	Term.Trim();

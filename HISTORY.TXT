@@ -7,12 +7,12 @@ Version 3.0.6
     - Suchbuttons für Amazon, Google und Beatport
     - Bugfix beim Einlesen von MP3-Covern
     - Fehlende DLL "libstdc++-6.dll" im Windows-Setup ergänzt
+    - Beim Anlegen eines neuen Titels in einer Suchliste, wird geprüft,
+      ob dieser in der Datenbank vorhanden ist
+    - Inhalt der Zwischenablage wird automatisch in den offenen
+      Suchlisten gesucht und der erste passende Track wird angezeigt
+    - Titel in der Suchliste können bewertet werden (Rating)
     
-    TODO:
-    - Titel in den Suchliste sollen suchbar sein
-    - Titel in der Suchliste sollen automatisch in der Datenbank gesucht werden
-      (analog zum Massenimport)
-
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
 	  dadurch in anderen Dialogen wiederverwendet werden
