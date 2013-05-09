@@ -269,7 +269,7 @@ void SearchlistDialog::on_trackList_customContextMenuRequested ( const QPoint & 
 void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int column )
 {
 	if (!item) return;
-	if (column<6) {
+	if (column<SL_COLUMN_DONE) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
@@ -278,7 +278,7 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
 
-	} else if (column==6) {
+	} else if (column==SL_COLUMN_DONE) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		if (it.found==true) it.found=false;
 		else it.found=true;
@@ -291,9 +291,9 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 void SearchlistDialog::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column)
 {
 	if (!item) return;
-	if (column<5) {
+	if (column<SL_COLUMN_EXISTING) {
 		editTrack((SearchlistTreeItem*)item);
-	} else if (column==5) {
+	} else if (column==SL_COLUMN_EXISTING) {
 		currentTrackListItem=(SearchlistTreeItem*)item;
 		on_contextFind_triggered();
 	}
