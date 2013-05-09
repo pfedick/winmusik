@@ -25,15 +25,16 @@ class SearchlistItem : public GenericListItem
 {
 	private:
 	public:
-		ppl6::CString Artist;
-		ppl6::CString Title;
-		ppl6::CString Version;
-		ppl6::CString Genre;
-		ppl6::CString Comment;
+		ppl6::CString	Artist;
+		ppl6::CString	Title;
+		ppl6::CString	Version;
+		ppl6::CString	Genre;
+		ppl6::CString	Comment;
 		ppl6::CDateTime DateAdded;
-		ppl6::CString ReleaseDate;
-		int Length;
-		bool found;
+		ppl6::CString	ReleaseDate;
+		int				Length;
+		bool			found;
+		ppluint8		Rating;
 
 		SearchlistItem();
 		SearchlistItem(const ppl6::CString &Misc);
