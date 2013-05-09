@@ -80,48 +80,48 @@ echo ""
 mkdir -p $WORK
 
 build_sources() {
-mkdir -p tmp/build
-if [ ! -d tmp/build ] ; then
-	echo "Could not create temporary directory tmp/build"
-	exit 1
-fi
-
-cd tmp/build
-#rm -rf *
-mkdir -p include lib bin src
-cd src
-mkdir -p ppl6 winmusik
-
-echo "Kopiere PPL6 in temporäres Build-Verzeichnis"
-cd $PPLPATH
-if [ $? -ne 0 ] ; then
-	echo "PPL6 not found in $PPLPATH"
-	exit 1
-fi
-
-find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
-
-echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
-cd $WINMUSIKPATH
-if [ $? -ne 0 ] ; then
-	echo "WinMusik not found in $WINMUSIKPATH"
-	exit 1
-fi
-find setup.iss docs forms include resources widgets src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
-cat WinMusik3.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik3.pro
-
-cd $BUILD
-mkdir -p WinMusik-$VERSION-src-complete/build
-cd WinMusik-$VERSION-src-complete/build
-mkdir -p include lib bin src
-cd $BUILD
-
-cp $WINMUSIKPATH/build_binary.sh WinMusik-$VERSION-src-complete
-
-mv src WinMusik-$VERSION-src-complete/build
-tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz --exclude .svn WinMusik-$VERSION-src-complete
-mv WinMusik-$VERSION-src-complete/build/src ./
-rm -rf WinMusik-$VERSION-src-complete
+	mkdir -p tmp/build
+	if [ ! -d tmp/build ] ; then
+		echo "Could not create temporary directory tmp/build"
+		exit 1
+	fi
+	
+	cd tmp/build
+	#rm -rf *
+	mkdir -p include lib bin src
+	cd src
+	mkdir -p ppl6 winmusik
+	
+	echo "Kopiere PPL6 in temporäres Build-Verzeichnis"
+	cd $PPLPATH
+	if [ $? -ne 0 ] ; then
+		echo "PPL6 not found in $PPLPATH"
+		exit 1
+	fi
+	
+	find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
+	
+	echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
+	cd $WINMUSIKPATH
+	if [ $? -ne 0 ] ; then
+		echo "WinMusik not found in $WINMUSIKPATH"
+		exit 1
+	fi
+	find setup.iss docs forms include resources widgets src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
+	cat WinMusik3.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik3.pro
+	
+	cd $BUILD
+	mkdir -p WinMusik-$VERSION-src-complete/build
+	cd WinMusik-$VERSION-src-complete/build
+	mkdir -p include lib bin src
+	cd $BUILD
+	
+	cp $WINMUSIKPATH/build_binary.sh WinMusik-$VERSION-src-complete
+	
+	mv src WinMusik-$VERSION-src-complete/build
+	tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz --exclude .svn WinMusik-$VERSION-src-complete
+	mv WinMusik-$VERSION-src-complete/build/src ./
+	rm -rf WinMusik-$VERSION-src-complete
 	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH/src
 
 }
