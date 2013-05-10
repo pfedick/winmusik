@@ -131,6 +131,8 @@ ppl6::CBinary *DataOimp::Export()
 	if (v2) size+=v2->Len();
 	char *a=(char*)malloc(size);
 	if (!a) {
+		delete v1;
+		delete v2;
 		ppl6::SetError(2);
 		return NULL;
 	}
@@ -169,6 +171,8 @@ ppl6::CBinary *DataOimp::Export()
 	if (!bin) return NULL;
 	bin->Set(a,size);
 	bin->ManageMemory();
+	delete v1;
+	delete v2;
 	return bin;
 }
 
