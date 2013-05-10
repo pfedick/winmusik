@@ -12,6 +12,8 @@ Version 3.0.6
     - Inhalt der Zwischenablage wird automatisch in den offenen
       Suchlisten gesucht und der erste passende Track wird angezeigt
     - Titel in der Suchliste können bewertet werden (Rating)
+    - Bugfix: Memory-Leak in DataOimp::Export gefixt
+    
     
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
