@@ -2982,6 +2982,25 @@ void Edit::on_coverSearchBeatport_clicked()
 	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
+void Edit::on_coverSearchSoundcloud_clicked()
+{
+	FixFocus();
+	if (position<3) return;
+	ppl6::CString Url;
+	// Interpret und Titel
+	ppl6::CString Artist=ui.artist->text();
+	Artist.Trim();
+	ppl6::CString Title=ui.title->text();
+	Title.Trim();
+
+	Url="https://soundcloud.com/search?q="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
+
+	ppl6::CString Cmd;
+	Cmd="firefox \""+Url+"\" &";
+	system(Cmd);
+	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+}
+
 bool Edit::on_f6_MassImport()
 {
 	MassImport Import(this,wm);
