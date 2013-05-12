@@ -1516,10 +1516,14 @@
                  <property name="text">
                   <string>copy</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../resources.qrc">
+                   <normaloff>:/icons/resources/edit-copy.png</normaloff>:/icons/resources/edit-copy.png</iconset>
+                 </property>
                  <property name="iconSize">
                   <size>
-                   <width>8</width>
-                   <height>8</height>
+                   <width>16</width>
+                   <height>16</height>
                   </size>
                  </property>
                  <property name="flat">
@@ -1543,10 +1547,14 @@
                  <property name="text">
                   <string>insert</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../resources.qrc">
+                   <normaloff>:/icons/resources/edit-paste.png</normaloff>:/icons/resources/edit-paste.png</iconset>
+                 </property>
                  <property name="iconSize">
                   <size>
-                   <width>8</width>
-                   <height>8</height>
+                   <width>16</width>
+                   <height>16</height>
                   </size>
                  </property>
                  <property name="flat">
@@ -1570,10 +1578,14 @@
                  <property name="text">
                   <string>delete</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../resources.qrc">
+                   <normaloff>:/icons/resources/edit-delete.png</normaloff>:/icons/resources/edit-delete.png</iconset>
+                 </property>
                  <property name="iconSize">
                   <size>
-                   <width>8</width>
-                   <height>8</height>
+                   <width>16</width>
+                   <height>16</height>
                   </size>
                  </property>
                  <property name="flat">
@@ -1600,10 +1612,14 @@
                  <property name="text">
                   <string>load</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../resources.qrc">
+                   <normaloff>:/icons/resources/fileopen.png</normaloff>:/icons/resources/fileopen.png</iconset>
+                 </property>
                  <property name="iconSize">
                   <size>
-                   <width>8</width>
-                   <height>8</height>
+                   <width>16</width>
+                   <height>16</height>
                   </size>
                  </property>
                  <property name="flat">
@@ -1630,10 +1646,14 @@
                  <property name="text">
                   <string>save</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="../resources.qrc">
+                   <normaloff>:/icons/resources/filesave.png</normaloff>:/icons/resources/filesave.png</iconset>
+                 </property>
                  <property name="iconSize">
                   <size>
-                   <width>8</width>
-                   <height>8</height>
+                   <width>16</width>
+                   <height>16</height>
                   </size>
                  </property>
                  <property name="flat">
@@ -1654,83 +1674,119 @@
                  </property>
                 </spacer>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <item>
-                  <widget class="QToolButton" name="coverSearchAmazon">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset resource="../resources.qrc">
-                     <normaloff>:/icons/resources/logo_amazon16x16.png</normaloff>:/icons/resources/logo_amazon16x16.png</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>16</width>
-                     <height>16</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QToolButton" name="coverSearchGoogle">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset resource="../resources.qrc">
-                     <normaloff>:/icons/resources/logo_google16x16.png</normaloff>:/icons/resources/logo_google16x16.png</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>16</width>
-                     <height>16</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QToolButton" name="coverSearchBeatport">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset resource="../resources.qrc">
-                     <normaloff>:/icons/resources/logo_beatport16x16.png</normaloff>:/icons/resources/logo_beatport16x16.png</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>16</width>
-                     <height>16</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_5">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>5</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
               </layout>
              </item>
             </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_22">
+               <property name="font">
+                <font>
+                 <pointsize>8</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Search Cover:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="coverSearchGoogle">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/icons/resources/logo_google16x16.png</normaloff>:/icons/resources/logo_google16x16.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="coverSearchBeatport">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/icons/resources/logo_beatport16x16.png</normaloff>:/icons/resources/logo_beatport16x16.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="coverSearchSoundcloud">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/icons/resources/soundcloud.png</normaloff>:/icons/resources/soundcloud.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="coverSearchAmazon">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../resources.qrc">
+                 <normaloff>:/icons/resources/logo_amazon16x16.png</normaloff>:/icons/resources/logo_amazon16x16.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>5</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="complete">
