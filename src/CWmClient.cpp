@@ -1120,14 +1120,15 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	ID3TagSaver.SetPaddingSize(conf.ID3v2Padding);
 	ID3TagSaver.SetRetryIntervall(conf.TagSaverRetryIntervall);
 
-	Job.Set("artist",Ti.Artist);
-	Job.Set("title",Ti.Title);
-	Job.Set("album",Ti.Album);
 	ppl6::CString comment,version;
 	version=GetVersionText(Ti.VersionId);
+
+	Job.Set("artist",Ti.Artist);
+	Job.Setf("title","%s (%s)",Ti.Title,(const char*)version);
+	Job.Set("album",Ti.Album);
 	comment=Ti.Remarks;
-	if (comment.Len()>0) comment+=" - ";
-	comment+=version;
+	//if (comment.Len()>0) comment+=" - ";
+	//comment+=version;
 	Job.Set("comment",comment);
 	Job.Set("version",version);
 	Job.Setf("track","%u",Track);
