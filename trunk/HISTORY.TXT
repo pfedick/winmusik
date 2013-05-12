@@ -4,7 +4,7 @@
 
 Version 3.0.6
     - Filter für Schnellsuche über Zwischenablage
-    - Suchbuttons für Amazon, Google und Beatport
+    - Suchbuttons für Amazon, Google, Beatport und Soundcloud
     - Bugfix beim Einlesen von MP3-Covern
     - Fehlende DLL "libstdc++-6.dll" im Windows-Setup ergänzt
     - Beim Anlegen eines neuen Titels in einer Suchliste, wird geprüft,
@@ -16,7 +16,18 @@ Version 3.0.6
     - Änderung ID3-Tags: Die Version wird nun dem Titel in Klammern
       hinzugefügt. Dies scheint gängige Praxis zu sein. Die Version wird
       folglich auch nicht mehr in der Bemerkung gespeichert.
-    
+
+TODO:
+	- Absturz bei Aufruf der Optionen unter Ubuntu 12.04 64-Bit fixen
+	- Absturz bei Programmende unter Windows 7 fixen
+	- Übersetzungen aktualisieren
+	- Doku zu: Arbeiten mit Covern
+	- Doku zu: arbeiten mit Suchlisten
+	- MP3-File-Suche durch Fallback-Mechanismus verbessern:
+	  1. $PATH/$PREFIX/$INDEX/$TRACK
+	  2. $PATH/$INDEX/$TRACK
+	  3. $PATH/$TRACK
+	
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
 	  dadurch in anderen Dialogen wiederverwendet werden
