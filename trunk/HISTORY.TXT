@@ -13,7 +13,9 @@ Version 3.0.6
       Suchlisten gesucht und der erste passende Track wird angezeigt
     - Titel in der Suchliste können bewertet werden (Rating)
     - Bugfix: Memory-Leak in DataOimp::Export gefixt
-    
+    - Änderung ID3-Tags: Die Version wird nun dem Titel in Klammern
+      hinzugefügt. Dies scheint gängige Praxis zu sein. Die Version wird
+      folglich auch nicht mehr in der Bemerkung gespeichert.
     
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
