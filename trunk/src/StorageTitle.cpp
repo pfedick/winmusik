@@ -809,6 +809,7 @@ void CTitleStore::Clear()
 	max=0;
 	highestId=0;
 	highestOimp=0;
+	Artists.Clear(true);
 }
 
 const char *CTitleStore::GetChunkName()
