@@ -50,8 +50,8 @@
 #endif
 
 #define WM_VERSION	"3.0.6"
-#define WM_RELEASEDATE	20120916
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2012"
+#define WM_RELEASEDATE	20130513
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2013"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
