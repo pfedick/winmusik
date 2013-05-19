@@ -1,0 +1,13 @@
+/*!\page WM3TODO WinMusik TODO-Liste
+
+	- Absturz bei Aufruf der Optionen unter Ubuntu 12.04 64-Bit fixen
+	- Absturz bei Programmende unter Windows 7 fixen
+	- Übersetzungen aktualisieren
+	- Doku zu: Arbeiten mit Covern
+	- Doku zu: arbeiten mit Suchlisten
+	- MP3-File-Suche durch Fallback-Mechanismus verbessern:
+	  1. $PATH/$PREFIX/$INDEX/$TRACK
+	  2. $PATH/$INDEX/$TRACK
+	  3. $PATH/$TRACK
+
+*/
