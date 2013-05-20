@@ -143,30 +143,16 @@ RC_FILE = resource.rc
 INCLUDEPATH += include
 INCLUDEPATH += widgets
 unix:INCLUDEPATH += /usr/local/include
-win32:INCLUDEPATH += C:/mingw/msys/1.0/local/include \
-    C:/mingw/msys/1.0/local/ssl/include
-win32:QMAKE_LIBDIR += C:/mingw/msys/1.0/local/lib \
-    C:/mingw/msys/1.0/local/ssl/lib
+win32:INCLUDEPATH += C:/mingw/usr/local/include
+win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 CONFIG(debug, debug|release) { 
     # Debug
     unix:LIBS += `ppl6-config \
         --libs \
         debug`
-    win32:LIBS += -lppl6-debug \
-        -lpcre \
-        -liconv \
-        -lz \
-        -lbz2 \
-        -lcurl \
-        -lidn \
-        -lssl \
-        -lmcrypt \
-        -lcrypto \
-        -lws2_32 \
-        -ldnsapi \
-        -lz \
-        -lbz2 \
-        -lgdi32
+    win32:LIBS += `ppl6-config \
+        --libs \
+        debug`
 }
 else { 
     # Release
