@@ -99,7 +99,8 @@ build_sources() {
 		exit 1
 	fi
 	
-	find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
+	find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests/src tests/Makefile \
+		tests/*.h tests/*.valgrind | cpio -pdmv $BUILD/src/ppl6
 	
 	echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
 	cd $WINMUSIKPATH
