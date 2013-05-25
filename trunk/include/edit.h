@@ -253,6 +253,8 @@ public slots:
 	void on_coverSearchBeatport_clicked();
 	void on_coverSearchSoundcloud_clicked();
 
+	void on_hideEditor_clicked();
+
 };
 
 #endif // EDIT_H
