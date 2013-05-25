@@ -17,7 +17,11 @@ Version 3.0.6
     - Änderung ID3-Tags: Die Version wird nun dem Titel in Klammern
       hinzugefügt. Dies scheint gängige Praxis zu sein. Die Version wird
       folglich auch nicht mehr in der Bemerkung gespeichert.
-
+    - Editor-Trackliste: Doppelklick auf Cover öffnet die Cover-Ansicht.
+      Ist die Cover-Ansicht schon offen, genügt auch ein normaler Click.
+    - Beim Öffnen des Editors ist der Edit-Bereich nun per Default nicht
+      mehr sichtbar. Er kann per Button ein und ausgeschaltet werden.
+    
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
 	  dadurch in anderen Dialogen wiederverwendet werden

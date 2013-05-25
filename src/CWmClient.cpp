@@ -468,6 +468,7 @@ int CWmClient::CloseDatabase()
 	if (CoverViewerWindow) {
 		Mutex.Unlock();
 		delete (CoverViewer*) CoverViewerWindow;
+		CoverViewerWindow=NULL;
 		Mutex.Lock();
 	}
 
@@ -650,6 +651,12 @@ void CWmClient::UpdateCoverViewer(const QPixmap &pix)
 		((CoverViewer*)CoverViewerWindow)->setCover(pix);
 	}
 	Mutex.Unlock();
+}
+
+bool CWmClient::IsCoverViewerVisible() const
+{
+	if (CoverViewerWindow!=NULL) return true;
+	return false;
 }
 
 

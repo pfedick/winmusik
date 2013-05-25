@@ -246,6 +246,8 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	Name.Setf("edit_type_%i",typ);
 	this->restoreGeometry(wm->GetGeometry(Name));
 
+	ui.titleEdit->setVisible(false);
+	ui.titleEdit->setEnabled(false);
 }
 
 Edit::~Edit()
@@ -287,6 +289,8 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 		ui.titleEdit->setEnabled(true);
 		ui.track->setFocus();
 		if (track>0) {
+			ui.titleEdit->setVisible(true);
+			ui.titleEdit->setEnabled(true);
 			ui.track->setText(ppl6::ToString("%i",track));
 			ui.artist->setFocus();
 		}
@@ -2676,6 +2680,17 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 				}
 			}
 			//printf ("Rating: %i, %i\n",ratePos.x(),x);
+		} else if (column==TRACKLIST_COVER_ROW && wm->IsCoverViewerVisible()==true) {
+			ppl6::CID3Tag Tag;
+			ppl6::CString File=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
+			if (Tag.Load(&File)) {
+				ppl6::CBinary cover;
+				if (Tag.GetPicture(3,cover)) {
+					QPixmap trackCover;
+					trackCover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+					wm->UpdateCoverViewer(trackCover);
+				}
+			}
 		}
 
 
@@ -2692,13 +2707,27 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 
 }
 
-void Edit::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, __unused__ int column )
+void Edit::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column )
 {
 	if (DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
-		if (Path.IsEmpty()) return;
-		//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
-		wm->PlayFile(Path);
+		if (column==TRACKLIST_RATING_ROW) return;
+		else if (column==TRACKLIST_COVER_ROW) {
+			ppl6::CID3Tag Tag;
+			ppl6::CString File=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
+			if (Tag.Load(&File)) {
+				ppl6::CBinary cover;
+				if (Tag.GetPicture(3,cover)) {
+					QPixmap trackCover;
+					trackCover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+					wm->OpenCoverViewer(trackCover);
+				}
+			}
+		} else {
+			ppl6::CString Path=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
+			if (Path.IsEmpty()) return;
+			//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
+			wm->PlayFile(Path);
+		}
 	}
 	//FixFocus();
 }
@@ -2770,6 +2799,8 @@ void Edit::on_contextPlayTrack_triggered()
 
 void Edit::on_contextEditTrack_triggered()
 {
+	ui.titleEdit->setVisible(true);
+	ui.titleEdit->setEnabled(true);
 	ppl6::CString Tmp;
 	Tmp.Setf("%i",currentTrackListItem->Track);
 	TrackNum=0;
@@ -3015,4 +3046,15 @@ bool Edit::on_f6_MassImport()
 
 
 	return true;
+}
+
+void Edit::on_hideEditor_clicked()
+{
+	if (ui.titleEdit->isVisible()) {
+		ui.titleEdit->setVisible(false);
+		ui.titleEdit->setEnabled(false);
+	} else {
+		ui.titleEdit->setVisible(true);
+		ui.titleEdit->setEnabled(true);
+	}
 }

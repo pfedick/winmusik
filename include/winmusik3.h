@@ -600,6 +600,7 @@ class CWmClient
 		void OpenCoverViewer(const QPixmap &pix);
 		void UpdateCoverViewer(const QPixmap &pix);
 		void CoverViewerClosed();
+		bool IsCoverViewerVisible() const;
 
 		int CurlTalk(ppl6::CCurl &Curl, ppl6::CAssocArray &cmd, ppl6::CAssocArray &answer);
 		ppl6::CString GetOperatingSystem();
