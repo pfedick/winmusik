@@ -246,8 +246,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	Name.Setf("edit_type_%i",typ);
 	this->restoreGeometry(wm->GetGeometry(Name));
 
-	ui.titleEdit->setVisible(false);
-	ui.titleEdit->setEnabled(false);
+	hideEditor();
 }
 
 Edit::~Edit()
@@ -289,8 +288,7 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 		ui.titleEdit->setEnabled(true);
 		ui.track->setFocus();
 		if (track>0) {
-			ui.titleEdit->setVisible(true);
-			ui.titleEdit->setEnabled(true);
+			showEditor();
 			ui.track->setText(ppl6::ToString("%i",track));
 			ui.artist->setFocus();
 		}
@@ -2799,8 +2797,7 @@ void Edit::on_contextPlayTrack_triggered()
 
 void Edit::on_contextEditTrack_triggered()
 {
-	ui.titleEdit->setVisible(true);
-	ui.titleEdit->setEnabled(true);
+	showEditor();
 	ppl6::CString Tmp;
 	Tmp.Setf("%i",currentTrackListItem->Track);
 	TrackNum=0;
@@ -3051,10 +3048,23 @@ bool Edit::on_f6_MassImport()
 void Edit::on_hideEditor_clicked()
 {
 	if (ui.titleEdit->isVisible()) {
-		ui.titleEdit->setVisible(false);
-		ui.titleEdit->setEnabled(false);
+		hideEditor();
 	} else {
-		ui.titleEdit->setVisible(true);
-		ui.titleEdit->setEnabled(true);
+		showEditor();
 	}
+}
+
+void Edit::hideEditor()
+{
+	ui.titleEdit->setVisible(false);
+	ui.titleEdit->setEnabled(false);
+	ui.hideEditor->setIcon(QIcon(":/icons/resources/1uparrow.png"));
+}
+
+void Edit::showEditor()
+{
+	ui.titleEdit->setVisible(true);
+	ui.titleEdit->setEnabled(true);
+	ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
+
 }
