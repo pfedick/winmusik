@@ -3066,5 +3066,5 @@ void Edit::showEditor()
 	ui.titleEdit->setVisible(true);
 	ui.titleEdit->setEnabled(true);
 	ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
-
+	ui.track->setFocus();
 }
