@@ -109,6 +109,8 @@ public:
 
 
 private:
+    AsynchronousTrackUpdate	asyncTrackUpdate;
+
 	CWmClient *wm;
 	ppluint8 DeviceType;
 	int position, oldposition;;
@@ -149,7 +151,7 @@ private:
 
     QWidget *searchWindow;
 
-    AsynchronousTrackUpdate	asyncTrackUpdate;
+
 
     void SetupTrackList();
 
