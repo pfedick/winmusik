@@ -104,6 +104,8 @@ public:
     void ReloadTranslation();
     void OpenTrack(ppluint32 deviceId, ppluint8 page=0, ppluint16 track=0);
     void ReloadTracks();
+    void hideEditor();
+    void showEditor();
 
 
 private:
