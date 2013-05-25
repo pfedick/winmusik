@@ -25,6 +25,8 @@ void CoverViewer::closeEvent(QCloseEvent *event)
 {
 	if (wm) {
 		wm->SaveGeometry("CoverViewer",this->saveGeometry());
+		wm->CoverViewerClosed();
+		wm=NULL;
 	}
     QWidget::closeEvent(event);
 }

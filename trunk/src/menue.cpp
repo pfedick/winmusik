@@ -36,6 +36,7 @@
 Menue::Menue(QWidget *parent, CWmClient *client)
     : QWidget(parent)
 {
+	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.setupUi(this);
 	wm=client;
 	QString Title=tr("WinMusik");
@@ -57,7 +58,6 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 Menue::~Menue()
 {
 	if (wm) {
-		wm->SaveGeometry("menue",this->saveGeometry());
 		wm->MainMenueClosed();
 	}
 }
@@ -85,6 +85,7 @@ void Menue::closeEvent(QCloseEvent *event)
 {
 	if (wm) {
 		wm->SaveGeometry("menue",this->saveGeometry());
+		wm->MainMenueClosed();
 	}
     QWidget::closeEvent(event);
 }
