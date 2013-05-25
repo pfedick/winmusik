@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/devices48/resources/tr48x48-0013.png</normaloff>:/devices48/resources/tr48x48-0013.png</iconset>
+    <normaloff>:/logo/resources/icon64.png</normaloff>:/logo/resources/icon64.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

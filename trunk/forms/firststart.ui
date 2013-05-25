@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>WinMusik 3 - First Start</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/logo/resources/icon64.png</normaloff>:/logo/resources/icon64.png</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -400,7 +404,7 @@ If this should be a new installation, simply click on &quot;next&quot;.</string>
        <x>10</x>
        <y>140</y>
        <width>381</width>
-       <height>66</height>
+       <height>69</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout">
@@ -1068,7 +1072,7 @@ If this should be a new installation, simply click on &quot;next&quot;.</string>
        <x>10</x>
        <y>230</y>
        <width>381</width>
-       <height>52</height>
+       <height>54</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
