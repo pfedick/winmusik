@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>CoverViewer</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/logo/resources/icon64.png</normaloff>:/logo/resources/icon64.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="margin">
     <number>0</number>
@@ -54,6 +58,8 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

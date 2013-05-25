@@ -4,6 +4,15 @@
     <file>winmusik_de.qm</file>
     <file>winmusik_en.qm</file>
   </qresource>
+  <qresource prefix="logo">
+    <file>resources/icon16.png</file>
+    <file>resources/icon24.png</file>
+    <file>resources/icon32.png</file>
+    <file>resources/icon48.png</file>
+    <file>resources/icon64.png</file>
+    <file>resources/icon128.png</file>
+    <file>resources/icon256.png</file>
+  </qresource>
   <qresource prefix="icons32">
     <file>resources/media-repeat.png</file>
     <file>resources/media-eject.png</file>
