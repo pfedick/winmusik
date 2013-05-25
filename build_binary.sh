@@ -288,7 +288,7 @@ build_ubuntu() {
 	fi
 	mkdir -p DEBIAN usr/bin usr/share/applications usr/share/pixmaps
 	cp $BUILD/bin/WinMusik3 usr/bin
-	cp $BUILD/src/winmusik/resources/icon48.png usr/share/pixmaps/WinMusik3.png
+	cp $BUILD/src/winmusik/resources/icon64.png usr/share/pixmaps/WinMusik3.png
 
 	cd $WORK
 	DEPENDS=""
@@ -372,7 +372,7 @@ build_specfile() {
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
 	echo "cp build/bin/WinMusik3 \$RPM_BUILD_ROOT/usr/bin"
-	echo "cp build/src/winmusik/resources/icon48.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik3.png"
+	echo "cp build/src/winmusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik3.png"
 	echo ""
 	echo "# Desktop menu entry"
 	echo "cat > %{name}.desktop << EOF"
