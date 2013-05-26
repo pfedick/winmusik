@@ -1,18 +1,20 @@
-Patrick F.-Productions - WinMusik 3
+WinMusik
 
-WinMusik is a program for managing your music titles on
-audio CDs, DVDs, audio tapes, vinyl records and other
-audio devices.
+WinMusik is a program for archiving music titles from audio CDs, DVDs,
+audio tapes, vinyl records, harddisks and other audio devices. It has a
+smart editor and an easy to use search interface.
 
   - smart graphical user interface for editing your music titles
-  - import of MP3-files
+  - import of MP3 files on harddisk
   - ID3v2-Tag-support
-  - extensive search functions for finding your songs
-  - open source under the GNU GENERAL PUBLIC LICENSE
-  - runs on Windows 2000/XP/Vista, Linux, FreeBSD and other
+  - supports cover images in MP3 files
+  - extensive search functions
+  - print cd cover
+  - search lists
+  - open source under the GNU GENERAL PUBLIC LICENSE v3
+  - runs on Windows XP/Vista/7, Linux, FreeBSD and other
     unixes
 
+WWW: http://www.winmusik.de/
 Author: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
-Copyright (c) 2013 by Patrick Fedick
-
  
