@@ -3056,6 +3056,7 @@ void Edit::on_hideEditor_clicked()
 
 void Edit::hideEditor()
 {
+	ui.track->setFocus();
 	ui.titleEdit->setVisible(false);
 	ui.titleEdit->setEnabled(false);
 	ui.hideEditor->setIcon(QIcon(":/icons/resources/1uparrow.png"));
