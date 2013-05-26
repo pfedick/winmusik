@@ -45,7 +45,7 @@ WORK=$MYPWD/tmp
 DISTFILES=$MYPWD/distfiles
 
 MAKE="make"
-QTVERSION=4.7.4
+QTVERSION=4.8.4
 QMAKE="qmake-qt4"
 QTDIR=""
 QMAKESPEC=""
@@ -149,7 +149,7 @@ gather_sources()
 		create_dir "$TARGET/ppl6"
 		cd $PPL6SOURCE
 		find *.m4 autoconf config configure docs Doxyfile include Makefile.in ppl6-config.in *.TXT \
-		   resource src tests/Makefile* tests/valgrind* tests/src tests/*.h tools | cpio -pdm "$TARGET/ppl6" > /dev/null 2>&1
+		   resource src tests/Makefile* tests/valgrind* tests/src tests/*.h tools | grep -v ".svn" | cpio -pdm "$TARGET/ppl6" > /dev/null 2>&1
 		echo "INFO: done"
 	else
 		echo "INFO: checkout PPL6-sources from svn repository..."
@@ -167,7 +167,7 @@ gather_sources()
 		echo "INFO: Ziel: $TARGET/WinMusik"
 		create_dir "$TARGET/WinMusik"
 		cd $WINMUSIKSOURCE
-		find *.TXT WinMusik.pro *.qm *.ts setup.iss Doxyfile resource.rc resources resources.qrc src widgets include forms docs| cpio -pdm "$TARGET/WinMusik" > /dev/null 2>&1
+		find *.TXT WinMusik.pro *.qm *.ts setup.iss Doxyfile resource.rc resources resources.qrc src widgets include forms docs| grep -v ".svn" | cpio -pdm "$TARGET/WinMusik" > /dev/null 2>&1
         echo "INFO: done"
     else
 		echo "INFO: checkout WinMusik-sources from svn repository..."
@@ -181,44 +181,132 @@ gather_sources()
 	cd $CUR
 }
 
-identify_system
-echo "Baue $PROGNAME $VERSION für: $DISTRIB_ID, $DISTRIB_RELEASE on $PLATFORM..."
+build_FreeBSD_package ()
+{
+	create_dir $WORK/FreeBSD
+	cd $CUR/FreeBSD
+	find ./ | grep -v ".svn" | cpio -pdmv $WORK/FreeBSD > /dev/null 2>&1
+	cd $DISTFILES
+	sha256 $PROGNAME-$VERSION-src.tar.bz2 > $WORK/FreeBSD/winmusik/distinfo
+	echo "SIZE ($PROGNAME-$VERSION-src.tar.bz2) = `stat -f \"%z\" $PROGNAME-$VERSION-src.tar.bz2`" >> $WORK/FreeBSD/winmusik/distinfo
+	cd $WORK/FreeBSD/winmusik; make clean;
+	cd ..
+	shar `find winmusik | grep -v ".svn" `| sed "s/^XPORTVERSION=.*$/XPORTVERSION=	$VERSION/" > $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar
+	if [ -d "$TARGETPATH" ] ; then
+		cp $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar $TARGETPATH
+	fi
+	cd $WORK
+}
 
-create_dir $WORK
+build_freebsd ()
+{
+	CONFIGURE="--with-pcre=/usr/local --with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png --with-libtiff=/usr/local"
+	cd $WORK 
+    build_ppl7 $WORK
+	cd $WORK
+	echo -n "Current Dir="
+	pwd
+	sleep 2
+	build_osm $WORK
+	cd $WORK
+	echo "INFO: Build FreeBSD-Packet for $DISTRIB_ID $DISTRIB_RELEASE"
+	DISTNAME="$PROGNAME-$VERSION-$DISTRIB_ID-$DISTRIB_RELEASE-$PLATFORM"
+	create_dir package
+	create_dir package/bin
+	create_dir package/share/applications
+	create_dir package/share/pixmaps
+	
+		(
+                echo "[Desktop Entry]"
+                echo "Encoding=UTF-8"
+                echo "Name=$PROGNAME"
+                echo "Comment=$DESCRIPTION"
+                echo "Exec=/usr/local/bin/$PROGNAME"
+                echo "Terminal=false"
+                echo "Type=Application"
+                echo "Categories=GTK;GNOME;AudioVideo;"
+                echo "Icon=/usr/local/share/pixmaps/$PROGNAME.png"
+        ) > package/share/applications/$PROGNAME.desktop
+	cp osm/resources/icon256x256.png package/share/pixmaps/$PROGNAME.png
+	cp bin/$PROGNAME package/bin
+	(
+		echo "@cwd /usr/local"
+		echo "@srcdir $WORK/package"
+		freebsd_dep pcre
+		freebsd_dep png
+		freebsd_dep tiff
+		freebsd_dep jpeg
+		freebsd_dep freetype2
+		freebsd_dep libiconv
+		freebsd_dep qt4-gui
+		freebsd_dep qt4-corelib
+		freebsd_dep qt4-opengl
+		echo "share/applications/$PROGNAME.desktop"
+		echo "share/pixmaps/$PROGNAME.png"
+		echo "bin/$PROGNAME"
+	) > pkg_list
+	
+	pkg_create -v -d ../README.TXT -p package -f pkg_list -c "-$DESCRIPTION" $PROGNAME-$VERSION
+	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz	
+}
+
+
+
+identify_system
 
 ##############################################################################################
 # Sourcen zusammenfassen, sofern wir im Sourceverzeichnis von WinMusik sind
 if [ -f WinMusik.pro ] ; then
-	echo "Erstelle Source-Distribution für WinMusik..."
+	create_dir $WORK
 	cd $WORK
-	rm -rf $PROGNAME-$VERSION
-	create_dir "$WORK/$PROGNAME-$VERSION"
-	gather_sources "$WORK/$PROGNAME-$VERSION"
-	cd $WORK
-	cp ../build_package.sh "$PROGNAME-$VERSION"
-	#cp ../*.TXT "$PROGNAME-$VERSION"
-	tar -cjf $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 --exclude .svn "$PROGNAME-$VERSION"
-	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 $TARGETPATH
-	fi
-	if [ "$DISTRIB_ID" = "FreeBSD" ] ; then
-		cd $DISTFILES
-		sha256 $PROGNAME-$VERSION-src.tar.bz2 > $CUR/FreeBSD/$PROGNAME/distinfo
-		echo "SIZE ($PROGNAME-$VERSION-src.tar.bz2) = `stat -f \"%z\" $PROGNAME-$VERSION-src.tar.bz2`" >> $CUR/FreeBSD/$PROGNAME/distinfo
-		cd $CUR/FreeBSD/$PROGNAME; make clean;
-		cd ..
-		shar `find $PROGNAME | grep -v ".svn" `| sed "s/^XPORTVERSION=.*$/XPORTVERSION=	$VERSION/" > $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar
-		if [ -d "$TARGETPATH" ] ; then
-			cp $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar $TARGETPATH
-		fi
+	if [ "$1" = "source" ] ; then
+		echo "Erstelle Source-Distribution für WinMusik..."
+		rm -rf $PROGNAME-$VERSION
+		create_dir "$WORK/$PROGNAME-$VERSION"
+		gather_sources "$WORK/$PROGNAME-$VERSION"
 		cd $WORK
+		cp ../build_package.sh "$PROGNAME-$VERSION"
+		cp ../*.TXT "$PROGNAME-$VERSION"
+		tar -cjf $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 --exclude .svn "$PROGNAME-$VERSION"
+		if [ -d "$TARGETPATH" ] ; then
+			cp $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 $TARGETPATH
+		fi
+		if [ "$DISTRIB_ID" = "FreeBSD" ] ; then
+			build_FreeBSD_package
+		fi
+		#build_srpm
+		exit 0
 	fi
-	#build_srpm
-	exit 0
+	gather_sources "$WORK"
+else
+	WORK=$MYPWD
 fi
 
+echo "Baue $PROGNAME $VERSION für: $DISTRIB_ID, $DISTRIB_RELEASE on $PLATFORM..."
+echo ""
+cd $WORK
 
-exit
+if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
+	build_debian
+elif [ "$DISTRIB_ID" = "Debian" ] ; then
+	build_debian
+elif [ "$DISTRIB_ID" = "FreeBSD" ] ; then
+	build_freebsd
+elif [ "$DISTRIB_ID" = "CentOS" ] ; then
+	build_redhat $1
+elif [ "$DISTRIB_ID" = "Fedora" ] ; then
+	build_redhat $1
+elif [ "$DISTRIB_ID" = "RedHat" ] ; then
+	build_redhat $1
+elif [ "$DISTRIB_ID" = "openSUSE" ] ; then
+	build_suse $1
+else
+	echo "ERROR: no automated build for this system"
+	echo "INFO: DISTRIB_ID=$DISTRIB_ID"
+	exit 1
+fi
+
+exit 0
 ##############################################################################################
 ##############################################################################################
 ##############################################################################################
@@ -243,52 +331,7 @@ echo "Baue WinMusik für: $DISTRIB_ID, $DISTRIB_RELEASE..."
 echo ""
 mkdir -p $WORK
 
-build_sources() {
-	mkdir -p tmp/build
-	if [ ! -d tmp/build ] ; then
-		echo "Could not create temporary directory tmp/build"
-		exit 1
-	fi
-	
-	cd tmp/build
-	#rm -rf *
-	mkdir -p include lib bin src
-	cd src
-	mkdir -p ppl6 winmusik
-	
-	echo "Kopiere PPL6 in temporäres Build-Verzeichnis"
-	cd $PPLPATH
-	if [ $? -ne 0 ] ; then
-		echo "PPL6 not found in $PPLPATH"
-		exit 1
-	fi
-	
-	find *.m4 conf.sh configure Doxyfile *.TXT *.in *.ico VERSION autoconf config docs include resource src tools tests | cpio -pdmv $BUILD/src/ppl6
-	
-	echo "Kopiere WinMusik in temporäres Build-Verzeichnis"
-	cd $WINMUSIKPATH
-	if [ $? -ne 0 ] ; then
-		echo "WinMusik not found in $WINMUSIKPATH"
-		exit 1
-	fi
-	find setup.iss docs forms include resources widgets src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
-	cat WinMusik.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik.pro
-	
-	cd $BUILD
-	mkdir -p WinMusik-$VERSION-src-complete/build
-	cd WinMusik-$VERSION-src-complete/build
-	mkdir -p include lib bin src
-	cd $BUILD
-	
-	cp $WINMUSIKPATH/build_binary.sh WinMusik-$VERSION-src-complete
-	
-	mv src WinMusik-$VERSION-src-complete/build
-	tar -czf $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz --exclude .svn WinMusik-$VERSION-src-complete
-	mv WinMusik-$VERSION-src-complete/build/src ./
-	rm -rf WinMusik-$VERSION-src-complete
-	cp $MYPWD/distfiles/WinMusik-$VERSION-src-complete.tar.gz $TARGETPATH/src
 
-}
 
 
 build_binary() {
