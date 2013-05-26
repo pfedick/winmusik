@@ -3,6 +3,7 @@
 \section WM3History_ WinMusik 3 Historie
 
 Version 3.0.6
+	- Umbenennung des Binaries von WinMusik3 in WinMusik
     - Filter für Schnellsuche über Zwischenablage
     - Suchbuttons für Amazon, Google, Beatport und Soundcloud
     - Bugfix beim Einlesen von MP3-Covern
