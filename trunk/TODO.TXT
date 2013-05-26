@@ -1,6 +1,5 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
-	- Doku zu: Arbeiten mit Covern
 	- MP3-File-Suche durch Fallback-Mechanismus verbessern:
 	  1. $PATH/$PREFIX/$INDEX/$TRACK
 	  2. $PATH/$INDEX/$TRACK
