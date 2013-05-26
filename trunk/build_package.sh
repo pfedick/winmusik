@@ -239,7 +239,7 @@ build_winmusik ()
                 exit 1
         fi
     echo "INFO: calling $MAKE in `pwd`"
-    $MAKE
+    $MAKE release
     if [ $? -ne 0 ] ; then
                 echo "ERROR: make for $PROGNAME failed"
                 exit 1
