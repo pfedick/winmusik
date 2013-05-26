@@ -29,7 +29,7 @@ WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
 VERSION="3.0.6"
 NAME="WinMusik"
-PACKAGENAME="WinMusik3"
+PACKAGENAME="WinMusik"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Music database to maintain songs on various devices"
@@ -109,7 +109,7 @@ build_sources() {
 		exit 1
 	fi
 	find setup.iss docs forms include resources widgets src *.TXT *.qm *.ts *.rc *.qrc | cpio -pdmv $BUILD/src/winmusik
-	cat WinMusik3.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik3.pro
+	cat WinMusik.pro | sed -e "s/--libs/--archive/" > $BUILD/src/winmusik/WinMusik.pro
 	
 	cd $BUILD
 	mkdir -p WinMusik-$VERSION-src-complete/build
@@ -220,12 +220,12 @@ cd $BUILD/src/winmusik
 
 case "$DISTRIB_ID:$DISTRIB_RELEASE" in
 	MINGW32*)
-		echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik3.pro
-		echo "QMAKE_LIBDIR += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik3.pro
+		echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik.pro
+		echo "QMAKE_LIBDIR += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik.pro
 		;;
 	*)
-		echo "INCLUDEPATH += $BUILD/include" >> WinMusik3.pro
-		echo "QMAKE_LIBDIR += $BUILD/lib" >> WinMusik3.pro
+		echo "INCLUDEPATH += $BUILD/include" >> WinMusik.pro
+		echo "QMAKE_LIBDIR += $BUILD/lib" >> WinMusik.pro
 		;;
 esac
 
@@ -240,8 +240,8 @@ make -j2 release
 if [ $? -ne 0 ] ; then
 	exit 1
 fi
-cp release/WinMusik3 $BUILD/bin
-strip $BUILD/bin/WinMusik3
+cp release/WinMusik $BUILD/bin
+strip $BUILD/bin/WinMusik
 
 
 }
@@ -287,8 +287,8 @@ build_ubuntu() {
 		exit
 	fi
 	mkdir -p DEBIAN usr/bin usr/share/applications usr/share/pixmaps
-	cp $BUILD/bin/WinMusik3 usr/bin
-	cp $BUILD/src/winmusik/resources/icon64.png usr/share/pixmaps/WinMusik3.png
+	cp $BUILD/bin/WinMusik usr/bin
+	cp $BUILD/src/winmusik/resources/icon64.png usr/share/pixmaps/WinMusik.png
 
 	cd $WORK
 	DEPENDS=""
@@ -298,11 +298,11 @@ build_ubuntu() {
 		echo "Encoding=UTF-8"
 		echo "Name=$PACKAGENAME"
 		echo "Comment=$DESCRIPTION"
-		echo "Exec=WinMusik3"
+		echo "Exec=WinMusik"
 		echo "Terminal=false"
 		echo "Type=Application"
 		echo "Categories=GTK;GNOME;AudioVideo;"
-		echo "Icon=/usr/share/pixmaps/WinMusik3.png"
+		echo "Icon=/usr/share/pixmaps/WinMusik.png"
 	) > debian/usr/share/applications/$NAME.desktop
 	(
 		echo "WinMusik ($VERSION) unstable; urgency=low"
@@ -317,7 +317,7 @@ build_ubuntu() {
      	echo "End:"
 	) > debian/changelog
 	
-	dpkg-shlibdeps debian/usr/bin/WinMusik3
+	dpkg-shlibdeps debian/usr/bin/WinMusik
 	
 	DEPENDS=`grep "shlibs:Depends" debian/substvars | sed -e "s/shlibs:Depends=//"`
 	ubuntu_write_control
@@ -371,16 +371,16 @@ build_specfile() {
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/bin"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
-	echo "cp build/bin/WinMusik3 \$RPM_BUILD_ROOT/usr/bin"
-	echo "cp build/src/winmusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik3.png"
+	echo "cp build/bin/WinMusik \$RPM_BUILD_ROOT/usr/bin"
+	echo "cp build/src/winmusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik.png"
 	echo ""
 	echo "# Desktop menu entry"
 	echo "cat > %{name}.desktop << EOF"
 	echo "[Desktop Entry]"
 	echo "Name=$NAME"
 	echo "Comment=$DESCRIPTION"
-	echo "Exec=WinMusik3"
-	echo "Icon=WinMusik3.png"
+	echo "Exec=WinMusik"
+	echo "Icon=WinMusik.png"
 	echo "Terminal=0"
 	echo "Type=Application"
 	echo "Categories=Qt;AudioVideo;Database"
@@ -480,8 +480,8 @@ mkdir -p $MYPWD/distfiles
 
 ##############################################################################################
 # Sourcen zusammenfassen, sofern wir im Sourceverzeichnis der GUI sind
-if [ -f WinMusik3.pro ] ; then
-	echo "Erstelle Source-Distribution für WinMusik3..."
+if [ -f WinMusik.pro ] ; then
+	echo "Erstelle Source-Distribution für WinMusik..."
 	build_sources
 	echo "Fertig"
 	echo "========================================================================================"
