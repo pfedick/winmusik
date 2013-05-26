@@ -194,14 +194,15 @@ build_FreeBSD_package ()
 	cd $WORK
 }
 
+CONFIGURE=""
+
 ppl6_linux_configure()
 {
     CONFIGURE="--with-pcre=/usr --with-libiconv-prefix --with-nasm --with-libmcrypt-prefix"
-    CONFIGURE="$CONFIGURE --with-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
+    CONFIGURE="$CONFIGURE --without-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
     CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
     CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libldns --without-freetds"
     CONFIGURE="$CONFIGURE --without-ogg"
-    return $CONFIGURE
 }
 
 build_ppl6 ()
@@ -318,7 +319,6 @@ build_debian ()
 	    check_debian_package "libssl-dev"
 	    check_debian_package "libcurl4-openssl-dev"
 	    check_debian_package "libmcrypt-dev"
-	    check_debian_package "libmhash-dev"
 	    check_debian_package "libpng12-dev"
 	    check_debian_package "libbz2-dev"
 	    check_debian_package "zlib1g-dev"
@@ -340,7 +340,8 @@ build_debian ()
     fi
 	echo "INFO: all required packages are installed"
 
-    CONFIGURE=ppl6_linux_configure
+	# CONFIGURE-Variable füllen
+    ppl6_linux_configure
     
     build_ppl6 $WORK
     build_winmusik $WORK
@@ -409,7 +410,7 @@ build_mingw32()
     CONFIGURE="$CONFIGURE --with-nasm --with-libiconv-prefix=/usr/local --without-postgresql "
     CONFIGURE="$CONFIGURE --with-png=/usr/local --with-jpeg=/usr/local --without-lame --without-ft-prefix"
     CONFIGURE="$CONFIGURE --without-libmad --without-lame --without-x --without-mysql --without-freetds"
-    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --with-libmhash"
+    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libmhash"
     CONFIGURE="$CONFIGURE --with-libmcrypt-prefix --without-libldns --without-ogg"
     
     echo "INCLUDEPATH += $WORK/include" >> $WORK/WinMusik/WinMusik.pro
@@ -482,13 +483,10 @@ build_freebsd ()
 		echo "@srcdir $WORK/package"
 		freebsd_dep pcre
 		freebsd_dep png
-		freebsd_dep tiff
 		freebsd_dep jpeg
-		freebsd_dep freetype2
 		freebsd_dep libiconv
 		freebsd_dep qt4-gui
 		freebsd_dep qt4-corelib
-		freebsd_dep qt4-opengl
 		echo "share/applications/$PROGNAME.desktop"
 		echo "share/pixmaps/$PROGNAME.png"
 		echo "bin/$PROGNAME"
@@ -502,7 +500,9 @@ write_source_specfile() {
     FILE=$1
     BUILDREQUIRES=$2
     COMMENT=`cat $WORK/WinMusik/README_en.TXT| grep -v "^===.*" `
-    CONFIGURE=ppl6_linux_configure
+    # CONFIGURE-Variable füllen
+    ppl6_linux_configure
+    
     (
     echo "Name:     $PROGNAME"
     echo "Version:  $VERSION"
@@ -527,11 +527,13 @@ write_source_specfile() {
     echo "%build"
     echo "WORK=\`pwd\`"
     echo "mkdir -p bin lib include"
+    echo "PATH=\"\$WORK/bin:\$PATH\""
     echo "cd ppl6"
     echo "./configure --prefix=\$WORK $CONFIGURE"
     echo "make -j2 install"
     echo "cd ../WinMusik"
-    echo "PATH=\"\$WORK/bin:\$PATH\""
+	echo "echo \"INCLUDEPATH += \$WORK/include\" >> WinMusik.pro"
+    echo "echo \"QMAKE_LIBDIR += \$WORK/lib\" >> WinMusik.pro"
     echo "$QMAKE"
     echo "make -j2 release"
     echo "cp release/WinMusik \$WORK/bin/$PROGNAME"
@@ -539,13 +541,15 @@ write_source_specfile() {
     echo "%install"
     echo "rm -rf \$RPM_BUILD_ROOT"
     echo "mkdir -p \$RPM_BUILD_ROOT/usr/bin"
-    echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
+    echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/pixmaps"
+    echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/doc/$PROGNAME"
     echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
     echo "cp bin/$PROGNAME \$RPM_BUILD_ROOT/usr/bin"
     echo "cp WinMusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/pixmaps/$PROGNAME.png"
+    echo "cp WinMusik/docs/Userguide_de.pdf \$RPM_BUILD_ROOT/usr/share/doc/$PROGNAME"
     echo ""
     echo "# Desktop menu entry"
-    echo "cat > %{name}.desktop << EOF"
+    echo "cat > \$RPM_BUILD_ROOT/usr/share/applications/$PROGNAME.desktop << EOF"
     echo "[Desktop Entry]"
     echo "Name=$PROGNAME"
     echo "Comment=$DESCRIPTION"
@@ -556,12 +560,6 @@ write_source_specfile() {
     echo "Categories=Qt;AudioVideo;"
     echo "EOF"
     echo ""
-    echo "desktop-file-install --vendor \"Patrick F.-Productions\" \\"
-    echo "  --dir \$RPM_BUILD_ROOT/usr/share/applications \\"
-    echo "  --add-category Qt \\"
-    echo "  --add-category AudioVideo \\"
-    echo "%{name}.desktop"
-    echo ""
     echo "%clean"
     echo "rm -rf \$RPM_BUILD_ROOT"
     echo ""
@@ -569,7 +567,8 @@ write_source_specfile() {
     echo "%defattr(-,root,root,-)"
     echo "/usr/bin/$PROGNAME"
     echo "/usr/share/pixmaps/$PROGNAME.png"
-    echo "/usr/share/applications/%{name}.desktop"
+    echo "/usr/share/applications/$PROGNAME.desktop"
+    echo "/usr/share/doc/$PROGNAME/*"
     echo "%doc"
     echo ""
     echo "%changelog"
@@ -607,10 +606,13 @@ if [ -f WinMusik.pro ] ; then
 			build_FreeBSD_package
 		fi
 		# Specfiles erstellen
-        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, zlib-devel, libjpeg-devel, libpng-devel, nasm, freetype-devel, libtiff-devel, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
+        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg-devel, libpng-devel, nasm, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-el6.spec" "$BUILDREQUIRES"
-        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc_s1, libbz2-devel, zlib-devel, libjpeg8-devel, libpng15-devel, nasm, freetype-devel, libtiff-devel, libstdc++-devel, libqt4-devel, glibc-devel, pcre-devel"
+        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc_s1, libbz2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg8-devel, libpng15-devel, nasm, libstdc++-devel, libqt4-devel, glibc-devel, pcre-devel"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-suse.spec" "$BUILDREQUIRES"
+        if [ -d "$TARGETPATH" ] ; then
+        	cp $DISTFILES/$PROGNAME-$VERSION-el6.spec $DISTFILES/$PROGNAME-$VERSION-suse.spec $TARGETPATH
+        fi
 		
 		# RedHat Source-RPM erstellen
 		#build_srpm
@@ -674,133 +676,6 @@ exit 0
 ##############################################################################################
 
 
-echo "Baue WinMusik für: $DISTRIB_ID, $DISTRIB_RELEASE..."
-echo ""
-mkdir -p $WORK
-
-
-
-
-build_binary() {
-
-case "$DISTRIB_ID:$DISTRIB_RELEASE" in
-	MINGW32*:1.0.11)
-		MAKE=gmake
-		QMAKE=qmake
-		;;
-	MINGW32*:1.0.17)
-		MAKE=make
-		QMAKE=qmake
-		;;
-esac
-
-cd $BUILD/src/ppl6
-
-if [ ! -f Makefile ]
-then
-	echo "Konfiguriere PPL6 fuer $DISTRIB_ID:$DISTRIB_RELEASE..."
-
-	case "$DISTRIB_ID:$DISTRIB_RELEASE" in
-	FreeBSD:*)
-        export CPPFLAGS=-I/usr/local/include
-		export LDLAGS=-L/usr/local/lib
-		./configure --prefix=$BUILD \
-			--with-pcre=/usr/local --with-libmhash --with-libiconv-prefix=/usr/local --with-nasm \
-			--with-libmcrypt-prefix --with-libiconv-prefix=/usr/local \
-			--without-pgsql --without-png --without-lame --without-ft-prefix \
-			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
-			--with-libcurl --with-sdl-prefix=$BUILD
-		;;
-	Ubuntu:*)
-		./configure --prefix=$BUILD \
-			--with-pcre=/usr --with-libiconv-prefix --with-nasm \
-			--with-libmcrypt-prefix --with-libmhash \
-			--without-pgsql --without-png --without-lame --without-ft-prefix \
-			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
-			--with-libcurl --with-sdl-prefix=$BUILD
-		;;	
-	Fedora:*)
-		./configure --prefix=$BUILD \
-			--with-pcre=/usr  --with-libiconv-prefix --with-nasm \
-			--with-libmcrypt-prefix --with-libmhash \
-			--without-pgsql --without-png --without-lame --without-ft-prefix \
-			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
-			--with-libcurl --with-sdl-prefix=$BUILD
-		;;	
-	
-	MINGW32*:1.0.*)
-                export CPPFLAGS="-DCURL_STATICLIB -I/usr/local/include -I/sdk/WindowsSDK/include"
-                export LDLAGS="-DCURL_STATICLIB -L/usr/local/lib -L/sdk/WindowsSDK/lib"
-                export CFLAGS="-DCURL_STATICLIB"
-                ./configure --prefix=$BUILD \
-			--with-pcre=/usr/local --with-bzip2=/usr/local --with-zlib=/usr/local \
-                        --with-nasm --with-libiconv-prefix=/usr/local \
-                        --without-pgsql --without-png --without-lame --without-ft-prefix \
-						--without-libmad --without-lame --without-x --without-mysql --without-sybase \
-						--with-libcurl --with-sdl-prefix=$BUILD \
-                        --with-libmhash \
-                        --with-libmcrypt-prefix \
-                        --with-libcurl
-		;;
-	*)
-		./configure --prefix=$BUILD \
-			--with-pcre=/usr --with-libiconv-prefix --with-nasm \
-			--with-libmcrypt-prefix=no --with-libmhash=no \
-			--without-pgsql --without-png --without-lame --without-ft-prefix \
-			--without-libmad --without-lame --without-x --without-mysql --without-sybase \
-			--with-libcurl=/usr --with-sdl-prefix=$BUILD		;;
-	esac
-	if [ $? -ne 0 ] ; then
-		exit 1
-	fi
-fi
-PATH=$BUILD/bin:$PATH
-
-$MAKE -j2 release
-if [ $? -ne 0 ] ; then
-	exit 1
-fi
-$MAKE -j2 install
-if [ $? -ne 0 ] ; then
-	exit 1
-fi
-
-
-echo -n "ppl6-config liegt in "
-which ppl6-config
-
-cd $BUILD/src/winmusik
-
-case "$DISTRIB_ID:$DISTRIB_RELEASE" in
-	MINGW32*)
-		echo "INCLUDEPATH += c:/MinGW/msys/1.0/$BUILD/include" >> WinMusik.pro
-		echo "QMAKE_LIBDIR += C:/MinGW/msys/1.0/$BUILD/lib" >> WinMusik.pro
-		;;
-	*)
-		echo "INCLUDEPATH += $BUILD/include" >> WinMusik.pro
-		echo "QMAKE_LIBDIR += $BUILD/lib" >> WinMusik.pro
-		;;
-esac
-
-
-
-$QMAKE
-$QMAKE
-if [ $? -ne 0 ] ; then
-	exit 1
-fi
-make -j2 release
-if [ $? -ne 0 ] ; then
-	exit 1
-fi
-cp release/WinMusik $BUILD/bin
-strip $BUILD/bin/WinMusik
-
-
-}
-
-
-
 
 build_specfile() {
 	COMMENT=`cat $MYPWD/README_en.TXT| grep -v "^===.*" `
@@ -833,10 +708,10 @@ build_specfile() {
 	echo "%install"
 	echo "rm -rf \$RPM_BUILD_ROOT"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/bin"
-	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
+	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/pixmaps"
 	echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
 	echo "cp build/bin/WinMusik \$RPM_BUILD_ROOT/usr/bin"
-	echo "cp build/src/winmusik/resources/icon48.png \$RPM_BUILD_ROOT/usr/share/icons/WinMusik.png"
+	echo "cp build/src/winmusik/resources/icon48.png \$RPM_BUILD_ROOT/usr/share/pixmaps/WinMusik.png"
 	echo ""
 	echo "# Desktop menu entry"
 	echo "cat > %{name}.desktop << EOF"
@@ -863,7 +738,7 @@ build_specfile() {
 	echo "%files"
 	echo "%defattr(-,root,root,-)"
 	echo "/usr/bin/*"
-	echo "/usr/share/icons/*"
+	echo "/usr/share/pixmaps/*"
 	echo "/usr/share/applications/*"
 	echo "%doc"
 	echo ""
