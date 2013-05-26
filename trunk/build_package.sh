@@ -194,6 +194,16 @@ build_FreeBSD_package ()
 	cd $WORK
 }
 
+ppl6_linux_configure()
+{
+    CONFIGURE="--with-pcre=/usr --with-libiconv-prefix --with-nasm --with-libmcrypt-prefix"
+    CONFIGURE="$CONFIGURE --with-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
+    CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
+    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libldns --without-freetds"
+    CONFIGURE="$CONFIGURE --without-ogg"
+    return $CONFIGURE
+}
+
 build_ppl6 ()
 {
     echo "INFO: building ppl6..."
@@ -330,12 +340,7 @@ build_debian ()
     fi
 	echo "INFO: all required packages are installed"
 
-    CONFIGURE="--with-pcre=/usr --with-libiconv-prefix --with-nasm --with-libmcrypt-prefix"
-    CONFIGURE="$CONFIGURE --with-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
-    CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
-    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libldns --without-freetds"
-    CONFIGURE="$CONFIGURE --without-ogg"
-    
+    CONFIGURE=ppl6_linux_configure
     
     build_ppl6 $WORK
     build_winmusik $WORK
@@ -493,6 +498,88 @@ build_freebsd ()
 	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz	
 }
 
+write_source_specfile() {
+    FILE=$1
+    BUILDREQUIRES=$2
+    COMMENT=`cat $WORK/WinMusik/README_en.TXT| grep -v "^===.*" `
+    CONFIGURE=ppl6_linux_configure
+    (
+    echo "Name:     $PROGNAME"
+    echo "Version:  $VERSION"
+    echo "Release:  $REVISION"
+    echo "Summary:  $DESCRIPTION"
+    echo "Autoreq:  yes"
+    echo ""
+    echo "Group:    Applications/Multimedia"
+    echo "License:  GPL3"
+    echo "URL:      $HOMEPAGE"
+    echo "Source:   $PROGNAME-%{version}-src.tar.bz2"
+    echo "BuildRoot:    %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)"
+    echo ""
+    echo "BuildRequires:    $BUILDREQUIRES"
+    echo "" 
+    echo "%description"
+    echo "$COMMENT"
+    echo ""
+    echo "%prep"
+    echo "%setup -q -n %{name}-%{version}"
+    echo ""
+    echo "%build"
+    echo "WORK=\`pwd\`"
+    echo "mkdir -p bin lib include"
+    echo "cd ppl6"
+    echo "./configure --prefix=\$WORK $CONFIGURE"
+    echo "make -j2 install"
+    echo "cd ../WinMusik"
+    echo "PATH=\"\$WORK/bin:\$PATH\""
+    echo "$QMAKE"
+    echo "make -j2 release"
+    echo "cp release/WinMusik \$WORK/bin/$PROGNAME"
+    echo ""
+    echo "%install"
+    echo "rm -rf \$RPM_BUILD_ROOT"
+    echo "mkdir -p \$RPM_BUILD_ROOT/usr/bin"
+    echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/icons"
+    echo "mkdir -p \$RPM_BUILD_ROOT/usr/share/applications"
+    echo "cp bin/$PROGNAME \$RPM_BUILD_ROOT/usr/bin"
+    echo "cp WinMusik/resources/icon64.png \$RPM_BUILD_ROOT/usr/share/pixmaps/$PROGNAME.png"
+    echo ""
+    echo "# Desktop menu entry"
+    echo "cat > %{name}.desktop << EOF"
+    echo "[Desktop Entry]"
+    echo "Name=$PROGNAME"
+    echo "Comment=$DESCRIPTION"
+    echo "Exec=/usr/bin/$PROGNAME"
+    echo "Icon=/usr/share/pixmaps/$PROGNAME.png"
+    echo "Terminal=0"
+    echo "Type=Application"
+    echo "Categories=Qt;AudioVideo;"
+    echo "EOF"
+    echo ""
+    echo "desktop-file-install --vendor \"Patrick F.-Productions\" \\"
+    echo "  --dir \$RPM_BUILD_ROOT/usr/share/applications \\"
+    echo "  --add-category Qt \\"
+    echo "  --add-category AudioVideo \\"
+    echo "%{name}.desktop"
+    echo ""
+    echo "%clean"
+    echo "rm -rf \$RPM_BUILD_ROOT"
+    echo ""
+    echo "%files"
+    echo "%defattr(-,root,root,-)"
+    echo "/usr/bin/$PROGNAME"
+    echo "/usr/share/pixmaps/$PROGNAME.png"
+    echo "/usr/share/applications/%{name}.desktop"
+    echo "%doc"
+    echo ""
+    echo "%changelog"
+    echo ""
+    ) > $FILE
+    
+}
+
+
+
 #################################################################################
 
 identify_system
@@ -519,6 +606,13 @@ if [ -f WinMusik.pro ] ; then
 		if [ "$DISTRIB_ID" = "FreeBSD" ] ; then
 			build_FreeBSD_package
 		fi
+		# Specfiles erstellen
+        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, zlib-devel, libjpeg-devel, libpng-devel, nasm, freetype-devel, libtiff-devel, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
+        write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-el6.spec" "$BUILDREQUIRES"
+        BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc_s1, libbz2-devel, zlib-devel, libjpeg8-devel, libpng15-devel, nasm, freetype-devel, libtiff-devel, libstdc++-devel, libqt4-devel, glibc-devel, pcre-devel"
+        write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-suse.spec" "$BUILDREQUIRES"
+		
+		# RedHat Source-RPM erstellen
 		#build_srpm
 		exit 0
 	fi
