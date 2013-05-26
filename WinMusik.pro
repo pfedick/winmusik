@@ -159,21 +159,9 @@ else {
     unix:LIBS += `ppl6-config \
         --libs \
         release`
-    win32:LIBS += -lppl6 \
-        -lpcre \
-        -liconv \
-        -lz \
-        -lbz2 \
-        -lcurl \
-        -lidn \
-        -lssl \
-        -lmcrypt \
-        -lcrypto \
-        -lws2_32 \
-        -ldnsapi \
-        -lz \
-        -lbz2 \
-        -lgdi32
+    win32:LIBS += `ppl6-config \
+        --libs \
+        release`
 }
 CODECFORSRC = UTF-8
 CODECFORTR = UTF-8

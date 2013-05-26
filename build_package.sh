@@ -177,7 +177,7 @@ gather_sources()
 	cd $CUR
 }
 
-build_FreeBSD_package ()
+build_FreeBSD_port ()
 {
 	create_dir $WORK/FreeBSD
 	cd $CUR/FreeBSD
@@ -394,6 +394,138 @@ build_debian ()
     fi
 }
 
+
+#
+# TODO:
+#
+#################################################################################
+# Specfile für Binary RPM schreiben
+#################################################################################
+write_specfile ()
+{
+	(
+	echo "%define __spec_prep_post true"
+	echo "%define __spec_prep_pre true"
+	echo "%define __spec_build_post true"
+	echo "%define __spec_build_pre true"
+	echo "%define __spec_install_post true"
+	echo "%define __spec_install_pre true"
+	echo "%define __spec_clean_post true"
+	echo "%define __spec_clean_pre true"
+	echo "%define _binary_filedigest_algorithm 1"
+	echo "%define _binary_payload w9.gzdio"
+	echo ""
+	echo "Name: $PROGNAME"
+	echo "Version: $VERSION"
+	echo "Release: $REVISION"
+	echo "Summary: $DESCRIPTION"
+	echo "BuildArch: $ARCH"
+	echo "AutoReqProv: yes"
+	echo "BuildRoot: %buildroot"
+	echo ""
+	echo "Prefix: /"
+	echo ""
+	echo "Group: Applications/Multimedia"
+	echo "License: GPL3"
+	echo "Vendor: $MAINTAINER"
+	echo "URL: $HOMEPAGE"
+	echo "Packager: $MAINTAINER"
+	echo ""
+	echo "%description"
+	cat ../README.TXT
+	echo ""
+	echo "%prep"
+	echo "# noop"
+	echo ""
+	echo "%build"
+	echo "# noop"
+	echo ""
+	echo "%install"
+	echo "[ ! -d $BUILD/usr/bin ] && mkdir -p $BUILD/usr/bin"
+	echo "cp $WORK/package/usr/bin/$PROGNAME $BUILD/usr/bin/$PROGNAME"
+	echo "[ ! -d $BUILD/usr/share/pixmaps ] && mkdir -p $BUILD/usr/share/pixmaps"
+	echo "cp $WORK/package/usr/share/pixmaps/$PROGNAME.png $BUILD/usr/share/pixmaps/$PROGNAME.png"
+	echo "[ ! -d $BUILD/usr/share/applications ] && mkdir -p $BUILD/usr/share/applications"
+	echo "cp $WORK/package/usr/share/applications/$PROGNAME.desktop $BUILD/usr/share/applications/$PROGNAME.desktop"
+	echo ""
+	echo "%clean"
+	echo "# noop"
+	echo ""
+	echo "%files"
+	echo "%defattr(-,root,root,-)"
+	echo "/usr/bin/OpenStopMotion"
+	echo "/usr/share/pixmaps/OpenStopMotion.png"
+	echo "/usr/share/applications/OpenStopMotion.desktop"
+	echo ""
+	echo "%changelog"
+	) > $PROGNAME.spec
+}
+
+#
+# TODO:
+#
+#################################################################################
+# Suse RPM bauen
+#################################################################################
+build_suse ()
+{
+	if [ ! -f packages.checked ] ; then
+		#
+	        # Check Dependencies
+	        #
+	        MISSING=""
+	        echo "INFO: Checking dependency packages..."
+	        check_rpm_package "pcre-devel"
+	        check_rpm_package "libjpeg8-devel"
+	        check_rpm_package "libpng15-devel"
+	        check_rpm_package "libbz2-devel"
+	        check_rpm_package "zlib-devel"
+	        check_rpm_package "libqt4-devel"
+	        check_rpm_package "nasm"
+	        check_rpm_package "subversion"
+	        check_rpm_package "rpm-devel"
+	        if [ "$MISSING" ] ; then
+	                echo "ERROR: Missing packages, please run the following command as root:"
+	                echo "   sudo zypper install $MISSING"
+			exit 1
+		fi
+		touch packages.checked
+	fi
+    echo "INFO: all required packages are installed"
+
+    cd $WORK
+	echo "WORK=$WORK"
+    CONFIGURE="--with-pcre=/usr --with-jpeg --with-png --with-nasm --with-libmcrypt-prefix=/usr"
+    build_ppl6 $WORK
+    cd $WORK
+    build_winmusik $WORK
+    cd $WORK
+
+    echo "INFO: Build rpm for $DISTRIB_ID $DISTRIB_RELEASE: $DISTRIB_CODENAME"
+	create_dir package
+	create_dir package/usr/bin
+	create_dir package/usr/share/applications
+	create_dir package/usr/share/doc/$PROGNAME
+	create_dir package/usr/share/pixmaps
+	write_desktop_application "/usr" package/usr/share/applications/$PROGNAME.desktop
+	cp $WINMUSIKDIR/resources/icon64.png package/usr/share/pixmaps/$PROGNAME.png
+	cp $WINMUSIKDIR/docs/Userguide_de.pdf package/usr/share/docs/$PROGNAME/
+	cp bin/$PROGNAME package/usr/bin
+	create_dir build/BUILD
+	BUILD=`pwd`/build/BUILD
+	write_specfile
+	rpmbuild --buildroot=$BUILD --define "_rpmdir ."  -bb $PROGNAME.spec
+	if [ $? -ne 0 ] ; then
+		echo "ERROR: rpmbuild failed"
+		exit 1
+	fi
+	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm  $DISTFILES
+	if [ -d "$TARGETPATH" ] ; then
+		cp $DISTFILES/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $TARGETPATH
+	fi
+}
+
+
 #################################################################################
 # Windows-Installer bauen
 #################################################################################
@@ -496,6 +628,9 @@ build_freebsd ()
 	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz	
 }
 
+#################################################################################
+# Source-Specfile schreiben
+#################################################################################
 write_source_specfile() {
     FILE=$1
     BUILDREQUIRES=$2
@@ -603,7 +738,7 @@ if [ -f WinMusik.pro ] ; then
 			cp $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 $TARGETPATH
 		fi
 		if [ "$DISTRIB_ID" = "FreeBSD" ] ; then
-			build_FreeBSD_package
+			build_FreeBSD_port
 		fi
 		# Specfiles erstellen
         BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg-devel, libpng-devel, nasm, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
