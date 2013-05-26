@@ -38,13 +38,14 @@ About::About(QWidget *parent)
 	//ui.note->setText(tr("This program makes use of the following Open Source Libraries:"));
 
 	Tmp="<div align=\"center\" style=\"font-size: 12pt;\"><b>"+tr("License:")+"</b></div>\n";
+	Tmp.Concatf("%s<p>\n",WM_COPYRIGHT);
 	Tmp+=tr("GPL3 short");
 
 	Tmp+="<div align=\"center\" style=\"font-size: 12pt;\"><b>"+tr("Credits:")+"</b></div>\n";
 	Tmp+=tr("This program makes use of the following Open Source Libraries:");
 	Tmp.Concat("<ul>");
 	Tmp.Concatf("<li>PPL %s, %s</li>\n",(const char*)core->GetVersion(), (const char*)core->GetCopyright());
-	Tmp.Concatf("<li>Qt %s, Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).",qVersion());
+	Tmp.Concatf("<li>Qt %s, Copyright (C) 2012 Digia Plc",qVersion());
 	AddFeature(Tmp,"zlib");
 	AddFeature(Tmp,"bzip2");
 	AddFeature(Tmp,"pcre");
