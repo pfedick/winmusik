@@ -32,7 +32,7 @@ PACKAGENAME="WinMusik"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Music database to maintain songs on various devices"
-
+TARGETPATH=/ftp/winmusik
 
 PPL6SOURCE="../../ppl6"
 PPL6REPO="https://svn.code.sf.net/p/pplib/code/lib/branches/RELENG_6"
@@ -110,17 +110,13 @@ identify_system()
 		DISTRIB_RELEASE=`uname -r`
 	
 		case "$DISTRIB_ID:$DISTRIB_RELEASE" in
-			MINGW32*:1.0.11*)
-				DISTRIB_ID="MINGW32";
-				DISTRIB_RELEASE="1.0.11";
-				;;
 			MINGW32*:1.0.17*)
 				DISTRIB_ID="MINGW32";
 				DISTRIB_RELEASE="1.0.17";
 				QTDIR=/c/Qt/$QTVERSION
 				QMAKESPEC=win32-g++
-				PATH=$PATH:/c/Qt/$QTVERSION/bin
-				echo "PATH=$PATH"
+				PATH="/c/Qt/$QTVERSION/bin:$PATH"
+				QMAKE=qmake
 				;;
 		esac
 	fi
@@ -198,6 +194,253 @@ build_FreeBSD_package ()
 	cd $WORK
 }
 
+build_ppl6 ()
+{
+    echo "INFO: building ppl6..."
+    create_dir $1/bin
+    create_dir $1/lib
+    create_dir $1/include
+    cd $PPL6DIR
+    if [ ! -f Makefile ] ; then
+        echo "INFO: Configuring ppl6..."
+        ./configure --prefix=$1 $CONFIGURE
+    fi
+    if [ $? -ne 0 ] ; then
+        echo "ERROR: configure for ppl6 failed"
+        exit 1
+    fi
+    $MAKE -j2
+    if [ $? -ne 0 ] ; then
+        echo "ERROR: make for ppl6 failed"
+        exit 1
+    fi
+    $MAKE install
+    if [ $? -ne 0 ] ; then
+        echo "ERROR: make install for ppl6 failed"
+        exit 1
+    fi
+    cd ..
+    echo "INFO: building ppl6 done"
+    sleep 2
+}
+
+build_winmusik ()
+{
+    echo "INFO: building $PROGNAME..."
+    create_dir $1/bin
+    PATH="$1/bin:$PATH"
+    export PATH
+    echo "PATH=$PATH"
+    cd $WINMUSIKDIR
+    echo "INFO: calling $QMAKE"
+    $QMAKE
+    if [ $? -ne 0 ] ; then
+                echo "ERROR: qmake for $PROGNAME failed"
+                exit 1
+        fi
+    echo "INFO: calling $MAKE in `pwd`"
+    $MAKE
+    if [ $? -ne 0 ] ; then
+                echo "ERROR: make for $PROGNAME failed"
+                exit 1
+        fi
+    cp release/$PROGNAME $1/bin/$PROGNAME
+    echo "INFO: building $PROGNAME done"
+}
+
+write_desktop_application ()
+{
+    PREFIX=$1
+    FILE=$2
+    (
+                echo "[Desktop Entry]"
+                echo "Encoding=UTF-8"
+                echo "Name=$PROGNAME"
+                echo "Comment=$DESCRIPTION"
+                echo "Exec=$PREFIX/bin/$PROGNAME"
+                echo "Terminal=false"
+                echo "Type=Application"
+                echo "Categories=GTK;GNOME;AudioVideo;"
+                echo "Icon=$PREFIX/share/pixmaps/$PROGNAME.png"
+        ) > $FILE
+}
+
+
+debian_write_control ()
+{
+    (
+        echo "Source: $PROGNAME"
+        echo "Section: video"
+        echo "Priority: optional"
+        echo "Maintainer: $MAINTAINER"
+        echo "Package: $PROGNAME"
+        echo "Version: $VERSION"
+        echo "Homepage: $HOMEPAGE"
+        echo "Architecture: $PLATFORM"
+        echo "Depends: $DEPENDS"
+        echo "Installed-Size: 1000"
+        echo "Description: $DESCRIPTION"
+        cat WinMusik/README_en.TXT | while read line
+        do
+                if [ -z "$line" ] ; then
+                    echo " ."
+                else
+                    echo "  $line"
+                fi
+        done
+        ) > debian/control
+}
+
+#################################################################################
+# DEBIAN/UBUNTU-Paket bauen
+#################################################################################
+build_debian ()
+{
+    cd $WORK
+    if [ ! -f ".dependency_checked" ] ; then
+	    #
+	    # Check Dependencies
+	    #
+	    MISSING=""
+	    echo "INFO: Checking dependency packages..."
+	    check_debian_package "libpcre3-dev"
+	    check_debian_package "libjpeg-dev"
+	    check_debian_package "libssl-dev"
+	    check_debian_package "libcurl4-openssl-dev"
+	    check_debian_package "libmcrypt-dev"
+	    check_debian_package "libmhash-dev"
+	    check_debian_package "libpng12-dev"
+	    check_debian_package "libbz2-dev"
+	    check_debian_package "zlib1g-dev"
+	    check_debian_package "libqt4-dev"
+	    check_debian_package "qt4-dev-tools"
+	    check_debian_package "qt4-qmake"
+	    check_debian_package "nasm"
+	    check_debian_package "subversion"
+	    check_debian_package "dpkg-dev"
+	    
+	    if [ "$MISSING" ] ; then
+	        echo "ERROR: Missing packages, please run the following command:"
+	        echo ""
+	        echo "   sudo apt-get install $MISSING"
+	        echo ""
+	        exit 1
+	    fi
+	    touch .dependency_checked
+    fi
+	echo "INFO: all required packages are installed"
+
+    CONFIGURE="--with-pcre=/usr --with-libiconv-prefix --with-nasm --with-libmcrypt-prefix"
+    CONFIGURE="$CONFIGURE --with-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
+    CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
+    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libldns --without-freetds"
+    CONFIGURE="$CONFIGURE --without-ogg"
+    
+    
+    build_ppl6 $WORK
+    build_winmusik $WORK
+    cd $WORK
+
+    echo "INFO: Build Debian-Packet for $DISTRIB_ID $DISTRIB_RELEASE: $DISTRIB_CODENAME"
+    DISTNAME="$PROGNAME-$VERSION"
+    rm -rf debian
+    create_dir debian
+    create_dir debian/DEBIAN
+    create_dir debian/usr/bin
+    create_dir debian/usr/share/applications
+    create_dir debian/usr/share/pixmaps
+    cp bin/$PROGNAME debian/usr/bin/$PROGNAME
+    cp WinMusik/resources/icon64.png debian/usr/share/pixmaps/$PROGNAME.png
+
+    DEPENDS=""
+    write_desktop_application "/usr" debian/usr/share/applications/$PROGNAME.desktop
+        (
+                echo "$PROGNAME ($VERSION) unstable; urgency=low"
+                echo ""
+                echo " * No upstream changes."
+                echo ""
+                echo -n "-- $USER   "
+                date 
+                echo ""
+                echo "Local variables:"
+            echo "mode: debian-changelog"
+            echo "End:"
+        ) > debian/changelog
+
+    debian_write_control
+    dpkg-shlibdeps debian/usr/bin/$PROGNAME
+        DEPENDS=`grep "shlibs:Depends" debian/substvars | sed -e "s/shlibs:Depends=//"`
+        debian_write_control
+    cp debian/control debian/DEBIAN
+        rm debian/control
+        rm debian/substvars
+        rm debian/changelog
+
+    dpkg -b debian $DISTFILES/$DISTNAME-$DISTRIB_ID-$DISTRIB_RELEASE-$PLATFORM.deb
+        if [ $? -ne 0 ] ; then
+                echo "ERROR: Fehler beim Erstellen des Pakets"
+                exit
+        fi
+    if [ -n "$TARGETPATH" ] ; then
+        if [ -d "$TARGETPATH" ] ; then
+            cp $DISTFILES/$DISTNAME-$DISTRIB_ID-$DISTRIB_RELEASE-$PLATFORM.deb $TARGETPATH
+        fi
+    fi
+}
+
+#################################################################################
+# Windows-Installer bauen
+#################################################################################
+build_mingw32()
+{
+    cd $WORK
+    echo "*******************************************************"
+    echo "Baue PPL6 und WinMusik unter Windows"
+    export CPPFLAGS="-DCURL_STATICLIB -I/usr/local/include -I/sdk/WindowsSDK/include"
+    export LDLAGS="-DCURL_STATICLIB -L/usr/local/lib -L/sdk/WindowsSDK/lib"
+    export CFLAGS="-DCURL_STATICLIB"
+    
+    CONFIGURE="--with-pcre=/usr/local --with-bzip2=/usr/local --with-zlib=/usr/local"
+    CONFIGURE="$CONFIGURE --with-nasm --with-libiconv-prefix=/usr/local --without-postgresql "
+    CONFIGURE="$CONFIGURE --with-png=/usr/local --with-jpeg=/usr/local --without-lame --without-ft-prefix"
+    CONFIGURE="$CONFIGURE --without-libmad --without-lame --without-x --without-mysql --without-freetds"
+    CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --with-libmhash"
+    CONFIGURE="$CONFIGURE --with-libmcrypt-prefix --without-libldns --without-ogg"
+    
+    echo "INCLUDEPATH += $WORK/include" >> $WORK/WinMusik/WinMusik.pro
+    echo "QMAKE_LIBDIR += $WORK/lib" >> $WORK/WinMusik/WinMusik.pro
+    
+    
+    build_ppl6 $WORK
+    build_winmusik $WORK
+    cd $WORK
+        
+    echo "*******************************************************"
+    echo "Erstelle Windows-Setup Programm"
+    cd $WORK/WinMusik
+    cat setup.iss | sed -e "s/OutputBaseFilename=.*/OutputBaseFilename=$NAME-$VERSION-Win32Setup/" \
+        | sed -e "s/AppVerName=.*/AppVerName=WinMusik $VERSION/" \
+        | sed -e "s/AppVersion=.*/AppVersion=$VERSION/" \
+        | sed -e "s/VersionInfoVersion=.*/VersionInfoVersion=$VERSION/" \
+        > setup2.iss
+
+    "$INNOSETUP" setup2.iss
+    if [ $? -ne 0 ] ; then
+        echo "Inno-Setup fehlgeschlagen"
+        exit 1
+    fi
+    cd $WORK/WinMusik
+    cp distfiles/$NAME-$VERSION-Win32Setup.exe $DISTFILES
+    if [ -n "$TARGETPATH" ] ; then
+        if [ -d "$TARGETPATH" ] ; then
+            cp distfiles/$NAME-$VERSION-Win32Setup.exe $TARGETPATH
+        fi
+    fi
+}
+
+#################################################################################
+# FreeBSD-Paket bauen
+#################################################################################
 build_freebsd ()
 {
 	CONFIGURE="--with-pcre=/usr/local --with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png --with-libtiff=/usr/local"
@@ -250,14 +493,16 @@ build_freebsd ()
 	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz	
 }
 
-
+#################################################################################
 
 identify_system
 
-##############################################################################################
+#################################################################################
 # Sourcen zusammenfassen, sofern wir im Sourceverzeichnis von WinMusik sind
+#################################################################################
 if [ -f WinMusik.pro ] ; then
 	create_dir $WORK
+	create_dir $DISTFILES
 	cd $WORK
 	if [ "$1" = "source" ] ; then
 		echo "Erstelle Source-Distribution für WinMusik..."
@@ -280,11 +525,17 @@ if [ -f WinMusik.pro ] ; then
 	gather_sources "$WORK"
 else
 	WORK=$MYPWD
+	DISTFILES=$MYPWD
 fi
 
+#################################################################################
+# Binary-Paket bauen
+#################################################################################
 echo "Baue $PROGNAME $VERSION für: $DISTRIB_ID, $DISTRIB_RELEASE on $PLATFORM..."
 echo ""
 cd $WORK
+PPL6DIR=$WORK/ppl6
+WINMUSIKDIR=$WORK/WinMusik
 
 if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
 	build_debian
@@ -292,6 +543,8 @@ elif [ "$DISTRIB_ID" = "Debian" ] ; then
 	build_debian
 elif [ "$DISTRIB_ID" = "FreeBSD" ] ; then
 	build_freebsd
+elif [ "$DISTRIB_ID" = "MINGW32" ] ; then
+    build_mingw32 $1
 elif [ "$DISTRIB_ID" = "CentOS" ] ; then
 	build_redhat $1
 elif [ "$DISTRIB_ID" = "Fedora" ] ; then
@@ -452,96 +705,7 @@ strip $BUILD/bin/WinMusik
 
 }
 
-ubuntu_write_control() {
-	(
-		echo "Source: $PACKAGENAME"
-     	echo "Section: misc"
-     	echo "Priority: optional"
-     	echo "Maintainer: $MAINTAINER"
-		echo "Package: $PACKAGENAME"
-		echo "Version: $VERSION"
-		echo "Homepage: $HOMEPAGE"
-		echo "Architecture: $PLATFORM"
-		echo "Depends: $DEPENDS"
-		echo "Installed-Size: 1000"
-		echo "Description: $DESCRIPTION"
-		cat $BUILD/src/winmusik/README_en.TXT | while read line
-		do
-			echo " $line"
-		done
-		
-	) > debian/control
 
-}
-
-#################################################################################
-# UBUNTU-Paket bauen
-#################################################################################
-build_ubuntu() {
-	echo "Baue Ubuntu-Paket für $DISTRIB_CODENAME"
-	DISTNAME="$NAME-$VERSION";
-	cd $WORK
-	if [ $? -ne 0 ] ; then
-		echo "Konnte nicht nach $WORK wechseln"
-		exit
-	fi
-	rm -rf debian
-	mkdir -p debian
-	cd debian
-	if [ $? -ne 0 ] ; then
-		echo "Konnte nicht nach $WORK/debian wechseln"
-		exit
-	fi
-	mkdir -p DEBIAN usr/bin usr/share/applications usr/share/pixmaps
-	cp $BUILD/bin/WinMusik usr/bin
-	cp $BUILD/src/winmusik/resources/icon48.png usr/share/pixmaps/WinMusik.png
-
-	cd $WORK
-	DEPENDS=""
-	ubuntu_write_control
-	(
-		echo "[Desktop Entry]"
-		echo "Encoding=UTF-8"
-		echo "Name=$PACKAGENAME"
-		echo "Comment=$DESCRIPTION"
-		echo "Exec=WinMusik"
-		echo "Terminal=false"
-		echo "Type=Application"
-		echo "Categories=GTK;GNOME;AudioVideo;"
-		echo "Icon=/usr/share/pixmaps/WinMusik.png"
-	) > debian/usr/share/applications/$NAME.desktop
-	(
-		echo "WinMusik ($VERSION) unstable; urgency=low"
-		echo ""
-		echo " * No upstream changes."
-		echo ""
-		echo -n "-- $USERNAME   "
-		date 
-		echo ""
-		echo "Local variables:"
-     	echo "mode: debian-changelog"
-     	echo "End:"
-	) > debian/changelog
-	
-	dpkg-shlibdeps debian/usr/bin/WinMusik
-	
-	DEPENDS=`grep "shlibs:Depends" debian/substvars | sed -e "s/shlibs:Depends=//"`
-	ubuntu_write_control
-	
-	cp debian/control debian/DEBIAN
-	rm debian/control
-	rm debian/substvars
-	rm debian/changelog
-	
-	mkdir -p $DISTFILES
-	dpkg -b debian $DISTFILES/$DISTNAME-Ubuntu-$DISTRIB_RELEASE-$PLATFORM.deb
-	if [ $? -ne 0 ] ; then
-		echo "ERROR: Fehler beim Erstellen des Pakets"
-		exit
-	fi
-	cp $DISTFILES/$DISTNAME-Ubuntu-$DISTRIB_RELEASE-$PLATFORM.deb $TARGETPATH
-	
-}
 
 
 build_specfile() {
@@ -647,82 +811,3 @@ build_srpm() {
 	cp $TOPDIR/SRPMS/WinMusik-$VERSION-1.src.rpm $DISTFILES
 	cp $TOPDIR/SRPMS/WinMusik-$VERSION-1.src.rpm $TARGETPATH
 }
-
-
-build_mingw32()
-{
-	echo "*******************************************************"
-	echo "Erstelle Windows-Setup Programm"
-	cd $BUILD/src/winmusik
-	cat setup.iss | sed -e "s/OutputBaseFilename=.*/OutputBaseFilename=$NAME-$VERSION-Win32Setup/" \
-		| sed -e "s/AppVerName=.*/AppVerName=WinMusik $VERSION/" \
-		| sed -e "s/AppVersion=.*/AppVersion=$VERSION/" \
-		| sed -e "s/VersionInfoVersion=.*/VersionInfoVersion=$VERSION/" \
-		> setup2.iss
-
-	"$INNOSETUP" setup2.iss
-	if [ $? -ne 0 ] ; then
-		echo "Inno-Setup fehlgeschlagen"
-		exit 1
-	fi
-	cd $BUILD/src/winmusik
-	cp distfiles/$NAME-$VERSION-Win32Setup.exe ../../../
-	cp distfiles/$NAME-$VERSION-Win32Setup.exe $TARGETPATH
-	
-}
-
-
-
-##############################################################################################
-
-ARCH=`uname -m`;
-PLATFORM="i386";
-
-if [ "$ARCH" = "x86_64" ] ; then
-	PLATFORM="amd64"
-fi
-
-mkdir -p $MYPWD/distfiles
-
-##############################################################################################
-# Sourcen zusammenfassen, sofern wir im Sourceverzeichnis der GUI sind
-if [ -f WinMusik.pro ] ; then
-	echo "Erstelle Source-Distribution für WinMusik..."
-	build_sources
-	echo "Fertig"
-	echo "========================================================================================"
-fi
-
-
-WORK=$MYPWD/tmp
-BUILD=$MYPWD/build
-
-##############################################################################################
-# Libs und Binary bauen
-if [ "$1" != "nobin" ] ; then 
-	build_binary
-fi
-
-
-##############################################################################################
-# Pakete bauen
-if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
-	if [ "$1" != "nobin" ] ; then
-		build_ubuntu
-	fi
-	build_specfile
-	build_srpm
-	
-elif [ "$DISTRIB_ID" = "MINGW32" ] ; then
-	build_mingw32
-else
-	build_specfile
-	build_srpm
-fi
-
-##############################################################################################
-# Aufräumen
-rm -rf $WORK
-#echo "rm -rf $WORK"
-
-

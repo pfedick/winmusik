@@ -63,7 +63,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 
 [Files]
-Source: "release\WinMusik3.exe"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "release\WinMusik.exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "HISTORY.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: de; Flags: ignoreversion;
@@ -78,7 +78,7 @@ Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 [Icons]
-Name: "{group}\WinMusik 3"; WorkingDir: "{app}"; Filename: "{app}\WinMusik3.exe"
+Name: "{group}\WinMusik 3"; WorkingDir: "{app}"; Filename: "{app}\WinMusik.exe"
 Name: "{group}\{cm:UninstallProgram,WinMusik 3}"; IconFilename: "{app}\uninstall.ico"; Filename: "{uninstallexe}"
 Name: "{group}\Liesmich.txt"; WorkingDir: "{app}"; Filename: "{app}\LIESMICH.TXT"; Languages: de;
 Name: "{group}\Readme.txt"; WorkingDir: "{app}"; Filename: "{app}\README.TXT"; Languages: en;
@@ -86,9 +86,9 @@ Name: "{group}\Lizenzbedingungen.txt"; WorkingDir: "{app}"; Filename: "{app}\LIC
 Name: "{group}\License.txt"; WorkingDir: "{app}"; Filename: "{app}\LICENSE.TXT"; Languages: en;
 Name: "{group}\Handbuch.pdf"; WorkingDir: "{app}"; Filename: "{app}\Userguide_de.pdf"; Languages: de;
 Name: "{group}\Userguide.pdf"; WorkingDir: "{app}"; Filename: "{app}\Userguide_de.pdf"; Languages: en;
-Name: "{commondesktop}\WinMusik 3"; Filename: "{app}\WinMusik3.exe"; Tasks: desktopicon;
+Name: "{commondesktop}\WinMusik 3"; Filename: "{app}\WinMusik.exe"; Tasks: desktopicon;
 
 
 [Run]
-Filename: "{app}\WinMusik3.exe"; Description: "{cm:LaunchProgram,WinMusik 3}"; Flags: nowait postinstall skipifsilent;
+Filename: "{app}\WinMusik.exe"; Description: "{cm:LaunchProgram,WinMusik 3}"; Flags: nowait postinstall skipifsilent;
 
