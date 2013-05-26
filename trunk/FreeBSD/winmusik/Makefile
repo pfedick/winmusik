@@ -13,12 +13,14 @@ COMMENT=			Webcam capture program for creating stopmotion video
 LICENSE=			GPLv3
 
 LIB_DEPENDS=		jpeg:${PORTSDIR}/graphics/jpeg \
-					tiff:${PORTSDIR}/graphics/tiff \
 					png15:${PORTSDIR}/graphics/png \
 					freetype:${PORTSDIR}/print/freetype2 \
 					iconv:${PORTSDIR}/converters/libiconv \
 					pcre:${PORTSDIR}/devel/pcre \
-
+					libmcrypt:${PORTSDIR}/security/libmcrypt \
+					curl:${PORTSDIR}/ftp/curl \
+					libiconv:${PORTSDIR}/converters/libiconv
+					
 BUILD_DEPENDS=		nasm:${PORTSDIR}/devel/nasm
 
 MAKE_JOBS_SAFE=		yes
@@ -34,7 +36,7 @@ PLIST_FILES=		bin/WinMusik \
 do-configure:
 	cd ${WRKSRC}; ${MKDIR} bin include lib; cd  ${WRKSRC}/ppl6; \
 	./configure --with-pcre=${LOCALBASE} --with-libiconv-prefix=${LOCALBASE} \
-		--with-nasm --with-jpeg --with-png --with-libtiff=${LOCALBASE} \
+		--with-nasm --with-jpeg --with-png --without-libtiff \
 		--prefix=${WRKSRC} \
 		--without-libmicrohttpd --without-libmcrypt-prefix --without-libmhash \
 		--without-libidn --without-libcurl --without-mpg123 --without-lame \
@@ -49,7 +51,7 @@ do-build:
 		fi; \
 		${FALSE}; \
 	fi)
-	@(PATH="${WRKSRC}/bin:${PATH}"; export PATH; cd ${WRKSRC}/osm; \
+	@(PATH="${WRKSRC}/bin:${PATH}"; export PATH; cd ${WRKSRC}/WinMusik; \
 	qmake-qt4; \
 	if ! ${SETENV} ${MAKE_ENV} ${MAKE} ${MAKE_FLAGS} ${MAKEFILE} ${_MAKE_JOBS} ${MAKE_ARGS} ${ALL_TARGET}; then \
 		if [ x != x${BUILD_FAIL_MESSAGE} ] ; then \
@@ -60,9 +62,10 @@ do-build:
 	fi)
 
 do-install:
-	${MKDIR} ${PREFIX}/bin ${PREFIX}/share/pixmaps ${PREFIX}/share/applications
-	${INSTALL_PROGRAM} ${WRKSRC}/osm/release/${PORTNAME} ${PREFIX}/bin
-	${INSTALL_DATA} ${WRKSRC}/osm/resources/icon64.png ${PREFIX}/share/pixmaps/${PORTNAME}.png
+	${MKDIR} ${PREFIX}/bin ${PREFIX}/share/pixmaps ${PREFIX}/share/applications ${PREFIX}/share/doc/${PORTNAME}
+	${INSTALL_PROGRAM} ${WRKSRC}/WinMusik/release/${PORTNAME} ${PREFIX}/bin
+	${INSTALL_DATA} ${WRKSRC}/WinMusik/docs/Userguide_de.odt ${PREFIX}/share/doc/${PORTNAME}
+	${INSTALL_DATA} ${WRKSRC}/WinMusik/resources/icon64.png ${PREFIX}/share/pixmaps/${PORTNAME}.png
 	${INSTALL_DATA} ${FILESDIR}/WinMusik.desktop ${PREFIX}/share/applications/${PORTNAME}.desktop
 
 .include <bsd.port.post.mk>
