@@ -584,9 +584,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="hideEditor">
+      <widget class="QPushButton" name="hideEditor">
        <property name="text">
-        <string/>
+        <string>Editor</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
