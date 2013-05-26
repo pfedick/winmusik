@@ -39,7 +39,7 @@ MAKE="make"
 PPLPATH=~/sourceforge/ppl6
 WINMUSIKPATH=~/svn/winmusik/client
 TARGETPATH=/ftp/build
-QTVERSION=4.7.4
+QTVERSION=4.8.4
 QMAKE="qmake-qt4"
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
 if [ -f /c/Program\ Files\ \(x86\)/Inno\ Setup\ 5/ISCC.exe ] ; then

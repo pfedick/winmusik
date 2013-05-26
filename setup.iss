@@ -30,10 +30,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{611E500A-4D60-400C-9829-0114ADE682D5}}
 AppName=WinMusik
-AppVerName=WinMusik 3.0.2
-AppCopyright=Copyright (C) 2010 Patrick Fedick
-AppVersion=3.0.2
-VersionInfoVersion=3.0.2
+AppVerName=WinMusik 3.0.6
+AppCopyright=Copyright (C) 2013 Patrick Fedick
+AppVersion=3.0.6
+VersionInfoVersion=3.0.6
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -70,9 +70,9 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.7.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.7.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.7.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.8.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.8.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.8.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
@@ -91,20 +91,4 @@ Name: "{commondesktop}\WinMusik 3"; Filename: "{app}\WinMusik3.exe"; Tasks: desk
 
 [Run]
 Filename: "{app}\WinMusik3.exe"; Description: "{cm:LaunchProgram,WinMusik 3}"; Flags: nowait postinstall skipifsilent;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
