@@ -743,11 +743,15 @@ if [ -f WinMusik.pro ] ; then
 		# Specfiles erstellen
         BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg-devel, libpng-devel, nasm, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-el6.spec" "$BUILDREQUIRES"
+        
         BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc_s1, libbz2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg8-devel, libpng15-devel, nasm, libstdc++-devel, libqt4-devel, glibc-devel, pcre-devel"
+        save_QMAKE=$QMAKE
+        QMAKE="qmake"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-suse.spec" "$BUILDREQUIRES"
         if [ -d "$TARGETPATH" ] ; then
         	cp $DISTFILES/$PROGNAME-$VERSION-el6.spec $DISTFILES/$PROGNAME-$VERSION-suse.spec $TARGETPATH
         fi
+        QMAKE=$saveQMAKE
 		
 		# RedHat Source-RPM erstellen
 		#build_srpm
