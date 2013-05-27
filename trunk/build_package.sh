@@ -1,4 +1,3 @@
-#!/bin/sh
 #
 # This file is part of WinMusik 3 by Patrick Fedick
 #
@@ -163,7 +162,9 @@ gather_sources()
 		echo "INFO: Ziel: $TARGET/WinMusik"
 		create_dir "$TARGET/WinMusik"
 		cd $WINMUSIKSOURCE
-		find *.TXT WinMusik.pro *.qm *.ts setup.iss Doxyfile resource.rc resources resources.qrc src widgets include forms docs| grep -v ".svn" | cpio -pdm "$TARGET/WinMusik" > /dev/null 2>&1
+		find *.TXT *.qm *.ts setup.iss Doxyfile resource.rc resources resources.qrc src widgets include forms docs| grep -v ".svn" | cpio -pdm "$TARGET/WinMusik" > /dev/null 2>&1
+		# We must take care, that the local compiled ppl6 lib is used
+		cat WinMusik.pro | sed -e "s/ppl6-config/ppl6-config source/" > $TARGET/WinMusik/WinMusik.pro
         echo "INFO: done"
     else
 		echo "INFO: checkout WinMusik-sources from svn repository..."
@@ -202,7 +203,17 @@ ppl6_linux_configure()
     CONFIGURE="$CONFIGURE --without-libmhash --without-postgresql --with-png --with-jpeg --without-lame"
     CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
     CONFIGURE="$CONFIGURE --with-libcurl --with-sdl-prefix=$WORK --without-libldns --without-freetds"
-    CONFIGURE="$CONFIGURE --without-ogg"
+    CONFIGURE="$CONFIGURE --without-ogg --without-libshout --without-sqlite"
+}
+
+ppl6_freebsd_configure()
+{
+	CONFIGURE="--with-pcre=/usr/local --with-openssl=/usr --with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png"
+	CONFIGURE="$CONFIGURE --with-libmcrypt-prefix=/usr/local --with-libcurl=/usr/local"
+	CONFIGURE="$CONFIGURE --without-libmhash --without-postgresql --without-lame"
+    CONFIGURE="$CONFIGURE --without-ft-prefix --without-libmad --without-lame --without-x --without-mysql "
+    CONFIGURE="$CONFIGURE --with-sdl-prefix=$WORK --without-libldns --without-freetds"
+    CONFIGURE="$CONFIGURE --without-ogg --without-libshout --without-sqlite"
 }
 
 build_ppl6 ()
@@ -212,26 +223,31 @@ build_ppl6 ()
     create_dir $1/lib
     create_dir $1/include
     cd $PPL6DIR
-    if [ ! -f Makefile ] ; then
-        echo "INFO: Configuring ppl6..."
-        ./configure --prefix=$1 $CONFIGURE
-    fi
-    if [ $? -ne 0 ] ; then
-        echo "ERROR: configure for ppl6 failed"
-        exit 1
-    fi
-    $MAKE -j2
-    if [ $? -ne 0 ] ; then
-        echo "ERROR: make for ppl6 failed"
-        exit 1
-    fi
-    $MAKE install
-    if [ $? -ne 0 ] ; then
-        echo "ERROR: make install for ppl6 failed"
-        exit 1
+    if [ -f .build_done ] ; then
+    	echo "INFO: ppl6 is already build"
+    else
+	    if [ ! -f Makefile ] ; then
+	        echo "INFO: Configuring ppl6..."
+	        ./configure --prefix=$1 $CONFIGURE
+	    fi
+	    if [ $? -ne 0 ] ; then
+	        echo "ERROR: configure for ppl6 failed"
+	        exit 1
+	    fi
+	    $MAKE -j2
+	    if [ $? -ne 0 ] ; then
+	        echo "ERROR: make for ppl6 failed"
+	        exit 1
+	    fi
+	    $MAKE install
+	    if [ $? -ne 0 ] ; then
+	        echo "ERROR: make install for ppl6 failed"
+	        exit 1
+	    fi
+	    echo "INFO: building ppl6 done"
+	    touch .build_done
     fi
     cd ..
-    echo "INFO: building ppl6 done"
     sleep 2
 }
 
@@ -243,20 +259,37 @@ build_winmusik ()
     export PATH
     echo "PATH=$PATH"
     cd $WINMUSIKDIR
-    echo "INFO: calling $QMAKE"
-    $QMAKE
-    if [ $? -ne 0 ] ; then
-                echo "ERROR: qmake for $PROGNAME failed"
-                exit 1
-        fi
-    echo "INFO: calling $MAKE in `pwd`"
-    $MAKE release
-    if [ $? -ne 0 ] ; then
-                echo "ERROR: make for $PROGNAME failed"
-                exit 1
-        fi
-    cp release/$PROGNAME $1/bin/$PROGNAME
-    echo "INFO: building $PROGNAME done"
+    if [ -f .build_done ] ; then
+    	echo "INFO: $PROGNAME is already build"
+    else
+	    echo "INCLUDEPATH += $1/include" >> WinMusik.pro
+	    echo "QMAKE_LIBDIR += $1/lib" >> WinMusik.pro
+	    
+	    echo "INFO: calling $QMAKE"
+	    $QMAKE
+	    if [ $? -ne 0 ] ; then
+	                echo "ERROR: qmake for $PROGNAME failed"
+	                exit 1
+	        fi
+	    sleep 1
+	    echo "INFO: calling $MAKE in `pwd`"
+	    $MAKE release
+	    if [ $? -ne 0 ] ; then
+	                echo "ERROR: make for $PROGNAME failed"
+	                exit 1
+	        fi
+	    if [ -f release/$PROGNAME ] ; then
+	    	cp release/$PROGNAME $1/bin/$PROGNAME
+	    	echo "INFO: building $PROGNAME done"
+	    	touch .build_done
+	    else
+	    	echo "ERROR: Build failed. Make says "release" is already build,"
+	    	echo "ERROR: but there is no $PROGNAME binary in that directory."
+	    	echo "INFO: Please try again"
+	    	exit 1
+	    fi
+    fi
+    cd ..
 }
 
 write_desktop_application ()
@@ -271,7 +304,7 @@ write_desktop_application ()
                 echo "Exec=$PREFIX/bin/$PROGNAME"
                 echo "Terminal=false"
                 echo "Type=Application"
-                echo "Categories=GTK;GNOME;AudioVideo;"
+                echo "Categories=GTK;GNOME;Audio;AudioVideo;"
                 echo "Icon=$PREFIX/share/pixmaps/$PROGNAME.png"
         ) > $FILE
 }
@@ -432,7 +465,7 @@ write_specfile ()
 	echo "Packager: $MAINTAINER"
 	echo ""
 	echo "%description"
-	cat ../README.TXT
+	cat README_en.TXT
 	echo ""
 	echo "%prep"
 	echo "# noop"
@@ -445,6 +478,8 @@ write_specfile ()
 	echo "cp $WORK/package/usr/bin/$PROGNAME $BUILD/usr/bin/$PROGNAME"
 	echo "[ ! -d $BUILD/usr/share/pixmaps ] && mkdir -p $BUILD/usr/share/pixmaps"
 	echo "cp $WORK/package/usr/share/pixmaps/$PROGNAME.png $BUILD/usr/share/pixmaps/$PROGNAME.png"
+	echo "[ ! -d $BUILD/usr/share/doc/$PROGNAME ] && mkdir -p $BUILD/usr/share/doc/$PROGNAME"
+	echo "cp $WORK/package/usr/share/doc/$PROGNAME/* $BUILD/usr/share/doc/$PROGNAME"
 	echo "[ ! -d $BUILD/usr/share/applications ] && mkdir -p $BUILD/usr/share/applications"
 	echo "cp $WORK/package/usr/share/applications/$PROGNAME.desktop $BUILD/usr/share/applications/$PROGNAME.desktop"
 	echo ""
@@ -453,13 +488,86 @@ write_specfile ()
 	echo ""
 	echo "%files"
 	echo "%defattr(-,root,root,-)"
-	echo "/usr/bin/OpenStopMotion"
-	echo "/usr/share/pixmaps/OpenStopMotion.png"
-	echo "/usr/share/applications/OpenStopMotion.desktop"
+	echo "/usr/bin/$PROGNAME"
+	echo "/usr/share/pixmaps/$PROGNAME.png"
+	echo "/usr/share/doc/$PROGNAME"
+	echo "/usr/share/doc/$PROGNAME/*"
+	echo "/usr/share/applications/$PROGNAME.desktop"
 	echo ""
 	echo "%changelog"
 	) > $PROGNAME.spec
 }
+
+#################################################################################
+# RedHat/CentOS/Fedora RPM bauen
+#################################################################################
+build_redhat ()
+{
+	cd $WORK
+	if [ ! -f packages.checked ] ; then
+		#
+	    # Check Dependencies
+        #
+        MISSING=""
+        echo "INFO: Checking dependency packages..."
+        check_rpm_package "pcre-devel"
+        check_rpm_package "libjpeg-devel"
+        check_rpm_package "openssl-devel"
+        check_rpm_package "libcurl-devel"
+        check_rpm_package "libmcrypt-devel"
+        check_rpm_package "libpng-devel"
+        check_rpm_package "bzip2-devel"
+        check_rpm_package "zlib-devel"
+        check_rpm_package "qt-devel"
+        check_rpm_package "nasm"
+        check_rpm_package "desktop-file-utils"
+        check_rpm_package "subversion"
+        check_rpm_package "gcc"
+        check_rpm_package "gcc-c++"
+        check_rpm_package "libgcc"
+        check_rpm_package "libstdc++-devel"
+        check_rpm_package "glibc-devel"
+        check_rpm_package "rpm-devel"
+        if [ "$MISSING" ] ; then
+            echo "ERROR: Missing packages, please run the following command as root:"
+            echo "   sudo zypper install $MISSING"
+			exit 1
+		fi
+		touch packages.checked
+	fi
+    echo "INFO: all required packages are installed"
+
+    cd $WORK
+	ppl6_linux_configure
+    build_ppl6 $WORK
+    build_winmusik $WORK
+    cd $WORK
+
+    echo "INFO: Build rpm for $DISTRIB_ID $DISTRIB_RELEASE: $DISTRIB_CODENAME"
+	create_dir package
+	create_dir package/usr/bin
+	create_dir package/usr/share/applications
+	create_dir package/usr/share/doc/$PROGNAME
+	create_dir package/usr/share/pixmaps
+	write_desktop_application "/usr" package/usr/share/applications/$PROGNAME.desktop
+	cp $WINMUSIKDIR/resources/icon64.png package/usr/share/pixmaps/$PROGNAME.png
+	cp $WINMUSIKDIR/docs/Userguide_de.pdf package/usr/share/doc/$PROGNAME/
+	cp bin/$PROGNAME package/usr/bin
+	create_dir build/BUILD
+	BUILD=`pwd`/build/BUILD
+	write_specfile
+	rpmbuild --buildroot=$BUILD --define "_rpmdir ."  -bb $PROGNAME.spec
+	if [ $? -ne 0 ] ; then
+		echo "ERROR: rpmbuild failed"
+		exit 1
+	fi
+	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm  $DISTFILES
+	if [ -d "$TARGETPATH" ] ; then
+		cp $DISTFILES/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $TARGETPATH
+	fi
+}
+
+
 
 #
 # TODO:
@@ -579,36 +687,35 @@ build_mingw32()
 #################################################################################
 # FreeBSD-Paket bauen
 #################################################################################
+freebsd_dep ()
+{
+	NAME=`pkg_info | grep "^$1-" | awk '{print $1}'`
+	if [ $? -ne 0 ] ; then
+		exit 1
+	fi
+	echo "@pkgdep $NAME"
+}
+
+
 build_freebsd ()
 {
-	CONFIGURE="--with-pcre=/usr/local --with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png --with-libtiff=/usr/local"
-	cd $WORK 
-    build_ppl7 $WORK
 	cd $WORK
-	echo -n "Current Dir="
-	pwd
-	sleep 2
-	build_osm $WORK
-	cd $WORK
+	ppl6_freebsd_configure
+	build_ppl6 $WORK
+    build_winmusik $WORK
+    cd $WORK
+	
 	echo "INFO: Build FreeBSD-Packet for $DISTRIB_ID $DISTRIB_RELEASE"
 	DISTNAME="$PROGNAME-$VERSION-$DISTRIB_ID-$DISTRIB_RELEASE-$PLATFORM"
 	create_dir package
 	create_dir package/bin
 	create_dir package/share/applications
+	create_dir package/share/docs/$PROGNAME
 	create_dir package/share/pixmaps
 	
-		(
-                echo "[Desktop Entry]"
-                echo "Encoding=UTF-8"
-                echo "Name=$PROGNAME"
-                echo "Comment=$DESCRIPTION"
-                echo "Exec=/usr/local/bin/$PROGNAME"
-                echo "Terminal=false"
-                echo "Type=Application"
-                echo "Categories=GTK;GNOME;AudioVideo;"
-                echo "Icon=/usr/local/share/pixmaps/$PROGNAME.png"
-        ) > package/share/applications/$PROGNAME.desktop
-	cp osm/resources/icon256x256.png package/share/pixmaps/$PROGNAME.png
+	write_desktop_application /usr/local package/share/applications/$PROGNAME.desktop
+	cp $WINMUSIKDIR/resources/icon64.png package/share/pixmaps/$PROGNAME.png
+	cp $WINMUSIKDIR/docs/Userguide_de.pdf package/share/docs/$PROGNAME/
 	cp bin/$PROGNAME package/bin
 	(
 		echo "@cwd /usr/local"
@@ -617,15 +724,20 @@ build_freebsd ()
 		freebsd_dep png
 		freebsd_dep jpeg
 		freebsd_dep libiconv
-		freebsd_dep qt4-gui
+		freebsd_dep libmcrypt
 		freebsd_dep qt4-corelib
+		freebsd_dep qt4-gui
 		echo "share/applications/$PROGNAME.desktop"
 		echo "share/pixmaps/$PROGNAME.png"
+		echo "share/docs/$PROGNAME/Userguide_de.pdf"
 		echo "bin/$PROGNAME"
 	) > pkg_list
 	
-	pkg_create -v -d ../README.TXT -p package -f pkg_list -c "-$DESCRIPTION" $PROGNAME-$VERSION
-	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz	
+	pkg_create -v -d ../README_en.TXT -p package -f pkg_list -c "-$DESCRIPTION" $PROGNAME-$VERSION
+	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz
+	if [ -n "$TARGETPATH" ] ; then
+		cp $PROGNAME-$VERSION.tbz $TARGETPATH/$DISTNAME.tbz
+	fi
 }
 
 #################################################################################
@@ -662,10 +774,10 @@ write_source_specfile() {
     echo "%build"
     echo "WORK=\`pwd\`"
     echo "mkdir -p bin lib include"
-    echo "PATH=\"\$WORK/bin:\$PATH\""
     echo "cd ppl6"
     echo "./configure --prefix=\$WORK $CONFIGURE"
     echo "make -j2 install"
+    echo "PATH=\"\$WORK/bin:\$PATH\""
     echo "cd ../WinMusik"
 	echo "echo \"INCLUDEPATH += \$WORK/include\" >> WinMusik.pro"
     echo "echo \"QMAKE_LIBDIR += \$WORK/lib\" >> WinMusik.pro"
@@ -692,7 +804,7 @@ write_source_specfile() {
     echo "Icon=/usr/share/pixmaps/$PROGNAME.png"
     echo "Terminal=0"
     echo "Type=Application"
-    echo "Categories=Qt;AudioVideo;"
+    echo "Categories=AudioVideo;Audio"
     echo "EOF"
     echo ""
     echo "%clean"
@@ -703,6 +815,7 @@ write_source_specfile() {
     echo "/usr/bin/$PROGNAME"
     echo "/usr/share/pixmaps/$PROGNAME.png"
     echo "/usr/share/applications/$PROGNAME.desktop"
+    echo "/usr/share/doc/$PROGNAME"
     echo "/usr/share/doc/$PROGNAME/*"
     echo "%doc"
     echo ""
@@ -742,12 +855,14 @@ if [ -f WinMusik.pro ] ; then
 		fi
 		# Specfiles erstellen
         BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc, bzip2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg-devel, libpng-devel, nasm, libstdc++-devel, qt-devel, glibc-devel, pcre-devel"
-        write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-el6.spec" "$BUILDREQUIRES"
+        write_source_specfile "$DISTFILES/$PROGNAME-$VERSION.spec" "$BUILDREQUIRES"
         
+        create_dir $DISTFILES/suse
         BUILDREQUIRES="desktop-file-utils, gcc, gcc-c++, libgcc_s1, libbz2-devel, openssl-devel, zlib-devel, libcurl-devel, libjpeg8-devel, libpng15-devel, nasm, libstdc++-devel, libqt4-devel, glibc-devel, pcre-devel"
         save_QMAKE=$QMAKE
         QMAKE="qmake"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-suse.spec" "$BUILDREQUIRES"
+        write_source_specfile "$DISTFILES/suse/$PROGNAME.spec" "$BUILDREQUIRES"
         if [ -d "$TARGETPATH" ] ; then
         	cp $DISTFILES/$PROGNAME-$VERSION-el6.spec $DISTFILES/$PROGNAME-$VERSION-suse.spec $TARGETPATH
         fi
