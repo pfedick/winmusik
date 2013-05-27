@@ -183,8 +183,8 @@ build_FreeBSD_port ()
 	create_dir $WORK/FreeBSD
 	cd $CUR/FreeBSD
 	find ./ | grep -v ".svn" | cpio -pdmv $WORK/FreeBSD > /dev/null 2>&1
-	cat winmusik/Makefile | sed -e "s/PORTVERSION=.*/PORTVERSION=        $VERSION/" \
-		| sed -e "s/COMMENT=.*/COMMENT=            $DESCRIPTION/" \
+	cat winmusik/Makefile | sed -e "s/PORTVERSION=.*/PORTVERSION=		$VERSION/" \
+		| sed -e "s/COMMENT=.*/COMMENT=			$DESCRIPTION/" \
 		>$WORK/FreeBSD/winmusik/Makefile
 	cd $DISTFILES
 	sha256 $PROGNAME-$VERSION-src.tar.bz2 > $WORK/FreeBSD/winmusik/distinfo

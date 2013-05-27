@@ -1,35 +1,35 @@
 # $FreeBSD$
 
-PORTNAME=           WinMusik
-PORTVERSION=        3.x.x
-CATEGORIES=         multimedia
-MASTER_SITES=       ${MASTER_SITE_SOURCEFORGE}
-MASTER_SITE_SUBDIR= winmusik/client/Sourcecode
-EXTRACT_SUFX=       -src.tar.bz2
+PORTNAME=			WinMusik
+PORTVERSION=		3.x.x
+CATEGORIES=			multimedia
+MASTER_SITES=		${MASTER_SITE_SOURCEFORGE}
+MASTER_SITE_SUBDIR=	winmusik/client/Sourcecode
+EXTRACT_SUFX=		-src.tar.bz2
 
-MAINTAINER=         patrick@pfp.de
-COMMENT=            Music database to maintain songs on various devices
+MAINTAINER=			patrick@pfp.de
+COMMENT=			Music database to maintain songs on various devices
 
-LICENSE=            GPLv3
+LICENSE=			GPLv3
 
-LIB_DEPENDS=        jpeg:${PORTSDIR}/graphics/jpeg \
-                    png15:${PORTSDIR}/graphics/png \
-                    freetype:${PORTSDIR}/print/freetype2 \
-                    iconv:${PORTSDIR}/converters/libiconv \
-                    pcre:${PORTSDIR}/devel/pcre \
-                    mcrypt:${PORTSDIR}/security/libmcrypt \
-                    curl:${PORTSDIR}/ftp/curl \
-                    iconv:${PORTSDIR}/converters/libiconv
-BUILD_DEPENDS=      nasm:${PORTSDIR}/devel/nasm
+LIB_DEPENDS=		jpeg:${PORTSDIR}/graphics/jpeg \
+					png15:${PORTSDIR}/graphics/png \
+					freetype:${PORTSDIR}/print/freetype2 \
+					iconv:${PORTSDIR}/converters/libiconv \
+					pcre:${PORTSDIR}/devel/pcre \
+					mcrypt:${PORTSDIR}/security/libmcrypt \
+					curl:${PORTSDIR}/ftp/curl \
+					iconv:${PORTSDIR}/converters/libiconv
+BUILD_DEPENDS=		nasm:${PORTSDIR}/devel/nasm
 
-MAKE_JOBS_SAFE=     yes
+MAKE_JOBS_SAFE=		yes
 
-USE_QT4=            corelib gui qmake
+USE_QT4=			corelib gui qmake
 
-PLIST_FILES=        bin/WinMusik \
-                    share/pixmaps/WinMusik.png \
-                    share/applications/WinMusik.desktop \
-                    share/doc/WinMusik/Userguide_de.pdf
+PLIST_FILES=		bin/WinMusik \
+					share/pixmaps/WinMusik.png \
+					share/applications/WinMusik.desktop \
+					share/doc/WinMusik/Userguide_de.pdf
 
 .include <bsd.port.pre.mk>
 
