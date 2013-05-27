@@ -30,10 +30,12 @@ void DropArea::dragEnterEvent(QDragEnterEvent *event)
  {
      const QMimeData *mimeData = event->mimeData();
      QStringList list=mimeData->formats();
+     /*
      for (int i = 0; i < list.size(); ++i) {
     	 ppl6::CString s=list[i];
     	 printf ("drop Event: %s\n",(const char*)s);
      }
+     */
 
 
      if (mimeData->hasImage()) {
@@ -42,18 +44,18 @@ void DropArea::dragEnterEvent(QDragEnterEvent *event)
      }
      if (mimeData->hasHtml()) {
          ppl6::CString t = mimeData->html();
-         printf ("Html: %s\n",(const char*)t);
+         //printf ("Html: %s\n",(const char*)t);
 
      }
      if (mimeData->hasText()) {
          ppl6::CString t = mimeData->text();
-         printf ("Text: %s\n",(const char*)t);
+         //printf ("Text: %s\n",(const char*)t);
      }
      if (mimeData->hasUrls()) {
          QList<QUrl> urlList = mimeData->urls();
          for (int i = 0; i < urlList.size() && i < 32; ++i) {
              ppl6::CString url = urlList.at(i).path();
-             printf ("Url: %s\n",(const char*)url);
+             //printf ("Url: %s\n",(const char*)url);
 
          }
      }
