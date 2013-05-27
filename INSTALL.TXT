@@ -67,7 +67,7 @@ On a RedHat 6 based Linux or Ubuntu 12.04, the following configure will work:
 On FreeBSD, you can use this one:
 	./configure --with-pcre=/usr/local --with-openssl=/usr \
 	--with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png \
-	--with-libgcrypt-prefix --with-libcurl=/usr/local
+	--with-libmcrypt-prefix=/usr/local --with-libcurl=/usr/local
 
 
 You should also specify the base directory for the resulting files with
