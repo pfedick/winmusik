@@ -388,8 +388,10 @@ build_debian ()
     create_dir debian/usr/bin
     create_dir debian/usr/share/applications
     create_dir debian/usr/share/pixmaps
+    create_dir debian/usr/share/doc/$PROGNAME
     cp bin/$PROGNAME debian/usr/bin/$PROGNAME
     cp WinMusik/resources/icon64.png debian/usr/share/pixmaps/$PROGNAME.png
+    cp WinMusik/docs/Userguide_de.pdf debian/usr/share/doc/$PROGNAME
 
     DEPENDS=""
     write_desktop_application "/usr" debian/usr/share/applications/$PROGNAME.desktop
@@ -428,9 +430,6 @@ build_debian ()
 }
 
 
-#
-# TODO:
-#
 #################################################################################
 # Specfile für Binary RPM schreiben
 #################################################################################
@@ -561,9 +560,10 @@ build_redhat ()
 		echo "ERROR: rpmbuild failed"
 		exit 1
 	fi
-	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm  $DISTFILES
+	TARGETFILE=$PROGNAME-$VERSION-$REVISION-$DISTRIB_ID-$DISTRIB_RELEASE.`uname -m`.rpm
+	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $DISTFILES/$TARGETFILE
 	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $TARGETPATH
+		cp $DISTFILES/$TARGETFILE $TARGETPATH
 	fi
 }
 
