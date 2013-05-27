@@ -183,12 +183,15 @@ build_FreeBSD_port ()
 	create_dir $WORK/FreeBSD
 	cd $CUR/FreeBSD
 	find ./ | grep -v ".svn" | cpio -pdmv $WORK/FreeBSD > /dev/null 2>&1
+	cat winmusik/Makefile | sed -e "s/PORTVERSION=.*/PORTVERSION=        $VERSION/" \
+		| sed -e "s/COMMENT=.*/COMMENT=            $DESCRIPTION/" \
+		>$WORK/FreeBSD/winmusik/Makefile
 	cd $DISTFILES
 	sha256 $PROGNAME-$VERSION-src.tar.bz2 > $WORK/FreeBSD/winmusik/distinfo
 	echo "SIZE ($PROGNAME-$VERSION-src.tar.bz2) = `stat -f \"%z\" $PROGNAME-$VERSION-src.tar.bz2`" >> $WORK/FreeBSD/winmusik/distinfo
 	cd $WORK/FreeBSD/winmusik; make clean;
 	cd ..
-	shar `find winmusik | grep -v ".svn" `| sed "s/^XPORTVERSION=.*$/XPORTVERSION=	$VERSION/" > $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar
+	shar `find winmusik | grep -v ".svn" ` > $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar
 	if [ -d "$TARGETPATH" ] ; then
 		cp $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar $TARGETPATH
 	fi
@@ -324,7 +327,7 @@ debian_write_control ()
         echo "Depends: $DEPENDS"
         echo "Installed-Size: 1000"
         echo "Description: $DESCRIPTION"
-        cat WinMusik/README_en.TXT | while read line
+        cat $WINMUSIKDIR/README_en.TXT | while read line
         do
                 if [ -z "$line" ] ; then
                     echo " ."
@@ -746,7 +749,7 @@ build_freebsd ()
 write_source_specfile() {
     FILE=$1
     BUILDREQUIRES=$2
-    COMMENT=`cat $WORK/WinMusik/README_en.TXT| grep -v "^===.*" `
+    COMMENT=`cat $WINMUSIKDIR/README_en.TXT| grep -v "^===.*" `
     # CONFIGURE-Variable füllen
     ppl6_linux_configure
     
