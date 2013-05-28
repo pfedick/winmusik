@@ -1,10 +1,10 @@
 #
 # This file is part of WinMusik 3 by Patrick Fedick
 #
-# $Author: pafe $
-# $Revision: 1.15 $
-# $Date: 2012/01/09 20:44:54 $
-# $Id: build_binary.sh,v 1.15 2012/01/09 20:44:54 pafe Exp $
+# $Author$
+# $Revision$
+# $Date$
+# $Id$
 #
 #
 # Copyright (c) 2013 Patrick Fedick <patrick@pfp.de>
@@ -572,9 +572,6 @@ build_redhat ()
 
 
 
-#
-# TODO:
-#
 #################################################################################
 # Suse RPM bauen
 #################################################################################
@@ -588,12 +585,21 @@ build_suse ()
 	        echo "INFO: Checking dependency packages..."
 	        check_rpm_package "pcre-devel"
 	        check_rpm_package "libjpeg8-devel"
+			check_rpm_package "libopenssl-devel"
+			check_rpm_package "libcurl-devel"
+			check_rpm_package "libmcrypt-devel"
 	        check_rpm_package "libpng15-devel"
 	        check_rpm_package "libbz2-devel"
 	        check_rpm_package "zlib-devel"
 	        check_rpm_package "libqt4-devel"
 	        check_rpm_package "nasm"
+	        check_rpm_package "desktop-file-utils"
 	        check_rpm_package "subversion"
+	        check_rpm_package "gcc"
+        	check_rpm_package "gcc-c++"
+        	check_rpm_package "libgcc_s1"
+			check_rpm_package "libstdc++-devel"
+			check_rpm_package "glibc-devel"
 	        check_rpm_package "rpm-devel"
 	        if [ "$MISSING" ] ; then
 	                echo "ERROR: Missing packages, please run the following command as root:"
@@ -620,7 +626,7 @@ build_suse ()
 	create_dir package/usr/share/pixmaps
 	write_desktop_application "/usr" package/usr/share/applications/$PROGNAME.desktop
 	cp $WINMUSIKDIR/resources/icon64.png package/usr/share/pixmaps/$PROGNAME.png
-	cp $WINMUSIKDIR/docs/Userguide_de.pdf package/usr/share/docs/$PROGNAME/
+	cp $WINMUSIKDIR/docs/Userguide_de.pdf package/usr/share/doc/$PROGNAME/
 	cp bin/$PROGNAME package/usr/bin
 	create_dir build/BUILD
 	BUILD=`pwd`/build/BUILD
@@ -630,9 +636,10 @@ build_suse ()
 		echo "ERROR: rpmbuild failed"
 		exit 1
 	fi
-	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm  $DISTFILES
+	TARGETFILE=$PROGNAME-$VERSION-$REVISION-$DISTRIB_ID-$DISTRIB_RELEASE.`uname -m`.rpm
+	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $DISTFILES/$TARGETFILE
 	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $TARGETPATH
+		cp $DISTFILES/$TARGETFILE $TARGETPATH
 	fi
 }
 
