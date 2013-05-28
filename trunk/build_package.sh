@@ -97,6 +97,9 @@ identify_system()
 {
 	if [ -f /etc/lsb-release ] ; then
 		. /etc/lsb-release
+	elif [ -f /etc/os-release ] ; then
+		DISTRIB_ID=`. /etc/os-release; echo $ID`
+		DISTRIB_RELEASE=`. /etc/os-release; echo $VERSION_ID`
 	elif [ -f /etc/system-release ] ; then
 		DISTRIB_ID=`cat /etc/system-release | awk '{print $1}'`
 		DISTRIB_RELEASE=`cat /etc/system-release | awk '{print $3}'`
@@ -351,7 +354,7 @@ build_debian ()
 	    MISSING=""
 	    echo "INFO: Checking dependency packages..."
 	    check_debian_package "libpcre3-dev"
-	    check_debian_package "libjpeg-dev"
+	    check_debian_package "libjpeg8-dev"
 	    check_debian_package "libssl-dev"
 	    check_debian_package "libcurl4-openssl-dev"
 	    check_debian_package "libmcrypt-dev"
@@ -899,7 +902,7 @@ WINMUSIKDIR=$WORK/WinMusik
 
 if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
 	build_debian
-elif [ "$DISTRIB_ID" = "Debian" ] ; then
+elif [ "$DISTRIB_ID" = "debian" ] ; then
 	build_debian
 elif [ "$DISTRIB_ID" = "FreeBSD" ] ; then
 	build_freebsd
