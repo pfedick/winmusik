@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.0.6
+Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
     - Filter für Schnellsuche über Zwischenablage
     - Suchbuttons für Amazon, Google, Beatport und Soundcloud
