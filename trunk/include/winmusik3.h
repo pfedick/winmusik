@@ -49,8 +49,8 @@
 #define __unused__ __attribute__ ((unused))
 #endif
 
-#define WM_VERSION	"3.0.6"
-#define WM_RELEASEDATE	20130525
+#define WM_VERSION	"3.0.7"
+#define WM_RELEASEDATE	20130530
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2013"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:

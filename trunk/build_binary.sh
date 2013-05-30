@@ -27,7 +27,7 @@
 MYPWD=`pwd`
 WORK=$MYPWD/tmp
 BUILD=$MYPWD/tmp/build
-VERSION="3.0.6"
+VERSION="3.0.7"
 NAME="WinMusik"
 PACKAGENAME="WinMusik"
 HOMEPAGE="http://www.winmusik.de/"
