@@ -1087,6 +1087,8 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	Tmp.Replace("*"," ");
 	Tmp.Replace(":","-");
 	Tmp.Replace("&","+");
+	Tmp.Replace("'","'");
+	Tmp.Replace("`","'");
 	Tmp.Replace("\"","''");
 	Tmp.Trim();
 	// Wir müssen mit Unicode arbeiten
