@@ -1,0 +1,8 @@
+/*!\page WM3TODO WinMusik TODO-Liste
+
+	- MP3-File-Suche durch Fallback-Mechanismus verbessern:
+	  1. $PATH/$PREFIX/$INDEX/$TRACK
+	  2. $PATH/$INDEX/$TRACK
+	  3. $PATH/$TRACK
+
+*/
