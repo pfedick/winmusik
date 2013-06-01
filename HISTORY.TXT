@@ -4,6 +4,10 @@
 
 Version 3.0.7
 	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
+	- Wenn Name der Version "Single" ist, wird dieser nicht mehr
+	  dem Titel im ID3-Tag hinzugefügt
+	- Refaktorierung: Es gibt jetzt eine zentrale Funktion zum Einlesen
+	  der MP3-Daten
 
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
