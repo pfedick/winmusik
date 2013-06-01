@@ -244,13 +244,14 @@ class TrackInfo
 		ppl6::CString	Label;
 		ppl6::CString	RecordingSource;
 		ppl6::CString	RecordingDevice;
+		ppl6::CBinary	Cover;
 
 		TrackInfo();
 		void clear();
 
 };
 
-void getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int preferedId3Version=2);
+bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int preferedId3Version=2);
 
 
 

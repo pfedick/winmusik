@@ -106,6 +106,7 @@ SOURCES += src/coverviewer.cpp \
     src/menue.cpp \
     src/main.cpp \
     src/edit.cpp \
+    src/edit-functions.cpp \
     src/playlists.cpp \
     src/devicelist.cpp \
     src/wmtoolbutton.cpp \

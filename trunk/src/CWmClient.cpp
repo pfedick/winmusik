@@ -1133,7 +1133,8 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	version=GetVersionText(Ti.VersionId);
 
 	Job.Set("artist",Ti.Artist);
-	Job.Setf("title","%s (%s)",Ti.Title,(const char*)version);
+	if (ppl6::LCase(version)!="single")	Job.Setf("title","%s (%s)",Ti.Title,(const char*)version);
+	else Job.Setf("title","%s",Ti.Title);
 	Job.Set("album",Ti.Album);
 	comment=Ti.Remarks;
 	//if (comment.Len()>0) comment+=" - ";

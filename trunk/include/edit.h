@@ -218,9 +218,7 @@ private:
 
     void SaveTrack();
     void resizeEvent ( QResizeEvent * event );
-    bool CopyFromID3v1Tag(ppl6::CString &Filename, ppl6::CFile &File);
-    bool CopyFromID3v2Tag(ppl6::CString &Filename, ppl6::CFile &File);
-    bool CopyFromFilename(ppl6::CString &Filename);
+    void CopyFromTrackInfo(TrackInfo &info);
 
     void UpdateCompleters();
     void ShowOimpInfo();
