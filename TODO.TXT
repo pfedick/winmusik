@@ -1,5 +1,10 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
+Keine Cover unter Windows
+  Wird WinMusik auf einem Windows-System ohne Qt-4.8.4 installiert, werden
+  keine Cover angezeigt. Scheinbar gibt es irgendeine Abhängigkeit, die im
+  Installer fehlt. Alternativ könnten die Cover mit PPL geladen werden.
+
 Character Replacement beim Import
   Im Konfigurationsmenü soll eine Liste von Zeichen definiert werden können,
   die beim Import von MP3-Dateien durch andere ersetzt werden. Es sollen nicht
