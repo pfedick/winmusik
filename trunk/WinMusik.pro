@@ -146,6 +146,7 @@ INCLUDEPATH += widgets
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
+win32:QMAKE_LFLAGS += -static-libgcc
 CONFIG(debug, debug|release) { 
     # Debug
     unix:LIBS += `ppl6-config \
