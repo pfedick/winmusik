@@ -5,7 +5,7 @@
  *      Author: patrick
  */
 
-#include <ppl6.h>
+#include <winmusik3.h>
 #include "csearchlist.h"
 
 
