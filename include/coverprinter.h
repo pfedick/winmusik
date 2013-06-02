@@ -26,7 +26,6 @@
 #define COVERPRINTER_H
 
 #define WITH_QT
-#include <ppl6.h>
 #include "winmusik3.h"
 #include <QtGui/QDialog>
 #include <QPrinter>
