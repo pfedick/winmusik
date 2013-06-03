@@ -1,9 +1,9 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
-Keine Cover unter Windows
-  Wird WinMusik auf einem Windows-System ohne Qt-4.8.4 installiert, werden
-  keine Cover angezeigt. Scheinbar gibt es irgendeine Abhängigkeit, die im
-  Installer fehlt. Alternativ könnten die Cover mit PPL geladen werden.
+
+Bewertung im Suchergebnis
+  Im Suchergebnis soll bei einem Rechtsklick auf die Bewertungsspalte ein
+  Kontextmenü aufgehen, worüber man direkt die Bewertung vornehmen kann
 
 Character Replacement beim Import
   Im Konfigurationsmenü soll eine Liste von Zeichen definiert werden können,

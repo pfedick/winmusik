@@ -8,6 +8,9 @@ Version 3.0.7
 	  dem Titel im ID3-Tag hinzugefügt
 	- Refaktorierung: Es gibt jetzt eine zentrale Funktion zum Einlesen
 	  der MP3-Daten
+	- Windows: Qt verwendet ein Plugin zum lesen von JPEGs. Dieses wurde vom
+	  Installer nicht mit installiert. Dadurch wurden keine Plattencover ange-
+	  zeigt
 
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
