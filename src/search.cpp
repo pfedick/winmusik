@@ -789,6 +789,7 @@ void Search::rateCurrentTrack(int value)
 	if (!currentTrackListItem) return;
 	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
+	if (value==t->Rating) return;
 	DataTitle tUpdate=*t;
 	tUpdate.Rating=value;
 	if (!wm->TitleStore.Put(&tUpdate)) {
