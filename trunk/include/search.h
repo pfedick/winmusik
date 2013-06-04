@@ -85,6 +85,9 @@ private:
     void FilterResult(const CTitleHashTree &in, ppl6::CGenericList &out);
     void LimitResult(const ppl6::CGenericList &in, ppl6::CGenericList &out);
     void RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out, size_t num);
+    void rateCurrentTrack(int value);
+
+    void renderTrack(WMTreeItem *item, DataTitle *ti);
 
 
 
@@ -113,6 +116,14 @@ public slots:
 	void on_contextEditTrack_triggered();
 	void on_contextCopyTrack_triggered();
 	void on_contextCopyFile_triggered();
+
+	void on_contextRate0_clicked();
+	void on_contextRate1_clicked();
+	void on_contextRate2_clicked();
+	void on_contextRate3_clicked();
+	void on_contextRate4_clicked();
+	void on_contextRate5_clicked();
+	void on_contextRate6_clicked();
 
 	void on_artist_returnPressed();
 	void on_title_returnPressed();

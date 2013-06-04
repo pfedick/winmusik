@@ -3,7 +3,8 @@
 
 Bewertung im Suchergebnis
   Im Suchergebnis soll bei einem Rechtsklick auf die Bewertungsspalte ein
-  Kontextmenü aufgehen, worüber man direkt die Bewertung vornehmen kann
+  Kontextmenü aufgehen, worüber man direkt die Bewertung vornehmen kann. => DONE
+  In den Suchlisten soll das ebenso möglich sein.
 
 Character Replacement beim Import
   Im Konfigurationsmenü soll eine Liste von Zeichen definiert werden können,
