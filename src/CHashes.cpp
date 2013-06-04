@@ -290,6 +290,14 @@ int CHashes::AddTitleInternal(ppluint32 TitleId, const DataTitle *title)
 		}
 		MyTags.Concatf("%s;",tmp);
 	}
+	tmp=wm->GetLabelText(title->LabelId);
+	if (tmp) {
+		if (wm->GetWords(tmp,words)) {
+			AddWords(Label,words,title);
+			//AddWords(Global,words,title);
+		}
+	}
+
 	MyTags+=title->Tags;
 	if (GetTags(MyTags,words)) {
 		AddWords(Tags,words,title);
@@ -347,6 +355,12 @@ int CHashes::RemoveTitle(ppluint32 TitleId, const DataTitle *title)
 			RemoveWords(Version,words,title);
 		}
 	}
+	tmp=wm->GetLabelText(title->LabelId);
+	if (tmp) {
+		if (wm->GetWords(tmp,words)) {
+			RemoveWords(Label,words,title);
+		}
+	}
 	tmp=wm->GetGenreText(title->GenreId);
 	if (tmp) {
 		if (wm->GetWords(tmp,words)) {
@@ -376,6 +390,7 @@ void CHashes::ThreadMain(void *)
 	Tags.Clear();
 	Remarks.Clear();
 	Album.Clear();
+	Label.Clear();
 
 	CTitleStore *store=&wm->TitleStore;
 	if (!store) {
@@ -400,6 +415,7 @@ void CHashes::ThreadMain(void *)
 		wmlog->Printf(ppl6::LOG::DEBUG,2,"CHashes","ThreadMain",__FILE__,__LINE__,"Anzahl Worte in Tags: %u",Tags.Num());
 		wmlog->Printf(ppl6::LOG::DEBUG,2,"CHashes","ThreadMain",__FILE__,__LINE__,"Anzahl Worte in Remarks: %u",Remarks.Num());
 		wmlog->Printf(ppl6::LOG::DEBUG,2,"CHashes","ThreadMain",__FILE__,__LINE__,"Anzahl Worte in Album: %u",Album.Num());
+		wmlog->Printf(ppl6::LOG::DEBUG,2,"CHashes","ThreadMain",__FILE__,__LINE__,"Anzahl Worte in Label: %u",Label.Num());
 
 		//wmlog->Printf(ppl6::LOG::DEBUG,2,"CHashes","ThreadMain",__FILE__,__LINE__,"Anzahl Worte global: %u",Global.Num());
 		log=wmlog;
@@ -471,7 +487,7 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitl
 	return 1;
 }
 
-int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, CTitleHashTree &Result)
+int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, const ppl6::CString &Label, CTitleHashTree &Result)
 {
 	Result.Clear();
 	// Zuerst die Wortlisten erstellen
@@ -480,14 +496,17 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	ppl6::CArray WordsVersion;
 	ppl6::CArray WordsGenre;
 	ppl6::CArray WordsTags;
+	ppl6::CArray WordsLabel;
 	wm->GetWords(Artist,WordsArtist);
 	wm->GetWords(Title,WordsTitle);
 	wm->GetWords(Version,WordsVersion);
+	wm->GetWords(Label,WordsLabel);
 	wm->GetWords(Genre,WordsGenre);
 	GetTags(Tags,WordsTags);
 	if (WordsArtist.Num()==0
 			&& WordsTitle.Num()==0
 			&& WordsVersion.Num()==0
+			&& WordsLabel.Num()==0
 			&& WordsGenre.Num()==0
 			&& WordsTags.Num()==0) {
 		ppl6::SetError(20028);
@@ -496,7 +515,7 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	Mutex.Lock();
 	//WordsArtist.List("WordsArtist");
 	//WordsTitle.List("WordsTitle");
-	CTitleHashTree res1, res2, res3, res4, res5, res;
+	CTitleHashTree res1, res2, res3, res4, res5, res6, res;
 	if (WordsArtist.Num()) {
 		FindWords(this->Artist,WordsArtist,res1);
 		//printf ("Result enthält %i Titel\n",res1.Num());
@@ -514,12 +533,17 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	if (WordsTags.Num()) {
 		FindWords(this->Tags,WordsTags,res5);
 	}
+	if (WordsLabel.Num()) {
+		FindWords(this->Label,WordsLabel,res6);
+	}
+
 	Mutex.Unlock();
 	if (WordsArtist.Num()>0) Copy(Result,res1);
 	else if (WordsTitle.Num()>0) Copy(Result,res2);
 	else if (WordsVersion.Num()>0) Copy(Result,res3);
 	else if (WordsGenre.Num()>0) Copy(Result,res4);
 	else if (WordsTags.Num()>0) Copy(Result,res5);
+	else if (WordsLabel.Num()>0) Copy(Result,res6);
 
 	if (WordsTitle.Num()>0 ) {
 		Copy(res,Result);
@@ -536,6 +560,10 @@ int CHashes::Find(const ppl6::CString &Artist, const ppl6::CString &Title, const
 	if (WordsTags.Num()>0 ) {
 		Copy(res,Result);
 		Union(Result,res,res5);
+	}
+	if (WordsLabel.Num()>0 ) {
+		Copy(res,Result);
+		Union(Result,res,res6);
 	}
 	return 1;
 }
@@ -604,6 +632,7 @@ int CHashes::FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int 
 		if (Flags&SearchTags) FindSingleWord(Tags,key,TmpResult);
 		if (Flags&SearchRemarks) FindSingleWord(Remarks,key,TmpResult);
 		if (Flags&SearchAlbum) FindSingleWord(Album,key,TmpResult);
+		if (Flags&SearchLabel) FindSingleWord(Label,key,TmpResult);
 		if (TmpResult.Num()>0) {
 			if (wordnum==0) Copy(Result,TmpResult);
 			else {

@@ -143,7 +143,7 @@ void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem *item)
 	// Titel in Datenbank suchen
 	CTitleHashTree Result;
 	int dupePresumption=0;
-	wm->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","",Result);
+	wm->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","","",Result);
 	if (Result.Num()>1) {
 		dupePresumption=100;
 	} else if (Result.Num()>0) {

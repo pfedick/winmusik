@@ -290,7 +290,7 @@ void MassImport::checkDupes(TreeItem *item)
 	} else {
 		LocalDupeCheck.insert(Key);
 		CTitleHashTree Result;
-		wm->Hashes.Find(item->info.Ti.Artist,item->info.Ti.Title,Version,"","",Result);
+		wm->Hashes.Find(item->info.Ti.Artist,item->info.Ti.Title,Version,"","","",Result);
 		if (Result.Num()>1) {
 			item->dupePresumption=100;
 			item->import=false;

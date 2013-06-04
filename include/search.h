@@ -49,7 +49,7 @@ public:
     ~Search();
 
     //void StartSearch(const char *artist, const char *title);
-    void FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version=ppl6::CString(),const ppl6::CString &Genre=ppl6::CString(),const ppl6::CString &Tags=ppl6::CString());
+    void FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version=ppl6::CString(),const ppl6::CString &Genre=ppl6::CString(),const ppl6::CString &Tags=ppl6::CString(),const ppl6::CString &Label=ppl6::CString());
     void ReloadTranslation();
 
     void DoSearch();
@@ -131,9 +131,7 @@ public slots:
 	void on_genre_returnPressed();
 	void on_tags_returnPressed();
 	void on_query_returnPressed();
-
-
-
+	void on_recordLabel_returnPressed();
 };
 
 class CSearchTrackList : public QTreeWidget
