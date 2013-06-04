@@ -73,6 +73,7 @@ private:
     void editTrack(SearchlistTreeItem *item);
     void deleteTrack(SearchlistTreeItem *item);
     void renderTrack(SearchlistTreeItem *item);
+    void dupeCheckOnTrack(SearchlistTreeItem *item);
     int save();
     void rateCurrentTrack(int value);
 
