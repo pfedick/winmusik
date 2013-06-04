@@ -190,13 +190,14 @@ void Search::StartSearch(const char *artist, const char *title)
 }
 */
 
-void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version,const ppl6::CString &Genre,const ppl6::CString &Tags)
+void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version,const ppl6::CString &Genre,const ppl6::CString &Tags,const ppl6::CString &Label)
 {
 	ui.artist->setText(Artist);
 	ui.title->setText(Title);
 	ui.version->setText(Version);
 	ui.genre->setText(Genre);
 	ui.tags->setText(Tags);
+	ui.recordLabel->setText(Label);
 	ui.numTracks->setText("");
 
 	currentTrackListItem=NULL;
@@ -209,7 +210,7 @@ void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title,
 	ppl6::CString Tmp;
 	ui.progressBar->setValue(0);
 	CTitleHashTree res;
-	if (wm->Hashes.Find(Artist,Title,Version,Genre,Tags,res)) {
+	if (wm->Hashes.Find(Artist,Title,Version,Genre,Tags,Label,res)) {
 		Tmp.Setf("%u",res.Num());
 		ui.numTracks->setText(Tmp);
 	}
@@ -257,14 +258,16 @@ void Search::DoSearch()
 	ppl6::CString Version=ui.version->text();
 	ppl6::CString Genre=ui.genre->text();
 	ppl6::CString Tags=ui.tags->text();
+	ppl6::CString Label=ui.recordLabel->text();
 	Artist=ppl6::Trim(ppl6::LCase(Artist));
 	Title=ppl6::Trim(ppl6::LCase(Title));
 	Version=ppl6::Trim(ppl6::LCase(Version));
 	Genre=ppl6::Trim(ppl6::LCase(Genre));
 	Tags=ppl6::Trim(ppl6::LCase(Tags));
+	Label=ppl6::Trim(ppl6::LCase(Label));
 
 	//if (ui.fastsearch->isChecked()) {
-		FastSearch(Artist,Title,Version,Genre,Tags);
+		FastSearch(Artist,Title,Version,Genre,Tags,Label);
 		ui.artist->setFocus();
 		return;
 	//}
@@ -519,6 +522,7 @@ void Search::on_quicksearchButton_clicked()
 	if (ui.searchArtist->isChecked()) flags|=CHashes::SearchArtist;
 	if (ui.searchTitle->isChecked()) flags|=CHashes::SearchTitle;
 	if (ui.searchVersion->isChecked()) flags|=CHashes::SearchVersion;
+	if (ui.searchLabel->isChecked()) flags|=CHashes::SearchLabel;
 	if (ui.searchGenre->isChecked()) flags|=CHashes::SearchGenre;
 	if (ui.searchTags->isChecked()) flags|=CHashes::SearchTags;
 	if (ui.searchRemarks->isChecked()) flags|=CHashes::SearchRemarks;
@@ -576,6 +580,10 @@ void Search::on_tags_returnPressed()
 	DoSearch();
 }
 
+void Search::on_recordLabel_returnPressed()
+{
+	DoSearch();
+}
 
 
 void Search::on_query_returnPressed()

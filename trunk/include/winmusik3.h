@@ -426,6 +426,7 @@ class CHashes : public ppl6::CThread
 		CWordTree		Tags;
 		CWordTree		Remarks;
 		CWordTree		Album;
+		CWordTree		Label;
 		//CWordTree		Global;
 		ppl6::CLog		*log;
 
@@ -446,7 +447,8 @@ class CHashes : public ppl6::CThread
 			SearchTags=16,
 			SearchRemarks=32,
 			SearchAlbum=64,
-			SearchAll=127
+			SearchLabel=128,
+			SearchAll=255
 		};
 
 		CHashes();
@@ -459,7 +461,7 @@ class CHashes : public ppl6::CThread
 		int RemoveTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 
 		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitleHashTree &Result);
-		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, CTitleHashTree &Result);
+		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, const ppl6::CString &Label, CTitleHashTree &Result);
 		int FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int Flags=SearchAll);
 		int CheckDupes(const ppl6::CString &Artist, const ppl6::CString &Title, ppluint32 Version, ppluint32 Ignore=0);
 
