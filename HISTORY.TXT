@@ -4,19 +4,18 @@
 
 Version 3.0.7
 	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
-	- Wenn Name der Version "Single" ist, wird dieser nicht mehr
-	  dem Titel im ID3-Tag hinzugefügt
-	- Refaktorierung: Es gibt jetzt eine zentrale Funktion zum Einlesen
-	  der MP3-Daten
+	- Wenn Name der Version "Single" ist, wird dieser nicht mehr dem Titel im
+	  ID3-Tag hinzugefügt
+	- Refaktorierung: Es gibt jetzt eine zentrale Funktion zum Einlesen der
+	  MP3-Daten
 	- Windows: Qt verwendet ein Plugin zum lesen von JPEGs. Dieses wurde vom
 	  Installer nicht mit installiert. Dadurch wurden keine Plattencover ange-
 	  zeigt
-	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das
-	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
-	  geändert werden	
+	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das Kontext-
+	  menü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert werden	
 	- Suchliste: Die Bewertung eines Titels kann nun ebenfalls über das
-	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
-	  geändert werden
+	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert
+	  werden
 	- Suchliste: Der Button "Neuer Track" funktioniert wieder
 	- Suche unterstützt nun auch Suche nach Plattenlabel
 	  
