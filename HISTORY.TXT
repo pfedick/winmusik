@@ -11,7 +11,10 @@ Version 3.0.7
 	- Windows: Qt verwendet ein Plugin zum lesen von JPEGs. Dieses wurde vom
 	  Installer nicht mit installiert. Dadurch wurden keine Plattencover ange-
 	  zeigt
-
+	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das
+	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
+	  geändert werden
+	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
     - Filter für Schnellsuche über Zwischenablage

@@ -392,13 +392,77 @@ void Search::LimitResult(const ppl6::CGenericList &in, ppl6::CGenericList &out)
 }
 
 
-void Search::PresentResults()
+void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 {
-	QPixmap icon;
-	DataTitle *ti;
 	const char Seite[]="?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	ppl6::CString Tmp;
+	QPixmap icon;
 	QBrush Brush(Qt::SolidPattern);
 	Brush.setColor("red");
+
+
+	Tmp.Setf("%5u",item->Track);
+	item->setText(0,Tmp);
+
+	if (ti->CoverPreview.Size()) {
+		icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
+		item->setIcon(1,icon.scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+
+	} else {
+		item->setIcon(1,QIcon(":/icons/resources/cover16.png"));
+
+	}
+	Tmp=ti->Artist;
+	item->setText(1,Tmp);
+	Tmp=ti->Title;
+	item->setText(2,Tmp);
+	item->setForeground(3,Brush);
+	Tmp=wm->GetVersionText(ti->VersionId);
+	item->setText(3,Tmp);
+	Tmp=wm->GetGenreText(ti->GenreId);
+	item->setText(4,Tmp);
+	Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
+	item->setText(5,Tmp);
+
+	// Tonträger
+	Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
+	item->setText(SEARCH_TRACKLIST_SOURCE_ROW,Tmp);
+	QIcon Icon;
+	Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",ti->DeviceType);
+	Icon.addFile(Tmp);
+	item->setIcon(SEARCH_TRACKLIST_SOURCE_ROW,Icon);
+
+	// Bewertung
+	switch (ti->Rating) {
+		case 0: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-0.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"0");
+			break;
+		case 1: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-1.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"1");
+			break;
+		case 2: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-2.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"2");
+			break;
+		case 3: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-3.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"3");
+			break;
+		case 4: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-4.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"4");
+			break;
+		case 5: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-5.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"5");
+			break;
+		case 6: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-6.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW,"6");
+			break;
+	}
+}
+
+void Search::PresentResults()
+{
+
+	DataTitle *ti;
+
 	ppl6::CString Tmp;
 	Tmp.Setf("%u",Results.Num());
 	ui.numTracks->setText(Tmp);
@@ -416,64 +480,9 @@ void Search::PresentResults()
 		WMTreeItem *item=new WMTreeItem;
 		item->Track=i;
 		item->Id=ti->TitleId;
-		Tmp.Setf("%5u",i);
-		item->setText(0,Tmp);
-		if (ti->CoverPreview.Size()) {
-			icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
-			item->setIcon(1,icon.scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 
-		} else {
-			item->setIcon(1,QIcon(":/icons/resources/cover16.png"));
-
-		}
-		Tmp=ti->Artist;
-		item->setText(1,Tmp);
-		Tmp=ti->Title;
-		item->setText(2,Tmp);
-		item->setForeground(3,Brush);
-		Tmp=wm->GetVersionText(ti->VersionId);
-		item->setText(3,Tmp);
-		Tmp=wm->GetGenreText(ti->GenreId);
-		item->setText(4,Tmp);
-		Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
-		item->setText(5,Tmp);
-
-		// Tonträger
-		Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
-		item->setText(SEARCH_TRACKLIST_SOURCE_ROW,Tmp);
-		QIcon Icon;
-		Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",ti->DeviceType);
-		Icon.addFile(Tmp);
-		item->setIcon(SEARCH_TRACKLIST_SOURCE_ROW,Icon);
-
-		// Bewertung
-		switch (ti->Rating) {
-			case 0: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-0.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"0");
-				break;
-			case 1: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-1.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"1");
-				break;
-			case 2: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-2.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"2");
-				break;
-			case 3: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-3.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"3");
-				break;
-			case 4: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-4.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"4");
-				break;
-			case 5: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-5.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"5");
-				break;
-			case 6: item->setIcon(SEARCH_TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/rating-6.png"));
-				item->setText(SEARCH_TRACKLIST_RATING_ROW,"6");
-				break;
-		}
-
-
+		renderTrack(item,ti);
 		totalLength+=ti->Length;
-
 		trackList->addTopLevelItem(item);
 	}
 
@@ -611,20 +620,32 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
 
 
     QMenu *m=new QMenu(this);
+    QAction *a=NULL;
 
-    QAction *a=m->addAction (QIcon(":/icons/resources/frame_text.png"),tr("select all","trackList Context Menue"),this,SLOT(on_markAllButton_clicked()));
-    m->addAction (QIcon(":/icons/resources/eraser.png"),tr("select none","trackList Context Menue"),this,SLOT(on_markNoneButton_clicked()));
+    int column=trackList->currentColumn();
+    if (column==SEARCH_TRACKLIST_RATING_ROW) {
+    	a=m->addAction (QIcon(":/bewertung/resources/rating-0.png"),"0",this,SLOT(on_contextRate0_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-1.png"),"1",this,SLOT(on_contextRate1_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-2.png"),"2",this,SLOT(on_contextRate2_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-3.png"),"3",this,SLOT(on_contextRate3_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-4.png"),"4",this,SLOT(on_contextRate4_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
+    } else {
+    	a=m->addAction (QIcon(":/icons/resources/frame_text.png"),tr("select all","trackList Context Menue"),this,SLOT(on_markAllButton_clicked()));
+    	m->addAction (QIcon(":/icons/resources/eraser.png"),tr("select none","trackList Context Menue"),this,SLOT(on_markNoneButton_clicked()));
 
-    m->addSeparator();
-    m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
-    if (t) m->addAction (wm->GetDeviceIcon(t->DeviceType),tr("All tracks on this medium","trackList Context Menue"),this,SLOT(on_contextFindMoreMedium_triggered()));
-    m->addSeparator();
-    if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
-    m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
-    m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
-    if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
+    	m->addSeparator();
+    	m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+    	m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
+    	m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+    	if (t) m->addAction (wm->GetDeviceIcon(t->DeviceType),tr("All tracks on this medium","trackList Context Menue"),this,SLOT(on_contextFindMoreMedium_triggered()));
+    	m->addSeparator();
+    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
+    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
+    }
     m->popup(p,a);
     ui.artist->setFocus();
 
@@ -761,6 +782,55 @@ void Search::on_contextCopyFile_triggered()
 	    clipboard->setMimeData(mimeData,QClipboard::Clipboard);
 	}
 	ui.artist->setFocus();
+}
+
+void Search::rateCurrentTrack(int value)
+{
+	if (!currentTrackListItem) return;
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (!t) return;
+	DataTitle tUpdate=*t;
+	tUpdate.Rating=value;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	renderTrack(currentTrackListItem,&tUpdate);
+}
+
+void Search::on_contextRate0_clicked()
+{
+	rateCurrentTrack(0);
+}
+
+void Search::on_contextRate1_clicked()
+{
+	rateCurrentTrack(1);
+}
+
+void Search::on_contextRate2_clicked()
+{
+	rateCurrentTrack(2);
+}
+
+void Search::on_contextRate3_clicked()
+{
+	rateCurrentTrack(3);
+}
+
+void Search::on_contextRate4_clicked()
+{
+	rateCurrentTrack(4);
+}
+
+void Search::on_contextRate5_clicked()
+{
+	rateCurrentTrack(5);
+}
+
+void Search::on_contextRate6_clicked()
+{
+	rateCurrentTrack(6);
 }
 
 
