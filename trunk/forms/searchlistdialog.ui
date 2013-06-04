@@ -85,7 +85,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="newTrackButton2">
+      <widget class="QPushButton" name="newTrackButton">
        <property name="text">
         <string>New Track</string>
        </property>

@@ -14,6 +14,7 @@ Version 3.0.7
 	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das
 	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
 	  geändert werden
+	- Suchliste: Der Button "Neuer Track" funktioniert wieder
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
