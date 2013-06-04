@@ -240,15 +240,25 @@ void SearchlistDialog::on_trackList_customContextMenuRequested ( const QPoint & 
     currentTrackListItem=(SearchlistTreeItem*)ui.trackList->itemAt(pos);
     if (!currentTrackListItem) return;
     //printf ("Custom Context %i\n",currentTrackListItem->Track);
+    int column=ui.trackList->currentColumn();
 
     QMenu *m=new QMenu(this);
     QAction *a=NULL;
-    a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()), tr("Return"));
-    m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()), tr("Del"));
-    m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()), tr("Ctrl+N"));
-    m->addSeparator();
-    m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Search track in Database","trackList Context Menue"),this,SLOT(on_contextFind_triggered()), tr("F4"));
-
+    if (column==SL_COLUMN_RATING) {
+    	a=m->addAction (QIcon(":/bewertung/resources/rating-0.png"),"0",this,SLOT(on_contextRate0_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-1.png"),"1",this,SLOT(on_contextRate1_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-2.png"),"2",this,SLOT(on_contextRate2_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-3.png"),"3",this,SLOT(on_contextRate3_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-4.png"),"4",this,SLOT(on_contextRate4_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
+    	m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
+    } else {
+    	a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()), tr("Return"));
+    	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()), tr("Del"));
+    	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()), tr("Ctrl+N"));
+    	m->addSeparator();
+    	m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Search track in Database","trackList Context Menue"),this,SLOT(on_contextFind_triggered()), tr("F4"));
+    }
     /*
     m->setTitle("Ein Titel");
     QAction *a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
@@ -299,6 +309,53 @@ void SearchlistDialog::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, 
 	}
 
 }
+
+
+void SearchlistDialog::rateCurrentTrack(int value)
+{
+	if (!currentTrackListItem) return;
+	if (value!=currentTrackListItem->Track.Rating) {
+		currentTrackListItem->Track.Rating=value;
+		renderTrack(currentTrackListItem);
+		save();
+	}
+}
+
+void SearchlistDialog::on_contextRate0_clicked()
+{
+	rateCurrentTrack(0);
+}
+
+void SearchlistDialog::on_contextRate1_clicked()
+{
+	rateCurrentTrack(1);
+}
+
+void SearchlistDialog::on_contextRate2_clicked()
+{
+	rateCurrentTrack(2);
+}
+
+void SearchlistDialog::on_contextRate3_clicked()
+{
+	rateCurrentTrack(3);
+}
+
+void SearchlistDialog::on_contextRate4_clicked()
+{
+	rateCurrentTrack(4);
+}
+
+void SearchlistDialog::on_contextRate5_clicked()
+{
+	rateCurrentTrack(5);
+}
+
+void SearchlistDialog::on_contextRate6_clicked()
+{
+	rateCurrentTrack(6);
+}
+
 
 void SearchlistDialog::on_contextEditTrack_triggered()
 {

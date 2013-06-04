@@ -74,6 +74,7 @@ private:
     void deleteTrack(SearchlistTreeItem *item);
     void renderTrack(SearchlistTreeItem *item);
     int save();
+    void rateCurrentTrack(int value);
 
     SearchlistItem	copyItem;
     bool			haveCopyItem;
@@ -96,6 +97,14 @@ public slots:
 	void on_contextInsertTrack_triggered();
 	void on_contextDeleteTrack_triggered();
 	void on_contextFind_triggered();
+	void on_contextRate0_clicked();
+	void on_contextRate1_clicked();
+	void on_contextRate2_clicked();
+	void on_contextRate3_clicked();
+	void on_contextRate4_clicked();
+	void on_contextRate5_clicked();
+	void on_contextRate6_clicked();
+
 	void on_newTrackFromClipboardButton_clicked();
 	void on_newTrackButton_clicked();
 	void on_searchButton_clicked();
