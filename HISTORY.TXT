@@ -13,6 +13,9 @@ Version 3.0.7
 	  zeigt
 	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das
 	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
+	  geändert werden	
+	- Suchliste: Die Bewertung eines Titels kann nun ebenfalls über das
+	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt
 	  geändert werden
 	- Suchliste: Der Button "Neuer Track" funktioniert wieder
 	  

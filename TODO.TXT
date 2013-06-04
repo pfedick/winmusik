@@ -1,14 +1,7 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
-Bewertung im Suchergebnis
-  Im Suchergebnis soll bei einem Rechtsklick auf die Bewertungsspalte ein
-  Kontextmenü aufgehen, worüber man direkt die Bewertung vornehmen kann. => DONE
-  In den Suchlisten soll das ebenso möglich sein.
-
 Suchliste
-  Die Bewertung eines Titels soll via Kontextmenü in der Bewertungsspalte
-  änderbar sein.
-  Schön wäre auch, wenn sich die Ladezeit verkürzen liesse. Was dauert da
+  Schön wäre, wenn sich die Ladezeit verkürzen liesse. Was dauert da
   eigentlich so lange? Das Rendering oder das Parsen des XML-Files?
  
 Character Replacement beim Import
