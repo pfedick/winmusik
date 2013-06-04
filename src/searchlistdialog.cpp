@@ -71,12 +71,23 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	}
 	ui.searchlistName->setText(List.name());
 	SearchlistTreeItem *item;
+	ui.trackList->setSortingEnabled(false);
 	for (size_t i=0;i<List.size();i++) {
 		item=new SearchlistTreeItem;
 		item->Track=List[i];
 		renderTrack(item);
 		ui.trackList->addTopLevelItem(item);
 	}
+	ui.trackList->setSortingEnabled(true);
+	ui.trackList->sortItems(SL_COLUMN_ARTIST,Qt::AscendingOrder);
+
+	// Das müssen wir irgendwie asynchron hinbekommen
+	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
+		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
+		dupeCheckOnTrack(item);
+	}
+
+
 	ClipBoardTimer.start(200);
 }
 
@@ -126,22 +137,9 @@ bool SearchlistDialog::eventFilter(QObject *target, QEvent *event)
 }
 
 
-
-
-void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
+void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem *item)
 {
 	ppl6::CString Tmp;
-	Tmp=item->Track.Artist+" - "+item->Track.Title;
-	item->setText(SL_COLUMN_ARTIST,Tmp);
-	item->setText(SL_COLUMN_VERSION,item->Track.Version);
-	item->setText(SL_COLUMN_GENRE,item->Track.Genre);
-	item->setTextAlignment(SL_COLUMN_LENGTH,Qt::AlignRight);
-	if (item->Track.Length>0) {
-		Tmp.Setf("%i:%02i",item->Track.Length/60,item->Track.Length%60);
-		item->setText(SL_COLUMN_LENGTH,Tmp);
-	}
-	item->setText(SL_COLUMN_DATEADDED,item->Track.DateAdded.get("%Y-%m-%d"));
-
 	// Titel in Datenbank suchen
 	CTitleHashTree Result;
 	int dupePresumption=0;
@@ -158,9 +156,24 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 			dupePresumption=40;
 		}
 	}
+
 	Tmp.Setf("%3i %%",dupePresumption);
 	item->setText(SL_COLUMN_EXISTING,Tmp);
+}
 
+void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
+{
+	ppl6::CString Tmp;
+	Tmp=item->Track.Artist+" - "+item->Track.Title;
+	item->setText(SL_COLUMN_ARTIST,Tmp);
+	item->setText(SL_COLUMN_VERSION,item->Track.Version);
+	item->setText(SL_COLUMN_GENRE,item->Track.Genre);
+	item->setTextAlignment(SL_COLUMN_LENGTH,Qt::AlignRight);
+	if (item->Track.Length>0) {
+		Tmp.Setf("%i:%02i",item->Track.Length/60,item->Track.Length%60);
+		item->setText(SL_COLUMN_LENGTH,Tmp);
+	}
+	item->setText(SL_COLUMN_DATEADDED,item->Track.DateAdded.get("%Y-%m-%d"));
 
 	if (item->Track.found==true) {
 		item->setIcon(SL_COLUMN_DONE,QIcon(":/icons/resources/button_ok.png"));
@@ -294,6 +307,7 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		else it.found=true;
 		((SearchlistTreeItem*)item)->Track=it;
 		renderTrack((SearchlistTreeItem*)item);
+		dupeCheckOnTrack((SearchlistTreeItem*)item);
 		save();
 	}
 }
@@ -317,6 +331,7 @@ void SearchlistDialog::rateCurrentTrack(int value)
 	if (value!=currentTrackListItem->Track.Rating) {
 		currentTrackListItem->Track.Rating=value;
 		renderTrack(currentTrackListItem);
+		dupeCheckOnTrack(currentTrackListItem);
 		save();
 	}
 }
@@ -372,6 +387,7 @@ void SearchlistDialog::editTrack(SearchlistTreeItem *item)
 	if (ret==1) {
 		item->Track=dialog.get();
 		renderTrack(item);
+		dupeCheckOnTrack(item);
 		save();
 	}
 }
@@ -386,6 +402,7 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 	SearchlistTreeItem *item=new SearchlistTreeItem;
 	item->Track=track;
 	renderTrack(item);
+	dupeCheckOnTrack(item);
 	ui.trackList->addTopLevelItem(item);
 	save();
 }
