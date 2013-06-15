@@ -748,8 +748,15 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 	Tmp.Setf("%d",info.Ti.BPM);				// BPM
 	ui.bpm->setText(Tmp);
 	QDate Date;								// ReleaseDate
-	Date.setDate(info.Ti.ReleaseDate,1,1);
+	Tmp.Setf("%u",info.Ti.ReleaseDate);
+	int year=Tmp.Mid(0,4).ToInt();
+	int month=Tmp.Mid(4,2).ToInt();
+	int day=Tmp.Mid(6,2).ToInt();
+	if (!month) month=1;
+	if (!day) day=1;
+	Date.setDate(year,month,day);
 	ui.releaseDate->setDate(Date);
+
 	ui.remarks->setText(info.Ti.Remarks);	// Comment
 	ui.genre->setText(info.Genre);			// Genre
 	if (info.Genre.NotEmpty()) {
@@ -799,6 +806,8 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 		} else {
 			ui.labelId->setText("*");
 		}
+	} else {
+		ui.labelId->setText("*");
 	}
 	if (info.Cover.Size()) {				// Cover
 		Cover.loadFromData((const uchar*)info.Cover.GetPtr(),info.Cover.GetSize());

@@ -291,6 +291,8 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	} else return false;
 	info.Ti.Channels=2;
 	info.Ti.Flags=1+2;
+	info.Ti.ReleaseDate=0;
+	info.Ti.LabelId=0;
 
 	ppl6::PPL_MPEG_HEADER pmp3;
 	ppl6::CFile File;
