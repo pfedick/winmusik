@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>412</height>
+    <width>697</width>
+    <height>444</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,17 +19,11 @@
     <height>412</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>600</width>
-    <height>414</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Properties</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/logo/resources/icon64.png</normaloff>:/logo/resources/icon64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -42,11 +36,11 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/configure.png</normaloff>:/icons/resources/configure.png</iconset>
       </attribute>
       <attribute name="title">
@@ -74,7 +68,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -101,7 +95,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -142,8 +136,14 @@
             <string>Check now</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/viewmag.png</normaloff>:/icons/resources/viewmag.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -244,7 +244,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/devices25/resources/tr25x25-0007.png</normaloff>:/devices25/resources/tr25x25-0007.png</iconset>
       </attribute>
       <attribute name="title">
@@ -275,7 +275,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -569,7 +569,7 @@
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/user.png</normaloff>:/icons/resources/user.png</iconset>
       </attribute>
       <attribute name="title">
@@ -692,8 +692,17 @@
               <string>Register</string>
              </property>
              <property name="icon">
-              <iconset resource="../resources.qrc">
+              <iconset resource="../../resources.qrc">
                <normaloff>:/icons/resources/edit.png</normaloff>:/icons/resources/edit.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="shortcut">
+              <string>Return</string>
              </property>
             </widget>
            </item>
@@ -724,7 +733,7 @@
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/bug.png</normaloff>:/icons/resources/bug.png</iconset>
       </attribute>
       <attribute name="title">
@@ -758,7 +767,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../resources.qrc">
+               <iconset resource="../../resources.qrc">
                 <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
               </property>
               <property name="iconSize">
@@ -892,7 +901,7 @@
      </widget>
      <widget class="QWidget" name="tab_5">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/devices.png</normaloff>:/icons/resources/devices.png</iconset>
       </attribute>
       <attribute name="title">
@@ -937,7 +946,7 @@
             <string>Music Cassette</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0001.png</normaloff>:/devices16/resources/tr16x16-0001.png</iconset>
            </property>
            <property name="iconSize">
@@ -954,7 +963,7 @@
             <string>Audio CD</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0002.png</normaloff>:/devices16/resources/tr16x16-0002.png</iconset>
            </property>
            <property name="iconSize">
@@ -971,7 +980,7 @@
             <string>Data Storage</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0003.png</normaloff>:/devices16/resources/tr16x16-0003.png</iconset>
            </property>
            <property name="iconSize">
@@ -988,7 +997,7 @@
             <string>Record</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0004.png</normaloff>:/devices16/resources/tr16x16-0004.png</iconset>
            </property>
            <property name="iconSize">
@@ -1005,7 +1014,7 @@
             <string>VHS-Tape</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0005.png</normaloff>:/devices16/resources/tr16x16-0005.png</iconset>
            </property>
            <property name="iconSize">
@@ -1022,7 +1031,7 @@
             <string>Other</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0006.png</normaloff>:/devices16/resources/tr16x16-0006.png</iconset>
            </property>
            <property name="iconSize">
@@ -1039,7 +1048,7 @@
             <string>MP3-CD</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0007.png</normaloff>:/devices16/resources/tr16x16-0007.png</iconset>
            </property>
            <property name="iconSize">
@@ -1056,7 +1065,7 @@
             <string>Tape</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0008.png</normaloff>:/devices16/resources/tr16x16-0008.png</iconset>
            </property>
            <property name="iconSize">
@@ -1073,7 +1082,7 @@
             <string>Audio DVD</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/devices16/resources/tr16x16-0009.png</normaloff>:/devices16/resources/tr16x16-0009.png</iconset>
            </property>
            <property name="iconSize">
@@ -1152,7 +1161,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1172,7 +1181,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1192,7 +1201,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1212,7 +1221,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1232,7 +1241,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1252,7 +1261,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1269,7 +1278,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1289,7 +1298,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1309,7 +1318,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../resources.qrc">
+            <iconset resource="../../resources.qrc">
              <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
            </property>
            <property name="iconSize">
@@ -1337,9 +1346,136 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_7">
+      <attribute name="title">
+       <string>Regular Expressions</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_17">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_17">
+         <item>
+          <widget class="QTableWidget" name="regexpTable">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectItems</enum>
+           </property>
+           <column>
+            <property name="text">
+             <string>Pos.</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Regular Expression</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_16">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="regexpAdd">
+             <property name="text">
+              <string>add</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/icons/resources/filenew.png</normaloff>:/icons/resources/filenew.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="regexpDelete">
+             <property name="text">
+              <string>delete</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="regexpUp">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/icons/resources/go-up.png</normaloff>:/icons/resources/go-up.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="regexpDown">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/icons/resources/go-down.png</normaloff>:/icons/resources/go-down.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="hardDiskSearch">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/harddisk.png</normaloff>:/icons/resources/harddisk.png</iconset>
       </attribute>
       <attribute name="title">
@@ -1366,7 +1502,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../resources.qrc">
+              <iconset resource="../../resources.qrc">
                <normaloff>:/icons/resources/filenew.png</normaloff>:/icons/resources/filenew.png</iconset>
              </property>
              <property name="iconSize">
@@ -1383,7 +1519,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../resources.qrc">
+              <iconset resource="../../resources.qrc">
                <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
              </property>
              <property name="iconSize">
@@ -1415,7 +1551,7 @@
      </widget>
      <widget class="QWidget" name="tab_6">
       <attribute name="icon">
-       <iconset resource="../resources.qrc">
+       <iconset resource="../../resources.qrc">
         <normaloff>:/icons/resources/server.png</normaloff>:/icons/resources/server.png</iconset>
       </attribute>
       <attribute name="title">
@@ -1521,7 +1657,7 @@
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset resource="../resources.qrc">
+                      <iconset resource="../../resources.qrc">
                        <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
                      </property>
                      <property name="iconSize">
@@ -1554,7 +1690,7 @@
                  <string>Manage User</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/icons/resources/user.png</normaloff>:/icons/resources/user.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -1610,7 +1746,7 @@
         <string>ok</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/button_ok.png</normaloff>:/icons/resources/button_ok.png</iconset>
        </property>
        <property name="default">
@@ -1640,7 +1776,7 @@
         <string>accept</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/filesave.png</normaloff>:/icons/resources/filesave.png</iconset>
        </property>
       </widget>
@@ -1664,7 +1800,7 @@
         <string>cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/cancel.png</normaloff>:/icons/resources/cancel.png</iconset>
        </property>
       </widget>
@@ -1675,8 +1811,8 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="../resources.qrc"/>
-  <include location="../../../../cvs/WinMusik/wm30/resources.qrc"/>
+  <include location="../../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
