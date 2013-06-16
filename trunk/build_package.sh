@@ -33,7 +33,7 @@ MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Music database to maintain songs on various devices"
 TARGETPATH=/ftp/winmusik
 
-PPL6SOURCE="../../ppl6"
+PPL6SOURCE=${PPL6SOURCE:="../../ppl6"}
 PPL6REPO="https://svn.code.sf.net/p/pplib/code/lib/branches/RELENG_6"
 WINMUSIKSOURCE=./
 WINMUSIKREPO=svn://server.pfp.de/winmusik/client/trunk
