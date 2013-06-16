@@ -27,7 +27,7 @@
 #include "winmusik3.h"
 #include "menue.h"
 #include "search.h"
-#include "properties.h"
+#include "properties/properties.h"
 #include "about.h"
 #include "updater.h"
 #include "wmtoolbutton.h"
