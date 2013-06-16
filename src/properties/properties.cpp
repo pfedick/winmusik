@@ -29,6 +29,7 @@
 
 #include "properties.h"
 #include "registration.h"
+#include "regexpedit.h"
 
 Properties::Properties(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
@@ -487,7 +488,11 @@ void Properties::on_buttonSelectServerKeyfile_clicked()
 
 void Properties::on_regexpAdd_clicked()
 {
+	RegExpEdit reg(this);
+	int ret=reg.exec();
+	if (ret==1) {
 
+	}
 }
 
 void Properties::on_regexpDelete_clicked()

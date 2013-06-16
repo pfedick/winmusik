@@ -53,9 +53,11 @@ HEADERS += include/coverviewer.h \
     include/firststart.h \
     include/winmusik3.h \
     src/properties/properties.h \
+    src/properties/regexpedit.h \
     include/search.h \
     include/edit.h \
     include/menue.h \
+    include/regexpcapture.h \
     include/playlists.h \
     include/devicelist.h \
     include/wmtoolbutton.h \
@@ -69,6 +71,7 @@ SOURCES += src/coverviewer.cpp \
     src/CTrackList.cpp \
     src/massimport.cpp \
     src/coverprinter.cpp \
+    src/regexpcapture.cpp \
     src/searchlists.cpp \
     src/searchlistdialog.cpp \
     src/searchlisttrackdialog.cpp \
@@ -102,6 +105,7 @@ SOURCES += src/coverviewer.cpp \
     src/firststart.cpp \
     src/config.cpp \
     src/properties/properties.cpp \
+    src/properties/regexpedit.cpp \
     src/search.cpp \
     src/menue.cpp \
     src/main.cpp \
@@ -133,6 +137,7 @@ FORMS += forms/coverviewer.ui \
     forms/langselect.ui \
     forms/firststart.ui \
     src/properties/properties.ui \
+    src/properties/regexpedit.ui \
     forms/search.ui \
     forms/edit.ui \
     forms/menue.ui \
