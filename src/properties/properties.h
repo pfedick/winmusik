@@ -151,6 +151,12 @@ private slots:
     void on_serverKeyfile_textChanged(const QString &text) {Change();};
     void on_serverKeyPassword_textChanged(const QString &text) {Change();};
 
+    // Regular Expressions
+    void on_regexpAdd_clicked();
+    void on_regexpDelete_clicked();
+    void on_regexpUp_clicked();
+    void on_regexpDown_clicked();
+
 };
 
 #endif // PROPERTIES_H

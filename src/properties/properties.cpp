@@ -27,8 +27,8 @@
 #include "winmusik3.h"
 #include "updater.h"
 
-#include "../include/properties.h"
-#include "../include/registration.h"
+#include "properties.h"
+#include "registration.h"
 
 Properties::Properties(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
@@ -478,5 +478,29 @@ void Properties::on_buttonSelectServerKeyfile_clicked()
 		ui.serverKeyfile->setText(file);
 		Change();
 	}
+
+}
+
+/*
+ * Regular Expressions
+ */
+
+void Properties::on_regexpAdd_clicked()
+{
+
+}
+
+void Properties::on_regexpDelete_clicked()
+{
+
+}
+
+void Properties::on_regexpUp_clicked()
+{
+
+}
+
+void Properties::on_regexpDown_clicked()
+{
 
 }

@@ -52,7 +52,7 @@ HEADERS += include/coverviewer.h \
     include/langselect.h \
     include/firststart.h \
     include/winmusik3.h \
-    include/properties.h \
+    src/properties/properties.h \
     include/search.h \
     include/edit.h \
     include/menue.h \
@@ -101,7 +101,7 @@ SOURCES += src/coverviewer.cpp \
     src/CWmClient.cpp \
     src/firststart.cpp \
     src/config.cpp \
-    src/properties.cpp \
+    src/properties/properties.cpp \
     src/search.cpp \
     src/menue.cpp \
     src/main.cpp \
@@ -132,7 +132,7 @@ FORMS += forms/coverviewer.ui \
     forms/about.ui \
     forms/langselect.ui \
     forms/firststart.ui \
-    forms/properties.ui \
+    src/properties/properties.ui \
     forms/search.ui \
     forms/edit.ui \
     forms/menue.ui \
