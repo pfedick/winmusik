@@ -39,6 +39,8 @@ class RegExpEdit : public QDialog
 public:
     RegExpEdit(QWidget *parent = 0);
     ~RegExpEdit();
+    void setPattern(const RegExpPattern &pat);
+    RegExpPattern getPattern() const;
 
 private:
     Ui::RegExpEditClass ui;
@@ -48,6 +50,19 @@ private:
 private slots:
     void on_cancelButton_clicked();
     void on_okButton_clicked();
+    void on_pattern_textChanged();
+    void on_teststring_textChanged();
+
+    void on_capture_artist_valueChanged() {on_teststring_textChanged();};
+    void on_capture_title_valueChanged() {on_teststring_textChanged();};
+    void on_capture_version_valueChanged() {on_teststring_textChanged();};
+    void on_capture_genre_valueChanged() {on_teststring_textChanged();};
+    void on_capture_label_valueChanged() {on_teststring_textChanged();};
+    void on_capture_bpm_valueChanged() {on_teststring_textChanged();};
+    void on_capture_album_valueChanged() {on_teststring_textChanged();};
+    void on_capture_hours_valueChanged() {on_teststring_textChanged();};
+    void on_capture_minutes_valueChanged() {on_teststring_textChanged();};
+    void on_capture_seconds_valueChanged() {on_teststring_textChanged();};
 
 
 };
