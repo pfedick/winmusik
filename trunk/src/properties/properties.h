@@ -44,6 +44,7 @@ private:
     Ui::PropertiesClass ui;
     CWmClient *wm;
     QString LastHDSearchDir;
+    QTreeWidgetItem *current_regexp_item;
 
     void Change();
 
@@ -54,6 +55,9 @@ private:
 
 
     void SelectLanguage();
+
+protected:
+    void resizeEvent ( QResizeEvent * event );
 
 
 private slots:
@@ -71,15 +75,15 @@ private slots:
 
 
     // Signals for General Options
-    void on_wmDataPath_textChanged(const QString &text);
-    void on_tmpPath_textChanged(const QString &text);
-    void on_showSplashscreen_stateChanged(int state) {Change();}
-    void on_checkForUpdates_stateChanged(int state) {Change();}
-    void on_suggestArtist_stateChanged(int state) {Change();}
-    void on_suggestTitle_stateChanged(int state) {Change();}
-    void on_automaticEditSearch_stateChanged(int state) {Change();}
-    void on_printColors_stateChanged(int state) {Change();}
-    void on_font_currentIndexChanged(int index) {Change();};
+    void on_wmDataPath_textChanged(const QString &);
+    void on_tmpPath_textChanged(const QString &);
+    void on_showSplashscreen_stateChanged(int ) {Change();}
+    void on_checkForUpdates_stateChanged(int ) {Change();}
+    void on_suggestArtist_stateChanged(int ) {Change();}
+    void on_suggestTitle_stateChanged(int ) {Change();}
+    void on_automaticEditSearch_stateChanged(int ) {Change();}
+    void on_printColors_stateChanged(int ) {Change();}
+    void on_font_currentIndexChanged(int ) {Change();};
 
     // Devices
     void on_devicePathButton_clicked(int device, QLineEdit *line);
@@ -93,69 +97,72 @@ private slots:
     void on_devicePathButtonTape_clicked() { on_devicePathButton_clicked(8, ui.devicePathTape); };
     void on_devicePathButtonDVD_clicked() { on_devicePathButton_clicked(9, ui.devicePathDVD); };
 
-    void on_devicePathCassette_textChanged(const QString &text) {Change();};
-    void on_devicePathCD_textChanged(const QString &text) {Change();};
-    void on_devicePathDataStorage_textChanged(const QString &text) {Change();};
-    void on_devicePathRecord_textChanged(const QString &text) {Change();};
-    void on_devicePathVHS_textChanged(const QString &text) {Change();};
-    void on_devicePathOther_textChanged(const QString &text) {Change();};
-    void on_devicePathMP3_textChanged(const QString &text) {Change();};
-    void on_devicePathTape_textChanged(const QString &text) {Change();};
-    void on_devicePathDVD_textChanged(const QString &text) {Change();};
+    void on_devicePathCassette_textChanged(const QString &) {Change();};
+    void on_devicePathCD_textChanged(const QString &) {Change();};
+    void on_devicePathDataStorage_textChanged(const QString &) {Change();};
+    void on_devicePathRecord_textChanged(const QString &) {Change();};
+    void on_devicePathVHS_textChanged(const QString &) {Change();};
+    void on_devicePathOther_textChanged(const QString &) {Change();};
+    void on_devicePathMP3_textChanged(const QString &) {Change();};
+    void on_devicePathTape_textChanged(const QString &) {Change();};
+    void on_devicePathDVD_textChanged(const QString &) {Change();};
 
     // MP3
-    void on_mp3Player_textChanged(const QString &text) {Change();};
-    void on_writeID3v1_stateChanged(int state) {Change();}
-    void on_writeID3v2_stateChanged(int state) {Change();}
-    void on_removeOriginalTags_stateChanged(int state) {Change();}
-    void on_ID3v2Padding_textChanged(const QString &text) {Change();}
-    void on_readID3v2_toggled(bool value) {Change();};
-    void on_readID3v1_toggled(bool value) {Change();};
-    void on_retryIntervall_valueChanged(const QString &text) {Change();};
-    void on_maxFilenameLength_currentIndexChanged(int index) {Change();};
+    void on_mp3Player_textChanged(const QString &) {Change();};
+    void on_writeID3v1_stateChanged(int ) {Change();}
+    void on_writeID3v2_stateChanged(int ) {Change();}
+    void on_removeOriginalTags_stateChanged(int ) {Change();}
+    void on_ID3v2Padding_textChanged(const QString &) {Change();}
+    void on_readID3v2_toggled(bool ) {Change();};
+    void on_readID3v1_toggled(bool ) {Change();};
+    void on_retryIntervall_valueChanged(const QString &) {Change();};
+    void on_maxFilenameLength_currentIndexChanged(int ) {Change();};
 
     // User
-    void on_name_textChanged(const QString &text) {Change();};
-    void on_company_textChanged(const QString &text) {Change();};
-    void on_serial_textChanged(const QString &text) {Change();};
-    void on_language_currentIndexChanged(int index) {Change();};
+    void on_name_textChanged(const QString &) {Change();};
+    void on_company_textChanged(const QString &) {Change();};
+    void on_serial_textChanged(const QString &) {Change();};
+    void on_language_currentIndexChanged(int ) {Change();};
 
-    void on_currency_textChanged(const QString &text) {Change();};
+    void on_currency_textChanged(const QString &) {Change();};
 
 
     // Debug
-    void on_enableDebug_toggled(bool on) {Change();}
-    void on_logfile_textChanged(const QString &text) {Change();};
-    void on_logfileSize_textChanged(const QString &text) {Change();};
-    void on_debuglevel_valueChanged(const QString &text) {Change();};
-    void on_generations_valueChanged(const QString &text) {Change();};
+    void on_enableDebug_toggled(bool ) {Change();}
+    void on_logfile_textChanged(const QString &) {Change();};
+    void on_logfileSize_textChanged(const QString &) {Change();};
+    void on_debuglevel_valueChanged(const QString &) {Change();};
+    void on_generations_valueChanged(const QString &) {Change();};
     void on_logfileButton_clicked();
 
     // Devices
-    void on_device_1_stateChanged(int state) {Change();}
-    void on_device_2_stateChanged(int state) {Change();}
-    void on_device_3_stateChanged(int state) {Change();}
-    void on_device_4_stateChanged(int state) {Change();}
-    void on_device_5_stateChanged(int state) {Change();}
-    void on_device_6_stateChanged(int state) {Change();}
-    void on_device_7_stateChanged(int state) {Change();}
-    void on_device_8_stateChanged(int state) {Change();}
-    void on_device_9_stateChanged(int state) {Change();}
+    void on_device_1_stateChanged(int ) {Change();}
+    void on_device_2_stateChanged(int ) {Change();}
+    void on_device_3_stateChanged(int ) {Change();}
+    void on_device_4_stateChanged(int ) {Change();}
+    void on_device_5_stateChanged(int ) {Change();}
+    void on_device_6_stateChanged(int ) {Change();}
+    void on_device_7_stateChanged(int ) {Change();}
+    void on_device_8_stateChanged(int ) {Change();}
+    void on_device_9_stateChanged(int ) {Change();}
 
     // Server
     void on_buttonSelectServerKeyfile_clicked();
-    void on_serverEnable_toggled(bool on) {Change();}
-    void on_serverEnableSSL_toggled(bool on) {Change();}
-    void on_serverHostname_textChanged(const QString &text) {Change();};
-    void on_serverPort_textChanged(const QString &text) {Change();};
-    void on_serverKeyfile_textChanged(const QString &text) {Change();};
-    void on_serverKeyPassword_textChanged(const QString &text) {Change();};
+    void on_serverEnable_toggled(bool ) {Change();}
+    void on_serverEnableSSL_toggled(bool ) {Change();}
+    void on_serverHostname_textChanged(const QString &) {Change();};
+    void on_serverPort_textChanged(const QString &) {Change();};
+    void on_serverKeyfile_textChanged(const QString &) {Change();};
+    void on_serverKeyPassword_textChanged(const QString &) {Change();};
 
     // Regular Expressions
     void on_regexpAdd_clicked();
+    void on_regexpEdit_clicked();
     void on_regexpDelete_clicked();
     void on_regexpUp_clicked();
     void on_regexpDown_clicked();
+    void on_regexpTable_itemActivated ( QTreeWidgetItem * item, int column );
+    void on_regexpTable_itemDoubleClicked ( QTreeWidgetItem * item, int column );
 
 };
 

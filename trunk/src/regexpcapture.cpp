@@ -45,6 +45,22 @@ RegExpPattern::RegExpPattern()
 	seconds=0;
 }
 
+void RegExpPattern::copyFrom(const RegExpPattern &other)
+{
+	Name=other.Name;
+	Pattern=other.Pattern;
+	artist=other.artist;
+	title=other.title;
+	version=other.version;
+	genre=other.genre;
+	label=other.label;
+	bpm=other.bpm;
+	album=other.album;
+	hours=other.hours;
+	minutes=other.minutes;
+	seconds=other.seconds;
+}
+
 RegularExpressionCapture::RegularExpressionCapture()
 {
 
@@ -171,6 +187,15 @@ void RegularExpressionCapture::deletePattern(size_t pos)
 	}
 }
 
+void RegularExpressionCapture::setPattern(size_t pos, const RegExpPattern &pattern)
+{
+	if (pos<patterns.size()) {
+		RegExpPattern &p=patterns.at(pos);
+		p.copyFrom(pattern);
+	}
+}
+
+
 const RegExpPattern &RegularExpressionCapture::getPattern(size_t pos) const
 {
 	return patterns.at(pos);
@@ -200,13 +225,19 @@ bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &mat
 	if (patterns.empty()) return false;
 	std::vector<RegExpPattern>::const_iterator it;
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
-		ppl6::CString Pattern;
-		ppl6::CArray res;
-		Pattern="/"+(*it).Pattern+"/ism";
-		if (data.PregMatch(Pattern,res)) {
-			copyToMatch(*it,res,match);
-			return true;
-		}
+		if(testMatch(data,match,*it)) return true;
+	}
+	return false;
+}
+
+bool RegularExpressionCapture::testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const
+{
+	ppl6::CString Pattern;
+	ppl6::CArray res;
+	Pattern="/"+(pattern).Pattern+"/ism";
+	if (data.PregMatch(Pattern,res)) {
+		copyToMatch(pattern,res,match);
+		return true;
 	}
 	return false;
 }

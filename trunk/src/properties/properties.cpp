@@ -31,6 +31,8 @@
 #include "registration.h"
 #include "regexpedit.h"
 
+#include <QTableWidgetItem>
+
 Properties::Properties(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
 {
@@ -132,11 +134,47 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.serverKeyPassword->setText(wm->DeCrypt(c->serverSSLPassword));
 
 	ui.acceptButton->setEnabled(false);
+
+
+	QString Style="QTreeView::item {\n"
+	    		"border-right: 1px solid #b9b9b9;\n"
+	    		"border-bottom: 1px solid #b9b9b9;\n"
+	    		"}\n"
+	    		"QTreeView::item:selected {\n"
+	    		"background: #d0d0ff;\n"
+	    		"color: #000000;\n"
+	    		"}\n"
+	    		"";
+	ui.regexpTable->setStyleSheet(Style);
+
+	ui.regexpTable->clear();
+	for (size_t i=0;i<wm->RegExpCapture.size();i++) {
+		const RegExpPattern &p=wm->RegExpCapture.getPattern(i);
+		QTreeWidgetItem *item=new QTreeWidgetItem;
+		Tmp.Setf("%zi",i+1);
+		item->setText(0,Tmp);
+		item->setText(1,p.Name);
+		item->setText(2,p.Pattern);
+		ui.regexpTable->addTopLevelItem (item);
+	}
+	current_regexp_item=NULL;
+
 }
 
 Properties::~Properties()
 {
 
+}
+
+
+void Properties::resizeEvent ( QResizeEvent * event )
+{
+	int w=ui.regexpTable->width();
+	ui.regexpTable->setColumnWidth(0,60);
+	w=w-64;
+	ui.regexpTable->setColumnWidth(1,w*30/100);
+	ui.regexpTable->setColumnWidth(2,w*70/100);
+	QDialog::resizeEvent(event);
 }
 
 void Properties::Change()
@@ -431,12 +469,12 @@ void Properties::on_checkUpdatesNow_clicked()
  * Changes
  */
 
-void Properties::on_wmDataPath_textChanged(const QString &text)
+void Properties::on_wmDataPath_textChanged(const QString &)
 {
 	Change();
 }
 
-void Properties::on_tmpPath_textChanged(const QString &text)
+void Properties::on_tmpPath_textChanged(const QString &)
 {
 	Change();
 }
@@ -488,16 +526,48 @@ void Properties::on_buttonSelectServerKeyfile_clicked()
 
 void Properties::on_regexpAdd_clicked()
 {
+	ppl6::CString Tmp;
 	RegExpEdit reg(this);
 	int ret=reg.exec();
 	if (ret==1) {
+		RegExpPattern p=reg.getPattern();
+		wm->RegExpCapture.addPattern(p);
+		size_t pos=wm->RegExpCapture.size();
+		QTreeWidgetItem *item=new QTreeWidgetItem;
+		Tmp.Setf("%zi",pos);
+		item->setText(0,Tmp);
+		item->setText(1,p.Name);
+		item->setText(2,p.Pattern);
+		ui.regexpTable->addTopLevelItem (item);
+		current_regexp_item=item;
+		ui.regexpTable->setCurrentItem(item);
+	}
+}
 
+void Properties::on_regexpEdit_clicked()
+{
+	if (!current_regexp_item) return;
+	ppl6::CString Tmp;
+	Tmp=current_regexp_item->text(0);
+	size_t pos=Tmp.ToInt();
+	if (pos<1) return;
+	const RegExpPattern &pat=wm->RegExpCapture.getPattern(pos-1);
+
+	RegExpEdit reg(this);
+	reg.setPattern(pat);
+	int ret=reg.exec();
+	if (ret==1) {
+		RegExpPattern p=reg.getPattern();
+		wm->RegExpCapture.setPattern(pos-1,p);
+		wm->RegExpCapture.save();
+		current_regexp_item->setText(1,p.Name);
+		current_regexp_item->setText(2,p.Pattern);
 	}
 }
 
 void Properties::on_regexpDelete_clicked()
 {
-
+	if (!current_regexp_item) return;
 }
 
 void Properties::on_regexpUp_clicked()
@@ -508,4 +578,15 @@ void Properties::on_regexpUp_clicked()
 void Properties::on_regexpDown_clicked()
 {
 
+}
+
+void Properties::on_regexpTable_itemActivated ( QTreeWidgetItem * item, int )
+{
+	current_regexp_item=item;
+}
+
+void Properties::on_regexpTable_itemDoubleClicked ( QTreeWidgetItem * item, int )
+{
+	current_regexp_item=item;
+	on_regexpEdit_clicked();
 }

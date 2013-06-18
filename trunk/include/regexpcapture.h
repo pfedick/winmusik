@@ -16,6 +16,8 @@ class RegExpPattern
 	public:
 		RegExpPattern();
 
+		void copyFrom(const RegExpPattern &other);
+
 		ppl6::CString Name;
 		ppl6::CString Pattern;
 		int artist;
@@ -62,11 +64,13 @@ class RegularExpressionCapture
 		void save();
 		void addPattern(const RegExpPattern &pattern);
 		void insertPattern(size_t pos, const RegExpPattern &pattern);
+		void setPattern(size_t pos, const RegExpPattern &pattern);
 		void deletePattern(size_t pos);
 		const RegExpPattern &getPattern(size_t pos) const;
 		size_t size() const;
 
 		bool match(const ppl6::CString &data, RegExpMatch &match) const;
+		bool testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const;
 
 
 
