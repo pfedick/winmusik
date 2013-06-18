@@ -37,6 +37,7 @@ class RegExpMatch
 			Length=0;
 		}
 		ppl6::CString	Artist;
+		ppl6::CString	Title;
 		ppl6::CString	Version;
 		ppl6::CString	Genre;
 		ppl6::CString	Label;

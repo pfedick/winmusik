@@ -947,10 +947,15 @@ void Search::on_ClipBoardTimer_update()
 	s=originalText;
 	if (s==LastClipboardString) return;
 	LastClipboardString=s;
-	if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
-	if (s.Instr("\n")>=0) return;
-	s.Replace("\t"," ");
-	s.PregReplace("/\\(.*?\\)/","");
+	RegExpMatch match;
+	if (wm->RegExpCapture.match(s,match)) {
+		s=match.Artist+" "+match.Title+" "+match.Version;
+	} else {
+		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (s.Instr("\n")>=0) return;
+		s.Replace("\t"," ");
+		s.PregReplace("/\\(.*?\\)/","");
+	}
 	wm->NormalizeTerm(s);
 	ClipBoardTimer.stop();
 	//printf ("Update\n");
