@@ -101,23 +101,25 @@ void RegExpEdit::on_teststring_textChanged()
 	RegExpMatch match;
 	RegExpPattern pat=getPattern();
 	ppl6::CString Text=ui.teststring->toPlainText();
-	try {
-		if (wm_main->RegExpCapture.testMatch(Text,match,pat)) {
-			ui.match_indicator->setStyleSheet("background: green;");
-			ui.test_artist->setText(match.Artist);
-			ui.test_title->setText(match.Title);
-			ui.test_version->setText(match.Version);
-			ui.test_genre->setText(match.Genre);
-			ui.test_label->setText(match.Label);
-			ui.test_bpm->setText(match.Bpm);
-			ui.test_album->setText(match.Album);
-			ppl6::CString Tmp;
-			Tmp.Setf("%i:%02i",match.Length/60,match.Length%60);
-			ui.test_length->setText(Tmp);
-			return;
-		}
-	} catch (...) {
+	if (pat.Pattern.NotEmpty()==true && Text.NotEmpty()==true) {
+		try {
+			if (wm_main->RegExpCapture.testMatch(Text,match,pat)) {
+				ui.match_indicator->setStyleSheet("background: green;");
+				ui.test_artist->setText(match.Artist);
+				ui.test_title->setText(match.Title);
+				ui.test_version->setText(match.Version);
+				ui.test_genre->setText(match.Genre);
+				ui.test_label->setText(match.Label);
+				ui.test_bpm->setText(match.Bpm);
+				ui.test_album->setText(match.Album);
+				ppl6::CString Tmp;
+				Tmp.Setf("%i:%02i",match.Length/60,match.Length%60);
+				ui.test_length->setText(Tmp);
+				return;
+			}
+		} catch (...) {
 
+		}
 	}
 	ui.match_indicator->setStyleSheet("background: red;");
 	ui.test_artist->setText("");
