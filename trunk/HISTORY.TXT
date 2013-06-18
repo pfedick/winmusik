@@ -18,6 +18,8 @@ Version 3.0.7
 	  werden
 	- Suchliste: Der Button "Neuer Track" funktioniert wieder
 	- Suche unterstützt nun auch Suche nach Plattenlabel
+	- Definierbare RegularExpressions für die Titelerkennung über die
+	  Zwischenablage
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
