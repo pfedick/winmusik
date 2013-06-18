@@ -166,7 +166,7 @@ class CWMFile
 };
 
 #include "wmstorage.h"
-
+#include "regexpcapture.h"
 
 
 /*******************************************************
@@ -558,7 +558,7 @@ class CWmClient
 		COimpDataStore			OimpDataStore;
 
 		CID3TagSaver			ID3TagSaver;
-
+		RegularExpressionCapture	RegExpCapture;
 		CHashes					Hashes;
 		CUpdateChecker			*UpdateChecker;
 

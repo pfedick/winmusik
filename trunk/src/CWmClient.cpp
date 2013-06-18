@@ -167,6 +167,7 @@ int CWmClient::Start()
 		return 0;
 	}
 
+	RegExpCapture.load();
 
 	//ImportDatabaseWM20();
 

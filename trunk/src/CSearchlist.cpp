@@ -22,6 +22,18 @@ SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 	found=false;
 	Length=0;
 	DateAdded.setCurrentTime();
+	RegExpMatch match;
+	if (wm_main->RegExpCapture.match(Misc,match)) {
+		Artist=match.Artist;
+		Title=match.Title;
+		Version=match.Version;
+		Genre=match.Genre;
+		Comment=match.Label;
+		Length=match.Length;
+		return;
+	}
+
+
 	ppl6::CArray Matches;
 	// Mike Koglin - Dyno (Original Mix, 8:05 min, Trance) [MP3 542 A-8]
 
