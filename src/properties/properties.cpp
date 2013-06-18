@@ -532,6 +532,7 @@ void Properties::on_regexpAdd_clicked()
 	if (ret==1) {
 		RegExpPattern p=reg.getPattern();
 		wm->RegExpCapture.addPattern(p);
+		wm->RegExpCapture.save();
 		size_t pos=wm->RegExpCapture.size();
 		QTreeWidgetItem *item=new QTreeWidgetItem;
 		Tmp.Setf("%zi",pos);
