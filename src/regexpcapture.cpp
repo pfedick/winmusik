@@ -208,13 +208,13 @@ size_t RegularExpressionCapture::size() const
 
 void RegularExpressionCapture::copyToMatch(const RegExpPattern &p, const ppl6::CArray &res, RegExpMatch &match) const
 {
-	if (p.artist) match.Artist=res[p.artist];
-	if (p.title) match.Title=res[p.title];
-	if (p.version) match.Version=res[p.version];
-	if (p.genre) match.Genre=res[p.genre];
-	if (p.label) match.Label=res[p.label];
-	if (p.bpm) match.Bpm=res[p.bpm];
-	if (p.album) match.Album=res[p.album];
+	if (p.artist) match.Artist=ppl6::Trim(res[p.artist]);
+	if (p.title) match.Title=ppl6::Trim(res[p.title]);
+	if (p.version) match.Version=ppl6::Trim(res[p.version]);
+	if (p.genre) match.Genre=ppl6::Trim(res[p.genre]);
+	if (p.label) match.Label=ppl6::Trim(res[p.label]);
+	if (p.bpm) match.Bpm=ppl6::Trim(res[p.bpm]);
+	if (p.album) match.Album=ppl6::Trim(res[p.album]);
 	if (p.hours) match.Length+=res.GetString(p.hours).ToInt()*60*60;
 	if (p.minutes) match.Length+=res.GetString(p.minutes).ToInt()*60;
 	if (p.seconds) match.Length+=res.GetString(p.seconds).ToInt();

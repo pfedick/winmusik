@@ -669,6 +669,7 @@ void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int column )
 			wm->GetVersionText(t->VersionId), t->Length/60,t->Length%60, wm->GetGenreText(t->GenreId));
 		Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
 				t->DeviceId,(t->Page+'A'-1),t->Track);
+		LastClipboardString=Text;
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);
 	}
@@ -949,7 +950,7 @@ void Search::on_ClipBoardTimer_update()
 	LastClipboardString=s;
 	RegExpMatch match;
 	if (wm->RegExpCapture.match(s,match)) {
-		s=match.Artist+" "+match.Title+" "+match.Version;
+		s=match.Artist+" "+match.Title;
 	} else {
 		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 		if (s.Instr("\n")>=0) return;
