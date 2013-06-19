@@ -42,8 +42,8 @@
 #include "playlists.h"
 #include "updater.h"
 #include "devicelist.h"
-#include "searchlists.h"
-#include "searchlistdialog.h"
+#include "src/searchlists/searchlists.h"
+#include "src/searchlists/searchlistdialog.h"
 #include "coverviewer.h"
 #include <QMessageBox>
 #include <QLocale>

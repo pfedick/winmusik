@@ -31,8 +31,8 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include "../include/searchlistdialog.h"
-#include "../include/searchlisttrackdialog.h"
+#include "searchlistdialog.h"
+#include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
 SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::CString &Filename)

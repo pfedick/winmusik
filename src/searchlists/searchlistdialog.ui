@@ -193,6 +193,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Selected</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Done</string>
           </property>
          </column>

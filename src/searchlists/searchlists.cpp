@@ -30,7 +30,7 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QMouseEvent>
-#include "../include/searchlists.h"
+#include "searchlists.h"
 #include "csearchlist.h"
 
 Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
