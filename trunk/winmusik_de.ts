@@ -132,84 +132,84 @@ Sie arbeiten bereits mit der aktuellsten Version.</translation>
 <context>
     <name>CWmClient</name>
     <message>
-        <location filename="src/CWmClient.cpp" line="376"/>
+        <location filename="src/CWmClient.cpp" line="377"/>
         <source>Could not load the WinMusik configuration!</source>
         <translation>WinMusik Konfiguration konnte nicht geladen werden!</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="379"/>
+        <location filename="src/CWmClient.cpp" line="380"/>
         <source>WinMusik - Error</source>
         <translation>WinMusik - Fehler</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="680"/>
+        <location filename="src/CWmClient.cpp" line="681"/>
         <source>Loading Database...</source>
         <translation>Lade Datenbank...</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="730"/>
+        <location filename="src/CWmClient.cpp" line="731"/>
         <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="732"/>
+        <location filename="src/CWmClient.cpp" line="733"/>
         <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="734"/>
+        <location filename="src/CWmClient.cpp" line="735"/>
         <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="736"/>
+        <location filename="src/CWmClient.cpp" line="737"/>
         <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="738"/>
+        <location filename="src/CWmClient.cpp" line="739"/>
         <source>VHS-Tape</source>
         <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="740"/>
+        <location filename="src/CWmClient.cpp" line="741"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="742"/>
+        <location filename="src/CWmClient.cpp" line="743"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="744"/>
+        <location filename="src/CWmClient.cpp" line="745"/>
         <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="746"/>
+        <location filename="src/CWmClient.cpp" line="747"/>
         <source>Audio DVD</source>
         <translation>Musik DVD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1112"/>
+        <location filename="src/CWmClient.cpp" line="1115"/>
         <source>Track: %i</source>
         <translation>Track: %i</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1378"/>
+        <location filename="src/CWmClient.cpp" line="1382"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Achtung</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1379"/>
+        <location filename="src/CWmClient.cpp" line="1383"/>
         <source>There is no MP3 player specified.
 Please go to preferences and open the MP3 page. There you can specify your favorite player.</source>
         <translation>Es ist kein MP3-Player definiert.
 Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können Sie Ihren Lieblingsplayer angeben.</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="292"/>
+        <location filename="src/CWmClient.cpp" line="293"/>
         <source>unknown</source>
         <translation>Unbekannt</translation>
     </message>
@@ -239,64 +239,64 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
         <translation>WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1231"/>
+        <location filename="src/CWmClient.cpp" line="1235"/>
         <source>min</source>
         <comment>Minutes in Tracklisting of Playlist</comment>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1253"/>
+        <location filename="src/CWmClient.cpp" line="1257"/>
         <source>Tracklisting MP3-Medium</source>
         <comment>Subject of Playlist</comment>
         <translation>Trackliste MP3-Tonträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1266"/>
+        <location filename="src/CWmClient.cpp" line="1270"/>
         <source>Playlist created by WinMusik</source>
         <translation>Playlist erstellt mit WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="810"/>
+        <location filename="src/CWmClient.cpp" line="811"/>
         <source>CAS</source>
         <translation>KAS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="812"/>
+        <location filename="src/CWmClient.cpp" line="813"/>
         <source>CD</source>
         <translation>CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="814"/>
+        <location filename="src/CWmClient.cpp" line="815"/>
         <source>DATA</source>
         <translation>DATA</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="816"/>
+        <location filename="src/CWmClient.cpp" line="817"/>
         <source>RECORD</source>
         <translation>PLATTE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="818"/>
+        <location filename="src/CWmClient.cpp" line="819"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="820"/>
+        <location filename="src/CWmClient.cpp" line="821"/>
         <source>OTHER</source>
         <translation>SONST</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="822"/>
+        <location filename="src/CWmClient.cpp" line="823"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="824"/>
+        <location filename="src/CWmClient.cpp" line="825"/>
         <source>TAPE</source>
         <translation>TAPE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="826"/>
+        <location filename="src/CWmClient.cpp" line="827"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
@@ -865,7 +865,7 @@ p, li { white-space: pre-wrap; }
         <translation>Massenimport</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1276"/>
+        <location filename="src/edit.cpp" line="1272"/>
         <source>There are no further titles without an index in the directory of this device</source>
         <oldsource>Es sind keine weiteren Titel ohne Index im Verzeichnis
 des Tonträgers vorhanden</oldsource>
@@ -873,42 +873,42 @@ des Tonträgers vorhanden</oldsource>
 des Tonträgers vorhanden</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1405"/>
+        <location filename="src/edit.cpp" line="1370"/>
         <source>Could not create playlists</source>
         <translation>Playlists konnten nicht erstellt werden</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1644"/>
+        <location filename="src/edit.cpp" line="1609"/>
         <source>WinMusik: update all ID3-Tags</source>
         <translation>WinMusik: Alle ID3-Tags aktualisieren</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1645"/>
+        <location filename="src/edit.cpp" line="1610"/>
         <source>Update ID3-Tags of all tracks?</source>
         <translation>ID3-Tags aller Titel aktualisieren?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1650"/>
+        <location filename="src/edit.cpp" line="1615"/>
         <source>Update of ID3-Tags on all tracks has been started</source>
         <translation>Aktualisierung aller ID3-Tags wurde im Hintergrund gestartet</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1653"/>
+        <location filename="src/edit.cpp" line="1618"/>
         <source>Update of ID3-Tags failed</source>
         <translation>Aktualisierung der ID3-Tags fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2202"/>
+        <location filename="src/edit-functions.cpp" line="314"/>
         <source>unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2916"/>
+        <location filename="src/edit.cpp" line="1910"/>
         <source>WinMusik: delete MP3-Cover</source>
         <translation>WinMusik: MP3-Cover löschen</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2917"/>
+        <location filename="src/edit.cpp" line="1911"/>
         <source>Do you want to remove the cover from the mp3 file?</source>
         <translation>Möchten Sie das Cover-Bild von dieser MP3-Datei entfernen?</translation>
     </message>
@@ -993,7 +993,7 @@ des Tonträgers vorhanden</translation>
         <translation>Autoimport</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2521"/>
+        <location filename="src/edit-functions.cpp" line="633"/>
         <source>Could not save ID3 Tags</source>
         <translation>ID3-Tags konnten nicht geschrieben werden</translation>
     </message>
@@ -1028,93 +1028,93 @@ des Tonträgers vorhanden</translation>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1275"/>
-        <location filename="src/edit.cpp" line="1401"/>
-        <location filename="src/edit.cpp" line="1649"/>
+        <location filename="src/edit.cpp" line="1271"/>
+        <location filename="src/edit.cpp" line="1366"/>
+        <location filename="src/edit.cpp" line="1614"/>
         <source>WinMusik: Notice</source>
         <oldsource>WinMusik: Hinweis</oldsource>
         <translation>WinMusik: Hinweis</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="1402"/>
+        <location filename="src/edit.cpp" line="1367"/>
         <source>Playlists wurden erfolgreich erstellt</source>
         <translation>Playlists wurden erfolgreich erstellt</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2397"/>
+        <location filename="src/edit-functions.cpp" line="509"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Achtung</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2398"/>
+        <location filename="src/edit-functions.cpp" line="510"/>
         <source>Artist and title are empty!
 Do you realy want to save this track?</source>
         <translation>Interpret und Titel sind leer!
 Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2755"/>
+        <location filename="src/edit.cpp" line="1749"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Versionen finden</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2756"/>
+        <location filename="src/edit.cpp" line="1750"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Mehr von diesem Interpreten</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2758"/>
+        <location filename="src/edit.cpp" line="1752"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel abspielen</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2759"/>
+        <location filename="src/edit.cpp" line="1753"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2760"/>
+        <location filename="src/edit.cpp" line="1754"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Interpret und Titel in Zwischenablage</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2761"/>
+        <location filename="src/edit.cpp" line="1755"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>MP3-Datei in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2763"/>
+        <location filename="src/edit.cpp" line="1757"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2764"/>
+        <location filename="src/edit.cpp" line="1758"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2499"/>
-        <location filename="src/edit.cpp" line="2657"/>
+        <location filename="src/edit-functions.cpp" line="611"/>
+        <location filename="src/edit.cpp" line="1651"/>
         <source>Could not save Title in TitleStore</source>
         <oldsource>Konnte Titel nicht in TitleStore speichern</oldsource>
         <translation>Konnte Titel nicht in TitleStore speichern</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2511"/>
+        <location filename="src/edit-functions.cpp" line="623"/>
         <source>Could not save Track in TrackList</source>
         <oldsource>Konnte Track nicht in TrackList speichern</oldsource>
         <translation>Konnte Track nicht in TrackList speichern</translation>
     </message>
     <message>
-        <location filename="src/edit.cpp" line="2757"/>
+        <location filename="src/edit.cpp" line="1751"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Interpreten mit diesem Titel</translation>
@@ -2749,17 +2749,17 @@ Gelöschte Titel können nicht wiederhergestellt werden!</translation>
 <context>
     <name>Properties</name>
     <message>
-        <location filename="src/properties.cpp" line="192"/>
+        <location filename="src/properties/properties.cpp" line="231"/>
         <source>WinMusik - Internal error!</source>
         <translation>WinMusik - Interner Fehler!</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="193"/>
+        <location filename="src/properties/properties.cpp" line="232"/>
         <source>An internal data pointer is NULL, this should never happen and is a Bug. Please write a bugreport.</source>
         <translation>Ein interner Datenzeiger ist NULL. Dies sollte niemals vorkommen und ist ein Bug. Bitte schreiben Sie eine Bugmeldung.</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="342"/>
+        <location filename="src/properties/properties.cpp" line="381"/>
         <source>Select directory for WinMusik database.
 Attention: Changing this directory can result in loss of data!</source>
         <translation>Bitte geben Sie das Verzeichnis an, in dem sich die WinMusik Datenbank befindet
@@ -2767,42 +2767,42 @@ Attention: Changing this directory can result in loss of data!</source>
 ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="358"/>
+        <location filename="src/properties/properties.cpp" line="397"/>
         <source>Select directory with your files for device type: %s</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, in dem die Dateien von diesem Audiotyp zu finden sind: %s</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="476"/>
+        <location filename="src/properties/properties.cpp" line="515"/>
         <source>Select File with SSL private server key</source>
         <translation>Datei mit dem privaten SSL-Schlüssel des Servers auswählen</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="378"/>
+        <location filename="src/properties/properties.cpp" line="417"/>
         <source>Select the program with which you want to use for playing MP3-Files</source>
         <translation>Bitte wählen Sie einen Player aus, mit dem Sie MP3-Dateien abspielen wollen</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="393"/>
+        <location filename="src/properties/properties.cpp" line="432"/>
         <source>Select directory for temporary files</source>
         <translation>Bitte wählen Sie aus, in welchem Verzeichnis temporäre Daten gespeichert werden sollen</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="448"/>
+        <location filename="src/properties/properties.cpp" line="487"/>
         <source>Select the directory you want to add to the harddisk search</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, das bei der Festplattensuche durchsucht werden soll</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="176"/>
+        <location filename="src/properties/properties.cpp" line="215"/>
         <source>WinMusik - Change database directory</source>
         <translation>WinMusik - Datenbank-Verzeichnis ändern</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="177"/>
+        <location filename="src/properties/properties.cpp" line="216"/>
         <source>Are you sure you want to change the directory of the database? This could result in loss of data!</source>
         <translation>Sind Sie sicher, dass Sie das Datenbank-Verzeichnis ändern wollen? Dies kann zu Datenverlust führen!</translation>
     </message>
     <message>
-        <location filename="src/properties.cpp" line="408"/>
+        <location filename="src/properties/properties.cpp" line="447"/>
         <source>Select location and filename for debug logfile</source>
         <translation>Bitte Pfad und Dateinamen für das Logfile auswählen</translation>
     </message>
@@ -2810,404 +2810,569 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
 <context>
     <name>PropertiesClass</name>
     <message>
-        <location filename="forms/properties.ui" line="29"/>
+        <location filename="src/properties/properties.ui" line="23"/>
         <source>Properties</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="53"/>
+        <location filename="src/properties/properties.ui" line="47"/>
         <source>General options</source>
         <translation>Allgemeine Optionen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="197"/>
+        <location filename="src/properties/properties.ui" line="197"/>
         <source>Print colors</source>
         <translation>farbig drucken</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="221"/>
+        <location filename="src/properties/properties.ui" line="221"/>
         <source>Font:</source>
         <translation>Schriftart:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="120"/>
+        <location filename="src/properties/properties.ui" line="114"/>
         <source>Show splash screen at startup</source>
         <translation>Begrüßungsfenster beim Starten anzeigen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="132"/>
+        <location filename="src/properties/properties.ui" line="126"/>
         <source>Check for Updates on startup</source>
         <translation>Beim Starten auf Updates prüfen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="142"/>
+        <location filename="src/properties/properties.ui" line="136"/>
         <source>Check now</source>
         <translation>jetzt prüfen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="168"/>
+        <location filename="src/properties/properties.ui" line="168"/>
         <source>Automatic suggestion of artist</source>
         <translation>automatisch Interpreten vorschlagen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="175"/>
+        <location filename="src/properties/properties.ui" line="175"/>
         <source>Automatic suggestion of title</source>
         <translation>automatisch Titel vorschlagen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="64"/>
+        <location filename="src/properties/properties.ui" line="58"/>
         <source>WinMusik data path:</source>
         <translation>WinMusik Datenpfad:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="91"/>
+        <location filename="src/properties/properties.ui" line="85"/>
         <source>Temporary path:</source>
         <translation>Pfad für temporäre Daten:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="576"/>
+        <location filename="src/properties/properties.ui" line="576"/>
         <source>User</source>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="584"/>
+        <location filename="src/properties/properties.ui" line="584"/>
         <source>Language:</source>
         <translation>Sprache:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="599"/>
+        <location filename="src/properties/properties.ui" line="599"/>
         <source>english</source>
         <translation>englisch</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="622"/>
+        <location filename="src/properties/properties.ui" line="622"/>
         <source>Currency:</source>
         <translation>Währung:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="656"/>
+        <location filename="src/properties/properties.ui" line="656"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="663"/>
+        <location filename="src/properties/properties.ui" line="663"/>
         <source>Company:</source>
         <translation>Firma:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="670"/>
+        <location filename="src/properties/properties.ui" line="670"/>
         <source>Serial:</source>
         <translation>Registrierungsschlüssel:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="692"/>
+        <location filename="src/properties/properties.ui" line="692"/>
         <source>Register</source>
         <translation>Registrieren</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1346"/>
+        <location filename="src/properties/properties.ui" line="705"/>
+        <source>Return</source>
+        <translation>Return</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1351"/>
+        <source>Regular Expressions</source>
+        <translation>Reguläre Ausdrücke</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1369"/>
+        <source>Pos.</source>
+        <translation>Pos.</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1374"/>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1379"/>
+        <source>Regular Expression</source>
+        <translation>Regulrärer Ausdruck</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1392"/>
+        <source>add</source>
+        <translation>hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1409"/>
+        <source>edit</source>
+        <translation>bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1426"/>
+        <source>delete</source>
+        <translation>löschen</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="1499"/>
         <source>Harddisk search</source>
         <translation>Festplattensuche</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1352"/>
+        <location filename="src/properties/properties.ui" line="1505"/>
         <source>cache directories</source>
         <translation>Verzeichnissinhalt zwischenspeichern</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1422"/>
+        <location filename="src/properties/properties.ui" line="1575"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1431"/>
+        <location filename="src/properties/properties.ui" line="1584"/>
         <source>start as server</source>
         <translation>als Server starten</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1451"/>
+        <location filename="src/properties/properties.ui" line="1604"/>
         <source>Hostname or IP:</source>
         <translation>Servername oder IP:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1461"/>
+        <location filename="src/properties/properties.ui" line="1614"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1474"/>
+        <location filename="src/properties/properties.ui" line="1627"/>
         <source>00009; </source>
         <translation>00000;  {00009;?}</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1481"/>
+        <location filename="src/properties/properties.ui" line="1634"/>
         <source>Encryption:</source>
         <translation>Verschlüsselung:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1488"/>
+        <location filename="src/properties/properties.ui" line="1641"/>
         <source>Enable SSL</source>
         <translation>SSL aktivieren</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1502"/>
+        <location filename="src/properties/properties.ui" line="1655"/>
         <source>Private Keyfile:</source>
         <translation>Privater Schlüssel:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1509"/>
+        <location filename="src/properties/properties.ui" line="1662"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1554"/>
+        <location filename="src/properties/properties.ui" line="1707"/>
         <source>Manage User</source>
         <translation>Benutzer verwalten</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1610"/>
+        <location filename="src/properties/properties.ui" line="1763"/>
         <source>ok</source>
         <translation>ok</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1640"/>
+        <location filename="src/properties/properties.ui" line="1793"/>
         <source>accept</source>
         <translation>übernehmen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1664"/>
+        <location filename="src/properties/properties.ui" line="1817"/>
         <source>cancel</source>
         <translation>abbrechen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="594"/>
+        <location filename="src/properties/properties.ui" line="594"/>
         <source>german</source>
         <translation>deutsch</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="251"/>
+        <location filename="src/properties/properties.ui" line="251"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="294"/>
+        <location filename="src/properties/properties.ui" line="294"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="311"/>
+        <location filename="src/properties/properties.ui" line="311"/>
         <source>read ID3v1-Tag</source>
         <translation>ID3v1-Tag lesen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="318"/>
+        <location filename="src/properties/properties.ui" line="318"/>
         <source>read ID3v2-Tag</source>
         <translation>ID3v2-Tag lesen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="347"/>
+        <location filename="src/properties/properties.ui" line="347"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="370"/>
+        <location filename="src/properties/properties.ui" line="370"/>
         <source>write ID3v1-Tag</source>
         <translation>ID3v1-Tag schreiben</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="380"/>
+        <location filename="src/properties/properties.ui" line="380"/>
         <source>write ID3v2-Tag</source>
         <translation>ID3v2-Tag schreiben</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="390"/>
+        <location filename="src/properties/properties.ui" line="390"/>
         <source>remove original ID3-Tags</source>
         <translation>Original ID3-Tags entfernen</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="397"/>
+        <location filename="src/properties/properties.ui" line="397"/>
         <source>ID3v2-Tag padding-size:</source>
         <translation>ID3v2-Tag Auffüll-Größe:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="419"/>
+        <location filename="src/properties/properties.ui" line="419"/>
         <source>Bytes</source>
         <translation>Bytes</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="412"/>
+        <location filename="src/properties/properties.ui" line="412"/>
         <source>00000; </source>
         <translation>00000; </translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="426"/>
+        <location filename="src/properties/properties.ui" line="426"/>
         <source>(0=no padding)</source>
         <translation>(0=nicht auffüllen)</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="731"/>
+        <location filename="src/properties/properties.ui" line="740"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="748"/>
+        <location filename="src/properties/properties.ui" line="757"/>
         <source>Logfile:</source>
         <translation>Logfile:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="779"/>
+        <location filename="src/properties/properties.ui" line="788"/>
         <source>Debuglevel:</source>
         <translation>Debuglevel:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="813"/>
+        <location filename="src/properties/properties.ui" line="822"/>
         <source>Maximum Size:</source>
         <translation>Maximale Größe:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="823"/>
+        <location filename="src/properties/properties.ui" line="832"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="846"/>
+        <location filename="src/properties/properties.ui" line="855"/>
         <source>Generations:</source>
         <translation>Generationen:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="330"/>
+        <location filename="src/properties/properties.ui" line="330"/>
         <source>always save original ID3 Tags</source>
         <translation>Original ID3-Tags immer sichern</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="337"/>
+        <location filename="src/properties/properties.ui" line="337"/>
         <source>save original ID3 Tags when using autoimport</source>
         <translation>Original ID3-Tags beim automatischen Import sichern</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="492"/>
+        <location filename="src/properties/properties.ui" line="492"/>
         <source>normalize filenames</source>
         <translation>Dateinamen normalisieren</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="189"/>
+        <location filename="src/properties/properties.ui" line="189"/>
         <source>Printing</source>
         <translation>Drucken</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="182"/>
+        <location filename="src/properties/properties.ui" line="182"/>
         <source>Automatic search</source>
         <translation>automatische Suche beim Importieren von MP3-Files</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="268"/>
+        <location filename="src/properties/properties.ui" line="268"/>
         <source>MP3-Player:</source>
         <translation>MP3-Player:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="450"/>
+        <location filename="src/properties/properties.ui" line="450"/>
         <source>Retry Intervall:</source>
         <translation>Erneut versuchen nach:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="470"/>
+        <location filename="src/properties/properties.ui" line="470"/>
         <source>Seconds</source>
         <translation>Sekunden</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="503"/>
+        <location filename="src/properties/properties.ui" line="503"/>
         <source>Maximum Filename length:</source>
         <translation>Maximale Dateinamenlänge:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="517"/>
+        <location filename="src/properties/properties.ui" line="517"/>
         <source>64 Characters (Joliet compatible)</source>
         <translation>64 Zeichen (Joliet kompatibel)</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="522"/>
+        <location filename="src/properties/properties.ui" line="522"/>
         <source>100 Characters (Joliet compatible)</source>
         <translation>100 Zeichen (Joliet funktioniert meist noch)</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="527"/>
+        <location filename="src/properties/properties.ui" line="527"/>
         <source>207 Characters (ISO 9660:1999 compatible)</source>
         <translation>207 Zeichen (ISO 9660:1990 kompatibel)</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="532"/>
+        <location filename="src/properties/properties.ui" line="532"/>
         <source>unlimited</source>
         <translation>unlimitiert</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="899"/>
+        <location filename="src/properties/properties.ui" line="908"/>
         <source>Devices</source>
         <translation>Tonträger</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="905"/>
+        <location filename="src/properties/properties.ui" line="914"/>
         <source>The following devices should be visible in the WinMusik Menu:</source>
         <translation>Die folgenden Tonträger werden in WinMusik Menü angezeigt:</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="923"/>
+        <location filename="src/properties/properties.ui" line="932"/>
         <source>Device</source>
         <translation>Tonträger Art</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="930"/>
+        <location filename="src/properties/properties.ui" line="939"/>
         <source>Digitalisation Path</source>
         <translation>Pfad der digitalen Daten</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="937"/>
+        <location filename="src/properties/properties.ui" line="946"/>
         <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="954"/>
+        <location filename="src/properties/properties.ui" line="963"/>
         <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="971"/>
+        <location filename="src/properties/properties.ui" line="980"/>
         <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="988"/>
+        <location filename="src/properties/properties.ui" line="997"/>
         <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1005"/>
+        <location filename="src/properties/properties.ui" line="1014"/>
         <source>VHS-Tape</source>
         <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1022"/>
+        <location filename="src/properties/properties.ui" line="1031"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1039"/>
+        <location filename="src/properties/properties.ui" line="1048"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1056"/>
+        <location filename="src/properties/properties.ui" line="1065"/>
         <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="1073"/>
+        <location filename="src/properties/properties.ui" line="1082"/>
         <source>Audio DVD</source>
         <translation>Musik DVD</translation>
     </message>
     <message>
-        <location filename="forms/properties.ui" line="737"/>
+        <location filename="src/properties/properties.ui" line="746"/>
         <source>activate debug output</source>
         <translation>Debug-Ausgabe aktivieren</translation>
+    </message>
+</context>
+<context>
+    <name>RegExpEditClass</name>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="17"/>
+        <source>Regular Expression Editor</source>
+        <translation>Editor für reguläre Ausdrücke</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="27"/>
+        <source>Expression</source>
+        <translation>Regulärer Ausdruck</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="33"/>
+        <source>Name:</source>
+        <translation>Name:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="43"/>
+        <source>Expression:</source>
+        <translation>Ausdruck:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="53"/>
+        <source>Capture fields:</source>
+        <translation>Kopier-Felder:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="70"/>
+        <location filename="src/properties/regexpedit.ui" line="305"/>
+        <source>Artist:</source>
+        <translation>Interpret:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="77"/>
+        <location filename="src/properties/regexpedit.ui" line="365"/>
+        <source>Genre:</source>
+        <translation>Genre:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="84"/>
+        <location filename="src/properties/regexpedit.ui" line="385"/>
+        <source>Album:</source>
+        <translation>Album:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="141"/>
+        <location filename="src/properties/regexpedit.ui" line="345"/>
+        <source>Version:</source>
+        <translation>Version:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="148"/>
+        <location filename="src/properties/regexpedit.ui" line="325"/>
+        <source>Title:</source>
+        <translation>Titel:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="165"/>
+        <location filename="src/properties/regexpedit.ui" line="405"/>
+        <source>Label:</source>
+        <translation>Label:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="175"/>
+        <location filename="src/properties/regexpedit.ui" line="425"/>
+        <source>BPM:</source>
+        <translation>BPM:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="182"/>
+        <source>Length Hours:</source>
+        <translation>Länge in Stunden:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="189"/>
+        <source>Length Minutes:</source>
+        <translation>Länge in Minuten:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="196"/>
+        <source>Length Seconds:</source>
+        <translation>Länge in Sekunden:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="217"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please Note: Expression must be a Perl compatibe Regular Expression.&lt;/p&gt;&lt;p&gt;A value of &amp;quot;0&amp;quot; in a capture field means, the field is not captured by the the regular expression.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bitte beachten: Ausdruck muß ein Perl-kompatibler regulärer Ausdruck sein.&lt;/p&gt;&lt;p&gt;Ein Wert von &amp;quot;0&amp;quot; in einem Kopierfeld bedeutet, dass das Feld in diesem regulären Ausdruck nicht vorkommt.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="264"/>
+        <source>Test</source>
+        <translation>Test</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="272"/>
+        <source>Teststring:</source>
+        <translation>Teststring:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="291"/>
+        <source>Match</source>
+        <translation>Treffer</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="456"/>
+        <source>Length:</source>
+        <translation>Länge:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="482"/>
+        <source>minutes</source>
+        <translation>Minuten</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="524"/>
+        <source>ok</source>
+        <translation>ok</translation>
+    </message>
+    <message>
+        <location filename="src/properties/regexpedit.ui" line="560"/>
+        <source>cancel</source>
+        <translation>abbrechen</translation>
     </message>
 </context>
 <context>
@@ -3531,76 +3696,81 @@ p, li { white-space: pre-wrap; }
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="615"/>
+        <location filename="src/search.cpp" line="643"/>
         <source>select all</source>
         <comment>trackList Context Menue</comment>
         <translation>alle auswählen</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="616"/>
+        <location filename="src/search.cpp" line="644"/>
         <source>select none</source>
         <comment>trackList Context Menue</comment>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="619"/>
+        <location filename="src/search.cpp" line="647"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Versionen finden</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="620"/>
+        <location filename="src/search.cpp" line="648"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Mehr von diesem Interpreten</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="622"/>
+        <location filename="src/search.cpp" line="650"/>
         <source>All tracks on this medium</source>
         <comment>trackList Context Menue</comment>
         <translation>Alle Titel auf diesem Tonträger</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="624"/>
+        <location filename="src/search.cpp" line="652"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel abspielen</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="625"/>
+        <location filename="src/search.cpp" line="653"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel editieren</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="626"/>
+        <location filename="src/search.cpp" line="654"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Interpret und Titel in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="627"/>
+        <location filename="src/search.cpp" line="655"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>Dateinamen in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="903"/>
+        <location filename="src/search.cpp" line="804"/>
+        <source>Could not save Title in TitleStore</source>
+        <translation>Konnte Titel nicht in TitleStore speichern</translation>
+    </message>
+    <message>
+        <location filename="src/search.cpp" line="987"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="904"/>
+        <location filename="src/search.cpp" line="988"/>
         <source>Filename</source>
         <translation>Dateiname</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="905"/>
+        <location filename="src/search.cpp" line="989"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="src/search.cpp" line="621"/>
+        <location filename="src/search.cpp" line="649"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Interpreten mit diesem Titel</translation>
@@ -3609,56 +3779,58 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistDialog</name>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="167"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="180"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="188"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="170"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="183"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="191"/>
         <source>no</source>
         <translation>nein</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="246"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="278"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="246"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="278"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="247"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="279"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="247"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="279"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="248"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="280"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="248"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="280"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="250"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="282"/>
         <source>Search track in Database</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel in Datenbank suchen</translation>
     </message>
     <message>
-        <location filename="src/searchlistdialog.cpp" line="250"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="282"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
@@ -3666,67 +3838,72 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistDialogClass</name>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="14"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="14"/>
         <source>Searchlist</source>
         <translation>Suchliste</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="26"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="26"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="60"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="60"/>
         <source>Search:</source>
         <translation>Suchen:</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="70"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="70"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="110"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="110"/>
         <source>New Track from Clipboard</source>
         <translation>Neuer Track aus der Zwischenablage</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="161"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="161"/>
         <source>Artist - Title</source>
         <translation>Interpret - Titel</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="166"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="166"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="171"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="171"/>
         <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="176"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="176"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="181"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="181"/>
         <source>Rating</source>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="186"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="186"/>
         <source>Added</source>
         <translation>Hinzugefügt</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="191"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="191"/>
         <source>Existing</source>
         <translation>Vorhanden</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="196"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="196"/>
+        <source>Selected</source>
+        <translation>Auswahl</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.ui" line="201"/>
         <source>Done</source>
         <translation>Erledigt</translation>
     </message>
@@ -3739,17 +3916,17 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Übernehmen</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="36"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="36"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="206"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="211"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="259"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="264"/>
         <source>Delete marked tracks</source>
         <translation>Markierte Tracks löschen</translation>
     </message>
@@ -3758,12 +3935,12 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="90"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="90"/>
         <source>New Track</source>
         <translation>Neuer Track</translation>
     </message>
     <message>
-        <location filename="forms/searchlistdialog.ui" line="236"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="241"/>
         <source>Delete Track</source>
         <translation>Track löschen</translation>
     </message>
@@ -3771,32 +3948,32 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistTrackDialogClass</name>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="14"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="14"/>
         <source>Searchlist Edit</source>
         <translation>Track der Suchliste editieren</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="26"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="26"/>
         <source>Artist:</source>
         <translation>Interpret:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="33"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="33"/>
         <source>Title:</source>
         <translation>Titel:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="40"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="40"/>
         <source>Version:</source>
         <translation>Version:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="56"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="56"/>
         <source>Genre:</source>
         <translation>Genre:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="66"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="66"/>
         <source>Length:</source>
         <translation>Länge:</translation>
     </message>
@@ -3805,32 +3982,32 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">00000;  {0009:99;?}</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="91"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="91"/>
         <source>min.</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="113"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="113"/>
         <source>Comment:</source>
         <translation>Bemerkung:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="123"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="123"/>
         <source>Releasedate:</source>
         <translation>Veröffentlichungsdatum:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="154"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="154"/>
         <source>Bewertung:</source>
         <translation>Bewertung:</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="278"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="278"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="forms/searchlisttrackdialog.ui" line="308"/>
+        <location filename="src/searchlists/searchlisttrackdialog.ui" line="308"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
@@ -3838,12 +4015,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Searchlists</name>
     <message>
-        <location filename="src/searchlists.cpp" line="152"/>
+        <location filename="src/searchlists/searchlists.cpp" line="152"/>
         <source>WinMusik: Delete searchlist</source>
         <translation>WinMusik: Suchliste löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists.cpp" line="153"/>
+        <location filename="src/searchlists/searchlists.cpp" line="153"/>
         <source>Are you sure you want to delete this searchlist?</source>
         <translation>Sind Sie sicher, dass Sie diese Suchliste löschen wollen?</translation>
     </message>
@@ -3851,37 +4028,37 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistsClass</name>
     <message>
-        <location filename="forms/searchlists.ui" line="14"/>
+        <location filename="src/searchlists/searchlists.ui" line="14"/>
         <source>Manage Searchlists</source>
         <translation>Suchlisten verwalten</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="43"/>
+        <location filename="src/searchlists/searchlists.ui" line="43"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="48"/>
+        <location filename="src/searchlists/searchlists.ui" line="48"/>
         <source>Tracks</source>
         <translation>Tracks</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="53"/>
+        <location filename="src/searchlists/searchlists.ui" line="53"/>
         <source>Created</source>
         <translation>Erstelldatum</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="58"/>
+        <location filename="src/searchlists/searchlists.ui" line="58"/>
         <source>Changed</source>
         <translation>Letzte Änderung</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="74"/>
+        <location filename="src/searchlists/searchlists.ui" line="74"/>
         <source>New Searchlist</source>
         <translation>Neue Suchliste</translation>
     </message>
     <message>
-        <location filename="forms/searchlists.ui" line="91"/>
+        <location filename="src/searchlists/searchlists.ui" line="91"/>
         <source>Delete Searchlist</source>
         <translation>Suchliste löschen</translation>
     </message>
@@ -4085,7 +4262,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>asynchronousMessage</name>
     <message>
-        <location filename="src/CHashes.cpp" line="579"/>
+        <location filename="src/CHashes.cpp" line="607"/>
         <source>search trees are created, please wait...</source>
         <translation>Suchbäume werden aufgebaut, bitte warten...</translation>
     </message>
@@ -4346,9 +4523,9 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="forms/search.ui" line="92"/>
-        <location filename="forms/search.ui" line="162"/>
-        <location filename="forms/search.ui" line="223"/>
-        <location filename="forms/search.ui" line="406"/>
+        <location filename="forms/search.ui" line="159"/>
+        <location filename="forms/search.ui" line="237"/>
+        <location filename="forms/search.ui" line="430"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
@@ -4378,104 +4555,114 @@ p, li { white-space: pre-wrap; }
         <translation>Tags:</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="188"/>
+        <location filename="forms/search.ui" line="187"/>
+        <source>Label:</source>
+        <translation>Label:</translation>
+    </message>
+    <message>
+        <location filename="forms/search.ui" line="202"/>
         <source>Quicksearch</source>
         <translation>Schnellsuche</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="208"/>
-        <location filename="forms/search.ui" line="396"/>
+        <location filename="forms/search.ui" line="222"/>
+        <location filename="forms/search.ui" line="420"/>
         <source>Query:</source>
         <translation>Abfrage:</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="251"/>
+        <location filename="forms/search.ui" line="265"/>
         <source>Search in:</source>
         <translation>Suche in:</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="274"/>
+        <location filename="forms/search.ui" line="288"/>
         <source>Artist</source>
         <translation>Interpret</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="284"/>
+        <location filename="forms/search.ui" line="298"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="294"/>
+        <location filename="forms/search.ui" line="308"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="304"/>
+        <location filename="forms/search.ui" line="318"/>
         <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="314"/>
+        <location filename="forms/search.ui" line="328"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="324"/>
+        <location filename="forms/search.ui" line="338"/>
         <source>Remarks</source>
         <translation>Bemerkungen</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="334"/>
+        <location filename="forms/search.ui" line="348"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="378"/>
-        <location filename="forms/search.ui" line="443"/>
+        <location filename="forms/search.ui" line="358"/>
+        <source>Label</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <location filename="forms/search.ui" line="402"/>
+        <location filename="forms/search.ui" line="467"/>
         <source>watch Clipboard</source>
         <translation>Zwischenablage beobachten</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="388"/>
+        <location filename="forms/search.ui" line="412"/>
         <source>Harddisk search</source>
         <translation>Festplattensuche</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="467"/>
+        <location filename="forms/search.ui" line="491"/>
         <source>Devices</source>
         <translation>Tonträger</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="749"/>
+        <location filename="forms/search.ui" line="773"/>
         <source>Result</source>
         <translation>Ergebnis</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="766"/>
+        <location filename="forms/search.ui" line="793"/>
         <source>Limit:</source>
         <translation>Limit:</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="785"/>
+        <location filename="forms/search.ui" line="812"/>
         <source>random</source>
         <translation>Zufällige Tracks</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="849"/>
+        <location filename="forms/search.ui" line="876"/>
         <source>select all</source>
         <translation>alle auswählen</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="863"/>
+        <location filename="forms/search.ui" line="890"/>
         <source>unselect all</source>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="893"/>
+        <location filename="forms/search.ui" line="920"/>
         <source>Tracks found:</source>
         <translation>Gefundene Titel:</translation>
     </message>
     <message>
-        <location filename="forms/search.ui" line="931"/>
+        <location filename="forms/search.ui" line="958"/>
         <source>Total length:</source>
         <translation>Gesamtlänge:</translation>
     </message>
