@@ -24,6 +24,8 @@ Version 3.0.7
 	  auswahl der Tracks treffen kann, die man als nächstes kaufen möchte.
 	- Suchliste hat jetzt eine Statuszeile am unteren Rand, die die Anzahl
 	  Tracks und die Anzahl aktuell markierter Tracks anzeigt.
+	- In der Suchliste können jetzt mehrere Tracks auf einmal gelöscht werden,
+	  wobei eine Sicherheitsabfrage eingebaut wurde.
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik

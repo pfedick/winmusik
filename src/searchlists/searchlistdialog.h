@@ -72,7 +72,6 @@ private:
     void showEvent(QShowEvent * event);
     void Resize();
     void editTrack(SearchlistTreeItem *item);
-    void deleteTrack(SearchlistTreeItem *item);
     void renderTrack(SearchlistTreeItem *item);
     void dupeCheckOnTrack(SearchlistTreeItem *item);
     int save();
@@ -118,9 +117,7 @@ public slots:
 	void on_deleteTrackButton_clicked();
 	void on_saveExitButton_clicked();
 	void on_saveButton_clicked();
-
 	void on_ClipBoardTimer_update();
-
 };
 
 
