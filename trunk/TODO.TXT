@@ -1,5 +1,10 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
+Track löschen (BUG)
+  Beim Löschen eines Tracks im Editor werden die nachfolgenden Tracks um
+  eine Position nach oben geschoben. Trackliste in der Datenbank und Dateinamen
+  werden aktualisiertm aber scheinbar nicht der Titel selbst.
+
 Suchliste
   Schön wäre, wenn sich die Ladezeit verkürzen liesse. Was dauert da
   eigentlich so lange? Das Rendering oder das Parsen des XML-Files?
@@ -43,12 +48,6 @@ Anbieter für Cover-Suche konfigurierbar machen
   gesetzt werden, z.B. $1, $2, $3. Es sollen keine sprechenden Namen verwendet
   werden, da dies zusätzliche Komplexität wegen der Übersetzungen bedeuten
   würde (stattdessen: Legende)
-
-Regular Expressions für Zwischenablage
-  Im Konfigurationsmenü sollen Regular-Expressions für den Import von
-  Titeln über die Zwischenablage definiert werden können. Neben Name und
-  Expression wird noch die Zuordnung der Captures zu den WinMusik-Feldern
-  benötigt: $1=Titel, $2=Interpret, usw... 
   
 
 */

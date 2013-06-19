@@ -32,6 +32,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QStatusBar>
+#include <QMessageBox>
 #include "searchlistdialog.h"
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
@@ -144,7 +145,7 @@ bool SearchlistDialog::eventFilter(QObject *target, QEvent *event)
 			int modifier=keyEvent->modifiers();
 			SearchlistTreeItem *item=(SearchlistTreeItem*)ui.trackList->currentItem();
 			if (key==Qt::Key_Delete && modifier==Qt::NoModifier) {
-				if (item) deleteTrack(item);
+				if (item) on_deleteTrackButton_clicked();
 				return true;
 			} else if (key==Qt::Key_Return && modifier==Qt::NoModifier) {
 				if (item) editTrack(item);
@@ -483,22 +484,26 @@ void SearchlistDialog::on_contextDeleteTrack_triggered()
 	on_deleteTrackButton_clicked();
 }
 
-void SearchlistDialog::deleteTrack(SearchlistTreeItem *item)
-{
-	if (!item) return;
-	int index=ui.trackList->indexOfTopLevelItem (item);
-	if (index<0) return;
-	item=(SearchlistTreeItem*) ui.trackList->takeTopLevelItem(index);
-	if (item) delete item;
-	save();
-	updateStatusBar();
-}
-
 void SearchlistDialog::on_deleteTrackButton_clicked()
 {
-	currentTrackListItem=(SearchlistTreeItem*)ui.trackList->currentItem();
-	deleteTrack(currentTrackListItem);
-	currentTrackListItem=NULL;
+	QList<QTreeWidgetItem *> list=ui.trackList->selectedItems();
+	if (list.size()>1) {
+		int ret = QMessageBox::question(this, tr("delete tracks"),
+		                                tr("You have selected more than one track.\n"
+		                                   "Are you sure, you want to delete them?"),
+		                                QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+		if (ret!=QMessageBox::Yes) return;
+	}
+	for (int i=0;i<list.size();i++) {
+		SearchlistTreeItem *item=(SearchlistTreeItem*)list[i];
+		int index=ui.trackList->indexOfTopLevelItem (item);
+		if (index>=0) {
+			item=(SearchlistTreeItem*) ui.trackList->takeTopLevelItem(index);
+			if (item) delete item;
+		}
+	}
+	save();
+	updateStatusBar();
 }
 
 void SearchlistDialog::on_saveExitButton_clicked()
