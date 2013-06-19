@@ -34,9 +34,9 @@ HEADERS += include/coverviewer.h \
     include/massimport.h \
     include/edittrackdialog.h \
     include/coverprinter.h \
-    include/searchlists.h \
-    include/searchlistdialog.h \
-    include/searchlisttrackdialog.h \
+    src/searchlists/searchlists.h \
+    src/searchlists/searchlistdialog.h \
+    src/searchlists/searchlisttrackdialog.h \
     include/shortcutdialog.h \
     include/updater.h \
     include/registration.h \
@@ -72,9 +72,9 @@ SOURCES += src/coverviewer.cpp \
     src/massimport.cpp \
     src/coverprinter.cpp \
     src/regexpcapture.cpp \
-    src/searchlists.cpp \
-    src/searchlistdialog.cpp \
-    src/searchlisttrackdialog.cpp \
+    src/searchlists/searchlists.cpp \
+    src/searchlists/searchlistdialog.cpp \
+    src/searchlists/searchlisttrackdialog.cpp \
     src/shortcutdialog.cpp \
     src/updater.cpp \
     src/registration.cpp \
@@ -120,10 +120,10 @@ FORMS += forms/coverviewer.ui \
     widgets/fkeys.ui \
     widgets/edittrack.ui \
     forms/edittrackdialog.ui \
-    forms/searchlists.ui \
+    src/searchlists/searchlists.ui \
     forms/massimport.ui \
-    forms/searchlistdialog.ui \
-    forms/searchlisttrackdialog.ui \
+    src/searchlists/searchlistdialog.ui \
+    src/searchlists/searchlisttrackdialog.ui \
     forms/coverprinter.ui \
     forms/shortcutdialog.ui \
     forms/updater.ui \

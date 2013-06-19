@@ -30,7 +30,7 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QMouseEvent>
-#include "../include/searchlisttrackdialog.h"
+#include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget *parent)
