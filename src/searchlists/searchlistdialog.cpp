@@ -387,6 +387,7 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		QCoreApplication::processEvents();
 		dupeCheckOnTrack((SearchlistTreeItem*)item);
 		save();
+		updateStatusBar();
 	} else if (column==SL_COLUMN_SELECTED) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		if (it.selected==true) it.selected=false;
@@ -396,6 +397,7 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		QCoreApplication::processEvents();
 		dupeCheckOnTrack((SearchlistTreeItem*)item);
 		save();
+		updateStatusBar();
 	}
 }
 
