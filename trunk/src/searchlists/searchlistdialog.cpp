@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QStatusBar>
 #include "searchlistdialog.h"
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
@@ -38,6 +39,7 @@
 SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::CString &Filename)
     : QWidget(parent)
 {
+	statusbar=NULL;
 	ui.setupUi(this);
 	this->wm=wm;
 	List.setWmClient(wm);
@@ -81,6 +83,8 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	ui.trackList->setSortingEnabled(true);
 	ui.trackList->sortItems(SL_COLUMN_ARTIST,Qt::AscendingOrder);
 
+	setupStatusBar();
+
 	// Das müssen wir irgendwie asynchron hinbekommen
 	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
 		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
@@ -96,6 +100,39 @@ SearchlistDialog::~SearchlistDialog()
 	if (wm) {
 		wm->SearchlistDialogClosed(this);
 	}
+}
+
+
+void SearchlistDialog::setupStatusBar()
+{
+	statusbar=new QStatusBar;
+	ui.searchlistLayout->addWidget(statusbar);
+
+	QLabel *label=new QLabel(tr("Tracks:"));
+	statusbar->addWidget(label);
+
+	statusbarTrackNumber=new QLabel("0");
+	statusbarTrackNumber->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+	statusbar->addWidget(statusbarTrackNumber);
+
+	label=new QLabel(tr("Selected:"));
+	statusbar->addWidget(label);
+
+	statusbarTracksSelected=new QLabel("0");
+	statusbarTracksSelected->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+	statusbar->addWidget(statusbarTracksSelected);
+
+	updateStatusBar();
+}
+
+void SearchlistDialog::updateStatusBar()
+{
+	ppl6::CString Tmp;
+	Tmp.Setf("%i",ui.trackList->topLevelItemCount());
+	statusbarTrackNumber->setText(Tmp);
+	QList<QTreeWidgetItem *> list=ui.trackList->selectedItems();
+	Tmp.Setf("%i",list.size());
+	statusbarTracksSelected->setText(Tmp);
 }
 
 bool SearchlistDialog::eventFilter(QObject *target, QEvent *event)
@@ -343,6 +380,10 @@ void SearchlistDialog::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, 
 
 }
 
+void SearchlistDialog::on_trackList_itemSelectionChanged()
+{
+	updateStatusBar();
+}
 
 void SearchlistDialog::rateCurrentTrack(int value)
 {
@@ -424,6 +465,7 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 	dupeCheckOnTrack(item);
 	ui.trackList->addTopLevelItem(item);
 	save();
+	updateStatusBar();
 }
 
 void SearchlistDialog::on_newTrackFromClipboardButton_clicked()
@@ -449,6 +491,7 @@ void SearchlistDialog::deleteTrack(SearchlistTreeItem *item)
 	item=(SearchlistTreeItem*) ui.trackList->takeTopLevelItem(index);
 	if (item) delete item;
 	save();
+	updateStatusBar();
 }
 
 void SearchlistDialog::on_deleteTrackButton_clicked()
@@ -456,7 +499,6 @@ void SearchlistDialog::on_deleteTrackButton_clicked()
 	currentTrackListItem=(SearchlistTreeItem*)ui.trackList->currentItem();
 	deleteTrack(currentTrackListItem);
 	currentTrackListItem=NULL;
-	save();
 }
 
 void SearchlistDialog::on_saveExitButton_clicked()
