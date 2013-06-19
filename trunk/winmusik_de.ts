@@ -3789,68 +3789,78 @@ p, li { white-space: pre-wrap; }
         <translation>Ausgewählt:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="218"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="226"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="126"/>
+        <source>Pre-selected:</source>
+        <translation>Vorauswahl:</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="133"/>
+        <source>Done:</source>
+        <translation>Erledigt:</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="248"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="256"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="221"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="229"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="251"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="259"/>
         <source>no</source>
         <translation>nein</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="316"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="316"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="317"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="347"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="317"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="347"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="318"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="318"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="320"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="350"/>
         <source>Search track in Database</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel in Datenbank suchen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="320"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="350"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="491"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="521"/>
         <source>delete tracks</source>
         <translation>Tracks löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="492"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="522"/>
         <source>You have selected more than one track.
 Are you sure, you want to delete them?</source>
         <translation>Sie haben mehr als einen Track ausgewählt.

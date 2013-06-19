@@ -92,6 +92,8 @@ private:
     QStatusBar	*statusbar;
     QLabel		*statusbarTrackNumber;
     QLabel		*statusbarTracksSelected;
+    QLabel		*statusbarTracksPreSelected;
+    QLabel		*statusbarTracksDone;
 
 public slots:
 	void on_trackList_customContextMenuRequested ( const QPoint & pos );
