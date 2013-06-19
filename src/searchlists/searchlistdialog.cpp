@@ -123,6 +123,20 @@ void SearchlistDialog::setupStatusBar()
 	statusbarTracksSelected->setFrameStyle(QFrame::Panel|QFrame::Sunken);
 	statusbar->addWidget(statusbarTracksSelected);
 
+	label=new QLabel(tr("Pre-selected:"));
+	statusbar->addWidget(label);
+
+	statusbarTracksPreSelected=new QLabel("0");
+	statusbarTracksPreSelected->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+	statusbar->addWidget(statusbarTracksPreSelected);
+
+	label=new QLabel(tr("Done:"));
+	statusbar->addWidget(label);
+
+	statusbarTracksDone=new QLabel("0");
+	statusbarTracksDone->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+	statusbar->addWidget(statusbarTracksDone);
+
 	updateStatusBar();
 }
 
@@ -134,6 +148,22 @@ void SearchlistDialog::updateStatusBar()
 	QList<QTreeWidgetItem *> list=ui.trackList->selectedItems();
 	Tmp.Setf("%i",list.size());
 	statusbarTracksSelected->setText(Tmp);
+
+	int selected=0;
+	int done=0;
+	SearchlistTreeItem *item;
+	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
+		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
+		if (item) {
+			if (item->Track.selected==true) selected++;
+			if (item->Track.found==true) done++;
+		}
+	}
+	Tmp.Setf("%i",selected);
+	statusbarTracksPreSelected->setText(Tmp);
+
+	Tmp.Setf("%i",done);
+	statusbarTracksDone->setText(Tmp);
 }
 
 bool SearchlistDialog::eventFilter(QObject *target, QEvent *event)
