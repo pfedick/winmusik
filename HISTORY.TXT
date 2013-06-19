@@ -20,6 +20,8 @@ Version 3.0.7
 	- Suche unterstützt nun auch Suche nach Plattenlabel
 	- Definierbare RegularExpressions für die Titelerkennung über die
 	  Zwischenablage
+	- Suchlisten haben jetzt eine Spalte "selected", mit der man eine Vor-
+	  auswahl der Tracks treffen kann, die man als nächstes kaufen möchte.
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
