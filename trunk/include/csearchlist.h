@@ -34,6 +34,7 @@ class SearchlistItem : public GenericListItem
 		ppl6::CString	ReleaseDate;
 		int				Length;
 		bool			found;
+		bool			selected;
 		ppluint8		Rating;
 
 		SearchlistItem();

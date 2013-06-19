@@ -12,6 +12,7 @@
 SearchlistItem::SearchlistItem()
 {
 	found=false;
+	selected=false;
 	Length=0;
 	DateAdded.setCurrentTime();
 	Rating=0;
@@ -20,6 +21,7 @@ SearchlistItem::SearchlistItem()
 SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 {
 	found=false;
+	selected=false;
 	Length=0;
 	DateAdded.setCurrentTime();
 	RegExpMatch match;
@@ -117,11 +119,13 @@ SearchlistItem::SearchlistItem(const ppl6::CString &Artist, const ppl6::CString 
 	this->Version=Version;
 	DateAdded.setCurrentTime();
 	found=false;
+	selected=false;
 }
 
 void SearchlistItem::clear()
 {
 	found=false;
+	selected=false;
 	Artist.Clear();
 	Title.Clear();
 	Version.Clear();
@@ -143,6 +147,7 @@ void SearchlistItem::importXML(const ppl6::CString &xml)
 	if (xml.PregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s",Matches)) DateAdded=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<length\\>(.*)\\<\\/length\\>/s",Matches)) Length=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
 	if (xml.PregMatch("/\\<found\\>(.*)\\<\\/found\\>/s",Matches)) found=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
+	if (xml.PregMatch("/\\<selected\\>(.*)\\<\\/selected\\>/s",Matches)) selected=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
 	if (xml.PregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s",Matches)) Rating=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
 }
 
@@ -159,6 +164,7 @@ ppl6::CString SearchlistItem::exportXML() const
 			"	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n"
 			"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
 			"	<found>"+(found?"true":"false")+"</found>\n"
+			"	<selected>"+(selected?"true":"false")+"</selected>\n"
 			"	<rating>"+ppl6::ToString("%i",Rating)+"</rating>\n"
 			"</searchlistitem>\n";
 	return s;

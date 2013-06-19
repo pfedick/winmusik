@@ -183,6 +183,14 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 		item->setText(SL_COLUMN_DONE,tr("no"));
 	}
 
+	if (item->Track.selected==true) {
+		item->setIcon(SL_COLUMN_SELECTED,QIcon(":/icons/resources/button_ok.png"));
+		item->setText(SL_COLUMN_SELECTED,tr("yes"));
+	} else {
+		item->setIcon(SL_COLUMN_SELECTED,QIcon(":/icons/resources/edit-delete.png"));
+		item->setText(SL_COLUMN_SELECTED,tr("no"));
+	}
+
 	// Rating
 	switch (item->Track.Rating) {
 		case 0: item->setIcon(SL_COLUMN_RATING,QIcon(":/bewertung/resources/rating-0.png"));
@@ -215,6 +223,7 @@ void SearchlistDialog::Resize()
 {
 	int s=ui.trackList->width();
 	ui.trackList->setColumnWidth(SL_COLUMN_DONE,60);
+	ui.trackList->setColumnWidth(SL_COLUMN_SELECTED,60);
 	ui.trackList->setColumnWidth(SL_COLUMN_EXISTING,60);
 	ui.trackList->setColumnWidth(SL_COLUMN_DATEADDED,90);
 	ui.trackList->setColumnWidth(SL_COLUMN_LENGTH,70);
@@ -222,7 +231,7 @@ void SearchlistDialog::Resize()
 
 	ui.trackList->setColumnWidth(SL_COLUMN_RATING,64);
 
-	s=s-62-62-92-72-108-66;
+	s=s-62-62-92-72-108-66-62;
 	if (s<300) s=300;
 	ui.trackList->setColumnWidth(SL_COLUMN_VERSION,s*30/100);
 	ui.trackList->setColumnWidth(SL_COLUMN_ARTIST,s*70/100);
@@ -292,7 +301,7 @@ void SearchlistDialog::on_trackList_customContextMenuRequested ( const QPoint & 
 void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int column )
 {
 	if (!item) return;
-	if (column<SL_COLUMN_DONE) {
+	if (column<SL_COLUMN_SELECTED) {
 		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
@@ -307,6 +316,16 @@ void SearchlistDialog::on_trackList_itemClicked ( QTreeWidgetItem * item, int co
 		else it.found=true;
 		((SearchlistTreeItem*)item)->Track=it;
 		renderTrack((SearchlistTreeItem*)item);
+		QCoreApplication::processEvents();
+		dupeCheckOnTrack((SearchlistTreeItem*)item);
+		save();
+	} else if (column==SL_COLUMN_SELECTED) {
+		SearchlistItem it=((SearchlistTreeItem*)item)->Track;
+		if (it.selected==true) it.selected=false;
+		else it.selected=true;
+		((SearchlistTreeItem*)item)->Track=it;
+		renderTrack((SearchlistTreeItem*)item);
+		QCoreApplication::processEvents();
 		dupeCheckOnTrack((SearchlistTreeItem*)item);
 		save();
 	}
