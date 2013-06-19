@@ -3779,58 +3779,68 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistDialog</name>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="180"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="188"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="111"/>
+        <source>Tracks:</source>
+        <translation>Tracks:</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="118"/>
+        <source>Selected:</source>
+        <translation>Ausgewählt:</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="217"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="225"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="183"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="191"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="220"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="228"/>
         <source>no</source>
         <translation>nein</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="278"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="315"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="278"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="315"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="279"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="316"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="279"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="316"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="280"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="317"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="280"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="317"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="282"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="319"/>
         <source>Search track in Database</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel in Datenbank suchen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="282"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="319"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
@@ -3843,67 +3853,67 @@ p, li { white-space: pre-wrap; }
         <translation>Suchliste</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="26"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="46"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="60"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="80"/>
         <source>Search:</source>
         <translation>Suchen:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="70"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="90"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="110"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="130"/>
         <source>New Track from Clipboard</source>
         <translation>Neuer Track aus der Zwischenablage</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="161"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="179"/>
         <source>Artist - Title</source>
         <translation>Interpret - Titel</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="166"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="184"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="171"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="189"/>
         <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="176"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="194"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="181"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="199"/>
         <source>Rating</source>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="186"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="204"/>
         <source>Added</source>
         <translation>Hinzugefügt</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="191"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="209"/>
         <source>Existing</source>
         <translation>Vorhanden</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="196"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="214"/>
         <source>Selected</source>
         <translation>Auswahl</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="201"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="219"/>
         <source>Done</source>
         <translation>Erledigt</translation>
     </message>
@@ -3916,17 +3926,17 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Übernehmen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="36"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="56"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="211"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="229"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="264"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="282"/>
         <source>Delete marked tracks</source>
         <translation>Markierte Tracks löschen</translation>
     </message>
@@ -3935,12 +3945,12 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Abbrechen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="90"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="110"/>
         <source>New Track</source>
         <translation>Neuer Track</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="241"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="259"/>
         <source>Delete Track</source>
         <translation>Track löschen</translation>
     </message>

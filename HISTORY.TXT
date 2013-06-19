@@ -22,6 +22,8 @@ Version 3.0.7
 	  Zwischenablage
 	- Suchlisten haben jetzt eine Spalte "selected", mit der man eine Vor-
 	  auswahl der Tracks treffen kann, die man als nächstes kaufen möchte.
+	- Suchliste hat jetzt eine Statuszeile am unteren Rand, die die Anzahl
+	  Tracks und die Anzahl aktuell markierter Tracks anzeigt.
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik

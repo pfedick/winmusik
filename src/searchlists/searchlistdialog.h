@@ -77,6 +77,8 @@ private:
     void dupeCheckOnTrack(SearchlistTreeItem *item);
     int save();
     void rateCurrentTrack(int value);
+    void setupStatusBar();
+    void updateStatusBar();
 
     SearchlistItem	copyItem;
     bool			haveCopyItem;
@@ -88,12 +90,15 @@ private:
     QTimer		ClipBoardTimer;
     ppl6::CString	LastClipboardString;
 
-
+    QStatusBar	*statusbar;
+    QLabel		*statusbarTrackNumber;
+    QLabel		*statusbarTracksSelected;
 
 public slots:
 	void on_trackList_customContextMenuRequested ( const QPoint & pos );
 	void on_trackList_itemClicked ( QTreeWidgetItem * item, int column );
 	void on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+	void on_trackList_itemSelectionChanged();
 
 	void on_contextEditTrack_triggered();
 	void on_contextInsertTrack_triggered();
