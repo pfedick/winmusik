@@ -31,6 +31,7 @@
 
 #include <locale.h>
 #include "winmusik3.h"
+#include "version.h"
 
 #include "menue.h"
 #include "edit.h"

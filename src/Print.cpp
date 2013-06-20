@@ -30,6 +30,7 @@
 
 
 #include "winmusik3.h"
+#include "version.h"
 #include <QMessageBox>
 #include <QPrinter>
 #include <QDir>

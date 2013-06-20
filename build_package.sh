@@ -178,6 +178,14 @@ gather_sources()
                 fi
                 echo "INFO: done"
 	fi
+	BUILDDATE=`date '+%Y%m%d'`
+	(
+		echo "#ifndef VERSION_H_"
+		echo "#define VERSION_H_"
+		echo "#define WM_VERSION	\"$VERSION\""
+		echo "#define WM_RELEASEDATE	\"$BUILDDATE\""
+		echo "#endif /* VERSION_H_ */"
+	) > $WINMUSIKDIR/include/version.h
 	cd $CUR
 }
 
@@ -682,7 +690,7 @@ build_mingw32()
     if [ $ISVERSION = "trunk" ] ; then
     	ISVERSION="0.0"
     else
-    	ISVERSION=`echo $ISVERSION | sed -e "s/build_(.*)/3.0.0.\$1/"`
+    	ISVERSION=`echo $ISVERSION | sed -e "s/^build_\(.*\)$/3.0.0.\1/"`
     fi
     cat setup.iss | sed -e "s/OutputBaseFilename=.*/OutputBaseFilename=$NAME-$VERSION-Win32Setup/" \
         | sed -e "s/AppVerName=.*/AppVerName=WinMusik $VERSION/" \
