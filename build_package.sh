@@ -857,7 +857,7 @@ if [ -f WinMusik.pro ] ; then
 		create_dir "$WORK/$PROGNAME-$VERSION"
 		gather_sources "$WORK/$PROGNAME-$VERSION"
 		cd $WORK
-		cp ../build_package.sh "$PROGNAME-$VERSION"
+		cat ./build_package.sh | sed -e "s/^VERSION=.*$/VERSION=$VERSION/" >$PROGNAME-$VERSION/build_package.sh
 		cp ../*.TXT "$PROGNAME-$VERSION"
 		tar -cjf $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 --exclude .svn "$PROGNAME-$VERSION"
 		if [ -d "$TARGETPATH" ] ; then
