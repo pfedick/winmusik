@@ -183,7 +183,7 @@ gather_sources()
 		echo "#ifndef VERSION_H_"
 		echo "#define VERSION_H_"
 		echo "#define WM_VERSION	\"$VERSION\""
-		echo "#define WM_RELEASEDATE	\"$BUILDDATE\""
+		echo "#define WM_RELEASEDATE	$BUILDDATE"
 		echo "#endif /* VERSION_H_ */"
 	) > $WINMUSIKDIR/include/version.h
 	cd $CUR
