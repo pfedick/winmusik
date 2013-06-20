@@ -25,6 +25,7 @@
 
 
 #include "../include/registration.h"
+#include "version.h"
 
 Registration::Registration(QWidget *parent, CWmClient *wm)
     : QDialog(parent)

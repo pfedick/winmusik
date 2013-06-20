@@ -25,6 +25,7 @@
 
 
 #include "winmusik3.h"
+#include "version.h"
 #include "menue.h"
 #include "search.h"
 #include "properties/properties.h"

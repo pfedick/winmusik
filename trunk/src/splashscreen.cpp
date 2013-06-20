@@ -25,6 +25,7 @@
 
 
 #include "../include/splashscreen.h"
+#include "version.h"
 
 SplashScreen::SplashScreen(QWidget *parent)
     : QDialog(parent)

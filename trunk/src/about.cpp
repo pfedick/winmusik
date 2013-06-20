@@ -25,6 +25,7 @@
 
 
 #include "winmusik3.h"
+#include "version.h"
 #include "../include/about.h"
 
 About::About(QWidget *parent)
