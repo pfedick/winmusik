@@ -677,10 +677,17 @@ build_mingw32()
     echo "*******************************************************"
     echo "Erstelle Windows-Setup Programm"
     cd $WORK/WinMusik
+    # Inno Setup mag keine Strings in der Version, daher müssen wir "build" oder "trunk" ersetzen
+    ISVERSION=$VERSION
+    if [ $ISVERSION = "trunk" ] ; then
+    	ISVERSION="0.0"
+    else
+    	ISVERSION=`echo $ISVERSION | sed -e "s/build_(.*)/3.0.0.\$1/"`
+    fi
     cat setup.iss | sed -e "s/OutputBaseFilename=.*/OutputBaseFilename=$NAME-$VERSION-Win32Setup/" \
         | sed -e "s/AppVerName=.*/AppVerName=WinMusik $VERSION/" \
-        | sed -e "s/AppVersion=.*/AppVersion=$VERSION/" \
-        | sed -e "s/VersionInfoVersion=.*/VersionInfoVersion=$VERSION/" \
+        | sed -e "s/AppVersion=.*/AppVersion=$ISVERSION/" \
+        | sed -e "s/VersionInfoVersion=.*/VersionInfoVersion=$ISVERSION/" \
         > setup2.iss
 
     "$INNOSETUP" setup2.iss
