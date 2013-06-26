@@ -81,7 +81,8 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	if (c->MaxFilenameLength<=64) ui.maxFilenameLength->setCurrentIndex(0);
 	else if (c->MaxFilenameLength<=100) ui.maxFilenameLength->setCurrentIndex(1);
 	else if (c->MaxFilenameLength<=207) ui.maxFilenameLength->setCurrentIndex(2);
-	else ui.maxFilenameLength->setCurrentIndex(3);
+	else if (c->MaxFilenameLength<=255) ui.maxFilenameLength->setCurrentIndex(3);
+	else ui.maxFilenameLength->setCurrentIndex(4);
 
 
 	// User
@@ -277,7 +278,8 @@ int Properties::Save()
 	c->TagSaverRetryIntervall=ui.retryIntervall->value();
 	if (ui.maxFilenameLength->currentIndex()==0) c->MaxFilenameLength=64;
 	else if (ui.maxFilenameLength->currentIndex()==1) c->MaxFilenameLength=100;
-	else if (ui.maxFilenameLength->currentIndex()==1) c->MaxFilenameLength=207;
+	else if (ui.maxFilenameLength->currentIndex()==2) c->MaxFilenameLength=207;
+	else if (ui.maxFilenameLength->currentIndex()==3) c->MaxFilenameLength=255;
 	else c->MaxFilenameLength=1024;
 
 	// User
