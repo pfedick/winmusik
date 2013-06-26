@@ -1078,10 +1078,12 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	Tmp+=" - ";
 	if (Ti.Title) Tmp+=Ti.Title;
 	else Tmp+="unknown";
-	Tmp+=" (";
 	// Version holen
-	Tmp+=GetVersionText(Ti.VersionId);
-	Tmp+=").mp3";
+	ppl6::CString Version=GetVersionText(Ti.VersionId);
+	if (Version!="Single") {
+		Tmp+=" ("+Version+")";
+	}
+	Tmp+=".mp3";
 	// Problematische Zeichen rausfiltern
 	Tmp.Replace("/"," ");
 	Tmp.Replace("\\"," ");
@@ -1089,6 +1091,7 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	Tmp.Replace("*"," ");
 	Tmp.Replace(":","-");
 	Tmp.Replace("&","+");
+	Tmp.Replace("ß","ss");
 	Tmp.Replace("'","'");
 	Tmp.Replace("`","'");
 	Tmp.Replace("\"","''");

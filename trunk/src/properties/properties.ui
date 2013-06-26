@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -525,6 +525,11 @@
               <item>
                <property name="text">
                 <string>207 Characters (ISO 9660:1999 compatible)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>255 Characters (FAT32 compatible)</string>
                </property>
               </item>
               <item>

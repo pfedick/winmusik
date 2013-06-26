@@ -26,6 +26,10 @@ Version 3.0.7
 	  Tracks und die Anzahl aktuell markierter Tracks anzeigt.
 	- In der Suchliste können jetzt mehrere Tracks auf einmal gelöscht werden,
 	  wobei eine Sicherheitsabfrage eingebaut wurde.
+	- Länge des Dateinamens kann jetzt zuzsätzlich auch auf 255 Zeichen
+	  beschränkt werden (FAT32-kompatibel)
+	- Das Zeichen "ß" wird im Dateinamen jetzt durch ein "ss" ersetzt, da "ß"
+	  mit einigen Dateisystemen Probleme bereitet hat
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
