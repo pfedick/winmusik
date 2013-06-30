@@ -426,7 +426,7 @@ void MassImport::on_contextDeleteTrack_triggered()
 		==QMessageBox::No) return;
 	int	index=ui.treeWidget->indexOfTopLevelItem(currentTrackListItem);
 	if (index>=0) ui.treeWidget->takeTopLevelItem(index);
-	ppl6::CFile::DeleteFile("%s",(const char*)currentTrackListItem->Filename);
+	ppl6::CFile::DeleteFile(currentTrackListItem->Filename);
 	delete currentTrackListItem;
 	currentTrackListItem=NULL;
 }
@@ -591,7 +591,7 @@ void MassImport::on_deleteSelectedTracksButton_clicked()
 		if (item) {
 			int	index=ui.treeWidget->indexOfTopLevelItem(item);
 			if (index>=0) ui.treeWidget->takeTopLevelItem(index);
-			ppl6::CFile::DeleteFile("%s",(const char*)item->Filename);
+			ppl6::CFile::DeleteFile(item->Filename);
 			delete item;
 		}
 	}
