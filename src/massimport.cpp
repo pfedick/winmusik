@@ -693,6 +693,11 @@ bool MassImport::importTrack(TreeItem *item)
 
 	// Erscheinungsjahr
 	Ti.ReleaseDate=item->info.Ti.ReleaseDate;
+	if (Ti.ReleaseDate==0) {
+		QDate Date=QDate::currentDate();
+		Tmp=Date.toString("yyyyMMdd");
+		Ti.ReleaseDate=Tmp.ToInt();
+	}
 
 	// Flags
 	Ti.Flags=item->info.Ti.Flags;
