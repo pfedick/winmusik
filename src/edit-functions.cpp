@@ -231,13 +231,17 @@ void Edit::FillEditFields()
 
 	// Erscheinungsjahr
 	QDate Date;
-	Tmp.Setf("%u",Ti.ReleaseDate);
-	int year=Tmp.Mid(0,4).ToInt();
-	int month=Tmp.Mid(4,2).ToInt();
-	int day=Tmp.Mid(6,2).ToInt();
-	if (!month) month=1;
-	if (!day) day=1;
-	Date.setDate(year,month,day);
+	if (Ti.ReleaseDate>0) {
+		Tmp.Setf("%u",Ti.ReleaseDate);
+		int year=Tmp.Mid(0,4).ToInt();
+		int month=Tmp.Mid(4,2).ToInt();
+		int day=Tmp.Mid(6,2).ToInt();
+		if (!month) month=1;
+		if (!day) day=1;
+		Date.setDate(year,month,day);
+	} else {
+		Date=QDate::currentDate();
+	}
 	ui.releaseDate->setDate(Date);
 
 	// Aufnahmedatum
