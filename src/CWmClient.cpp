@@ -34,7 +34,7 @@
 #include "version.h"
 
 #include "menue.h"
-#include "edit.h"
+#include "src/editor/edit.h"
 #include "search.h"
 #include "firststart.h"
 #include "langselect.h"

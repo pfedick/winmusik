@@ -25,7 +25,7 @@
 
 
 #include "winmusik3.h"
-#include "../include/tablesearch.h"
+#include "tablesearch.h"
 #include <QKeyEvent>
 
 TableSearch::TableSearch(QWidget *parent, CWmClient *client)
@@ -107,7 +107,7 @@ void TableSearch::on_searchButton_clicked()
 
 }
 
-void TableSearch::on_list_itemDoubleClicked (QTreeWidgetItem * item, int column )
+void TableSearch::on_list_itemDoubleClicked (QTreeWidgetItem * item, int )
 {
 	WMTreeItem *i=(WMTreeItem*)item;
 	done(i->Id);

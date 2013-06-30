@@ -24,7 +24,7 @@
  */
 
 
-#include "../include/oimpinfo.h"
+#include "oimpinfo.h"
 
 OimpInfo::OimpInfo(QWidget *parent, DataOimp *oimp)
     : QWidget(parent)

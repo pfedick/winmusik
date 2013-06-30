@@ -1,7 +1,7 @@
 #include "winmusik3.h"
 #include "edittrack.h"
-#include "tablesearch.h"
-#include "shortcutdialog.h"
+#include "src/editor/tablesearch.h"
+#include "src/editor/shortcutdialog.h"
 #include <QClipboard>
 #include <QCompleter>
 #include <QUrl>

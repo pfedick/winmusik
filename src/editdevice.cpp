@@ -25,7 +25,7 @@
 
 #include "winmusik3.h"
 #include "../include/editdevice.h"
-#include "tablesearch.h"
+#include "src/editor/tablesearch.h"
 
 EditDevice::EditDevice(QWidget *parent, CWmClient *wm, int typ, ppluint32 DeviceId)
     : QDialog(parent)
