@@ -9,7 +9,7 @@
 #include <QKeyEvent>
 #include "tablecontrol.h"
 #include "fkeys.h"
-#include "oimpinfo.h"
+#include "src/editor/oimpinfo.h"
 
 
 

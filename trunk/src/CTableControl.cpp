@@ -26,7 +26,7 @@
 
 #include "winmusik3.h"
 #include "tablecontrol.h"
-#include "tablesearch.h"
+#include "src/editor/tablesearch.h"
 
 CTableControl::CTableControl()
 {

@@ -27,24 +27,27 @@ else {
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
-HEADERS += include/coverviewer.h \
-    widgets/fkeys.h \
+HEADERS += widgets/fkeys.h \
     widgets/edittrack.h \
+    src/searchlists/searchlists.h \
+    src/searchlists/searchlistdialog.h \
+    src/searchlists/searchlisttrackdialog.h \
+    src/properties/properties.h \
+    src/properties/regexpedit.h \
+    src/editor/shortcutdialog.h \
+    src/editor/oimpinfo.h \
+	src/editor/tablesearch.h \
+    src/editor/edit.h \    
+ 	include/coverviewer.h \
     include/csearchlist.h \
     include/massimport.h \
     include/edittrackdialog.h \
     include/coverprinter.h \
-    src/searchlists/searchlists.h \
-    src/searchlists/searchlistdialog.h \
-    src/searchlists/searchlisttrackdialog.h \
-    include/shortcutdialog.h \
     include/updater.h \
     include/registration.h \
     include/printdevicedialog.h \
-    include/oimpinfo.h \
     include/wmstorage.h \
     include/tablecontrol.h \
-    include/tablesearch.h \
     include/editdevice.h \
     include/splashscreen.h \
     include/wm20import.h \
@@ -52,10 +55,7 @@ HEADERS += include/coverviewer.h \
     include/langselect.h \
     include/firststart.h \
     include/winmusik3.h \
-    src/properties/properties.h \
-    src/properties/regexpedit.h \
     include/search.h \
-    include/edit.h \
     include/menue.h \
     include/regexpcapture.h \
     include/playlists.h \
@@ -63,29 +63,33 @@ HEADERS += include/coverviewer.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h
-SOURCES += src/coverviewer.cpp \
-    widgets/fkeys.cpp \
+SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
+    src/searchlists/searchlists.cpp \
+    src/searchlists/searchlistdialog.cpp \
+    src/searchlists/searchlisttrackdialog.cpp \
+    src/properties/properties.cpp \
+    src/properties/regexpedit.cpp \
+    src/editor/edit.cpp \
+    src/editor/edit-functions.cpp \
+    src/editor/shortcutdialog.cpp \
+    src/editor/oimpinfo.cpp \
+    src/editor/tablesearch.cpp \
+	src/coverviewer.cpp \
     src/CSearchlist.cpp \
     src/edittrackdialog.cpp \
     src/CTrackList.cpp \
     src/massimport.cpp \
     src/coverprinter.cpp \
     src/regexpcapture.cpp \
-    src/searchlists/searchlists.cpp \
-    src/searchlists/searchlistdialog.cpp \
-    src/searchlists/searchlisttrackdialog.cpp \
-    src/shortcutdialog.cpp \
     src/updater.cpp \
     src/registration.cpp \
     src/CHashes.cpp \
     src/printdevicedialog.cpp \
     src/Print.cpp \
-    src/oimpinfo.cpp \
     src/StorageOriginalImportData.cpp \
     src/CID3TagSaver.cpp \
     src/CTableControl.cpp \
-    src/tablesearch.cpp \
     src/functions.cpp \
     src/editdevice.cpp \
     src/splashscreen.cpp \
@@ -104,42 +108,38 @@ SOURCES += src/coverviewer.cpp \
     src/CWmClient.cpp \
     src/firststart.cpp \
     src/config.cpp \
-    src/properties/properties.cpp \
-    src/properties/regexpedit.cpp \
     src/search.cpp \
     src/menue.cpp \
     src/main.cpp \
-    src/edit.cpp \
-    src/edit-functions.cpp \
     src/playlists.cpp \
     src/devicelist.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
     src/DropArea.cpp
-FORMS += forms/coverviewer.ui \
-    widgets/fkeys.ui \
+FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
-    forms/edittrackdialog.ui \
+    src/editor/oimpinfo.ui \
+    src/editor/tablesearch.ui \
+    src/editor/shortcutdialog.ui \
+    src/editor/edit.ui \
     src/searchlists/searchlists.ui \
-    forms/massimport.ui \
     src/searchlists/searchlistdialog.ui \
     src/searchlists/searchlisttrackdialog.ui \
+    src/properties/properties.ui \
+    src/properties/regexpedit.ui \
+	forms/coverviewer.ui \
+    forms/massimport.ui \
+	forms/edittrackdialog.ui \
     forms/coverprinter.ui \
-    forms/shortcutdialog.ui \
     forms/updater.ui \
     forms/registration.ui \
     forms/printdevicedialog.ui \
-    forms/oimpinfo.ui \
-    forms/tablesearch.ui \
     forms/editdevice.ui \
     forms/splashscreen.ui \
     forms/about.ui \
     forms/langselect.ui \
     forms/firststart.ui \
-    src/properties/properties.ui \
-    src/properties/regexpedit.ui \
     forms/search.ui \
-    forms/edit.ui \
     forms/menue.ui \
     forms/playlists.ui \
     forms/devicelist.ui \
