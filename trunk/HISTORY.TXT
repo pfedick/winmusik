@@ -32,6 +32,8 @@ Version 3.0.7
 	  mit einigen Dateisystemen Probleme bereitet hat
 	- Beim Massenimport wird das Erscheinungsjahr jetzt auf das aktuelle
 	  Jahr gesetzt, sofern in der MP3-Datei keins vermerkt war.
+	- Im Editor wird das Erscheinungsjahr jetzt auf das aktuelle Jahr gesetzt,
+	  sofern vorher noch keins gespeichert war.
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
