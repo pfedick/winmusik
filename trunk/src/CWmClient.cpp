@@ -1220,7 +1220,7 @@ int CWmClient::SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp)
 
 int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device)
 {
-	ppl6::CString Path, Filename, Tmp, Minuten;
+	ppl6::CString Path, Filename, Tmp, Minuten, FilePath;
 	DataTrack *track;
 	DataTitle *Ti;
 	if (!DeviceId) {
@@ -1295,7 +1295,8 @@ int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 				Tmp+=GetVersionText(Ti->VersionId);
 				Tmp+=")";
 
-				Filename=ppl6::GetFilename(MP3Filename(DeviceId,Page,i));
+				FilePath=MP3Filename(DeviceId,Page,i);
+				Filename=ppl6::GetFilename(FilePath);
 				m3u.Putsf("#EXTINF:%u,%s\n",Ti->Length,(const char*)Tmp);
 				m3u.Putsf("%s\n",(const char*)Filename);
 
@@ -1309,13 +1310,16 @@ int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 				TmpTxt.Chop(1);
 				txt.Putsf("%3u. %s, %0i:%02i %s)\r\n",i,(const char*)TmpTxt,(int)(Ti->Length/60),Ti->Length%60,(const char*)Minuten);
 
-				Tmp=Filename;
-				Tmp.Replace(" ","%20");
-				xspf.Putsf("     <location>%s</location>\n",(const char*)Tmp);
-				if (Ti->Artist) xspf.Putsf("     <creator>%s</creator>\n",Ti->Artist);
-				if (Ti->Title) xspf.Putsf("     <title>%s</title>\n",Ti->Title);
-				xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
-				if (Ti->Album) xspf.Putsf("     <album>%s</album>\n",Ti->Album);
+				//Tmp=ppl6::UrlEncode(FilePath);
+				//Tmp.Replace("+","%20");
+				xspf.Putsf("     <location>file://%s</location>\n",(const char*)ppl6::EscapeHTMLTags(FilePath));
+				if (Ti->Artist) xspf.Putsf("     <creator>%s</creator>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Artist));
+				if (Ti->Title) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
+						(const char*)ppl6::EscapeHTMLTags(Ti->Artist),
+						(const char*)ppl6::EscapeHTMLTags(Ti->Title),
+						(const char*)ppl6::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
+				//xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
+				if (Ti->Album) xspf.Putsf("     <album>%s</album>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Album));
 				xspf.Putsf("     <duration>%u</duration>\n",Ti->Length*1000);  // Bringt VLC zum Absturz
 				xspf.Putsf("  </track>\n");
 
