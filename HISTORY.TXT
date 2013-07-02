@@ -36,6 +36,7 @@ Version 3.0.7
 	  sofern vorher noch keins gespeichert war.
 	- Problem beim Umgang mit MP3-Dateinamen gefixt, bei denen ein Prozent-
 	  zeichen enthalten ist.
+	- Format der XSPF-Playlisten korrigiert
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
