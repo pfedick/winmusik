@@ -871,6 +871,16 @@ int CTitleStore::Save(DataTitle *t)
 	return 1;
 }
 
+/*!\brief Kopie eines Titels speichern
+ *
+ * \desc
+ * Diese Funktion geht davon aus, dass \p title entweder einen neuen Titel ohne ID enthält
+ * oder einen bestehenden Titel. Zeigt \p title direkt in die Datenbank (Verwendung von
+ * CTitleStore::Get) werden keine Daten kopiert, sondern nur dessen Daten in die Datenbank
+ * geschrieben. Ist dies nicht der Fall, wird der bisherige Eintrag in der Datenbank mit
+ * den neuen Daten überschrieben und gespeichert.
+ *
+ */
 int CTitleStore::Put(DataTitle *title)
 {
 	if (!title) {
@@ -900,26 +910,34 @@ int CTitleStore::Put(DataTitle *title)
 	}
 	// Gibt's den Titel schon?
 	if (TitleIndex[id].t) {
-		// CopyFrom führt ein Clear aus, daher müssen wir die Storage Daten retten
-		CStorageItem ssave;
-		ssave.CopyStorageFrom(TitleIndex[id].t);
-		// Nun können wir die Daten kopieren
-		if (!TitleIndex[id].t->CopyFrom(title)) {
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
+		if (TitleIndex[id].t!=title) {
+			// CopyFrom führt ein Clear aus, daher müssen wir die Storage Daten retten
+			CStorageItem ssave;
+			ssave.CopyStorageFrom(TitleIndex[id].t);
+			// Nun können wir die Daten kopieren
+			if (!TitleIndex[id].t->CopyFrom(title)) {
+				highestId=save_highestId;
+				Mutex.Unlock();
+				return 0;
+			}
+			// StorageDaten wieder herstellen
+			TitleIndex[id].t->CopyStorageFrom(&ssave);
+			TitleIndex[id].t->TitleId=id;
+			if (!Save(TitleIndex[id].t)) {
+				highestId=save_highestId;
+				Mutex.Unlock();
+				return 0;
+			}
+			if (title->ImportData>highestOimp) highestOimp=title->ImportData;
+			// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
+			title->CopyStorageFrom(TitleIndex[id].t);
+		} else {
+			if (!Save(TitleIndex[id].t)) {
+				highestId=save_highestId;
+				Mutex.Unlock();
+				return 0;
+			}
 		}
-		// StorageDaten wieder herstellen
-		TitleIndex[id].t->CopyStorageFrom(&ssave);
-		TitleIndex[id].t->TitleId=id;
-		if (!Save(TitleIndex[id].t)) {
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
-		}
-		if (title->ImportData>highestOimp) highestOimp=title->ImportData;
-		// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-		title->CopyStorageFrom(TitleIndex[id].t);
 		Mutex.Unlock();
 		return 1;
 	}

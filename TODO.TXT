@@ -1,10 +1,5 @@
 /*!\page WM3TODO WinMusik TODO-Liste
 
-Track löschen (BUG)
-  Beim Löschen eines Tracks im Editor werden die nachfolgenden Tracks um
-  eine Position nach oben geschoben. Trackliste in der Datenbank und Dateinamen
-  werden aktualisiertm aber scheinbar nicht der Titel selbst.
-
 Suchliste
   Schön wäre, wenn sich die Ladezeit verkürzen liesse. Was dauert da
   eigentlich so lange? Das Rendering oder das Parsen des XML-Files?
