@@ -393,6 +393,7 @@ int CTrackList::Delete(int track)
 			if (ti) {
 				if (ti->DeviceType==DeviceType && ti->DeviceId==DeviceId && ti->Page==Page) {
 					// Titel muss gelöscht werden
+					wm_main->Hashes.RemoveTitle(ti->TitleId);
 					wm_main->TitleStore.Delete(ti);
 				}
 			}
