@@ -3,6 +3,9 @@
 \section WM3History_ WinMusik 3 Historie
 
 Version 3.0.7
+    - Bugfix: Beim Löschen eines Tracks im Editor wurde der Titel nicht aus
+      den internen Suchbäumen gelöscht. Das konnte zu seltsamen Suchergeb-
+      nissen und Abstürzen führen.
 	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
 	- Wenn Name der Version "Single" ist, wird dieser nicht mehr dem Titel im
 	  ID3-Tag hinzugefügt
@@ -38,7 +41,7 @@ Version 3.0.7
 	  zeichen enthalten ist.
 	- Format der XSPF-Playlisten korrigiert
 	- Kommandozeilenparameter "-c" hinzugefügt, womit eine alternative
-	  Konfigurationsdatei angegeben werden kann
+	  Konfigurationsdatei angegeben werden kann (nützlich zum Debuggen)
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
