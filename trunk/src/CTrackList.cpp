@@ -456,7 +456,7 @@ int CTrackList::DeleteShift(int track, CTitleStore *tistore)
 			if (tistore) {
 				Ti=tistore->Get(t->track->TitleId);
 				if (Ti!=NULL && Ti->DeviceId==t->track->DeviceId
-						&& Ti->DeviceType==t->track->DeviceId
+						&& Ti->DeviceType==t->track->Device
 						&& Ti->Page==t->track->Page) {
 					Ti->Track=t->track->Track;
 					tistore->Put(Ti);
@@ -523,7 +523,7 @@ int CTrackList::InsertShift(int track, CTitleStore *tistore)
 			if (tistore) {
 				Ti=tistore->Get(t->track->TitleId);
 				if (Ti!=NULL && Ti->DeviceId==t->track->DeviceId
-						&& Ti->DeviceType==t->track->DeviceId
+						&& Ti->DeviceType==t->track->Device
 						&& Ti->Page==t->track->Page) {
 					Ti->Track=t->track->Track;
 					tistore->Put(Ti);

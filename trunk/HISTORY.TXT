@@ -6,6 +6,11 @@ Version 3.0.7
     - Bugfix: Beim Löschen eines Tracks im Editor wurde der Titel nicht aus
       den internen Suchbäumen gelöscht. Das konnte zu seltsamen Suchergeb-
       nissen und Abstürzen führen.
+    - Bugfix: Beim Löschen oder Einfügen eines Tracks im Editor werden die
+      nachfolgenden Tracks um eine Position nach oben oder unten verschoben.
+      Die Trackliste in der Datenbank und die Dateinamen beim Datentyp MP3
+      wurden auch korrekt aktualisiert, aber nicht der Titel selbst. Bei
+      der Suche hat man daher immer noch die alte Track-Position vorgefunden.
 	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
 	- Wenn Name der Version "Single" ist, wird dieser nicht mehr dem Titel im
 	  ID3-Tag hinzugefügt
