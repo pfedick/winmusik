@@ -260,12 +260,15 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 
 class Config
 {
+	private:
+		ppl6::CString	ConfigFile;
+
 	public:
 		Config();
 		int Load();
 		int Save();
+		int setConfigFile(const ppl6::CString &filename);
 
-		ppl6::CString	ConfigFile;
 		ppl6::CString	DataPath;
 		ppl6::CString	TmpPath;
 		//ppl6::CString	MP3Path;

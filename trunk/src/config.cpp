@@ -72,6 +72,36 @@ Config::Config()
 	serverPort=8030;
 }
 
+int Config::setConfigFile(const ppl6::CString &filename)
+{
+	ppl6::CDirEntry res;
+	if (ppl6::CFile::Stat(filename,res)) {
+		if (!res.IsFile()) {
+			ppl6::CString e="alternative configurationfile (Parameter -c) is not a regular file! ";
+			e+="("+filename+")";
+			ppl6::SetError(20043,e);
+			return 0;
+		}
+	} else {
+		ppl6::CString Path=ppl6::GetPath(filename);
+		if (ppl6::CFile::Stat(Path,res)) {
+			if (res.IsDir()!=1) {
+				ppl6::CString e="Path of configuration file does not exist or is not a valid directory! ";
+				e+="("+filename+")";
+				ppl6::SetError(20043,e);
+				return 0;
+			}
+		} else {
+			ppl6::CString e="Path of configuration file does not exist or is not a valid directory! ";
+			e+="("+filename+")";
+			ppl6::SetError(20043,e);
+			return 0;
+		}
+	}
+	ConfigFile=filename;
+	return 1;
+}
+
 
 int Config::Save()
 {

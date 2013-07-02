@@ -26,15 +26,32 @@
 
 #include "menue.h"
 #include "winmusik3.h"
+#include "version.h"
 
 #include <QtGui>
 #include <QApplication>
 
 ppl6::CLog *wmlog=NULL;
 
+void help()
+{
+	printf ("%s, Version %s\n",WM_APPNAME,WM_VERSION);
+	printf ("\nCommandline options:\n"
+			"  -h | --help   Show this help\n"
+			"  -c FILE       Alternative configfile\n"
+			);
+}
+
+
 int main(int argc, char *argv[])
 {
 	ppl6::PPLInit();
+	if (ppl6::getargv(argc,argv,"-h")!=NULL || ppl6::getargv(argc,argv,"--help")!=NULL) {
+		help();
+		return 0;
+	}
+
+
     QApplication a(argc, argv);
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
