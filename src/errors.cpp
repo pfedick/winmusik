@@ -71,6 +71,7 @@ static const char * errors[] = {
 	"Kein Tonträger ausgewählt",										// 20040
 	"Tonträger enthält keine Titel",									// 20041
 	"Es wurde kein MP3-Archiv in den Einstellungen definiert",			// 20042
+	"Invalid configuration file",										// 20043
 
 
 

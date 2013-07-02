@@ -93,6 +93,11 @@ int CWmClient::Init(int argc, char **argv, QApplication *app)
 	this->app=app;
 	this->argc=argc;
 	this->argv=argv;
+	ppl6::CString Tmp;
+	Tmp=ppl6::getargv(argc,argv,"-c");
+	if (Tmp.NotEmpty()) {
+		if (!conf.setConfigFile(Tmp)) return 0;
+	}
 	if (!InitStorage()) return 0;
 	return 1;
 }
