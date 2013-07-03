@@ -1,10 +1,10 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: CID3TagSaver.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
+ * $Author$
+ * $Revision$
+ * $Date$
+ * $Id$
  *
  *
  * Copyright (c) 2013 Patrick Fedick
