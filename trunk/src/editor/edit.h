@@ -106,6 +106,7 @@ public:
     void ReloadTracks();
     void hideEditor();
     void showEditor();
+    void showEditorWithoutFocusChange();
 
 
 private:
@@ -223,6 +224,7 @@ private:
     void UpdateCompleters();
     void ShowOimpInfo();
     void CheckDupes();
+    void UpdateCover();
     //void index_LostFocus();
 
 public slots:

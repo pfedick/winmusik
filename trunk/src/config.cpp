@@ -32,6 +32,7 @@ Config::Config()
 {
 	Locale=QLocale::system().name();;
 	TmpPath=QDir::tempPath();
+	LastCoverPath=QDir::homePath();
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION,WM_APPNAME);
 	ConfigFile=settings.fileName();
 #ifdef _WIN32
@@ -110,6 +111,7 @@ int Config::Save()
 	c.Add("client","locale",(const char*)Locale);
 	c.Add("client","tmppath",(const char*)TmpPath);
 	c.Add("client","datapath",(const char*)DataPath);
+	c.Add("client","LastCoverPath",(const char*)LastCoverPath);
 	c.Add("client","user",(const char*)UserName);
 	c.Add("client","company",(const char*)UserCompany);
 	c.Add("client","currency",(const char*)Currency);
@@ -204,6 +206,9 @@ int Config::Load()
 	Currency=c.Get("client","currency",NULL);
 	Serial=c.Get("client","serial",NULL);
 	CoverPath=c.Get("client","coverpath",NULL);
+
+	Tmp=QDir::homePath();
+	LastCoverPath=c.Get("client","LastCoverPath",Tmp);
 
 	bShowSplashScreen=c.GetBool("client","showsplash",true);
 	bCheckForUpdatesOnStartup=c.GetBool("client","checkupdatestartup",true);

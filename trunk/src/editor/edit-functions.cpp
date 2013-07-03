@@ -819,3 +819,47 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 		wm->UpdateCoverViewer(Cover);
 	}
 }
+
+void Edit::UpdateCover()
+{
+	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	wm->UpdateCoverViewer(Cover);
+	if (DeviceType==7) {
+		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
+		if (Path.NotEmpty()) {
+			QPixmap pixmap;
+			QByteArray bytes;
+			QBuffer buffer(&bytes);
+			buffer.open(QIODevice::WriteOnly);
+			Cover.save(&buffer, "JPEG",50);
+			ppl6::CBinary bin;
+			bin.Copy(bytes.data(),bytes.size());
+
+			ppl6::CID3Tag Tag;
+			Tag.Load(&Path);
+			Tag.SetPicture(3,bin,"image/jpeg");
+			Tag.Save(wm->conf.bWriteId3v1,wm->conf.bWriteId3v2);
+		}
+	}
+}
+
+void Edit::hideEditor()
+{
+	ui.track->setFocus();
+	ui.titleEdit->setVisible(false);
+	ui.titleEdit->setEnabled(false);
+	ui.hideEditor->setIcon(QIcon(":/icons/resources/1uparrow.png"));
+}
+
+void Edit::showEditor()
+{
+	showEditorWithoutFocusChange();
+	ui.track->setFocus();
+}
+
+void Edit::showEditorWithoutFocusChange()
+{
+	ui.titleEdit->setVisible(true);
+	ui.titleEdit->setEnabled(true);
+	ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
+}

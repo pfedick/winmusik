@@ -24,6 +24,7 @@
  */
 
 #include "winmusik3.h"
+#include <ppl6-grafix.h>
 #include "edit.h"
 #include "editdevice.h"
 #include "tablesearch.h"
@@ -1090,6 +1091,8 @@ void Edit::ReloadTracks()
 // EVENT: artist
 bool Edit::on_artist_FocusIn()
 {
+	showEditorWithoutFocusChange();
+	ui.artist->setFocus();
 	ppl6::CString Tmp;
 	if (!TrackNum) {
 		if (!EditTrack()) {
@@ -1879,26 +1882,8 @@ void Edit::on_coverInsertButton_clicked()
 	if (clipboard->pixmap().isNull()) return;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	Cover=clipboard->pixmap();
-	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-	wm->UpdateCoverViewer(Cover);
+	UpdateCover();
 	FixFocus();
-	if (DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
-		if (Path.NotEmpty()) {
-			QPixmap pixmap;
-			QByteArray bytes;
-			QBuffer buffer(&bytes);
-			buffer.open(QIODevice::WriteOnly);
-			Cover.save(&buffer, "JPEG",50);
-			ppl6::CBinary bin;
-			bin.Copy(bytes.data(),bytes.size());
-
-			ppl6::CID3Tag Tag;
-			Tag.Load(&Path);
-			Tag.SetPicture(3,bin,"image/jpeg");
-			Tag.Save(wm->conf.bWriteId3v1,wm->conf.bWriteId3v2);
-		}
-	}
 	QApplication::restoreOverrideCursor();
 }
 
@@ -1928,6 +1913,29 @@ void Edit::on_coverDeleteButton_clicked()
 
 void Edit::on_coverLoadButton_clicked()
 {
+	ppl6::CString Dir=ppl6::GetPath(wm->conf.LastCoverPath);
+	if (Dir.IsEmpty()) {
+		Dir=QDir::homePath();
+	}
+	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
+			Dir,
+			tr("Images (*.png *.bmp *.jpg)"));
+	if (!newfile.isNull()) {
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+		wm->conf.LastCoverPath=Dir;
+		wm->conf.Save();
+		try {
+			ppl6::grafix::CImage img;
+			if (img.load(newfile)) {
+				QImage qi((uchar*)img.adr(),img.width(),img.height(), img.pitch(), QImage::Format_RGB32);
+				Cover.convertFromImage(qi);
+				UpdateCover();
+			}
+		} catch (...) {
+
+		}
+		QApplication::restoreOverrideCursor();
+	}
 	FixFocus();
 	if (position<3) return;
 }
@@ -2052,18 +2060,3 @@ void Edit::on_hideEditor_clicked()
 	}
 }
 
-void Edit::hideEditor()
-{
-	ui.track->setFocus();
-	ui.titleEdit->setVisible(false);
-	ui.titleEdit->setEnabled(false);
-	ui.hideEditor->setIcon(QIcon(":/icons/resources/1uparrow.png"));
-}
-
-void Edit::showEditor()
-{
-	ui.titleEdit->setVisible(true);
-	ui.titleEdit->setEnabled(true);
-	ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
-	ui.track->setFocus();
-}

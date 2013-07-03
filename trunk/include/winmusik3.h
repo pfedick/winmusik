@@ -270,6 +270,7 @@ class Config
 		int Save();
 		int setConfigFile(const ppl6::CString &filename);
 
+		ppl6::CString	LastCoverPath;
 		ppl6::CString	DataPath;
 		ppl6::CString	TmpPath;
 		//ppl6::CString	MP3Path;
