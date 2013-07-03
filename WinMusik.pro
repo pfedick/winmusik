@@ -55,6 +55,7 @@ HEADERS += widgets/fkeys.h \
     include/langselect.h \
     include/firststart.h \
     include/winmusik3.h \
+    include/backgroundjobs.h \
     include/search.h \
     include/menue.h \
     include/regexpcapture.h \
@@ -106,6 +107,7 @@ SOURCES += widgets/fkeys.cpp \
     src/langselect.cpp \
     src/errors.cpp \
     src/CWmClient.cpp \
+    src/backgroundjobs.cpp \
     src/firststart.cpp \
     src/config.cpp \
     src/search.cpp \
