@@ -107,7 +107,7 @@ bool BackgroundJobs::empty() const
  */
 void BackgroundJobs::shutdown()
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"BackgroundJobs","shutdown",__FILE__,__LINE__,"stop worker thread");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"BackgroundJobs","shutdown",__FILE__,__LINE__,"wait for worker thread to stop");
 	this->ThreadSignalStop();
 	Mutex.Signal();
 	this->ThreadStop();
