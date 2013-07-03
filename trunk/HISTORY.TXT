@@ -12,6 +12,7 @@ Version 3.0.7
       wurden auch korrekt aktualisiert, aber nicht der Titel selbst. Bei
       der Suche hat man daher immer noch die alte Track-Position vorgefunden.
     - Ladefunktion für Cover im Editor ist nun implementiert
+    - Speicherfunktion für Cover im Editor ist nun implementiert
 	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
 	- Wenn Name der Version "Single" ist, wird dieser nicht mehr dem Titel im
 	  ID3-Tag hinzugefügt

@@ -41,6 +41,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QDesktopServices>
+#include <QMessageBox>
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -1913,31 +1914,31 @@ void Edit::on_coverDeleteButton_clicked()
 
 void Edit::on_coverLoadButton_clicked()
 {
-	ppl6::CString Dir=ppl6::GetPath(wm->conf.LastCoverPath);
+	FixFocus();
+	if (position<3) return;
+
+	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
 	if (Dir.IsEmpty()) {
 		Dir=QDir::homePath();
 	}
 	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
 			Dir,
 			tr("Images (*.png *.bmp *.jpg)"));
-	if (!newfile.isNull()) {
-		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-		wm->conf.LastCoverPath=Dir;
-		wm->conf.Save();
-		try {
-			ppl6::grafix::CImage img;
-			if (img.load(newfile)) {
-				QImage qi((uchar*)img.adr(),img.width(),img.height(), img.pitch(), QImage::Format_RGB32);
-				Cover.convertFromImage(qi);
-				UpdateCover();
-			}
-		} catch (...) {
+	if (newfile.isNull()) return;
 
-		}
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.Save();
+	if (!Cover.load(newfile)) {
 		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this,tr("Error: could not load Cover"),
+				tr("The soecified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
+				);
+		return;
+	} else {
+		UpdateCover();
 	}
-	FixFocus();
-	if (position<3) return;
+	QApplication::restoreOverrideCursor();
 }
 
 void Edit::on_coverSaveButton_clicked()
@@ -1945,7 +1946,31 @@ void Edit::on_coverSaveButton_clicked()
 	FixFocus();
 	if (position<3) return;
 	if (Cover.isNull()) return;
+	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
+	Dir+=ppl6::Mid(ppl6::GetFilename(wm->NormalizeFilename(Track.DeviceId,Page,Track.Track,Ti)),4);
+	Dir.Cut(Dir.Length()-4);
+	Dir+=".jpg";
+	Dir.Print(true);
 
+	QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"),
+				Dir,
+				tr("Images (*.png *.bmp *.jpg)"));
+	if (newfile.isNull()) return;
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.Save();
+	if (!Cover.save (newfile)) {
+		/*
+		 * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton ) [static]
+		 *
+		 */
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this,tr("Error: could not save Cover"),
+				tr("The cover of this track could not be saved.\nPlease check if the target directory exists and is writable.\nPlease also check the file extension. WinMusik only supports .png, .jpg and .bmp")
+				);
+		return;
+	}
+	QApplication::restoreOverrideCursor();
 }
 
 
