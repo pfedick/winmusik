@@ -165,6 +165,7 @@ class CWMFile
 
 #include "wmstorage.h"
 #include "regexpcapture.h"
+#include "backgroundjobs.h"
 
 
 /*******************************************************
@@ -559,6 +560,7 @@ class CWmClient
 		COimpDataStore			OimpDataStore;
 
 		CID3TagSaver			ID3TagSaver;
+		BackgroundJobs			Background;
 		RegularExpressionCapture	RegExpCapture;
 		CHashes					Hashes;
 		CUpdateChecker			*UpdateChecker;

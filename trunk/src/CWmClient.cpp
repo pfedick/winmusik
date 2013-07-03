@@ -74,6 +74,7 @@ CWmClient::CWmClient()
 
 CWmClient::~CWmClient()
 {
+	Background.triggerShutdown();
 	delete UpdateChecker;
 	Hashes.Clear();
 	ID3TagSaver.ThreadStop();
@@ -84,6 +85,7 @@ CWmClient::~CWmClient()
 	}
 	if (MainMenue) delete (Menue*)MainMenue;
 	MainMenue=NULL;
+	Background.shutdown();
 	if (wmlog) delete wmlog;
 	wmlog=NULL;
 }
