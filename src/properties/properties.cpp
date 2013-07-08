@@ -147,7 +147,19 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	    		"}\n"
 	    		"";
 	ui.regexpTable->setStyleSheet(Style);
+	UpdateRegExpPatternTable();
 
+}
+
+Properties::~Properties()
+{
+
+}
+
+
+void Properties::UpdateRegExpPatternTable()
+{
+	ppl6::CString Tmp;
 	ui.regexpTable->clear();
 	for (size_t i=0;i<wm->RegExpCapture.size();i++) {
 		const RegExpPattern &p=wm->RegExpCapture.getPattern(i);
@@ -159,14 +171,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 		ui.regexpTable->addTopLevelItem (item);
 	}
 	current_regexp_item=NULL;
-
 }
-
-Properties::~Properties()
-{
-
-}
-
 
 void Properties::resizeEvent ( QResizeEvent * event )
 {
@@ -575,12 +580,23 @@ void Properties::on_regexpDelete_clicked()
 
 void Properties::on_regexpUp_clicked()
 {
+	if (!current_regexp_item) return;
+	ppl6::CString Tmp;
+	Tmp=current_regexp_item->text(0);
+	size_t pos=Tmp.ToInt();
+	if (pos<2) return;
+	RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
+	wm->RegExpCapture.deletePattern(pos-1);
+	wm->RegExpCapture.insertPattern(pos-2,p);
+	wm->RegExpCapture.save();
+	UpdateRegExpPatternTable();
+
 
 }
 
 void Properties::on_regexpDown_clicked()
 {
-
+	if (!current_regexp_item) return;
 }
 
 void Properties::on_regexpTable_itemActivated ( QTreeWidgetItem * item, int )
