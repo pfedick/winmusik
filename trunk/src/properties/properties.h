@@ -55,6 +55,7 @@ private:
 
 
     void SelectLanguage();
+    void UpdateRegExpPatternTable();
 
 protected:
     void resizeEvent ( QResizeEvent * event );
