@@ -357,7 +357,7 @@ void Search::RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out,
 					ti=list[i];
 					if (ti) list2.push_back(ti);
 				}
-				if (list2.size()==0) return;
+				if (!list2.size()) return;
 				list=list2;
 				ti=NULL;
 			}
@@ -659,7 +659,7 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
 
 }
 
-void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int column )
+void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 {
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
@@ -677,7 +677,7 @@ void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int column )
 
 }
 
-void Search::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item,int column)
+void Search::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item,int )
 {
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t!=NULL && t->DeviceType==7) {
@@ -850,7 +850,7 @@ bool Search::on_trackList_MousePress(QMouseEvent * event)
 	return false;
 }
 
-bool Search::on_trackList_MouseRelease(QMouseEvent * event)
+bool Search::on_trackList_MouseRelease(QMouseEvent * )
 {
 	startPos.setX(0);
 	startPos.setY(0);
