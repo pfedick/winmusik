@@ -34,6 +34,8 @@
 			</storageModule>
 		</cconfiguration>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 		<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
@@ -42,7 +44,7 @@
 				<parser enabled="true"/>
 			</buildOutputProvider>
 			<scannerInfoProvider id="specsFile">
-				<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="g++" useDefault="true"/>
 				<parser enabled="true"/>
 			</scannerInfoProvider>
 		</profile>
@@ -118,31 +120,11 @@
 		</profile>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry">
-		<pathentry base-path="C:/Qt/4.5.2/include" include="" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="ActiveQt" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="Phonon" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="Qt" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="Qt3Support" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtAssistant" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtCore" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtDBus" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtDesigner" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtGui" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtHelp" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtNetwork" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtOpenGL" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtScript" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtScriptTools" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtSql" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtSvg" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtTest" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtUiTools" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtWebKit" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtXml" kind="inc" path="" system="true"/>
-		<pathentry base-path="C:/Qt/4.5.2/include" include="QtXmlPatterns" kind="inc" path="" system="true"/>
 		<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="/home/patrick/cvs/WinMusik/wm30/include" kind="inc" path="" system="true"/>
 		<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="/usr/local/include" kind="inc" path="" system="true"/>
-		<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="/home/patrick/cvs/WinMusik/wm30/debug" kind="inc" path="" system="true"/>
+		<pathentry include="/usr/local/include/qt4/QtCore" kind="inc" path="" system="true"/>
+		<pathentry include="/usr/local/include/qt4/QtGui" kind="inc" path="" system="true"/>
+		<pathentry include="/usr/local/include/qt4" kind="inc" path="" system="true"/>
 		<pathentry kind="src" path=""/>
 		<pathentry kind="out" path=""/>
 		<pathentry kind="prj" path="/PPL6"/>
