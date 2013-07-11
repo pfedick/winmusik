@@ -590,16 +590,28 @@ void Properties::on_regexpUp_clicked()
 	wm->RegExpCapture.insertPattern(pos-2,p);
 	wm->RegExpCapture.save();
 	UpdateRegExpPatternTable();
-
-
 }
 
 void Properties::on_regexpDown_clicked()
 {
 	if (!current_regexp_item) return;
+	ppl6::CString Tmp;
+	Tmp=current_regexp_item->text(0);
+	size_t pos=Tmp.ToInt();
+	if (pos>=wm->RegExpCapture.size()) return;
+	RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
+	wm->RegExpCapture.deletePattern(pos-1);
+	wm->RegExpCapture.insertPattern(pos,p);
+	wm->RegExpCapture.save();
+	UpdateRegExpPatternTable();
 }
 
 void Properties::on_regexpTable_itemActivated ( QTreeWidgetItem * item, int )
+{
+	current_regexp_item=item;
+}
+
+void Properties::on_regexpTable_itemClicked ( QTreeWidgetItem * item, int )
 {
 	current_regexp_item=item;
 }
