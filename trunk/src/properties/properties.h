@@ -56,15 +56,18 @@ private:
 
     void SelectLanguage();
     void UpdateRegExpPatternTable();
+    void resize();
 
 protected:
     void resizeEvent ( QResizeEvent * event );
+    void showEvent ( QShowEvent * event );
 
 
 private slots:
     void on_cancelButton_clicked();
     void on_okButton_clicked();
     void on_acceptButton_clicked();
+    void on_tabWidget_currentChanged ( int index );
 
     void on_wmDataPathButton_clicked();
     void on_mp3PlayerButton_clicked();
@@ -156,7 +159,7 @@ private slots:
     void on_serverKeyfile_textChanged(const QString &) {Change();};
     void on_serverKeyPassword_textChanged(const QString &) {Change();};
 
-    // Regular Expressions
+    // Regular Expressions#
     void on_regexpAdd_clicked();
     void on_regexpEdit_clicked();
     void on_regexpDelete_clicked();
