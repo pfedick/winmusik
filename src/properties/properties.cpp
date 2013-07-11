@@ -148,7 +148,6 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	    		"";
 	ui.regexpTable->setStyleSheet(Style);
 	UpdateRegExpPatternTable();
-
 }
 
 Properties::~Properties()
@@ -173,15 +172,28 @@ void Properties::UpdateRegExpPatternTable()
 	current_regexp_item=NULL;
 }
 
-void Properties::resizeEvent ( QResizeEvent * event )
+void Properties::resize ()
 {
 	int w=ui.regexpTable->width();
 	ui.regexpTable->setColumnWidth(0,60);
 	w=w-64;
 	ui.regexpTable->setColumnWidth(1,w*30/100);
 	ui.regexpTable->setColumnWidth(2,w*70/100);
+}
+
+void Properties::resizeEvent ( QResizeEvent * event )
+{
+	resize();
 	QDialog::resizeEvent(event);
 }
+
+void Properties::showEvent ( QShowEvent * event )
+{
+	resize();
+	QDialog::showEvent(event);
+}
+
+
 
 void Properties::Change()
 {
@@ -377,6 +389,11 @@ void Properties::on_acceptButton_clicked()
 	if (!CheckValues()) return;
 	if (!Save()) return;
 	ui.acceptButton->setEnabled(false);
+}
+
+void Properties::on_tabWidget_currentChanged ( int  )
+{
+	resize();
 }
 
 void Properties::on_wmDataPathButton_clicked()
