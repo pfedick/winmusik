@@ -76,10 +76,17 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 
 void SearchlistTrackDialog::setFromClipboard()
 {
+	QString subtype="html";
+	QString htmlText = QApplication::clipboard()->text(subtype);
+	ppl6::CString s;
+	s=htmlText;
+	// TODO!!!
+	//printf ("HTML: %s\n",(const char*)s);
+
 	QString originalText = QApplication::clipboard()->text();
 	if (originalText.length()>512) return;
 	if (originalText.length()==0) return;
-	ppl6::CString s;
+
 	s=originalText;
 	SearchlistItem track(s);
 	ui.artistEdit->setText(track.Artist);
