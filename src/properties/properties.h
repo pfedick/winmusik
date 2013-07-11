@@ -164,6 +164,7 @@ private slots:
     void on_regexpDown_clicked();
     void on_regexpTable_itemActivated ( QTreeWidgetItem * item, int column );
     void on_regexpTable_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+    void on_regexpTable_itemClicked ( QTreeWidgetItem * item, int column );
 
 };
 
