@@ -74,9 +74,9 @@ RegularExpressionCapture::~RegularExpressionCapture()
 void RegularExpressionCapture::load()
 {
 	patterns.clear();
-	ppl6::CString File=WM_APPNAME;
-	File+="-RegularExpressions";
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope,WM_ORGANISATION,File);
+	if (!wm_main) return;
+	ppl6::CString File=wm_main->conf.DataPath+"/regexp.conf";
+	QSettings settings(File,QSettings::IniFormat);
 	size_t pos=0;
 	ppl6::CString Group;
 	while (1) {
@@ -123,9 +123,9 @@ void RegularExpressionCapture::addDefaultPatterns()
 
 void RegularExpressionCapture::save()
 {
-	ppl6::CString File=WM_APPNAME;
-	File+="-RegularExpressions";
-	QSettings settings(QSettings::IniFormat, QSettings::UserScope,WM_ORGANISATION,File);
+	if (!wm_main) return;
+	ppl6::CString File=wm_main->conf.DataPath+"/regexp.conf";
+	QSettings settings(File,QSettings::IniFormat);
 	std::vector<RegExpPattern>::const_iterator it;
 
 	size_t pos=0;
