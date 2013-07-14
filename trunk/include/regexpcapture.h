@@ -30,6 +30,7 @@ class RegExpPattern
 		int hours;
 		int minutes;
 		int seconds;
+		int releasedate;
 };
 
 class RegExpMatch
@@ -45,8 +46,17 @@ class RegExpMatch
 		ppl6::CString	Label;
 		ppl6::CString	Bpm;
 		ppl6::CString	Album;
+		ppl6::CString	ReleaseDate;
 		int				Length;		// in Sekunden
 
+};
+
+class RegExpClipboard
+{
+	public:
+		void copyFromClipboard();
+		ppl6::CString PlainText;
+		ppl6::CString Html;
 };
 
 
@@ -70,6 +80,7 @@ class RegularExpressionCapture
 		size_t size() const;
 
 		bool match(const ppl6::CString &data, RegExpMatch &match) const;
+		bool match(const RegExpClipboard &data, RegExpMatch &match) const;
 		bool testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const;
 
 
