@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>844</width>
-    <height>706</height>
+    <height>679</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,9 +33,6 @@
          <string>Name:</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="name"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
@@ -242,6 +239,13 @@
         </item>
        </layout>
       </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLineEdit" name="name"/>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -267,14 +271,68 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Teststring:</string>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
           </property>
-         </widget>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Teststring:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Copy from Clipboard:</string>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="copyPlaintext">
+            <property name="text">
+             <string>plaintext</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="copyHTML">
+            <property name="text">
+             <string>html</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="teststring"/>
+         <widget class="QPlainTextEdit" name="teststring">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="match_indicator">
