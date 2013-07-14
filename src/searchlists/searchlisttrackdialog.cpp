@@ -32,6 +32,7 @@
 #include <QMouseEvent>
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
+#include "regexpcapture.h"
 
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget *parent)
     : QDialog(parent)
@@ -76,26 +77,18 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 
 void SearchlistTrackDialog::setFromClipboard()
 {
-	QString subtype="html";
-	QString htmlText = QApplication::clipboard()->text(subtype);
-	ppl6::CString s;
-	s=htmlText;
-	// TODO!!!
-	//printf ("HTML: %s\n",(const char*)s);
-
-	QString originalText = QApplication::clipboard()->text();
-	if (originalText.length()>512) return;
-	if (originalText.length()==0) return;
-
-	s=originalText;
-	SearchlistItem track(s);
-	ui.artistEdit->setText(track.Artist);
-	ui.titleEdit->setText(track.Title);
-	ui.versionEdit->setText(track.Version);
-	ui.genreEdit->setText(track.Genre);
-	ui.commentEdit->setText(track.Comment);
-	ui.releaseDateEdit->setText(track.ReleaseDate);
-	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",track.Length/60,track.Length%60));
+	RegExpMatch match;
+	RegExpClipboard clip;
+	clip.copyFromClipboard();
+	if (wm_main->RegExpCapture.match(clip,match)) {
+		ui.artistEdit->setText(match.Artist);
+		ui.titleEdit->setText(match.Title);
+		ui.versionEdit->setText(match.Version);
+		ui.genreEdit->setText(match.Genre);
+		ui.commentEdit->setText(match.Label);
+		ui.releaseDateEdit->setText(match.ReleaseDate);
+		if (match.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",match.Length/60,match.Length%60));
+	}
 }
 
 SearchlistItem SearchlistTrackDialog::get() const

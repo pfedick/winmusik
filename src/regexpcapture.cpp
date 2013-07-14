@@ -26,10 +26,16 @@
 #include "winmusik3.h"
 #include "regexpcapture.h"
 #include <QSettings>
+#include <QClipboard>
 #include <exception>
 #include <stdexcept>
 
-//Tonny Nesse - Memories (Fady & Mina Remix, 7:56 min, Trance) [MP3 572 A-5]
+void RegExpClipboard::copyFromClipboard()
+{
+	QString subtype="html";
+	Html = QApplication::clipboard()->text(subtype);
+	PlainText = QApplication::clipboard()->text();
+}
 
 RegExpPattern::RegExpPattern()
 {
@@ -43,6 +49,7 @@ RegExpPattern::RegExpPattern()
 	hours=0;
 	minutes=0;
 	seconds=0;
+	releasedate=0;
 }
 
 void RegExpPattern::copyFrom(const RegExpPattern &other)
@@ -59,6 +66,7 @@ void RegExpPattern::copyFrom(const RegExpPattern &other)
 	hours=other.hours;
 	minutes=other.minutes;
 	seconds=other.seconds;
+	releasedate=other.releasedate;
 }
 
 RegularExpressionCapture::RegularExpressionCapture()
@@ -73,7 +81,6 @@ RegularExpressionCapture::~RegularExpressionCapture()
 
 void RegularExpressionCapture::load()
 {
-	//
 	patterns.clear();
 	if (!wm_main) return;
 	ppl6::CString File=wm_main->conf.DataPath+"/regexp.conf";
@@ -94,6 +101,7 @@ void RegularExpressionCapture::load()
 		p.label=settings.value("label").toInt();
 		p.bpm=settings.value("bpm").toInt();
 		p.album=settings.value("album").toInt();
+		p.releasedate=settings.value("releasedate").toInt();
 		p.hours=settings.value("hours").toInt();
 		p.minutes=settings.value("minutes").toInt();
 		p.seconds=settings.value("seconds").toInt();
@@ -143,6 +151,7 @@ void RegularExpressionCapture::save()
 		settings.setValue("label",(*it).label);
 		settings.setValue("bpm",(*it).bpm);
 		settings.setValue("album",(*it).album);
+		settings.setValue("releasedate",(*it).releasedate);
 		settings.setValue("hours",(*it).hours);
 		settings.setValue("minutes",(*it).minutes);
 		settings.setValue("seconds",(*it).seconds);
@@ -219,6 +228,14 @@ void RegularExpressionCapture::copyToMatch(const RegExpPattern &p, const ppl6::C
 	if (p.hours) match.Length+=res.GetString(p.hours).ToInt()*60*60;
 	if (p.minutes) match.Length+=res.GetString(p.minutes).ToInt()*60;
 	if (p.seconds) match.Length+=res.GetString(p.seconds).ToInt();
+	if (p.releasedate) match.ReleaseDate=ppl6::Trim(res[p.releasedate]);
+}
+
+
+bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &match) const
+{
+	if (this->match(data.Html,match)) return true;
+	return this->match(data.PlainText,match);
 }
 
 bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &match) const

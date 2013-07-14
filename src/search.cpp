@@ -941,15 +941,13 @@ void Search::on_watchClipboardHarddisk_toggled (bool checked)
 
 void Search::on_ClipBoardTimer_update()
 {
-	QString originalText = QApplication::clipboard()->text();
-	if (originalText.length()>512) return;
-	if (originalText.length()==0) return;
-	ppl6::CString s;
-	s=originalText;
-	if (s==LastClipboardString) return;
-	LastClipboardString=s;
+	RegExpClipboard clip;
+	clip.copyFromClipboard();
+	if (clip.PlainText==LastClipboardString) return;
+	LastClipboardString=clip.PlainText;
 	RegExpMatch match;
-	if (wm->RegExpCapture.match(s,match)) {
+	ppl6::CString s;
+	if (wm->RegExpCapture.match(clip,match)) {
 		s=match.Artist+" "+match.Title;
 	} else {
 		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
