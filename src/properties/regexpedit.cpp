@@ -28,6 +28,7 @@
 
 #include "properties.h"
 #include "regexpedit.h"
+#include <QClipboard>
 
 RegExpEdit::RegExpEdit(QWidget *parent)
     : QDialog(parent)
@@ -132,3 +133,15 @@ void RegExpEdit::on_teststring_textChanged()
 	ui.test_length->setText("");
 }
 
+void RegExpEdit::on_copyPlaintext_clicked()
+{
+	QString Text=QApplication::clipboard()->text();
+	ui.teststring->setPlainText(Text);
+}
+
+void RegExpEdit::on_copyHTML_clicked()
+{
+	QString format="html";
+	QString Text=QApplication::clipboard()->text(format);
+	ui.teststring->setPlainText(Text);
+}

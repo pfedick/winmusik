@@ -30,6 +30,7 @@
 #include "winmusik3.h"
 #include <QtGui/QDialog>
 #include "ui_regexpedit.h"
+#include <QTimer>
 
 
 class RegExpEdit : public QDialog
@@ -52,6 +53,8 @@ private slots:
     void on_okButton_clicked();
     void on_pattern_textChanged();
     void on_teststring_textChanged();
+    void on_copyPlaintext_clicked();
+    void on_copyHTML_clicked();
 
     void on_capture_artist_valueChanged() {on_teststring_textChanged();};
     void on_capture_title_valueChanged() {on_teststring_textChanged();};
