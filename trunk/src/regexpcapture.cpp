@@ -73,6 +73,7 @@ RegularExpressionCapture::~RegularExpressionCapture()
 
 void RegularExpressionCapture::load()
 {
+	//
 	patterns.clear();
 	if (!wm_main) return;
 	ppl6::CString File=wm_main->conf.DataPath+"/regexp.conf";
