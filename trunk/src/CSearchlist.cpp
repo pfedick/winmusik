@@ -7,7 +7,7 @@
 
 #include <winmusik3.h>
 #include "csearchlist.h"
-
+//
 
 SearchlistItem::SearchlistItem()
 {
