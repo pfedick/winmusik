@@ -234,7 +234,7 @@ void RegularExpressionCapture::copyToMatch(const RegExpPattern &p, const ppl6::C
 
 bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &match) const
 {
-	if (this->match(data.Html,match)) return true;
+	//if (this->match(data.Html,match)) return true;
 	return this->match(data.PlainText,match);
 }
 
