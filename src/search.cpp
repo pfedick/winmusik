@@ -949,11 +949,14 @@ void Search::on_ClipBoardTimer_update()
 	ppl6::CString s;
 	if (wm->RegExpCapture.match(clip,match)) {
 		s=match.Artist+" "+match.Title;
+		//printf ("RegExpMatch: %s\n",(const char*)s);
 	} else {
+		s=clip.PlainText;
 		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 		if (s.Instr("\n")>=0) return;
 		s.Replace("\t"," ");
 		s.PregReplace("/\\(.*?\\)/","");
+		//printf ("NO RegExpMatch: %s\n",(const char*)s);
 	}
 	wm->NormalizeTerm(s);
 	ClipBoardTimer.stop();

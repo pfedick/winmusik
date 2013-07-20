@@ -82,6 +82,7 @@ class RegularExpressionCapture
 		bool match(const ppl6::CString &data, RegExpMatch &match) const;
 		bool match(const RegExpClipboard &data, RegExpMatch &match) const;
 		bool testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const;
+		bool buildinMatch(const ppl6::CString &data, RegExpMatch &match) const;
 
 
 
