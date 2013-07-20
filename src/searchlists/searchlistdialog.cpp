@@ -634,6 +634,7 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 	if (wm->RegExpCapture.match(clip,match)) {
 		s=match.Artist+" "+match.Title;
 	} else {
+		s=clip.PlainText;
 		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 		if (s.Instr("\n")>=0) return;
 		s.Replace("\t"," ");
