@@ -1651,7 +1651,9 @@ void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t repl
 
 static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, const ppl6::CWString &replace)
 {
+	if (s.IsEmpty()) return;
 	wchar_t *buffer=(wchar_t*)s.GetBuffer();
+	if (!buffer) return;
 	if (wcsstr(buffer,search)) {
 		ppl6::CWString ss;
 		ss.Set(search);
@@ -1661,6 +1663,7 @@ static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, con
 
 void CWmClient::NormalizeTerm(ppl6::CString &term)
 {
+	if (term.IsEmpty()) return;
 	ppl6::CWString s=term;
 	ppl6::CWString search,replace;
 	s.LCase();
