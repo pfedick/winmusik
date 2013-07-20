@@ -245,7 +245,50 @@ bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &mat
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
 		if(testMatch(data,match,*it)) return true;
 	}
+	if (buildinMatch(data,match)) return true;
 	return false;
+}
+
+bool RegularExpressionCapture::buildinMatch(const ppl6::CString &data, RegExpMatch &match) const
+{
+	ppl6::CArray Matches;
+	if (data.PregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/",Matches)) {
+		//printf ("Match ASOT\n");
+		match.Artist=ppl6::Trim(Matches[1]);
+		match.Title=ppl6::Trim(Matches[2]);
+		match.Version=ppl6::Trim(Matches[3]);
+	} else if (data.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/",Matches)) {
+		match.Artist=ppl6::Trim(Matches[3]);
+		match.Title=ppl6::Trim(Matches[1]);
+		match.Version=ppl6::Trim(Matches[2]);
+	} else if (data.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/",Matches)) {
+		match.Artist=ppl6::Trim(Matches[3]);
+		match.Title=ppl6::Trim(Matches[1]);
+		match.Version=ppl6::Trim(Matches[2]);
+	} else if (data.PregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/",Matches)) {
+		match.Artist=ppl6::Trim(Matches[1]);
+		match.Title=ppl6::Trim(Matches[2]);
+		match.Version=ppl6::Trim(Matches[3]);
+	} else if (data.PregMatch("/^(.*?)\\-(.*?)$/",Matches)) {
+		match.Artist=ppl6::Trim(Matches[1]);
+		match.Title=ppl6::Trim(Matches[2]);
+	} else {
+		return false;
+	}
+	if (match.Title.PregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
+		match.Title=Matches[1];
+		match.Artist+=Matches[2];
+	} else if (match.Title.PregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
+		match.Title=Matches[1];
+		match.Artist+=Matches[2];
+	} else if (match.Title.PregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
+		match.Title=Matches[1];
+		match.Artist+=Matches[2];
+	} else if (match.Title.PregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
+		match.Title=Matches[1];
+		match.Artist+=Matches[2];
+	}
+	return true;
 }
 
 bool RegularExpressionCapture::testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const
