@@ -226,7 +226,7 @@ Bit 3: Titel enthält Jingle oder es wurde reingeredet      (8)
 3: E-Flat Minor (D#m)
 4: F-Sharp Major
 5: B-Flat Minor (A#m)
-6: D-Flat Major
+6: D-Flat Major (C#)
 7: F Minor
 8: A-Flat Major
 9: C Minor
@@ -595,32 +595,74 @@ void DataTitle::SetTags(const ppl6::CString &tags)
 
 void DataTitle::SetKey(const ppl6::CString &key)
 {
-	Key=0;
-	ppl6::CString k=ppl6::LCase(ppl6::Trim(key));
-	if (k=="g#m") Key=1;
-	else if (k=="b") Key=2;
-	else if (k=="d#m") Key=3;
-	else if (k=="f#") Key=4;
-	else if (k=="a#m") Key=5;
-	else if (k=="c#") Key=6;
-	else if (k=="fm") Key=7;
-	else if (k=="g#") Key=8;
-	else if (k=="cm") Key=9;
-	else if (k=="d#") Key=10;
-	else if (k=="gm") Key=11;
-	else if (k=="a#") Key=12;
-	else if (k=="dm") Key=13;
-	else if (k=="f") Key=14;
-	else if (k=="am") Key=15;
-	else if (k=="c") Key=16;
-	else if (k=="em") Key=17;
-	else if (k=="g") Key=18;
-	else if (k=="bm") Key=19;
-	else if (k=="d") Key=20;
-	else if (k=="f#m") Key=21;
-	else if (k=="a") Key=22;
-	else if (k=="c#m") Key=23;
-	else if (k=="e") Key=24;
+	Key=DataTitle::keyId(key);
+}
+
+ppl6::CString DataTitle::getKeyName()
+{
+	return DataTitle::keyName(Key);
+}
+
+ppl6::CString DataTitle::keyName(int id)
+{
+	switch (id) {
+		case 1: return "G#m";
+		case 2: return "B";
+		case 3: return "D#m";
+		case 4: return "F#";
+		case 5: return "A#m";
+		case 6: return "C#";
+		case 7: return "Fm";
+		case 8: return "G#";
+		case 9: return "Cm";
+		case 10: return "D#";
+		case 11: return "Gm";
+		case 12: return "A#";
+		case 13: return "Dm";
+		case 14: return "F";
+		case 15: return "Am";
+		case 16: return "C";
+		case 17: return "Em";
+		case 18: return "G";
+		case 19: return "Bm";
+		case 20: return "D";
+		case 21: return "F#m";
+		case 22: return "A";
+		case 23: return "C#m";
+		case 24: return "E";
+		default: return "";
+	}
+}
+
+int DataTitle::keyId(const ppl6::CString &name)
+{
+	ppl6::CString k=ppl6::LCase(ppl6::Trim(name));
+	if (k.IsEmpty()) return 0;
+	if (k=="g#m") return 1;
+	else if (k=="b") return 2;
+	else if (k=="d#m") return 3;
+	else if (k=="f#") return 4;
+	else if (k=="a#m") return 5;
+	else if (k=="c#") return 6;
+	else if (k=="fm") return 7;
+	else if (k=="g#") return 8;
+	else if (k=="cm") return 9;
+	else if (k=="d#") return 10;
+	else if (k=="gm") return 11;
+	else if (k=="a#") return 12;
+	else if (k=="dm") return 13;
+	else if (k=="f") return 14;
+	else if (k=="am") return 15;
+	else if (k=="c") return 16;
+	else if (k=="em") return 17;
+	else if (k=="g") return 18;
+	else if (k=="bm") return 19;
+	else if (k=="d") return 20;
+	else if (k=="f#m") return 21;
+	else if (k=="a") return 22;
+	else if (k=="c#m") return 23;
+	else if (k=="e") return 24;
+	return 0;
 }
 
 
@@ -652,7 +694,7 @@ ppl6::CBinary *DataTitle::Export()
  */
 {
 	// Zunächst den benötigten Speicher berechnen
-	int size=68;
+	int size=69;
 	int p=0;
 	int lenArtist=0;
 	int lenTitle=0;
