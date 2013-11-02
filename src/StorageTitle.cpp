@@ -958,15 +958,17 @@ int CTitleStore::Save(DataTitle *t)
 		ppl6::SetError(194,"int CTitelStore::Save(==> CTitle *t <==)");
 		return 0;
 	}
-	ppl6::CBinary *bin=t->Export();
-	if (!bin) return 0;
-	if (!Storage->Save(this,t,bin)) {
-		ppl6::PushError();
+	if (!Storage->isDatabaseLoading()) {
+		ppl6::CBinary *bin=t->Export();
+		if (!bin) return 0;
+		if (!Storage->Save(this,t,bin)) {
+			ppl6::PushError();
+			delete bin;
+			ppl6::PopError();
+			return 0;
+		}
 		delete bin;
-		ppl6::PopError();
-		return 0;
 	}
-	delete bin;
 	CStringCounterItem *found, *item;
 	if (t->Artist!=NULL) {
 		item=new CStringCounterItem;

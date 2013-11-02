@@ -408,6 +408,7 @@ int CShortcutStore::Save(DataShortcut *t)
 		ppl6::SetError(194,"int CShortcutStore::Save(==> DataShortcut *t <==)");
 		return 0;
 	}
+	if (Storage->isDatabaseLoading()) return 1;
 	ppl6::CBinary *bin=t->Export();
 	if (!bin) return 0;
 	if (!Storage->Save(this,t,bin)) {
