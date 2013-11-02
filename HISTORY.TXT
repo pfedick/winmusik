@@ -6,6 +6,9 @@ Version 3.0.7
     - Laden der Datenbank wurde beschleunigt
     - Neues Datenfeld für Titel: Music-Key (initiale Tonart)
     - Neue Spalten im Tracklisting des Editors für BPM und Key
+    - Öffnet man das Kontextmenü im Tracklisting des Editors in der Spalte
+      BPM oder Key, kann man BPM und Key nun nachträglich aus den ID3-Tags
+      aller Tracks importieren.
     - Bugfix: Beim Löschen eines Tracks im Editor wurde der Titel nicht aus
       den internen Suchbäumen gelöscht. Das konnte zu seltsamen Suchergeb-
       nissen und Abstürzen führen.
