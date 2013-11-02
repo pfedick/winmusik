@@ -791,6 +791,10 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 		Tmp.Setf("%i",info.Ti.BPM);
 		ui.bpm->setText(Tmp);
 	}
+
+	// Music Key
+	ui.musickey->setText(info.Ti.getKeyName());
+
 	if (info.Version.IsEmpty()) {			// Version
 		if (info.Ti.Length<5*60) {
 			info.Version="Single";

@@ -153,6 +153,9 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		NormalizeImportString(Tmp);
 		info.Ti.BPM=Tmp.ToInt();
 
+		// Music Key
+		info.Ti.SetKey(Tag.GetKey());
+
 		// ReleaseDate
 		Tmp=Tag.GetYear();
 		NormalizeImportString(Tmp);
