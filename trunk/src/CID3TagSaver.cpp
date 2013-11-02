@@ -183,6 +183,7 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 	Tag.SetAlbum(Tags->Get("album"));
 	Tag.SetLabel(Tags->Get("publisher"));
 	Tag.SetBPM(Tags->Get("bpm"));
+	Tag.SetKey(Tags->Get("key"));
 
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Saving: %s",filename);
 	if (!Tag.Save(writev1, writev2)) {

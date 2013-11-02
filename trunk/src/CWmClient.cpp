@@ -1156,6 +1156,7 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	Job.Setf("track","%u",Track);
 	if (Ti.BPM>0) Job.Setf("bpm","%u",Ti.BPM);
 	else Job.Setf("bpm","");
+	Job.Set("key",Ti.getKeyName());
 	Job.Set("genre",GetGenreText(Ti.GenreId));
 	Job.Set("publisher",GetLabelText(Ti.LabelId));
 	Tmp.Setf("%u",Ti.ReleaseDate);
