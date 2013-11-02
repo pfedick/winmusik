@@ -190,6 +190,7 @@ class DataTitle : public CStorageItem
 		ppluint8		Quality;
 		ppluint8		Rating;
 		ppluint8		Flags;
+		ppluint8		Key;
 		//void *operator new (size_t size);
 		//void operator delete (void *ptr, size_t size);
 
@@ -211,6 +212,7 @@ class DataTitle : public CStorageItem
 		void SetRemarks(const ppl6::CString &remarks);
 		void SetTags(const ppl6::CString &tags);
 		void SetAlbum(const ppl6::CString &album);
+		void SetKey(const ppl6::CString &key);
 
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
