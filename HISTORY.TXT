@@ -6,6 +6,8 @@ Version 3.0.7
     - Laden der Datenbank wurde beschleunigt
     - Neues Datenfeld für Titel: Music-Key (initiale Tonart)
     - Neue Spalten im Tracklisting des Editors für BPM und Key
+    - Klickt man im Tracklisting einen Music-Key an, werden harmonisch dazu
+      passende Tracks grün markiert
     - BPM und Key werden auch im Suchergebnis angezeigt
     - Öffnet man das Kontextmenü im Tracklisting des Editors in der Spalte
       BPM oder Key, kann man BPM und Key nun nachträglich aus den ID3-Tags
