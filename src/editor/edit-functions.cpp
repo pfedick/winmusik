@@ -156,6 +156,7 @@ void Edit::ClearEditFields()
 	ui.title->clear();
 	ui.length->clear();
 	ui.bpm->clear();
+	ui.musickey->clear();
 	ui.remarks->clear();
 	//ui.tags->clear();
 	ui.album->clear();
@@ -224,6 +225,9 @@ void Edit::FillEditFields()
 	// BPM
 	if (Ti.BPM>0) Tmp.Setf("%i",Ti.BPM); else Tmp.Clear();
 	ui.bpm->setText(Tmp);
+
+	// Music Key
+	ui.musickey->setText(Ti.getKeyName());
 
 	// Bitrate
 	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();
@@ -529,6 +533,9 @@ void Edit::SaveTrack()
 
 	// BPM
 	Ti.BPM=ui.bpm->text().toInt();
+
+	// Music Key
+	Ti.SetKey(ui.musickey->text());
 
 	// Bitrate
 	Ti.Bitrate=ui.bitrate->text().toInt();

@@ -155,7 +155,6 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.genre,9);
 	InstallFilter(ui.length,10);
 	InstallFilter(ui.bpm,11);
-	InstallFilter(ui.bitrate,29);
 	InstallFilter(ui.releaseDate,12);
 	InstallFilter(ui.recordDate,13);
 	InstallFilter(ui.album,14);
@@ -173,6 +172,9 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.channels,26);
 	InstallFilter(ui.quality,27);
 	InstallFilter(ui.rating,28);
+	InstallFilter(ui.bitrate,29);
+	InstallFilter(ui.musickey,30);
+
 	InstallFilter(ui.cover,100);
 
 
@@ -501,6 +503,8 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.length);
 	} else if (target==ui.bpm) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.bpm);
+	} else if (target==ui.musickey) {
+		if (type==QEvent::FocusIn) return on_FocusIn(ui.musickey);
 	} else if (target==ui.bitrate) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.bitrate);
 	} else if (target==ui.album) {
@@ -734,7 +738,8 @@ void Edit::MoveToNextWidget()
 		case 8: ui.genre->setFocus(); break;
 		case 9: ui.length->setFocus(); break;
 		case 10: ui.bpm->setFocus(); break;
-		case 11: ui.bitrate->setFocus(); break;
+		case 11: ui.musickey->setFocus(); break;
+		case 30: ui.bitrate->setFocus(); break;
 		case 29: ui.releaseDate->setFocus(); break;
 		case 12: ui.recordDate->setFocus(); break;
 		case 13: ui.album->setFocus(); break;
@@ -747,13 +752,12 @@ void Edit::MoveToNextWidget()
 		case 20: ui.remarks->setFocus(); break;
 		case 21: ui.tags->setFocus(); break;
 		case 22: ui.artist->setFocus(); break;
-		//case 21: ui.complete->setFocus(); break;
-		case 24: ui.realTitle->setFocus(); break;
-		case 25: ui.interrupted->setFocus(); break;
-		case 26: ui.channels->setFocus(); break;
-		case 27: ui.quality->setFocus(); break;
-		case 28: ui.rating->setFocus(); break;
-		case 30: ui.artist->setFocus(); break;
+		case 23: ui.realTitle->setFocus(); break;
+		case 24: ui.interrupted->setFocus(); break;
+		case 25: ui.channels->setFocus(); break;
+		case 26: ui.quality->setFocus(); break;
+		case 27: ui.rating->setFocus(); break;
+		case 28: ui.artist->setFocus(); break;
 	};
 }
 
@@ -771,7 +775,6 @@ QWidget *Edit::GetWidgetFromPosition(int position)
 		case 9: return ui.genre;
 		case 10: return ui.length;
 		case 11: return ui.bpm;
-		case 29: return ui.bitrate;
 		case 12: return ui.releaseDate;
 		case 13: return ui.recordDate;
 		case 14: return ui.album;
@@ -783,13 +786,14 @@ QWidget *Edit::GetWidgetFromPosition(int position)
 		case 20: return ui.recordDevice;
 		case 21: return ui.remarks;
 		case 22: return ui.tags;
-		case 23: return ui.realTitle;
-		case 24: return ui.interrupted;
-		case 25: return ui.channels;
-		case 26: return ui.quality;
-		case 27: return ui.rating;
-
-
+		case 23: return ui.complete;
+		case 24: return ui.realTitle;
+		case 25: return ui.interrupted;
+		case 26: return ui.channels;
+		case 27: return ui.quality;
+		case 28: return ui.rating;
+		case 29: return ui.bitrate;
+		case 30: return ui.musickey;
 	}
 	return NULL;
 }
