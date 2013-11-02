@@ -45,9 +45,11 @@ class Edit;
 #define TRACKLIST_COVER_ROW		1
 #define TRACKLIST_NAME_ROW		2
 #define TRACKLIST_VERSION_ROW		3
-#define TRACKLIST_GENRE_ROW		4
+#define TRACKLIST_GENRE_ROW			4
 #define TRACKLIST_LENGTH_ROW		5
-#define TRACKLIST_RATING_ROW		6
+#define TRACKLIST_BPM_ROW			6
+#define TRACKLIST_KEY_ROW			7
+#define TRACKLIST_RATING_ROW		8
 
 class CTitleList : public QTreeWidget
 {
@@ -241,6 +243,7 @@ public slots:
 	void on_contextCopyFile_triggered();
 	void on_contextDeleteTrack_triggered();
 	void on_contextInsertTrack_triggered();
+	void on_contextReadBpmAndKey_triggered();
 	void on_DupeTimer_update();
 
 	void on_fkeys_clicked(int num);
