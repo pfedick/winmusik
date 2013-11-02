@@ -40,6 +40,7 @@
 #include <QDate>
 #include <QPixmap>
 #include <map>
+#include <set>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
@@ -174,6 +175,8 @@ class CWMFile
 ppluint32 Time2Int(ppl6::CString &Time);
 ppl6::CString Int2Time(ppluint32 Time);
 ppl6::CString Long2Date(ppl6::CString &Format, ppluint32 Date);
+
+void getHarmonicKeys(std::set<int> &harmonics, int key);
 
 /*******************************************************
  * Global Variablen                                    *
