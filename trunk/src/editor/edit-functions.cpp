@@ -381,6 +381,12 @@ void Edit::UpdateTrackListing()
 					item->setText(TRACKLIST_GENRE_ROW,Text);
 					Text.Setf("%4i:%02i",(int)(title->Length/60),title->Length%60);
 					item->setText(TRACKLIST_LENGTH_ROW,Text);
+
+					// BPM und Key
+					Text.Setf("%d",(int)title->BPM);
+					item->setText(TRACKLIST_BPM_ROW,Text);
+					item->setText(TRACKLIST_KEY_ROW,title->getKeyName());
+
 					// Rating
 					switch (title->Rating) {
 						case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));

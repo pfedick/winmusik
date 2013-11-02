@@ -42,6 +42,7 @@
 #include <QBuffer>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QProgressDialog>
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -338,6 +339,8 @@ void Edit::SetupTrackList()
     trackList->headerItem()->setText(TRACKLIST_VERSION_ROW, tr("Version","trackList"));
     trackList->headerItem()->setText(TRACKLIST_GENRE_ROW, tr("Genre","trackList"));
     trackList->headerItem()->setText(TRACKLIST_LENGTH_ROW, tr("Length","trackList"));
+    trackList->headerItem()->setText(TRACKLIST_BPM_ROW, tr("BPM","trackList"));
+    trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key","trackList"));
     trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
     connect(trackList,SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -563,10 +566,17 @@ void Edit::resizeEvent ( QResizeEvent * event )
 {
 	int w=trackList->width();
 	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,60);
+	w-=62;
 	trackList->setColumnWidth(TRACKLIST_COVER_ROW,64);
-	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,80);
-	trackList->setColumnWidth(TRACKLIST_RATING_ROW,64);
-	w=w-140-64-64-30;
+	w-=66;
+	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,60);
+	w-=62;
+	trackList->setColumnWidth(TRACKLIST_BPM_ROW,35);
+	w-=37;
+	trackList->setColumnWidth(TRACKLIST_KEY_ROW,40);
+	w-=42;
+	trackList->setColumnWidth(TRACKLIST_RATING_ROW,75);
+	w-=77;
 	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100);
 	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100);
 	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100);
@@ -1764,8 +1774,62 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     m->addSeparator();
     m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
     m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()));
+    if (DeviceType==7 && TrackList != NULL &&(
+    		trackList->currentColumn()==TRACKLIST_BPM_ROW
+    		|| trackList->currentColumn()==TRACKLIST_KEY_ROW )) {
+    	m->addSeparator();
+    	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
+
+    }
     m->popup(p,a);
     //FixFocus();
+}
+
+void Edit::on_contextReadBpmAndKey_triggered()
+{
+	if (!TrackList) return;
+	// Höchste Tracknummer
+	int max=TrackList->GetMax();
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	QProgressDialog progress(tr("Reading ID3-Tags from Files..."), tr("Abort"), 0, max, this);
+	progress.setWindowModality(Qt::WindowModal);
+	progress.setWindowTitle(QString(WM_APPNAME)+QString(": ")+tr("Reading ID3-Tags from Files..."));
+	progress.setMinimumWidth(500);
+	progress.setMaximumWidth(500);
+	progress.show();
+
+	QCoreApplication::processEvents();
+	for (int i=1;i<=max;i++) {
+		progress.setValue(i);
+		QCoreApplication::processEvents();
+		if (progress.wasCanceled())	break;
+		DataTrack *track=TrackList->Get(i);
+		if (track) {
+			// Titel holen
+			DataTitle *title=wm->GetTitle(track->TitleId);
+			ppl6::CString Path=wm->MP3Filename(track->DeviceId,track->Page,track->Track);
+			if (title!=NULL && Path.NotEmpty()==true) {
+				//printf ("Path: %s\n",(const char*)Path);
+				progress.setLabelText(Path);
+				TrackInfo tinfo;
+				if (getTrackInfoFromFile(tinfo,Path)) {
+					if (tinfo.Ti.Key != title->Key || tinfo.Ti.BPM != title->BPM) {
+						title->Key=tinfo.Ti.Key;
+						title->BPM=tinfo.Ti.BPM;
+						if (!wm->TitleStore.Put(title)) {
+							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	QApplication::restoreOverrideCursor();
+	UpdateTrackListing();
 }
 
 
