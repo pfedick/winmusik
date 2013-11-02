@@ -374,7 +374,7 @@ void Edit::SetupTrackList()
     		"color: #000000;\n"
     		"}\n"
     		"";
-    trackList->setStyleSheet(Style);
+    //trackList->setStyleSheet(Style);
 
 }
 
@@ -1703,6 +1703,28 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 					QPixmap trackCover;
 					trackCover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
 					wm->UpdateCoverViewer(trackCover);
+				}
+			}
+		} else if (column==TRACKLIST_KEY_ROW && t->Key>0) {
+			std::set<int> harmonics;
+			std::set<int>::const_iterator it;
+			getHarmonicKeys(harmonics,t->Key);
+			int count=trackList->topLevelItemCount();
+
+
+			for (int i=0;i<count;i++) {
+				WMTreeItem *item=(WMTreeItem*)trackList->topLevelItem(i);
+				if (item) {
+					DataTitle *title=wm->GetTitle(item->Id);
+					QBrush q=item->background(TRACKLIST_BPM_ROW);
+					item->setBackground(TRACKLIST_KEY_ROW,q);
+
+					if (title!=NULL && title->Key>0) {
+						it=harmonics.find(title->Key);
+						if (it!=harmonics.end()) item->setBackgroundColor(TRACKLIST_KEY_ROW,QColor(192,255,192,255));
+					}
+
+
 				}
 			}
 		}
