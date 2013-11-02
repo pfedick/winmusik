@@ -1,4 +1,9 @@
 /*!\page WM3File_Chunk_TITL Chunk: TITL - Titel
+Versionen:
+- \ref WM3File_Chunk_TITL_version1 : Initiale Version
+- \ref WM3File_Chunk_TITL_version2 : Cover-Icon und Dateigröße hinzugekommen
+- \ref WM3File_Chunk_TITL_version3 : Tags hinzugekommen
+- \ref WM3File_Chunk_TITL_version4 : Tonart (Key) hinzugekommen
 
 \section WM3File_Chunk_TITL_version1 Version 1
 Ein Titel Chunk besteht aus einem 60-Byte langem Datenblock mit verschiedenen Informationen,
@@ -118,6 +123,10 @@ bzw. \ref WM3File_Chunk_OIMP)
 <tr valign="top">
 <td>Byte ??</td><td>Album</td><td>String mit dem Namen des Albums im UTF-8 Format</td><td>n Byte</td></tr>
 </table>
+
+
+
+
 
 \section WM3File_Chunk_TITL_version2 Version 2
 Ein Titel Chunk besteht aus einem 66-Byte langem Datenblock mit verschiedenen Informationen,
@@ -247,6 +256,313 @@ bzw. \ref WM3File_Chunk_OIMP)
 <td><b>Byte ??</b></td><td><b>CoverPreview</b></td><td>Binärdaten im JPEG-Format</td><td>n Byte</td></tr>
 
 </table>
+
+
+
+
+
+\section WM3File_Chunk_TITL_version3 Version 3
+Ein Titel Chunk besteht aus einem 66-Byte langem Datenblock mit verschiedenen Informationen,
+gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
+ist folgendermassen: 
+
+\code
+Byte 0:  Chunkname: TITL                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>TitelId</td><td>Eindeutige ID des Titels</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>Flags</td><td>Ein Bitfeld mit folgender Bedeutung:
+\code
+Bit 0: Titel ist komplett                                            (1)
+Bit 1: Es handelt sich um einen Musiktitel                           (2)
+Bit 2: MP3-Datei mit variabler Bitrate                               (4)
+Bit 3: Titel enthält Jingle oder es wurde reingeredet                (8)
+\endcode
+</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 5</td><td>DeviceId</td><td>ID des Tonträgers</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 9</td><td>Length</td><td>Länge des Titels in Sekunden</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 13</td><td>VersionId</td><td>Verknüpfung mit der Versions-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 17</td><td>LableId</td><td>Verknüpfung mit der Plattenlable-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 21</td><td>BPM</td><td>Beats per Minute mit 1000 multipliziert</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 25</td><td>RecordDate</td><td>Aufnahmedatum als Integer im Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 29</td><td>ReleaseDate</td><td>Veröffentlichungsdatum des Titels als Integer um Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 33</td><td>SourceId</td><td>Verknüpfung mit der Tabelle der Aufnahmequellen</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 35</td><td>Track</td><td>Track-Nummer</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 37</td><td>Bitrate</td><td>Bitrate in KBit, 0 = unbekannt</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 39</td><td>GenreId</td><td>Verknüpfung mit der Genre-Tabelle</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 41</td><td>RecordDeviceId</td><td>Verknüpfung mit der Tabelle der Aufnahmegeräte</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 43</td><td>DeviceType</td><td>\ref WM3File_Devices "Tonträger-Art"</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 44</td><td>Page</td><td>Seite auf dem Tonträger</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 45</td><td>Channels</td><td>Tonkanäle-Index mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = Mono
+2 = Stereo
+3 = Dolby Stereo
+4 = Dolby Surround
+5 = Dolby Digital 5.1
+6 = Dolby Digital 5.1EX
+7 = DTS
+\endverbatim
+</td><td>1 Byte</td></tr>
+<tr valign="top">         
+<td>Byte 46</td><td>Quality</td><td>Bewertung der Tonqualität mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = sehr gut
+2 = gut
+3 = mittelmäßig
+4 = schlecht
+5 = sehr schlecht
+\endverbatim
+</td><td>1 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 47</td><td>Rating</td><td>Bewertung des Titels mit folgender Bedeutung:
+\verbatim
+0 = keine Bewertung
+1 = 1 Stern (sehr schlecht)
+2 = 2 Sterne (schlecht)
+3 = 3 Sterne (mittelmäßig)
+4 = 4 Sterne (gut)
+5 = 5 Sterne (sehr gut)
+6 = 6 Sterne (absoluter Knaller)
+\endverbatim
+</td><td>1 Byte</td></tr> 
+<tr valign="top">
+<td>Byte 48</td><td>importData</td><td>Verweis auf Original-Importdaten (nur MP3, siehe DataTitle::ImportData,
+bzw. \ref WM3File_Chunk_OIMP)
+</td><td>4 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 52</td><td>size</td><td>Größe der Datei bei MP3-Dateien in Bytes. Kann 0 sein
+</td><td>4 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 56</td><td>lenArtist</td><td>Anzahl Byte des Interpretennamens. Ist 0, wenn kein Interpret angegeben ist.
+</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 58</td><td>Artist</td><td>String mit dem Namen des Interpreten im UTF-8 Format ohne schließendes 0-Byte</td><td>n Bytes</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenTitle</td><td>Länge des Titels oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Title</td><td>String mit dem Titel im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenRemarks</td><td>Länge der Bemerkung oder 0 </td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Remarks</td><td>String mit einer zusätzlichen Bemerkung im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenAlbum</td><td>Länge des Album-Namens oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Album</td><td>String mit dem Namen des Albums im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td><b>Byte ??</b></td><td><b>lenTags</b></td><td>Länge des Tags-String oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td><b>Byte ??</b></td><td><b>Tags</b></td><td>String mit den Tags im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenCoverPreview</td><td>Größe des Cover-Previews oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>CoverPreview</td><td>Binärdaten im JPEG-Format</td><td>n Byte</td></tr>
+
+</table>
+
+
+
+
+
+
+\section WM3File_Chunk_TITL_version4 Version 4
+Ein Titel Chunk besteht aus einem 67-Byte langem Datenblock mit verschiedenen Informationen,
+gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
+ist folgendermassen: 
+
+\code
+Byte 0:  Chunkname: TITL                                4 Byte
+Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
+Byte 8:  Timestamp der letzten Änderung                 4 Byte
+Byte 12: Versionsnummer                                 4 Byte
+Byte 16: Datensatz-Format								1 Byte 
+Byte 17: Nutzdaten des Chunks
+\endcode
+
+<b>Nutzdaten:</b>
+<table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
+<tr style="background: #d0d0d0" align="left">
+<th>Byte</th><th>Name</th><th>Beschreibung</th><th>Länge</th></tr>
+<tr valign="top">
+<td>Byte 0</td><td>TitelId</td><td>Eindeutige ID des Titels</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 4</td><td>Flags</td><td>Ein Bitfeld mit folgender Bedeutung:
+\code
+Bit 0: Titel ist komplett                                            (1)
+Bit 1: Es handelt sich um einen Musiktitel                           (2)
+Bit 2: MP3-Datei mit variabler Bitrate                               (4)
+Bit 3: Titel enthält Jingle oder es wurde reingeredet                (8)
+\endcode
+</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 5</td><td>DeviceId</td><td>ID des Tonträgers</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 9</td><td>Length</td><td>Länge des Titels in Sekunden</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 13</td><td>VersionId</td><td>Verknüpfung mit der Versions-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 17</td><td>LableId</td><td>Verknüpfung mit der Plattenlable-Tabelle</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 21</td><td>BPM</td><td>Beats per Minute mit 1000 multipliziert</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 25</td><td>RecordDate</td><td>Aufnahmedatum als Integer im Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 29</td><td>ReleaseDate</td><td>Veröffentlichungsdatum des Titels als Integer um Format yyyymmdd.
+Ein Wert von 0 bedeutet, das Datum ist unbekannt</td><td>4 Byte</td></tr>
+<tr valign="top">
+<td>Byte 33</td><td>SourceId</td><td>Verknüpfung mit der Tabelle der Aufnahmequellen</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 35</td><td>Track</td><td>Track-Nummer</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 37</td><td>Bitrate</td><td>Bitrate in KBit, 0 = unbekannt</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 39</td><td>GenreId</td><td>Verknüpfung mit der Genre-Tabelle</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 41</td><td>RecordDeviceId</td><td>Verknüpfung mit der Tabelle der Aufnahmegeräte</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 43</td><td>DeviceType</td><td>\ref WM3File_Devices "Tonträger-Art"</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 44</td><td>Page</td><td>Seite auf dem Tonträger</td><td>1 Byte</td></tr>
+<tr valign="top">
+<td>Byte 45</td><td>Channels</td><td>Tonkanäle-Index mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = Mono
+2 = Stereo
+3 = Dolby Stereo
+4 = Dolby Surround
+5 = Dolby Digital 5.1
+6 = Dolby Digital 5.1EX
+7 = DTS
+\endverbatim
+</td><td>1 Byte</td></tr>
+<tr valign="top">         
+<td>Byte 46</td><td>Quality</td><td>Bewertung der Tonqualität mit folgender Bedeutung:
+\verbatim
+0 = unbekannt
+1 = sehr gut
+2 = gut
+3 = mittelmäßig
+4 = schlecht
+5 = sehr schlecht
+\endverbatim
+</td><td>1 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 47</td><td>Rating</td><td>Bewertung des Titels mit folgender Bedeutung:
+\verbatim
+0 = keine Bewertung
+1 = 1 Stern (sehr schlecht)
+2 = 2 Sterne (schlecht)
+3 = 3 Sterne (mittelmäßig)
+4 = 4 Sterne (gut)
+5 = 5 Sterne (sehr gut)
+6 = 6 Sterne (absoluter Knaller)
+\endverbatim
+</td><td>1 Byte</td></tr> 
+<tr valign="top">
+<td>Byte 48</td><td>importData</td><td>Verweis auf Original-Importdaten (nur MP3, siehe DataTitle::ImportData,
+bzw. \ref WM3File_Chunk_OIMP)
+</td><td>4 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 52</td><td>size</td><td>Größe der Datei bei MP3-Dateien in Bytes. Kann 0 sein
+</td><td>4 Byte</td></tr>
+
+<tr valign="top">
+<td><b>Byte 56</b></td><td><b>key</b></td><td>Initiale Tonart des Songs:
+\verbatim
+0: unbekannt
+1: A-Flat Minor (G#m)
+2: B Major
+3: E-Flat Minor (D#m)
+4: F-Sharp Major
+5: B-Flat Minor (A#m)
+6: D-Flat Major
+7: F Minor
+8: A-Flat Major
+9: C Minor
+10: E-Flat Major
+11: G Minor
+12: B-Flat Major
+13: D Minor
+14: F Major
+15: A Minor
+16: C Major
+17: E Minor
+18: G Major
+19: B Minor
+20: D Major
+21: F-Sharp Minor
+22: A Major
+23: D-Flat Minor (C#m)
+24: E Major
+\endverbatim
+</td><td>1 Byte</td></tr>
+
+<tr valign="top">
+<td>Byte 5</td><td>lenArtist</td><td>Anzahl Byte des Interpretennamens. Ist 0, wenn kein Interpret angegeben ist.
+</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte 58</td><td>Artist</td><td>String mit dem Namen des Interpreten im UTF-8 Format ohne schließendes 0-Byte</td><td>n Bytes</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenTitle</td><td>Länge des Titels oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Title</td><td>String mit dem Titel im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenRemarks</td><td>Länge der Bemerkung oder 0 </td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Remarks</td><td>String mit einer zusätzlichen Bemerkung im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenAlbum</td><td>Länge des Album-Namens oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Album</td><td>String mit dem Namen des Albums im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenTags</td><td>Länge des Tags-String oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>Tags</td><td>String mit den Tags im UTF-8 Format</td><td>n Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>lenCoverPreview</td><td>Größe des Cover-Previews oder 0</td><td>2 Byte</td></tr>
+<tr valign="top">
+<td>Byte ??</td><td>CoverPreview</td><td>Binärdaten im JPEG-Format</td><td>n Byte</td></tr>
+
+</table>
+
 
 */
 

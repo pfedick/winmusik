@@ -46,8 +46,13 @@ void TrackInfo::clear()
  * \ingroup WM3DataTypes
  * \brief Speicherklasse für einen Titel
  *
- * Diese Klasse dient zum Speichern eines Titels im Hauptspeicher.
+ * Diese Klasse repräsentiert einen Musiktitel im Hauptspeicher.
  * Mit CTitleStore::Get kann ein vorhandener Titel gelesen, mit CTitleStore::Put gespeichert werden.
+ * \par Formatversionen
+ * - Version 1: Initiale Version
+ * - Version 2: Cover-Icon und Dateigröße hinzugekommen
+ * - Version 3: Tags hinzugekommen
+ * - Version 4: Tonart (Key) hinzugekommen
  */
 
 /*!\var DataTitle::Artist
@@ -209,6 +214,41 @@ Bit 3: Titel enthält Jingle oder es wurde reingeredet      (8)
  *
  */
 
+/*!\var DataTitle::Key
+ * \brief Tonart
+ *
+ * Gibt die initiale Tonart des Songs im Quintenzirkel an.
+ *
+ * \verbatim
+0: unbekannt
+1: A-Flat Minor (G#m)
+2: B Major
+3: E-Flat Minor (D#m)
+4: F-Sharp Major
+5: B-Flat Minor (A#m)
+6: D-Flat Major
+7: F Minor
+8: A-Flat Major
+9: C Minor
+10: E-Flat Major
+11: G Minor
+12: B-Flat Major
+13: D Minor
+14: F Major
+15: A Minor
+16: C Major
+17: E Minor
+18: G Major
+19: B Minor
+20: D Major
+21: F-Sharp Minor
+22: A Major
+23: D-Flat Minor (C#m)
+24: E Major
+\endverbatim
+ *
+ */
+
 /*!\var DataTitle::ImportData
  * \brief Verweis auf Original-Importdaten (nur MP3)
  *
@@ -245,7 +285,7 @@ DataTitle::DataTitle()
 	Album=NULL;
 	Tags=NULL;
 	Clear();
-	formatversion=3;
+	formatversion=4;
 }
 
 DataTitle::DataTitle(const DataTitle &other)
@@ -256,7 +296,7 @@ DataTitle::DataTitle(const DataTitle &other)
 	Remarks=NULL;
 	Album=NULL;
 	Tags=NULL;
-	formatversion=3;
+	formatversion=4;
 	CopyFrom(&other);
 }
 
@@ -360,7 +400,8 @@ void DataTitle::Clear()
 	ImportData=0;
 	CoverPreview.Clear();
 	CStorageItem::Clear();
-	formatversion=3;
+	formatversion=4;
+	Key=0;
 }
 
 
@@ -414,6 +455,7 @@ int DataTitle::CopyFrom(const DataTitle *t)
 	ImportData=t->ImportData;
 	CoverPreview=t->CoverPreview;
 	Size=t->Size;
+	Key=t->Key;
 	CopyStorageFrom(t);
 	return 1;
 }
@@ -551,6 +593,36 @@ void DataTitle::SetTags(const ppl6::CString &tags)
 }
 
 
+void DataTitle::SetKey(const ppl6::CString &key)
+{
+	Key=0;
+	ppl6::CString k=ppl6::LCase(ppl6::Trim(key));
+	if (k=="g#m") Key=1;
+	else if (k=="b") Key=2;
+	else if (k=="d#m") Key=3;
+	else if (k=="f#") Key=4;
+	else if (k=="a#m") Key=5;
+	else if (k=="c#") Key=6;
+	else if (k=="fm") Key=7;
+	else if (k=="g#") Key=8;
+	else if (k=="cm") Key=9;
+	else if (k=="d#") Key=10;
+	else if (k=="gm") Key=11;
+	else if (k=="a#") Key=12;
+	else if (k=="dm") Key=13;
+	else if (k=="f") Key=14;
+	else if (k=="am") Key=15;
+	else if (k=="c") Key=16;
+	else if (k=="em") Key=17;
+	else if (k=="g") Key=18;
+	else if (k=="bm") Key=19;
+	else if (k=="d") Key=20;
+	else if (k=="f#m") Key=21;
+	else if (k=="a") Key=22;
+	else if (k=="c#m") Key=23;
+	else if (k=="e") Key=24;
+}
+
 
 void DataTitle::SetAlbum(const ppl6::CString &album)
 /*!\brief Album setzen
@@ -587,7 +659,7 @@ ppl6::CBinary *DataTitle::Export()
 	int lenRemarks=0;
 	int lenAlbum=0;
 	int lenTags=0;
-	formatversion=3;
+	formatversion=4;
 
 	if (Artist) lenArtist=strlen(Artist);
 	if (Title) lenTitle=strlen(Title);
@@ -622,7 +694,8 @@ ppl6::CBinary *DataTitle::Export()
 	ppl6::Poke8(a+47,Rating);
 	ppl6::Poke32(a+48,ImportData);
 	ppl6::Poke32(a+52,Size);
-	p=56;
+	ppl6::Poke8(a+56,Key);
+	p=57;
 	ppl6::Poke16(a+p,lenArtist);
 	if (lenArtist) strncpy(a+p+2,Artist,lenArtist);
 	p+=lenArtist+2;
@@ -670,7 +743,7 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 		ppl6::SetError(194,"int DataTitle::Import(==> ppl6::CBinary *bin <==)");
 		return 0;
 	}
-	if (version<1 || version>3) {
+	if (version<1 || version>4) {
 		ppl6::SetError(20023,"%i",version);
 		return 0;
 	}
@@ -718,6 +791,10 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 		Size=ppl6::Peek32(a+52);
 		p=56;
 	}
+	if (version >= 4) {
+		Key=ppl6::Peek8(a+56);
+		p=57;
+	}
 	len=ppl6::Peek16(a+p);
 	if (len) Artist=ppl6::strndup(a+p+2,len);
 	p+=len+2;
@@ -730,13 +807,12 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 	len=ppl6::Peek16(a+p);
 	if (len) Album=ppl6::strndup(a+p+2,len);
 	p+=len+2;
-	if (version==2) {
-		len=ppl6::Peek16(a+p);
-		if (len) CoverPreview.Copy(a+p+2,len);
-	} else if (version==3) {
+	if (version>=3) {
 		len=ppl6::Peek16(a+p);
 		if (len) Tags=ppl6::strndup(a+p+2,len);
 		p+=len+2;
+	}
+	if (version>=2) {
 		len=ppl6::Peek16(a+p);
 		if (len) CoverPreview.Copy(a+p+2,len);
 	}
