@@ -88,12 +88,14 @@ void Search::Resize()
 	int w=trackList->width();
 	trackList->setColumnWidth(0,50);
 	if (resultmode==0) {
-		w=w-230-40-10;
+		w=w-230-40-10-42-42;
 		trackList->setColumnWidth(1,w*35/100);
 		trackList->setColumnWidth(2,w*30/100);
 		trackList->setColumnWidth(3,w*25/100);
 		trackList->setColumnWidth(4,w*10/100);
 		trackList->setColumnWidth(5,50);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_BPM_ROW,40);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_KEY_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_RATING_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_SOURCE_ROW,120);
 	} else {
@@ -168,6 +170,8 @@ void Search::DefaultTracklistHeader()
     trackList->headerItem()->setText(3, tr("Version","trackList"));
     trackList->headerItem()->setText(4, tr("Genre","trackList"));
     trackList->headerItem()->setText(5, tr("Length","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_BPM_ROW, tr("BPM","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_KEY_ROW, tr("Key","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_SOURCE_ROW, tr("Medium","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
@@ -426,6 +430,11 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	item->setText(4,Tmp);
 	Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
 	item->setText(5,Tmp);
+
+	// BPM und Key
+	Tmp.Setf("%d",(int)ti->BPM);
+	item->setText(SEARCH_TRACKLIST_BPM_ROW,Tmp);
+	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName());
 
 	// Tonträger
 	Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
