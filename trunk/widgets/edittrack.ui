@@ -228,6 +228,23 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label_55">
+             <property name="text">
+              <string>Music key:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="musickey">
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item row="4" column="0">

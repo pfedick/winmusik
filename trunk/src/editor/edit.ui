@@ -329,7 +329,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../resources.qrc">:/devices48/resources/tr48x48-0013.png</pixmap>
+           <pixmap resource="../../resources.qrc">:/devices48/resources/tr48x48-0013.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -589,7 +589,7 @@
         <string>Editor</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/1downarrow.png</normaloff>:/icons/resources/1downarrow.png</iconset>
        </property>
        <property name="iconSize">
@@ -1004,6 +1004,23 @@
             </item>
             <item>
              <widget class="QLineEdit" name="bpm">
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_55">
+              <property name="text">
+               <string>Music key:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="musickey">
               <property name="maximumSize">
                <size>
                 <width>60</width>
@@ -1541,7 +1558,7 @@
                   <string>copy</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources.qrc">
+                  <iconset resource="../../resources.qrc">
                    <normaloff>:/icons/resources/edit-copy.png</normaloff>:/icons/resources/edit-copy.png</iconset>
                  </property>
                  <property name="iconSize">
@@ -1572,7 +1589,7 @@
                   <string>insert</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources.qrc">
+                  <iconset resource="../../resources.qrc">
                    <normaloff>:/icons/resources/edit-paste.png</normaloff>:/icons/resources/edit-paste.png</iconset>
                  </property>
                  <property name="iconSize">
@@ -1603,7 +1620,7 @@
                   <string>delete</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources.qrc">
+                  <iconset resource="../../resources.qrc">
                    <normaloff>:/icons/resources/edit-delete.png</normaloff>:/icons/resources/edit-delete.png</iconset>
                  </property>
                  <property name="iconSize">
@@ -1637,7 +1654,7 @@
                   <string>load</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources.qrc">
+                  <iconset resource="../../resources.qrc">
                    <normaloff>:/icons/resources/fileopen.png</normaloff>:/icons/resources/fileopen.png</iconset>
                  </property>
                  <property name="iconSize">
@@ -1671,7 +1688,7 @@
                   <string>save</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../resources.qrc">
+                  <iconset resource="../../resources.qrc">
                    <normaloff>:/icons/resources/filesave.png</normaloff>:/icons/resources/filesave.png</iconset>
                  </property>
                  <property name="iconSize">
@@ -1728,7 +1745,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../resources.qrc">
+                <iconset resource="../../resources.qrc">
                  <normaloff>:/icons/resources/logo_google16x16.png</normaloff>:/icons/resources/logo_google16x16.png</iconset>
                </property>
                <property name="iconSize">
@@ -1745,7 +1762,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../resources.qrc">
+                <iconset resource="../../resources.qrc">
                  <normaloff>:/icons/resources/logo_beatport16x16.png</normaloff>:/icons/resources/logo_beatport16x16.png</iconset>
                </property>
                <property name="iconSize">
@@ -1762,7 +1779,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../resources.qrc">
+                <iconset resource="../../resources.qrc">
                  <normaloff>:/icons/resources/soundcloud.png</normaloff>:/icons/resources/soundcloud.png</iconset>
                </property>
                <property name="iconSize">
@@ -1779,7 +1796,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../resources.qrc">
+                <iconset resource="../../resources.qrc">
                  <normaloff>:/icons/resources/logo_amazon16x16.png</normaloff>:/icons/resources/logo_amazon16x16.png</iconset>
                </property>
                <property name="iconSize">
@@ -1897,7 +1914,7 @@
                  <string>unknown</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-unknown.png</normaloff>:/channels/resources/sound-unknown.png</iconset>
                 </property>
                </item>
@@ -1906,7 +1923,7 @@
                  <string>Mono</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-mono.png</normaloff>:/channels/resources/sound-mono.png</iconset>
                 </property>
                </item>
@@ -1915,7 +1932,7 @@
                  <string>Stereo</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-stereo.png</normaloff>:/channels/resources/sound-stereo.png</iconset>
                 </property>
                </item>
@@ -1924,7 +1941,7 @@
                  <string>Dolby Stereo</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-dolbystereo.png</normaloff>:/channels/resources/sound-dolbystereo.png</iconset>
                 </property>
                </item>
@@ -1933,7 +1950,7 @@
                  <string>Dolby Surround</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-dolby-surround.png</normaloff>:/channels/resources/sound-dolby-surround.png</iconset>
                 </property>
                </item>
@@ -1942,7 +1959,7 @@
                  <string>Dolby Digital 5.1</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-dolbydigital-5.1.png</normaloff>:/channels/resources/sound-dolbydigital-5.1.png</iconset>
                 </property>
                </item>
@@ -1951,7 +1968,7 @@
                  <string>Dolby Digital EX</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-dolbydigital-5.1ex.png</normaloff>:/channels/resources/sound-dolbydigital-5.1ex.png</iconset>
                 </property>
                </item>
@@ -1960,7 +1977,7 @@
                  <string>DTS 5.1</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/channels/resources/sound-dts-5.1.png</normaloff>:/channels/resources/sound-dts-5.1.png</iconset>
                 </property>
                </item>
@@ -2002,7 +2019,7 @@
                  <string>unknown</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-unknown.png</normaloff>:/quality/resources/quali-unknown.png</iconset>
                 </property>
                </item>
@@ -2011,7 +2028,7 @@
                  <string>sehr gut</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-1.png</normaloff>:/quality/resources/quali-1.png</iconset>
                 </property>
                </item>
@@ -2020,7 +2037,7 @@
                  <string>gut</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-2.png</normaloff>:/quality/resources/quali-2.png</iconset>
                 </property>
                </item>
@@ -2029,7 +2046,7 @@
                  <string>mittelmäßig</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-3.png</normaloff>:/quality/resources/quali-3.png</iconset>
                 </property>
                </item>
@@ -2038,7 +2055,7 @@
                  <string>schlecht</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-4.png</normaloff>:/quality/resources/quali-4.png</iconset>
                 </property>
                </item>
@@ -2047,7 +2064,7 @@
                  <string>sehr schlecht</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/quality/resources/quali-5.png</normaloff>:/quality/resources/quali-5.png</iconset>
                 </property>
                </item>
@@ -2101,7 +2118,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne-unbewertet.png</normaloff>:/bewertung/resources/sterne-unbewertet.png</iconset>
                 </property>
                </item>
@@ -2110,7 +2127,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne1.png</normaloff>:/bewertung/resources/sterne1.png</iconset>
                 </property>
                </item>
@@ -2119,7 +2136,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne2.png</normaloff>:/bewertung/resources/sterne2.png</iconset>
                 </property>
                </item>
@@ -2128,7 +2145,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne3.png</normaloff>:/bewertung/resources/sterne3.png</iconset>
                 </property>
                </item>
@@ -2137,7 +2154,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne4.png</normaloff>:/bewertung/resources/sterne4.png</iconset>
                 </property>
                </item>
@@ -2146,7 +2163,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne5.png</normaloff>:/bewertung/resources/sterne5.png</iconset>
                 </property>
                </item>
@@ -2155,7 +2172,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources.qrc">
+                 <iconset resource="../../resources.qrc">
                   <normaloff>:/bewertung/resources/sterne6.png</normaloff>:/bewertung/resources/sterne6.png</iconset>
                 </property>
                </item>
@@ -2209,6 +2226,7 @@
   <tabstop>genre</tabstop>
   <tabstop>length</tabstop>
   <tabstop>bpm</tabstop>
+  <tabstop>musickey</tabstop>
   <tabstop>bitrate</tabstop>
   <tabstop>releaseDate</tabstop>
   <tabstop>recordDate</tabstop>
@@ -2227,7 +2245,6 @@
   <tabstop>channels</tabstop>
   <tabstop>quality</tabstop>
   <tabstop>rating</tabstop>
-  <tabstop>filename</tabstop>
   <tabstop>filesize</tabstop>
   <tabstop>statsTracks</tabstop>
   <tabstop>statsLength</tabstop>
@@ -2237,9 +2254,16 @@
   <tabstop>coverDeleteButton</tabstop>
   <tabstop>coverLoadButton</tabstop>
   <tabstop>coverSaveButton</tabstop>
+  <tabstop>hideEditor</tabstop>
+  <tabstop>filename</tabstop>
+  <tabstop>coverSearchGoogle</tabstop>
+  <tabstop>coverSearchBeatport</tabstop>
+  <tabstop>coverSearchSoundcloud</tabstop>
+  <tabstop>coverSearchAmazon</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -39,6 +39,7 @@ EditTrack::EditTrack(QWidget *parent)
 	InstallFilter(ui.genre,9);
 	InstallFilter(ui.length,10);
 	InstallFilter(ui.bpm,11);
+	InstallFilter(ui.musickey,30);
 	InstallFilter(ui.bitrate,29);
 	InstallFilter(ui.releaseDate,12);
 	InstallFilter(ui.recordDate,13);
@@ -159,6 +160,9 @@ void EditTrack::setData(const TrackInfo &data)
 	// BPM
 	if (Ti.BPM>0) Tmp.Setf("%i",Ti.BPM); else Tmp.Clear();
 	ui.bpm->setText(Tmp);
+
+	// Music Key
+	ui.musickey->setText(Ti.getKeyName());
 
 	// Bitrate
 	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();
@@ -313,6 +317,9 @@ const TrackInfo &EditTrack::getData()
 
 	// BPM
 	data.Ti.BPM=ui.bpm->text().toInt();
+
+	// Music Key
+	data.Ti.SetKey(ui.musickey->text());
 
 	// Bitrate
 	data.Ti.Bitrate=ui.bitrate->text().toInt();
@@ -486,6 +493,7 @@ bool EditTrack::consumeEvent(QObject *target, QEvent *event)
 	} else if (target==ui.album) {
 	} else if (target==ui.length) {
 	} else if (target==ui.bpm) {
+	} else if (target==ui.musickey) {
 	} else if (target==ui.bitrate) {
 	} else if (target==ui.album) {
 	} else if (target==ui.remarks) {
@@ -762,7 +770,8 @@ void EditTrack::MoveToNextWidget()
 		case 8: ui.genre->setFocus(); break;
 		case 9: ui.length->setFocus(); break;
 		case 10: ui.bpm->setFocus(); break;
-		case 11: ui.bitrate->setFocus(); break;
+		case 11: ui.musickey->setFocus(); break;
+		case 30: ui.bitrate->setFocus(); break;
 		case 29: ui.releaseDate->setFocus(); break;
 		case 12: ui.recordDate->setFocus(); break;
 		case 13: ui.album->setFocus(); break;
@@ -781,7 +790,7 @@ void EditTrack::MoveToNextWidget()
 		case 26: ui.channels->setFocus(); break;
 		case 27: ui.quality->setFocus(); break;
 		case 28: ui.rating->setFocus(); break;
-		case 30: ui.artist->setFocus(); break;
+		case 31: ui.artist->setFocus(); break;
 	};
 }
 
