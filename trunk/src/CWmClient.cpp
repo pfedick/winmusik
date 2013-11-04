@@ -1043,8 +1043,8 @@ ppl6::CString CWmClient::NextMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint3
 			Filename=entry->Filename;
 			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
 			if (!Filename.PregMatch("/^[0-9]{3}\\-.*/")) {
-				// Muss aber mit .mp3 enden
-				if (Filename.PregMatch("/^.*\\.mp3$/i")) {
+				// Muss aber mit .mp3 enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
+				if (Filename.PregMatch("/^.*\\.mp3$/i")==true && entry->Size>256) {
 					// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
 					if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextMP3File",__FILE__,__LINE__,"Datei passt auf Pattern: %s",(const char*)Filename);
 					ppl6::CString newFilename;
@@ -1172,6 +1172,10 @@ int CWmClient::SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp)
 	ppl6::CFile ff;
 	ppl6::CString Tmp;
 	if (!ff.Open(File,"rb")) return 0;
+	if (ff.Size()<256) {
+		ppl6::SetError(20017,"%s",(const char*)File);
+		return 0;
+	}
 	// Alte Daten löschen
 	oimp.Filename=ppl6::GetFilename(File);
 	memset(&oimp.ID3v1,0,sizeof(ID3TAG));
