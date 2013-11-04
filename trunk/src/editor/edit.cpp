@@ -566,17 +566,17 @@ void Edit::resizeEvent ( QResizeEvent * event )
 {
 	int w=trackList->width();
 	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,60);
-	w-=62;
+	w-=64;
 	trackList->setColumnWidth(TRACKLIST_COVER_ROW,64);
-	w-=66;
+	w-=68;
 	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,60);
-	w-=62;
+	w-=64;
 	trackList->setColumnWidth(TRACKLIST_BPM_ROW,35);
-	w-=37;
+	w-=39;
 	trackList->setColumnWidth(TRACKLIST_KEY_ROW,40);
-	w-=42;
-	trackList->setColumnWidth(TRACKLIST_RATING_ROW,75);
-	w-=77;
+	w-=44;
+	trackList->setColumnWidth(TRACKLIST_RATING_ROW,85);
+	w-=89;
 	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100);
 	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100);
 	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100);
