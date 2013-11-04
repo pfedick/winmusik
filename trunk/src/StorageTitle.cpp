@@ -637,31 +637,33 @@ ppl6::CString DataTitle::keyName(int id)
 int DataTitle::keyId(const ppl6::CString &name)
 {
 	ppl6::CString k=ppl6::LCase(ppl6::Trim(name));
+	k.Replace("♯","#");
+
 	if (k.IsEmpty()) return 0;
-	if (k=="g#m") return 1;
-	else if (k=="b") return 2;
-	else if (k=="d#m") return 3;
-	else if (k=="f#") return 4;
-	else if (k=="a#m") return 5;
-	else if (k=="c#") return 6;
-	else if (k=="fm") return 7;
-	else if (k=="g#") return 8;
-	else if (k=="cm") return 9;
-	else if (k=="d#") return 10;
-	else if (k=="gm") return 11;
-	else if (k=="a#") return 12;
-	else if (k=="dm") return 13;
-	else if (k=="f") return 14;
-	else if (k=="am") return 15;
-	else if (k=="c") return 16;
-	else if (k=="em") return 17;
-	else if (k=="g") return 18;
-	else if (k=="bm") return 19;
-	else if (k=="d") return 20;
-	else if (k=="f#m") return 21;
-	else if (k=="a") return 22;
-	else if (k=="c#m") return 23;
-	else if (k=="e") return 24;
+	if (k=="g#m" || k=="g#min") return 1;
+	else if (k=="b" || k=="bmaj") return 2;
+	else if (k=="d#m" || k=="d#min") return 3;
+	else if (k=="f#" || k=="f#maj") return 4;
+	else if (k=="a#m" || k=="a#min") return 5;
+	else if (k=="c#" || k=="c#maj") return 6;
+	else if (k=="fm" || k=="fmin") return 7;
+	else if (k=="g#" || k=="g#maj") return 8;
+	else if (k=="cm"|| k=="cmin") return 9;
+	else if (k=="d#" || k=="d#maj") return 10;
+	else if (k=="gm" || k=="gmin") return 11;
+	else if (k=="a#" || k=="a#maj") return 12;
+	else if (k=="dm" || k=="dmin") return 13;
+	else if (k=="f" || k=="fmaj") return 14;
+	else if (k=="am" || k=="amin") return 15;
+	else if (k=="c" || k=="cmaj") return 16;
+	else if (k=="em" || k=="emin") return 17;
+	else if (k=="g" || k=="gmaj") return 18;
+	else if (k=="bm" || k=="bmin") return 19;
+	else if (k=="d" || k=="dmaj") return 20;
+	else if (k=="f#m" || k=="f#min") return 21;
+	else if (k=="a" || k=="amaj") return 22;
+	else if (k=="c#m" || k=="c#min") return 23;
+	else if (k=="e" || k=="emaj") return 24;
 	return 0;
 }
 
