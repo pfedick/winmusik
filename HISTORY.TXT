@@ -58,6 +58,7 @@ Version 3.0.7
 	- Format der XSPF-Playlisten korrigiert
 	- Kommandozeilenparameter "-c" hinzugefügt, womit eine alternative
 	  Konfigurationsdatei angegeben werden kann (nützlich zum Debuggen)
+	- Bugfix: Absturz beim ID3-Tag-Import von leeren MP3-Files behoben.
 	  
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
