@@ -43,6 +43,11 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 
 	Config *c=&wm->conf;
 
+	// Registration verbergen
+	ui.serial_label->setVisible(false);
+	ui.serial->setVisible(false);
+	ui.registerButton->setVisible(false);
+
 	// General Options
 	ui.wmDataPath->setText(c->DataPath);
 	ui.tmpPath->setText(c->TmpPath);

@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -670,7 +670,10 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_12">
+          <widget class="QLabel" name="serial_label">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Serial:</string>
            </property>
@@ -681,7 +684,7 @@
            <item>
             <widget class="QLineEdit" name="serial">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="readOnly">
               <bool>true</bool>
@@ -691,7 +694,7 @@
            <item>
             <widget class="QPushButton" name="registerButton">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="text">
               <string>Register</string>
