@@ -31,7 +31,6 @@ PACKAGENAME="WinMusik"
 HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 DESCRIPTION="Music database to maintain songs on various devices"
-TARGETPATH=/ftp/winmusik
 
 PPL6SOURCE=${PPL6SOURCE:="../../ppl6"}
 PPL6REPO="https://svn.code.sf.net/p/pplib/code/lib/branches/RELENG_6"
@@ -203,9 +202,6 @@ build_FreeBSD_port ()
 	cd $WORK/FreeBSD/winmusik; make clean;
 	cd ..
 	shar `find winmusik | grep -v ".svn" ` > $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar
-	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$PROGNAME-$VERSION-FreeBSD-Port.shar $TARGETPATH
-	fi
 	cd $WORK
 }
 
@@ -436,11 +432,6 @@ build_debian ()
                 echo "ERROR: Fehler beim Erstellen des Pakets"
                 exit
         fi
-    if [ -n "$TARGETPATH" ] ; then
-        if [ -d "$TARGETPATH" ] ; then
-            cp $DISTFILES/$DISTNAME-$DISTRIB_ID-$DISTRIB_RELEASE-$PLATFORM.deb $TARGETPATH
-        fi
-    fi
 }
 
 
@@ -576,9 +567,6 @@ build_redhat ()
 	fi
 	TARGETFILE=$PROGNAME-$VERSION-$REVISION-$DISTRIB_ID-$DISTRIB_RELEASE.`uname -m`.rpm
 	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $DISTFILES/$TARGETFILE
-	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$TARGETFILE $TARGETPATH
-	fi
 }
 
 
@@ -649,9 +637,6 @@ build_suse ()
 	fi
 	TARGETFILE=$PROGNAME-$VERSION-$REVISION-$DISTRIB_ID-$DISTRIB_RELEASE.`uname -m`.rpm
 	mv $ARCH/$PROGNAME-$VERSION-$REVISION.`uname -m`.rpm $DISTFILES/$TARGETFILE
-	if [ -d "$TARGETPATH" ] ; then
-		cp $DISTFILES/$TARGETFILE $TARGETPATH
-	fi
 }
 
 
@@ -705,11 +690,6 @@ build_mingw32()
     fi
     cd $WORK/WinMusik
     cp distfiles/$NAME-$VERSION-Win32Setup.exe $DISTFILES
-    if [ -n "$TARGETPATH" ] ; then
-        if [ -d "$TARGETPATH" ] ; then
-            cp distfiles/$NAME-$VERSION-Win32Setup.exe $TARGETPATH
-        fi
-    fi
 }
 
 #################################################################################
@@ -763,9 +743,6 @@ build_freebsd ()
 	
 	pkg_create -v -d ../README_en.TXT -p package -f pkg_list -c "-$DESCRIPTION" $PROGNAME-$VERSION
 	cp $PROGNAME-$VERSION.tbz $DISTFILES/$DISTNAME.tbz
-	if [ -n "$TARGETPATH" ] ; then
-		cp $PROGNAME-$VERSION.tbz $TARGETPATH/$DISTNAME.tbz
-	fi
 }
 
 #################################################################################
@@ -875,9 +852,6 @@ if [ -f WinMusik.pro ] ; then
 		cat ../build_package.sh | sed -e "s/^VERSION=.*$/VERSION=$VERSION/" >$PROGNAME-$VERSION/build_package.sh
 		cp ../*.TXT "$PROGNAME-$VERSION"
 		tar -cjf $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 --exclude .svn "$PROGNAME-$VERSION"
-		if [ -d "$TARGETPATH" ] ; then
-			cp $DISTFILES/$PROGNAME-$VERSION-src.tar.bz2 $TARGETPATH
-		fi
 		if [ "$DISTRIB_ID" = "FreeBSD" ] ; then
 			build_FreeBSD_port
 		fi
@@ -890,9 +864,6 @@ if [ -f WinMusik.pro ] ; then
         save_QMAKE=$QMAKE
         QMAKE="qmake"
         write_source_specfile "$DISTFILES/$PROGNAME-$VERSION-suse.spec" "$BUILDREQUIRES"
-        if [ -d "$TARGETPATH" ] ; then
-        	cp $DISTFILES/$PROGNAME-$VERSION-el6.spec $DISTFILES/$PROGNAME-$VERSION-suse.spec $TARGETPATH
-        fi
         QMAKE=$saveQMAKE
 		
 		# RedHat Source-RPM erstellen
