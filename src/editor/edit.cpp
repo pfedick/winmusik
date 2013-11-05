@@ -1645,6 +1645,26 @@ void Edit::FixFocus()
 	if (widget) widget->setFocus();
 }
 
+static void setItemBackgroundColor(WMTreeItem *item, const QColor &c)
+{
+	item->setBackgroundColor(TRACKLIST_NAME_ROW,c);
+	item->setBackgroundColor(TRACKLIST_VERSION_ROW,c);
+	item->setBackgroundColor(TRACKLIST_GENRE_ROW,c);
+	item->setBackgroundColor(TRACKLIST_LENGTH_ROW,c);
+	item->setBackgroundColor(TRACKLIST_BPM_ROW,c);
+	item->setBackgroundColor(TRACKLIST_KEY_ROW,c);
+}
+
+static void setItemBackground(WMTreeItem *item, const QBrush &c)
+{
+	item->setBackground(TRACKLIST_NAME_ROW,c);
+	item->setBackground(TRACKLIST_VERSION_ROW,c);
+	item->setBackground(TRACKLIST_GENRE_ROW,c);
+	item->setBackground(TRACKLIST_LENGTH_ROW,c);
+	item->setBackground(TRACKLIST_BPM_ROW,c);
+	item->setBackground(TRACKLIST_KEY_ROW,c);
+}
+
 void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 {
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
@@ -1716,12 +1736,15 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 				WMTreeItem *item=(WMTreeItem*)trackList->topLevelItem(i);
 				if (item) {
 					DataTitle *title=wm->GetTitle(item->Id);
-					QBrush q=item->background(TRACKLIST_BPM_ROW);
-					item->setBackground(TRACKLIST_KEY_ROW,q);
+					QBrush q=item->background(TRACKLIST_TRACK_ROW);
+					setItemBackground(item,q);
 
 					if (title!=NULL && title->Key>0) {
-						it=harmonics.find(title->Key);
-						if (it!=harmonics.end()) item->setBackgroundColor(TRACKLIST_KEY_ROW,QColor(192,255,192,255));
+						if (title->Key==t->Key) setItemBackgroundColor(item,QColor(170,255,170,255));
+						else {
+							it=harmonics.find(title->Key);
+							if (it!=harmonics.end()) setItemBackgroundColor(item,QColor(218,255,192,255));
+						}
 					}
 
 
