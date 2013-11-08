@@ -2,6 +2,9 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.1.1
+    - Interpretation des Music-Key wurde verbessert
+
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
     - Neues Datenfeld für Titel: Music-Key (initiale Tonart)
