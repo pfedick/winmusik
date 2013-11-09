@@ -282,6 +282,9 @@
             <bold>true</bold>
            </font>
           </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -628,6 +631,9 @@
        <width>16777215</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
