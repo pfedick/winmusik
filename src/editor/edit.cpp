@@ -178,6 +178,9 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 
 	InstallFilter(ui.cover,100);
 
+	ui.deviceTitle->installEventFilter(this);
+	ui.titleEdit->installEventFilter(this);
+
 
 	/*
 	 * 	Label.Title=tr("Producer / Label");
@@ -520,6 +523,12 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		wm->OpenCoverViewer(Cover);	
 	} else if (target==ui.cover && type==QEvent::MouseButtonPress) {
 		wm->OpenCoverViewer(Cover);	
+	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::Drop) {
+		handleDropEvent(static_cast<QDropEvent *>(event));
+		return true;
+	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::DragEnter) {
+			(static_cast<QDragEnterEvent *>(event))->accept();
+			return true;
 	}
 	return false;
 }
@@ -812,6 +821,39 @@ QWidget *Edit::GetWidgetFromPosition(int position)
 // ********************************************************************************************************
 // *** EVENTS                                                                                           ***
 // ********************************************************************************************************
+
+void Edit::handleDropEvent(QDropEvent *event)
+{
+	event->accept();
+	const QMimeData *mime=event->mimeData();
+	if (!mime) return;
+	if (!mime->hasUrls()) return;
+	QList<QUrl>	list=mime->urls ();
+	QUrl url=list.first();
+	QString file=url.encodedPath();
+	ppl6::CString f=file;
+	ppl6::CString path=wm->conf.DevicePath[7];
+	int p=f.Instr(path);
+	if (p<0) return;
+	f=f.Mid(p);
+	f.Replace(path,"");
+	if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
+		int myDeviceId=ppl6::atoi(f.GetMatch(1));
+		int myTrack=ppl6::atoi(f.GetMatch(2));
+		OpenTrack(myDeviceId,0,myTrack);
+		QApplication::processEvents();
+		ui.artist->setFocus();
+		QApplication::setActiveWindow(this);
+		QApplication::processEvents();
+		position=4;
+		FixFocus();
+		on_artist_FocusIn();
+	}
+
+
+	//printf ("lala: %s, path: %s\n",(const char*)f, (const char*)path);
+
+}
 
 // Globale Events, Fkeys
 bool Edit::on_KeyPress(QObject *target, int key, int modifier)

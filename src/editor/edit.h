@@ -154,7 +154,7 @@ private:
 
     QWidget *searchWindow;
 
-
+    void handleDropEvent(QDropEvent *event);
 
     void SetupTrackList();
 
