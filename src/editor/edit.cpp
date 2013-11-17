@@ -1866,11 +1866,28 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     		|| trackList->currentColumn()==TRACKLIST_KEY_ROW )) {
     	m->addSeparator();
     	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
+    	m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
 
     }
     m->popup(p,a);
     //FixFocus();
 }
+
+void Edit::on_contextMusicKeyVerified_triggered()
+{
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (!t) return;
+	DataTitle tUpdate=*t;
+	if (tUpdate.Flags&16) tUpdate.Flags-=16;
+	else tUpdate.Flags|=16;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	RenderTrack(currentTrackListItem,&tUpdate);
+
+}
+
 
 void Edit::on_contextReadBpmAndKey_triggered()
 {

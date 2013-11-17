@@ -100,6 +100,7 @@ public:
     void UpdateFkeys();
     void UpdateDevice();
     void UpdateTrackListing();
+    void RenderTrack(WMTreeItem *item, DataTitle *title);
     ppluint32 EditDeviceDialog(ppluint32 id);
     void ClearEditFields();
     void FillEditFields();
@@ -244,6 +245,7 @@ public slots:
 	void on_contextDeleteTrack_triggered();
 	void on_contextInsertTrack_triggered();
 	void on_contextReadBpmAndKey_triggered();
+	void on_contextMusicKeyVerified_triggered();
 	void on_DupeTimer_update();
 
 	void on_fkeys_clicked(int num);

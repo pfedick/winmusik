@@ -319,21 +319,16 @@ void Edit::UpdateTrackListing()
 	WMTreeItem *item;
 	DataTrack *track;
 	DataTitle *title;
-	DataVersion *version;
-	DataGenre *genre;
 
 //	Artists.clear();
 //	Titles.clear();
 
-	ppl6::CString Unknown=tr("unknown");
-	const char *unknown=Unknown;
+
 	// Tabelle leeren
 	trackList->clear();
 	trackList->setWordWrap(false);
 	trackList->setSortingEnabled(false);
 	trackList->setIconSize(QSize(64,16));
-	QBrush Brush(Qt::SolidPattern);
-	Brush.setColor("red");
 	int count=0;
 	ppluint32 length=0;
 	ppluint32 size=0;
@@ -360,120 +355,13 @@ void Edit::UpdateTrackListing()
 				if (title) {
 					count++;
 					length+=title->Length;
-					Text.Setf("%s - %s",
-							(title->Artist?title->Artist:unknown),
-							(title->Title?title->Title:unknown));
-					/*
-					if (title->Artist) {
-						QTmp=title->Artist;
-						Artists.append(QTmp);
-					}
-					if (title->Title) {
-						QTmp=title->Title;
-						Titles.append(QTmp);
-					}
-					*/
-					item->setText(TRACKLIST_NAME_ROW,Text);
-					// Version holen
-					version=wm->GetVersion(title->VersionId);
-					if (version) Text.Set(version->Value);
-					else Text.Set(unknown);
-					item->setText(TRACKLIST_VERSION_ROW,Text);
-					item->setForeground(TRACKLIST_VERSION_ROW,Brush);
-					// Genre holen
-					genre=wm->GetGenre(title->GenreId);
-					if (genre) Text.Set(genre->Value);
-					else Text.Set(unknown);
-					item->setText(TRACKLIST_GENRE_ROW,Text);
-					Text.Setf("%4i:%02i",(int)(title->Length/60),title->Length%60);
-					item->setText(TRACKLIST_LENGTH_ROW,Text);
-
-					// BPM und Key
-					Text.Setf("%d",(int)title->BPM);
-					item->setText(TRACKLIST_BPM_ROW,Text);
-					item->setText(TRACKLIST_KEY_ROW,title->getKeyName());
-
-					// Rating
-					switch (title->Rating) {
-						case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));
-							item->setText(TRACKLIST_RATING_ROW,"0");
-							break;
-						case 1: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-1.png"));
-							item->setText(TRACKLIST_RATING_ROW,"1");
-							break;
-						case 2: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-2.png"));
-							item->setText(TRACKLIST_RATING_ROW,"2");
-							break;
-						case 3: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-3.png"));
-							item->setText(TRACKLIST_RATING_ROW,"3");
-							break;
-						case 4: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-4.png"));
-							item->setText(TRACKLIST_RATING_ROW,"4");
-							break;
-						case 5: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-5.png"));
-							item->setText(TRACKLIST_RATING_ROW,"5");
-							break;
-						case 6: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-6.png"));
-							item->setText(TRACKLIST_RATING_ROW,"6");
-							break;
-					}
-
+					RenderTrack(item,title);
 					if (title->DeviceType==7) {
-						if (title->Size==0) {
-							//printf ("title->Size ist Null, führe Stat durch\n");
-							ppl6::CString Path=wm->MP3Filename(title->DeviceId,title->Page,title->Track);
-							if (Path.NotEmpty()) {
-								ppl6::CDirEntry de;
-								if (ppl6::CFile::Stat(Path,de)) {
-									//printf ("Stat erfolgreich\n");
-									DataTitle ti;
-									ti.CopyFrom(title);
-									ti.Size=de.Size;
-									size+=ti.Size;
-
-									ppl6::CID3Tag Tag;
-									if (Tag.Load(&Path)) {
-										// Cover?
-										ppl6::CBinary cover;
-										QPixmap pix, icon;
-										if (Tag.GetPicture(3,cover)) {
-											pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-											icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-
-											item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
-
-											QByteArray bytes;
-											QBuffer buffer(&bytes);
-											buffer.open(QIODevice::WriteOnly);
-											icon.save(&buffer, "JPEG",70);
-											ti.CoverPreview.Copy(bytes.data(),bytes.size());
-										}
-									}
-
-									if (!wm->TitleStore.Put(&ti)) {
-										printf ("Speichern fehlgeschlagen!\n");
-										ppl6::PrintError();
-
-									}
-
-								}
-							}
-						} else {
-							//printf("Wir haben die Größe schon\n");
-							size+=title->Size;
-							if (title->CoverPreview.Size()>0) {
-								QPixmap pix, icon;
-								pix.loadFromData((const uchar*)title->CoverPreview.GetPtr(),title->CoverPreview.Size());
-								icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-								item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
-							}
-						}
-
+						size+=title->Size;
 					}
 				}
 			}
 			trackList->addTopLevelItem(item);
-
 		}
 	}
 	QApplication::restoreOverrideCursor();
@@ -487,6 +375,122 @@ void Edit::UpdateTrackListing()
 	resizeEvent(NULL);
 	trackList->sortByColumn(0,Qt::AscendingOrder);
 	trackList->setSortingEnabled(true);
+}
+
+void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
+{
+	//QString QTmp;
+	ppl6::CString Text,Tmp;
+	ppl6::CString Unknown=tr("unknown");
+	const char *unknown=Unknown;
+	DataVersion *version;
+	DataGenre *genre;
+	QBrush Brush(Qt::SolidPattern);
+	Brush.setColor("red");
+
+	Text.Setf("%s - %s",
+			(title->Artist?title->Artist:unknown),
+			(title->Title?title->Title:unknown));
+
+	item->setText(TRACKLIST_NAME_ROW,Text);
+	// Version holen
+	version=wm->GetVersion(title->VersionId);
+	if (version) Text.Set(version->Value);
+	else Text.Set(unknown);
+	item->setText(TRACKLIST_VERSION_ROW,Text);
+	item->setForeground(TRACKLIST_VERSION_ROW,Brush);
+	// Genre holen
+	genre=wm->GetGenre(title->GenreId);
+	if (genre) Text.Set(genre->Value);
+	else Text.Set(unknown);
+	item->setText(TRACKLIST_GENRE_ROW,Text);
+	Text.Setf("%4i:%02i",(int)(title->Length/60),title->Length%60);
+	item->setText(TRACKLIST_LENGTH_ROW,Text);
+
+	// BPM und Key
+	Text.Setf("%d",(int)title->BPM);
+	item->setText(TRACKLIST_BPM_ROW,Text);
+	item->setText(TRACKLIST_KEY_ROW,title->getKeyName());
+	if ((title->Flags&16)) item->setTextColor(TRACKLIST_KEY_ROW,QColor(0,0,0));
+	else item->setTextColor(TRACKLIST_KEY_ROW,QColor(192,192,192));
+
+	// Rating
+	switch (title->Rating) {
+		case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));
+		item->setText(TRACKLIST_RATING_ROW,"0");
+		break;
+		case 1: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-1.png"));
+		item->setText(TRACKLIST_RATING_ROW,"1");
+		break;
+		case 2: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-2.png"));
+		item->setText(TRACKLIST_RATING_ROW,"2");
+		break;
+		case 3: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-3.png"));
+		item->setText(TRACKLIST_RATING_ROW,"3");
+		break;
+		case 4: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-4.png"));
+		item->setText(TRACKLIST_RATING_ROW,"4");
+		break;
+		case 5: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-5.png"));
+		item->setText(TRACKLIST_RATING_ROW,"5");
+		break;
+		case 6: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-6.png"));
+		item->setText(TRACKLIST_RATING_ROW,"6");
+		break;
+	}
+
+	if (title->DeviceType==7) {
+		if (title->Size==0) {
+			//printf ("title->Size ist Null, führe Stat durch\n");
+			ppl6::CString Path=wm->MP3Filename(title->DeviceId,title->Page,title->Track);
+			if (Path.NotEmpty()) {
+				ppl6::CDirEntry de;
+				if (ppl6::CFile::Stat(Path,de)) {
+					//printf ("Stat erfolgreich\n");
+					DataTitle ti;
+					ti.CopyFrom(title);
+					ti.Size=de.Size;
+					title->Size=ti.Size;
+
+					ppl6::CID3Tag Tag;
+					if (Tag.Load(&Path)) {
+						// Cover?
+						ppl6::CBinary cover;
+						QPixmap pix, icon;
+						if (Tag.GetPicture(3,cover)) {
+							pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+							icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+
+							item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
+
+							QByteArray bytes;
+							QBuffer buffer(&bytes);
+							buffer.open(QIODevice::WriteOnly);
+							icon.save(&buffer, "JPEG",70);
+							ti.CoverPreview.Copy(bytes.data(),bytes.size());
+						}
+					}
+
+					if (!wm->TitleStore.Put(&ti)) {
+						printf ("Speichern fehlgeschlagen!\n");
+						ppl6::PrintError();
+
+					}
+
+				}
+			}
+		} else {
+			//printf("Wir haben die Größe schon\n");
+			if (title->CoverPreview.Size()>0) {
+				QPixmap pix, icon;
+				pix.loadFromData((const uchar*)title->CoverPreview.GetPtr(),title->CoverPreview.Size());
+				icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
+			}
+		}
+
+	}
+
 }
 
 

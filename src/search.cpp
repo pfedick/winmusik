@@ -435,6 +435,8 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	Tmp.Setf("%d",(int)ti->BPM);
 	item->setText(SEARCH_TRACKLIST_BPM_ROW,Tmp);
 	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName());
+	if ((ti->Flags&16)) item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(0,0,0));
+	else item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(192,192,192));
 
 	// Tonträger
 	Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);
