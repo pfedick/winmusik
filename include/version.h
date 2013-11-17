@@ -8,8 +8,8 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define WM_VERSION	"3.1.0"
-#define WM_RELEASEDATE	20131105
+#define WM_VERSION	"3.1.1"
+#define WM_RELEASEDATE	20131117
 
 
 #endif /* VERSION_H_ */

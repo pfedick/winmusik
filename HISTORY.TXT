@@ -4,6 +4,7 @@
 
 Version 3.1.1
     - Interpretation des Music-Key wurde verbessert
+    - Zum Music-Key kann jetzt angegeben werden, ob dieser verifiziert wurde.
     - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
       werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
       der Editor mit dem entsprechenden Track zum Editieren geöffnet.

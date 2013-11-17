@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>887</width>
-    <height>678</height>
+    <width>934</width>
+    <height>699</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1035,6 +1035,13 @@
                 <width>60</width>
                 <height>16777215</height>
                </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="musickeyVerified">
+              <property name="text">
+               <string>verified</string>
               </property>
              </widget>
             </item>
