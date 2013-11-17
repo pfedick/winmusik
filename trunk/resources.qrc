@@ -168,6 +168,8 @@
     <file>resources/fkeys/f-key-3006.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/musicKeyNotOk.png</file>
+    <file>resources/musicKeyOk.png</file>
     <file>resources/1downarrow.png</file>
     <file>resources/1uparrow.png</file>
     <file>resources/go-down.png</file>
