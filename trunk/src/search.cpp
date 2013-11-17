@@ -650,6 +650,11 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	m->addAction (QIcon(":/bewertung/resources/rating-4.png"),"4",this,SLOT(on_contextRate4_clicked()));
     	m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
     	m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
+    } else if (column==SEARCH_TRACKLIST_KEY_ROW) {
+       	if (t!=NULL && (t->Flags&16)==0) a=m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+       	else if (t!=NULL && (t->Flags&16)==16) a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+    	QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
+    	createSetMusicKeyContextMenu(mk);
     } else {
     	a=m->addAction (QIcon(":/icons/resources/frame_text.png"),tr("select all","trackList Context Menue"),this,SLOT(on_markAllButton_clicked()));
     	m->addAction (QIcon(":/icons/resources/eraser.png"),tr("select none","trackList Context Menue"),this,SLOT(on_markNoneButton_clicked()));
@@ -669,6 +674,67 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
     ui.artist->setFocus();
 
 }
+
+void Search::createSetMusicKeyContextMenu(QMenu *m)
+{
+	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextMusicKey0_triggered()));
+	m->addAction(tr("A","trackList Context Menue"),this,SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(tr("A#","trackList Context Menue"),this,SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(tr("A#m","trackList Context Menue"),this,SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(tr("Am","trackList Context Menue"),this,SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(tr("B","trackList Context Menue"),this,SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(tr("Bm","trackList Context Menue"),this,SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(tr("C","trackList Context Menue"),this,SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(tr("C#","trackList Context Menue"),this,SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(tr("C#m","trackList Context Menue"),this,SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(tr("Cm","trackList Context Menue"),this,SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(tr("D","trackList Context Menue"),this,SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(tr("D#","trackList Context Menue"),this,SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(tr("D#m","trackList Context Menue"),this,SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(tr("Dm","trackList Context Menue"),this,SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(tr("E","trackList Context Menue"),this,SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(tr("Em","trackList Context Menue"),this,SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(tr("F","trackList Context Menue"),this,SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(tr("F#","trackList Context Menue"),this,SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(tr("F#m","trackList Context Menue"),this,SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(tr("Fm","trackList Context Menue"),this,SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(tr("G","trackList Context Menue"),this,SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(tr("G#","trackList Context Menue"),this,SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(tr("G#m","trackList Context Menue"),this,SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(tr("Gm","trackList Context Menue"),this,SLOT(on_contextMusicKey11_triggered()));
+}
+
+void Search::on_contextMusicKeyVerified_triggered()
+{
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (!t) return;
+	DataTitle tUpdate=*t;
+	if (tUpdate.Flags&16) tUpdate.Flags-=16;
+	else tUpdate.Flags|=16;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	renderTrack(currentTrackListItem,&tUpdate);
+
+}
+
+void Search::on_contextSetMusicKey(int k)
+{
+	if (!currentTrackListItem) return;
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (!t) return;
+
+	DataTitle tUpdate=*t;
+	tUpdate.Key=k;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	renderTrack(currentTrackListItem,&tUpdate);
+}
+
+
 
 void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 {
