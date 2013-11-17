@@ -4,7 +4,7 @@
 <cproject>
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="org.eclipse.cdt.core.default.config.1664625078">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.core.default.config.1664625078" moduleId="org.eclipse.cdt.core.settings" name="Configuration1">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.core.default.config.1664625078" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -20,11 +20,11 @@
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser" id="org.eclipse.cdt.core.default.config.1664625078" name="Configuration1" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+				<configuration buildProperties="" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser" id="org.eclipse.cdt.core.default.config.1664625078" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
 					<folderInfo id="org.eclipse.cdt.core.default.config.1664625078." name="/" resourcePath="">
 						<toolChain errorParsers="" id="org.eclipse.cdt.build.core.prefbase.toolchain.791352565" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.PE" id="org.eclipse.cdt.core.default.config.1664625078..472065759" name=""/>
-							<builder appendEnvironment="true" autoBuildTarget="debug" buildPath="" cleanBuildTarget="clean" enableAutoBuild="true" enableCleanBuild="true" enabledIncrementalBuild="true" environment="QMAKESPEC=win32-g++|PATH=C:\\Qt\\4.5.2\\bin;${env_var:PATH};c:\\mingw\\bin|" errorParsers="" id="org.eclipse.cdt.make.core.makeBuilder.1045874617" incrementalBuildTarget="debug" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder appendEnvironment="true" autoBuildTarget="debug" buildPath="" cleanBuildTarget="clean" enableAutoBuild="true" enableCleanBuild="true" enabledIncrementalBuild="true" environment="QMAKESPEC=win32-g++|PATH=C:\\Qt\\4.5.2\\bin;${env_var:PATH};c:\\mingw\\bin|" errorParsers="" id="org.eclipse.cdt.make.core.makeBuilder.1045874617" incrementalBuildTarget="debug" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool errorParsers="org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="org.eclipse.cdt.build.core.settings.holder.libs.345854703" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool errorParsers="org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="org.eclipse.cdt.build.core.settings.holder.431666224" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.2037717270" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
@@ -46,8 +46,10 @@
 			</storageModule>
 		</cconfiguration>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/WinMusik"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/WinMusik"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry">
@@ -161,4 +163,5 @@
 			</target>
 		</buildTargets>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 </cproject>
