@@ -165,6 +165,7 @@ void Edit::ClearEditFields()
 	ui.titleId->clear();
 	ui.recordVersion->clear();
 	ui.bitrate->clear();
+	ui.musickeyVerified->setChecked(false);
 
 	// Flags
 	ui.complete->setChecked(true);
@@ -229,6 +230,7 @@ void Edit::FillEditFields()
 	// Music Key
 	ui.musickey->setText(Ti.getKeyName());
 
+
 	// Bitrate
 	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();
 	ui.bitrate->setText(Tmp);
@@ -291,6 +293,10 @@ void Edit::FillEditFields()
 
 	if (Ti.Flags&8) ui.interrupted->setChecked(true);
 	else ui.interrupted->setChecked(false);
+
+
+	if (Ti.Flags&16) ui.musickeyVerified->setChecked(true);
+	else ui.musickeyVerified->setChecked(false);
 
 	// Ton
 	ui.channels->setCurrentIndex(Ti.Channels);
@@ -586,6 +592,9 @@ void Edit::SaveTrack()
 	else Ti.Flags&=(0xff-2);
 	if (ui.interrupted->isChecked()) Ti.Flags|=8;
 	else Ti.Flags&=(0xff-8);
+	if (ui.musickeyVerified->isChecked()) Ti.Flags|=16;
+	else Ti.Flags&=(0xff-16);
+
 
 	// Ton
 	Ti.Channels=ui.channels->currentIndex();

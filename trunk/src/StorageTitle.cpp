@@ -210,6 +210,7 @@ Bit 0: Titel ist komplett                                  (1)
 Bit 1: Es handelt sich um einen Musiktitel                 (2)
 Bit 2: MP3-Datei mit variabler Bitrate                     (4)
 Bit 3: Titel enthält Jingle oder es wurde reingeredet      (8)
+Bit 4: Music-Key ist verifiziert                           (16)
 \endverbatim
  *
  */
