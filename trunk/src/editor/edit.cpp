@@ -1848,29 +1848,64 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     currentTrackListItem=(WMTreeItem*)trackList->itemAt(pos);
     if (!currentTrackListItem) return;
     //printf ("Custom Context %i\n",currentTrackListItem->Track);
+    DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
 
     QMenu *m=new QMenu(this);
-    m->setTitle("Ein Titel");
-    QAction *a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
-    if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
-    m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
-    m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
-    if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
-    m->addSeparator();
-    m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
-    m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()));
-    if (DeviceType==7 && TrackList != NULL &&(
-    		trackList->currentColumn()==TRACKLIST_BPM_ROW
-    		|| trackList->currentColumn()==TRACKLIST_KEY_ROW )) {
+    QAction *a=NULL;
+    //m->setTitle("Ein Titel");
+    if (DeviceType==7 && TrackList != NULL && trackList->currentColumn()==TRACKLIST_KEY_ROW) {
+    	a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
+    	QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
+    	createSetMusicKeyContextMenu(mk);
+    	if (t!=NULL && (t->Flags&16)==0) m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+    	else if (t!=NULL && (t->Flags&16)==16) m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+    } else {
+    	a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+    	m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
+    	m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
+    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
     	m->addSeparator();
-    	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
-    	m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
-
+    	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()));
+    	if (DeviceType==7 && TrackList != NULL && trackList->currentColumn()==TRACKLIST_BPM_ROW) {
+    		m->addSeparator();
+    		m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
+    	}
     }
     m->popup(p,a);
     //FixFocus();
+}
+
+void Edit::createSetMusicKeyContextMenu(QMenu *m)
+{
+	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextMusicKey0_triggered()));
+	m->addAction(tr("A","trackList Context Menue"),this,SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(tr("A#","trackList Context Menue"),this,SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(tr("A#m","trackList Context Menue"),this,SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(tr("Am","trackList Context Menue"),this,SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(tr("B","trackList Context Menue"),this,SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(tr("Bm","trackList Context Menue"),this,SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(tr("C","trackList Context Menue"),this,SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(tr("C#","trackList Context Menue"),this,SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(tr("C#m","trackList Context Menue"),this,SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(tr("Cm","trackList Context Menue"),this,SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(tr("D","trackList Context Menue"),this,SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(tr("D#","trackList Context Menue"),this,SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(tr("D#m","trackList Context Menue"),this,SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(tr("Dm","trackList Context Menue"),this,SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(tr("E","trackList Context Menue"),this,SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(tr("Em","trackList Context Menue"),this,SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(tr("F","trackList Context Menue"),this,SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(tr("F#","trackList Context Menue"),this,SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(tr("F#m","trackList Context Menue"),this,SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(tr("Fm","trackList Context Menue"),this,SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(tr("G","trackList Context Menue"),this,SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(tr("G#","trackList Context Menue"),this,SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(tr("G#m","trackList Context Menue"),this,SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(tr("Gm","trackList Context Menue"),this,SLOT(on_contextMusicKey11_triggered()));
 }
 
 void Edit::on_contextMusicKeyVerified_triggered()
@@ -1886,6 +1921,19 @@ void Edit::on_contextMusicKeyVerified_triggered()
 	}
 	RenderTrack(currentTrackListItem,&tUpdate);
 
+}
+
+void Edit::on_contextSetMusicKey(int k)
+{
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (!t) return;
+	DataTitle tUpdate=*t;
+	tUpdate.Key=k;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	RenderTrack(currentTrackListItem,&tUpdate);
 }
 
 
