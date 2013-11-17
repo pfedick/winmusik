@@ -7,6 +7,7 @@ Version 3.1.1
     - Zum Music-Key kann jetzt angegeben werden, ob dieser verifiziert wurde.
     - Nicht-verifizierte Keys werden im Editor und Suchergebnis hellgrau
       dargestellt
+    - Music-Key kann im Editor über das Kontextmenü gesetzt werden
     - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
       werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
       der Editor mit dem entsprechenden Track zum Editieren geöffnet.

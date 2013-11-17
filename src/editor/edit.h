@@ -110,6 +110,7 @@ public:
     void hideEditor();
     void showEditor();
     void showEditorWithoutFocusChange();
+    void createSetMusicKeyContextMenu(QMenu *m);
 
 
 private:
@@ -247,6 +248,33 @@ public slots:
 	void on_contextReadBpmAndKey_triggered();
 	void on_contextMusicKeyVerified_triggered();
 	void on_DupeTimer_update();
+
+	void on_contextSetMusicKey(int k);
+	void on_contextMusicKey0_triggered() { on_contextSetMusicKey(0); };
+	void on_contextMusicKey1_triggered() { on_contextSetMusicKey(1); };
+	void on_contextMusicKey2_triggered() { on_contextSetMusicKey(2); };
+	void on_contextMusicKey3_triggered() { on_contextSetMusicKey(3); };
+	void on_contextMusicKey4_triggered() { on_contextSetMusicKey(4); };
+	void on_contextMusicKey5_triggered() { on_contextSetMusicKey(5); };
+	void on_contextMusicKey6_triggered() { on_contextSetMusicKey(6); };
+	void on_contextMusicKey7_triggered() { on_contextSetMusicKey(7); };
+	void on_contextMusicKey8_triggered() { on_contextSetMusicKey(8); };
+	void on_contextMusicKey9_triggered() { on_contextSetMusicKey(9); };
+	void on_contextMusicKey10_triggered() { on_contextSetMusicKey(10); };
+	void on_contextMusicKey11_triggered() { on_contextSetMusicKey(11); };
+	void on_contextMusicKey12_triggered() { on_contextSetMusicKey(12); };
+	void on_contextMusicKey13_triggered() { on_contextSetMusicKey(13); };
+	void on_contextMusicKey14_triggered() { on_contextSetMusicKey(14); };
+	void on_contextMusicKey15_triggered() { on_contextSetMusicKey(15); };
+	void on_contextMusicKey16_triggered() { on_contextSetMusicKey(16); };
+	void on_contextMusicKey17_triggered() { on_contextSetMusicKey(17); };
+	void on_contextMusicKey18_triggered() { on_contextSetMusicKey(18); };
+	void on_contextMusicKey19_triggered() { on_contextSetMusicKey(19); };
+	void on_contextMusicKey20_triggered() { on_contextSetMusicKey(20); };
+	void on_contextMusicKey21_triggered() { on_contextSetMusicKey(21); };
+	void on_contextMusicKey22_triggered() { on_contextSetMusicKey(22); };
+	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
+	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
 
 	void on_fkeys_clicked(int num);
 
