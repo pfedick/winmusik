@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>playlistsClass</class>
- <widget class="QWidget" name="playlistsClass">
+ <class>playlistClass</class>
+ <widget class="QWidget" name="playlistClass">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Manage Playlists</string>
+   <string>Playlist</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/devices48/resources/tr48x48-0016.png</normaloff>:/devices48/resources/tr48x48-0016.png</iconset>
   </property>
   <widget class="QPushButton" name="newPlaylistButton">
@@ -36,7 +36,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

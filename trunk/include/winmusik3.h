@@ -534,8 +534,7 @@ class CWmClient
 		ppl6::CGenericList EditorWindows;
 		ppl6::CGenericList SearchWindows;
 		ppl6::CGenericList CoverPrinterWindows;
-		ppl6::CGenericList PlaylistOverviewWindows;
-		ppl6::CGenericList PlaylistEditWindows;
+		ppl6::CGenericList PlaylistWindows;
 		ppl6::CGenericList SearchlistOverviewWindows;
 		ppl6::CGenericList SearchlistWindows;
 		ppl6::CGenericList DeviceListWindows;
@@ -605,7 +604,7 @@ class CWmClient
 		void UpdateSearchlistOverviews();
 		void SearchlistDialogClosed(void *object);
 		void CoverPrinterClosed(void *object);
-		void PlaylistOverviewClosed(void *object);
+		void PlaylistClosed(void *object);
 		void DeviceListClosed(void *object);
 		void OpenCoverViewer(const QPixmap &pix);
 		void UpdateCoverViewer(const QPixmap &pix);

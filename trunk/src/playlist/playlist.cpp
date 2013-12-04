@@ -4,7 +4,7 @@
  * $Author: pafe $
  * $Revision: 1.1 $
  * $Date: 2010/11/14 13:20:11 $
- * $Id: playlists.h,v 1.1 2010/11/14 13:20:11 pafe Exp $
+ * $Id: Playlist.cpp,v 1.1 2010/11/14 13:20:11 pafe Exp $
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -24,35 +24,49 @@
  */
 
 
-#ifndef PLAYLISTS_H
-#define PLAYLISTS_H
+#include <QClipboard>
+#include <QMenu>
+#include <QList>
+#include <QUrl>
+#include <QMimeData>
+#include <QMouseEvent>
+#include "playlist.h"
 
-#include <QtGui/QWidget>
-#include <QTimer>
-#include "ui_playlists.h"
-#include "winmusik3.h"
-
-class Playlists : public QWidget
+Playlist::Playlist(QWidget *parent, CWmClient *wm)
+    : QWidget(parent)
 {
-    Q_OBJECT
+	ui.setupUi(this);
+	this->wm=wm;
+	setAttribute(Qt::WA_DeleteOnClose,true);
+}
 
-public:
-    Playlists(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~Playlists();
-    void ReloadTranslation();
-
-private:
-    Ui::playlistsClass ui;
-    CWmClient *wm;
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void Resize();
+Playlist::~Playlist()
+{
+	if (wm) {
+		wm->PlaylistClosed(this);
+	}
+}
 
 
-public slots:
+void Playlist::Resize()
+{
+
+}
+
+void Playlist::showEvent(QShowEvent * event)
+{
+	Resize();
+	QWidget::showEvent(event);
+}
+void Playlist::resizeEvent(QResizeEvent * event)
+{
+	Resize();
+	QWidget::resizeEvent(event);
+}
 
 
-};
 
-
-#endif // PLAYLISTS_H
+void Playlist::ReloadTranslation()
+{
+	ui.retranslateUi(this);
+}

@@ -40,7 +40,7 @@
 #include "langselect.h"
 #include "splashscreen.h"
 #include "coverprinter.h"
-#include "playlists.h"
+#include "src/playlist/playlist.h"
 #include "updater.h"
 #include "devicelist.h"
 #include "src/searchlists/searchlists.h"
@@ -324,10 +324,10 @@ void CWmClient::ReloadTranslation()
 	while ((cover=(CoverPrinter *)CoverPrinterWindows.GetFirst())) {
 		cover->ReloadTranslation();
 	}
-	Playlists *playlists;
-	PlaylistOverviewWindows.Reset();
-	while ((playlists=(Playlists *)PlaylistOverviewWindows.GetFirst())) {
-		playlists->ReloadTranslation();
+	Playlist *playlist;
+	PlaylistWindows.Reset();
+	while ((playlist=(Playlist *)PlaylistWindows.GetFirst())) {
+		playlist->ReloadTranslation();
 	}
 	/*
 	PlaylistEditor *playlisteditor;
@@ -440,10 +440,10 @@ int CWmClient::CloseDatabase()
 		delete cover;
 		Mutex.Lock();
 	}
-	Playlists *playlists;
-	while ((playlists=(Playlists *)PlaylistOverviewWindows.GetFirst())) {
+	Playlist *playlist;
+	while ((playlist=(Playlist *)PlaylistWindows.GetFirst())) {
 		Mutex.Unlock();
-		delete playlists;
+		delete playlist;
 		Mutex.Lock();
 	}
 	/*
@@ -534,18 +534,18 @@ void CWmClient::CoverPrinterClosed(void *object)
 void CWmClient::OpenPlaylistDialog()
 {
 	//printf ("Open Playlists\n");
-	Playlists *w=new Playlists((Menue*)MainMenue,this);
+	Playlist *w=new Playlist((Menue*)MainMenue,this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
 	Mutex.Lock();
-	PlaylistOverviewWindows.Add(w);
+	PlaylistWindows.Add(w);
 	Mutex.Unlock();
 }
 
-void CWmClient::PlaylistOverviewClosed(void *object)
+void CWmClient::PlaylistClosed(void *object)
 {
 	Mutex.Lock();
-	PlaylistOverviewWindows.Delete(object);
+	PlaylistWindows.Delete(object);
 	Mutex.Unlock();
 
 }
