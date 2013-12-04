@@ -52,8 +52,6 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_TimerUpdate()));
 	timer->start(3000);
-
-	ui.playlistButton->setVisible(false);
 }
 
 Menue::~Menue()
