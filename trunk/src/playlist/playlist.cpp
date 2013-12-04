@@ -33,11 +33,19 @@
 #include "playlist.h"
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
-    : QWidget(parent)
+    : QMainWindow(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
 	setAttribute(Qt::WA_DeleteOnClose,true);
+
+	menuFile=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&File"));
+
+	menuFile->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
+	menuFile->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
+	menuFile->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
+	menuFile->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+
 }
 
 Playlist::~Playlist()
@@ -69,4 +77,24 @@ void Playlist::resizeEvent(QResizeEvent * event)
 void Playlist::ReloadTranslation()
 {
 	ui.retranslateUi(this);
+}
+
+void Playlist::on_menuNew_triggered()
+{
+
+}
+
+void Playlist::on_menuOpen_triggered()
+{
+
+}
+
+void Playlist::on_menuSave_triggered()
+{
+
+}
+
+void Playlist::on_menuSaveAs_triggered()
+{
+
 }

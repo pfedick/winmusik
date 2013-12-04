@@ -27,12 +27,12 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QMainWindow>
 #include <QTimer>
 #include "ui_playlist.h"
 #include "winmusik3.h"
 
-class Playlist : public QWidget
+class Playlist : public QMainWindow
 {
     Q_OBJECT
 
@@ -44,6 +44,9 @@ public:
 private:
     Ui::playlistClass ui;
     CWmClient *wm;
+
+    QMenu	*menuFile;
+
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     void Resize();
@@ -51,6 +54,10 @@ private:
 
 public slots:
 
+	void on_menuNew_triggered();
+	void on_menuOpen_triggered();
+	void on_menuSave_triggered();
+	void on_menuSaveAs_triggered();
 
 };
 
