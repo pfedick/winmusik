@@ -38,13 +38,23 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.setupUi(this);
 	this->wm=wm;
 	setAttribute(Qt::WA_DeleteOnClose,true);
+	ui.tracks->setAcceptDrops(true);
+	ui.tracks->installEventFilter(this);
 
-	menuFile=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&File"));
+	QMenu	*menu;
+	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&File"));
 
-	menuFile->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
-	menuFile->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
-	menuFile->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
-	menuFile->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
+	menu->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+
+	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&View"));
+	menu->addAction(QIcon(":/icons/resources/devices.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
+	menu->addAction(QIcon(":/icons/resources/devices.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
+
+	playlistView=playlistViewNormal;
+	recreatePlaylist();
 
 }
 
@@ -55,9 +65,246 @@ Playlist::~Playlist()
 	}
 }
 
+bool Playlist::eventFilter(QObject *target, QEvent *event)
+{
+	if (consumeEvent(target,event)) return true;
+	return QWidget::eventFilter(target,event);
+}
+
+bool Playlist::consumeEvent(QObject *target, QEvent *event)
+{
+	int type=event->type();
+	if (target==ui.tracks) {
+		if (type==QEvent::Drop) {
+			handleDropEvent(static_cast<QDropEvent *>(event));
+			return true;
+		} else if (type==QEvent::DragEnter) {
+			(static_cast<QDragEnterEvent *>(event))->accept();
+			return true;
+		}
+	}
+	return false;
+}
+
+void Playlist::handleDropEvent(QDropEvent *event)
+{
+	event->accept();
+	const QMimeData *mime=event->mimeData();
+	if (!mime) return;
+	//if (!mime->hasUrls()) return;
+
+	ppl6::CString xml=mime->text();
+	if (xml.Left(18)=="<winmusikTracklist") {
+		ppl6::CArray List;
+		List.Explode(xml,"</track>");
+		//printf ("List: %i\n",List.Num());
+		for (int i=0;i<List.Num();i++) {
+			ppl6::CString Row=List.GetString(i);
+			if (!Row.PregMatch("/^\\<titleId\\>(.*?)\\<\\/titleId\\>$/m")) continue;
+
+			Row.Print(true);
+			PlaylistItem *item=new PlaylistItem;
+			item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+			item->startPositionSec=0;
+			item->endPositionSec=0;
+			for (int z=0;z<5;z++) {
+				item->cutStartPosition[z]=0;
+				item->cutEndPosition[z]=0;
+			}
+			if (Row.PregMatch("/^\\<artist\\>(.*?)\\<\\/artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<title\\>(.*?)\\<\\/title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<version\\>(.*?)\\<\\/version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<genre\\>(.*?)\\<\\/genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<label\\>(.*?)\\<\\/label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<album\\>(.*?)\\<\\/album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<file\\>(.*?)\\<\\/file\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+			if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+			if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+			if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->endPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+
+			if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
+
+			item->length=item->endPositionSec-item->startPositionSec;
+
+			renderTrack(item);
+			ui.tracks->addTopLevelItem(item);
+
+
+		}
+		return;
+	}
+
+	ppl6::CString path=wm->conf.DevicePath[7];
+	QList<QUrl>	list=mime->urls();
+	for (int i=0;i<list.size();i++) {
+		QUrl url=list[i];
+		QString file=url.encodedPath();
+		ppl6::CString f=file;
+		int p=f.Instr(path);
+		if (p<0) continue;
+		f=f.Mid(p);
+		f.Replace(path,"");
+		if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
+			int myDeviceId=ppl6::atoi(f.GetMatch(1));
+			int myTrack=ppl6::atoi(f.GetMatch(2));
+			// TODO
+			printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
+		}
+	}
+
+	/*
+	QUrl url=list.first();
+	QString file=url.encodedPath();
+	ppl6::CString f=file;
+	ppl6::CString path=wm->conf.DevicePath[7];
+	int p=f.Instr(path);
+	if (p<0) return;
+	f=f.Mid(p);
+	f.Replace(path,"");
+	if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
+		int myDeviceId=ppl6::atoi(f.GetMatch(1));
+		int myTrack=ppl6::atoi(f.GetMatch(2));
+		OpenTrack(myDeviceId,0,myTrack);
+		QApplication::processEvents();
+		ui.artist->setFocus();
+		QApplication::setActiveWindow(this);
+		QApplication::processEvents();
+		position=4;
+		FixFocus();
+		on_artist_FocusIn();
+	}
+	*/
+
+	//printf ("lala: %s, path: %s\n",(const char*)f, (const char*)path);
+
+}
+
 
 void Playlist::Resize()
 {
+	int w=ui.tracks->width();
+	ui.tracks->setColumnWidth(columnTrack,40);
+	w-=44;
+	ui.tracks->setColumnWidth(columnCover,64);
+	w-=68;
+	ui.tracks->setColumnWidth(columnLength,60);
+	w-=64;
+	ui.tracks->setColumnWidth(columnRating,85);
+	w-=89;
+
+
+	if (playlistView==playlistViewNormal) {
+	} else if (playlistView==playlistViewDJ) {
+		ui.tracks->setColumnWidth(columnBpm,35);
+		w-=39;
+		ui.tracks->setColumnWidth(columnMusicKey,50);
+		w-=54;
+		ui.tracks->setColumnWidth(columnStart,60);
+		w-=64;
+		ui.tracks->setColumnWidth(columnEnd,60);
+		w-=64;
+		ui.tracks->setColumnWidth(columnCuts,30);
+		w-=34;
+	}
+	ui.tracks->setColumnWidth(columnSource,85);
+	w-=89;
+	ui.tracks->setColumnWidth(columnTitle,w*80/100);
+	ui.tracks->setColumnWidth(columnGenre,w*15/100);
+
+}
+
+void Playlist::recreatePlaylist()
+{
+	QTreeWidgetItem *item=ui.tracks->headerItem();
+
+	columnTrack=0;
+	columnCover=1;
+	columnTitle=2;
+	columnGenre=3;
+
+	if (playlistView==playlistViewNormal) {
+		ui.tracks->setColumnCount(7);
+		item->setText(0,tr("Track"));
+		item->setText(1,tr("Cover"));
+		item->setText(2,tr("Artist - Title (Version)"));
+		item->setText(3,tr("Genre"));
+		item->setText(4,tr("Length"));
+		item->setText(5,tr("Rating"));
+		item->setText(6,tr("Source"));
+		columnLength=4;
+		columnRating=5;
+		columnSource=6;
+
+	} else if (playlistView==playlistViewDJ) {
+		ui.tracks->setColumnCount(12);
+		item->setText(0,tr("Track"));
+		item->setText(1,tr("Cover"));
+		item->setText(2,tr("Artist - Title (Version)"));
+		item->setText(3,tr("Genre"));
+		item->setText(4,tr("Bpm"));
+		item->setText(5,tr("MusicKey"));
+		item->setText(6,tr("Rating"));
+		item->setText(7,tr("Start"));
+		item->setText(8,tr("End"));
+		item->setText(9,tr("Cuts"));
+		item->setText(10,tr("Length"));
+		item->setText(11,tr("Source"));
+
+		columnLength=10;
+		columnRating=6;
+		columnSource=11;
+		columnBpm=4;
+		columnMusicKey=5;
+		columnStart=7;
+		columnEnd=8;
+		columnCuts=9;
+	}
+	Resize();
+	updatePlaylist();
+}
+
+void Playlist::updatePlaylist()
+{
+	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		renderTrack(item);
+	}
+}
+
+void Playlist::renderTrack(PlaylistItem *item)
+{
+	if (playlistView==playlistViewNormal) {
+		renderTrackViewPlaylist(item);
+	} else if (playlistView==playlistViewDJ) {
+		renderTrackViewDJ(item);
+	}
+}
+
+void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
+{
+	ppl6::CString Tmp;
+	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
+	item->setText(columnTitle,Tmp);
+	item->setText(columnGenre,item->Genre);
+}
+
+void Playlist::renderTrackViewDJ(PlaylistItem *item)
+{
+	ppl6::CString Tmp;
+	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
+	item->setText(columnTitle,Tmp);
+	item->setText(columnGenre,item->Genre);
+	Tmp.Setf("%i",item->bpm);
+	item->setText(columnBpm,Tmp);
+	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
+	Tmp.Setf("%02i:%02i",(int)(item->startPositionSec/60),(int)item->startPositionSec%60);
+	item->setText(columnStart,Tmp);
+	Tmp.Setf("%02i:%02i",(int)(item->endPositionSec/60),(int)item->endPositionSec%60);
+	item->setText(columnEnd,Tmp);
+
+	int length=item->endPositionSec-item->startPositionSec;
+	Tmp.Setf("%02i:%02i",(int)(length/60),(int)length%60);
+	item->setText(columnLength,Tmp);
 
 }
 
@@ -98,3 +345,21 @@ void Playlist::on_menuSaveAs_triggered()
 {
 
 }
+
+void Playlist::on_viewPlaylist_triggered()
+{
+	if (playlistView!=playlistViewNormal) {
+		playlistView=playlistViewNormal;
+		recreatePlaylist();
+	}
+}
+
+void Playlist::on_viewDJ_triggered()
+{
+	if (playlistView!=playlistViewDJ) {
+		playlistView=playlistViewDJ;
+		recreatePlaylist();
+	}
+}
+
+

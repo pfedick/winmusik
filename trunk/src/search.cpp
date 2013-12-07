@@ -952,12 +952,15 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 	QList<QTreeWidgetItem*> Items=trackList->selectedItems();
 	QList<QUrl> list;
 	ppl6::CString File;
-
+	ppl6::CString xml;
+	xml="<winmusikTracklist>\n";
 	QPixmap Icon;
 	int count=0;
 	for (int i=0;i<Items.size();i++) {
 		item=(WMTreeItem *)Items[i];
 		DataTitle *t=wm->GetTitle(item->Id);
+		xml+="<track>\n";
+		xml+=wm->getXmlTitle(item->Id);
 		if (t!=NULL && t->DeviceType==7) {
 			if (Icon.isNull()) {
 				if (t->CoverPreview.Size()>0) {
@@ -967,6 +970,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 
 			File=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
 			if (File.NotEmpty()) {
+				xml+="<file>"+ppl6::EscapeHTMLTags(File)+"</file>";
 #ifdef _WIN32
 				if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,10,"Search","on_trackList_MouseMove",__FILE__,__LINE__,"Add File to Drag: %s",(const char*)File);
 				list.append(QUrl::fromLocalFile(File));
@@ -976,15 +980,15 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 				count++;
 			}
 		}
+		xml+="</track>";
 	}
 	if (!count) return false;
     QDrag *drag = new QDrag(trackList);
     QMimeData *mimeData = new QMimeData;
     if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
     drag->setPixmap(Icon);
-
+    mimeData->setText(xml);
     mimeData->setUrls(list);
-
     drag->setMimeData(mimeData);
     // start drag
     drag->start(Qt::CopyAction | Qt::MoveAction);

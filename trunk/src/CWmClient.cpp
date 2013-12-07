@@ -905,6 +905,29 @@ const char *CWmClient::GetLabelText(ppluint32 Id)
 	return Str_Unknown;
 }
 
+ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
+{
+	ppl6::CString r;
+	DataTitle *ti=TitleStore.Get(TitleId);
+	if (!ti) return r;
+	r.Setf("<titleId>%u</titleId>\n",TitleId);
+	r.Concatf("<deviceType>%i</deviceType>\n",ti->DeviceType);
+	r.Concatf("<deviceId>%i</deviceId>\n",ti->DeviceId);
+	r.Concatf("<devicePage>%i</devicePage>\n",ti->Page);
+	r.Concatf("<trackNum>%i</trackNum>\n",ti->Track);
+	r+="<artist>"+ppl6::EscapeHTMLTags(ti->Artist)+"</artist>\n";
+	r+="<title>"+ppl6::EscapeHTMLTags(ti->Title)+"</title>\n";
+	r+="<version>"+ppl6::EscapeHTMLTags(GetVersionText(ti->VersionId))+"</version>\n";
+	r+="<genre>"+ppl6::EscapeHTMLTags(GetGenreText(ti->GenreId))+"</genre>\n";
+	r+="<label>"+ppl6::EscapeHTMLTags(GetLabelText(ti->LabelId))+"</label>\n";
+	r+="<album>"+ppl6::EscapeHTMLTags(ti->Album)+"</album>\n";
+	r.Concatf("<bpm>%i</bpm>\n",(int)ti->BPM);
+	r.Concatf("<bitrate>%i</bitrate>\n",(int)ti->Bitrate);
+	r.Concatf("<rating>%i</rating>\n",(int)ti->Rating);
+	r.Concatf("<length>%i</length>\n",(int)ti->Length);
+	r+="<musicKey>"+ti->getKeyName()+"</musicKey>\n";
+	return r;
+}
 
 DataRecordSource *CWmClient::GetRecordSource(ppluint32 Id)
 {

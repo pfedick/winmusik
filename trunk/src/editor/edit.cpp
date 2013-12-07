@@ -1631,6 +1631,9 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 	QString qFile;
     QPixmap Icon;
 
+    ppl6::CString xml;
+    xml="<winmusikTracklist>\n";
+
 
 	for (int i=0;i<Items.size();i++) {
 		item=(WMTreeItem *)Items[i];
@@ -1640,19 +1643,26 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 				Icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
 			}
 		}
+		xml+="<track>\n";
+		xml+=wm->getXmlTitle(item->Id);
 		File=wm->MP3Filename(DeviceId,Page,item->Track);
 		if (File.NotEmpty()) {
+			xml+="<file>"+ppl6::EscapeHTMLTags(File)+"</file>\n";
+
 #ifdef _WIN32
 			list.append(QUrl::fromLocalFile(File));
 #else
 			list.append(QUrl::fromLocalFile(File));
 #endif
 		}
+		xml+="</track>";
 	}
+	//xml+="</winmusikTracklist>\n";
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
     if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
     drag->setPixmap(Icon);
+    mimeData->setText(xml);
     mimeData->setUrls(list);
     drag->setMimeData(mimeData);
     // start drag
