@@ -29,8 +29,30 @@
 
 #include <QtGui/QMainWindow>
 #include <QTimer>
+#include <QTreeWidgetItem>
 #include "ui_playlist.h"
 #include "winmusik3.h"
+
+class PlaylistItem : public QTreeWidgetItem
+{
+	public:
+		ppluint32	titleId;
+		int			startPositionSec;
+		int			endPositionSec;
+		int			cutStartPosition[5];
+		int			cutEndPosition[5];
+		ppl6::CString	Artist;
+		ppl6::CString	Title;
+		ppl6::CString	Version;
+		ppl6::CString	Genre;
+		ppl6::CString	Label;
+		ppl6::CString	Album;
+		ppl6::CString	File;
+		int				musicKey;
+		int				bpm;
+		int				rating;
+		int				length;
+};
 
 class Playlist : public QMainWindow
 {
@@ -45,11 +67,40 @@ private:
     Ui::playlistClass ui;
     CWmClient *wm;
 
-    QMenu	*menuFile;
-
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     void Resize();
+
+    void recreatePlaylist();
+    void updatePlaylist();
+    void renderTrack(PlaylistItem *item);
+
+    void renderTrackViewPlaylist(PlaylistItem *item);
+    void renderTrackViewDJ(PlaylistItem *item);
+
+    bool eventFilter(QObject *target, QEvent *event);
+    bool consumeEvent(QObject *target, QEvent *event);
+    void handleDropEvent(QDropEvent *event);
+
+    enum playlistViewType {
+    	playlistViewNormal,
+    	playlistViewDJ
+    };
+    playlistViewType playlistView;
+
+    int columnTrack;
+    int columnCover;
+    int columnTitle;
+    int columnGenre;
+    int columnLength;
+    int columnRating;
+    int columnSource;
+    int columnBpm;
+    int columnMusicKey;
+    int columnStart;
+    int columnEnd;
+    int columnCuts;
+
 
 
 public slots:
@@ -58,6 +109,9 @@ public slots:
 	void on_menuOpen_triggered();
 	void on_menuSave_triggered();
 	void on_menuSaveAs_triggered();
+
+	void on_viewPlaylist_triggered();
+	void on_viewDJ_triggered();
 
 };
 

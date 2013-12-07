@@ -635,6 +635,8 @@ class CWmClient
 		const char *GetRecordSourceText(ppluint32 Id);
 		const char *GetRecordDeviceText(ppluint32 Id);
 
+		ppl6::CString getXmlTitle(ppluint32 TitleId);
+
 
 		QByteArray GetGeometry(const char *name);
 		void SaveGeometry(const char *name, QByteArray Geometry);
