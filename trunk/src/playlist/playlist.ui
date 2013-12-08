@@ -34,21 +34,42 @@
      </layout>
     </item>
     <item>
-     <widget class="QTreeWidget" name="tracks">
+     <widget class="PlaylistTracks" name="tracks">
+      <property name="mouseTracking">
+       <bool>false</bool>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="acceptDrops">
        <bool>true</bool>
       </property>
-      <property name="dragEnabled">
+      <property name="showDropIndicator" stdset="0">
        <bool>true</bool>
+      </property>
+      <property name="dragEnabled">
+       <bool>false</bool>
       </property>
       <property name="dragDropMode">
        <enum>QAbstractItemView::DragDrop</enum>
       </property>
+      <property name="defaultDropAction">
+       <enum>Qt::IgnoreAction</enum>
+      </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <property name="rootIsDecorated">
+       <bool>false</bool>
+      </property>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
       </property>
       <column>
        <property name="text">
@@ -121,6 +142,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaylistTracks</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">src/playlist/playlisttracks.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../resources.qrc"/>
  </resources>

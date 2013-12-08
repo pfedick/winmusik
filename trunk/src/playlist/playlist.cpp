@@ -31,14 +31,18 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "playlist.h"
+#include <stdio.h>
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	currentTreeItem=NULL;
 	setAttribute(Qt::WA_DeleteOnClose,true);
+	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
+	//ui.tracks->setMouseTracking(true);
 	ui.tracks->installEventFilter(this);
 
 	QMenu	*menu;
@@ -56,7 +60,10 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	playlistView=playlistViewNormal;
 	recreatePlaylist();
 
+	restoreGeometry(wm->GetGeometry("playlist"));
+
 }
+
 
 Playlist::~Playlist()
 {
@@ -65,10 +72,20 @@ Playlist::~Playlist()
 	}
 }
 
+
+void Playlist::closeEvent(QCloseEvent *event)
+{
+	if (wm) {
+		wm->SaveGeometry("playlist",saveGeometry());
+	}
+	QMainWindow::closeEvent(event);
+}
+
+
 bool Playlist::eventFilter(QObject *target, QEvent *event)
 {
 	if (consumeEvent(target,event)) return true;
-	return QWidget::eventFilter(target,event);
+	return QMainWindow::eventFilter(target,event);
 }
 
 bool Playlist::consumeEvent(QObject *target, QEvent *event)
@@ -81,17 +98,128 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 		} else if (type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
 			return true;
+			/*
+		} else if (type==QEvent::DragMove) {
+			QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
+			QTreeWidgetItem *item=ui.tracks->itemAt(p);
+			unselectItems();
+
+			if (item) {
+				item->setSelected(true);
+			}
+
+			//printf ("Move: %i:%i\n",p.x(),p.y());
+			(static_cast<QDragMoveEvent *>(event))->accept();
+			return true;
+			*/
 		}
 	}
 	return false;
 }
 
+bool Playlist::on_tracks_MouseButtonPress(QMouseEvent * event)
+{
+	//printf ("on_tracks_MouseButtonPress\n");
+	if (event->buttons() == Qt::LeftButton) startPos=event->pos();
+	ratePos=event->pos();
+	return false;
+}
+
+bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent *)
+{
+	//printf ("on_tracks_MouseButtonRelease\n");
+	startPos.setX(0);
+	startPos.setY(0);
+	return false;
+}
+
+
+
+bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
+{
+	//printf ("on_tracks_MouseMove\n");
+	if (!(event->buttons() == Qt::LeftButton)) return false;
+
+	int distance=(event->pos()-startPos).manhattanLength();
+	if (distance<QApplication::startDragDistance()) return false;
+
+	QList<QTreeWidgetItem*> Items=ui.tracks->selectedItems();
+	QList<QUrl> list;
+    QPixmap Icon;
+
+    //printf ("DragStart\n");
+
+    ppl6::CString xml;
+    xml="<winmusikTracklist>\n";
+	for (int i=0;i<Items.size();i++) {
+		PlaylistItem *item=(PlaylistItem *)Items[i];
+		if (Icon.isNull()) {
+			DataTitle *ti=wm->GetTitle(item->titleId);
+			if (ti!=NULL &&ti->CoverPreview.Size()>0) {
+				Icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
+			}
+		}
+		xml+="<track>\n";
+		xml+=wm->getXmlTitle(item->titleId);
+		if (item->File.NotEmpty()) {
+			xml+="<file>"+ppl6::EscapeHTMLTags(item->File)+"</file>\n";
+
+#ifdef _WIN32
+			list.append(QUrl::fromLocalFile(item->File));
+#else
+			list.append(QUrl::fromLocalFile(item->File));
+#endif
+		}
+		xml+="</track>";
+	}
+	xml.Print(true);
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+    if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
+    drag->setPixmap(Icon);
+    mimeData->setText(xml);
+    mimeData->setUrls(list);
+    drag->setMimeData(mimeData);
+    // start drag
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
+	startPos.setX(0);
+	startPos.setY(0);
+
+	return true;
+}
+
+
+void Playlist::unselectItems()
+{
+	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+	for (int i=0;i<selected.size();i++) selected.at(i)->setSelected(false);
+}
+
+void Playlist::deleteSelectedItems()
+{
+	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+	for (int i=0;i<selected.size();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(selected.at(i)));
+		delete item;
+	}
+}
+
 void Playlist::handleDropEvent(QDropEvent *event)
 {
+	//printf ("Drop Event 1\n");
+
 	event->accept();
+	if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
 	//if (!mime->hasUrls()) return;
+	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
+	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
+	printf ("Drop Event 2\n");
+
+	if (event->source()==this) deleteSelectedItems();
+	unselectItems();
 
 	ppl6::CString xml=mime->text();
 	if (xml.Left(18)=="<winmusikTracklist") {
@@ -102,7 +230,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			ppl6::CString Row=List.GetString(i);
 			if (!Row.PregMatch("/^\\<titleId\\>(.*?)\\<\\/titleId\\>$/m")) continue;
 
-			Row.Print(true);
+			//Row.Print(true);
 			PlaylistItem *item=new PlaylistItem;
 			item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 			item->startPositionSec=0;
@@ -127,9 +255,11 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			item->length=item->endPositionSec-item->startPositionSec;
 
 			renderTrack(item);
-			ui.tracks->addTopLevelItem(item);
-
-
+			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
+			else ui.tracks->addTopLevelItem(item);
+			if (i==0) {
+				item->setSelected(true);
+			}
 		}
 		return;
 	}

@@ -114,6 +114,7 @@ SOURCES += widgets/fkeys.cpp \
     src/menue.cpp \
     src/main.cpp \
     src/playlist/playlist.cpp \
+    src/playlist/playlisttracks.cpp \
     src/devicelist.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
