@@ -29,9 +29,12 @@
 
 #include <QtGui/QMainWindow>
 #include <QTimer>
+#include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include "ui_playlist.h"
 #include "winmusik3.h"
+
+class PlaylistTracks;
 
 class PlaylistItem : public QTreeWidgetItem
 {
@@ -58,6 +61,8 @@ class Playlist : public QMainWindow
 {
     Q_OBJECT
 
+    friend class PlaylistTracks;
+
 public:
     Playlist(QWidget *parent = 0, CWmClient *wm=NULL);
     ~Playlist();
@@ -66,6 +71,7 @@ public:
 private:
     Ui::playlistClass ui;
     CWmClient *wm;
+    PlaylistItem *currentTreeItem;
 
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
@@ -81,6 +87,15 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
     void handleDropEvent(QDropEvent *event);
+    void unselectItems();
+    void deleteSelectedItems();
+
+    void closeEvent(QCloseEvent *event);
+
+    bool on_tracks_MouseMove(QMouseEvent *event);
+    bool on_tracks_MouseButtonPress(QMouseEvent * event);
+    bool on_tracks_MouseButtonRelease(QMouseEvent * event);
+
 
     enum playlistViewType {
     	playlistViewNormal,
@@ -101,6 +116,8 @@ private:
     int columnEnd;
     int columnCuts;
 
+    QPoint startPos;	// Für Drag/Drop und multiple Markierungen
+    QPoint	ratePos;	// Für Rating-Spalte
 
 
 public slots:
