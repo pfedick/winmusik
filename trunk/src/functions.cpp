@@ -289,9 +289,11 @@ static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename)
 bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int preferedId3Version)
 {
 	ppl6::CDirEntry de;
+	//printf ("getTrackInfoFromFile: %s\n",(const char*)Filename);
 	if (ppl6::CFile::Stat(Filename,de)) {
 		info.Ti.Size=de.Size;
 	} else return false;
+	//printf ("debug 1\n");
 	info.Ti.Channels=2;
 	info.Ti.Flags=1+2;
 	info.Ti.ReleaseDate=0;
@@ -303,6 +305,7 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	if (!File.Open(Filename,"rb")) return false;
 	//printf ("Ok. rufe Ident auf\n");
 	if (!ppl6::IdentMPEG(&File,&pmp3)) return false;
+	//printf ("Ok\n");
 	info.Ti.Length=pmp3.length;
 	info.Ti.Bitrate=pmp3.bitrate;
 	//info.Ti.Channels=pmp3.

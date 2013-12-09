@@ -864,6 +864,11 @@ CTrackList *CWmClient::GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint
 	return TrackStore.GetTracklist(Device,DeviceId,Page);
 }
 
+DataTrack *CWmClient::GetTrack(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track)
+{
+	return TrackStore.Get(Device,DeviceId,Page,Track);
+}
+
 DataTitle *CWmClient::GetTitle(ppluint32 TitleId)
 {
 	return TitleStore.Get(TitleId);

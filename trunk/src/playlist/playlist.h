@@ -39,6 +39,7 @@ class PlaylistTracks;
 class PlaylistItem : public QTreeWidgetItem
 {
 	public:
+		PlaylistItem();
 		ppluint32	titleId;
 		int			startPositionSec;
 		int			endPositionSec;
@@ -79,6 +80,10 @@ private:
 
     void recreatePlaylist();
     void updatePlaylist();
+
+    bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
+    void loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml);
+    void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
     void renderTrack(PlaylistItem *item);
 
     void renderTrackViewPlaylist(PlaylistItem *item);
@@ -89,6 +94,7 @@ private:
     void handleDropEvent(QDropEvent *event);
     void unselectItems();
     void deleteSelectedItems();
+    void deleteItems(QList<QTreeWidgetItem *>items);
 
     void closeEvent(QCloseEvent *event);
 
