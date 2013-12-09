@@ -33,6 +33,21 @@
 #include "playlist.h"
 #include <stdio.h>
 
+PlaylistItem::PlaylistItem()
+{
+	titleId=0;
+	startPositionSec=0;
+	endPositionSec=0;
+	musicKey=0;
+	bpm=0;
+	rating=0;
+	length=0;
+	for (int z=0;z<5;z++) {
+		cutStartPosition[z]=0;
+		cutEndPosition[z]=0;
+	}
+}
+
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
@@ -98,20 +113,12 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 		} else if (type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
 			return true;
-			/*
 		} else if (type==QEvent::DragMove) {
 			QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
 			QTreeWidgetItem *item=ui.tracks->itemAt(p);
-			unselectItems();
-
-			if (item) {
-				item->setSelected(true);
-			}
-
-			//printf ("Move: %i:%i\n",p.x(),p.y());
-			(static_cast<QDragMoveEvent *>(event))->accept();
-			return true;
-			*/
+			printf ("Move: %i:%i\n",p.x(),p.y());
+			//(static_cast<QDragMoveEvent *>(event))->accept();
+			return false;
 		}
 	}
 	return false;
@@ -172,7 +179,7 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 		}
 		xml+="</track>";
 	}
-	xml.Print(true);
+	//xml.Print(true);
 
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
@@ -205,6 +212,14 @@ void Playlist::deleteSelectedItems()
 	}
 }
 
+void Playlist::deleteItems(QList<QTreeWidgetItem *>items)
+{
+	for (int i=0;i<items.size();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(items.at(i)));
+		delete item;
+	}
+}
+
 void Playlist::handleDropEvent(QDropEvent *event)
 {
 	//printf ("Drop Event 1\n");
@@ -214,12 +229,15 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
 	//if (!mime->hasUrls()) return;
-	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
 	printf ("Drop Event 2\n");
 
-	if (event->source()==this) deleteSelectedItems();
+	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 	unselectItems();
+	QApplication::processEvents();
+
+	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
+	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
+
 
 	ppl6::CString xml=mime->text();
 	if (xml.Left(18)=="<winmusikTracklist") {
@@ -233,34 +251,13 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			//Row.Print(true);
 			PlaylistItem *item=new PlaylistItem;
 			item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-			item->startPositionSec=0;
-			item->endPositionSec=0;
-			for (int z=0;z<5;z++) {
-				item->cutStartPosition[z]=0;
-				item->cutEndPosition[z]=0;
-			}
-			if (Row.PregMatch("/^\\<artist\\>(.*?)\\<\\/artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<title\\>(.*?)\\<\\/title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<version\\>(.*?)\\<\\/version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<genre\\>(.*?)\\<\\/genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<label\\>(.*?)\\<\\/label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<album\\>(.*?)\\<\\/album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<file\\>(.*?)\\<\\/file\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-			if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-			if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-			if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->endPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-
-			if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
-
-			item->length=item->endPositionSec-item->startPositionSec;
-
+			loadTrackFromXML(item,Row);
 			renderTrack(item);
 			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 			else ui.tracks->addTopLevelItem(item);
-			if (i==0) {
-				item->setSelected(true);
-			}
+			item->setSelected(true);
 		}
+		if (event->source()==this) deleteItems(selected);
 		return;
 	}
 
@@ -268,47 +265,102 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	QList<QUrl>	list=mime->urls();
 	for (int i=0;i<list.size();i++) {
 		QUrl url=list[i];
-		QString file=url.encodedPath();
+		QString file=url.toLocalFile();
+		PlaylistItem *item=new PlaylistItem;
 		ppl6::CString f=file;
 		int p=f.Instr(path);
-		if (p<0) continue;
-		f=f.Mid(p);
-		f.Replace(path,"");
-		if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
-			int myDeviceId=ppl6::atoi(f.GetMatch(1));
-			int myTrack=ppl6::atoi(f.GetMatch(2));
-			// TODO
-			printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
+		if (p>=0) {
+			f=f.Mid(p);
+			f.Replace(path,"");
+			if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
+				int myDeviceId=ppl6::atoi(f.GetMatch(1));
+				int myTrack=ppl6::atoi(f.GetMatch(2));
+				printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
+				const DataTrack *tr=wm->GetTrack(7,myDeviceId,1,myTrack);
+				if (tr) {
+					if (!loadTrackFromDatabase(item,tr->TitleId)) {
+						delete item;
+						continue;
+					} else {
+						item->File=file;
+					}
+				}
+			}
 		}
+		if (item->titleId==0) loadTrackFromFile(item,file);
+		renderTrack(item);
+		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
+		else ui.tracks->addTopLevelItem(item);
+		item->setSelected(true);
 	}
-
-	/*
-	QUrl url=list.first();
-	QString file=url.encodedPath();
-	ppl6::CString f=file;
-	ppl6::CString path=wm->conf.DevicePath[7];
-	int p=f.Instr(path);
-	if (p<0) return;
-	f=f.Mid(p);
-	f.Replace(path,"");
-	if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
-		int myDeviceId=ppl6::atoi(f.GetMatch(1));
-		int myTrack=ppl6::atoi(f.GetMatch(2));
-		OpenTrack(myDeviceId,0,myTrack);
-		QApplication::processEvents();
-		ui.artist->setFocus();
-		QApplication::setActiveWindow(this);
-		QApplication::processEvents();
-		position=4;
-		FixFocus();
-		on_artist_FocusIn();
-	}
-	*/
-
-	//printf ("lala: %s, path: %s\n",(const char*)f, (const char*)path);
-
 }
 
+bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
+{
+	DataTitle *ti=wm->GetTitle(titleId);
+	if (!ti) return false;
+	item->titleId=titleId;
+	item->Artist=ti->Artist;
+	item->Title=ti->Title;
+	item->Version=wm->GetVersionText(ti->VersionId);
+	item->Genre=wm->GetGenreText(ti->GenreId);
+	item->Label=wm->GetLabelText(ti->LabelId);
+	item->Album=ti->Album;
+	item->musicKey=ti->Key;
+	item->bpm=ti->BPM;
+	item->rating=ti->Rating;
+	item->length=ti->Length;
+	item->startPositionSec=0;
+	item->endPositionSec=ti->Length;
+	for (int z=0;z<5;z++) {
+		item->cutStartPosition[z]=0;
+		item->cutEndPosition[z]=0;
+	}
+	return true;
+}
+
+void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
+{
+	ppl6::CString Row=xml;
+	if (Row.PregMatch("/^\\<artist\\>(.*?)\\<\\/artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<title\\>(.*?)\\<\\/title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<version\\>(.*?)\\<\\/version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<genre\\>(.*?)\\<\\/genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<label\\>(.*?)\\<\\/label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<album\\>(.*?)\\<\\/album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<file\\>(.*?)\\<\\/file\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->length=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
+
+	item->startPositionSec=0;
+	item->endPositionSec=item->length;
+	for (int z=0;z<5;z++) {
+		item->cutStartPosition[z]=0;
+		item->cutEndPosition[z]=0;
+	}
+}
+
+void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
+{
+	item->File=file;
+	TrackInfo info;
+
+	if (!getTrackInfoFromFile(info,file)) return;
+	//printf ("Playlist::loadTrackFromFile: %s\n",(const char*)file);
+	item->Artist=info.Ti.Artist;
+	item->Title=info.Ti.Title;
+	item->Album=info.Ti.Album;
+	item->Version=info.Version;
+	item->Genre=info.Genre;
+	item->Label=info.Label;
+	item->length=info.Ti.Length;
+	item->endPositionSec=item->length;
+	item->bpm=info.Ti.BPM;
+	item->rating=info.Ti.Rating;
+	item->musicKey=info.Ti.Key;
+}
 
 void Playlist::Resize()
 {

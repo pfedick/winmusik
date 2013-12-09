@@ -622,6 +622,7 @@ class CWmClient
 		void SetLatestPurchaseDate(QDate Date);
 		int LoadDevice(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice *data);
 		CTrackList *GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page);
+		DataTrack *GetTrack(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track);
 		DataTitle *GetTitle(ppluint32 TitleId);
 		DataVersion *GetVersion(ppluint32 Id);
 		DataGenre *GetGenre(ppluint32 Id);
