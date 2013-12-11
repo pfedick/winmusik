@@ -262,6 +262,7 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
  * Configuration Class                                 *
  *******************************************************/
 
+#define WM_NUM_LASTPLAYLISTS	5
 class Config
 {
 	private:
@@ -288,6 +289,8 @@ class Config
 		ppl6::CString	Logfile;
 		ppl6::CString	DefaultPrintPath;
 		ppl6::CString	CoverPath;
+		ppl6::CString	LastPlaylistPath;
+		ppl6::CString	LastPlaylists[WM_NUM_LASTPLAYLISTS];
 
 		ppl6::CString	DevicePath[MAX_DEVICE_TYPES];	// Muss erweitert werden, wenn neue Device-Typen hinzukommen!
 
@@ -572,8 +575,8 @@ class CWmClient
 		~CWmClient();
 		int Init(int argc, char **argv, QApplication *app);
 
-		int RaiseError();
-		int RaiseError(QWidget *object, QString msg);
+		static int RaiseError();
+		static int RaiseError(QWidget *object, QString msg);
 
 		int Start();
 		int InitStorage();

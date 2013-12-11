@@ -30,23 +30,11 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QMouseEvent>
+#include <QFileDialog>
+
+#include "playlisttracks.h"
 #include "playlist.h"
 #include <stdio.h>
-
-PlaylistItem::PlaylistItem()
-{
-	titleId=0;
-	startPositionSec=0;
-	endPositionSec=0;
-	musicKey=0;
-	bpm=0;
-	rating=0;
-	length=0;
-	for (int z=0;z<5;z++) {
-		cutStartPosition[z]=0;
-		cutEndPosition[z]=0;
-	}
-}
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
@@ -67,6 +55,10 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	menu->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
 	menu->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
 	menu->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	menu->addSeparator();
+
+	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"),tr("&recent Playlists"));
+	updateRecentPlaylistsMenu();
 
 	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&View"));
 	menu->addAction(QIcon(":/icons/resources/devices.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
@@ -74,9 +66,9 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 
 	playlistView=playlistViewNormal;
 	recreatePlaylist();
+	changed=false;
 
 	restoreGeometry(wm->GetGeometry("playlist"));
-
 }
 
 
@@ -87,6 +79,16 @@ Playlist::~Playlist()
 	}
 }
 
+void Playlist::updateRecentPlaylistsMenu()
+{
+	menuRecentPlaylists->clear();
+	if (wm->conf.LastPlaylists[0].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[0],this,SLOT(on_menuOpenRecent0_triggered()));
+	if (wm->conf.LastPlaylists[1].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[1],this,SLOT(on_menuOpenRecent1_triggered()));
+	if (wm->conf.LastPlaylists[2].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[2],this,SLOT(on_menuOpenRecent2_triggered()));
+	if (wm->conf.LastPlaylists[3].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[3],this,SLOT(on_menuOpenRecent3_triggered()));
+	if (wm->conf.LastPlaylists[4].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[4],this,SLOT(on_menuOpenRecent4_triggered()));
+
+}
 
 void Playlist::closeEvent(QCloseEvent *event)
 {
@@ -113,12 +115,14 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 		} else if (type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
 			return true;
+			/*
 		} else if (type==QEvent::DragMove) {
-			QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-			QTreeWidgetItem *item=ui.tracks->itemAt(p);
-			printf ("Move: %i:%i\n",p.x(),p.y());
+			//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
+			//QTreeWidgetItem *item=ui.tracks->itemAt(p);
+			//printf ("Move: %i:%i\n",p.x(),p.y());
 			//(static_cast<QDragMoveEvent *>(event))->accept();
 			return false;
+			*/
 		}
 	}
 	return false;
@@ -196,43 +200,19 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 	return true;
 }
 
-
-void Playlist::unselectItems()
-{
-	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	for (int i=0;i<selected.size();i++) selected.at(i)->setSelected(false);
-}
-
-void Playlist::deleteSelectedItems()
-{
-	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	for (int i=0;i<selected.size();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(selected.at(i)));
-		delete item;
-	}
-}
-
-void Playlist::deleteItems(QList<QTreeWidgetItem *>items)
-{
-	for (int i=0;i<items.size();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(items.at(i)));
-		delete item;
-	}
-}
-
 void Playlist::handleDropEvent(QDropEvent *event)
 {
 	//printf ("Drop Event 1\n");
 
 	event->accept();
-	if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
+	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
 	//if (!mime->hasUrls()) return;
-	printf ("Drop Event 2\n");
+	//printf ("Drop Event 2\n");
 
 	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	unselectItems();
+	ui.tracks->unselectItems();
 	QApplication::processEvents();
 
 	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
@@ -256,8 +236,9 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 			else ui.tracks->addTopLevelItem(item);
 			item->setSelected(true);
+			changed=true;
 		}
-		if (event->source()==this) deleteItems(selected);
+		if (event->source()==this) ui.tracks->deleteItems(selected);
 		return;
 	}
 
@@ -289,6 +270,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 		}
 		if (item->titleId==0) loadTrackFromFile(item,file);
 		renderTrack(item);
+		changed=true;
 		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 		else ui.tracks->addTopLevelItem(item);
 		item->setSelected(true);
@@ -510,7 +492,12 @@ void Playlist::ReloadTranslation()
 
 void Playlist::on_menuNew_triggered()
 {
-
+	PlaylistFileName.Clear();
+	ui.tracks->setName("");
+	ui.playlistName->setText("");
+	ui.tracks->clear();
+	updatePlaylist();
+	changed=false;
 }
 
 void Playlist::on_menuOpen_triggered()
@@ -518,14 +505,71 @@ void Playlist::on_menuOpen_triggered()
 
 }
 
-void Playlist::on_menuSave_triggered()
+void Playlist::on_menuOpenRecent0_triggered()
 {
 
 }
 
-void Playlist::on_menuSaveAs_triggered()
+void Playlist::on_menuOpenRecent1_triggered()
 {
 
+}
+
+void Playlist::on_menuOpenRecent2_triggered()
+{
+
+}
+
+void Playlist::on_menuOpenRecent3_triggered()
+{
+
+}
+
+void Playlist::on_menuOpenRecent4_triggered()
+{
+
+}
+
+
+void Playlist::on_menuSave_triggered()
+{
+	if (PlaylistFileName.IsEmpty()) {
+		on_menuSaveAs_triggered();
+		return;
+	}
+	ui.tracks->setName(ui.playlistName->text());
+	ui.tracks->save(PlaylistFileName);
+	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
+	updateLastPlaylist();
+	updateRecentPlaylistsMenu();
+	wm->conf.Save();
+	changed=false;
+}
+
+void Playlist::on_menuSaveAs_triggered()
+{
+	ppl6::CString Filename=PlaylistFileName;
+	if (Filename.IsEmpty()) Filename=wm->conf.LastPlaylistPath+"/playlist.wmp";
+
+	ppl6::CString Tmp=QFileDialog::getSaveFileName (this, tr("Save WinMusik Playlist"), Filename,
+			tr("Playlists (*.wmp)"));
+	if (Tmp.IsEmpty()) return;
+	PlaylistFileName=Tmp;
+	on_menuSave_triggered();
+}
+
+void Playlist::updateLastPlaylist()
+{
+	ppl6::CString Tmp[WM_NUM_LASTPLAYLISTS];
+	for (int i=0;i<WM_NUM_LASTPLAYLISTS;i++) Tmp[i]=wm->conf.LastPlaylists[i];
+	wm->conf.LastPlaylists[0]=PlaylistFileName;
+	int c=1;
+	for (int i=0;i<WM_NUM_LASTPLAYLISTS && c<WM_NUM_LASTPLAYLISTS;i++) {
+		if(Tmp[i]!=PlaylistFileName) {
+			wm->conf.LastPlaylists[c]=Tmp[i];
+			c++;
+		}
+	}
 }
 
 void Playlist::on_viewPlaylist_triggered()

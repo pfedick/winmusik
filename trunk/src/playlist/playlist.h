@@ -33,30 +33,9 @@
 #include <QTreeWidgetItem>
 #include "ui_playlist.h"
 #include "winmusik3.h"
+#include "playlisttracks.h"
 
 class PlaylistTracks;
-
-class PlaylistItem : public QTreeWidgetItem
-{
-	public:
-		PlaylistItem();
-		ppluint32	titleId;
-		int			startPositionSec;
-		int			endPositionSec;
-		int			cutStartPosition[5];
-		int			cutEndPosition[5];
-		ppl6::CString	Artist;
-		ppl6::CString	Title;
-		ppl6::CString	Version;
-		ppl6::CString	Genre;
-		ppl6::CString	Label;
-		ppl6::CString	Album;
-		ppl6::CString	File;
-		int				musicKey;
-		int				bpm;
-		int				rating;
-		int				length;
-};
 
 class Playlist : public QMainWindow
 {
@@ -73,6 +52,9 @@ private:
     Ui::playlistClass ui;
     CWmClient *wm;
     PlaylistItem *currentTreeItem;
+    QMenu	*menuRecentPlaylists;
+    ppl6::CString	PlaylistFileName;
+    bool changed;
 
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
@@ -80,6 +62,7 @@ private:
 
     void recreatePlaylist();
     void updatePlaylist();
+    void updateRecentPlaylistsMenu();
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml);
@@ -92,9 +75,7 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
     void handleDropEvent(QDropEvent *event);
-    void unselectItems();
-    void deleteSelectedItems();
-    void deleteItems(QList<QTreeWidgetItem *>items);
+    void updateLastPlaylist();
 
     void closeEvent(QCloseEvent *event);
 
@@ -132,6 +113,12 @@ public slots:
 	void on_menuOpen_triggered();
 	void on_menuSave_triggered();
 	void on_menuSaveAs_triggered();
+
+	void on_menuOpenRecent0_triggered();
+	void on_menuOpenRecent1_triggered();
+	void on_menuOpenRecent2_triggered();
+	void on_menuOpenRecent3_triggered();
+	void on_menuOpenRecent4_triggered();
 
 	void on_viewPlaylist_triggered();
 	void on_viewDJ_triggered();

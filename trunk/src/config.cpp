@@ -122,6 +122,7 @@ int Config::Save()
 	c.Add("client","suggesttitle",bAutomaticTitleSuggestion);
 	c.Add("client","automaticsearch",bAutomaticEditSearch);
 	c.Add("client","coverpath",(const char*)CoverPath);
+	c.Add("client","LastPlaylistPath",(const char*)LastPlaylistPath);
 
 	c.Add("printer","printername",(const char*)PrinterName);
 	c.Add("printer","printerfont",(const char*)PrinterFont);
@@ -187,6 +188,11 @@ int Config::Save()
 	c.Add("server","sslkeyfile",(const char*)serverSSLKeyfile);
 	c.Add("server","sslpassword",(const char*)serverSSLPassword);
 
+	// Playlists
+	for (int i=0;i<WM_NUM_LASTPLAYLISTS;i++) {
+		c.Add("playlists",ppl6::ToString("%i",i+1),(const char*)LastPlaylists[i]);
+	}
+
 
 	if (!c.Save(ConfigFile)) return 0;
 	return 1;
@@ -209,6 +215,7 @@ int Config::Load()
 
 	Tmp=QDir::homePath();
 	LastCoverPath=c.Get("client","LastCoverPath",Tmp);
+	LastPlaylistPath=c.Get("client","LastPlaylistPath",Tmp);
 
 	bShowSplashScreen=c.GetBool("client","showsplash",true);
 	bCheckForUpdatesOnStartup=c.GetBool("client","checkupdatestartup",true);
@@ -278,5 +285,10 @@ int Config::Load()
 	serverSSLKeyfile=c.Get("server","sslkeyfile","");
 	serverSSLPassword=c.Get("server","sslpassword","");
 
+	// Playlists
+	for (int i=0;i<WM_NUM_LASTPLAYLISTS;i++) {
+		Key.Setf("%i",i+1);
+		LastPlaylists[i]=c.Get("playlists",Key,"");
+	}
 	return 1;
 }
