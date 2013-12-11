@@ -17,7 +17,8 @@
 TEMPLATE = app
 TARGET = WinMusik
 QT += core \
-    gui
+    gui \
+    xml
 CONFIG += debug_and_release
 CONFIG(debug, debug|release) { 
     win32:TARGET = WinMusik
