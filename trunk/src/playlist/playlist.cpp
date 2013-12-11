@@ -502,7 +502,17 @@ void Playlist::on_menuNew_triggered()
 
 void Playlist::on_menuOpen_triggered()
 {
-
+	ppl6::CString Tmp=QFileDialog::getOpenFileName (this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
+				tr("Playlists (*.wmp)"));
+	if (Tmp.IsEmpty()) return;
+	if (ui.tracks->load(Tmp)) {
+		PlaylistFileName=Tmp;
+		updateLastPlaylist();
+		updateRecentPlaylistsMenu();
+		ui.playlistName->setText(ui.tracks->getName());
+		updatePlaylist();
+		changed=false;
+	}
 }
 
 void Playlist::on_menuOpenRecent0_triggered()
