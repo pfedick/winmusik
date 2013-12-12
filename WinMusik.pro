@@ -61,6 +61,8 @@ HEADERS += widgets/fkeys.h \
     include/menue.h \
     include/regexpcapture.h \
     src/playlist/playlist.h \
+    src/playlist/playlisttracks.h \
+    src/playlist/playlistedit.h \
     include/devicelist.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
@@ -115,6 +117,7 @@ SOURCES += widgets/fkeys.cpp \
     src/menue.cpp \
     src/main.cpp \
     src/playlist/playlist.cpp \
+    src/playlist/playlistedit.cpp \
     src/playlist/playlisttracks.cpp \
     src/devicelist.cpp \
     src/wmtoolbutton.cpp \
@@ -146,6 +149,7 @@ FORMS += widgets/fkeys.ui \
     forms/search.ui \
     forms/menue.ui \
     src/playlist/playlist.ui \
+    src/playlist/playlistedit.ui \
     forms/devicelist.ui \
     forms/asynchronousMessage.ui
 RESOURCES += resources.qrc

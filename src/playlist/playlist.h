@@ -123,6 +123,8 @@ public slots:
 	void on_viewPlaylist_triggered();
 	void on_viewDJ_triggered();
 
+	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
+
 };
 
 

@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ShortcutDialogClass</class>
- <widget class="QDialog" name="ShortcutDialogClass" >
-  <property name="geometry" >
+ <widget class="QDialog" name="ShortcutDialogClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,60 +10,60 @@
     <height>326</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>WinMusik: Edit shortcuts</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../resources.qrc" >
+  <property name="windowIcon">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/devices48/resources/tr48x48-0013.png</normaloff>:/devices48/resources/tr48x48-0013.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTreeWidget" name="treeWidget" >
-     <property name="contextMenuPolicy" >
+    <widget class="QTreeWidget" name="treeWidget">
+     <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
-     <property name="alternatingRowColors" >
+     <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
-     <property name="rootIsDecorated" >
+     <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
-     <property name="uniformRowHeights" >
+     <property name="uniformRowHeights">
       <bool>true</bool>
      </property>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Shortcut</string>
       </property>
      </column>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Artist</string>
       </property>
      </column>
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
         <string>Shortcut:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="shortcutEdit" />
+        <widget class="QLineEdit" name="shortcutEdit"/>
        </item>
        <item>
-        <spacer name="horizontalSpacer" >
-         <property name="orientation" >
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" stdset="0" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>40</width>
            <height>20</height>
@@ -72,34 +73,34 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
         <string>Artist:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="QLineEdit" name="artistEdit" />
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="artistEdit"/>
      </item>
-     <item row="1" column="2" >
-      <widget class="QPushButton" name="saveButton" >
-       <property name="text" >
+     <item row="1" column="2">
+      <widget class="QPushButton" name="saveButton">
+       <property name="text">
         <string>save</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../resources.qrc" >
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/filesave.png</normaloff>:/icons/resources/filesave.png</iconset>
        </property>
       </widget>
      </item>
-     <item row="0" column="2" >
-      <widget class="QPushButton" name="cancelButton" >
-       <property name="text" >
+     <item row="0" column="2">
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
         <string>cancel</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../resources.qrc" >
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
          <normaloff>:/icons/resources/cancel.png</normaloff>:/icons/resources/cancel.png</iconset>
        </property>
       </widget>
@@ -116,7 +117,7 @@
   <tabstop>treeWidget</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources.qrc" />
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
