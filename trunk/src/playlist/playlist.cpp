@@ -34,6 +34,7 @@
 
 #include "playlisttracks.h"
 #include "playlist.h"
+#include "playlistedit.h"
 #include <stdio.h>
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
@@ -598,4 +599,10 @@ void Playlist::on_viewDJ_triggered()
 	}
 }
 
+void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
+{
+	PlaylistEdit edit(this,wm);
+	edit.filloutFields((PlaylistItem*)item);
+	int ret=edit.exec();
 
+}

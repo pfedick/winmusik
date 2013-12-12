@@ -118,19 +118,19 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	QDomNode cuts=e.namedItem("cuts");
 	int c=0;
 	if (cuts.isNull()==false) {
-		printf ("   Parsing cuts...\n");
+		//printf ("   Parsing cuts...\n");
 		QDomElement e=cuts.firstChildElement("cut");
 		while (!e.isNull()) {
-			printf ("      Parsing cut...\n");
+			//printf ("      Parsing cut...\n");
 			node =e.namedItem("start");
 			if (node.isNull()==false && node.isElement()==true) {
 				cutStartPosition[c]=node.toElement().text().toInt();
-				printf ("       start found\n");
+				//printf ("       start found\n");
 			}
 			node =e.namedItem("end");
 			if (node.isNull()==false && node.isElement()==true) {
 				cutEndPosition[c]=node.toElement().text().toInt();
-				printf ("       end found\n");
+				//printf ("       end found\n");
 			}
 			length-=(cutEndPosition[c]-cutStartPosition[c]);
 			c++;
@@ -307,10 +307,10 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	}
 	QDomNode tracks=root.namedItem("tracks");
 	if (tracks.isNull()==false) {
-		printf ("Parsing tracks...\n");
+		//printf ("Parsing tracks...\n");
 		QDomElement e=tracks.firstChildElement("item");
 		while (!e.isNull()) {
-			printf ("Parsing item...\n");
+			//printf ("Parsing item...\n");
 			PlaylistItem *item=new PlaylistItem;
 			item->importFromXML(e);
 			addTopLevelItem(item);
