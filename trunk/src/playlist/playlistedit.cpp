@@ -101,6 +101,8 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.cutEnd2->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[2]/60),item->cutEndPosition[2]%60));
 	ui.cutEnd3->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[3]/60),item->cutEndPosition[3]%60));
 	ui.cutEnd4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[4]/60),item->cutEndPosition[4]%60));
+	ui.trackLength->setText(ppl6::ToString("%0d:%02d",(int)(item->trackLength/60),item->trackLength%60));
+
 	updateTotalTime();
 }
 
@@ -146,5 +148,5 @@ void PlaylistEdit::updateTotalTime()
 	length-=(getSecondsFromLine(ui.cutEnd2)-getSecondsFromLine(ui.cutStart2));
 	length-=(getSecondsFromLine(ui.cutEnd3)-getSecondsFromLine(ui.cutStart3));
 	length-=(getSecondsFromLine(ui.cutEnd4)-getSecondsFromLine(ui.cutStart4));
-	ui.totalTime->setText(ppl6::ToString("%0d:%02d",(int)(length/60),length%60));
+	ui.mixLength->setText(ppl6::ToString("%0d:%02d",(int)(length/60),length%60));
 }
