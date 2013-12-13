@@ -110,35 +110,66 @@ void Playlist::createToolbar()
 
 void Playlist::createStatusBar()
 {
-	QStatusBar *status=this->statusBar();
-	QLabel *label=new QLabel(tr("total track length:"));
-	status->addPermanentWidget(label);
+	QHBoxLayout *layout=new QHBoxLayout;
+	layout->setContentsMargins(2,2,2,2);
+
+	QLabel *label;
+	QFrame *line;
+
+	// Total Tracks
+	label=new QLabel(tr("total tracks:"));
+	layout->addWidget(label);
+
+	totalTracks=new QLabel();
+	totalTracks->setFrameShadow(QFrame::Sunken);
+	totalTracks->setFrameShape(QFrame::StyledPanel);
+	layout->addWidget(totalTracks);
+
+	line = new QFrame();
+	line->setGeometry(QRect(320, 150, 118, 3));
+	line->setFrameShape(QFrame::VLine);
+	line->setFrameShadow(QFrame::Sunken);
+	layout->addWidget(line);
+
+
+	// Total Track length
+	label=new QLabel(tr("total track length:"));
+	layout->addWidget(label);
 
 	totalTrackLength=new QLabel();
 	totalTrackLength->setFrameShadow(QFrame::Sunken);
 	totalTrackLength->setFrameShape(QFrame::StyledPanel);
-
-	status->addPermanentWidget(totalTrackLength);
+	layout->addWidget(totalTrackLength);
 
 	QLabel *min=new QLabel(tr("(hh:mm:ss)"));
-	status->addPermanentWidget(min);
+	layout->addWidget(min);
 
-	QFrame *line = new QFrame();
+	line = new QFrame();
 	line->setGeometry(QRect(320, 150, 118, 3));
 	line->setFrameShape(QFrame::VLine);
 	line->setFrameShadow(QFrame::Sunken);
-	status->addPermanentWidget(line);
+	layout->addWidget(line);
 
+
+	// Total Mix length
 	label=new QLabel(tr("total mix length:"));
-	status->addPermanentWidget(label);
+	layout->addWidget(label);
 
 	totalMixLength=new QLabel();
 	totalMixLength->setFrameShadow(QFrame::Sunken);
 	totalMixLength->setFrameShape(QFrame::StyledPanel);
 
-	status->addPermanentWidget(totalMixLength);
+	layout->addWidget(totalMixLength);
 	min=new QLabel(tr("(hh:mm:ss)"));
-	status->addPermanentWidget(min);
+	layout->addWidget(min);
+
+	QFrame *frame=new QFrame;
+	//frame->setFrameShadow(QFrame::Sunken);
+	//frame->setFrameShape(QFrame::StyledPanel);
+	frame->setContentsMargins(0,0,0,0);
+	frame->setLayout(layout);
+
+	this->statusBar()->addPermanentWidget(frame);
 
 }
 
@@ -536,6 +567,7 @@ void Playlist::updateLengthStatus()
 	}
 	setLength(totalTrackLength,trackLength);
 	setLength(totalMixLength,mixLength);
+	totalTracks->setText(ppl6::ToString("%d",ui.tracks->topLevelItemCount()));
 }
 
 void Playlist::renderTrack(PlaylistItem *item)

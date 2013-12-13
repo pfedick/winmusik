@@ -55,6 +55,7 @@ private:
     QMenu	*menuRecentPlaylists;
     QLabel *totalTrackLength;
     QLabel *totalMixLength;
+    QLabel *totalTracks;
 
     ppl6::CString	PlaylistFileName;
     bool changed;
