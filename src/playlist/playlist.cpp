@@ -257,7 +257,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
 				int myDeviceId=ppl6::atoi(f.GetMatch(1));
 				int myTrack=ppl6::atoi(f.GetMatch(2));
-				printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
+				//printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
 				const DataTrack *tr=wm->GetTrack(7,myDeviceId,1,myTrack);
 				if (tr) {
 					if (!loadTrackFromDatabase(item,tr->TitleId)) {
@@ -292,7 +292,8 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->musicKey=ti->Key;
 	item->bpm=ti->BPM;
 	item->rating=ti->Rating;
-	item->length=ti->Length;
+	item->trackLength=ti->Length;
+	item->mixLength=ti->Length;
 	item->startPositionSec=0;
 	item->endPositionSec=ti->Length;
 	for (int z=0;z<5;z++) {
@@ -314,11 +315,12 @@ void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 	if (Row.PregMatch("/^\\<file\\>(.*?)\\<\\/file\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
 	if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 	if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->length=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->trackLength=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
 
+	item->mixLength=item->trackLength;
 	item->startPositionSec=0;
-	item->endPositionSec=item->length;
+	item->endPositionSec=item->trackLength;
 	for (int z=0;z<5;z++) {
 		item->cutStartPosition[z]=0;
 		item->cutEndPosition[z]=0;
@@ -338,8 +340,9 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->Version=info.Version;
 	item->Genre=info.Genre;
 	item->Label=info.Label;
-	item->length=info.Ti.Length;
-	item->endPositionSec=item->length;
+	item->trackLength=info.Ti.Length;
+	item->mixLength=item->trackLength;
+	item->endPositionSec=item->trackLength;
 	item->bpm=info.Ti.BPM;
 	item->rating=info.Ti.Rating;
 	item->musicKey=info.Ti.Key;
@@ -466,9 +469,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	item->setText(columnStart,Tmp);
 	Tmp.Setf("%02i:%02i",(int)(item->endPositionSec/60),(int)item->endPositionSec%60);
 	item->setText(columnEnd,Tmp);
-
-	int length=item->endPositionSec-item->startPositionSec;
-	Tmp.Setf("%02i:%02i",(int)(length/60),(int)length%60);
+	Tmp.Setf("%02i:%02i",(int)(item->mixLength/60),(int)item->mixLength%60);
 	item->setText(columnLength,Tmp);
 
 }

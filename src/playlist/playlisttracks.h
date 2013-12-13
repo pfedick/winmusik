@@ -29,10 +29,12 @@ class PlaylistItem : public QTreeWidgetItem
 		ppl6::CString	Label;
 		ppl6::CString	Album;
 		ppl6::CString	File;
+		ppl6::CString	Remarks;
 		int				musicKey;
 		int				bpm;
 		int				rating;
-		int				length;
+		int				trackLength;
+		int				mixLength;
 
 		PlaylistItem();
 		ppl6::CString exportAsXML(int indention=3) const;
