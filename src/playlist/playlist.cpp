@@ -54,8 +54,6 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	createToolbar();
 	createStatusBar();
 
-
-
 	playlistView=playlistViewNormal;
 
 	recreatePlaylist();
@@ -649,6 +647,18 @@ void Playlist::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
+void Playlist::loadPlaylist(ppl6::CString &Filename)
+{
+	if (ui.tracks->load(Filename)) {
+		PlaylistFileName=Filename;
+		updateLastPlaylist();
+		updateRecentPlaylistsMenu();
+		ui.playlistName->setText(ui.tracks->getName());
+		updatePlaylist();
+		changed=false;
+	}
+}
+
 void Playlist::on_menuNew_triggered()
 {
 	PlaylistFileName.Clear();
@@ -664,39 +674,32 @@ void Playlist::on_menuOpen_triggered()
 	ppl6::CString Tmp=QFileDialog::getOpenFileName (this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
 				tr("Playlists (*.wmp)"));
 	if (Tmp.IsEmpty()) return;
-	if (ui.tracks->load(Tmp)) {
-		PlaylistFileName=Tmp;
-		updateLastPlaylist();
-		updateRecentPlaylistsMenu();
-		ui.playlistName->setText(ui.tracks->getName());
-		updatePlaylist();
-		changed=false;
-	}
+	loadPlaylist(Tmp);
 }
 
 void Playlist::on_menuOpenRecent0_triggered()
 {
-
+	loadPlaylist(wm->conf.LastPlaylists[0]);
 }
 
 void Playlist::on_menuOpenRecent1_triggered()
 {
-
+	loadPlaylist(wm->conf.LastPlaylists[1]);
 }
 
 void Playlist::on_menuOpenRecent2_triggered()
 {
-
+	loadPlaylist(wm->conf.LastPlaylists[2]);
 }
 
 void Playlist::on_menuOpenRecent3_triggered()
 {
-
+	loadPlaylist(wm->conf.LastPlaylists[3]);
 }
 
 void Playlist::on_menuOpenRecent4_triggered()
 {
-
+	loadPlaylist(wm->conf.LastPlaylists[4]);
 }
 
 
