@@ -72,6 +72,7 @@ Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf";
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\4.8.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\4.8.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\4.8.4\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\4.8.4\plugins\imageformats\qjpeg4.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "C:\Qt\4.8.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
