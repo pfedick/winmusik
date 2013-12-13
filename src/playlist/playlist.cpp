@@ -31,6 +31,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QFileDialog>
+#include <QToolBar>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -62,11 +63,13 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	updateRecentPlaylistsMenu();
 
 	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&View"));
-	menu->addAction(QIcon(":/icons/resources/devices.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
-	menu->addAction(QIcon(":/icons/resources/devices.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
+	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
+	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
 
 	playlistView=playlistViewNormal;
 	recreatePlaylist();
+	createToolbar();
+
 	changed=false;
 
 	restoreGeometry(wm->GetGeometry("playlist"));
@@ -78,6 +81,25 @@ Playlist::~Playlist()
 	if (wm) {
 		wm->PlaylistClosed(this);
 	}
+}
+
+
+void Playlist::createToolbar()
+{
+	QToolBar *tb=new QToolBar();
+	tb->setFloatable(false);
+	tb->setMovable(false);
+
+	tb->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
+	tb->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
+	tb->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
+	tb->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	tb->addSeparator();
+	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
+	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
+
+	this->addToolBar(tb);
+
 }
 
 void Playlist::updateRecentPlaylistsMenu()

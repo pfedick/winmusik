@@ -63,6 +63,7 @@ private:
     void recreatePlaylist();
     void updatePlaylist();
     void updateRecentPlaylistsMenu();
+    void createToolbar();
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml);
