@@ -446,8 +446,8 @@ void Playlist::Resize()
 		w-=64;
 		ui.tracks->setColumnWidth(columnEnd,60);
 		w-=64;
-		ui.tracks->setColumnWidth(columnCuts,30);
-		w-=34;
+		ui.tracks->setColumnWidth(columnCuts,60);
+		w-=64;
 	}
 	ui.tracks->setColumnWidth(columnSource,85);
 	w-=89;
@@ -623,6 +623,12 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	Tmp.Setf("%02i:%02i",(int)(item->mixLength/60),(int)item->mixLength%60);
 	item->setText(columnLength,Tmp);
 
+	int cuts=0;
+	for (int i=0;i<5;i++) {
+		cuts+=(item->cutEndPosition[i]-item->cutStartPosition[i]);
+	}
+	Tmp.Setf("%02i:%02i",(int)(cuts/60),(int)cuts%60);
+	item->setText(columnCuts,Tmp);
 }
 
 void Playlist::showEvent(QShowEvent * event)
