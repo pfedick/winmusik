@@ -594,8 +594,11 @@
          </spacer>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <item row="1" column="0">
            <widget class="QLabel" name="label_14">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
@@ -604,12 +607,56 @@
              <enum>QFrame::Sunken</enum>
             </property>
             <property name="text">
-             <string>Total Time:</string>
+             <string>Mix length:</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="totalTime">
+          <item row="1" column="1">
+           <widget class="QLabel" name="mixLength">
+            <property name="minimumSize">
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>80</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="text">
+             <string>00:00</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_23">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="text">
+             <string>Track length:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="trackLength">
             <property name="minimumSize">
              <size>
               <width>80</width>
