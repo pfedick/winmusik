@@ -30,15 +30,25 @@ class PlaylistItem : public QTreeWidgetItem
 		ppl6::CString	Album;
 		ppl6::CString	File;
 		ppl6::CString	Remarks;
+		ppl6::CBinary	CoverPreview;
 		int				musicKey;
 		int				bpm;
 		int				rating;
 		int				trackLength;
 		int				mixLength;
 
+		ppluint32		DeviceId;
+		ppluint16		DeviceTrack;
+		ppluint8		DeviceType;
+		ppluint8		DevicePage;
+
+
+
 		PlaylistItem();
 		ppl6::CString exportAsXML(int indention=3) const;
 		void importFromXML(QDomElement &e);
+		void loadCoverPreview();
+		void updateFromDatabase();
 };
 
 
