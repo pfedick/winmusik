@@ -53,7 +53,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
 	ret+=Indent+"   <musicKey>"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey))+"</musicKey>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
-	ret+=Indent+"   <rating>"+ppl6::ToString("%u",musicKey)+"</rating>\n";
+	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";
 	ret+=Indent+"   <trackLength>"+ppl6::ToString("%u",trackLength)+"</trackLength>\n";
 	ret+=Indent+"   <mixLength>"+ppl6::ToString("%u",mixLength)+"</mixLength>\n";
 	ret+=Indent+"</item>\n";
@@ -149,6 +149,43 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			e=e.nextSiblingElement("cut");
 		}
 	}
+	loadCoverPreview();
+}
+
+void PlaylistItem::loadCoverPreview()
+{
+	// Cover laden
+	if (titleId>0) {
+		DataTitle *ti=wm_main->GetTitle(titleId);
+		if (ti) CoverPreview=ti->CoverPreview;
+	}
+	if (CoverPreview.Size()==0 && File.Size()>0) {
+		TrackInfo info;
+		if (getTrackInfoFromFile(info,File)) {
+			CoverPreview=info.Ti.CoverPreview;
+		}
+	}
+}
+
+void PlaylistItem::updateFromDatabase()
+{
+	if (titleId==0) return;
+	DataTitle *ti=wm_main->GetTitle(titleId);
+	if (!ti) return;
+	trackLength=ti->Length;
+	Artist=ti->Artist;
+	Title=ti->Title;
+	Album=ti->Album;
+	musicKey=ti->Key;
+	bpm=ti->BPM;
+	rating=ti->Rating;
+	Version=wm_main->GetVersionText(ti->VersionId);
+	Genre=wm_main->GetGenreText(ti->GenreId);
+	Label=wm_main->GetLabelText(ti->LabelId);
+	DeviceId=ti->DeviceId;
+	DeviceTrack=ti->Track;
+	DeviceType=ti->DeviceType;
+	DevicePage=ti->Page;
 }
 
 

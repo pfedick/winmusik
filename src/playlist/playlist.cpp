@@ -282,6 +282,11 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 {
 	DataTitle *ti=wm->GetTitle(titleId);
 	if (!ti) return false;
+	item->DeviceId=ti->DeviceId;
+	item->DeviceTrack=ti->Track;
+	item->DeviceType=ti->DeviceType;
+	item->DevicePage=ti->Page;
+
 	item->titleId=titleId;
 	item->Artist=ti->Artist;
 	item->Title=ti->Title;
@@ -300,6 +305,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 		item->cutStartPosition[z]=0;
 		item->cutEndPosition[z]=0;
 	}
+	item->CoverPreview=ti->CoverPreview;
 	return true;
 }
 
@@ -325,6 +331,8 @@ void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 		item->cutStartPosition[z]=0;
 		item->cutEndPosition[z]=0;
 	}
+	item->updateFromDatabase();
+	item->loadCoverPreview();
 }
 
 void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
@@ -346,6 +354,7 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->bpm=info.Ti.BPM;
 	item->rating=info.Ti.Rating;
 	item->musicKey=info.Ti.Key;
+	item->CoverPreview=info.Ti.CoverPreview;
 }
 
 void Playlist::Resize()
@@ -441,6 +450,60 @@ void Playlist::updatePlaylist()
 
 void Playlist::renderTrack(PlaylistItem *item)
 {
+	for (int i=0;i<item->columnCount();i++) {
+		item->setText(i,"");
+		item->setIcon(i,QIcon());
+	}
+	if (item->CoverPreview.Size()>0) {
+		QPixmap pix, icon;
+		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.Size());
+		icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+		item->setIcon(columnCover,icon.copy(0,0,64,16));
+	}
+	ppl6::CString Tmp;
+	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
+	item->setText(columnTitle,Tmp);
+	item->setText(columnGenre,item->Genre);
+
+	// Rating
+	switch (item->rating) {
+		case 0: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-0.png"));
+		item->setText(columnRating,"0");
+		break;
+		case 1: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-1.png"));
+		item->setText(columnRating,"1");
+		break;
+		case 2: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-2.png"));
+		item->setText(columnRating,"2");
+		break;
+		case 3: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-3.png"));
+		item->setText(columnRating,"3");
+		break;
+		case 4: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-4.png"));
+		item->setText(columnRating,"4");
+		break;
+		case 5: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-5.png"));
+		item->setText(columnRating,"5");
+		break;
+		case 6: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-6.png"));
+		item->setText(columnRating,"6");
+		break;
+	}
+
+	// Tonträger
+	if (item->titleId) {
+		const char Seite[]="?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		Tmp.Setf("%u %c-%03u", item->DeviceId,Seite[(item->DevicePage<10?item->DevicePage:0)],item->DeviceTrack);
+		item->setText(columnSource,Tmp);
+		QIcon Icon;
+		Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",item->DeviceType);
+		Icon.addFile(Tmp);
+		item->setIcon(columnSource,Icon);
+	} else {
+		item->setText(columnSource,item->File);
+	}
+
+
 	if (playlistView==playlistViewNormal) {
 		renderTrackViewPlaylist(item);
 	} else if (playlistView==playlistViewDJ) {
@@ -451,17 +514,13 @@ void Playlist::renderTrack(PlaylistItem *item)
 void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
 {
 	ppl6::CString Tmp;
-	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
-	item->setText(columnTitle,Tmp);
-	item->setText(columnGenre,item->Genre);
+	Tmp.Setf("%02i:%02i",(int)(item->trackLength/60),(int)item->trackLength%60);
+	item->setText(columnLength,Tmp);
 }
 
 void Playlist::renderTrackViewDJ(PlaylistItem *item)
 {
 	ppl6::CString Tmp;
-	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
-	item->setText(columnTitle,Tmp);
-	item->setText(columnGenre,item->Genre);
 	Tmp.Setf("%i",item->bpm);
 	item->setText(columnBpm,Tmp);
 	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
