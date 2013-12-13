@@ -74,7 +74,7 @@ Playlist::~Playlist()
 void Playlist::createMenue()
 {
 	QMenu	*menu;
-	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&File"));
+	menu=menuBar()->addMenu(tr("&File"));
 
 	menu->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
 	menu->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
@@ -85,7 +85,7 @@ void Playlist::createMenue()
 	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"),tr("&recent Playlists"));
 	updateRecentPlaylistsMenu();
 
-	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&View"));
+	menu=menuBar()->addMenu(tr("&View"));
 	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
 
