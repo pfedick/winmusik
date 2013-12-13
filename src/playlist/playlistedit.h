@@ -42,6 +42,7 @@ public:
     ~PlaylistEdit();
     void ReloadTranslation();
     void filloutFields(PlaylistItem *item);
+    void storeFileds(PlaylistItem *item);
 
 private:
     Ui::playlistEditClass ui;

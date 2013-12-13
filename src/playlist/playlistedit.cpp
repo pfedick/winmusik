@@ -81,8 +81,12 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.genre->setText(item->Genre);
 	ui.labelName->setText(item->Label);
 	ui.album->setText(item->Album);
+	ui.remarks->setText(item->Remarks);
 	ui.bpm->setText(ppl6::ToString("%i",item->bpm));
 	ui.musicKey->setText(DataTitle::keyName(item->musicKey));
+
+	ui.rating->setCurrentIndex(item->rating);
+
 	ui.trackStart->setText(ppl6::ToString("%0d:%02d",(int)(item->startPositionSec/60),item->startPositionSec%60));
 	ui.trackEnd->setText(ppl6::ToString("%0d:%02d",(int)(item->endPositionSec/60),item->endPositionSec%60));
 
@@ -98,6 +102,32 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.cutEnd3->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[3]/60),item->cutEndPosition[3]%60));
 	ui.cutEnd4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[4]/60),item->cutEndPosition[4]%60));
 	updateTotalTime();
+}
+
+void PlaylistEdit::storeFileds(PlaylistItem *item)
+{
+	item->Artist=ui.artist->text().trimmed();
+	item->Title=ui.title->text().trimmed();
+	item->Version=ui.version->text().trimmed();
+	item->Genre=ui.genre->text().trimmed();
+	item->Label=ui.labelName->text().trimmed();
+	item->Album=ui.album->text().trimmed();
+	item->Remarks=ui.remarks->text().trimmed();
+	item->musicKey=DataTitle::keyId(ui.artist->text().trimmed());
+	item->bpm=ui.artist->text().trimmed().toInt();
+	item->rating=ui.rating->currentIndex();
+	item->startPositionSec=getSecondsFromLine(ui.trackStart);
+	item->endPositionSec=getSecondsFromLine(ui.trackEnd);
+	item->cutStartPosition[0]=getSecondsFromLine(ui.cutStart0);
+	item->cutStartPosition[1]=getSecondsFromLine(ui.cutStart1);
+	item->cutStartPosition[2]=getSecondsFromLine(ui.cutStart2);
+	item->cutStartPosition[3]=getSecondsFromLine(ui.cutStart3);
+	item->cutStartPosition[4]=getSecondsFromLine(ui.cutStart4);
+	item->cutEndPosition[0]=getSecondsFromLine(ui.cutEnd0);
+	item->cutEndPosition[1]=getSecondsFromLine(ui.cutEnd1);
+	item->cutEndPosition[2]=getSecondsFromLine(ui.cutEnd2);
+	item->cutEndPosition[3]=getSecondsFromLine(ui.cutEnd3);
+	item->cutEndPosition[4]=getSecondsFromLine(ui.cutEnd4);
 }
 
 int PlaylistEdit::getSecondsFromLine(QLineEdit *line)

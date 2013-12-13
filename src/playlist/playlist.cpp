@@ -603,6 +603,10 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 {
 	PlaylistEdit edit(this,wm);
 	edit.filloutFields((PlaylistItem*)item);
-	int ret=edit.exec();
+	if (edit.exec()==1) {
+		edit.storeFileds((PlaylistItem*)item);
+		changed=true;
+		renderTrack((PlaylistItem*)item);
+	}
 
 }
