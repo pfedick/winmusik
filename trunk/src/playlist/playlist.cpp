@@ -259,7 +259,6 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 	startPos.setX(0);
 	startPos.setY(0);
-
 	return true;
 }
 
@@ -370,6 +369,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 		item->cutEndPosition[z]=0;
 	}
 	item->CoverPreview=ti->CoverPreview;
+	item->File=wm->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
 	return true;
 }
 

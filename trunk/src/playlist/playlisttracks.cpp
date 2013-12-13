@@ -186,6 +186,7 @@ void PlaylistItem::updateFromDatabase()
 	DeviceTrack=ti->Track;
 	DeviceType=ti->DeviceType;
 	DevicePage=ti->Page;
+	File=wm_main->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
 }
 
 
