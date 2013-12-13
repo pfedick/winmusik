@@ -366,8 +366,8 @@ void Playlist::Resize()
 	w-=68;
 	ui.tracks->setColumnWidth(columnLength,60);
 	w-=64;
-	ui.tracks->setColumnWidth(columnRating,85);
-	w-=89;
+	ui.tracks->setColumnWidth(columnRating,50);
+	w-=53;
 
 
 	if (playlistView==playlistViewNormal) {
@@ -419,7 +419,7 @@ void Playlist::recreatePlaylist()
 		item->setText(2,tr("Artist - Title (Version)"));
 		item->setText(3,tr("Genre"));
 		item->setText(4,tr("Bpm"));
-		item->setText(5,tr("MusicKey"));
+		item->setText(5,tr("Key"));
 		item->setText(6,tr("Rating"));
 		item->setText(7,tr("Start"));
 		item->setText(8,tr("End"));
