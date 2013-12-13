@@ -21,7 +21,8 @@ PlaylistItem::PlaylistItem()
 	musicKey=0;
 	bpm=0;
 	rating=0;
-	length=0;
+	trackLength=0;
+	mixLength=0;
 	for (int z=0;z<5;z++) {
 		cutStartPosition[z]=0;
 		cutEndPosition[z]=0;
@@ -48,11 +49,13 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <Genre>"+ppl6::EscapeHTMLTags(Genre)+"</Genre>\n";
 	ret+=Indent+"   <Label>"+ppl6::EscapeHTMLTags(Label)+"</Label>\n";
 	ret+=Indent+"   <Album>"+ppl6::EscapeHTMLTags(Album)+"</Album>\n";
+	ret+=Indent+"   <Remarks>"+ppl6::EscapeHTMLTags(Remarks)+"</Remarks>\n";
 	ret+=Indent+"   <File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
 	ret+=Indent+"   <musicKey>"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey))+"</musicKey>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",musicKey)+"</rating>\n";
-	ret+=Indent+"   <length>"+ppl6::ToString("%u",length)+"</length>\n";
+	ret+=Indent+"   <trackLength>"+ppl6::ToString("%u",trackLength)+"</trackLength>\n";
+	ret+=Indent+"   <mixLength>"+ppl6::ToString("%u",mixLength)+"</mixLength>\n";
 	ret+=Indent+"</item>\n";
 	return ret;
 }
@@ -72,8 +75,10 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	if (node.isNull()==false && node.isElement()==true) {
 		endPositionSec=node.toElement().text().toInt();
 	}
-	length=endPositionSec;
-
+	node =e.namedItem("trackLength");
+	if (node.isNull()==false && node.isElement()==true) {
+		trackLength=node.toElement().text().toInt();
+	}
 	node =e.namedItem("Artist");
 	if (node.isNull()==false && node.isElement()==true) {
 		Artist=node.toElement().text();
@@ -98,6 +103,11 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	if (node.isNull()==false && node.isElement()==true) {
 		Album=node.toElement().text();
 	}
+	node =e.namedItem("Remarks");
+	if (node.isNull()==false && node.isElement()==true) {
+		Remarks=node.toElement().text();
+	}
+
 	node =e.namedItem("File");
 	if (node.isNull()==false && node.isElement()==true) {
 		File=node.toElement().text();
@@ -115,6 +125,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		rating=node.toElement().text().toInt();
 	}
 
+	mixLength=endPositionSec-startPositionSec;
 	QDomNode cuts=e.namedItem("cuts");
 	int c=0;
 	if (cuts.isNull()==false) {
@@ -132,7 +143,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 				cutEndPosition[c]=node.toElement().text().toInt();
 				//printf ("       end found\n");
 			}
-			length-=(cutEndPosition[c]-cutStartPosition[c]);
+			mixLength-=(cutEndPosition[c]-cutStartPosition[c]);
 			c++;
 			if (c>4) break;
 			e=e.nextSiblingElement("cut");
@@ -237,12 +248,15 @@ void PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	xml+="   <name>"+ppl6::EscapeHTMLTags(Name)+"</name>\n";
 	int count=topLevelItemCount();
 	xml+="   <totalTracks>"+ppl6::ToString("%u",count)+"</totalTracks>\n";
-	ppluint64 length=0;
+	ppluint64 totalTrackLength=0;
+	ppluint64 totalMixLength=0;
 	for (int i=0;i<count;i++) {
 		PlaylistItem *item=(PlaylistItem*)this->topLevelItem(i);
-		length+=item->length;
+		totalTrackLength+=item->trackLength;
+		totalMixLength+=item->mixLength;
 	}
-	xml+="   <totalLength>"+ppl6::ToString("%llu",length)+"</totalLength>\n";
+	xml+="   <totalTrackLength>"+ppl6::ToString("%llu",totalTrackLength)+"</totalTrackLength>\n";
+	xml+="   <totalMixLength>"+ppl6::ToString("%llu",totalMixLength)+"</totalMixLength>\n";
 	xml+="   <tracks>\n";
 	for (int i=0;i<count;i++) {
 		PlaylistItem *item=(PlaylistItem*)this->topLevelItem(i);
