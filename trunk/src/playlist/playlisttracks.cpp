@@ -364,6 +364,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 			//printf ("Parsing item...\n");
 			PlaylistItem *item=new PlaylistItem;
 			item->importFromXML(e);
+			item->updateFromDatabase();
 			addTopLevelItem(item);
 			e=e.nextSiblingElement("item");
 		}
