@@ -50,6 +50,31 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	//ui.tracks->setMouseTracking(true);
 	ui.tracks->installEventFilter(this);
 
+	createMenue();
+	createToolbar();
+	createStatusBar();
+
+
+
+	playlistView=playlistViewNormal;
+
+	recreatePlaylist();
+	changed=false;
+
+	restoreGeometry(wm->GetGeometry("playlist"));
+}
+
+
+Playlist::~Playlist()
+{
+	if (wm) {
+		wm->PlaylistClosed(this);
+	}
+}
+
+
+void Playlist::createMenue()
+{
 	QMenu	*menu;
 	menu=menuBar()->addMenu(QIcon(":/icons/resources/edit.png"),tr("&File"));
 
@@ -66,23 +91,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
 
-	playlistView=playlistViewNormal;
-	recreatePlaylist();
-	createToolbar();
-
-	changed=false;
-
-	restoreGeometry(wm->GetGeometry("playlist"));
 }
-
-
-Playlist::~Playlist()
-{
-	if (wm) {
-		wm->PlaylistClosed(this);
-	}
-}
-
 
 void Playlist::createToolbar()
 {
@@ -99,6 +108,39 @@ void Playlist::createToolbar()
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
 
 	this->addToolBar(tb);
+}
+
+void Playlist::createStatusBar()
+{
+	QStatusBar *status=this->statusBar();
+	QLabel *label=new QLabel(tr("total track length:"));
+	status->addPermanentWidget(label);
+
+	totalTrackLength=new QLabel();
+	totalTrackLength->setFrameShadow(QFrame::Sunken);
+	totalTrackLength->setFrameShape(QFrame::StyledPanel);
+
+	status->addPermanentWidget(totalTrackLength);
+
+	QLabel *min=new QLabel(tr("(hh:mm:ss)"));
+	status->addPermanentWidget(min);
+
+	QFrame *line = new QFrame();
+	line->setGeometry(QRect(320, 150, 118, 3));
+	line->setFrameShape(QFrame::VLine);
+	line->setFrameShadow(QFrame::Sunken);
+	status->addPermanentWidget(line);
+
+	label=new QLabel(tr("total mix length:"));
+	status->addPermanentWidget(label);
+
+	totalMixLength=new QLabel();
+	totalMixLength->setFrameShadow(QFrame::Sunken);
+	totalMixLength->setFrameShape(QFrame::StyledPanel);
+
+	status->addPermanentWidget(totalMixLength);
+	min=new QLabel(tr("(hh:mm:ss)"));
+	status->addPermanentWidget(min);
 
 }
 
@@ -261,6 +303,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			item->setSelected(true);
 			changed=true;
 		}
+		updateLengthStatus();
 		if (event->source()==this) ui.tracks->deleteItems(selected);
 		return;
 	}
@@ -298,6 +341,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 		else ui.tracks->addTopLevelItem(item);
 		item->setSelected(true);
 	}
+	updateLengthStatus();
 }
 
 bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
@@ -462,12 +506,38 @@ void Playlist::recreatePlaylist()
 	updatePlaylist();
 }
 
+void setLength(QLabel *label, int length)
+{
+	int hh=0;
+	int mm=(int)(length/60);
+	int ss=length%60;
+	if (mm>59) {
+		hh=(int)(mm/60);
+		mm=mm%60;
+	}
+	label->setText(ppl6::ToString("%0d:%02d:%02d",hh,mm,ss));
+}
+
 void Playlist::updatePlaylist()
 {
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		renderTrack(item);
 	}
+	updateLengthStatus();
+}
+
+void Playlist::updateLengthStatus()
+{
+	int trackLength=0;
+	int mixLength=0;
+	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		trackLength+=item->trackLength;
+		mixLength+=item->mixLength;
+	}
+	setLength(totalTrackLength,trackLength);
+	setLength(totalMixLength,mixLength);
 }
 
 void Playlist::renderTrack(PlaylistItem *item)
@@ -689,6 +759,7 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 		edit.storeFileds((PlaylistItem*)item);
 		changed=true;
 		renderTrack((PlaylistItem*)item);
+		updateLengthStatus();
 	}
 
 }

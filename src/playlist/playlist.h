@@ -53,6 +53,9 @@ private:
     CWmClient *wm;
     PlaylistItem *currentTreeItem;
     QMenu	*menuRecentPlaylists;
+    QLabel *totalTrackLength;
+    QLabel *totalMixLength;
+
     ppl6::CString	PlaylistFileName;
     bool changed;
 
@@ -63,12 +66,15 @@ private:
     void recreatePlaylist();
     void updatePlaylist();
     void updateRecentPlaylistsMenu();
+    void createMenue();
     void createToolbar();
+    void createStatusBar();
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml);
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
     void renderTrack(PlaylistItem *item);
+    void updateLengthStatus();
 
     void renderTrackViewPlaylist(PlaylistItem *item);
     void renderTrackViewDJ(PlaylistItem *item);
