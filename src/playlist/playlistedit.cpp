@@ -128,6 +128,8 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->cutEndPosition[2]=getSecondsFromLine(ui.cutEnd2);
 	item->cutEndPosition[3]=getSecondsFromLine(ui.cutEnd3);
 	item->cutEndPosition[4]=getSecondsFromLine(ui.cutEnd4);
+	item->mixLength=item->endPositionSec-item->startPositionSec;
+	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
 }
 
 int PlaylistEdit::getSecondsFromLine(QLineEdit *line)
