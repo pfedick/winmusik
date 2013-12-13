@@ -70,6 +70,8 @@ private:
     void createToolbar();
     void createStatusBar();
 
+    void loadPlaylist(ppl6::CString &Filename);
+
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml);
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
