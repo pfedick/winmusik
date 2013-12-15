@@ -60,6 +60,8 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	recreatePlaylist();
 	changed=false;
 
+	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
+
 	restoreGeometry(wm->GetGeometry("playlist"));
 }
 
@@ -558,6 +560,7 @@ void Playlist::updatePlaylist()
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		renderTrack(item);
+		item->setText(0,ppl6::ToString("%5d",i+1));
 	}
 	updateLengthStatus();
 }
@@ -697,6 +700,7 @@ void Playlist::ReloadTranslation()
 
 void Playlist::loadPlaylist(ppl6::CString &Filename)
 {
+	ui.tracks->setSortingEnabled(false);
 	if (ui.tracks->load(Filename)) {
 		PlaylistFileName=Filename;
 		updateLastPlaylist();
@@ -705,6 +709,9 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 		updatePlaylist();
 		changed=false;
 	}
+	ui.tracks->setSortingEnabled(true);
+	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
+
 }
 
 void Playlist::on_menuNew_triggered()
