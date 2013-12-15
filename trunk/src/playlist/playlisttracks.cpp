@@ -274,6 +274,13 @@ void PlaylistTracks::deleteItems(QList<QTreeWidgetItem *>items)
 	}
 }
 
+void PlaylistTracks::selectItems(QList<QTreeWidgetItem *>items)
+{
+	for (int i=0;i<items.size();i++) {
+		items.at(i)->setSelected(true);
+	}
+}
+
 void PlaylistTracks::setName(const ppl6::CString &Name)
 {
 	this->Name=Name;

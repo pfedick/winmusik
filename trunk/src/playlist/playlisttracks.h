@@ -78,6 +78,7 @@ class PlaylistTracks : public QTreeWidget
 		void unselectItems();
 		void deleteSelectedItems();
 		void deleteItems(QList<QTreeWidgetItem *>items);
+		void selectItems(QList<QTreeWidgetItem *>items);
 
 		void save(const ppl6::CString &Filename);
 		bool load(const ppl6::CString &Filename);
