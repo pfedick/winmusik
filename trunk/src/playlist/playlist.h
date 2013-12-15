@@ -135,6 +135,7 @@ public slots:
 	void on_viewDJ_triggered();
 
 	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
+	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
 
 };
 
