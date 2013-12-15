@@ -35,13 +35,17 @@
 #include "playlisttracks.h"
 #include "playlistedit.h"
 #include <stdio.h>
+#include "traktor.h"
 
 PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	ui.traktorCuesGroupBox->setVisible(false);
 	restoreGeometry(wm->GetGeometry("playlistedit"));
+	traktorIn=-1;
+	traktorOut=-1;
 }
 
 
@@ -71,6 +75,14 @@ void PlaylistEdit::on_okButton_clicked()
 void PlaylistEdit::on_cancelButton_clicked()
 {
 	done(0);
+}
+
+
+void PlaylistEdit::on_traktorUseInOutButton_clicked()
+{
+	if (traktorIn>=0) ui.trackStart->setText(ppl6::ToString("%0d:%02d",(int)(traktorIn/60),traktorIn%60));
+	if (traktorOut>=0) ui.trackEnd->setText(ppl6::ToString("%0d:%02d",(int)(traktorOut/60),traktorOut%60));
+	updateTotalTime();
 }
 
 void PlaylistEdit::filloutFields(PlaylistItem *item)
@@ -103,7 +115,57 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.cutEnd4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[4]/60),item->cutEndPosition[4]%60));
 	ui.trackLength->setText(ppl6::ToString("%0d:%02d",(int)(item->trackLength/60),item->trackLength%60));
 
+
+	ppl6::CID3Tag Tag;
+	if (Tag.Load(item->File)) {
+		loadCover(Tag);
+		loadTraktorCues(Tag);
+	}
+
 	updateTotalTime();
+}
+
+void PlaylistEdit::loadCover(const ppl6::CID3Tag &Tag)
+{
+	ppl6::CBinary cover;
+	Tag.GetPicture(3,cover);
+	if (cover.Size()>0) {
+		QPixmap pix;
+		pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+		ui.cover->setPixmap(pix.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	}
+}
+
+void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
+{
+	ppl6::CString Tmp;
+	std::list <TraktorTagCue> cuelist;
+	std::list <TraktorTagCue>::const_iterator it;
+	getTraktorCues(cuelist, Tag);
+	if (cuelist.size()==0) return;
+	ui.traktorCuesGroupBox->setVisible(true);
+
+	for (it=cuelist.begin();it!=cuelist.end();it++) {
+		QTreeWidgetItem *item=new QTreeWidgetItem;
+		if (it->hotcue>=0) item->setText(0,ppl6::ToString("%d",it->hotcue));
+		item->setText(1,it->typeName());
+		item->setText(2,it->name);
+		int sec=(int)(it->start/1000.0);
+		item->setText(3,ppl6::ToString("%0d:%02d",(int)(sec/60),sec%60));
+		ui.traktorCues->addTopLevelItem(item);
+
+		if (it->type==TraktorTagCue::IN) traktorIn=sec;
+		if (it->type==TraktorTagCue::OUT) traktorOut=sec;
+
+	}
+	ui.traktorCues->resizeColumnToContents(0);
+	ui.traktorCues->resizeColumnToContents(1);
+	ui.traktorCues->resizeColumnToContents(2);
+	ui.traktorCues->resizeColumnToContents(3);
+
+	if(traktorIn>=0 || traktorOut>=0) ui.traktorUseInOutButton->setEnabled(true);
+	else ui.traktorUseInOutButton->setEnabled(false);
+
 }
 
 void PlaylistEdit::storeFileds(PlaylistItem *item)
