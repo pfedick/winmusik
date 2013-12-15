@@ -64,6 +64,7 @@ HEADERS += widgets/fkeys.h \
     src/playlist/playlisttracks.h \
     src/playlist/playlistedit.h \
     include/devicelist.h \
+    include/traktor.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h
@@ -120,6 +121,7 @@ SOURCES += widgets/fkeys.cpp \
     src/playlist/playlistedit.cpp \
     src/playlist/playlisttracks.cpp \
     src/devicelist.cpp \
+    src/traktor.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
     src/DropArea.cpp
