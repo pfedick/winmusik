@@ -328,12 +328,13 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	ui.tracks->unselectItems();
 	QApplication::processEvents();
 
+	//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
 	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-	printf ("Drop Position: %i:%i\n",p.x(),p.y());
+	//printf ("Drop Position: %i:%i\n",p.x(),p.y());
 	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
 	if (insertItem) {
 		PlaylistItem *p=(PlaylistItem*)insertItem;
-		printf ("Insert Item: %s\n",(const char*)((ppl6::CString)(p->text(0))));
+		//printf ("Insert Item: %s\n",(const char*)((ppl6::CString)(p->text(0))));
 	}
 
 
