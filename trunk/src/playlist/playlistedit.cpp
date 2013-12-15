@@ -177,8 +177,8 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->Label=ui.labelName->text().trimmed();
 	item->Album=ui.album->text().trimmed();
 	item->Remarks=ui.remarks->text().trimmed();
-	item->musicKey=DataTitle::keyId(ui.artist->text().trimmed());
-	item->bpm=ui.artist->text().trimmed().toInt();
+	item->musicKey=DataTitle::keyId(ui.musicKey->text().trimmed());
+	item->bpm=ui.bpm->text().trimmed().toInt();
 	item->rating=ui.rating->currentIndex();
 	item->startPositionSec=getSecondsFromLine(ui.trackStart);
 	item->endPositionSec=getSecondsFromLine(ui.trackEnd);
