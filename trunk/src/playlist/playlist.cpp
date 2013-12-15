@@ -836,13 +836,19 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 
 void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int)
 {
+	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
+
 	PlaylistItem *t=(PlaylistItem*)item;
 	QClipboard *clipboard = QApplication::clipboard();
 	ppl6::CString Text;
-	Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
-			(const char*)t->Version, t->trackLength/60,t->trackLength%60, (const char*)t->Genre);
-	Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
-			t->DeviceId,(t->DevicePage+'A'-1),t->DeviceTrack);
+	if (key&Qt::MetaModifier) {
+		Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
+	} else {
+		Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
+				(const char*)t->Version, t->trackLength/60,t->trackLength%60, (const char*)t->Genre);
+		Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
+				t->DeviceId,(t->DevicePage+'A'-1),t->DeviceTrack);
+	}
 	clipboard->setText(Text,QClipboard::Clipboard);
 	clipboard->setText(Text,QClipboard::Selection);
 }

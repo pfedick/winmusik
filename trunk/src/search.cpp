@@ -738,14 +738,19 @@ void Search::on_contextSetMusicKey(int k)
 
 void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 {
+	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
-			wm->GetVersionText(t->VersionId), t->Length/60,t->Length%60, wm->GetGenreText(t->GenreId));
-		Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
-				t->DeviceId,(t->Page+'A'-1),t->Track);
+		if (key&Qt::MetaModifier) {
+			Text.Setf("%s %s",t->Artist,t->Title);
+		} else {
+			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
+					wm->GetVersionText(t->VersionId), t->Length/60,t->Length%60, wm->GetGenreText(t->GenreId));
+			Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
+					t->DeviceId,(t->Page+'A'-1),t->Track);
+		}
 		LastClipboardString=Text;
 		clipboard->setText(Text,QClipboard::Clipboard);
 		clipboard->setText(Text,QClipboard::Selection);

@@ -2,7 +2,11 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.1.1
+Version 3.2.0
+    - NEU: Erstellung von Playlists
+    - Wird im Editor, Suchergebnis oder Playlist auf einen Track geklickt und
+      gleichzeitig die Meta-Taste (aka. Windows-Taste) gedrückt gehalten, wird
+      nur Interpret und Titel in die Zwischenablage kopiert
     - Interpretation des Music-Key wurde verbessert
     - Zum Music-Key kann jetzt angegeben werden, ob dieser verifiziert wurde.
     - Nicht-verifizierte Keys werden im Editor und Suchergebnis hellgrau
