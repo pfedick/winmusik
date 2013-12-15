@@ -325,6 +325,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	//printf ("Drop Event 2\n");
 
 	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+	QList<QTreeWidgetItem *>newTracks;
 	ui.tracks->unselectItems();
 	QApplication::processEvents();
 
@@ -333,7 +334,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	//printf ("Drop Position: %i:%i\n",p.x(),p.y());
 	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
 	if (insertItem) {
-		PlaylistItem *p=(PlaylistItem*)insertItem;
+		//PlaylistItem *p=(PlaylistItem*)insertItem;
 		//printf ("Insert Item: %s\n",(const char*)((ppl6::CString)(p->text(0))));
 	}
 
@@ -352,15 +353,16 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 			loadTrackFromXML(item,Row);
 			renderTrack(item);
+			newTracks.push_back(item);
 			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 			else ui.tracks->addTopLevelItem(item);
-			item->setSelected(true);
 			changed=true;
 		}
 		if (event->source()==this) ui.tracks->deleteItems(selected);
 		updateLengthStatus();
 		renumberTracks();
 		ui.tracks->setSortingEnabled(true);
+		ui.tracks->selectItems(newTracks);
 		return;
 	}
 
