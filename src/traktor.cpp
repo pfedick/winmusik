@@ -97,7 +97,6 @@ void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &c
 	const char *adr=cuep.data;
 	int cuepoints=ppl6::Peek32(adr);
 	adr+=4;
-	printf ("Anzahl Cues: %i\n",cuepoints);
 	for (int i=0;i<cuepoints;i++) {
 		TraktorTagCue cue;
 		cue.version=ppl6::Peek32(adr);

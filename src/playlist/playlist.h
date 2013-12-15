@@ -34,6 +34,7 @@
 #include "ui_playlist.h"
 #include "winmusik3.h"
 #include "playlisttracks.h"
+#include <ppl6-sound.h>
 
 class PlaylistTracks;
 

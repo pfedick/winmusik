@@ -36,6 +36,7 @@
 #include "playlisttracks.h"
 #include "playlist.h"
 #include "playlistedit.h"
+#include "traktor.h"
 #include <stdio.h>
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
@@ -401,6 +402,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	}
 	item->CoverPreview=ti->CoverPreview;
 	item->File=wm->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
+	item->useTraktorCues(item->File);
 	return true;
 }
 
@@ -427,6 +429,7 @@ void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 		item->cutEndPosition[z]=0;
 	}
 	item->updateFromDatabase();
+	item->useTraktorCues(item->File);
 	item->loadCoverPreview();
 }
 
@@ -450,7 +453,10 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->rating=info.Ti.Rating;
 	item->musicKey=info.Ti.Key;
 	item->CoverPreview=info.Ti.CoverPreview;
+
+	item->useTraktorCues(file);
 }
+
 
 void Playlist::Resize()
 {
@@ -572,9 +578,11 @@ void Playlist::updateLengthStatus()
 
 void Playlist::renderTrack(PlaylistItem *item)
 {
+	QColor color(0,0,0);
 	for (int i=0;i<item->columnCount();i++) {
 		item->setText(i,"");
 		item->setIcon(i,QIcon());
+		item->setTextColor(i,color);
 	}
 	if (item->CoverPreview.Size()>0) {
 		QPixmap pix, icon;
@@ -659,6 +667,14 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	}
 	Tmp.Setf("%02i:%02i",(int)(cuts/60),(int)cuts%60);
 	item->setText(columnCuts,Tmp);
+
+	QColor grey(192,192,192);
+
+	if (item->startPositionSec==0) item->setTextColor(columnStart,grey);
+	if (item->endPositionSec==item->trackLength) item->setTextColor(columnEnd,grey);
+	if (cuts==0) item->setTextColor(columnCuts,grey);
+
+
 }
 
 void Playlist::showEvent(QShowEvent * event)

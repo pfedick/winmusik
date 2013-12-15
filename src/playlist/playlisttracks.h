@@ -11,6 +11,7 @@
 #include <QTreeWidget>
 #include <QDomElement>
 #include "winmusik3.h"
+#include <ppl6-sound.h>
 
 class Playlist;
 
@@ -49,6 +50,9 @@ class PlaylistItem : public QTreeWidgetItem
 		void importFromXML(QDomElement &e);
 		void loadCoverPreview();
 		void updateFromDatabase();
+		void updateMixLength();
+		void useTraktorCues(const ppl6::CString &file);
+		void useTraktorCues(const ppl6::CID3Tag &Tag);
 };
 
 

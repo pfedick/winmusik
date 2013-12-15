@@ -31,6 +31,7 @@
 #include <QTreeWidgetItem>
 #include "ui_playlistedit.h"
 #include "winmusik3.h"
+#include <ppl6-sound.h>
 #include "playlisttracks.h"
 
 
@@ -47,13 +48,18 @@ public:
 private:
     Ui::playlistEditClass ui;
     CWmClient *wm;
+    int traktorIn, traktorOut;
+
     void closeEvent(QCloseEvent *event);
     void updateTotalTime();
     int getSecondsFromLine(QLineEdit *line);
+    void loadTraktorCues(const ppl6::CID3Tag &Tag);
+    void loadCover(const ppl6::CID3Tag &Tag);
 
 public slots:
 	void on_okButton_clicked();
 	void on_cancelButton_clicked();
+	void on_traktorUseInOutButton_clicked();
 
 	void on_trackStart_editingFinished() { updateTotalTime(); }
 	void on_trackEnd_editingFinished() { updateTotalTime(); }

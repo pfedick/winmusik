@@ -7,6 +7,7 @@
 
 #include "playlisttracks.h"
 #include "playlist.h"
+#include "traktor.h"
 
 #include <QDomDocument>
 #include <QFile>
@@ -152,6 +153,14 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	loadCoverPreview();
 }
 
+void PlaylistItem::updateMixLength()
+{
+	mixLength=endPositionSec-startPositionSec;
+	for (int i=0;i<5;i++) {
+		mixLength-=(cutEndPosition[i]-cutStartPosition[i]);
+	}
+}
+
 void PlaylistItem::loadCoverPreview()
 {
 	// Cover laden
@@ -189,6 +198,26 @@ void PlaylistItem::updateFromDatabase()
 	File=wm_main->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
 }
 
+void PlaylistItem::useTraktorCues(const ppl6::CString &file)
+{
+	ppl6::CID3Tag Tag;
+	if (Tag.Load(file)) useTraktorCues(Tag);
+}
+
+void PlaylistItem::useTraktorCues(const ppl6::CID3Tag &Tag)
+{
+	ppl6::CString Tmp;
+	std::list <TraktorTagCue> cuelist;
+	std::list <TraktorTagCue>::const_iterator it;
+	getTraktorCues(cuelist, Tag);
+	if (cuelist.size()==0) return;
+	for (it=cuelist.begin();it!=cuelist.end();it++) {
+		int sec=(int)(it->start/1000.0);
+		if (it->type==TraktorTagCue::IN) startPositionSec=sec;
+		if (it->type==TraktorTagCue::OUT) endPositionSec=sec;
+	}
+	updateMixLength();
+}
 
 PlaylistTracks::PlaylistTracks(QWidget * parent)
 	:QTreeWidget(parent)
