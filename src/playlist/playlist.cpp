@@ -32,6 +32,7 @@
 #include <QMouseEvent>
 #include <QFileDialog>
 #include <QToolBar>
+#include <QKeyEvent>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -212,6 +213,20 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 		} else if (type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
 			return true;
+		} else if (type==QEvent::KeyPress) {
+			QKeyEvent *e=static_cast<QKeyEvent *>(event);
+			if (e->key()==Qt::Key_Delete) {
+				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+				if (selected.count()>1) {
+					if (QMessageBox::question (this, tr("Delete Tracks"),
+							tr("Do you want to delete all selected tracks from this playlist?"),
+							QMessageBox::No|QMessageBox::Yes,
+							QMessageBox::No) != QMessageBox::Yes) return false;
+				}
+				ui.tracks->deleteSelectedItems();
+				return true;
+			}
+			return false;
 			/*
 		} else if (type==QEvent::DragMove) {
 			//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
@@ -301,9 +316,11 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	//printf ("Drop Event 1\n");
 
 	event->accept();
-	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
+	if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
+
+	ui.tracks->setSortingEnabled(false);
 	//if (!mime->hasUrls()) return;
 	//printf ("Drop Event 2\n");
 
@@ -312,7 +329,12 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	QApplication::processEvents();
 
 	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
+	printf ("Drop Position: %i:%i\n",p.x(),p.y());
 	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
+	if (insertItem) {
+		PlaylistItem *p=(PlaylistItem*)insertItem;
+		printf ("Insert Item: %s\n",(const char*)((ppl6::CString)(p->text(0))));
+	}
 
 
 	ppl6::CString xml=mime->text();
@@ -334,8 +356,10 @@ void Playlist::handleDropEvent(QDropEvent *event)
 			item->setSelected(true);
 			changed=true;
 		}
-		updateLengthStatus();
 		if (event->source()==this) ui.tracks->deleteItems(selected);
+		updateLengthStatus();
+		renumberTracks();
+		ui.tracks->setSortingEnabled(true);
 		return;
 	}
 
@@ -373,6 +397,8 @@ void Playlist::handleDropEvent(QDropEvent *event)
 		item->setSelected(true);
 	}
 	updateLengthStatus();
+	renumberTracks();
+	ui.tracks->setSortingEnabled(true);
 }
 
 bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
@@ -565,6 +591,14 @@ void Playlist::updatePlaylist()
 	updateLengthStatus();
 }
 
+void Playlist::renumberTracks()
+{
+	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		item->setText(0,ppl6::ToString("%5d",i+1));
+	}
+}
+
 void Playlist::updateLengthStatus()
 {
 	int trackLength=0;
@@ -582,7 +616,7 @@ void Playlist::updateLengthStatus()
 void Playlist::renderTrack(PlaylistItem *item)
 {
 	QColor color(0,0,0);
-	for (int i=0;i<item->columnCount();i++) {
+	for (int i=1;i<item->columnCount();i++) {
 		item->setText(i,"");
 		item->setIcon(i,QIcon());
 		item->setTextColor(i,color);

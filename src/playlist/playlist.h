@@ -79,6 +79,7 @@ private:
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
     void renderTrack(PlaylistItem *item);
     void updateLengthStatus();
+    void renumberTracks();
 
     void renderTrackViewPlaylist(PlaylistItem *item);
     void renderTrackViewDJ(PlaylistItem *item);
