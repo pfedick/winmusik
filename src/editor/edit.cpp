@@ -1643,11 +1643,11 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 				Icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
 			}
 		}
-		xml+="<track>\n";
+		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
 		File=wm->MP3Filename(DeviceId,Page,item->Track);
 		if (File.NotEmpty()) {
-			xml+="<file>"+ppl6::EscapeHTMLTags(File)+"</file>\n";
+			xml+="<File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
 
 #ifdef _WIN32
 			list.append(QUrl::fromLocalFile(File));
@@ -1655,7 +1655,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 			list.append(QUrl::fromLocalFile(File));
 #endif
 		}
-		xml+="</track>";
+		xml+="</item>";
 	}
 	//xml+="</winmusikTracklist>\n";
     QDrag *drag = new QDrag(this);

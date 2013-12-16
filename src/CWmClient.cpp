@@ -920,16 +920,16 @@ ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
 	r.Concatf("<deviceId>%i</deviceId>\n",ti->DeviceId);
 	r.Concatf("<devicePage>%i</devicePage>\n",ti->Page);
 	r.Concatf("<trackNum>%i</trackNum>\n",ti->Track);
-	r+="<artist>"+ppl6::EscapeHTMLTags(ti->Artist)+"</artist>\n";
-	r+="<title>"+ppl6::EscapeHTMLTags(ti->Title)+"</title>\n";
-	r+="<version>"+ppl6::EscapeHTMLTags(GetVersionText(ti->VersionId))+"</version>\n";
-	r+="<genre>"+ppl6::EscapeHTMLTags(GetGenreText(ti->GenreId))+"</genre>\n";
-	r+="<label>"+ppl6::EscapeHTMLTags(GetLabelText(ti->LabelId))+"</label>\n";
-	r+="<album>"+ppl6::EscapeHTMLTags(ti->Album)+"</album>\n";
+	r+="<Artist>"+ppl6::EscapeHTMLTags(ti->Artist)+"</Artist>\n";
+	r+="<Title>"+ppl6::EscapeHTMLTags(ti->Title)+"</Title>\n";
+	r+="<Version>"+ppl6::EscapeHTMLTags(GetVersionText(ti->VersionId))+"</Version>\n";
+	r+="<Genre>"+ppl6::EscapeHTMLTags(GetGenreText(ti->GenreId))+"</Genre>\n";
+	r+="<Label>"+ppl6::EscapeHTMLTags(GetLabelText(ti->LabelId))+"</Label>\n";
+	r+="<Album>"+ppl6::EscapeHTMLTags(ti->Album)+"</Album>\n";
 	r.Concatf("<bpm>%i</bpm>\n",(int)ti->BPM);
 	r.Concatf("<bitrate>%i</bitrate>\n",(int)ti->Bitrate);
 	r.Concatf("<rating>%i</rating>\n",(int)ti->Rating);
-	r.Concatf("<length>%i</length>\n",(int)ti->Length);
+	r.Concatf("<trackLength>%i</trackLength>\n",(int)ti->Length);
 	r+="<musicKey>"+ti->getKeyName()+"</musicKey>\n";
 	return r;
 }

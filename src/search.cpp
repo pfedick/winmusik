@@ -964,7 +964,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 	for (int i=0;i<Items.size();i++) {
 		item=(WMTreeItem *)Items[i];
 		DataTitle *t=wm->GetTitle(item->Id);
-		xml+="<track>\n";
+		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
 		if (t!=NULL && t->DeviceType==7) {
 			if (Icon.isNull()) {
@@ -975,7 +975,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 
 			File=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
 			if (File.NotEmpty()) {
-				xml+="<file>"+ppl6::EscapeHTMLTags(File)+"</file>";
+				xml+="<File>"+ppl6::EscapeHTMLTags(File)+"</File>";
 #ifdef _WIN32
 				if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,10,"Search","on_trackList_MouseMove",__FILE__,__LINE__,"Add File to Drag: %s",(const char*)File);
 				list.append(QUrl::fromLocalFile(File));
@@ -985,7 +985,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 				count++;
 			}
 		}
-		xml+="</track>";
+		xml+="</item>";
 	}
 	if (!count) return false;
     QDrag *drag = new QDrag(trackList);
