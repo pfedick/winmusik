@@ -206,6 +206,7 @@ bool Playlist::eventFilter(QObject *target, QEvent *event)
 bool Playlist::consumeEvent(QObject *target, QEvent *event)
 {
 	int type=event->type();
+	//printf ("Event: %i\n",type);
 	if (target==ui.tracks) {
 		if (type==QEvent::Drop) {
 			handleDropEvent(static_cast<QDropEvent *>(event));
@@ -224,6 +225,8 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 							QMessageBox::No) != QMessageBox::Yes) return false;
 				}
 				ui.tracks->deleteSelectedItems();
+				updateLengthStatus();
+				renumberTracks();
 				return true;
 			}
 			return false;
@@ -277,23 +280,15 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 	for (int i=0;i<Items.size();i++) {
 		PlaylistItem *item=(PlaylistItem *)Items[i];
 		if (Icon.isNull()) {
-			DataTitle *ti=wm->GetTitle(item->titleId);
-			if (ti!=NULL &&ti->CoverPreview.Size()>0) {
-				Icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
-			}
+			Icon.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.GetSize());
 		}
-		xml+="<track>\n";
-		xml+=wm->getXmlTitle(item->titleId);
-		if (item->File.NotEmpty()) {
-			xml+="<file>"+ppl6::EscapeHTMLTags(item->File)+"</file>\n";
+		xml+=item->exportAsXML(0);
 
 #ifdef _WIN32
 			list.append(QUrl::fromLocalFile(item->File));
 #else
-			list.append(QUrl::fromLocalFile(item->File));
+		list.append(QUrl::fromLocalFile(item->File));
 #endif
-		}
-		xml+="</track>";
 	}
 	//xml.Print(true);
 
@@ -325,7 +320,6 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	//printf ("Drop Event 2\n");
 
 	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	QList<QTreeWidgetItem *>newTracks;
 	ui.tracks->unselectItems();
 	QApplication::processEvents();
 
@@ -345,24 +339,22 @@ void Playlist::handleDropEvent(QDropEvent *event)
 		List.Explode(xml,"</track>");
 		//printf ("List: %i\n",List.Num());
 		for (int i=0;i<List.Num();i++) {
-			ppl6::CString Row=List.GetString(i);
-			if (!Row.PregMatch("/^\\<titleId\\>(.*?)\\<\\/titleId\\>$/m")) continue;
-
-			//Row.Print(true);
 			PlaylistItem *item=new PlaylistItem;
-			item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-			loadTrackFromXML(item,Row);
+			ppl6::CString Row=List.GetString(i);
+			if (Row.PregMatch("/^\\<titleId\\>(.*?)\\<\\/titleId\\>$/m"))
+				item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+			loadTrackFromXML(item,xml);
 			renderTrack(item);
-			newTracks.push_back(item);
 			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 			else ui.tracks->addTopLevelItem(item);
 			changed=true;
+			item->setSelected(true);
+
 		}
 		if (event->source()==this) ui.tracks->deleteItems(selected);
 		updateLengthStatus();
 		renumberTracks();
 		ui.tracks->setSortingEnabled(true);
-		ui.tracks->selectItems(newTracks);
 		return;
 	}
 
@@ -440,16 +432,16 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 {
 	ppl6::CString Row=xml;
-	if (Row.PregMatch("/^\\<artist\\>(.*?)\\<\\/artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<title\\>(.*?)\\<\\/title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<version\\>(.*?)\\<\\/version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<genre\\>(.*?)\\<\\/genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<label\\>(.*?)\\<\\/label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<album\\>(.*?)\\<\\/album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<file\\>(.*?)\\<\\/file\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Artist\\>(.*?)\\<\\/Artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Title\\>(.*?)\\<\\/Title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Version\\>(.*?)\\<\\/Version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Genre\\>(.*?)\\<\\/Genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Label\\>(.*?)\\<\\/Label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<Album\\>(.*?)\\<\\/Album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
+	if (Row.PregMatch("/^\\<File\\>(.*?)\\<\\/File\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
 	if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 	if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<length\\>(.*?)\\<\\/length\\>$/m")) item->trackLength=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<trackLength\\>(.*?)\\<\\/trackLength\\>$/m")) item->trackLength=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
 	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
 
 	item->mixLength=item->trackLength;
@@ -460,7 +452,22 @@ void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 		item->cutEndPosition[z]=0;
 	}
 	item->updateFromDatabase();
+
+	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
 	item->useTraktorCues(item->File);
+
+	if (Row.PregMatch("/^\\<startPositionSec\\>(.*?)\\<\\/startPositionSec\\>$/m")) item->startPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<endPositionSec\\>(.*?)\\<\\/endPositionSec\\>$/m")) item->endPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
+	if (Row.PregMatch("/^\\<cuts\\>(.*?)\\<\\/cuts\\>$/s")) {
+		ppl6::CArray cut(Row.GetMatch(1),"</cut>");
+		printf ("Number of cuts: %i\n",cut.Num());
+		for (int i=0;i<5;i++) {
+			ppl6::CString r=cut[i];
+			if (r.PregMatch("/^\\<start\\>(.*?)\\<\\/start\\>$/m")) item->cutStartPosition[i]=ppl6::UnescapeHTMLTags(r.GetMatch(1)).ToInt();
+			if (r.PregMatch("/^\\<end\\>(.*?)\\<\\/end\\>$/m")) item->cutEndPosition[i]=ppl6::UnescapeHTMLTags(r.GetMatch(1)).ToInt();
+		}
+	}
+	item->updateMixLength();
 	item->loadCoverPreview();
 }
 
