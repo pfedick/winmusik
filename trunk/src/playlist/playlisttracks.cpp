@@ -150,6 +150,17 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			e=e.nextSiblingElement("cut");
 		}
 	}
+
+	if (titleId>0) {
+		DataTitle *ti=wm_main->GetTitle(titleId);
+		if (ti) {
+			DeviceId=ti->DeviceId;
+			DeviceTrack=ti->Track;
+			DeviceType=ti->DeviceType;
+			DevicePage=ti->Page;
+		}
+	}
+
 	loadCoverPreview();
 }
 
