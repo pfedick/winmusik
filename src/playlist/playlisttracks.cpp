@@ -12,7 +12,10 @@
 #include <QDomDocument>
 #include <QFile>
 #include <QMessageBox>
-
+#include <QList>
+#include <QUrl>
+#include <QMimeData>
+#include <QDragMoveEvent>
 
 PlaylistItem::PlaylistItem()
 {
@@ -35,6 +38,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ppl6::CString Indent, ret;
 	Indent.Repeat(" ",indention);
 	ret=Indent+"<item>\n";
+	ret+=Indent+"   <widgetId>"+ppl6::ToString("%tu",(ptrdiff_t)this)+"</widgetId>\n";
 	ret+=Indent+"   <titleId>"+ppl6::ToString("%u",titleId)+"</titleId>\n";
 	ret+=Indent+"   <startPositionSec>"+ppl6::ToString("%u",startPositionSec)+"</startPositionSec>\n";
 	ret+=Indent+"   <endPositionSec>"+ppl6::ToString("%u",endPositionSec)+"</endPositionSec>\n";
@@ -234,6 +238,7 @@ PlaylistTracks::PlaylistTracks(QWidget * parent)
 	:QTreeWidget(parent)
 {
 	playlist=NULL;
+	lastmoveitem=NULL;
 }
 
 void PlaylistTracks::mouseMoveEvent ( QMouseEvent * event )
@@ -256,6 +261,122 @@ void PlaylistTracks::mouseReleaseEvent ( QMouseEvent * event )
 	//printf ("PlaylistTracks::mouseReleaseEvent\n");
 	QTreeWidget::mouseReleaseEvent(event);
 }
+
+
+QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
+{
+	QList<QUrl> list;
+	QPixmap Icon;
+	ppl6::CString xml;
+	xml="<winmusikTracklist>\n";
+	xml+="<tracks>\n";
+	for (int i=0;i<items.size();i++) {
+		PlaylistItem *item=(PlaylistItem *)items[i];
+		if (Icon.isNull()) {
+			Icon.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.GetSize());
+		}
+		xml+=item->exportAsXML(0);
+
+#ifdef _WIN32
+		list.append(QUrl::fromLocalFile(item->File));
+#else
+		list.append(QUrl::fromLocalFile(item->File));
+#endif
+	}
+	xml+="</tracks>\n";
+	xml+="</winmusikTracklist>\n";
+
+
+	QMimeData *mimeData = new QMimeData;
+	mimeData->setText(xml);
+	mimeData->setUrls(list);
+	mimeData->setImageData(Icon);
+	return mimeData;
+}
+
+void PlaylistTracks::dragEnterEvent ( QDragEnterEvent * event)
+{
+	event->accept();
+}
+
+void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
+{
+	e->accept();
+	//QTreeWidget::dragMoveEvent(e);
+	//return;
+	PlaylistItem *item = (PlaylistItem*)itemAt(e->pos());
+	if (item) {
+		if (item!=lastmoveitem) {
+			if (lastmoveitem) lastmoveitem->setSelected(false);
+			this->scrollToItem(item);
+			lastmoveitem=item;
+		}
+		item->setSelected(true);
+	} else if (lastmoveitem) {
+		lastmoveitem->setSelected(false);
+		lastmoveitem=NULL;
+	}
+
+	//e->ignore();
+	//QTreeWidget::dragMoveEvent(e);
+}
+
+bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action)
+{
+	printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
+	ppl6::CString Tmp;
+	playlist->handleDropEvent(data,parent);
+	lastmoveitem=NULL;
+	return true;
+}
+
+void PlaylistTracks::dropEvent ( QDropEvent * event )
+{
+	printf ("PlaylistTracks::dropEvent, action: %i\n",event->dropAction());
+	if (lastmoveitem) {
+		lastmoveitem->setSelected(false);
+		lastmoveitem=NULL;
+	}
+	event->acceptProposedAction();
+	playlist->handleDropEvent(event);
+	if (event->source()==this) {
+		printf ("Quelle ist gleich\n");
+		if (event->dropAction()==1) {
+			deleteSourceItems(event);
+			playlist->renumberTracks();
+			playlist->updateLengthStatus();
+		}
+	}
+}
+
+void PlaylistTracks::deleteSourceItems(QDropEvent * event)
+{
+	const QMimeData *mime=event->mimeData();
+	if (!mime) return;
+	ppl6::CString xml=mime->text();
+	if (xml.Left(18)!="<winmusikTracklist") return;
+	QDomDocument doc("winmusikTracklist");
+	if (doc.setContent(xml)) {
+		QDomElement root=doc.documentElement();
+		if (root.tagName()=="winmusikTracklist") {
+			QDomNode tracks=root.namedItem("tracks");
+			if (tracks.isNull()==false) {
+				QDomElement e=tracks.firstChildElement("item");
+				while (!e.isNull()) {
+					QDomNode node =e.namedItem("widgetId");
+					if (node.isNull()==false && node.isElement()==true) {
+						QTreeWidgetItem *item=(QTreeWidgetItem*)node.toElement().text().toULongLong();
+						int id=indexOfTopLevelItem(item);
+//						printf ("delete Widget with id=%i\n",id);
+						if (item!=NULL && id>=0) this->takeTopLevelItem(id);
+					}
+					e=e.nextSiblingElement("item");
+				}
+			}
+		}
+	}
+}
+
 
 void PlaylistTracks::setPlaylist(Playlist *p)
 {

@@ -87,6 +87,7 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
     void handleDropEvent(QDropEvent *event);
+    void handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertItem);
     void handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem);
     void handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem);
     void updateLastPlaylist();
@@ -96,6 +97,7 @@ private:
     bool on_tracks_MouseMove(QMouseEvent *event);
     bool on_tracks_MouseButtonPress(QMouseEvent * event);
     bool on_tracks_MouseButtonRelease(QMouseEvent * event);
+
 
 
     enum playlistViewType {
@@ -139,6 +141,7 @@ public slots:
 
 	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
 	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
+
 
 };
 
