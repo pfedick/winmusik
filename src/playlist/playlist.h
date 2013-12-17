@@ -87,6 +87,8 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
     void handleDropEvent(QDropEvent *event);
+    void handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem);
+    void handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem);
     void updateLastPlaylist();
 
     void closeEvent(QCloseEvent *event);
