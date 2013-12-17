@@ -29,7 +29,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="playlistName"/>
+       <widget class="QLineEdit" name="playlistName">
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -51,13 +55,13 @@
        <bool>true</bool>
       </property>
       <property name="dragDropOverwriteMode">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragDrop</enum>
+       <enum>QAbstractItemView::DragOnly</enum>
       </property>
       <property name="defaultDropAction">
-       <enum>Qt::CopyAction</enum>
+       <enum>Qt::IgnoreAction</enum>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
