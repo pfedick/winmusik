@@ -1633,7 +1633,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 
     ppl6::CString xml;
     xml="<winmusikTracklist>\n";
-
+    xml+="<tracks>\n";
 
 	for (int i=0;i<Items.size();i++) {
 		item=(WMTreeItem *)Items[i];
@@ -1657,6 +1657,9 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 		}
 		xml+="</item>";
 	}
+	xml+="</tracks>\n";
+	xml+="</winmusikTracklist>\n";
+
 	//xml+="</winmusikTracklist>\n";
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;

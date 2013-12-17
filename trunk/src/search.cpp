@@ -959,6 +959,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 	ppl6::CString File;
 	ppl6::CString xml;
 	xml="<winmusikTracklist>\n";
+	xml+="<tracks>\n";
 	QPixmap Icon;
 	int count=0;
 	for (int i=0;i<Items.size();i++) {
@@ -987,6 +988,9 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 		}
 		xml+="</item>";
 	}
+	xml+="</tracks>\n";
+	xml+="</winmusikTracklist>\n";
+
 	if (!count) return false;
     QDrag *drag = new QDrag(trackList);
     QMimeData *mimeData = new QMimeData;
