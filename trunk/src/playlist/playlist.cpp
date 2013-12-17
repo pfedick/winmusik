@@ -33,6 +33,7 @@
 #include <QFileDialog>
 #include <QToolBar>
 #include <QKeyEvent>
+#include <QDomDocument>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -277,6 +278,7 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 
     ppl6::CString xml;
     xml="<winmusikTracklist>\n";
+    xml+="<tracks>\n";
 	for (int i=0;i<Items.size();i++) {
 		PlaylistItem *item=(PlaylistItem *)Items[i];
 		if (Icon.isNull()) {
@@ -290,7 +292,10 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
 	}
-	//xml.Print(true);
+	xml+="</tracks>\n";
+	xml+="</winmusikTracklist>\n";
+
+	xml.Print(true);
 
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
@@ -308,58 +313,62 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 
 void Playlist::handleDropEvent(QDropEvent *event)
 {
-	//printf ("Drop Event 1\n");
-
 	event->accept();
 	if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
-
-	ui.tracks->setSortingEnabled(false);
-	//if (!mime->hasUrls()) return;
-	//printf ("Drop Event 2\n");
-
 	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 	ui.tracks->unselectItems();
 	QApplication::processEvents();
 
-	//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
 	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-	//printf ("Drop Position: %i:%i\n",p.x(),p.y());
 	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
-	if (insertItem) {
-		//PlaylistItem *p=(PlaylistItem*)insertItem;
-		//printf ("Insert Item: %s\n",(const char*)((ppl6::CString)(p->text(0))));
-	}
 
-
+	ui.tracks->setSortingEnabled(false);
 	ppl6::CString xml=mime->text();
 	if (xml.Left(18)=="<winmusikTracklist") {
-		ppl6::CArray List;
-		List.Explode(xml,"</track>");
-		//printf ("List: %i\n",List.Num());
-		for (int i=0;i<List.Num();i++) {
-			PlaylistItem *item=new PlaylistItem;
-			ppl6::CString Row=List.GetString(i);
-			if (Row.PregMatch("/^\\<titleId\\>(.*?)\\<\\/titleId\\>$/m"))
-				item->titleId=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-			loadTrackFromXML(item,xml);
-			renderTrack(item);
-			if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
-			else ui.tracks->addTopLevelItem(item);
-			changed=true;
-			item->setSelected(true);
-
-		}
+		handleXMLDrop(xml,insertItem);
 		if (event->source()==this) ui.tracks->deleteItems(selected);
 		updateLengthStatus();
 		renumberTracks();
-		ui.tracks->setSortingEnabled(true);
 		return;
+	} else {
+		QList<QUrl>	list=mime->urls();
+		handleURLDrop(list,insertItem);
 	}
+	updateLengthStatus();
+	renumberTracks();
+	ui.tracks->setSortingEnabled(true);
+}
 
+void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem)
+{
+	QDomDocument doc("winmusikTracklist");
+	if (doc.setContent(xml)) {
+		QDomElement root=doc.documentElement();
+		if (root.tagName()=="winmusikTracklist") {
+			QDomNode tracks=root.namedItem("tracks");
+			if (tracks.isNull()==false) {
+				QDomElement e=tracks.firstChildElement("item");
+				while (!e.isNull()) {
+					PlaylistItem *item=new PlaylistItem;
+					item->importFromXML(e);
+					//	item->updateFromDatabase();
+					renderTrack(item);
+					if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
+					else ui.tracks->addTopLevelItem(item);
+					changed=true;
+					item->setSelected(true);
+					e=e.nextSiblingElement("item");
+				}
+			}
+		}
+	}
+}
+
+void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem)
+{
 	ppl6::CString path=wm->conf.DevicePath[7];
-	QList<QUrl>	list=mime->urls();
 	for (int i=0;i<list.size();i++) {
 		QUrl url=list[i];
 		QString file=url.toLocalFile();
@@ -391,9 +400,6 @@ void Playlist::handleDropEvent(QDropEvent *event)
 		else ui.tracks->addTopLevelItem(item);
 		item->setSelected(true);
 	}
-	updateLengthStatus();
-	renumberTracks();
-	ui.tracks->setSortingEnabled(true);
 }
 
 bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
@@ -451,7 +457,7 @@ void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
 		item->cutStartPosition[z]=0;
 		item->cutEndPosition[z]=0;
 	}
-	item->updateFromDatabase();
+	//item->updateFromDatabase();
 
 	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
 	item->useTraktorCues(item->File);
