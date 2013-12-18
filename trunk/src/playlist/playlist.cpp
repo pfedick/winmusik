@@ -47,6 +47,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.setupUi(this);
 	this->wm=wm;
 	currentTreeItem=NULL;
+	searchWindow=NULL;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
@@ -776,6 +777,45 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 
 }
 
+
+void Playlist::editTrack(PlaylistItem *item)
+{
+	PlaylistEdit edit(this,wm);
+	edit.filloutFields(item);
+	if (edit.exec()==1) {
+		edit.storeFileds(item);
+		changed=true;
+		renderTrack(item);
+		updateLengthStatus();
+	}
+}
+
+void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
+{
+	QList<QUrl> list;
+	ppl6::CString File;
+	ppl6::CString xml;
+	xml="<winmusikTracklist>\n";
+	xml+="<tracks>\n";
+	for (int i=0;i<items.size();i++) {
+		PlaylistItem *item=(PlaylistItem *)items[i];
+		xml+=item->exportAsXML(0);
+
+#ifdef _WIN32
+		list.append(QUrl::fromLocalFile(item->File));
+#else
+		list.append(QUrl::fromLocalFile(item->File));
+#endif
+	}
+	xml+="</tracks>\n";
+	xml+="</winmusikTracklist>\n";
+	QClipboard *clipboard = QApplication::clipboard();
+	QMimeData *mimeData = new QMimeData;
+	mimeData->setText(xml);
+	mimeData->setUrls(list);
+	clipboard->setMimeData(mimeData);
+}
+
 void Playlist::on_menuNew_triggered()
 {
 	PlaylistFileName.Clear();
@@ -884,16 +924,7 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 		wm->PlayFile(((PlaylistItem*)item)->File);
 		return;
 	}
-
-	PlaylistEdit edit(this,wm);
-	edit.filloutFields((PlaylistItem*)item);
-	if (edit.exec()==1) {
-		edit.storeFileds((PlaylistItem*)item);
-		changed=true;
-		renderTrack((PlaylistItem*)item);
-		updateLengthStatus();
-	}
-
+	editTrack((PlaylistItem*)item);
 }
 
 void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int)
@@ -914,3 +945,78 @@ void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int)
 	clipboard->setText(Text,QClipboard::Clipboard);
 	clipboard->setText(Text,QClipboard::Selection);
 }
+
+void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
+{
+	QPoint p=ui.tracks->mapToGlobal(pos);
+	currentTreeItem=(PlaylistItem*)ui.tracks->itemAt(pos);
+	if (!currentTreeItem) return;
+
+    QMenu *m=new QMenu(this);
+    QAction *a=NULL;
+   	a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
+   	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
+   	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Paste","trackList Context Menue"),this,SLOT(on_contextPasteTrack_triggered()));
+   	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
+   	m->addSeparator();
+   	m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+    m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
+    m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+    m->addSeparator();
+    m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+    m->popup(p,a);
+}
+
+void Playlist::on_contextEditTrack_triggered()
+{
+	if(!currentTreeItem) return;
+	editTrack(currentTreeItem);
+}
+
+void Playlist::on_contextCopyTrack_triggered()
+{
+	if(!currentTreeItem) return;
+	QList<QTreeWidgetItem *> items;
+	items.push_back(currentTreeItem);
+	copyTracks(items);
+}
+
+void Playlist::on_contextPasteTrack_triggered()
+{
+
+}
+
+void Playlist::on_contextDeleteTrack_triggered()
+{
+	if(!currentTreeItem) return;
+	PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(currentTreeItem));
+	if (item) delete item;
+	changed=true;
+	updateLengthStatus();
+}
+
+void Playlist::on_contextFindMoreVersions_triggered()
+{
+	if(!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTreeItem->Artist,currentTreeItem->Title);
+}
+
+void Playlist::on_contextFindMoreArtist_triggered()
+{
+	if(!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTreeItem->Artist);
+}
+
+void Playlist::on_contextFindMoreTitle_triggered()
+{
+	if(!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow,NULL,currentTreeItem->Title);
+}
+
+void Playlist::on_contextPlayTrack_triggered()
+{
+	if(!currentTreeItem) return;
+	wm->PlayFile(((PlaylistItem*)currentTreeItem)->File);
+}
+
+
