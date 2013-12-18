@@ -57,6 +57,7 @@ private:
     QLabel *totalTrackLength;
     QLabel *totalMixLength;
     QLabel *totalTracks;
+    QWidget *searchWindow;
 
     ppl6::CString	PlaylistFileName;
     bool changed;
@@ -94,10 +95,15 @@ private:
 
     void closeEvent(QCloseEvent *event);
 
+
     bool on_tracks_MouseMove(QMouseEvent *event);
     bool on_tracks_MouseButtonPress(QMouseEvent * event);
     bool on_tracks_MouseButtonRelease(QMouseEvent * event);
 
+
+    // Aktionen
+    void editTrack(PlaylistItem *item);
+    void copyTracks(const QList<QTreeWidgetItem *> items);
 
 
     enum playlistViewType {
@@ -142,6 +148,16 @@ public slots:
 	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
 	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
 
+	void on_tracks_customContextMenuRequested ( const QPoint & pos );
+
+	void on_contextEditTrack_triggered();
+	void on_contextCopyTrack_triggered();
+	void on_contextPasteTrack_triggered();
+	void on_contextDeleteTrack_triggered();
+	void on_contextFindMoreVersions_triggered();
+	void on_contextFindMoreArtist_triggered();
+	void on_contextFindMoreTitle_triggered();
+	void on_contextPlayTrack_triggered();
 
 };
 
