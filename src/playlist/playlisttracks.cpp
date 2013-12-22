@@ -164,6 +164,11 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			DevicePage=ti->Page;
 		}
 	}
+	if (endPositionSec==0) {
+		this->useTraktorCues(File);
+		if (endPositionSec==0) endPositionSec=trackLength;
+		updateMixLength();
+	}
 
 	loadCoverPreview();
 }

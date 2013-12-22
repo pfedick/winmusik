@@ -51,6 +51,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
+	this->setWindowTitle(tr("WinMusik Playlist"));
 
 	//ui.tracks->installEventFilter(this);
 
@@ -112,6 +113,7 @@ void Playlist::createToolbar()
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
 
 	this->addToolBar(tb);
+
 }
 
 void Playlist::createStatusBar()
@@ -448,47 +450,6 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	return true;
 }
 
-void Playlist::loadTrackFromXML(PlaylistItem *item, const ppl6::CString &xml)
-{
-	ppl6::CString Row=xml;
-	if (Row.PregMatch("/^\\<Artist\\>(.*?)\\<\\/Artist\\>$/m")) item->Artist=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<Title\\>(.*?)\\<\\/Title\\>$/m")) item->Title=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<Version\\>(.*?)\\<\\/Version\\>$/m")) item->Version=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<Genre\\>(.*?)\\<\\/Genre\\>$/m")) item->Genre=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<Label\\>(.*?)\\<\\/Label\\>$/m")) item->Label=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<Album\\>(.*?)\\<\\/Album\\>$/m")) item->Album=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<File\\>(.*?)\\<\\/File\\>$/m")) item->File=ppl6::UnescapeHTMLTags(Row.GetMatch(1));
-	if (Row.PregMatch("/^\\<bpm\\>(.*?)\\<\\/bpm\\>$/m")) item->bpm=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<rating\\>(.*?)\\<\\/rating\\>$/m")) item->rating=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<trackLength\\>(.*?)\\<\\/trackLength\\>$/m")) item->trackLength=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
-
-	item->mixLength=item->trackLength;
-	item->startPositionSec=0;
-	item->endPositionSec=item->trackLength;
-	for (int z=0;z<5;z++) {
-		item->cutStartPosition[z]=0;
-		item->cutEndPosition[z]=0;
-	}
-	//item->updateFromDatabase();
-
-	if (Row.PregMatch("/^\\<musicKey\\>(.*?)\\<\\/musicKey\\>$/m")) item->musicKey=DataTitle::keyId(ppl6::UnescapeHTMLTags(Row.GetMatch(1)));
-	item->useTraktorCues(item->File);
-
-	if (Row.PregMatch("/^\\<startPositionSec\\>(.*?)\\<\\/startPositionSec\\>$/m")) item->startPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<endPositionSec\\>(.*?)\\<\\/endPositionSec\\>$/m")) item->endPositionSec=ppl6::UnescapeHTMLTags(Row.GetMatch(1)).ToInt();
-	if (Row.PregMatch("/^\\<cuts\\>(.*?)\\<\\/cuts\\>$/s")) {
-		ppl6::CArray cut(Row.GetMatch(1),"</cut>");
-		printf ("Number of cuts: %i\n",cut.Num());
-		for (int i=0;i<5;i++) {
-			ppl6::CString r=cut[i];
-			if (r.PregMatch("/^\\<start\\>(.*?)\\<\\/start\\>$/m")) item->cutStartPosition[i]=ppl6::UnescapeHTMLTags(r.GetMatch(1)).ToInt();
-			if (r.PregMatch("/^\\<end\\>(.*?)\\<\\/end\\>$/m")) item->cutEndPosition[i]=ppl6::UnescapeHTMLTags(r.GetMatch(1)).ToInt();
-		}
-	}
-	item->updateMixLength();
-	item->loadCoverPreview();
-}
 
 void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 {
@@ -771,6 +732,9 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 		ui.playlistName->setText(ui.tracks->getName());
 		updatePlaylist();
 		changed=false;
+		ppl6::CString Title=tr("WinMusik Playlist");
+		Title+=" - "+Filename;
+		this->setWindowTitle(Title);
 	}
 	ui.tracks->setSortingEnabled(true);
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
@@ -824,6 +788,7 @@ void Playlist::on_menuNew_triggered()
 	ui.tracks->clear();
 	updatePlaylist();
 	changed=false;
+	this->setWindowTitle(tr("WinMusik Playlist"));
 }
 
 void Playlist::on_menuOpen_triggered()
@@ -873,6 +838,9 @@ void Playlist::on_menuSave_triggered()
 	updateRecentPlaylistsMenu();
 	wm->conf.Save();
 	changed=false;
+	ppl6::CString Title=tr("WinMusik Playlist");
+	Title+=" - "+PlaylistFileName;
+	this->setWindowTitle(Title);
 }
 
 void Playlist::on_menuSaveAs_triggered()
