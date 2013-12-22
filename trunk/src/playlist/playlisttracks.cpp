@@ -428,10 +428,11 @@ ppl6::CString PlaylistTracks::getName() const
 	return Name;
 }
 
-void PlaylistTracks::save(const ppl6::CString &Filename)
+bool PlaylistTracks::save(const ppl6::CString &Filename)
 {
 	ppl6::CString ext=ppl6::UCase(ppl6::FileSuffix(Filename));
 	if (ext=="WMP") return saveWMP(Filename);
+	return false;
 
 }
 
@@ -446,12 +447,12 @@ bool PlaylistTracks::load(const ppl6::CString &Filename)
 	return false;
 }
 
-void PlaylistTracks::saveWMP(const ppl6::CString &Filename)
+bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 {
 	ppl6::CFile ff;
 	if (!ff.Open(Filename,"wb")) {
 		CWmClient::RaiseError(NULL,tr("Could not open File"));
-		return;
+		return false;
 	}
 	ppl6::CString xml;
 	xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -477,6 +478,7 @@ void PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	xml+="</WinMusikPlaylist>\n";
 	ff.Write(xml);
 	ff.Close();
+	return true;
 }
 
 bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)

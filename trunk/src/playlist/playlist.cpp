@@ -53,7 +53,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.tracks->setAcceptDrops(true);
 	this->setWindowTitle(tr("WinMusik Playlist"));
 
-	//ui.tracks->installEventFilter(this);
+	ui.tracks->installEventFilter(this);
 
 	createMenue();
 	createToolbar();
@@ -194,12 +194,47 @@ void Playlist::updateRecentPlaylistsMenu()
 
 void Playlist::closeEvent(QCloseEvent *event)
 {
+	if (saveFirst()!=QMessageBox::Ok) {
+		event->ignore();
+		return;
+	}
 	if (wm) {
 		wm->SaveGeometry("playlist",saveGeometry());
 	}
 	QMainWindow::closeEvent(event);
 }
 
+QMessageBox::StandardButton Playlist::saveFirst()
+{
+	if (!changed) return QMessageBox::Ok;
+
+	QMessageBox::StandardButton ret=QMessageBox::question(this,tr("Save playlist"),
+			tr("This playlist was modified since the last save.\nDo you want to save your changes?"),
+			QMessageBox::No|QMessageBox::Yes|QMessageBox::Abort, QMessageBox::Abort);
+	if (ret==QMessageBox::Abort) return QMessageBox::Abort;
+	if (ret==QMessageBox::No) return QMessageBox::Ok;
+
+	if (PlaylistFileName.IsEmpty()) {
+		ppl6::CString Filename=PlaylistFileName;
+		if (Filename.IsEmpty()) Filename=wm->conf.LastPlaylistPath+"/playlist.wmp";
+		ppl6::CString Tmp=QFileDialog::getSaveFileName (this, tr("Save WinMusik Playlist"), Filename,
+				tr("Playlists (*.wmp)"));
+		if (Tmp.IsEmpty()) return QMessageBox::Abort;
+		PlaylistFileName=Tmp;
+	}
+
+	ui.tracks->setName(ui.playlistName->text());
+	if (!ui.tracks->save(PlaylistFileName)) return QMessageBox::Abort;
+	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
+	updateLastPlaylist();
+	updateRecentPlaylistsMenu();
+	wm->conf.Save();
+	changed=false;
+	ppl6::CString Title=tr("WinMusik Playlist");
+	Title+=" - "+PlaylistFileName;
+	this->setWindowTitle(Title);
+	return QMessageBox::Ok;
+}
 
 bool Playlist::eventFilter(QObject *target, QEvent *event)
 {
@@ -212,14 +247,7 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 	int type=event->type();
 	//printf ("Event: %i\n",type);
 	if (target==ui.tracks) {
-		if (type==QEvent::Drop) {
-			return false;
-			handleDropEvent(static_cast<QDropEvent *>(event));
-			return true;
-		} else if (type==QEvent::DragEnter) {
-			(static_cast<QDragEnterEvent *>(event))->accept();
-			return true;
-		} else if (type==QEvent::KeyPress) {
+		if (type==QEvent::KeyPress) {
 			QKeyEvent *e=static_cast<QKeyEvent *>(event);
 			if (e->key()==Qt::Key_Delete) {
 				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
@@ -782,6 +810,7 @@ void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
 
 void Playlist::on_menuNew_triggered()
 {
+	if (saveFirst()!=QMessageBox::Ok) return;
 	PlaylistFileName.Clear();
 	ui.tracks->setName("");
 	ui.playlistName->setText("");
@@ -793,6 +822,8 @@ void Playlist::on_menuNew_triggered()
 
 void Playlist::on_menuOpen_triggered()
 {
+	if (saveFirst()!=QMessageBox::Ok) return;
+
 	ppl6::CString Tmp=QFileDialog::getOpenFileName (this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
 				tr("Playlists (*.wmp)"));
 	if (Tmp.IsEmpty()) return;
@@ -832,7 +863,7 @@ void Playlist::on_menuSave_triggered()
 		return;
 	}
 	ui.tracks->setName(ui.playlistName->text());
-	ui.tracks->save(PlaylistFileName);
+	if (!ui.tracks->save(PlaylistFileName)) return;
 	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
 	updateLastPlaylist();
 	updateRecentPlaylistsMenu();
@@ -889,10 +920,11 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
 	if (key&Qt::MetaModifier) {
-		wm->PlayFile(((PlaylistItem*)item)->File);
+		editTrack((PlaylistItem*)item);
 		return;
 	}
-	editTrack((PlaylistItem*)item);
+	wm->PlayFile(((PlaylistItem*)item)->File);
+	return;
 }
 
 void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int)
@@ -960,6 +992,7 @@ void Playlist::on_contextDeleteTrack_triggered()
 	PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(currentTreeItem));
 	if (item) delete item;
 	changed=true;
+	renumberTracks();
 	updateLengthStatus();
 }
 
