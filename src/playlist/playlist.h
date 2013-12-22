@@ -73,6 +73,8 @@ private:
     void createToolbar();
     void createStatusBar();
 
+    QMessageBox::StandardButton saveFirst();
+
     void loadPlaylist(ppl6::CString &Filename);
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);

@@ -68,7 +68,7 @@ class PlaylistTracks : public QTreeWidget
 		bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
 		void dropEvent ( QDropEvent * event );
 
-		void saveWMP(const ppl6::CString &Filename);
+		bool saveWMP(const ppl6::CString &Filename);
 		bool loadWMP(const ppl6::CString &Filename);
 		void loadWMPItem(QDomElement &e);
 
@@ -88,7 +88,7 @@ class PlaylistTracks : public QTreeWidget
 		void deleteItems(QList<QTreeWidgetItem *>items);
 		void selectItems(QList<QTreeWidgetItem *>items);
 
-		void save(const ppl6::CString &Filename);
+		bool save(const ppl6::CString &Filename);
 		bool load(const ppl6::CString &Filename);
 		void setName(const ppl6::CString &Name);
 		ppl6::CString getName() const;
