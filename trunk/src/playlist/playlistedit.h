@@ -49,12 +49,16 @@ private:
     Ui::playlistEditClass ui;
     CWmClient *wm;
     int traktorIn, traktorOut;
+    ppl6::CBinary CoverPreview;
+    QPixmap			Cover;
+    ppl6::CString	Filename;
 
     void closeEvent(QCloseEvent *event);
     void updateTotalTime();
     int getSecondsFromLine(QLineEdit *line);
     void loadTraktorCues(const ppl6::CID3Tag &Tag);
     void loadCover(const ppl6::CID3Tag &Tag);
+    void updateCover();
 
 public slots:
 	void on_okButton_clicked();
@@ -73,6 +77,18 @@ public slots:
 	void on_cutEnd2_editingFinished() { updateTotalTime(); }
 	void on_cutEnd3_editingFinished() { updateTotalTime(); }
 	void on_cutEnd4_editingFinished() { updateTotalTime(); }
+
+	void on_coverCopyButton_clicked();
+	void on_coverInsertButton_clicked();
+	void on_coverLoadButton_clicked();
+	void on_coverSaveButton_clicked();
+
+	/*
+	void on_coverSearchAmazon_clicked();
+	void on_coverSearchGoogle_clicked();
+	void on_coverSearchBeatport_clicked();
+	void on_coverSearchSoundcloud_clicked();
+	*/
 
 
 };

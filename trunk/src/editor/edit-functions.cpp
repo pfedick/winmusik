@@ -861,7 +861,7 @@ void Edit::UpdateCover()
 			QByteArray bytes;
 			QBuffer buffer(&bytes);
 			buffer.open(QIODevice::WriteOnly);
-			Cover.save(&buffer, "JPEG",50);
+			Cover.save(&buffer, "JPEG",70);
 			ppl6::CBinary bin;
 			bin.Copy(bytes.data(),bytes.size());
 
