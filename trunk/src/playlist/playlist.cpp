@@ -275,6 +275,7 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 							QMessageBox::No) != QMessageBox::Yes) return false;
 				}
 				ui.tracks->deleteSelectedItems();
+				setChanged(true);
 				updateLengthStatus();
 				renumberTracks();
 				return true;
