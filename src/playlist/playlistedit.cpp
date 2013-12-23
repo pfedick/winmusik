@@ -31,6 +31,8 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QFileDialog>
+#include <QByteArray>
+#include <QBuffer>
 
 #include "playlisttracks.h"
 #include "playlistedit.h"
@@ -115,6 +117,8 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.cutEnd4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[4]/60),item->cutEndPosition[4]%60));
 	ui.trackLength->setText(ppl6::ToString("%0d:%02d",(int)(item->trackLength/60),item->trackLength%60));
 
+	CoverPreview=item->CoverPreview;
+	Filename=item->File;
 
 	ppl6::CID3Tag Tag;
 	if (Tag.Load(item->File)) {
@@ -130,10 +134,21 @@ void PlaylistEdit::loadCover(const ppl6::CID3Tag &Tag)
 	ppl6::CBinary cover;
 	Tag.GetPicture(3,cover);
 	if (cover.Size()>0) {
-		QPixmap pix;
-		pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-		ui.cover->setPixmap(pix.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+		Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+		updateCover();
 	}
+}
+
+void PlaylistEdit::updateCover()
+{
+	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	QPixmap icon;
+	icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+	QByteArray bytes;
+	QBuffer buffer(&bytes);
+	buffer.open(QIODevice::WriteOnly);
+	icon.save(&buffer, "JPEG",70);
+	CoverPreview.Copy(bytes.data(),bytes.size());
 }
 
 void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
@@ -193,6 +208,7 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->cutEndPosition[3]=getSecondsFromLine(ui.cutEnd3);
 	item->cutEndPosition[4]=getSecondsFromLine(ui.cutEnd4);
 	item->mixLength=item->endPositionSec-item->startPositionSec;
+	item->CoverPreview=CoverPreview;
 	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
 }
 
@@ -212,3 +228,78 @@ void PlaylistEdit::updateTotalTime()
 	length-=(getSecondsFromLine(ui.cutEnd4)-getSecondsFromLine(ui.cutStart4));
 	ui.mixLength->setText(ppl6::ToString("%0d:%02d",(int)(length/60),length%60));
 }
+
+void PlaylistEdit::on_coverCopyButton_clicked()
+{
+	QClipboard *clipboard = QApplication::clipboard();
+	if (!clipboard) return;
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	clipboard->setPixmap(Cover);
+	QApplication::restoreOverrideCursor();
+}
+
+void PlaylistEdit::on_coverInsertButton_clicked()
+{
+	QClipboard *clipboard = QApplication::clipboard();
+	if (!clipboard) return;
+	if (clipboard->pixmap().isNull()) return;
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	Cover=clipboard->pixmap();
+	saveCover(Filename,Cover);
+	updateCover();
+	QApplication::restoreOverrideCursor();
+}
+
+void PlaylistEdit::on_coverLoadButton_clicked()
+{
+	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
+	if (Dir.IsEmpty()) {
+		Dir=QDir::homePath();
+	}
+	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
+			Dir,
+			tr("Images (*.png *.bmp *.jpg)"));
+	if (newfile.isNull()) return;
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.Save();
+	if (!Cover.load(newfile)) {
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this,tr("Error: could not load Cover"),
+				tr("The soecified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
+				);
+		return;
+	} else {
+		saveCover(Filename,Cover);
+		QApplication::restoreOverrideCursor();
+		updateCover();
+	}
+}
+
+void PlaylistEdit::on_coverSaveButton_clicked()
+{
+	if (Cover.isNull()) return;
+	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
+
+	QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"),
+				Dir,
+				tr("Images (*.png *.bmp *.jpg)"));
+	if (newfile.isNull()) return;
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.Save();
+	if (!Cover.save (newfile)) {
+		/*
+		 * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton ) [static]
+		 *
+		 */
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this,tr("Error: could not save Cover"),
+				tr("The cover of this track could not be saved.\nPlease check if the target directory exists and is writable.\nPlease also check the file extension. WinMusik only supports .png, .jpg and .bmp")
+				);
+		return;
+	}
+	QApplication::restoreOverrideCursor();
+}
+

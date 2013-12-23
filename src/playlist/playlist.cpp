@@ -34,6 +34,7 @@
 #include <QToolBar>
 #include <QKeyEvent>
 #include <QDomDocument>
+#include <QBuffer>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -48,6 +49,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	this->wm=wm;
 	currentTreeItem=NULL;
 	searchWindow=NULL;
+	saveWidget=saveAsWidget=NULL;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
@@ -62,7 +64,8 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	playlistView=playlistViewNormal;
 
 	recreatePlaylist();
-	changed=false;
+	changed=true;
+	setChanged(false);
 
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
 
@@ -101,13 +104,16 @@ void Playlist::createMenue()
 void Playlist::createToolbar()
 {
 	QToolBar *tb=new QToolBar();
+	QAction *action;
 	tb->setFloatable(false);
 	tb->setMovable(false);
 
 	tb->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
 	tb->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
-	tb->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
-	tb->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	action=tb->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
+	saveWidget=tb->widgetForAction(action);
+	action=tb->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	saveAsWidget=tb->widgetForAction(action);
 	tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
@@ -192,6 +198,17 @@ void Playlist::updateRecentPlaylistsMenu()
 
 }
 
+void Playlist::setChanged(bool flag)
+{
+	if (changed!=flag) {
+		changed=flag;
+		if (saveWidget) saveWidget->setEnabled(changed);
+		if (saveAsWidget) saveAsWidget->setEnabled(changed);
+
+	}
+
+}
+
 void Playlist::closeEvent(QCloseEvent *event)
 {
 	if (saveFirst()!=QMessageBox::Ok) {
@@ -229,7 +246,7 @@ QMessageBox::StandardButton Playlist::saveFirst()
 	updateLastPlaylist();
 	updateRecentPlaylistsMenu();
 	wm->conf.Save();
-	changed=false;
+	setChanged(false);
 	ppl6::CString Title=tr("WinMusik Playlist");
 	Title+=" - "+PlaylistFileName;
 	this->setWindowTitle(Title);
@@ -399,7 +416,7 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 					renderTrack(item);
 					if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 					else ui.tracks->addTopLevelItem(item);
-					changed=true;
+					setChanged(true);
 					//item->setSelected(true);
 					e=e.nextSiblingElement("item");
 				}
@@ -438,7 +455,7 @@ void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertIte
 		}
 		if (item->titleId==0) loadTrackFromFile(item,file);
 		renderTrack(item);
-		changed=true;
+		setChanged(true);
 		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 		else ui.tracks->addTopLevelItem(item);
 		//item->setSelected(true);
@@ -759,7 +776,7 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 		updateRecentPlaylistsMenu();
 		ui.playlistName->setText(ui.tracks->getName());
 		updatePlaylist();
-		changed=false;
+		setChanged(false);
 		ppl6::CString Title=tr("WinMusik Playlist");
 		Title+=" - "+Filename;
 		this->setWindowTitle(Title);
@@ -776,9 +793,38 @@ void Playlist::editTrack(PlaylistItem *item)
 	edit.filloutFields(item);
 	if (edit.exec()==1) {
 		edit.storeFileds(item);
-		changed=true;
+		saveTitle(item);
+		setChanged(true);
 		renderTrack(item);
 		updateLengthStatus();
+	}
+}
+
+void Playlist::saveTitle(PlaylistItem *item)
+{
+	if (item->titleId==0) return;
+	DataTitle *ti=wm_main->GetTitle(item->titleId);
+	if (!ti) return;
+
+	DataTitle Ti;
+	Ti.CopyFrom(ti);
+
+	Ti.SetArtist(item->Artist);
+	Ti.SetTitle(item->Title);
+	Ti.SetAlbum(item->Album);
+	Ti.VersionId=wm_main->VersionStore.FindOrAdd(item->Version);
+	Ti.GenreId=wm_main->GenreStore.FindOrAdd(item->Genre);
+	Ti.LabelId=wm_main->LabelStore.FindOrAdd(item->Label);
+	Ti.Key=item->musicKey;
+	Ti.BPM=item->bpm;
+	Ti.Rating=item->rating;
+	if (Ti.CoverPreview.Size()==0 || item->CoverPreview.Size()>0) Ti.CoverPreview=item->CoverPreview;
+
+	// Titel speichern
+	if (Ti.TitleId>0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
+	if (!wm_main->TitleStore.Put(&Ti)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
 	}
 }
 
@@ -816,7 +862,7 @@ void Playlist::on_menuNew_triggered()
 	ui.playlistName->setText("");
 	ui.tracks->clear();
 	updatePlaylist();
-	changed=false;
+	setChanged(false);
 	this->setWindowTitle(tr("WinMusik Playlist"));
 }
 
@@ -868,7 +914,7 @@ void Playlist::on_menuSave_triggered()
 	updateLastPlaylist();
 	updateRecentPlaylistsMenu();
 	wm->conf.Save();
-	changed=false;
+	setChanged(false);
 	ppl6::CString Title=tr("WinMusik Playlist");
 	Title+=" - "+PlaylistFileName;
 	this->setWindowTitle(Title);
@@ -951,21 +997,186 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 	QPoint p=ui.tracks->mapToGlobal(pos);
 	currentTreeItem=(PlaylistItem*)ui.tracks->itemAt(pos);
 	if (!currentTreeItem) return;
+	int column=ui.tracks->currentColumn();
 
-    QMenu *m=new QMenu(this);
-    QAction *a=NULL;
-   	a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
-   	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
-   	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Paste","trackList Context Menue"),this,SLOT(on_contextPasteTrack_triggered()));
-   	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
-   	m->addSeparator();
-   	m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
-    m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
-    m->addSeparator();
-    m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
-    m->popup(p,a);
+	DataTitle *t=NULL;
+	t=wm->GetTitle(currentTreeItem->titleId);
+
+	QMenu *m=new QMenu(this);
+	QAction *a=NULL;
+
+	if (column==columnRating) {
+		a=m->addAction (QIcon(":/bewertung/resources/rating-0.png"),"0",this,SLOT(on_contextRate0_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-1.png"),"1",this,SLOT(on_contextRate1_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-2.png"),"2",this,SLOT(on_contextRate2_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-3.png"),"3",this,SLOT(on_contextRate3_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-4.png"),"4",this,SLOT(on_contextRate4_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
+		m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
+	} else if (column==columnMusicKey) {
+		if (t!=NULL && (t->Flags&16)==0) a=m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+		else if (t!=NULL && (t->Flags&16)==16) a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+		QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
+		createSetMusicKeyContextMenu(mk);
+	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {
+		a=m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Paste Cover","trackList Context Menue"),this,SLOT(on_contextPasteCover_triggered()));
+	} else {
+		a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
+		m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
+		m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Paste","trackList Context Menue"),this,SLOT(on_contextPasteTrack_triggered()));
+		m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
+		m->addSeparator();
+		m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+		m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
+		m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+		m->addSeparator();
+		m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+	}
+	m->popup(p,a);
 }
+
+void Playlist::createSetMusicKeyContextMenu(QMenu *m)
+{
+	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextMusicKey0_triggered()));
+	m->addAction(tr("A","trackList Context Menue"),this,SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(tr("A#","trackList Context Menue"),this,SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(tr("A#m","trackList Context Menue"),this,SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(tr("Am","trackList Context Menue"),this,SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(tr("B","trackList Context Menue"),this,SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(tr("Bm","trackList Context Menue"),this,SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(tr("C","trackList Context Menue"),this,SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(tr("C#","trackList Context Menue"),this,SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(tr("C#m","trackList Context Menue"),this,SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(tr("Cm","trackList Context Menue"),this,SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(tr("D","trackList Context Menue"),this,SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(tr("D#","trackList Context Menue"),this,SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(tr("D#m","trackList Context Menue"),this,SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(tr("Dm","trackList Context Menue"),this,SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(tr("E","trackList Context Menue"),this,SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(tr("Em","trackList Context Menue"),this,SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(tr("F","trackList Context Menue"),this,SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(tr("F#","trackList Context Menue"),this,SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(tr("F#m","trackList Context Menue"),this,SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(tr("Fm","trackList Context Menue"),this,SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(tr("G","trackList Context Menue"),this,SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(tr("G#","trackList Context Menue"),this,SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(tr("G#m","trackList Context Menue"),this,SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(tr("Gm","trackList Context Menue"),this,SLOT(on_contextMusicKey11_triggered()));
+}
+
+void Playlist::on_contextMusicKeyVerified_triggered()
+{
+	if (!currentTreeItem) return;
+	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+	DataTitle tUpdate=*t;
+	if (tUpdate.Flags&16) tUpdate.Flags-=16;
+	else tUpdate.Flags|=16;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	renderTrack(currentTreeItem);
+
+}
+
+void Playlist::on_contextSetMusicKey(int k)
+{
+	if (!currentTreeItem) return;
+	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+
+	DataTitle tUpdate=*t;
+	tUpdate.Key=k;
+
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	currentTreeItem->musicKey=k;
+	renderTrack(currentTreeItem);
+}
+
+void Playlist::rateCurrentTrack(int value)
+{
+	if (!currentTreeItem) return;
+	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+	if (value==t->Rating) return;
+	DataTitle tUpdate=*t;
+	tUpdate.Rating=value;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
+	currentTreeItem->rating=value;
+	renderTrack(currentTreeItem);
+}
+
+void Playlist::on_contextRate0_clicked()
+{
+	rateCurrentTrack(0);
+}
+
+void Playlist::on_contextRate1_clicked()
+{
+	rateCurrentTrack(1);
+}
+
+void Playlist::on_contextRate2_clicked()
+{
+	rateCurrentTrack(2);
+}
+
+void Playlist::on_contextRate3_clicked()
+{
+	rateCurrentTrack(3);
+}
+
+void Playlist::on_contextRate4_clicked()
+{
+	rateCurrentTrack(4);
+}
+
+void Playlist::on_contextRate5_clicked()
+{
+	rateCurrentTrack(5);
+}
+
+void Playlist::on_contextRate6_clicked()
+{
+	rateCurrentTrack(6);
+}
+
+void Playlist::on_contextPasteCover_triggered()
+{
+	if (!currentTreeItem) return;
+	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+
+	QClipboard *clipboard = QApplication::clipboard();
+	if (!clipboard) return;
+	if (clipboard->pixmap().isNull()) return;
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	QPixmap Cover=clipboard->pixmap();
+
+	// Cover im File speichern
+	if (currentTreeItem->File.NotEmpty()) saveCover(currentTreeItem->File, Cover);
+	DataTitle Ti=*t;
+	getIconFromCover(Ti.CoverPreview,Cover);
+	currentTreeItem->CoverPreview=Ti.CoverPreview;
+	QApplication::restoreOverrideCursor();
+
+	// Titel speichern
+	if (!wm_main->TitleStore.Put(&Ti)) {
+		QApplication::restoreOverrideCursor();
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+	} else {
+		this->renderTrack(currentTreeItem);
+		QApplication::restoreOverrideCursor();
+	}
+}
+
 
 void Playlist::on_contextEditTrack_triggered()
 {
@@ -991,7 +1202,7 @@ void Playlist::on_contextDeleteTrack_triggered()
 	if(!currentTreeItem) return;
 	PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(currentTreeItem));
 	if (item) delete item;
-	changed=true;
+	setChanged(true);
 	renumberTracks();
 	updateLengthStatus();
 }

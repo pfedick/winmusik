@@ -361,3 +361,33 @@ void getHarmonicKeys(std::set<int> &harmonics, int key)
 		else break;
 	}
 }
+
+
+bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
+{
+	if (filename.IsEmpty()) return false;
+	if (Cover.isNull()) return false;
+	ppl6::CID3Tag Tag;
+	if (Tag.Load(filename)) {
+		QByteArray bytes;
+		QBuffer buffer(&bytes);
+		buffer.open(QIODevice::WriteOnly);
+		Cover.save(&buffer, "JPEG",70);
+		ppl6::CBinary bin;
+		bin.Copy(bytes.data(),bytes.size());
+		Tag.SetPicture(3,bin,"image/jpeg");
+		return Tag.Save(wm_main->conf.bWriteId3v1,wm_main->conf.bWriteId3v2);
+	}
+	return 0;
+}
+
+void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover)
+{
+	QPixmap icon;
+	icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+	QByteArray bytes;
+	QBuffer buffer(&bytes);
+	buffer.open(QIODevice::WriteOnly);
+	icon.save(&buffer, "JPEG",70);
+	bin.Copy(bytes.data(),bytes.size());
+}
