@@ -265,7 +265,9 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 	//printf ("Event: %i\n",type);
 	if (target==ui.tracks) {
 		if (type==QEvent::KeyPress) {
+			currentTreeItem=(PlaylistItem*)ui.tracks->currentItem();
 			QKeyEvent *e=static_cast<QKeyEvent *>(event);
+			//printf ("Key: %i\n",e->key());
 			if (e->key()==Qt::Key_Delete) {
 				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 				if (selected.count()>1) {
