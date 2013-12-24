@@ -930,7 +930,9 @@ ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
 	r.Concatf("<bitrate>%i</bitrate>\n",(int)ti->Bitrate);
 	r.Concatf("<rating>%i</rating>\n",(int)ti->Rating);
 	r.Concatf("<trackLength>%i</trackLength>\n",(int)ti->Length);
-	r+="<musicKey>"+ti->getKeyName()+"</musicKey>\n";
+	r+="<musicKey verified=\"";
+	if (ti->Flags&16) r+="true"; else r+="false";
+	r+=""\">"+ti->getKeyName()+"</musicKey>\n";
 	return r;
 }
 
@@ -1645,7 +1647,7 @@ static void SubstituteLetter(ppl6::CWString &Text, const ppl6::CWString &Letters
 
 void CWmClient::initLetterReplacements()
 {
-	addLetterReplacement(ppl6::CWString(L"&+()_,"),L' ');
+	addLetterReplacement(ppl6::CWString(L"&+()_,!"),L' ');
 	addLetterReplacement(ppl6::CWString(L".:''`"),0);
 	addLetterReplacement(ppl6::CWString(L"°"),L'o');
 	addLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
