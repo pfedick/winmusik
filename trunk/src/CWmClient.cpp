@@ -932,7 +932,7 @@ ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
 	r.Concatf("<trackLength>%i</trackLength>\n",(int)ti->Length);
 	r+="<musicKey verified=\"";
 	if (ti->Flags&16) r+="true"; else r+="false";
-	r+=""\">"+ti->getKeyName()+"</musicKey>\n";
+	r+="\">"+ti->getKeyName()+"</musicKey>\n";
 	return r;
 }
 

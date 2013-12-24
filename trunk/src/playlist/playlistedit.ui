@@ -108,6 +108,23 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Bpm played:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="bpmPlayed">
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>MusicKey:</string>
@@ -121,6 +138,13 @@
               <width>60</width>
               <height>16777215</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="keyVerified">
+            <property name="text">
+             <string>Key verified</string>
             </property>
            </widget>
           </item>

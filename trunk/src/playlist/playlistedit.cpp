@@ -97,7 +97,9 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.album->setText(item->Album);
 	ui.remarks->setText(item->Remarks);
 	ui.bpm->setText(ppl6::ToString("%i",item->bpm));
+	ui.bpmPlayed->setText(ppl6::ToString("%i",item->bpmPlayed));
 	ui.musicKey->setText(DataTitle::keyName(item->musicKey));
+	ui.keyVerified->setChecked(item->keyVerified);
 
 	ui.rating->setCurrentIndex(item->rating);
 
@@ -193,7 +195,9 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->Album=ui.album->text().trimmed();
 	item->Remarks=ui.remarks->text().trimmed();
 	item->musicKey=DataTitle::keyId(ui.musicKey->text().trimmed());
+	item->keyVerified=ui.keyVerified->isChecked();
 	item->bpm=ui.bpm->text().trimmed().toInt();
+	item->bpmPlayed=ui.bpmPlayed->text().trimmed().toInt();
 	item->rating=ui.rating->currentIndex();
 	item->startPositionSec=getSecondsFromLine(ui.trackStart);
 	item->endPositionSec=getSecondsFromLine(ui.trackEnd);

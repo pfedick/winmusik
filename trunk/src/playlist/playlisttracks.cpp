@@ -24,6 +24,7 @@ PlaylistItem::PlaylistItem()
 	endPositionSec=0;
 	musicKey=0;
 	bpm=0;
+	bpmPlayed=0;
 	rating=0;
 	trackLength=0;
 	mixLength=0;
@@ -31,6 +32,11 @@ PlaylistItem::PlaylistItem()
 		cutStartPosition[z]=0;
 		cutEndPosition[z]=0;
 	}
+	keyVerified=false;
+	DeviceId=0;
+	DeviceTrack=0;
+	DeviceType=0;
+	DevicePage=0;
 }
 
 ppl6::CString PlaylistItem::exportAsXML(int indention) const
@@ -56,8 +62,11 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <Album>"+ppl6::EscapeHTMLTags(Album)+"</Album>\n";
 	ret+=Indent+"   <Remarks>"+ppl6::EscapeHTMLTags(Remarks)+"</Remarks>\n";
 	ret+=Indent+"   <File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
-	ret+=Indent+"   <musicKey>"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey))+"</musicKey>\n";
+	ret+=Indent+"   <musicKey verified=\"";
+	if (keyVerified) ret+="true"; else ret+="false";
+	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey))+"</musicKey>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
+	ret+=Indent+"   <bpmPlayed>"+ppl6::ToString("%u",bpmPlayed)+"</bpmPlayed>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";
 	ret+=Indent+"   <trackLength>"+ppl6::ToString("%u",trackLength)+"</trackLength>\n";
 	ret+=Indent+"   <mixLength>"+ppl6::ToString("%u",mixLength)+"</mixLength>\n";
@@ -67,6 +76,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 
 void PlaylistItem::importFromXML(QDomElement &e)
 {
+	ppl6::CString Tmp;
 	QDomNode node =e.namedItem("titleId");
 	if (node.isNull()==false && node.isElement()==true) {
 		titleId=node.toElement().text().toInt();
@@ -120,11 +130,19 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	node =e.namedItem("musicKey");
 	if (node.isNull()==false && node.isElement()==true) {
 		musicKey=DataTitle::keyId(node.toElement().text());
+		Tmp=node.toElement().attribute("verified","false");
+		keyVerified=Tmp.ToBool();
 	}
 	node =e.namedItem("bpm");
 	if (node.isNull()==false && node.isElement()==true) {
 		bpm=node.toElement().text().toInt();
 	}
+	node =e.namedItem("bpmPlayed");
+	if (node.isNull()==false && node.isElement()==true) {
+		bpmPlayed=node.toElement().text().toInt();
+	}
+	if (!bpmPlayed) bpmPlayed=bpm;
+
 	node =e.namedItem("rating");
 	if (node.isNull()==false && node.isElement()==true) {
 		rating=node.toElement().text().toInt();
@@ -155,6 +173,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		}
 	}
 
+	/*
 	if (titleId>0) {
 		DataTitle *ti=wm_main->GetTitle(titleId);
 		if (ti) {
@@ -164,6 +183,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			DevicePage=ti->Page;
 		}
 	}
+	*/
 	if (endPositionSec==0) {
 		this->useTraktorCues(File);
 		if (endPositionSec==0) endPositionSec=trackLength;
@@ -207,7 +227,9 @@ void PlaylistItem::updateFromDatabase()
 	Album=ti->Album;
 	musicKey=ti->Key;
 	bpm=ti->BPM;
+	if (!bpmPlayed) bpmPlayed=bpm;
 	rating=ti->Rating;
+	keyVerified=(ti->Flags<<4)&1;
 	Version=wm_main->GetVersionText(ti->VersionId);
 	Genre=wm_main->GetGenreText(ti->GenreId);
 	Label=wm_main->GetLabelText(ti->LabelId);

@@ -34,9 +34,11 @@ class PlaylistItem : public QTreeWidgetItem
 		ppl6::CBinary	CoverPreview;
 		int				musicKey;
 		int				bpm;
+		int				bpmPlayed;
 		int				rating;
 		int				trackLength;
 		int				mixLength;
+		bool			keyVerified;
 
 		ppluint32		DeviceId;
 		ppluint16		DeviceTrack;
