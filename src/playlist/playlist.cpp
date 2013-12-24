@@ -279,6 +279,10 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 				updateLengthStatus();
 				renumberTracks();
 				return true;
+			} else if (e->key()==Qt::Key_E) {
+				if(!currentTreeItem) return false;
+				editTrack(currentTreeItem);
+				return true;
 			}
 			return false;
 			/*
@@ -565,6 +569,15 @@ void Playlist::recreatePlaylist()
 	columnCover=1;
 	columnTitle=2;
 	columnGenre=3;
+	columnBpm=4;
+	columnBpmPlayed=5;
+	columnMusicKey=6;
+	columnRating=7;
+	columnStart=8;
+	columnEnd=9;
+	columnCuts=10;
+	columnLength=11;
+	columnSource=12;
 
 	if (playlistView==playlistViewNormal) {
 		ui.tracks->setColumnCount(7);
@@ -595,16 +608,6 @@ void Playlist::recreatePlaylist()
 		item->setText(10,tr("Cuts"));
 		item->setText(11,tr("Length"));
 		item->setText(12,tr("Source"));
-
-		columnBpm=4;
-		columnBpmPlayed=5;
-		columnMusicKey=6;
-		columnRating=7;
-		columnStart=8;
-		columnEnd=9;
-		columnCuts=10;
-		columnLength=11;
-		columnSource=12;
 	}
 	Resize();
 	updatePlaylist();
@@ -662,6 +665,11 @@ void Playlist::renderTrack(PlaylistItem *item)
 		item->setIcon(i,QIcon());
 		item->setTextColor(i,color);
 	}
+	QFont f=item->font(columnMusicKey);
+	f.setBold(false);
+	item->setFont(columnMusicKey,f);
+
+
 	if (item->CoverPreview.Size()>0) {
 		QPixmap pix, icon;
 		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.Size());
@@ -734,8 +742,15 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	Tmp.Setf("%i",item->bpmPlayed);
 	item->setText(columnBpmPlayed,Tmp);
 	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
-	if ((item->keyVerified)) item->setTextColor(columnMusicKey,QColor(0,0,0));
-		else item->setTextColor(columnMusicKey,QColor(192,192,192));
+	QFont f=item->font(columnMusicKey);
+	if ((item->keyVerified)) {
+		item->setTextColor(columnMusicKey,QColor(0,0,0));
+		f.setBold(true);
+	} else {
+		item->setTextColor(columnMusicKey,QColor(192,192,192));
+		f.setBold(false);
+	}
+	item->setFont(columnMusicKey,f);
 
 	Tmp.Setf("%02i:%02i",(int)(item->startPositionSec/60),(int)item->startPositionSec%60);
 	item->setText(columnStart,Tmp);
@@ -1025,8 +1040,8 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 		m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
 		m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
 	} else if (column==columnMusicKey) {
-		if (t!=NULL && (t->Flags&16)==0) a=m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
-		else if (t!=NULL && (t->Flags&16)==16) a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+		if (currentTreeItem->keyVerified==false) a=m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
+		else a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
 		QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
 		createSetMusicKeyContextMenu(mk);
 	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {
