@@ -60,6 +60,10 @@ private:
     void loadCover(const ppl6::CID3Tag &Tag);
     void updateCover();
 
+    void installFilter(QObject *object, int id);
+    bool eventFilter(QObject *target, QEvent *event);
+    bool consumeEvent(QObject *target, QEvent *event);
+
 public slots:
 	void on_okButton_clicked();
 	void on_cancelButton_clicked();
