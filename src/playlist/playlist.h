@@ -127,6 +127,7 @@ private:
     int columnRating;
     int columnSource;
     int columnBpm;
+    int columnBpmPlayed;
     int columnMusicKey;
     int columnStart;
     int columnEnd;
