@@ -48,6 +48,32 @@ PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
 	restoreGeometry(wm->GetGeometry("playlistedit"));
 	traktorIn=-1;
 	traktorOut=-1;
+
+	installFilter(ui.artist,0);
+	installFilter(ui.title,0);
+	installFilter(ui.version,0);
+	installFilter(ui.genre,0);
+	installFilter(ui.album,0);
+	installFilter(ui.label,0);
+	installFilter(ui.bpm,0);
+	installFilter(ui.bpmPlayed,0);
+	installFilter(ui.musicKey,0);
+	installFilter(ui.keyVerified,0);
+	installFilter(ui.rating,0);
+	installFilter(ui.trackStart,0);
+	installFilter(ui.trackEnd,0);
+	installFilter(ui.cutStart0,0);
+	installFilter(ui.cutStart1,0);
+	installFilter(ui.cutStart2,0);
+	installFilter(ui.cutStart3,0);
+	installFilter(ui.cutStart4,0);
+	installFilter(ui.cutEnd0,0);
+	installFilter(ui.cutEnd1,0);
+	installFilter(ui.cutEnd2,0);
+	installFilter(ui.cutEnd3,0);
+	installFilter(ui.cutEnd4,0);
+	installFilter(ui.traktorUseInOutButton,0);
+
 }
 
 
@@ -55,6 +81,14 @@ PlaylistEdit::~PlaylistEdit()
 {
 
 }
+
+
+void PlaylistEdit::installFilter(QObject *object, int id)
+{
+	object->installEventFilter(this);
+	object->setProperty("id",id);
+}
+
 
 void PlaylistEdit::closeEvent(QCloseEvent *event)
 {
@@ -253,6 +287,29 @@ void PlaylistEdit::on_coverInsertButton_clicked()
 	updateCover();
 	QApplication::restoreOverrideCursor();
 }
+
+bool PlaylistEdit::eventFilter(QObject *target, QEvent *event)
+{
+	if (consumeEvent(target,event)) return true;
+	return QDialog::eventFilter(target,event);
+}
+
+bool PlaylistEdit::consumeEvent(QObject *target, QEvent *event)
+{
+	int type=event->type();
+	if (type==QEvent::KeyPress) {
+		QKeyEvent *e=static_cast<QKeyEvent *>(event);
+		if (e->key()==Qt::Key_F12) {
+			done(1);
+			return true;
+		} else if (e->key()==Qt::Key_Escape) {
+			done(0);
+			return true;
+		}
+	}
+	return false;
+}
+
 
 void PlaylistEdit::on_coverLoadButton_clicked()
 {
