@@ -1078,17 +1078,20 @@ void Playlist::createSetMusicKeyContextMenu(QMenu *m)
 void Playlist::on_contextMusicKeyVerified_triggered()
 {
 	if (!currentTreeItem) return;
+	if (currentTreeItem->keyVerified) currentTreeItem->keyVerified=false;
+	else currentTreeItem->keyVerified=true;
+
 	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
-	if (!t) return;
-	DataTitle tUpdate=*t;
-	if (tUpdate.Flags&16) tUpdate.Flags-=16;
-	else tUpdate.Flags|=16;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-		return;
+	if (t) {
+		DataTitle tUpdate=*t;
+		if (tUpdate.Flags&16) tUpdate.Flags-=16;
+		if (currentTreeItem->keyVerified) tUpdate.Flags|=16;
+		if (!wm->TitleStore.Put(&tUpdate)) {
+			wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+			return;
+		}
 	}
 	renderTrack(currentTreeItem);
-
 }
 
 void Playlist::on_contextSetMusicKey(int k)
