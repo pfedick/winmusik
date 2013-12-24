@@ -203,7 +203,7 @@ void Playlist::setChanged(bool flag)
 	if (changed!=flag) {
 		changed=flag;
 		if (saveWidget) saveWidget->setEnabled(changed);
-		if (saveAsWidget) saveAsWidget->setEnabled(changed);
+		//if (saveAsWidget) saveAsWidget->setEnabled(changed);
 
 	}
 
@@ -539,6 +539,8 @@ void Playlist::Resize()
 	} else if (playlistView==playlistViewDJ) {
 		ui.tracks->setColumnWidth(columnBpm,35);
 		w-=39;
+		ui.tracks->setColumnWidth(columnBpmPlayed,35);
+		w-=39;
 		ui.tracks->setColumnWidth(columnMusicKey,50);
 		w-=54;
 		ui.tracks->setColumnWidth(columnStart,60);
@@ -578,28 +580,31 @@ void Playlist::recreatePlaylist()
 		columnSource=6;
 
 	} else if (playlistView==playlistViewDJ) {
-		ui.tracks->setColumnCount(12);
+		ui.tracks->setColumnCount(13);
 		item->setText(0,tr("Track"));
 		item->setText(1,tr("Cover"));
 		item->setText(2,tr("Artist - Title (Version)"));
 		item->setText(3,tr("Genre"));
 		item->setText(4,tr("Bpm"));
-		item->setText(5,tr("Key"));
-		item->setText(6,tr("Rating"));
-		item->setText(7,tr("Start"));
-		item->setText(8,tr("End"));
-		item->setText(9,tr("Cuts"));
-		item->setText(10,tr("Length"));
-		item->setText(11,tr("Source"));
+		item->setText(5,tr("BpmPlayed"));
 
-		columnLength=10;
-		columnRating=6;
-		columnSource=11;
+		item->setText(6,tr("Key"));
+		item->setText(7,tr("Rating"));
+		item->setText(8,tr("Start"));
+		item->setText(9,tr("End"));
+		item->setText(10,tr("Cuts"));
+		item->setText(11,tr("Length"));
+		item->setText(12,tr("Source"));
+
 		columnBpm=4;
-		columnMusicKey=5;
-		columnStart=7;
-		columnEnd=8;
-		columnCuts=9;
+		columnBpmPlayed=5;
+		columnMusicKey=6;
+		columnRating=7;
+		columnStart=8;
+		columnEnd=9;
+		columnCuts=10;
+		columnLength=11;
+		columnSource=12;
 	}
 	Resize();
 	updatePlaylist();
@@ -726,7 +731,12 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	ppl6::CString Tmp;
 	Tmp.Setf("%i",item->bpm);
 	item->setText(columnBpm,Tmp);
+	Tmp.Setf("%i",item->bpmPlayed);
+	item->setText(columnBpmPlayed,Tmp);
 	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
+	if ((item->keyVerified)) item->setTextColor(columnMusicKey,QColor(0,0,0));
+		else item->setTextColor(columnMusicKey,QColor(192,192,192));
+
 	Tmp.Setf("%02i:%02i",(int)(item->startPositionSec/60),(int)item->startPositionSec%60);
 	item->setText(columnStart,Tmp);
 	Tmp.Setf("%02i:%02i",(int)(item->endPositionSec/60),(int)item->endPositionSec%60);
