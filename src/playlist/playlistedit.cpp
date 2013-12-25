@@ -38,6 +38,7 @@
 #include "playlistedit.h"
 #include <stdio.h>
 #include "traktor.h"
+#include "winmusik3.h"
 
 PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
@@ -160,6 +161,20 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	if (Tag.Load(item->File)) {
 		loadCover(Tag);
 		loadTraktorCues(Tag);
+		ppl6::CString Tmp;
+		if (item->bpm==0) {
+			// BPM
+			Tmp=Tag.GetBPM();
+			NormalizeImportString(Tmp);
+			ui.bpm->setText(Tmp);
+		}
+
+		if (item->musicKey==0) {
+			// Music Key
+			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey())));
+		}
+
+
 	}
 
 	updateTotalTime();
