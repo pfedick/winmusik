@@ -179,7 +179,7 @@ ppl6::CString Long2Date(ppl6::CString &Format, ppluint32 Date);
 void getHarmonicKeys(std::set<int> &harmonics, int key);
 bool saveCover(const ppl6::CString &filename, const QPixmap &Cover);
 void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover);
-
+void NormalizeImportString(ppl6::CString &Buffer);
 
 /*******************************************************
  * Global Variablen                                    *
