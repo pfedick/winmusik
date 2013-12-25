@@ -82,6 +82,9 @@ public slots:
 	void on_cutEnd3_editingFinished() { updateTotalTime(); }
 	void on_cutEnd4_editingFinished() { updateTotalTime(); }
 
+	void on_bpm_editingFinished() { updateTotalTime(); }
+	void on_bpmPlayed_editingFinished() { updateTotalTime(); }
+
 	void on_coverCopyButton_clicked();
 	void on_coverInsertButton_clicked();
 	void on_coverLoadButton_clicked();
