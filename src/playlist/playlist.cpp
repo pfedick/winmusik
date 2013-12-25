@@ -285,6 +285,10 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 				if(!currentTreeItem) return false;
 				editTrack(currentTreeItem);
 				return true;
+			} else if (e->key()==Qt::Key_P) {
+				if(!currentTreeItem) return false;
+				wm->PlayFile((currentTreeItem)->File);
+				return true;
 			}
 			return false;
 			/*
