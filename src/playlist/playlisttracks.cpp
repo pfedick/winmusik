@@ -539,7 +539,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	if (!doc.setContent(&file, &errorMsg,&errorLine,&errorColumn)) {
 		file.close();
 		ppl6::CString m=tr("Could not read playlist, invalid XML-format:");
-		m+=tr("Fielname:"); m+=" "+Filename+"\n";
+		m+=tr("Filename:"); m+=" "+Filename+"\n";
 		m+=tr("Error:"); m+=" "+errorMsg+"\n";
 		m+=tr("Line:"); m+=" "+ppl6::ToString("%i\n",errorLine);
 		m+=tr("Column:"); m+=" "+ppl6::ToString("%i\n",errorColumn);
@@ -552,7 +552,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	if (root.tagName()!="WinMusikPlaylist") {
 		ppl6::CString m=tr("File is not a WinMusik playlist");
 		m+="\n\n";
-		m+=tr("Fielname:"); m+=" "+Filename+"\n";
+		m+=tr("Filename:"); m+=" "+Filename+"\n";
 		QMessageBox::critical(NULL, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
 		return false;
@@ -560,7 +560,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	if (root.attribute("version")!="1") {
 		ppl6::CString m=tr("Unknown or unsupported version of WinMusik playlist");
 		m+="\n\n";
-		m+=tr("Fielname:"); m+=" "+Filename+"\n";
+		m+=tr("Filename:"); m+=" "+Filename+"\n";
 		m+=tr("Version:"); m+=" "+root.attribute("version")+"\n";
 		QMessageBox::critical(NULL, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
