@@ -248,7 +248,7 @@ void PlaylistItem::updateFromDatabase()
 	bpm=ti->BPM;
 	if (!bpmPlayed) bpmPlayed=bpm;
 	rating=ti->Rating;
-	keyVerified=(ti->Flags<<4)&1;
+	keyVerified=(ti->Flags>>4)&1;
 	Version=wm_main->GetVersionText(ti->VersionId);
 	Genre=wm_main->GetGenreText(ti->GenreId);
 	Label=wm_main->GetLabelText(ti->LabelId);
