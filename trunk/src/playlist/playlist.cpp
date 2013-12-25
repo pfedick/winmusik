@@ -602,7 +602,7 @@ void Playlist::recreatePlaylist()
 		item->setText(2,tr("Artist - Title (Version)"));
 		item->setText(3,tr("Genre"));
 		item->setText(4,tr("Bpm"));
-		item->setText(5,tr("BpmPlayed"));
+		item->setText(5,tr("Played"));
 
 		item->setText(6,tr("Key"));
 		item->setText(7,tr("Rating"));
@@ -742,7 +742,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	ppl6::CString Tmp;
 	Tmp.Setf("%i",item->bpm);
 	item->setText(columnBpm,Tmp);
-	Tmp.Setf("%i",item->bpmPlayed);
+	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
 	item->setText(columnBpmPlayed,Tmp);
 	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
 	QFont f=item->font(columnMusicKey);

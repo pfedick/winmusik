@@ -2170,7 +2170,7 @@ void Edit::on_coverLoadButton_clicked()
 	if (!Cover.load(newfile)) {
 		QApplication::restoreOverrideCursor();
 		QMessageBox::critical(this,tr("Error: could not load Cover"),
-				tr("The soecified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
+				tr("The specified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
 				);
 		return;
 	} else {
