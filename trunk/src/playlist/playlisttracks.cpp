@@ -77,10 +77,29 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 void PlaylistItem::importFromXML(QDomElement &e)
 {
 	ppl6::CString Tmp;
+
 	QDomNode node =e.namedItem("titleId");
 	if (node.isNull()==false && node.isElement()==true) {
 		titleId=node.toElement().text().toInt();
 	}
+
+	node =e.namedItem("deviceType");
+	if (node.isNull()==false && node.isElement()==true) {
+		DeviceType=node.toElement().text().toInt();
+	}
+	node =e.namedItem("deviceId");
+	if (node.isNull()==false && node.isElement()==true) {
+		DeviceId=node.toElement().text().toInt();
+	}
+	node =e.namedItem("devicePage");
+	if (node.isNull()==false && node.isElement()==true) {
+		DevicePage=node.toElement().text().toInt();
+	}
+	node =e.namedItem("deviceTrack");
+	if (node.isNull()==false && node.isElement()==true) {
+		DeviceTrack=node.toElement().text().toInt();
+	}
+
 
 	node =e.namedItem("startPositionSec");
 	if (node.isNull()==false && node.isElement()==true) {

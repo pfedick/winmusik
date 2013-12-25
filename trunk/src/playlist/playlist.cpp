@@ -409,6 +409,7 @@ void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertIte
 void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem)
 {
 //	printf ("Playlist::handleXMLDrop\n");
+	//xml.Print(true);
 	QDomDocument doc("winmusikTracklist");
 	if (doc.setContent(xml)) {
 		QDomElement root=doc.documentElement();
@@ -419,7 +420,7 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 				while (!e.isNull()) {
 					PlaylistItem *item=new PlaylistItem;
 					item->importFromXML(e);
-					//	item->updateFromDatabase();
+					item->updateFromDatabase();
 					renderTrack(item);
 					if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
 					else ui.tracks->addTopLevelItem(item);
