@@ -1030,8 +1030,11 @@
   <tabstop>album</tabstop>
   <tabstop>labelName</tabstop>
   <tabstop>bpm</tabstop>
+  <tabstop>bpmPlayed</tabstop>
   <tabstop>musicKey</tabstop>
+  <tabstop>keyVerified</tabstop>
   <tabstop>rating</tabstop>
+  <tabstop>remarks</tabstop>
   <tabstop>trackStart</tabstop>
   <tabstop>trackEnd</tabstop>
   <tabstop>cutStart0</tabstop>
@@ -1044,6 +1047,12 @@
   <tabstop>cutEnd3</tabstop>
   <tabstop>cutStart4</tabstop>
   <tabstop>cutEnd4</tabstop>
+  <tabstop>traktorCues</tabstop>
+  <tabstop>traktorUseInOutButton</tabstop>
+  <tabstop>coverCopyButton</tabstop>
+  <tabstop>coverLoadButton</tabstop>
+  <tabstop>coverInsertButton</tabstop>
+  <tabstop>coverSaveButton</tabstop>
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
