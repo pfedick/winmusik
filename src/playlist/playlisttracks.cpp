@@ -191,6 +191,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			e=e.nextSiblingElement("cut");
 		}
 	}
+	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) mixLength=mixLength*bpm/bpmPlayed;
 
 	/*
 	if (titleId>0) {
