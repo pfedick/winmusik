@@ -557,8 +557,8 @@ void Playlist::Resize()
 	} else if (playlistView==playlistViewDJ) {
 		ui.tracks->setColumnWidth(columnBpm,35);
 		w-=39;
-		ui.tracks->setColumnWidth(columnBpmPlayed,35);
-		w-=39;
+		ui.tracks->setColumnWidth(columnBpmPlayed,45);
+		w-=49;
 		ui.tracks->setColumnWidth(columnMusicKey,50);
 		w-=54;
 		ui.tracks->setColumnWidth(columnStart,60);
@@ -687,6 +687,8 @@ void Playlist::updateLengthStatus()
 void Playlist::renderTrack(PlaylistItem *item)
 {
 	QColor color(0,0,0);
+	QBrush b=item->background(0);
+	setItemBackground(item,b);
 	for (int i=1;i<item->columnCount();i++) {
 		item->setText(i,"");
 		item->setIcon(i,QIcon());
@@ -1027,23 +1029,27 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 	return;
 }
 
-void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int)
+void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int column)
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
 
 	PlaylistItem *t=(PlaylistItem*)item;
-	QClipboard *clipboard = QApplication::clipboard();
-	ppl6::CString Text;
-	if (key&Qt::MetaModifier) {
-		Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
+	if (column==columnMusicKey && playlistView==playlistViewDJ) {
+		highlightHarmonicKeys(t);
 	} else {
-		Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
-				(const char*)t->Version, t->trackLength/60,t->trackLength%60, (const char*)t->Genre);
-		Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
-				t->DeviceId,(t->DevicePage+'A'-1),t->DeviceTrack);
+		QClipboard *clipboard = QApplication::clipboard();
+		ppl6::CString Text;
+		if (key&Qt::MetaModifier) {
+			Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
+		} else {
+			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
+					(const char*)t->Version, t->trackLength/60,t->trackLength%60, (const char*)t->Genre);
+			Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
+					t->DeviceId,(t->DevicePage+'A'-1),t->DeviceTrack);
+		}
+		clipboard->setText(Text,QClipboard::Clipboard);
+		clipboard->setText(Text,QClipboard::Selection);
 	}
-	clipboard->setText(Text,QClipboard::Clipboard);
-	clipboard->setText(Text,QClipboard::Selection);
 }
 
 void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
@@ -1291,3 +1297,46 @@ void Playlist::on_contextPlayTrack_triggered()
 }
 
 
+
+void Playlist::setItemBackgroundColor(PlaylistItem *item, const QColor &c)
+{
+	item->setBackgroundColor(columnTitle,c);
+	item->setBackgroundColor(columnMusicKey,c);
+}
+
+void Playlist::setItemBackground(PlaylistItem *item, const QBrush &b)
+{
+	item->setBackground(columnTitle,b);
+	item->setBackground(columnMusicKey,b);
+}
+
+
+void Playlist::highlightHarmonicKeys(PlaylistItem *track)
+{
+	if (!track) {
+		return;
+	}
+	std::set<int> harmonics;
+	std::set<int>::const_iterator it;
+	getHarmonicKeys(harmonics,track->musicKey);
+
+	int count=ui.tracks->topLevelItemCount();
+	for (int i=0;i<count;i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		if (item) {
+			QBrush b=item->background(columnTrack);
+			setItemBackground(item,b);
+
+			if (item->musicKey!=0 && track->musicKey!=0) {
+				if (item->musicKey==track->musicKey) setItemBackgroundColor(item,QColor(170,255,170,255));
+				else {
+					it=harmonics.find(item->musicKey);
+					if (it!=harmonics.end()) setItemBackgroundColor(item,QColor(218,255,192,255));
+				}
+			}
+
+
+		}
+	}
+
+}
