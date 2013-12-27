@@ -70,6 +70,8 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
 
 	restoreGeometry(wm->GetGeometry("playlist"));
+
+	//ui.tracks->setStyleSheet("QTreeWidget::item { border-left-color: rgb(158, 158, 158)};");
 }
 
 
@@ -544,9 +546,14 @@ void Playlist::Resize()
 	w-=64;
 	ui.tracks->setColumnWidth(columnRating,50);
 	w-=53;
+	ui.tracks->setColumnWidth(columnSource,65);
+	w-=69;
 
 
 	if (playlistView==playlistViewNormal) {
+		ui.tracks->setColumnWidth(columnTitle,w*80/100);
+		ui.tracks->setColumnWidth(columnGenre,w*15/100);
+
 	} else if (playlistView==playlistViewDJ) {
 		ui.tracks->setColumnWidth(columnBpm,35);
 		w-=39;
@@ -560,11 +567,15 @@ void Playlist::Resize()
 		w-=64;
 		ui.tracks->setColumnWidth(columnCuts,60);
 		w-=64;
+		ui.tracks->setColumnWidth(columnTotalLength,60);
+		w-=64;
+
+		ui.tracks->setColumnWidth(columnTitle,w*65/100);
+		ui.tracks->setColumnWidth(columnGenre,w*15/100);
+		ui.tracks->setColumnWidth(columnComment,w*20/100);
 	}
-	ui.tracks->setColumnWidth(columnSource,85);
-	w-=89;
-	ui.tracks->setColumnWidth(columnTitle,w*80/100);
-	ui.tracks->setColumnWidth(columnGenre,w*15/100);
+
+
 
 }
 
@@ -576,45 +587,49 @@ void Playlist::recreatePlaylist()
 	columnCover=1;
 	columnTitle=2;
 	columnGenre=3;
-	columnBpm=4;
-	columnBpmPlayed=5;
-	columnMusicKey=6;
-	columnRating=7;
-	columnStart=8;
-	columnEnd=9;
-	columnCuts=10;
-	columnLength=11;
-	columnSource=12;
+	columnComment=4;
+	columnBpm=5;
+	columnBpmPlayed=6;
+	columnMusicKey=7;
+	columnRating=8;
+	columnStart=9;
+	columnEnd=10;
+	columnCuts=11;
+	columnLength=12;
+	columnTotalLength=13;
+	columnSource=14;
 
 	if (playlistView==playlistViewNormal) {
 		ui.tracks->setColumnCount(7);
-		item->setText(0,tr("Track"));
-		item->setText(1,tr("Cover"));
-		item->setText(2,tr("Artist - Title (Version)"));
-		item->setText(3,tr("Genre"));
-		item->setText(4,tr("Length"));
-		item->setText(5,tr("Rating"));
-		item->setText(6,tr("Source"));
 		columnLength=4;
 		columnRating=5;
 		columnSource=6;
 
-	} else if (playlistView==playlistViewDJ) {
-		ui.tracks->setColumnCount(13);
-		item->setText(0,tr("Track"));
-		item->setText(1,tr("Cover"));
-		item->setText(2,tr("Artist - Title (Version)"));
-		item->setText(3,tr("Genre"));
-		item->setText(4,tr("Bpm"));
-		item->setText(5,tr("Played"));
+		item->setText(columnTrack,tr("Track"));
+		item->setText(columnCover,tr("Cover"));
+		item->setText(columnTitle,tr("Artist - Title (Version)"));
+		item->setText(columnGenre,tr("Genre"));
+		item->setText(columnLength,tr("Length"));
+		item->setText(columnRating,tr("Rating"));
+		item->setText(columnSource,tr("Source"));
 
-		item->setText(6,tr("Key"));
-		item->setText(7,tr("Rating"));
-		item->setText(8,tr("Start"));
-		item->setText(9,tr("End"));
-		item->setText(10,tr("Cuts"));
-		item->setText(11,tr("Length"));
-		item->setText(12,tr("Source"));
+	} else if (playlistView==playlistViewDJ) {
+		ui.tracks->setColumnCount(15);
+		item->setText(columnTrack,tr("Track"));
+		item->setText(columnCover,tr("Cover"));
+		item->setText(columnTitle,tr("Artist - Title (Version)"));
+		item->setText(columnGenre,tr("Genre"));
+		item->setText(columnComment,tr("Comment"));
+		item->setText(columnBpm,tr("Bpm"));
+		item->setText(columnBpmPlayed,tr("MixBpm"));
+		item->setText(columnMusicKey,tr("Key"));
+		item->setText(columnRating,tr("Rating"));
+		item->setText(columnStart,tr("Start"));
+		item->setText(columnEnd,tr("End"));
+		item->setText(columnCuts,tr("Cuts"));
+		item->setText(columnLength,tr("Length"));
+		item->setText(columnTotalLength,tr("Total"));
+		item->setText(columnSource,tr("Source"));
 	}
 	Resize();
 	updatePlaylist();
@@ -652,12 +667,17 @@ void Playlist::renumberTracks()
 
 void Playlist::updateLengthStatus()
 {
+	ppl6::CString Tmp;
 	int trackLength=0;
 	int mixLength=0;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		trackLength+=item->trackLength;
 		mixLength+=item->mixLength;
+		if (playlistView==playlistViewDJ) {
+			Tmp.Setf("%02i:%02i",(int)(mixLength/60),(int)mixLength%60);
+			item->setText(columnTotalLength,Tmp);
+		}
 	}
 	setLength(totalTrackLength,trackLength);
 	setLength(totalMixLength,mixLength);
@@ -744,6 +764,7 @@ void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
 void Playlist::renderTrackViewDJ(PlaylistItem *item)
 {
 	ppl6::CString Tmp;
+	item->setText(columnComment,item->Remarks);
 	Tmp.Setf("%i",item->bpm);
 	item->setText(columnBpm,Tmp);
 	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
@@ -1114,6 +1135,7 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 		}
 	}
 	renderTrack(currentTreeItem);
+	updateLengthStatus();
 }
 
 void Playlist::on_contextSetMusicKey(int k)
@@ -1147,6 +1169,7 @@ void Playlist::rateCurrentTrack(int value)
 	}
 	currentTreeItem->rating=value;
 	renderTrack(currentTreeItem);
+	updateLengthStatus();
 }
 
 void Playlist::on_contextRate0_clicked()

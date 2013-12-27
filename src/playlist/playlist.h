@@ -123,6 +123,7 @@ private:
     int columnCover;
     int columnTitle;
     int columnGenre;
+    int columnComment;
     int columnLength;
     int columnRating;
     int columnSource;
@@ -132,6 +133,7 @@ private:
     int columnStart;
     int columnEnd;
     int columnCuts;
+    int columnTotalLength;
 
     QPoint startPos;	// Für Drag/Drop und multiple Markierungen
     QPoint	ratePos;	// Für Rating-Spalte
