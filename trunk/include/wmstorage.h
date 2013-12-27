@@ -223,6 +223,7 @@ class DataTitle : public CStorageItem
 		DataTitle & operator=(const DataTitle &other);
 
 		static ppl6::CString keyName(int id);
+		static ppl6::CString openKeyName(int id);
 		static int keyId(const ppl6::CString &name);
 };
 
