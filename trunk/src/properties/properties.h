@@ -169,6 +169,36 @@ private slots:
     void on_regexpTable_itemDoubleClicked ( QTreeWidgetItem * item, int column );
     void on_regexpTable_itemClicked ( QTreeWidgetItem * item, int column );
 
+
+    // Musical Key
+    void on_saveMusicKey_currentIndexChanged(int ) {Change();};
+    void on_displayMusicKey_currentIndexChanged(int ) {Change();};
+    void on_customMusicalKey_1_textChanged(const QString &) {Change();};
+    void on_customMusicalKey_2_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_3_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_4_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_5_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_6_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_7_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_8_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_9_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_10_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_11_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_12_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_13_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_14_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_15_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_16_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_17_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_18_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_19_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_20_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_21_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_22_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_23_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_24_textChanged(const QString & ) {Change();};
+    void on_customMusicalKey_25_textChanged(const QString & ) {Change();};
+
 };
 
 #endif // PROPERTIES_H
