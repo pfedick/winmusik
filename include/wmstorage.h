@@ -215,15 +215,14 @@ class DataTitle : public CStorageItem
 		void SetTags(const ppl6::CString &tags);
 		void SetAlbum(const ppl6::CString &album);
 		void SetKey(const ppl6::CString &key);
-		ppl6::CString getKeyName();
+		ppl6::CString getKeyName(MusicKeyType type);
 
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
 
 		DataTitle & operator=(const DataTitle &other);
 
-		static ppl6::CString keyName(int id);
-		static ppl6::CString openKeyName(int id);
+		static ppl6::CString keyName(int id, MusicKeyType type);
 		static int keyId(const ppl6::CString &name);
 };
 

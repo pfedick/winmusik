@@ -141,6 +141,48 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 
 	ui.acceptButton->setEnabled(false);
 
+	// MusicKey
+	switch (c->musicKeyDisplay) {
+		case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(2); break;
+		default: ui.displayMusicKey->setCurrentIndex(1); break;
+
+	}
+
+	switch (c->musicKeyTag) {
+		case musicKeyTypeNone: ui.displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
+		default: ui.displayMusicKey->setCurrentIndex(2); break;
+	}
+	ui.customMusicalKey_1->setText(c->customMusicKey[1]);
+	ui.customMusicalKey_2->setText(c->customMusicKey[2]);
+	ui.customMusicalKey_3->setText(c->customMusicKey[3]);
+	ui.customMusicalKey_4->setText(c->customMusicKey[4]);
+	ui.customMusicalKey_5->setText(c->customMusicKey[5]);
+	ui.customMusicalKey_6->setText(c->customMusicKey[6]);
+	ui.customMusicalKey_7->setText(c->customMusicKey[7]);
+	ui.customMusicalKey_8->setText(c->customMusicKey[8]);
+	ui.customMusicalKey_9->setText(c->customMusicKey[9]);
+	ui.customMusicalKey_10->setText(c->customMusicKey[10]);
+	ui.customMusicalKey_11->setText(c->customMusicKey[11]);
+	ui.customMusicalKey_12->setText(c->customMusicKey[12]);
+	ui.customMusicalKey_13->setText(c->customMusicKey[13]);
+	ui.customMusicalKey_14->setText(c->customMusicKey[14]);
+	ui.customMusicalKey_15->setText(c->customMusicKey[15]);
+	ui.customMusicalKey_16->setText(c->customMusicKey[16]);
+	ui.customMusicalKey_17->setText(c->customMusicKey[17]);
+	ui.customMusicalKey_18->setText(c->customMusicKey[18]);
+	ui.customMusicalKey_19->setText(c->customMusicKey[19]);
+	ui.customMusicalKey_20->setText(c->customMusicKey[20]);
+	ui.customMusicalKey_21->setText(c->customMusicKey[21]);
+	ui.customMusicalKey_22->setText(c->customMusicKey[22]);
+	ui.customMusicalKey_23->setText(c->customMusicKey[23]);
+	ui.customMusicalKey_24->setText(c->customMusicKey[24]);
+	ui.customMusicalKey_25->setText(c->customMusicKey[25]);
+
 
 	QString Style="QTreeView::item {\n"
 	    		"border-right: 1px solid #b9b9b9;\n"
@@ -361,6 +403,48 @@ int Properties::Save()
 	c->serverSSLKeyfile=ui.serverKeyfile->text();
 	Tmp=ui.serverKeyPassword->text();
 	c->serverSSLPassword=wm->Crypt(Tmp);
+
+	// MusicKey
+	switch (ui.displayMusicKey->currentIndex()) {
+		case 0: c->musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+		case 1: c->musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 2: c->musicKeyDisplay=musicKeyTypeCustom; break;
+		default: c->musicKeyDisplay=musicKeyTypeOpenKey; break;
+	}
+	switch (ui.saveMusicKey->currentIndex()) {
+		case 0: c->musicKeyTag=musicKeyTypeNone; break;
+		case 1: c->musicKeyTag=musicKeyTypeMusicalSharps; break;
+		case 2: c->musicKeyTag=musicKeyTypeOpenKey; break;
+		case 3: c->musicKeyTag=musicKeyTypeCustom; break;
+		default: c->musicKeyTag=musicKeyTypeOpenKey; break;
+	}
+	c->customMusicKey[1]=ui.customMusicalKey_1->text();
+	c->customMusicKey[2]=ui.customMusicalKey_2->text();
+	c->customMusicKey[3]=ui.customMusicalKey_3->text();
+	c->customMusicKey[4]=ui.customMusicalKey_4->text();
+	c->customMusicKey[5]=ui.customMusicalKey_5->text();
+	c->customMusicKey[6]=ui.customMusicalKey_6->text();
+	c->customMusicKey[7]=ui.customMusicalKey_7->text();
+	c->customMusicKey[8]=ui.customMusicalKey_8->text();
+	c->customMusicKey[9]=ui.customMusicalKey_9->text();
+	c->customMusicKey[10]=ui.customMusicalKey_10->text();
+	c->customMusicKey[11]=ui.customMusicalKey_11->text();
+	c->customMusicKey[12]=ui.customMusicalKey_12->text();
+	c->customMusicKey[13]=ui.customMusicalKey_13->text();
+	c->customMusicKey[14]=ui.customMusicalKey_14->text();
+	c->customMusicKey[15]=ui.customMusicalKey_15->text();
+	c->customMusicKey[16]=ui.customMusicalKey_16->text();
+	c->customMusicKey[17]=ui.customMusicalKey_17->text();
+	c->customMusicKey[18]=ui.customMusicalKey_18->text();
+	c->customMusicKey[19]=ui.customMusicalKey_19->text();
+	c->customMusicKey[20]=ui.customMusicalKey_20->text();
+	c->customMusicKey[21]=ui.customMusicalKey_21->text();
+	c->customMusicKey[22]=ui.customMusicalKey_22->text();
+	c->customMusicKey[23]=ui.customMusicalKey_23->text();
+	c->customMusicKey[24]=ui.customMusicalKey_24->text();
+	c->customMusicKey[25]=ui.customMusicalKey_25->text();
+
+
 
 	if (!wm->conf.Save()) {
 		return 0;

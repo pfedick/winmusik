@@ -64,7 +64,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
 	ret+=Indent+"   <musicKey verified=\"";
 	if (keyVerified) ret+="true"; else ret+="false";
-	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey))+"</musicKey>\n";
+	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey,musicKeyTypeMusicalSharps))+"</musicKey>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
 	ret+=Indent+"   <bpmPlayed>"+ppl6::ToString("%u",bpmPlayed)+"</bpmPlayed>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";

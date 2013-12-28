@@ -133,7 +133,7 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.remarks->setText(item->Remarks);
 	ui.bpm->setText(ppl6::ToString("%i",item->bpm));
 	ui.bpmPlayed->setText(ppl6::ToString("%i",item->bpmPlayed));
-	ui.musicKey->setText(DataTitle::keyName(item->musicKey));
+	ui.musicKey->setText(DataTitle::keyName(item->musicKey,wm->conf.musicKeyDisplay));
 	ui.keyVerified->setChecked(item->keyVerified);
 
 	ui.rating->setCurrentIndex(item->rating);
@@ -173,7 +173,7 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 
 		if (item->musicKey==0) {
 			// Music Key
-			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey())));
+			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
 		}
 
 

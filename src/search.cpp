@@ -434,7 +434,7 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	// BPM und Key
 	Tmp.Setf("%d",(int)ti->BPM);
 	item->setText(SEARCH_TRACKLIST_BPM_ROW,Tmp);
-	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName());
+	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName(wm->conf.musicKeyDisplay));
 	if ((ti->Flags&16)) item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(0,0,0));
 	else item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(192,192,192));
 

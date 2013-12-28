@@ -771,7 +771,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	item->setText(columnBpm,Tmp);
 	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
 	item->setText(columnBpmPlayed,Tmp);
-	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey));
+	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,wm->conf.musicKeyDisplay));
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
 		item->setTextColor(columnMusicKey,QColor(0,0,0));
