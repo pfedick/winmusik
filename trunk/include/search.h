@@ -69,6 +69,7 @@ private:
 
     QTimer		ClipBoardTimer;
     ppl6::CString	LastClipboardString;
+    MusicKeyType	musicKeyDisplay;
 
     void PresentResults();
     void SetupTrackList();
@@ -89,6 +90,7 @@ private:
     void RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out, size_t num);
     void rateCurrentTrack(int value);
 
+    void updateTrackListing();
     void renderTrack(WMTreeItem *item, DataTitle *ti);
     void createSetMusicKeyContextMenu(QMenu *m);
 
@@ -156,6 +158,7 @@ public slots:
 	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
 	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
 	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
+	void on_displayMusicKey_currentIndexChanged(int);
 
 
 	void on_artist_returnPressed();

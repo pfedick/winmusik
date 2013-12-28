@@ -146,6 +146,7 @@ private:
     bool		DupeCheck;
     QTimer		*DupeTimer;
     const char	*DupeCheckIcon;
+    MusicKeyType	musicKeyDisplay;
 
     OimpInfo	*oimpInfo;
 
@@ -276,6 +277,7 @@ public slots:
 	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
 	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
 	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
+	void on_displayMusicKey_currentIndexChanged(int);
 
 	void on_fkeys_clicked(int num);
 

@@ -31,6 +31,7 @@
 #include <QTimer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QComboBox>
 #include "ui_playlist.h"
 #include "winmusik3.h"
 #include "playlisttracks.h"
@@ -59,9 +60,11 @@ private:
     QLabel *totalTracks;
     QWidget *searchWindow;
     QWidget *saveWidget, *saveAsWidget;
+    QComboBox *displayMusicKey;
 
     ppl6::CString	PlaylistFileName;
     bool changed;
+    MusicKeyType	musicKeyDisplay;
 
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
@@ -210,6 +213,7 @@ public slots:
 	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
 	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
 	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
+	void on_displayMusicKey_currentIndexChanged(int);
 
 	void on_contextPasteCover_triggered();
 };
