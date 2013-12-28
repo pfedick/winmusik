@@ -672,6 +672,7 @@ ppl6::CString DataTitle::keyName(int id, MusicKeyType type)
 {
 	if (type==musicKeyTypeMusicalSharps) return keyNameSharps(id);
 	else if (type==musicKeyTypeOpenKey) return keyNameOpenKey(id);
+	else if (type==musicKeyTypeCustom) return wm_main->conf.customMusicKey[id];
 	return "";
 
 }
@@ -683,6 +684,14 @@ int DataTitle::keyId(const ppl6::CString &name)
 	k.Replace("♯","#");
 
 	if (k.IsEmpty()) return 0;
+	if (wm_main->conf.musicKeyDisplay==musicKeyTypeCustom) {
+		for (int i=1;i<26;i++) {
+			ppl6::CString tmp=ppl6::LCase(ppl6::Trim(wm_main->conf.customMusicKey[i]));
+			if (tmp==k) return i;
+		}
+	}
+
+
 	if (k=="g#m" || k=="g#min" || k=="abm" || k=="1a" || k=="6m") return 1;
 	else if (k=="b" || k=="bmaj" || k=="1b" || k=="6d") return 2;
 	else if (k=="d#m" || k=="d#min" || k=="ebm" || k=="2a" || k=="7m") return 3;
@@ -707,6 +716,7 @@ int DataTitle::keyId(const ppl6::CString &name)
 	else if (k=="a" || k=="amaj" || k=="11b" || k=="4d") return 22;
 	else if (k=="c#m" || k=="c#min" || k=="dbm" || k=="12a" || k=="5m") return 23;
 	else if (k=="e" || k=="emaj" || k=="12b" || k=="5d") return 24;
+
 	return 0;
 }
 
