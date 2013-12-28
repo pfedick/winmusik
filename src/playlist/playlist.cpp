@@ -50,6 +50,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	currentTreeItem=NULL;
 	searchWindow=NULL;
 	saveWidget=saveAsWidget=NULL;
+	displayMusicKey=NULL;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
@@ -66,6 +67,14 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	recreatePlaylist();
 	changed=true;
 	setChanged(false);
+
+	musicKeyDisplay=wm->conf.musicKeyDisplay;
+	switch (musicKeyDisplay) {
+		case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(2); break;
+		default: displayMusicKey->setCurrentIndex(1); break;
+	}
 
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
 
@@ -131,6 +140,17 @@ void Playlist::createStatusBar()
 
 	QLabel *label;
 	QFrame *line;
+
+	label=new QLabel(tr("Musical Key:"));
+	layout->addWidget(label);
+	displayMusicKey=new QComboBox();
+	displayMusicKey->addItem(tr("musical sharps"));
+	displayMusicKey->addItem(tr("open key"));
+	displayMusicKey->addItem(tr("custom format"));
+	layout->addWidget(displayMusicKey);
+	connect(displayMusicKey,SIGNAL(currentIndexChanged(int)),
+			this, SLOT(on_displayMusicKey_currentIndexChanged(int)));
+	displayMusicKey->setEnabled(false);
 
 	// Total Tracks
 	label=new QLabel(tr("total tracks:"));
@@ -771,7 +791,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	item->setText(columnBpm,Tmp);
 	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
 	item->setText(columnBpmPlayed,Tmp);
-	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,wm->conf.musicKeyDisplay));
+	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,musicKeyDisplay));
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
 		item->setTextColor(columnMusicKey,QColor(0,0,0));
@@ -1006,6 +1026,7 @@ void Playlist::on_viewPlaylist_triggered()
 {
 	if (playlistView!=playlistViewNormal) {
 		playlistView=playlistViewNormal;
+		displayMusicKey->setEnabled(false);
 		recreatePlaylist();
 	}
 }
@@ -1014,6 +1035,7 @@ void Playlist::on_viewDJ_triggered()
 {
 	if (playlistView!=playlistViewDJ) {
 		playlistView=playlistViewDJ;
+		displayMusicKey->setEnabled(true);
 		recreatePlaylist();
 	}
 }
@@ -1297,6 +1319,16 @@ void Playlist::on_contextPlayTrack_triggered()
 	wm->PlayFile(((PlaylistItem*)currentTreeItem)->File);
 }
 
+void Playlist::on_displayMusicKey_currentIndexChanged(int)
+{
+	switch (displayMusicKey->currentIndex()) {
+		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+		case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 2: musicKeyDisplay=musicKeyTypeCustom; break;
+		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
+	}
+	updatePlaylist();
+}
 
 
 void Playlist::setItemBackgroundColor(PlaylistItem *item, const QColor &c)

@@ -899,6 +899,32 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>Musical key:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="displayMusicKey">
+       <item>
+        <property name="text">
+         <string>musical sharps</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>open key</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>custom format</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -931,7 +957,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>70</width>
          <height>0</height>
         </size>
        </property>
@@ -969,7 +995,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>100</width>
+         <width>70</width>
          <height>0</height>
         </size>
        </property>

@@ -228,7 +228,7 @@ void Edit::FillEditFields()
 	ui.bpm->setText(Tmp);
 
 	// Music Key
-	ui.musickey->setText(Ti.getKeyName(wm->conf.musicKeyDisplay));
+	ui.musickey->setText(ppl6::Trim(Ti.getKeyName(musicKeyDisplay)));
 
 
 	// Bitrate
@@ -410,7 +410,7 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 	// BPM und Key
 	Text.Setf("%d",(int)title->BPM);
 	item->setText(TRACKLIST_BPM_ROW,Text);
-	item->setText(TRACKLIST_KEY_ROW,title->getKeyName(wm->conf.musicKeyDisplay));
+	item->setText(TRACKLIST_KEY_ROW,ppl6::Trim(title->getKeyName(musicKeyDisplay)));
 	if ((title->Flags&16)) item->setTextColor(TRACKLIST_KEY_ROW,QColor(0,0,0));
 	else item->setTextColor(TRACKLIST_KEY_ROW,QColor(192,192,192));
 
@@ -812,7 +812,7 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 	}
 
 	// Music Key
-	ui.musickey->setText(info.Ti.getKeyName(wm->conf.musicKeyDisplay));
+	ui.musickey->setText(ppl6::Trim(info.Ti.getKeyName(musicKeyDisplay)));
 
 	if (info.Version.IsEmpty()) {			// Version
 		if (info.Ti.Length<5*60) {
