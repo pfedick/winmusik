@@ -275,6 +275,7 @@ public slots:
 	void on_contextMusicKey22_triggered() { on_contextSetMusicKey(22); };
 	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
 	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
+	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
 
 	void on_fkeys_clicked(int num);
 

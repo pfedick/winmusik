@@ -49,6 +49,7 @@
 #include <QMessageBox>
 #include <QLocale>
 #include <QDesktopWidget>
+#include <QMenu>
 #include <ppl6-crypt.h>
 
 CWmClient *wm_main=NULL;
@@ -1782,4 +1783,5 @@ int CWmClient::StopServer()
 {
 	return 1;
 }
+
 

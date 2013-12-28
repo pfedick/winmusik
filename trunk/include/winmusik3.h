@@ -692,7 +692,6 @@ class CWmClient
 		int StartServer();
 		int StopServer();
 
-
 };
 
 
