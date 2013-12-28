@@ -678,31 +678,33 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
 void Search::createSetMusicKeyContextMenu(QMenu *m)
 {
 	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(tr("A","trackList Context Menue"),this,SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(tr("A#","trackList Context Menue"),this,SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(tr("A#m","trackList Context Menue"),this,SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(tr("Am","trackList Context Menue"),this,SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(tr("B","trackList Context Menue"),this,SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(tr("Bm","trackList Context Menue"),this,SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(tr("C","trackList Context Menue"),this,SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(tr("C#","trackList Context Menue"),this,SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(tr("C#m","trackList Context Menue"),this,SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(tr("Cm","trackList Context Menue"),this,SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(tr("D","trackList Context Menue"),this,SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(tr("D#","trackList Context Menue"),this,SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(tr("D#m","trackList Context Menue"),this,SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(tr("Dm","trackList Context Menue"),this,SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(tr("E","trackList Context Menue"),this,SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(tr("Em","trackList Context Menue"),this,SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(tr("F","trackList Context Menue"),this,SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(tr("F#","trackList Context Menue"),this,SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(tr("F#m","trackList Context Menue"),this,SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(tr("Fm","trackList Context Menue"),this,SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(tr("G","trackList Context Menue"),this,SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(tr("G#","trackList Context Menue"),this,SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(tr("G#m","trackList Context Menue"),this,SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(tr("Gm","trackList Context Menue"),this,SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(DataTitle::keyName(22,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(DataTitle::keyName(12,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(DataTitle::keyName(5,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(DataTitle::keyName(15,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(DataTitle::keyName(2,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(DataTitle::keyName(19,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(DataTitle::keyName(16,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(DataTitle::keyName(6,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(DataTitle::keyName(23,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(DataTitle::keyName(9,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(DataTitle::keyName(20,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(DataTitle::keyName(10,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(DataTitle::keyName(3,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(DataTitle::keyName(13,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(DataTitle::keyName(24,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(DataTitle::keyName(17,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(DataTitle::keyName(14,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(DataTitle::keyName(4,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(DataTitle::keyName(21,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(DataTitle::keyName(7,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(DataTitle::keyName(18,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(DataTitle::keyName(8,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(DataTitle::keyName(1,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(DataTitle::keyName(11,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(DataTitle::keyName(25,wm->conf.musicKeyDisplay),this,SLOT(on_contextMusicKey25_triggered()));
 }
+
 
 void Search::on_contextMusicKeyVerified_triggered()
 {
