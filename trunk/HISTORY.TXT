@@ -13,6 +13,8 @@ Version 3.2.0
       dargestellt
     - Music-Key kann im Editor über das Kontextmenü gesetzt werden
     - Music-Key kann im Suchergebnis über das Kontextmenü gesetzt werden
+    - Music-Key unterstützt jetzt neben der bisherigen "MusicalSharps"-
+      Schreibweise auch OpenKey und Benutzerdefinierte Einstellungen
     - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
       werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
       der Editor mit dem entsprechenden Track zum Editieren geöffnet.

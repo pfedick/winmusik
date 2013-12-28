@@ -164,6 +164,17 @@ class CWMFile
 		static int CopyDatabase(CWMFile &oldfile, CWMFile &newfile, CCallback *callback=NULL);
 };
 
+
+enum MusicKeyType
+{
+	musicKeyTypeNone=0,
+	musicKeyTypeMusicalSharps,
+	musicKeyTypeOpenKey,
+	musicKeyTypeCustom=99
+};
+
+
+
 #include "wmstorage.h"
 #include "regexpcapture.h"
 #include "backgroundjobs.h"
@@ -184,8 +195,6 @@ void NormalizeImportString(ppl6::CString &Buffer);
 /*******************************************************
  * Global Variablen                                    *
  *******************************************************/
-
-
 
 
 
@@ -330,6 +339,10 @@ class Config
 		int				serverPort;
 		ppl6::CString	serverSSLKeyfile;
 		ppl6::CString	serverSSLPassword;
+
+		ppl6::CString	customMusicKey[26];
+		MusicKeyType	musicKeyDisplay;
+		MusicKeyType	musicKeyTag;
 
 
 

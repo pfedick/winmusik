@@ -599,12 +599,12 @@ void DataTitle::SetKey(const ppl6::CString &key)
 	Key=DataTitle::keyId(key);
 }
 
-ppl6::CString DataTitle::getKeyName()
+ppl6::CString DataTitle::getKeyName(MusicKeyType type)
 {
-	return DataTitle::keyName(Key);
+	return DataTitle::keyName(Key,type);
 }
 
-ppl6::CString DataTitle::keyName(int id)
+static inline ppl6::CString keyNameSharps(int id)
 {
 	switch (id) {
 		case 1: return "G#m";
@@ -631,11 +631,12 @@ ppl6::CString DataTitle::keyName(int id)
 		case 22: return "A";
 		case 23: return "C#m";
 		case 24: return "E";
+		case 25: return "none";
 		default: return "";
 	}
 }
 
-ppl6::CString DataTitle::openKeyName(int id)
+static inline ppl6::CString keyNameOpenKey(int id)
 {
 	switch (id) {
 		case 1: return " 6m";	// G#m
@@ -662,8 +663,17 @@ ppl6::CString DataTitle::openKeyName(int id)
 		case 22: return " 4d";	// A
 		case 23: return " 5m";	// C#m
 		case 24: return " 5d";	// E
+		case 25: return "none";	// E
 		default: return "";		// ""
 	}
+}
+
+ppl6::CString DataTitle::keyName(int id, MusicKeyType type)
+{
+	if (type==musicKeyTypeMusicalSharps) return keyNameSharps(id);
+	else if (type==musicKeyTypeOpenKey) return keyNameOpenKey(id);
+	return "";
+
 }
 
 

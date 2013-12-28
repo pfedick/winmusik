@@ -162,7 +162,7 @@ void EditTrack::setData(const TrackInfo &data)
 	ui.bpm->setText(Tmp);
 
 	// Music Key
-	ui.musickey->setText(Ti.getKeyName());
+	ui.musickey->setText(Ti.getKeyName(wm->conf.musicKeyDisplay));
 
 	// Bitrate
 	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();

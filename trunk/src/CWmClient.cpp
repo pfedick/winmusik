@@ -932,7 +932,7 @@ ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
 	r.Concatf("<trackLength>%i</trackLength>\n",(int)ti->Length);
 	r+="<musicKey verified=\"";
 	if (ti->Flags&16) r+="true"; else r+="false";
-	r+="\">"+ti->getKeyName()+"</musicKey>\n";
+	r+="\">"+ti->getKeyName(musicKeyTypeMusicalSharps)+"</musicKey>\n";
 	return r;
 }
 
@@ -1186,7 +1186,7 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	Job.Setf("track","%u",Track);
 	if (Ti.BPM>0) Job.Setf("bpm","%u",Ti.BPM);
 	else Job.Setf("bpm","");
-	Job.Set("key",Ti.getKeyName());
+	if (conf.musicKeyTag!=musicKeyTypeNone) Job.Set("key",Ti.getKeyName(conf.musicKeyTag));
 	Job.Set("genre",GetGenreText(Ti.GenreId));
 	Job.Set("publisher",GetLabelText(Ti.LabelId));
 	Tmp.Setf("%u",Ti.ReleaseDate);
