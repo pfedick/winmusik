@@ -139,7 +139,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.serverKeyfile->setText(c->serverSSLKeyfile);
 	ui.serverKeyPassword->setText(wm->DeCrypt(c->serverSSLPassword));
 
-	ui.acceptButton->setEnabled(false);
+
 
 	// MusicKey
 	switch (c->musicKeyDisplay) {
@@ -151,11 +151,11 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	}
 
 	switch (c->musicKeyTag) {
-		case musicKeyTypeNone: ui.displayMusicKey->setCurrentIndex(0); break;
-		case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(1); break;
-		case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
-		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
-		default: ui.displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeNone: ui.saveMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeMusicalSharps: ui.saveMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeOpenKey: ui.saveMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeCustom: ui.saveMusicKey->setCurrentIndex(3); break;
+		default: ui.saveMusicKey->setCurrentIndex(2); break;
 	}
 	ui.customMusicalKey_1->setText(c->customMusicKey[1]);
 	ui.customMusicalKey_2->setText(c->customMusicKey[2]);
@@ -183,6 +183,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.customMusicalKey_24->setText(c->customMusicKey[24]);
 	ui.customMusicalKey_25->setText(c->customMusicKey[25]);
 
+	ui.acceptButton->setEnabled(false);
 
 	QString Style="QTreeView::item {\n"
 	    		"border-right: 1px solid #b9b9b9;\n"
