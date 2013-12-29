@@ -226,7 +226,10 @@ void PlaylistItem::loadCoverPreview()
 	// Cover laden
 	if (titleId>0) {
 		DataTitle *ti=wm_main->GetTitle(titleId);
-		if (ti) CoverPreview=ti->CoverPreview;
+		if (ti) {
+			CoverPreview=ti->CoverPreview;
+			return;
+		}
 	}
 	if (CoverPreview.Size()==0 && File.Size()>0) {
 		TrackInfo info;
@@ -569,7 +572,8 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	}
 
 	clear();
-
+	setSortingEnabled(false);
+	this->sortByColumn(0);
 	QDomNode node=root.namedItem("name");
 	if (node.isNull()==false && node.isElement()==true) {
 		Name=node.toElement().text();
@@ -588,6 +592,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 		}
 
 	}
+	setSortingEnabled(true);
 
 
 	return true;
