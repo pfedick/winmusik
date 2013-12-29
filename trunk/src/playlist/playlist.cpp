@@ -513,7 +513,9 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->Label=wm->GetLabelText(ti->LabelId);
 	item->Album=ti->Album;
 	item->musicKey=ti->Key;
+	item->keyVerified=(ti->Flags>>4)&1;
 	item->bpm=ti->BPM;
+	item->bpmPlayed=0;
 	item->rating=ti->Rating;
 	item->trackLength=ti->Length;
 	item->mixLength=ti->Length;

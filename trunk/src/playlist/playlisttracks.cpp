@@ -250,7 +250,7 @@ void PlaylistItem::updateFromDatabase()
 	Album=ti->Album;
 	musicKey=ti->Key;
 	bpm=ti->BPM;
-	if (!bpmPlayed) bpmPlayed=bpm;
+	if (!bpmPlayed) bpmPlayed=0;
 	rating=ti->Rating;
 	keyVerified=(ti->Flags>>4)&1;
 	Version=wm_main->GetVersionText(ti->VersionId);
