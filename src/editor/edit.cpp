@@ -1996,7 +1996,7 @@ void Edit::on_contextReadBpmAndKey_triggered()
 				TrackInfo tinfo;
 				if (getTrackInfoFromFile(tinfo,Path)) {
 					if (tinfo.Ti.Key != title->Key || tinfo.Ti.BPM != title->BPM) {
-						title->Key=tinfo.Ti.Key;
+						if (title->Key==0 || (title->Flags&16)==0) title->Key=tinfo.Ti.Key;
 						title->BPM=tinfo.Ti.BPM;
 						if (!wm->TitleStore.Put(title)) {
 							wm->RaiseError(this,tr("Could not save Title in TitleStore"));

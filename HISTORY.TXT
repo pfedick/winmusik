@@ -18,6 +18,10 @@ Version 3.2.0
     - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
       werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
       der Editor mit dem entsprechenden Track zum Editieren geöffnet.
+    - Beim Masseneinlesen von MusicKeys über das Kontextmenü im Editor werden
+      die Keys nur dann aus dem ID3-Tag übernommen, wenn vorher noch kein Key
+      in der Datenbank war oder diese noch nicht verifiziert war. Im Klartext:
+      Keys, die schon verifiziert waren, werden nicht überschrieben.
 
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
