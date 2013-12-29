@@ -146,7 +146,7 @@ void Playlist::createStatusBar()
 	displayMusicKey=new QComboBox();
 	displayMusicKey->addItem(tr("musical sharps"));
 	displayMusicKey->addItem(tr("open key"));
-	displayMusicKey->addItem(tr("custom format"));
+	displayMusicKey->addItem(wm->conf.customMusicKeyName);
 	layout->addWidget(displayMusicKey);
 	connect(displayMusicKey,SIGNAL(currentIndexChanged(int)),
 			this, SLOT(on_displayMusicKey_currentIndexChanged(int)));

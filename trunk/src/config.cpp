@@ -73,6 +73,7 @@ Config::Config()
 	serverPort=8030;
 	musicKeyDisplay=musicKeyTypeOpenKey;
 	musicKeyTag=musicKeyTypeOpenKey;
+	customMusicKeyName=tr("custom format");
 	for (int i=0;i<26;i++) customMusicKey[i]=DataTitle::keyName(i,musicKeyTypeMusicalSharps);
 }
 
@@ -196,8 +197,10 @@ int Config::Save()
 		c.Add("playlists",ppl6::ToString("%i",i+1),(const char*)LastPlaylists[i]);
 	}
 
+	// MusicKey
 	c.Add("musicKey","musicKeyDisplay",musicKeyDisplay);
 	c.Add("musicKey","musicKeyTag",musicKeyTag);
+	c.Add("musicKey","customMusicKeyName",(const char*)customMusicKeyName);
 	for (int i=0;i<26;i++) c.Add("musicKey",(const char*)ppl6::ToString("customMusicKey[%i]",i),(const char*)customMusicKey[i]);
 
 
@@ -298,8 +301,12 @@ int Config::Load()
 		LastPlaylists[i]=c.Get("playlists",Key,"");
 	}
 
+	// MusicKey
 	musicKeyDisplay=(MusicKeyType)c.GetInt("musicKey","musicKeyDisplay",musicKeyTypeOpenKey);
 	musicKeyTag=(MusicKeyType)c.GetInt("musicKey","musicKeyTag",musicKeyTypeOpenKey);
+	Tmp=tr("custom format");
+	customMusicKeyName=c.Get("musicKey","customMusicKeyName",(const char*)Tmp);
+
 	for (int i=0;i<26;i++) customMusicKey[i]=c.Get("musicKey",
 			(const char*)ppl6::ToString("customMusicKey[%i]",i),
 			(const char*)DataTitle::keyName(i,musicKeyTypeMusicalSharps));

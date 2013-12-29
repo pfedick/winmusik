@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -916,6 +916,16 @@
             <widget class="QLineEdit" name="customMusicalKey_14"/>
            </item>
           </layout>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_56">
+           <property name="text">
+            <string>Name of custom keys:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="customMusicKeyName"/>
          </item>
         </layout>
        </item>
@@ -2197,6 +2207,122 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>wmDataPath</tabstop>
+  <tabstop>wmDataPathButton</tabstop>
+  <tabstop>tmpPath</tabstop>
+  <tabstop>tmpPathButton</tabstop>
+  <tabstop>showSplashscreen</tabstop>
+  <tabstop>checkForUpdates</tabstop>
+  <tabstop>checkUpdatesNow</tabstop>
+  <tabstop>suggestArtist</tabstop>
+  <tabstop>suggestTitle</tabstop>
+  <tabstop>automaticEditSearch</tabstop>
+  <tabstop>font</tabstop>
+  <tabstop>printColors</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>acceptButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>mp3Player</tabstop>
+  <tabstop>mp3PlayerButton</tabstop>
+  <tabstop>readID3v1</tabstop>
+  <tabstop>readID3v2</tabstop>
+  <tabstop>saveOriginalTags</tabstop>
+  <tabstop>saveOriginalTagsOnAutoImport</tabstop>
+  <tabstop>writeID3v1</tabstop>
+  <tabstop>writeID3v2</tabstop>
+  <tabstop>removeOriginalTags</tabstop>
+  <tabstop>retryIntervall</tabstop>
+  <tabstop>ID3v2Padding</tabstop>
+  <tabstop>normalizeFilenames</tabstop>
+  <tabstop>maxFilenameLength</tabstop>
+  <tabstop>displayMusicKey</tabstop>
+  <tabstop>saveMusicKey</tabstop>
+  <tabstop>customMusicalKey_15</tabstop>
+  <tabstop>customMusicalKey_17</tabstop>
+  <tabstop>customMusicalKey_19</tabstop>
+  <tabstop>customMusicalKey_21</tabstop>
+  <tabstop>customMusicalKey_23</tabstop>
+  <tabstop>customMusicalKey_1</tabstop>
+  <tabstop>customMusicalKey_3</tabstop>
+  <tabstop>customMusicalKey_5</tabstop>
+  <tabstop>customMusicalKey_7</tabstop>
+  <tabstop>customMusicalKey_9</tabstop>
+  <tabstop>customMusicalKey_11</tabstop>
+  <tabstop>customMusicalKey_13</tabstop>
+  <tabstop>customMusicalKey_16</tabstop>
+  <tabstop>customMusicalKey_18</tabstop>
+  <tabstop>customMusicalKey_20</tabstop>
+  <tabstop>customMusicalKey_22</tabstop>
+  <tabstop>customMusicalKey_24</tabstop>
+  <tabstop>customMusicalKey_2</tabstop>
+  <tabstop>customMusicalKey_4</tabstop>
+  <tabstop>customMusicalKey_6</tabstop>
+  <tabstop>customMusicalKey_8</tabstop>
+  <tabstop>customMusicalKey_10</tabstop>
+  <tabstop>customMusicalKey_12</tabstop>
+  <tabstop>customMusicalKey_14</tabstop>
+  <tabstop>customMusicalKey_25</tabstop>
+  <tabstop>customMusicKeyName</tabstop>
+  <tabstop>name</tabstop>
+  <tabstop>company</tabstop>
+  <tabstop>serial</tabstop>
+  <tabstop>registerButton</tabstop>
+  <tabstop>language</tabstop>
+  <tabstop>currency</tabstop>
+  <tabstop>enableDebug</tabstop>
+  <tabstop>logfile</tabstop>
+  <tabstop>logfileButton</tabstop>
+  <tabstop>debuglevel</tabstop>
+  <tabstop>logfileSize</tabstop>
+  <tabstop>generations</tabstop>
+  <tabstop>device_1</tabstop>
+  <tabstop>devicePathCassette</tabstop>
+  <tabstop>devicePathButtonCassette</tabstop>
+  <tabstop>device_2</tabstop>
+  <tabstop>devicePathCD</tabstop>
+  <tabstop>devicePathButtonCD</tabstop>
+  <tabstop>device_3</tabstop>
+  <tabstop>devicePathDataStorage</tabstop>
+  <tabstop>devicePathButtonDataStorage</tabstop>
+  <tabstop>device_4</tabstop>
+  <tabstop>devicePathRecord</tabstop>
+  <tabstop>devicePathButtonRecord</tabstop>
+  <tabstop>device_5</tabstop>
+  <tabstop>devicePathVHS</tabstop>
+  <tabstop>devicePathButtonVHS</tabstop>
+  <tabstop>device_6</tabstop>
+  <tabstop>devicePathOther</tabstop>
+  <tabstop>devicePathButtonOther</tabstop>
+  <tabstop>device_7</tabstop>
+  <tabstop>devicePathMP3</tabstop>
+  <tabstop>devicePathButtonMP3</tabstop>
+  <tabstop>device_8</tabstop>
+  <tabstop>devicePathTape</tabstop>
+  <tabstop>devicePathButtonTape</tabstop>
+  <tabstop>device_9</tabstop>
+  <tabstop>devicePathDVD</tabstop>
+  <tabstop>devicePathButtonDVD</tabstop>
+  <tabstop>regexpTable</tabstop>
+  <tabstop>regexpAdd</tabstop>
+  <tabstop>regexpEdit</tabstop>
+  <tabstop>regexpDelete</tabstop>
+  <tabstop>regexpUp</tabstop>
+  <tabstop>regexpDown</tabstop>
+  <tabstop>cacheDirectories</tabstop>
+  <tabstop>directoryList</tabstop>
+  <tabstop>addDirectory</tabstop>
+  <tabstop>deleteDirectory</tabstop>
+  <tabstop>serverEnable</tabstop>
+  <tabstop>serverHostname</tabstop>
+  <tabstop>serverPort</tabstop>
+  <tabstop>serverEnableSSL</tabstop>
+  <tabstop>serverKeyfile</tabstop>
+  <tabstop>buttonSelectServerKeyfile</tabstop>
+  <tabstop>serverKeyPassword</tabstop>
+  <tabstop>buttonManageUser</tabstop>
+ </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
   <include location="../../resources.qrc"/>

@@ -67,6 +67,7 @@ Search::Search(QWidget *parent, CWmClient *wm)
 		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(2); break;
 		default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
+	ui.displayMusicKey->setItemText(2,wm->conf.customMusicKeyName);
 
 	update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
