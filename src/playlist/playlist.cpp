@@ -904,6 +904,10 @@ void Playlist::saveTitle(PlaylistItem *item)
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
 	}
+
+	if (!wm->SaveID3Tags(ti->DeviceId, ti->Page, ti->Track,Ti)) {
+		wm->RaiseError(this,tr("Could not save ID3 Tags"));
+	}
 }
 
 void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
@@ -1180,6 +1184,10 @@ void Playlist::on_contextSetMusicKey(int k)
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		return;
 	}
+	if (!wm->SaveID3Tags(t->DeviceId, t->Page, t->Track,tUpdate)) {
+		wm->RaiseError(this,tr("Could not save ID3 Tags"));
+	}
+
 	currentTreeItem->musicKey=k;
 	renderTrack(currentTreeItem);
 }
