@@ -198,6 +198,7 @@ private slots:
     void on_customMusicalKey_23_textChanged(const QString & ) {Change();};
     void on_customMusicalKey_24_textChanged(const QString & ) {Change();};
     void on_customMusicalKey_25_textChanged(const QString & ) {Change();};
+    void on_customMusicKeyName_textChanged(const QString & ) {Change();};
 
 };
 

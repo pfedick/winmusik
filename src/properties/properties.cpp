@@ -157,6 +157,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 		case musicKeyTypeCustom: ui.saveMusicKey->setCurrentIndex(3); break;
 		default: ui.saveMusicKey->setCurrentIndex(2); break;
 	}
+	ui.customMusicKeyName->setText(c->customMusicKeyName);
 	ui.customMusicalKey_1->setText(c->customMusicKey[1]);
 	ui.customMusicalKey_2->setText(c->customMusicKey[2]);
 	ui.customMusicalKey_3->setText(c->customMusicKey[3]);
@@ -419,6 +420,7 @@ int Properties::Save()
 		case 3: c->musicKeyTag=musicKeyTypeCustom; break;
 		default: c->musicKeyTag=musicKeyTypeOpenKey; break;
 	}
+	c->customMusicKeyName=ui.customMusicKeyName->text();
 	c->customMusicKey[1]=ui.customMusicalKey_1->text();
 	c->customMusicKey[2]=ui.customMusicalKey_2->text();
 	c->customMusicKey[3]=ui.customMusicalKey_3->text();

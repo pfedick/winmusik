@@ -277,6 +277,8 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 #define WM_NUM_LASTPLAYLISTS	5
 class Config
 {
+	Q_DECLARE_TR_FUNCTIONS(Config)
+
 	private:
 		ppl6::CString	ConfigFile;
 
@@ -341,6 +343,7 @@ class Config
 		ppl6::CString	serverSSLPassword;
 
 		ppl6::CString	customMusicKey[26];
+		ppl6::CString	customMusicKeyName;
 		MusicKeyType	musicKeyDisplay;
 		MusicKeyType	musicKeyTag;
 

@@ -251,6 +251,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(2); break;
 		default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
+	ui.displayMusicKey->setItemText(2,wm->conf.customMusicKeyName);
 
 
 	ppluint32 highest=wm->GetHighestDeviceId(typ);
