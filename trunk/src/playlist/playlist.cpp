@@ -514,6 +514,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->Album=ti->Album;
 	item->musicKey=ti->Key;
 	item->keyVerified=(ti->Flags>>4)&1;
+	item->energyLevel=ti->EnergyLevel;
 	item->bpm=ti->BPM;
 	item->bpmPlayed=0;
 	item->rating=ti->Rating;
@@ -551,6 +552,7 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->bpm=info.Ti.BPM;
 	item->rating=info.Ti.Rating;
 	item->musicKey=info.Ti.Key;
+	item->energyLevel=info.Ti.EnergyLevel;
 	item->CoverPreview=info.Ti.CoverPreview;
 
 	item->useTraktorCues(file);
@@ -583,6 +585,8 @@ void Playlist::Resize()
 		w-=49;
 		ui.tracks->setColumnWidth(columnMusicKey,50);
 		w-=54;
+		ui.tracks->setColumnWidth(columnEnergyLevel,30);
+		w-=34;
 		ui.tracks->setColumnWidth(columnStart,60);
 		w-=64;
 		ui.tracks->setColumnWidth(columnEnd,60);
@@ -613,13 +617,14 @@ void Playlist::recreatePlaylist()
 	columnBpm=5;
 	columnBpmPlayed=6;
 	columnMusicKey=7;
-	columnRating=8;
-	columnStart=9;
-	columnEnd=10;
-	columnCuts=11;
-	columnLength=12;
-	columnTotalLength=13;
-	columnSource=14;
+	columnEnergyLevel=8;
+	columnRating=9;
+	columnStart=10;
+	columnEnd=11;
+	columnCuts=12;
+	columnLength=13;
+	columnTotalLength=14;
+	columnSource=15;
 
 	if (playlistView==playlistViewNormal) {
 		ui.tracks->setColumnCount(7);
@@ -636,7 +641,7 @@ void Playlist::recreatePlaylist()
 		item->setText(columnSource,tr("Source"));
 
 	} else if (playlistView==playlistViewDJ) {
-		ui.tracks->setColumnCount(15);
+		ui.tracks->setColumnCount(16);
 		item->setText(columnTrack,tr("Track"));
 		item->setText(columnCover,tr("Cover"));
 		item->setText(columnTitle,tr("Artist - Title (Version)"));
@@ -645,6 +650,7 @@ void Playlist::recreatePlaylist()
 		item->setText(columnBpm,tr("Bpm"));
 		item->setText(columnBpmPlayed,tr("MixBpm"));
 		item->setText(columnMusicKey,tr("Key"));
+		item->setText(columnEnergyLevel,tr("Energy"));
 		item->setText(columnRating,tr("Rating"));
 		item->setText(columnStart,tr("Start"));
 		item->setText(columnEnd,tr("End"));
@@ -804,6 +810,9 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	}
 	item->setFont(columnMusicKey,f);
 
+	Tmp.Setf("%i",item->energyLevel);
+	item->setText(columnEnergyLevel,Tmp);
+
 	Tmp.Setf("%02i:%02i",(int)(item->startPositionSec/60),(int)item->startPositionSec%60);
 	item->setText(columnStart,Tmp);
 	Tmp.Setf("%02i:%02i",(int)(item->endPositionSec/60),(int)item->endPositionSec%60);
@@ -895,6 +904,7 @@ void Playlist::saveTitle(PlaylistItem *item)
 	Ti.LabelId=wm_main->LabelStore.FindOrAdd(item->Label);
 	Ti.Key=item->musicKey;
 	Ti.BPM=item->bpm;
+	Ti.EnergyLevel=item->energyLevel;
 	Ti.Rating=item->rating;
 	if (Ti.CoverPreview.Size()==0 || item->CoverPreview.Size()>0) Ti.CoverPreview=item->CoverPreview;
 

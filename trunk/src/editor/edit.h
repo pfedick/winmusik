@@ -49,7 +49,8 @@ class Edit;
 #define TRACKLIST_LENGTH_ROW		5
 #define TRACKLIST_BPM_ROW			6
 #define TRACKLIST_KEY_ROW			7
-#define TRACKLIST_RATING_ROW		8
+#define TRACKLIST_ENERGYLEVEL_ROW	8
+#define TRACKLIST_RATING_ROW		9
 
 class CTitleList : public QTreeWidget
 {

@@ -193,6 +193,7 @@ class DataTitle : public CStorageItem
 		ppluint8		Rating;
 		ppluint8		Flags;
 		ppluint8		Key;
+		ppluint8		EnergyLevel;
 		//void *operator new (size_t size);
 		//void operator delete (void *ptr, size_t size);
 
