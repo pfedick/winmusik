@@ -78,6 +78,7 @@ private:
     void createToolbar();
     void createStatusBar();
     void createSetMusicKeyContextMenu(QMenu *m);
+    void createSetEnergyLevelContextMenu(QMenu *m);
 
     QMessageBox::StandardButton saveFirst();
 
@@ -217,6 +218,21 @@ public slots:
 	void on_displayMusicKey_currentIndexChanged(int);
 
 	void on_contextPasteCover_triggered();
+
+	void on_contextSetEnergyLevel(int v);
+	void on_contextEnergyLevel0_triggered() {on_contextSetEnergyLevel(0); };
+	void on_contextEnergyLevel1_triggered() {on_contextSetEnergyLevel(1); };
+	void on_contextEnergyLevel2_triggered() {on_contextSetEnergyLevel(2); };
+	void on_contextEnergyLevel3_triggered() {on_contextSetEnergyLevel(3); };
+	void on_contextEnergyLevel4_triggered() {on_contextSetEnergyLevel(4); };
+	void on_contextEnergyLevel5_triggered() {on_contextSetEnergyLevel(5); };
+	void on_contextEnergyLevel6_triggered() {on_contextSetEnergyLevel(6); };
+	void on_contextEnergyLevel7_triggered() {on_contextSetEnergyLevel(7); };
+	void on_contextEnergyLevel8_triggered() {on_contextSetEnergyLevel(8); };
+	void on_contextEnergyLevel9_triggered() {on_contextSetEnergyLevel(9); };
+	void on_contextEnergyLevel10_triggered() {on_contextSetEnergyLevel(10); };
+
+
 };
 
 

@@ -1116,6 +1116,10 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 		else a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
 		QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
 		createSetMusicKeyContextMenu(mk);
+	} else if (column==columnEnergyLevel) {
+		a=m->addAction(tr("Energy Level"));
+		createSetEnergyLevelContextMenu(m);
+
 	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {
 		a=m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Paste Cover","trackList Context Menue"),this,SLOT(on_contextPasteCover_triggered()));
 	} else {
@@ -1163,9 +1167,26 @@ void Playlist::createSetMusicKeyContextMenu(QMenu *m)
 	m->addAction(DataTitle::keyName(25,musicKeyDisplay),this,SLOT(on_contextMusicKey25_triggered()));
 }
 
+void Playlist::createSetEnergyLevelContextMenu(QMenu *m)
+{
+	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextEnergyLevel0_triggered()));
+	m->addAction(tr("1","trackList Context Menue"),this,SLOT(on_contextEnergyLevel1_triggered()));
+	m->addAction(tr("2","trackList Context Menue"),this,SLOT(on_contextEnergyLevel2_triggered()));
+	m->addAction(tr("3","trackList Context Menue"),this,SLOT(on_contextEnergyLevel3_triggered()));
+	m->addAction(tr("4","trackList Context Menue"),this,SLOT(on_contextEnergyLevel4_triggered()));
+	m->addAction(tr("5","trackList Context Menue"),this,SLOT(on_contextEnergyLevel5_triggered()));
+	m->addAction(tr("6","trackList Context Menue"),this,SLOT(on_contextEnergyLevel6_triggered()));
+	m->addAction(tr("7","trackList Context Menue"),this,SLOT(on_contextEnergyLevel7_triggered()));
+	m->addAction(tr("8","trackList Context Menue"),this,SLOT(on_contextEnergyLevel8_triggered()));
+	m->addAction(tr("9","trackList Context Menue"),this,SLOT(on_contextEnergyLevel9_triggered()));
+	m->addAction(tr("10","trackList Context Menue"),this,SLOT(on_contextEnergyLevel10_triggered()));
+}
+
 void Playlist::on_contextMusicKeyVerified_triggered()
 {
 	if (!currentTreeItem) return;
+	setChanged(true);
+	currentTreeItem->keyVerified=!currentTreeItem->keyVerified;
 	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
 	if (t) {
 		DataTitle tUpdate=*t;
@@ -1184,6 +1205,10 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 void Playlist::on_contextSetMusicKey(int k)
 {
 	if (!currentTreeItem) return;
+	setChanged(true);
+	currentTreeItem->musicKey=k;
+	renderTrack(currentTreeItem);
+
 	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
@@ -1197,26 +1222,43 @@ void Playlist::on_contextSetMusicKey(int k)
 	if (!wm->SaveID3Tags(t->DeviceId, t->Page, t->Track,tUpdate)) {
 		wm->RaiseError(this,tr("Could not save ID3 Tags"));
 	}
+}
 
-	currentTreeItem->musicKey=k;
+void Playlist::on_contextSetEnergyLevel(int v)
+{
+	if (!currentTreeItem) return;
+	setChanged(true);
+	currentTreeItem->energyLevel=v;
 	renderTrack(currentTreeItem);
+
+	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+
+	DataTitle tUpdate=*t;
+	tUpdate.EnergyLevel=v;
+	if (!wm->TitleStore.Put(&tUpdate)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return;
+	}
 }
 
 void Playlist::rateCurrentTrack(int value)
 {
 	if (!currentTreeItem) return;
+	setChanged(true);
+	currentTreeItem->rating=value;
+	renderTrack(currentTreeItem);
+
 	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 	if (value==t->Rating) return;
+
 	DataTitle tUpdate=*t;
 	tUpdate.Rating=value;
 	if (!wm->TitleStore.Put(&tUpdate)) {
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		return;
 	}
-	currentTreeItem->rating=value;
-	renderTrack(currentTreeItem);
-	updateLengthStatus();
 }
 
 void Playlist::on_contextRate0_clicked()
