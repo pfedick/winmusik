@@ -2267,6 +2267,8 @@
   <tabstop>length</tabstop>
   <tabstop>bpm</tabstop>
   <tabstop>musickey</tabstop>
+  <tabstop>musickeyVerified</tabstop>
+  <tabstop>energyLevel</tabstop>
   <tabstop>bitrate</tabstop>
   <tabstop>releaseDate</tabstop>
   <tabstop>recordDate</tabstop>
@@ -2279,6 +2281,7 @@
   <tabstop>recordDevice</tabstop>
   <tabstop>remarks</tabstop>
   <tabstop>tags</tabstop>
+  <tabstop>filename</tabstop>
   <tabstop>complete</tabstop>
   <tabstop>realTitle</tabstop>
   <tabstop>interrupted</tabstop>
@@ -2286,20 +2289,20 @@
   <tabstop>quality</tabstop>
   <tabstop>rating</tabstop>
   <tabstop>filesize</tabstop>
-  <tabstop>statsTracks</tabstop>
-  <tabstop>statsLength</tabstop>
-  <tabstop>statsSize</tabstop>
   <tabstop>coverCopyButton</tabstop>
-  <tabstop>coverInsertButton</tabstop>
   <tabstop>coverDeleteButton</tabstop>
+  <tabstop>coverInsertButton</tabstop>
   <tabstop>coverLoadButton</tabstop>
   <tabstop>coverSaveButton</tabstop>
+  <tabstop>statsLength</tabstop>
   <tabstop>hideEditor</tabstop>
-  <tabstop>filename</tabstop>
   <tabstop>coverSearchGoogle</tabstop>
   <tabstop>coverSearchBeatport</tabstop>
-  <tabstop>coverSearchSoundcloud</tabstop>
   <tabstop>coverSearchAmazon</tabstop>
+  <tabstop>coverSearchSoundcloud</tabstop>
+  <tabstop>statsTracks</tabstop>
+  <tabstop>statsSize</tabstop>
+  <tabstop>displayMusicKey</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
