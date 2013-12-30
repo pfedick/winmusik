@@ -22,6 +22,8 @@ Version 3.2.0
       die Keys nur dann aus dem ID3-Tag übernommen, wenn vorher noch kein Key
       in der Datenbank war oder diese noch nicht verifiziert war. Im Klartext:
       Keys, die schon verifiziert waren, werden nicht überschrieben.
+    - Neues Datenfeld für Titel: EnergyLevel (Tanzbarkeit des Titels auf einer
+      Skala von 1 bis 10)
 
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt

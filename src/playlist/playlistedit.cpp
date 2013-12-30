@@ -61,6 +61,7 @@ PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
 	installFilter(ui.musicKey,0);
 	installFilter(ui.keyVerified,0);
 	installFilter(ui.rating,0);
+	installFilter(ui.energyLevel,0);
 	installFilter(ui.trackStart,0);
 	installFilter(ui.trackEnd,0);
 	installFilter(ui.cutStart0,0);
@@ -135,6 +136,7 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.bpmPlayed->setText(ppl6::ToString("%i",item->bpmPlayed));
 	ui.musicKey->setText(DataTitle::keyName(item->musicKey,wm->conf.musicKeyDisplay));
 	ui.keyVerified->setChecked(item->keyVerified);
+	ui.energyLevel->setValue(item->energyLevel);
 
 	ui.rating->setCurrentIndex(item->rating);
 
@@ -250,6 +252,7 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->bpm=ui.bpm->text().trimmed().toInt();
 	item->bpmPlayed=ui.bpmPlayed->text().trimmed().toInt();
 	item->rating=ui.rating->currentIndex();
+	item->energyLevel=ui.energyLevel->value();
 	item->startPositionSec=getSecondsFromLine(ui.trackStart);
 	item->endPositionSec=getSecondsFromLine(ui.trackEnd);
 	item->cutStartPosition[0]=getSecondsFromLine(ui.cutStart0);

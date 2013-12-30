@@ -157,6 +157,7 @@ void Edit::ClearEditFields()
 	ui.length->clear();
 	ui.bpm->clear();
 	ui.musickey->clear();
+	ui.energyLevel->setValue(0);
 	ui.remarks->clear();
 	//ui.tags->clear();
 	ui.album->clear();
@@ -230,6 +231,8 @@ void Edit::FillEditFields()
 	// Music Key
 	ui.musickey->setText(ppl6::Trim(Ti.getKeyName(musicKeyDisplay)));
 
+	// EnergyLevel
+	ui.energyLevel->setValue(Ti.EnergyLevel);
 
 	// Bitrate
 	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();
@@ -407,12 +410,15 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 	Text.Setf("%4i:%02i",(int)(title->Length/60),title->Length%60);
 	item->setText(TRACKLIST_LENGTH_ROW,Text);
 
-	// BPM und Key
+	// BPM, Key und EnergyLevel
 	Text.Setf("%d",(int)title->BPM);
 	item->setText(TRACKLIST_BPM_ROW,Text);
 	item->setText(TRACKLIST_KEY_ROW,ppl6::Trim(title->getKeyName(musicKeyDisplay)));
 	if ((title->Flags&16)) item->setTextColor(TRACKLIST_KEY_ROW,QColor(0,0,0));
 	else item->setTextColor(TRACKLIST_KEY_ROW,QColor(192,192,192));
+	Text.Setf("%d",(int)title->EnergyLevel);
+	item->setText(TRACKLIST_ENERGYLEVEL_ROW,Text);
+
 
 	// Rating
 	switch (title->Rating) {
@@ -552,6 +558,9 @@ void Edit::SaveTrack()
 
 	// Music Key
 	Ti.SetKey(ui.musickey->text());
+
+	// EnergyLevel
+	Ti.EnergyLevel=ui.energyLevel->value();
 
 	// Bitrate
 	Ti.Bitrate=ui.bitrate->text().toInt();

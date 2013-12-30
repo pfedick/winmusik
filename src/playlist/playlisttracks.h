@@ -38,6 +38,7 @@ class PlaylistItem : public QTreeWidgetItem
 		int				rating;
 		int				trackLength;
 		int				mixLength;
+		int				energyLevel;
 		bool			keyVerified;
 
 		ppluint32		DeviceId;

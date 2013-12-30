@@ -97,7 +97,7 @@ void Search::Resize()
 	int w=trackList->width();
 	trackList->setColumnWidth(0,50);
 	if (resultmode==0) {
-		w=w-230-40-10-42-42;
+		w=w-230-40-10-42-42-32;
 		trackList->setColumnWidth(1,w*35/100);
 		trackList->setColumnWidth(2,w*30/100);
 		trackList->setColumnWidth(3,w*25/100);
@@ -105,6 +105,7 @@ void Search::Resize()
 		trackList->setColumnWidth(5,50);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_BPM_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_KEY_ROW,40);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_ENERGYLEVEL_ROW,30);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_RATING_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_SOURCE_ROW,120);
 	} else {
@@ -181,6 +182,7 @@ void Search::DefaultTracklistHeader()
     trackList->headerItem()->setText(5, tr("Length","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_BPM_ROW, tr("BPM","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_KEY_ROW, tr("Key","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_ENERGYLEVEL_ROW, tr("Energy","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_SOURCE_ROW, tr("Medium","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
@@ -451,12 +453,14 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
 	item->setText(5,Tmp);
 
-	// BPM und Key
+	// BPM, Key und EnergyLevel
 	Tmp.Setf("%d",(int)ti->BPM);
 	item->setText(SEARCH_TRACKLIST_BPM_ROW,Tmp);
 	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName(musicKeyDisplay));
 	if ((ti->Flags&16)) item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(0,0,0));
 	else item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(192,192,192));
+	Tmp.Setf("%d",(int)ti->EnergyLevel);
+	item->setText(SEARCH_TRACKLIST_ENERGYLEVEL_ROW,Tmp);
 
 	// Tonträger
 	Tmp.Setf("%u %c-%03u", ti->DeviceId,Seite[(ti->Page<10?ti->Page:0)],ti->Track);

@@ -23,6 +23,7 @@ PlaylistItem::PlaylistItem()
 	startPositionSec=0;
 	endPositionSec=0;
 	musicKey=0;
+	energyLevel=0;
 	bpm=0;
 	bpmPlayed=0;
 	rating=0;
@@ -65,6 +66,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <musicKey verified=\"";
 	if (keyVerified) ret+="true"; else ret+="false";
 	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey,musicKeyTypeMusicalSharps))+"</musicKey>\n";
+	ret+=Indent+"   <energyLevel>"+ppl6::ToString("%u",energyLevel)+"</energyLevel>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
 	ret+=Indent+"   <bpmPlayed>"+ppl6::ToString("%u",bpmPlayed)+"</bpmPlayed>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";
@@ -152,6 +154,11 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		Tmp=node.toElement().attribute("verified","false");
 		keyVerified=Tmp.ToBool();
 	}
+	node =e.namedItem("energyLevel");
+	if (node.isNull()==false && node.isElement()==true) {
+		energyLevel=node.toElement().text().toInt();
+	}
+
 	node =e.namedItem("bpm");
 	if (node.isNull()==false && node.isElement()==true) {
 		bpm=node.toElement().text().toInt();
@@ -249,6 +256,7 @@ void PlaylistItem::updateFromDatabase()
 	Title=ti->Title;
 	Album=ti->Album;
 	musicKey=ti->Key;
+	energyLevel=ti->EnergyLevel;
 	bpm=ti->BPM;
 	if (!bpmPlayed) bpmPlayed=0;
 	rating=ti->Rating;

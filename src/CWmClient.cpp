@@ -1,10 +1,10 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.15 $
- * $Date: 2011/05/24 18:55:11 $
- * $Id: CWmClient.cpp,v 1.15 2011/05/24 18:55:11 pafe Exp $
+ * $Author$
+ * $Revision$
+ * $Date$
+ * $Id$
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -931,6 +931,7 @@ ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
 	r.Concatf("<bitrate>%i</bitrate>\n",(int)ti->Bitrate);
 	r.Concatf("<rating>%i</rating>\n",(int)ti->Rating);
 	r.Concatf("<trackLength>%i</trackLength>\n",(int)ti->Length);
+	r.Concatf("<energyLevel>%i</energyLevel>\n",(int)ti->EnergyLevel);
 	r+="<musicKey verified=\"";
 	if (ti->Flags&16) r+="true"; else r+="false";
 	r+="\">"+ti->getKeyName(musicKeyTypeMusicalSharps)+"</musicKey>\n";

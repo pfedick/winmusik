@@ -137,6 +137,7 @@ private:
     int columnBpm;
     int columnBpmPlayed;
     int columnMusicKey;
+    int columnEnergyLevel;
     int columnStart;
     int columnEnd;
     int columnCuts;

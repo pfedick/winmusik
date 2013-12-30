@@ -53,6 +53,7 @@ void TrackInfo::clear()
  * - Version 2: Cover-Icon und Dateigröße hinzugekommen
  * - Version 3: Tags hinzugekommen
  * - Version 4: Tonart (Key) hinzugekommen
+ * - Version 5: EnergyLevel hinzugekommen
  */
 
 /*!\var DataTitle::Artist
@@ -250,6 +251,15 @@ Bit 4: Music-Key ist verifiziert                           (16)
  *
  */
 
+/*!\var DataTitle::EnergyLevel
+ * \brief Tonart
+ *
+ * Wert zwischen 1 und 10, der die Tanzbarkeit des Titels angibt. Niedrige Werte
+ * stehen für eher ruhigere Titel, hohe Werte für Floorfiller.
+ *
+ */
+
+
 /*!\var DataTitle::ImportData
  * \brief Verweis auf Original-Importdaten (nur MP3)
  *
@@ -286,7 +296,7 @@ DataTitle::DataTitle()
 	Album=NULL;
 	Tags=NULL;
 	Clear();
-	formatversion=4;
+	formatversion=5;
 }
 
 DataTitle::DataTitle(const DataTitle &other)
@@ -297,7 +307,7 @@ DataTitle::DataTitle(const DataTitle &other)
 	Remarks=NULL;
 	Album=NULL;
 	Tags=NULL;
-	formatversion=4;
+	formatversion=5;
 	CopyFrom(&other);
 }
 
@@ -401,8 +411,9 @@ void DataTitle::Clear()
 	ImportData=0;
 	CoverPreview.Clear();
 	CStorageItem::Clear();
-	formatversion=4;
+	formatversion=5;
 	Key=0;
+	EnergyLevel=0;
 }
 
 
@@ -457,6 +468,7 @@ int DataTitle::CopyFrom(const DataTitle *t)
 	CoverPreview=t->CoverPreview;
 	Size=t->Size;
 	Key=t->Key;
+	EnergyLevel=t->EnergyLevel;
 	CopyStorageFrom(t);
 	return 1;
 }
@@ -749,14 +761,14 @@ ppl6::CBinary *DataTitle::Export()
  */
 {
 	// Zunächst den benötigten Speicher berechnen
-	int size=69;
+	int size=70;
 	int p=0;
 	int lenArtist=0;
 	int lenTitle=0;
 	int lenRemarks=0;
 	int lenAlbum=0;
 	int lenTags=0;
-	formatversion=4;
+	formatversion=5;
 
 	if (Artist) lenArtist=strlen(Artist);
 	if (Title) lenTitle=strlen(Title);
@@ -792,7 +804,8 @@ ppl6::CBinary *DataTitle::Export()
 	ppl6::Poke32(a+48,ImportData);
 	ppl6::Poke32(a+52,Size);
 	ppl6::Poke8(a+56,Key);
-	p=57;
+	ppl6::Poke8(a+57,EnergyLevel);
+	p=58;
 	ppl6::Poke16(a+p,lenArtist);
 	if (lenArtist) strncpy(a+p+2,Artist,lenArtist);
 	p+=lenArtist+2;
@@ -840,7 +853,7 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 		ppl6::SetError(194,"int DataTitle::Import(==> ppl6::CBinary *bin <==)");
 		return 0;
 	}
-	if (version<1 || version>4) {
+	if (version<1 || version>5) {
 		ppl6::SetError(20023,"%i",version);
 		return 0;
 	}
@@ -891,6 +904,10 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 	if (version >= 4) {
 		Key=ppl6::Peek8(a+56);
 		p=57;
+	}
+	if (version >= 5) {
+		EnergyLevel=ppl6::Peek8(a+57);
+		p=58;
 	}
 	len=ppl6::Peek16(a+p);
 	if (len) Artist=ppl6::strndup(a+p+2,len);
