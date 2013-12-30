@@ -175,6 +175,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.rating,28);
 	InstallFilter(ui.bitrate,29);
 	InstallFilter(ui.musickey,30);
+	InstallFilter(ui.energyLevel,31);
 
 	InstallFilter(ui.cover,100);
 
@@ -772,7 +773,8 @@ void Edit::MoveToNextWidget()
 		case 9: ui.length->setFocus(); break;
 		case 10: ui.bpm->setFocus(); break;
 		case 11: ui.musickey->setFocus(); break;
-		case 30: ui.bitrate->setFocus(); break;
+		case 30: ui.energyLevel->setFocus(); break;
+		case 31: ui.bitrate->setFocus(); break;
 		case 29: ui.releaseDate->setFocus(); break;
 		case 12: ui.recordDate->setFocus(); break;
 		case 13: ui.album->setFocus(); break;
@@ -827,6 +829,7 @@ QWidget *Edit::GetWidgetFromPosition(int position)
 		case 28: return ui.rating;
 		case 29: return ui.bitrate;
 		case 30: return ui.musickey;
+		case 31: return ui.energyLevel;
 	}
 	return NULL;
 }
