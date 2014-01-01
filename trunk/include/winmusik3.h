@@ -680,7 +680,7 @@ class CWmClient
 		int WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device=NULL);
 		int UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list);
 
-		int PlayFile(ppl6::CString &Filename);
+		int PlayFile(const ppl6::CString &Filename);
 
 		// Printing
 		int PrintCoverDialog(QWidget *parent, int DeviceType, ppluint32 DeviceId);

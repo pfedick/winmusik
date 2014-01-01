@@ -1052,7 +1052,7 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
 		editTrack((PlaylistItem*)item);
 		return;
 	}
-	wm->PlayFile(((PlaylistItem*)item)->File);
+	wm->PlayFile(((PlaylistItem*)item)->getExistingFilename());
 	return;
 }
 

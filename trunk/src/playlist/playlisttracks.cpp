@@ -76,6 +76,13 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	return ret;
 }
 
+ppl6::CString PlaylistItem::getExistingFilename() const
+{
+	if (File.IsEmpty()) return wm_main->MP3Filename(DeviceId,DevicePage,DeviceTrack);
+	if (ppl6::CFile::Exists(File)) return File;
+	return wm_main->MP3Filename(DeviceId,DevicePage,DeviceTrack);
+}
+
 void PlaylistItem::importFromXML(QDomElement &e)
 {
 	ppl6::CString Tmp;

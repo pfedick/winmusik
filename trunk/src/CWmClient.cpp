@@ -1412,7 +1412,7 @@ int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 }
 
 
-int CWmClient::PlayFile(ppl6::CString &Filename)
+int CWmClient::PlayFile(const ppl6::CString &Filename)
 {
 #ifdef _WIN32
 	ppl6::CWString f=Filename;
