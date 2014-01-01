@@ -111,7 +111,6 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	currentTreeItem=NULL;
 	searchWindow=NULL;
 	saveWidget=saveAsWidget=NULL;
-	displayMusicKey=NULL;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
@@ -124,18 +123,11 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	createStatusBar();
 
 	playlistView=playlistViewNormal;
+	musicKeyDisplay=wm->conf.musicKeyDisplay;
 
 	recreatePlaylist();
 	changed=true;
 	setChanged(false);
-
-	musicKeyDisplay=wm->conf.musicKeyDisplay;
-	switch (musicKeyDisplay) {
-		case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
-		case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(1); break;
-		case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(2); break;
-		default: displayMusicKey->setCurrentIndex(1); break;
-	}
 
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
 
@@ -196,77 +188,11 @@ void Playlist::createToolbar()
 
 void Playlist::createStatusBar()
 {
-	QHBoxLayout *layout=new QHBoxLayout;
-	layout->setContentsMargins(2,2,2,2);
-
-	QLabel *label;
-	QFrame *line;
-
-	label=new QLabel(tr("Musical Key:"));
-	layout->addWidget(label);
-	displayMusicKey=new QComboBox();
-	displayMusicKey->addItem(tr("musical sharps"));
-	displayMusicKey->addItem(tr("open key"));
-	displayMusicKey->addItem(wm->conf.customMusicKeyName);
-	layout->addWidget(displayMusicKey);
-	connect(displayMusicKey,SIGNAL(currentIndexChanged(int)),
-			this, SLOT(on_displayMusicKey_currentIndexChanged(int)));
-	displayMusicKey->setEnabled(false);
-
-	// Total Tracks
-	label=new QLabel(tr("total tracks:"));
-	layout->addWidget(label);
-
-	totalTracks=new QLabel();
-	totalTracks->setFrameShadow(QFrame::Sunken);
-	totalTracks->setFrameShape(QFrame::StyledPanel);
-	layout->addWidget(totalTracks);
-
-	line = new QFrame();
-	line->setGeometry(QRect(320, 150, 118, 3));
-	line->setFrameShape(QFrame::VLine);
-	line->setFrameShadow(QFrame::Sunken);
-	layout->addWidget(line);
-
-
-	// Total Track length
-	label=new QLabel(tr("total track length:"));
-	layout->addWidget(label);
-
-	totalTrackLength=new QLabel();
-	totalTrackLength->setFrameShadow(QFrame::Sunken);
-	totalTrackLength->setFrameShape(QFrame::StyledPanel);
-	layout->addWidget(totalTrackLength);
-
-	QLabel *min=new QLabel(tr("(hh:mm:ss)"));
-	layout->addWidget(min);
-
-	line = new QFrame();
-	line->setGeometry(QRect(320, 150, 118, 3));
-	line->setFrameShape(QFrame::VLine);
-	line->setFrameShadow(QFrame::Sunken);
-	layout->addWidget(line);
-
-
-	// Total Mix length
-	label=new QLabel(tr("total mix length:"));
-	layout->addWidget(label);
-
-	totalMixLength=new QLabel();
-	totalMixLength->setFrameShadow(QFrame::Sunken);
-	totalMixLength->setFrameShape(QFrame::StyledPanel);
-
-	layout->addWidget(totalMixLength);
-	min=new QLabel(tr("(hh:mm:ss)"));
-	layout->addWidget(min);
-
-	QFrame *frame=new QFrame;
-	//frame->setFrameShadow(QFrame::Sunken);
-	//frame->setFrameShape(QFrame::StyledPanel);
-	frame->setContentsMargins(0,0,0,0);
-	frame->setLayout(layout);
-
-	this->statusBar()->addPermanentWidget(frame);
+	statusbar=new PlaylistStatusBar;
+	statusbar->setMusicKeySelectionEnabled(false);
+	this->statusBar()->addWidget(statusbar);
+	connect(statusbar,SIGNAL(musicKeySelectionChanged(int)),
+				this, SLOT(on_statusbar_musicKeySelectionChanged(int)));
 
 }
 
@@ -403,8 +329,6 @@ bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent *)
 	return false;
 }
 
-
-
 bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 {
 	return false;
@@ -455,6 +379,10 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
 	return true;
 }
 
+void Playlist::on_tracks_itemSelectionChanged ()
+{
+	updateLengthStatus();
+}
 
 void Playlist::handleDropEvent(QDropEvent *event)
 {
@@ -724,18 +652,6 @@ void Playlist::recreatePlaylist()
 	updatePlaylist();
 }
 
-void setLength(QLabel *label, int length)
-{
-	int hh=0;
-	int mm=(int)(length/60);
-	int ss=length%60;
-	if (mm>59) {
-		hh=(int)(mm/60);
-		mm=mm%60;
-	}
-	label->setText(ppl6::ToString("%0d:%02d:%02d",hh,mm,ss));
-}
-
 void Playlist::updatePlaylist()
 {
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
@@ -759,6 +675,9 @@ void Playlist::updateLengthStatus()
 	ppl6::CString Tmp;
 	int trackLength=0;
 	int mixLength=0;
+	int selectedLength=0;
+	int selectedMixLength=0;
+	int selectedTracks=0;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		trackLength+=item->trackLength;
@@ -767,10 +686,19 @@ void Playlist::updateLengthStatus()
 			Tmp.Setf("%02i:%02i",(int)(mixLength/60),(int)mixLength%60);
 			item->setText(columnTotalLength,Tmp);
 		}
+		if (item->isSelected()) {
+			selectedTracks++;
+			selectedLength+=item->trackLength;
+			selectedMixLength+=item->mixLength;
+		}
 	}
-	setLength(totalTrackLength,trackLength);
-	setLength(totalMixLength,mixLength);
-	totalTracks->setText(ppl6::ToString("%d",ui.tracks->topLevelItemCount()));
+	statusbar->setTotalLength(trackLength);
+	statusbar->setMixLength(mixLength);
+	statusbar->setTotalTracks(ui.tracks->topLevelItemCount());
+
+	statusbar->setSelectedLength(selectedLength);
+	statusbar->setSelectedMixLength(selectedMixLength);
+	statusbar->setSelectedTracks(selectedTracks);
 }
 
 void Playlist::renderTrack(PlaylistItem *item)
@@ -1103,7 +1031,7 @@ void Playlist::on_viewPlaylist_triggered()
 {
 	if (playlistView!=playlistViewNormal) {
 		playlistView=playlistViewNormal;
-		displayMusicKey->setEnabled(false);
+		statusbar->setMusicKeySelectionEnabled(false);
 		recreatePlaylist();
 	}
 }
@@ -1112,7 +1040,7 @@ void Playlist::on_viewDJ_triggered()
 {
 	if (playlistView!=playlistViewDJ) {
 		playlistView=playlistViewDJ;
-		displayMusicKey->setEnabled(true);
+		statusbar->setMusicKeySelectionEnabled(true);
 		recreatePlaylist();
 	}
 }
@@ -1440,14 +1368,9 @@ void Playlist::on_contextPlayTrack_triggered()
 	wm->PlayFile(((PlaylistItem*)currentTreeItem)->File);
 }
 
-void Playlist::on_displayMusicKey_currentIndexChanged(int)
+void Playlist::on_statusbar_musicKeySelectionChanged(int newValue)
 {
-	switch (displayMusicKey->currentIndex()) {
-		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-		case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
-		case 2: musicKeyDisplay=musicKeyTypeCustom; break;
-		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	}
+	musicKeyDisplay=(MusicKeyType)newValue;
 	updatePlaylist();
 }
 

@@ -34,6 +34,7 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QString>
+#include <QLabel>
 #include <QFileDialog>
 #include <QTranslator>
 #include <QApplication>
@@ -191,6 +192,7 @@ void getHarmonicKeys(std::set<int> &harmonics, int key);
 bool saveCover(const ppl6::CString &filename, const QPixmap &Cover);
 void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover);
 void NormalizeImportString(ppl6::CString &Buffer);
+void setReadableLength(QLabel *label, int length);
 
 /*******************************************************
  * Global Variablen                                    *
