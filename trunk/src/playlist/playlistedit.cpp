@@ -160,27 +160,28 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	Filename=item->File;
 
 	ppl6::CID3Tag Tag;
-	if (Tag.Load(item->File)) {
-		//Tag.ListFrames(0);
-		//Tag.GetKey().Print(true);
-		loadCover(Tag);
-		loadTraktorCues(Tag);
-		ppl6::CString Tmp;
-		if (item->bpm==0) {
-			// BPM
-			Tmp=Tag.GetBPM();
-			NormalizeImportString(Tmp);
-			ui.bpm->setText(Tmp);
+
+	if (!Tag.Load(item->File)) {
+		ppl6::CString Tmp=wm->MP3Filename(item->DeviceId,item->DevicePage,item->DeviceTrack);
+		if (Tmp.NotEmpty()==true && Tmp!=item->File) {
+			item->File=Tmp;
+			Tag.Load(item->File);
 		}
-
-		if (item->musicKey==0) {
-			// Music Key
-			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
-		}
-
-
 	}
 
+	loadCover(Tag);
+	loadTraktorCues(Tag);
+	ppl6::CString Tmp;
+	if (item->bpm==0) {
+		// BPM
+		Tmp=Tag.GetBPM();
+		NormalizeImportString(Tmp);
+		ui.bpm->setText(Tmp);
+	}
+	if (item->musicKey==0) {
+		// Music Key
+		ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
+	}
 	updateTotalTime();
 }
 
