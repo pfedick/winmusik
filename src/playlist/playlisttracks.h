@@ -50,6 +50,7 @@ class PlaylistItem : public QTreeWidgetItem
 
 		PlaylistItem();
 		ppl6::CString exportAsXML(int indention=3) const;
+		ppl6::CString getExistingFilename() const;
 		void importFromXML(QDomElement &e);
 		void loadCoverPreview();
 		void updateFromDatabase();
