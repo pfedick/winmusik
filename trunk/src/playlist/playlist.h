@@ -35,6 +35,7 @@
 #include "ui_playlist.h"
 #include "winmusik3.h"
 #include "playlisttracks.h"
+#include "playlistStatusBar.h"
 #include <ppl6-sound.h>
 
 class PlaylistTracks;
@@ -55,12 +56,13 @@ private:
     CWmClient *wm;
     PlaylistItem *currentTreeItem;
     QMenu	*menuRecentPlaylists;
-    QLabel *totalTrackLength;
-    QLabel *totalMixLength;
-    QLabel *totalTracks;
+
+    // StatusBar
+    PlaylistStatusBar *statusbar;
+
+
     QWidget *searchWindow;
     QWidget *saveWidget, *saveAsWidget;
-    QComboBox *displayMusicKey;
 
     ppl6::CString	PlaylistFileName;
     bool changed;
@@ -166,8 +168,8 @@ public slots:
 
 	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
 	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
-
 	void on_tracks_customContextMenuRequested ( const QPoint & pos );
+	void on_tracks_itemSelectionChanged ();
 
 	void on_contextEditTrack_triggered();
 	void on_contextCopyTrack_triggered();
@@ -215,7 +217,7 @@ public slots:
 	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
 	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
 	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
-	void on_displayMusicKey_currentIndexChanged(int);
+	void on_statusbar_musicKeySelectionChanged(int newValue);
 
 	void on_contextPasteCover_triggered();
 

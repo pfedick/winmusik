@@ -29,6 +29,7 @@
 
 #include <QPixmap>
 #include <QBuffer>
+#include <QLabel>
 
 
 static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename);
@@ -391,3 +392,17 @@ void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover)
 	icon.save(&buffer, "JPEG",70);
 	bin.Copy(bytes.data(),bytes.size());
 }
+
+
+void setReadableLength(QLabel *label, int length)
+{
+	int hh=0;
+	int mm=(int)(length/60);
+	int ss=length%60;
+	if (mm>59) {
+		hh=(int)(mm/60);
+		mm=mm%60;
+	}
+	label->setText(ppl6::ToString("%0d:%02d:%02d",hh,mm,ss));
+}
+

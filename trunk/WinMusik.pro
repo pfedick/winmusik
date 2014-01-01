@@ -60,6 +60,7 @@ HEADERS += widgets/fkeys.h \
     include/search.h \
     include/menue.h \
     include/regexpcapture.h \
+    src/playlist/playlistStatusBar.h \
     src/playlist/playlist.h \
     src/playlist/playlisttracks.h \
     src/playlist/playlistedit.h \
@@ -118,6 +119,7 @@ SOURCES += widgets/fkeys.cpp \
     src/menue.cpp \
     src/main.cpp \
     src/playlist/playlist.cpp \
+    src/playlist/playlistStatusBar.cpp \
     src/playlist/playlistedit.cpp \
     src/playlist/playlisttracks.cpp \
     src/devicelist.cpp \
