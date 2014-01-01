@@ -42,6 +42,67 @@
 #include "traktor.h"
 #include <stdio.h>
 
+
+/*
+class Playlist;
+
+class PlaylistTab : public QWidget
+{
+		Q_OBJECT
+	public:
+		PlaylistTab(QWidget *parent = 0);
+		~PlaylistTab();
+		PlaylistTracks *tracks;
+
+		void setPlaylist(Playlist *p);
+	private:
+
+
+};
+
+PlaylistTab::PlaylistTab(QWidget *parent)
+	: QWidget(parent)
+{
+	QVBoxLayout *layout=new QVBoxLayout;
+	layout->setContentsMargins(2,2,2,2);
+
+	tracks=new PlaylistTracks;
+	tracks->setAcceptDrops(true);
+	tracks->sortByColumn(0,Qt::AscendingOrder);
+	tracks->setMouseTracking(false);
+	tracks->setContextMenuPolicy(Qt::CustomContextMenu);
+	tracks->setAcceptDrops(true);
+	tracks->setDropIndicatorShown(true);
+	tracks->setDragEnabled(true);
+	tracks->setDragDropOverwriteMode(false);
+	tracks->setDragDropMode(QAbstractItemView::DragOnly);
+	tracks->setDefaultDropAction(Qt::IgnoreAction);
+	tracks->setAlternatingRowColors(true);
+	tracks->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	tracks->setSelectionBehavior(QAbstractItemView::SelectRows);
+	tracks->setIconSize(QSize(64,16));
+	tracks->setRootIsDecorated(false);
+	tracks->setUniformRowHeights(true);
+	tracks->setItemsExpandable(false);
+	tracks->setSortingEnabled(true);
+	tracks->setExpandsOnDoubleClick(false);
+
+	layout->addWidget(tracks);
+	setLayout(layout);
+}
+
+PlaylistTab::~PlaylistTab()
+{
+
+}
+
+void PlaylistTab::setPlaylist(Playlist *p)
+{
+	tracks->setPlaylist(p);
+}
+
+*/
+
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
