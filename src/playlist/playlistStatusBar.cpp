@@ -33,7 +33,7 @@ static void addSpacer(QLayout *layout)
 static QHBoxLayout *createPanel(QLayout *layout)
 {
 	QHBoxLayout *l=new QHBoxLayout;
-	l->setContentsMargins(2,2,2,2);
+	l->setContentsMargins(1,1,1,1);
 
 	QFrame *frame=new QFrame;
 	frame->setFrameShape(QFrame::Panel);
@@ -48,23 +48,23 @@ void PlaylistStatusBar::setupUi()
 {
 	QHBoxLayout *panel;
 	QHBoxLayout *layout=new QHBoxLayout;
-	layout->setContentsMargins(2,2,2,2);
+	layout->setContentsMargins(1,1,1,1);
 	QLabel *label;
 
 	// Search
 	setupSearch(layout);
-	layout->addStretch(1);
+	layout->addStretch(0);
 
 	// MusicKey selection
-	panel=createPanel(layout);
+	//panel=createPanel(layout);
 
 	musicKeyLabel=new QLabel(tr("Musical Key:"));
-	panel->addWidget(musicKeyLabel);
+	layout->addWidget(musicKeyLabel);
 	displayMusicKey=new QComboBox();
 	displayMusicKey->addItem(tr("musical sharps"));
 	displayMusicKey->addItem(tr("open key"));
 	displayMusicKey->addItem(wm_main->conf.customMusicKeyName);
-	panel->addWidget(displayMusicKey);
+	layout->addWidget(displayMusicKey);
 	connect(displayMusicKey,SIGNAL(currentIndexChanged(int)),
 			this, SLOT(on_displayMusicKey_currentIndexChanged(int)));
 	displayMusicKey->setEnabled(false);
@@ -149,22 +149,29 @@ void PlaylistStatusBar::setupUi()
 
 void PlaylistStatusBar::setupSearch(QLayout *layout)
 {
-	QHBoxLayout *panel=createPanel(layout);
+	//QHBoxLayout *panel=createPanel(layout);
+	searchWidget=new QWidget;
+	QHBoxLayout *panel=new QHBoxLayout();
+	panel->setContentsMargins(0,0,0,0);
+	searchWidget->setLayout(panel);
+
+	layout->addWidget(searchWidget);
+
 	QLabel *label;
-	panel->setEnabled(false);			// TODO: Enablen, wenn fertig implementiert
+	//panel->setEnabled(false);			// TODO: Enablen, wenn fertig implementiert
 	label=new QLabel(tr("search:"));
 	panel->addWidget(label);
 
-	searchText=new QLineEdit;
-	panel->addWidget(searchText);
+	searchTextWidget=new QLineEdit;
+	panel->addWidget(searchTextWidget);
+	connect(searchTextWidget,SIGNAL(returnPressed()),
+				this, SLOT(on_search_clicked()));
 
-	searchBackward=new QToolButton();
-	searchBackward->setIcon(QIcon(":/icons/resources/previous.png"));
-	panel->addWidget(searchBackward);
-
-	searchForward=new QToolButton();
-	searchForward->setIcon(QIcon(":/icons/resources/next.png"));
-	panel->addWidget(searchForward);
+	searchTriggerButton=new QToolButton();
+	searchTriggerButton->setIcon(QIcon(":/icons/resources/next.png"));
+	panel->addWidget(searchTriggerButton);
+	connect(searchTriggerButton,SIGNAL(clicked()),
+				this, SLOT(on_search_clicked()));
 }
 
 void PlaylistStatusBar::ReloadTranslation()
@@ -223,4 +230,32 @@ void PlaylistStatusBar::on_displayMusicKey_currentIndexChanged(int)
 	}
 	emit musicKeySelectionChanged(musicKeyDisplay);
 }
+
+void PlaylistStatusBar::setFocusOnSearch()
+{
+	searchTextWidget->setFocus();
+	searchTextWidget->deselect();
+	searchTextWidget->selectAll();
+}
+
+void PlaylistStatusBar::setSearchEnabled(bool enable)
+{
+	searchWidget->setEnabled(enable);
+}
+
+void PlaylistStatusBar::setSearchVisible(bool visible)
+{
+	searchWidget->setVisible(visible);
+}
+
+const QString &PlaylistStatusBar::searchText() const
+{
+	return searchTextWidget->text();
+}
+
+void PlaylistStatusBar::on_search_clicked()
+{
+	emit searchTriggered();
+}
+
 

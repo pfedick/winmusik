@@ -234,6 +234,7 @@ public slots:
 	void on_contextEnergyLevel9_triggered() {on_contextSetEnergyLevel(9); };
 	void on_contextEnergyLevel10_triggered() {on_contextSetEnergyLevel(10); };
 
+	void on_searchTriggered();
 
 };
 

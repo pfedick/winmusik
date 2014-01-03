@@ -107,6 +107,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
 	ui.setupUi(this);
+	this->setStatusBar(NULL);
 	this->wm=wm;
 	currentTreeItem=NULL;
 	searchWindow=NULL;
@@ -117,6 +118,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	this->setWindowTitle(tr("WinMusik Playlist"));
 
 	ui.tracks->installEventFilter(this);
+	ui.playlistName->installEventFilter(this);
 
 	createMenue();
 	createToolbar();
@@ -132,6 +134,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
 
 	restoreGeometry(wm->GetGeometry("playlist"));
+	ui.tracks->setFocus();
 
 	//ui.tracks->setStyleSheet("QTreeWidget::item { border-left-color: rgb(158, 158, 158)};");
 }
@@ -190,9 +193,14 @@ void Playlist::createStatusBar()
 {
 	statusbar=new PlaylistStatusBar;
 	statusbar->setMusicKeySelectionEnabled(false);
-	this->statusBar()->addWidget(statusbar);
+	ui.centralwidget->layout()->addWidget(statusbar);
+	//this->layout()->addWidget(statusbar);
+	//this->statusBar()->addWidget(statusbar);
 	connect(statusbar,SIGNAL(musicKeySelectionChanged(int)),
 				this, SLOT(on_statusbar_musicKeySelectionChanged(int)));
+
+	connect(statusbar,SIGNAL(searchTriggered()),
+				this, SLOT(on_searchTriggered()));
 
 }
 
@@ -272,10 +280,10 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 {
 	int type=event->type();
 	//printf ("Event: %i\n",type);
-	if (target==ui.tracks) {
-		if (type==QEvent::KeyPress) {
+	if (type==QEvent::KeyPress) {
+		QKeyEvent *e=static_cast<QKeyEvent *>(event);
+		if (target==ui.tracks) {
 			currentTreeItem=(PlaylistItem*)ui.tracks->currentItem();
-			QKeyEvent *e=static_cast<QKeyEvent *>(event);
 			//printf ("Key: %i\n",e->key());
 			if (e->key()==Qt::Key_Delete) {
 				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
@@ -298,16 +306,14 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 				if(!currentTreeItem) return false;
 				wm->PlayFile((currentTreeItem)->File);
 				return true;
+			} else if (e->key()==Qt::Key_F && e->modifiers()==Qt::ControlModifier) {
+				statusbar->setFocusOnSearch();
+				return true;
 			}
 			return false;
-			/*
-		} else if (type==QEvent::DragMove) {
-			//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-			//QTreeWidgetItem *item=ui.tracks->itemAt(p);
-			//printf ("Move: %i:%i\n",p.x(),p.y());
-			//(static_cast<QDragMoveEvent *>(event))->accept();
-			return false;
-			*/
+		} else if (target==ui.playlistName && e->key()==Qt::Key_F && e->modifiers()==Qt::ControlModifier) {
+			statusbar->setFocusOnSearch();
+			return true;
 		}
 	}
 	return false;
@@ -1414,6 +1420,36 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 
 
 		}
+	}
+
+}
+
+void Playlist::on_searchTriggered()
+{
+	ui.tracks->unselectItems();
+	ppl6::CString Search=statusbar->searchText();
+	ppl6::CString TrackWords;
+	Search.Trim();
+	Search.LCase();
+	//printf ("Search triggered: %s\n",(const char*)Search);
+	if (Search.IsEmpty()) return;
+	ppl6::CArray Words(Search," ");
+	int count=0;
+	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		TrackWords=item->Artist+" "+item->Title+" "+item->Version;
+		TrackWords.LCase();
+		int found=0;
+		for (int w=0;w<Words.Num();w++) {
+			if (TrackWords.Instr(Words[w])>=0) found++;
+		}
+		if (found==Words.Num()) {
+			if (!count) ui.tracks->setCurrentItem(item);
+			item->setSelected(true);
+			count++;
+		}
+
+
 	}
 
 }
