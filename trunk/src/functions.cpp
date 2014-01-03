@@ -364,6 +364,68 @@ void getHarmonicKeys(std::set<int> &harmonics, int key)
 }
 
 
+class Harmonics
+{
+	public:
+		enum HarmonicTypes {
+			sameKey=0,
+			nextKey,
+			minorMajorSwitch,
+			minorMajorJump,
+			semitoneUpOrDown,
+		};
+		Harmonics();
+		Harmonics(int key, HarmonicTypes type) { this->key=key; this->type=type; }
+
+		int key;
+		HarmonicTypes type;
+
+};
+
+#define KEY_MINOR	128
+#define KEY_MAJOR	0
+
+static int wm2openkey[25] = {
+		0,
+		6|KEY_MINOR,
+		6|KEY_MAJOR,
+		7|KEY_MINOR,
+		7|KEY_MAJOR,
+		8|KEY_MINOR,
+		8|KEY_MAJOR,
+		9|KEY_MINOR,
+		9|KEY_MAJOR,
+		10|KEY_MINOR,
+		10|KEY_MAJOR,
+		11|KEY_MINOR,
+		11|KEY_MAJOR,
+		12|KEY_MINOR,
+		12|KEY_MAJOR,
+		1|KEY_MINOR,
+		1|KEY_MAJOR,
+		2|KEY_MINOR,
+		2|KEY_MAJOR,
+		3|KEY_MINOR,
+		3|KEY_MAJOR,
+		4|KEY_MINOR,
+		4|KEY_MAJOR,
+		5|KEY_MINOR,
+		5|KEY_MAJOR,
+};
+
+
+
+void getHarmonicKeys(std::map<int,Harmonics> &harmonics, int key)
+{
+	if (key<1 || key>24) return;
+	int openkey=wm2openkey[key]&31;
+	int minor=wm2openkey[key]&KEY_MINOR;
+	harmonics.clear();
+
+
+}
+
+
 bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
 {
 	if (filename.IsEmpty()) return false;
