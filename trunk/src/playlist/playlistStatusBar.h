@@ -14,6 +14,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QToolButton>
+#include <QString>
 
 
 
@@ -30,9 +31,9 @@ class PlaylistStatusBar : public QFrame
 		QLabel *selectedMixLength;
 		QLabel *selectedTracks;
 		QLabel *musicKeyLabel;
-		QLineEdit *searchText;
-		QToolButton *searchForward;
-		QToolButton *searchBackward;
+		QWidget *searchWidget;
+		QLineEdit *searchTextWidget;
+		QToolButton *searchTriggerButton;
 
 		QComboBox *displayMusicKey;
 		int	musicKeyDisplay;
@@ -54,12 +55,20 @@ class PlaylistStatusBar : public QFrame
 		void setSelectedMixLength(int sec);
 		void setMusicKeySelectionEnabled(bool flag);
 
+		void setFocusOnSearch();
+		void setSearchEnabled(bool enable);
+		void setSearchVisible(bool visible);
+
+		const QString &searchText() const;
+
 	signals:
 		void musicKeySelectionChanged(int newValue);
+		void searchTriggered();
+
 
 	public slots:
 		void on_displayMusicKey_currentIndexChanged(int);
-
+		void on_search_clicked();
 
 
 
