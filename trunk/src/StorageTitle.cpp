@@ -222,31 +222,33 @@ Bit 4: Music-Key ist verifiziert                           (16)
  * Gibt die initiale Tonart des Songs im Quintenzirkel an.
  *
  * \verbatim
-0: unbekannt
-1: A-Flat Minor (G#m)
-2: B Major
-3: E-Flat Minor (D#m)
-4: F-Sharp Major
-5: B-Flat Minor (A#m)
-6: D-Flat Major (C#)
-7: F Minor
-8: A-Flat Major
-9: C Minor
-10: E-Flat Major
-11: G Minor
-12: B-Flat Major
-13: D Minor
-14: F Major
-15: A Minor
-16: C Major
-17: E Minor
-18: G Major
-19: B Minor
-20: D Major
-21: F-Sharp Minor
-22: A Major
-23: D-Flat Minor (C#m)
-24: E Major
+ID: Note OpenKey Name
+0:  -    -       unbekannt
+1:  g#m  6m      A-Flat Minor
+2:  B    6d      B Major
+3:  d#m  7m      E-Flat Minor
+4:  F#   7d      F-Sharp Major
+5:  a#m  8m      B-Flat Minor
+6:  C#   8d      D-Flat Major
+7:  fm   9m      F Minor
+8:  G#   9d      A-Flat Major
+9:  cm   10m     C Minor
+10: D#   10d     E-Flat Major
+11: gm   11m     G Minor
+12: A#   11d     B-Flat Major
+13: dm   12m     D Minor
+14: F    12d     F Major
+15: am   1m      A Minor
+16: C    1d      C Major
+17: em   2m      E Minor
+18: G    2d      G Major
+19: bm   3m      B Minor
+20: D    3d      D Major
+21: f#m  4m      F-Sharp Minor
+22: A    4d      A Major
+23: c#m  5m      D-Flat Minor
+24: E    5d      E Major
+25: none
 \endverbatim
  *
  */
