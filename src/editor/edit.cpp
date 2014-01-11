@@ -2057,7 +2057,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						if (!wm->SaveID3Tags(title->DeviceId, title->Page, title->Track,Ti)) {
 							wm->RaiseError(this,tr("Could not save ID3 Tags"));
 						}
-					} else if (tinfo.Ti.Key != title->Key && (title->Flags&16)==16) {
+					} else if (tinfo.Ti.Key != title->Key && (title->Flags&16)==0) {
 						DataTitle Ti;
 						Ti.CopyFrom(title);
 						Ti.Key=tinfo.Ti.Key;
