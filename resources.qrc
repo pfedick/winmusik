@@ -168,6 +168,7 @@
     <file>resources/fkeys/f-key-3006.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/sync-keys.png</file>
     <file>resources/view_dj.png</file>
     <file>resources/view_playlist.png</file>
     <file>resources/musicKey.png</file>
