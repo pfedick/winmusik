@@ -1186,6 +1186,7 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	Job.Set("comment",comment);
 	Job.Set("version",version);
 	Job.Setf("track","%u",Track);
+	if (Ti.EnergyLevel>0) Job.Setf("EnergyLevel","%d",Ti.EnergyLevel);
 	if (Ti.BPM>0) Job.Setf("bpm","%u",Ti.BPM);
 	else Job.Setf("bpm","");
 	if (conf.musicKeyTag!=musicKeyTypeNone) Job.Set("key",Ti.getKeyName(conf.musicKeyTag));
