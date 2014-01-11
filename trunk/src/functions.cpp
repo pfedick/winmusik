@@ -157,6 +157,9 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		// Music Key
 		info.Ti.SetKey(Tag.GetKey());
 
+		// EnergyLevel
+		info.Ti.EnergyLevel=(char)(Tag.GetEnergyLevel().ToInt()&255);
+
 		// ReleaseDate
 		Tmp=Tag.GetYear();
 		NormalizeImportString(Tmp);
@@ -364,24 +367,6 @@ void getHarmonicKeys(std::set<int> &harmonics, int key)
 }
 
 
-class Harmonics
-{
-	public:
-		enum HarmonicTypes {
-			sameKey=0,
-			nextKey,
-			minorMajorSwitch,
-			minorMajorJump,
-			semitoneUpOrDown,
-		};
-		Harmonics();
-		Harmonics(int key, HarmonicTypes type) { this->key=key; this->type=type; }
-
-		int key;
-		HarmonicTypes type;
-
-};
-
 #define KEY_MINOR	128
 #define KEY_MAJOR	0
 
@@ -413,9 +398,63 @@ static int wm2openkey[25] = {
 		5|KEY_MAJOR,
 };
 
+enum HarmonicTypes {
+			sameKey=0,
+			nextKey,
+			minorMajorSwitch,
+			minorMajorJump,
+			semitoneUpOrDown,
+		};
+
+class Harmonics
+{
+	public:
+		enum HarmonicTypes {
+			sameKey=0,
+			previousKey,		// -1 on wheel
+			nextKey,			// +1 on wheel
+			minorMajorSwitch,
+			minorMajorJump,     // from major -3 on wheel to minor
+								// from minor +3 on wheel to major
+			semitoneUp,			// +7 on wheel
+			semitoneDown,		// -7 on wheel
+			twoSemitoneUp,		// +2 on wheel
+			twoSemitoneDown		// -2 on wheel
+		};
+		int key;
+		HarmonicTypes type;
+
+};
 
 
-void getHarmonicKeys(std::map<int,Harmonics> &harmonics, int key)
+static Harmonics newharms[24][9] = {
+		{	// 1: G#m, 6m
+				{1,Harmonics::sameKey},
+				{23,Harmonics::previousKey},
+				{3,Harmonics::nextKey},
+				{2,Harmonics::minorMajorSwitch},
+				{8,Harmonics::minorMajorJump},
+				{15,Harmonics::semitoneUp},
+				{11,Harmonics::semitoneDown},
+				{5,Harmonics::twoSemitoneUp},
+				{21,Harmonics::twoSemitoneDown},
+		},
+		{	// 2: B, 6d
+				{2,Harmonics::sameKey},
+				{24,Harmonics::previousKey},
+				{4,Harmonics::nextKey},
+				{1,Harmonics::minorMajorSwitch},
+				{19,Harmonics::minorMajorJump},
+				{16,Harmonics::semitoneUp},
+				{12,Harmonics::semitoneDown},
+				{6,Harmonics::twoSemitoneUp},
+				{22,Harmonics::twoSemitoneDown},
+		},
+
+};
+
+
+void getHarmonicKeys(std::map<int,int> &harmonics, int key)
 {
 	if (key<1 || key>24) return;
 	int openkey=wm2openkey[key]&31;
