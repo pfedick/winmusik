@@ -784,8 +784,6 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 	ui.artist->setText(info.Ti.Artist);		// Artist
 	ui.title->setText(info.Ti.Title);		// Title
 	ui.album->setText(info.Ti.Album);		// Album
-	Tmp.Setf("%d",info.Ti.BPM);				// BPM
-	ui.bpm->setText(Tmp);
 	QDate Date;								// ReleaseDate
 	Tmp.Setf("%u",info.Ti.ReleaseDate);
 	int year=Tmp.Mid(0,4).ToInt();
@@ -818,6 +816,9 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 	if (info.Ti.BPM>0) {					// BPM
 		Tmp.Setf("%i",info.Ti.BPM);
 		ui.bpm->setText(Tmp);
+	}
+	if (info.Ti.EnergyLevel>0) {			// EnergyLevel
+		ui.energyLevel->setValue(info.Ti.EnergyLevel);
 	}
 
 	// Music Key
