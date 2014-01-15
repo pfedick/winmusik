@@ -71,6 +71,7 @@ CWmClient::CWmClient()
 	Hashes.wm=this;
 	UpdateChecker=new CUpdateChecker(NULL,this);
 	initLetterReplacements();
+	initFilenameLetterReplacements();
 }
 
 CWmClient::~CWmClient()
@@ -1124,26 +1125,16 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	}
 	Tmp+=".mp3";
 	// Problematische Zeichen rausfiltern
-	Tmp.Replace("/"," ");
-	Tmp.Replace("\\"," ");
-	Tmp.Replace("?"," ");
-	Tmp.Replace("*"," ");
-	Tmp.Replace(":","-");
-	Tmp.Replace("&","+");
 	Tmp.Replace("ß","ss");
-	Tmp.Replace("'","'");
-	Tmp.Replace("`","'");
-	Tmp.Replace("\"","''");
 	Tmp.Trim();
 	// Wir müssen mit Unicode arbeiten
 	ppl6::CWString w=Tmp;
-	if (w.Len()>conf.MaxFilenameLength) {
+	NormalizeLetters(filenameLetterReplacements,w);
+	if (w.Len()>(size_t)conf.MaxFilenameLength) {
 		w.Cut(conf.MaxFilenameLength-4);
 		w+=".mp3";
-		Tmp=w;
 	}
-
-
+	Tmp=w;
 	Filename+=Tmp;
 	return Filename;
 }
@@ -1675,6 +1666,40 @@ void CWmClient::initLetterReplacements()
 	addLetterReplacement(ppl6::CWString(L"źżž"),L'z');
 }
 
+void CWmClient::initFilenameLetterReplacements()
+{
+	addFilenameLetterReplacement(ppl6::CWString(L"&"),L'+');
+	addFilenameLetterReplacement(ppl6::CWString(L"\"´`"),L'\'');
+	addFilenameLetterReplacement(ppl6::CWString(L"{"),L'(');
+	addFilenameLetterReplacement(ppl6::CWString(L"}"),L')');
+	addFilenameLetterReplacement(ppl6::CWString(L"|%#;:<>*?\\/"),L' ');
+	addFilenameLetterReplacement(ppl6::CWString(L"$"),L'S');
+	addFilenameLetterReplacement(ppl6::CWString(L"°"),L'o');
+	addFilenameLetterReplacement(ppl6::CWString(L"þ"),L'b');
+
+	/*
+	addFilenameLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
+	addFilenameLetterReplacement(ppl6::CWString(L"çćĉċč"),L'c');
+	addFilenameLetterReplacement(ppl6::CWString(L"ďđ"),L'd');
+	addFilenameLetterReplacement(ppl6::CWString(L"èéêëēĕėęě"),L'e');
+	addFilenameLetterReplacement(ppl6::CWString(L"ĝğġģ"),L'g');
+	addFilenameLetterReplacement(ppl6::CWString(L"ĥħ"),L'h');
+	addFilenameLetterReplacement(ppl6::CWString(L"ìíîïĩīĭįı"),L'i');
+	addFilenameLetterReplacement(ppl6::CWString(L"ĵ"),L'j');
+	addFilenameLetterReplacement(ppl6::CWString(L"ķĸ"),L'k');
+	addFilenameLetterReplacement(ppl6::CWString(L"ĺļľŀł"),L'l');
+	addFilenameLetterReplacement(ppl6::CWString(L"ñńņňŉŋ"),L'n');
+	addFilenameLetterReplacement(ppl6::CWString(L"òóôõöøōŏőœ"),L'o');
+	addFilenameLetterReplacement(ppl6::CWString(L"ŕŗř"),L'r');
+	addFilenameLetterReplacement(ppl6::CWString(L"śŝşš"),L's');
+	addFilenameLetterReplacement(ppl6::CWString(L"ţťŧ"),L't');
+	addFilenameLetterReplacement(ppl6::CWString(L"ùúûüũūŭůűų"),L'u');
+	addFilenameLetterReplacement(ppl6::CWString(L"ŵ"),L'w');
+	addFilenameLetterReplacement(ppl6::CWString(L"ýÿŷ"),L'y');
+	addFilenameLetterReplacement(ppl6::CWString(L"źżž"),L'z');
+	*/
+}
+
 void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
 {
 	letterReplacements[letter]=replacement;
@@ -1684,6 +1709,13 @@ void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t repl
 {
 	for (size_t i=0;i<letters.Size();i++) {
 		addLetterReplacement(letters[i],replacement);
+	}
+}
+
+void CWmClient::addFilenameLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
+{
+	for (size_t i=0;i<letters.Size();i++) {
+		filenameLetterReplacements[letters[i]]=replacement;
 	}
 }
 
@@ -1699,6 +1731,33 @@ static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, con
 	}
 }
 
+void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6::CWString &term)
+{
+	wchar_t *buffer;
+	std::map<wchar_t,wchar_t>::const_iterator it;
+	size_t ss=term.Len();
+	size_t target=0;
+	buffer=(wchar_t*)term.GetBuffer();
+	wchar_t c;
+	for (size_t i=0;i<ss;i++) {
+		c=buffer[i];
+		if (c<L'A' || c>L'z' || (c>L'Z' && c<L'a')) {
+			it=letters.find(c);
+			if (it!=letters.end()) {
+				if (it->second!=(wchar_t)0) {
+					buffer[target++]=it->second;
+				}
+			} else {
+				buffer[target++]=c;
+			}
+		} else {
+			buffer[target++]=c;
+		}
+	}
+	term.Cut(target);
+}
+
+
 void CWmClient::NormalizeTerm(ppl6::CString &term)
 {
 	if (term.IsEmpty()) return;
@@ -1706,7 +1765,6 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ppl6::CWString search,replace;
 	s.LCase();
 	replace.Set(L" ");
-	wchar_t *buffer;
 	ReplaceIfExists(s,L" versus ",replace);
 	ReplaceIfExists(s,L" pres. ",replace);
 	ReplaceIfExists(s,L" presents ",replace);
@@ -1719,28 +1777,7 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ReplaceIfExists(s,L" - ",replace);
 	ReplaceIfExists(s,L"DJ ",replace);
 	s.Trim();
-	std::map<wchar_t,wchar_t>::iterator it;
-	size_t ss=s.Len();
-	size_t target=0;
-	buffer=(wchar_t*)s.GetBuffer();
-	wchar_t c;
-	for (size_t i=0;i<ss;i++) {
-		c=buffer[i];
-		if (c<L'A' || c>L'z' || (c>L'Z' && c<L'a')) {
-			it=letterReplacements.find(c);
-			if (it!=letterReplacements.end()) {
-				if (it->second!=(wchar_t)0) {
-					buffer[target++]=it->second;
-				}
-			} else {
-				buffer[target++]=c;
-			}
-		} else {
-			buffer[target++]=c;
-		}
-	}
-	//printf ("ss=%zi, target=%zi\n",ss,target);
-	s.Cut(target);
+	NormalizeLetters(letterReplacements,s);
 	term=s;
 }
 
