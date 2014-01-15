@@ -552,8 +552,10 @@ class CWmClient
 		int PrintTracklistDeviceHeader(QFont &Font, QPainter &painter,int x, int y,DataDevice *device);
 		int PrintTracklistDisclaimer(QFont &Font, QPainter &painter);
 		void initLetterReplacements();
+		void initFilenameLetterReplacements();
 		void addLetterReplacement(wchar_t letter, wchar_t replacement);
 		void addLetterReplacement(const ppl6::CWString &letters, wchar_t replacement);
+		void addFilenameLetterReplacement(const ppl6::CWString &letters, wchar_t replacement);
 		void *MainMenue;
 		ppl6::CGenericList EditorWindows;
 		ppl6::CGenericList SearchWindows;
@@ -567,6 +569,7 @@ class CWmClient
 		QDate					LatestPurchaseDate;
 
 		std::map<wchar_t, wchar_t> letterReplacements;
+		std::map<wchar_t, wchar_t> filenameLetterReplacements;
 
 
 	public:
@@ -689,6 +692,7 @@ class CWmClient
 
 
 		void NormalizeTerm(ppl6::CString &term);
+		void NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6::CWString &term);
 		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
 
 		ppl6::CString DeCrypt(const ppl6::CString &str);
