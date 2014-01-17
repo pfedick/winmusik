@@ -247,7 +247,6 @@ public slots:
 	void on_contextCopyFile_triggered();
 	void on_contextDeleteTrack_triggered();
 	void on_contextInsertTrack_triggered();
-	void on_contextReadBpmAndKey_triggered();
 	void on_contextSynchronizeKeys_triggered();
 	void on_contextMusicKeyVerified_triggered();
 	void on_DupeTimer_update();
