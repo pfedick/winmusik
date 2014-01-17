@@ -1888,9 +1888,12 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     QMenu *m=new QMenu(this);
     QAction *a=NULL;
     //m->setTitle("Ein Titel");
-    if (DeviceType==7 && TrackList != NULL && trackList->currentColumn()==TRACKLIST_KEY_ROW) {
-    	a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
-    	m->addAction (QIcon(":/icons/resources/sync-keys.png"),tr("Synchronize Keys with ID3-Tag","trackList Context Menue"),this,SLOT(on_contextSynchronizeKeys_triggered()));
+    if (DeviceType==7 && TrackList != NULL &&
+    		(trackList->currentColumn()==TRACKLIST_KEY_ROW
+    				|| trackList->currentColumn()==TRACKLIST_BPM_ROW
+    				|| trackList->currentColumn()==TRACKLIST_ENERGYLEVEL_ROW
+    				)) {
+    	a=m->addAction (QIcon(":/icons/resources/sync-keys.png"),tr("Synchronize Keys, BPM and Energy with ID3-Tag","trackList Context Menue"),this,SLOT(on_contextSynchronizeKeys_triggered()));
     	QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
     	createSetMusicKeyContextMenu(mk);
     	if (t!=NULL && (t->Flags&16)==0) m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
@@ -1974,54 +1977,6 @@ void Edit::on_contextSetMusicKey(int k)
 }
 
 
-void Edit::on_contextReadBpmAndKey_triggered()
-{
-	if (!TrackList) return;
-	// Höchste Tracknummer
-	int max=TrackList->GetMax();
-
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	QProgressDialog progress(tr("Reading ID3-Tags from Files..."), tr("Abort"), 0, max, this);
-	progress.setWindowModality(Qt::WindowModal);
-	progress.setWindowTitle(QString(WM_APPNAME)+QString(": ")+tr("Reading ID3-Tags from Files..."));
-	progress.setMinimumWidth(500);
-	progress.setMaximumWidth(500);
-	progress.show();
-
-	QCoreApplication::processEvents();
-	for (int i=1;i<=max;i++) {
-		progress.setValue(i);
-		QCoreApplication::processEvents();
-		if (progress.wasCanceled())	break;
-		DataTrack *track=TrackList->Get(i);
-		if (track) {
-			// Titel holen
-			DataTitle *title=wm->GetTitle(track->TitleId);
-			ppl6::CString Path=wm->MP3Filename(track->DeviceId,track->Page,track->Track);
-			if (title!=NULL && Path.NotEmpty()==true) {
-				//printf ("Path: %s\n",(const char*)Path);
-				progress.setLabelText(Path);
-				TrackInfo tinfo;
-				if (getTrackInfoFromFile(tinfo,Path)) {
-					if (tinfo.Ti.Key != title->Key || tinfo.Ti.BPM != title->BPM || tinfo.Ti.EnergyLevel != title->EnergyLevel) {
-						if (title->Key==0 || (title->Flags&16)==0) title->Key=tinfo.Ti.Key;
-						title->BPM=tinfo.Ti.BPM;
-						title->EnergyLevel=tinfo.Ti.EnergyLevel;
-						if (!wm->TitleStore.Put(title)) {
-							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-
-
-	QApplication::restoreOverrideCursor();
-	UpdateTrackListing();
-}
-
 void Edit::on_contextSynchronizeKeys_triggered()
 {
 	if (!TrackList) return;
@@ -2051,16 +2006,26 @@ void Edit::on_contextSynchronizeKeys_triggered()
 				progress.setLabelText(Path);
 				TrackInfo tinfo;
 				if (getTrackInfoFromFile(tinfo,Path)) {
+					DataTitle Ti;
+					Ti.CopyFrom(title);
+					bool modified=false;
 					if (tinfo.Ti.Key != title->Key && (title->Flags&16)==16) {
-						DataTitle Ti;
-						Ti.CopyFrom(title);
 						if (!wm->SaveID3Tags(title->DeviceId, title->Page, title->Track,Ti)) {
 							wm->RaiseError(this,tr("Could not save ID3 Tags"));
 						}
 					} else if (tinfo.Ti.Key != title->Key && (title->Flags&16)==0) {
-						DataTitle Ti;
-						Ti.CopyFrom(title);
 						Ti.Key=tinfo.Ti.Key;
+						modified=true;
+					}
+					if (Ti.EnergyLevel==0 && tinfo.Ti.EnergyLevel>0) {
+						Ti.EnergyLevel=tinfo.Ti.EnergyLevel;
+						modified=true;
+					}
+					if (Ti.BPM==0 && tinfo.Ti.BPM>0) {
+						Ti.BPM=tinfo.Ti.BPM;
+						modified=true;
+					}
+					if (modified) {
 						if (!wm->TitleStore.Put(&Ti)) {
 							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 							break;
