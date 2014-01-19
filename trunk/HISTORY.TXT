@@ -24,6 +24,7 @@ Version 3.2.0
       Keys, die schon verifiziert waren, werden nicht überschrieben.
     - Neues Datenfeld für Titel: EnergyLevel (Tanzbarkeit des Titels auf einer
       Skala von 1 bis 10)
+    - Massenimport prüft nurnoch innerhalb der MP3-Files auf Duplikate
 
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
