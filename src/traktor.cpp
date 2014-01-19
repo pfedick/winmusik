@@ -93,7 +93,7 @@ void getTraktorFrames(std::map<ppl6::CString,TraktorTagFrame> &frames, const cha
 void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &cuep)
 {
 	ppl6::CIconv iconv;
-	iconv.Init("UTF-16","UTF-8");
+	iconv.Init("UTF-16LE","UTF-8");
 	if (cuep.size<10) return;
 	const char *adr=cuep.data;
 	int cuepoints=ppl6::Peek32(adr);
@@ -108,7 +108,10 @@ void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &c
 		int namelen=ppl6::Peek32(adr);
 		adr+=4;
 		if (namelen) {
-
+			ppl6::HexDump((void*)adr,namelen*2);
+			char *t=iconv.Transcode(adr,namelen*2);
+			cue.name.Set(t);
+			free(t);
 			adr+=namelen*2;
 		}
 		cue.displ_order=ppl6::Peek32(adr);

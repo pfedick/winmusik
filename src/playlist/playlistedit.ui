@@ -608,12 +608,12 @@
            </column>
            <column>
             <property name="text">
-             <string>Name</string>
+             <string>Start</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>Start</string>
+             <string>Name</string>
             </property>
            </column>
           </widget>
