@@ -218,11 +218,11 @@ void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
 
 	for (it=cuelist.begin();it!=cuelist.end();it++) {
 		QTreeWidgetItem *item=new QTreeWidgetItem;
-		if (it->hotcue>=0) item->setText(0,ppl6::ToString("%d",it->hotcue));
+		if (it->hotcue>=0) item->setText(0,ppl6::ToString("%d",it->hotcue+1));
 		item->setText(1,it->typeName());
-		item->setText(2,it->name);
+		item->setText(3,it->name);
 		int sec=(int)(it->start/1000.0);
-		item->setText(3,ppl6::ToString("%0d:%02d",(int)(sec/60),sec%60));
+		item->setText(2,ppl6::ToString("%0d:%02d",(int)(sec/60),sec%60));
 		ui.traktorCues->addTopLevelItem(item);
 
 		if (it->type==TraktorTagCue::IN) traktorIn=sec;
