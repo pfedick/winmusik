@@ -178,7 +178,7 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 		ppl6::CBinary Cover;
 		Tag.GetPicture(3,Cover);
 		Tag.ClearTags();
-		if (Cover.Size()>0) Tag.SetPicture(3,Cover);
+		if (Cover.Size()>0) Tag.SetPicture(3,Cover,"image/jpeg");
 	}
 	Tag.SetArtist(Tags->Get("artist"));
 	Tag.SetTitle(Tags->Get("title"));
