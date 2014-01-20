@@ -172,7 +172,14 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 			return 0;
 		}
 	}
-	if (cleartag) Tag.ClearTags();
+
+	if (cleartag) {
+		// Cover retten, falls vorhanden
+		ppl6::CBinary Cover;
+		Tag.GetPicture(3,Cover);
+		Tag.ClearTags();
+		if (Cover.Size()>0) Tag.SetPicture(3,Cover);
+	}
 	Tag.SetArtist(Tags->Get("artist"));
 	Tag.SetTitle(Tags->Get("title"));
 	Tag.SetRemixer(Tags->Get("version"));
