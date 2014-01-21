@@ -51,7 +51,7 @@
 #define __unused__ __attribute__ ((unused))
 #endif
 
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2013"
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2014"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
