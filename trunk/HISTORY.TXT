@@ -25,6 +25,9 @@ Version 3.2.0
     - Neues Datenfeld für Titel: EnergyLevel (Tanzbarkeit des Titels auf einer
       Skala von 1 bis 10)
     - Massenimport prüft nurnoch innerhalb der MP3-Files auf Duplikate
+    - Cover geht nicht mehr verloren, wenn die Option "Original ID3-Tags
+      entfernen" in den Einstellungen aktiviert ist.
+    - MP3-Files mit defektem Header werden besser erkannt.
 
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
