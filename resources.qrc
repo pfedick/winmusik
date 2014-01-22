@@ -168,6 +168,13 @@
     <file>resources/fkeys/f-key-3006.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/cuetocut.png</file>
+    <file>resources/cuein.png</file>
+    <file>resources/cueload.png</file>
+    <file>resources/cueloop.png</file>
+    <file>resources/cueout.png</file>
+    <file>resources/cuepoint.png</file>
+    <file>resources/cuegrid.png</file>
     <file>resources/sync-keys.png</file>
     <file>resources/view_dj.png</file>
     <file>resources/view_playlist.png</file>
