@@ -437,20 +437,20 @@ void PlaylistEdit::cue2CutEnd(int cut)
 void PlaylistEdit::cutDelete(int cut)
 {
 	switch (cut) {
-		case 0: ui.cutStart0->setText("");
-				ui.cutEnd0->setText("");
+		case 0: ui.cutStart0->setText("0:00");
+				ui.cutEnd0->setText("0:00");
 				break;
-		case 1: ui.cutStart1->setText("");
-				ui.cutEnd1->setText("");
+		case 1: ui.cutStart1->setText("0:00");
+				ui.cutEnd1->setText("0:00");
 				break;
-		case 2: ui.cutStart2->setText("");
-				ui.cutEnd2->setText("");
+		case 2: ui.cutStart2->setText("0:00");
+				ui.cutEnd2->setText("0:00");
 				break;
-		case 3: ui.cutStart3->setText("");
-				ui.cutEnd3->setText("");
+		case 3: ui.cutStart3->setText("0:00");
+				ui.cutEnd3->setText("0:00");
 				break;
-		case 4: ui.cutStart4->setText("");
-				ui.cutEnd4->setText("");
+		case 4: ui.cutStart4->setText("0:00");
+				ui.cutEnd4->setText("0:00");
 				break;
 
 	}
