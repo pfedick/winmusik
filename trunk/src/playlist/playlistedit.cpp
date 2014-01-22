@@ -229,6 +229,12 @@ void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
 		QTreeWidgetItem *item=new QTreeWidgetItem;
 		if (it->hotcue>=0) item->setText(0,ppl6::ToString("%d",it->hotcue+1));
 		item->setText(1,it->typeName());
+		if (it->type==TraktorTagCue::GRID) item->setIcon(1,QIcon(":/icons/resources/cuegrid.png"));
+		else if (it->type==TraktorTagCue::IN) item->setIcon(1,QIcon(":/icons/resources/cuein.png"));
+		else if (it->type==TraktorTagCue::OUT) item->setIcon(1,QIcon(":/icons/resources/cueout.png"));
+		else if (it->type==TraktorTagCue::LOAD) item->setIcon(1,QIcon(":/icons/resources/cueload.png"));
+		else if (it->type==TraktorTagCue::LOOP) item->setIcon(1,QIcon(":/icons/resources/cueloop.png"));
+		else item->setIcon(1,QIcon(":/icons/resources/cuepoint.png"));
 		item->setText(3,it->name);
 		int sec=(int)(it->start/1000.0);
 		item->setText(2,ppl6::ToString("%0d:%02d",(int)(sec/60),sec%60));
@@ -397,4 +403,58 @@ void PlaylistEdit::on_coverSaveButton_clicked()
 	}
 	QApplication::restoreOverrideCursor();
 }
+
+void PlaylistEdit::cue2CutStart(int cut)
+{
+	QTreeWidgetItem *item=ui.traktorCues->currentItem();
+	if (!item) return;
+	QString Tmp=item->text(2);
+	switch (cut) {
+		case 0: ui.cutStart0->setText(Tmp); break;
+		case 1: ui.cutStart1->setText(Tmp); break;
+		case 2: ui.cutStart2->setText(Tmp); break;
+		case 3: ui.cutStart3->setText(Tmp); break;
+		case 4: ui.cutStart4->setText(Tmp); break;
+	}
+	updateTotalTime();
+}
+
+void PlaylistEdit::cue2CutEnd(int cut)
+{
+	QTreeWidgetItem *item=ui.traktorCues->currentItem();
+	if (!item) return;
+	QString Tmp=item->text(2);
+	switch (cut) {
+		case 0: ui.cutEnd0->setText(Tmp); break;
+		case 1: ui.cutEnd1->setText(Tmp); break;
+		case 2: ui.cutEnd2->setText(Tmp); break;
+		case 3: ui.cutEnd3->setText(Tmp); break;
+		case 4: ui.cutEnd4->setText(Tmp); break;
+	}
+	updateTotalTime();
+}
+
+void PlaylistEdit::cutDelete(int cut)
+{
+	switch (cut) {
+		case 0: ui.cutStart0->setText("");
+				ui.cutEnd0->setText("");
+				break;
+		case 1: ui.cutStart1->setText("");
+				ui.cutEnd1->setText("");
+				break;
+		case 2: ui.cutStart2->setText("");
+				ui.cutEnd2->setText("");
+				break;
+		case 3: ui.cutStart3->setText("");
+				ui.cutEnd3->setText("");
+				break;
+		case 4: ui.cutStart4->setText("");
+				ui.cutEnd4->setText("");
+				break;
+
+	}
+	updateTotalTime();
+}
+
 

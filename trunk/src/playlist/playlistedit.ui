@@ -358,6 +358,43 @@
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout">
+          <property name="spacing">
+           <number>-1</number>
+          </property>
+          <item row="1" column="4">
+           <widget class="QToolButton" name="cueCutStart_0">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QToolButton" name="cueCutEnd_0">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="2">
            <widget class="QLabel" name="label_19">
             <property name="text">
@@ -438,7 +475,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="4">
+          <item row="4" column="5">
            <widget class="QLineEdit" name="cutEnd2">
             <property name="maximumSize">
              <size>
@@ -451,7 +488,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="4">
+          <item row="3" column="5">
            <widget class="QLineEdit" name="cutEnd1">
             <property name="maximumSize">
              <size>
@@ -464,7 +501,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="4">
+          <item row="5" column="5">
            <widget class="QLineEdit" name="cutEnd3">
             <property name="maximumSize">
              <size>
@@ -477,7 +514,7 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="4">
+          <item row="6" column="5">
            <widget class="QLineEdit" name="cutEnd4">
             <property name="maximumSize">
              <size>
@@ -504,7 +541,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
+          <item row="0" column="5">
            <widget class="QLabel" name="label_22">
             <property name="text">
              <string>End</string>
@@ -524,7 +561,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item row="1" column="5">
            <widget class="QLineEdit" name="cutEnd0">
             <property name="maximumSize">
              <size>
@@ -544,32 +581,240 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="5">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item row="1" column="7">
+           <widget class="QToolButton" name="clearCut_0">
+            <property name="text">
+             <string/>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+            </property>
+            <property name="iconSize">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>12</width>
+              <height>12</height>
              </size>
             </property>
-           </spacer>
+           </widget>
           </item>
-          <item row="1" column="5">
-           <widget class="QLabel" name="label_16">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-             </font>
-            </property>
+          <item row="3" column="7">
+           <widget class="QToolButton" name="clearCut_1">
             <property name="text">
-             <string>(Format: mm:ss)</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="7">
+           <widget class="QToolButton" name="clearCut_2">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="7">
+           <widget class="QToolButton" name="clearCut_3">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="7">
+           <widget class="QToolButton" name="clearCut_4">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/trash-16.png</normaloff>:/icons/resources/trash-16.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QToolButton" name="cueCutStart_1">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QToolButton" name="cueCutStart_2">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="4">
+           <widget class="QToolButton" name="cueCutStart_3">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="4">
+           <widget class="QToolButton" name="cueCutStart_4">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="6">
+           <widget class="QToolButton" name="cueCutEnd_1">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="6">
+           <widget class="QToolButton" name="cueCutEnd_2">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="6">
+           <widget class="QToolButton" name="cueCutEnd_3">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="6">
+           <widget class="QToolButton" name="cueCutEnd_4">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_16">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>(Time format: mm:ss)</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

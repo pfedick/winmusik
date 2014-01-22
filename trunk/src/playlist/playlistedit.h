@@ -63,6 +63,9 @@ private:
     void installFilter(QObject *object, int id);
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
+    void cue2CutStart(int cut);
+    void cue2CutEnd(int cut);
+    void cutDelete(int cut);
 
 public slots:
 	void on_okButton_clicked();
@@ -89,6 +92,24 @@ public slots:
 	void on_coverInsertButton_clicked();
 	void on_coverLoadButton_clicked();
 	void on_coverSaveButton_clicked();
+
+	void on_cueCutStart_0_clicked() { cue2CutStart(0); };
+	void on_cueCutStart_1_clicked() { cue2CutStart(1); };
+	void on_cueCutStart_2_clicked() { cue2CutStart(2); };
+	void on_cueCutStart_3_clicked() { cue2CutStart(3); };
+	void on_cueCutStart_4_clicked() { cue2CutStart(4); };
+
+	void on_cueCutEnd_0_clicked() { cue2CutEnd(0); };
+	void on_cueCutEnd_1_clicked() { cue2CutEnd(1); };
+	void on_cueCutEnd_2_clicked() { cue2CutEnd(2); };
+	void on_cueCutEnd_3_clicked() { cue2CutEnd(3); };
+	void on_cueCutEnd_4_clicked() { cue2CutEnd(4); };
+
+	void on_clearCut_0_clicked() { cutDelete(0); };
+	void on_clearCut_1_clicked() { cutDelete(1); };
+	void on_clearCut_2_clicked() { cutDelete(2); };
+	void on_clearCut_3_clicked() { cutDelete(3); };
+	void on_clearCut_4_clicked() { cutDelete(4); };
 
 	/*
 	void on_coverSearchAmazon_clicked();
