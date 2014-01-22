@@ -832,6 +832,12 @@
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
            <property name="rootIsDecorated">
             <bool>false</bool>
            </property>

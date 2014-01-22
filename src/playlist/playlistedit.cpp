@@ -232,6 +232,7 @@ void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
 	getTraktorCues(cuelist, Tag);
 	if (cuelist.size()==0) return;
 	ui.traktorCuesGroupBox->setVisible(true);
+	//ui.traktorCues->setIconSize(QSize(16,16));
 
 	for (it=cuelist.begin();it!=cuelist.end();it++) {
 		QTreeWidgetItem *item=new QTreeWidgetItem;
