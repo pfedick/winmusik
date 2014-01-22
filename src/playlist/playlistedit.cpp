@@ -160,27 +160,36 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	Filename=item->File;
 
 	ppl6::CID3Tag Tag;
+	Tag.SetLogfile(wmlog);
 
+	if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"Try to load ID3-Tags: %s",(const char*)item->File);
 	if (!Tag.Load(item->File)) {
+		if(wmlog) wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
 		ppl6::CString Tmp=wm->MP3Filename(item->DeviceId,item->DevicePage,item->DeviceTrack);
+
 		if (Tmp.NotEmpty()==true && Tmp!=item->File) {
 			item->File=Tmp;
-			Tag.Load(item->File);
+			if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"File seems to be renamed, try to load again: %s",(const char*)item->File);
+			if (!Tag.Load(item->File)) {
+				if(wmlog) wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
+			}
 		}
 	}
-
-	loadCover(Tag);
-	loadTraktorCues(Tag);
-	ppl6::CString Tmp;
-	if (item->bpm==0) {
-		// BPM
-		Tmp=Tag.GetBPM();
-		NormalizeImportString(Tmp);
-		ui.bpm->setText(Tmp);
-	}
-	if (item->musicKey==0) {
-		// Music Key
-		ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
+	if (Tag.FrameCount()>0) {
+		if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"ID3-Tag with %zd frames loaded",Tag.FrameCount());
+		loadCover(Tag);
+		loadTraktorCues(Tag);
+		ppl6::CString Tmp;
+		if (item->bpm==0) {
+			// BPM
+			Tmp=Tag.GetBPM();
+			NormalizeImportString(Tmp);
+			ui.bpm->setText(Tmp);
+		}
+		if (item->musicKey==0) {
+			// Music Key
+			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
+		}
 	}
 	updateTotalTime();
 }
