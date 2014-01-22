@@ -164,14 +164,20 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 
 	if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"Try to load ID3-Tags: %s",(const char*)item->File);
 	if (!Tag.Load(item->File)) {
-		if(wmlog) wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
+		if(wmlog) {
+			wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
+			wmlog->Printf(ppl6::LOG::ERROR,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"Load ID3-Tag failed: %s",(const char*)ppl6::Error2String());
+		}
 		ppl6::CString Tmp=wm->MP3Filename(item->DeviceId,item->DevicePage,item->DeviceTrack);
 
 		if (Tmp.NotEmpty()==true && Tmp!=item->File) {
 			item->File=Tmp;
 			if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"File seems to be renamed, try to load again: %s",(const char*)item->File);
 			if (!Tag.Load(item->File)) {
-				if(wmlog) wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
+				if(wmlog) {
+					wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
+					wmlog->Printf(ppl6::LOG::ERROR,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"Load ID3-Tag failed: %s",(const char*)ppl6::Error2String());
+				}
 			}
 		}
 	}
@@ -190,6 +196,8 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 			// Music Key
 			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.GetKey()),wm->conf.musicKeyDisplay));
 		}
+	} else {
+		if(wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"ID3-Tags not loaded");
 	}
 	updateTotalTime();
 }
