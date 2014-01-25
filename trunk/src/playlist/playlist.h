@@ -124,8 +124,8 @@ private:
 
 
     enum playlistViewType {
-    	playlistViewNormal,
-    	playlistViewDJ
+    	playlistViewNormal=0,
+    	playlistViewDJ=1
     };
     playlistViewType playlistView;
 
