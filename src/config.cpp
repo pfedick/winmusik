@@ -75,6 +75,7 @@ Config::Config()
 	musicKeyTag=musicKeyTypeOpenKey;
 	customMusicKeyName=tr("custom format");
 	for (int i=0;i<26;i++) customMusicKey[i]=DataTitle::keyName(i,musicKeyTypeMusicalSharps);
+	playlistView=0;
 }
 
 int Config::setConfigFile(const ppl6::CString &filename)
@@ -127,6 +128,7 @@ int Config::Save()
 	c.Add("client","automaticsearch",bAutomaticEditSearch);
 	c.Add("client","coverpath",(const char*)CoverPath);
 	c.Add("client","LastPlaylistPath",(const char*)LastPlaylistPath);
+	c.Add("client","playlistView",playlistView);
 
 	c.Add("printer","printername",(const char*)PrinterName);
 	c.Add("printer","printerfont",(const char*)PrinterFont);
@@ -226,6 +228,7 @@ int Config::Load()
 	Tmp=QDir::homePath();
 	LastCoverPath=c.Get("client","LastCoverPath",Tmp);
 	LastPlaylistPath=c.Get("client","LastPlaylistPath",Tmp);
+	playlistView=(MusicKeyType)c.GetInt("client","playlistView",0);
 
 	bShowSplashScreen=c.GetBool("client","showsplash",true);
 	bCheckForUpdatesOnStartup=c.GetBool("client","checkupdatestartup",true);

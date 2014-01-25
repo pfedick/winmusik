@@ -348,6 +348,7 @@ class Config
 		ppl6::CString	customMusicKeyName;
 		MusicKeyType	musicKeyDisplay;
 		MusicKeyType	musicKeyTag;
+		int				playlistView;
 
 
 

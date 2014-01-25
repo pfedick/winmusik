@@ -124,7 +124,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	createToolbar();
 	createStatusBar();
 
-	playlistView=playlistViewNormal;
+	playlistView=(playlistViewType)wm->conf.playlistView;
 	musicKeyDisplay=wm->conf.musicKeyDisplay;
 
 	recreatePlaylist();
@@ -1039,6 +1039,8 @@ void Playlist::on_viewPlaylist_triggered()
 		playlistView=playlistViewNormal;
 		statusbar->setMusicKeySelectionEnabled(false);
 		recreatePlaylist();
+		wm->conf.playlistView=playlistView;
+		wm->conf.Save();
 	}
 }
 
@@ -1048,6 +1050,8 @@ void Playlist::on_viewDJ_triggered()
 		playlistView=playlistViewDJ;
 		statusbar->setMusicKeySelectionEnabled(true);
 		recreatePlaylist();
+		wm->conf.playlistView=playlistView;
+		wm->conf.Save();
 	}
 }
 
