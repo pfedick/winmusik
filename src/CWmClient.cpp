@@ -207,6 +207,12 @@ void CWmClient::InitLogging()
 		wmlog->Printf(ppl6::LOG::DEBUG,1,"CWmClient","InitLogging",__FILE__,__LINE__,
 				"Logfile initialized, Debuglevel: %i, Maxsize: %i MB, Generations: %i",
 				conf.Debuglevel,conf.LogfileSize,conf.LogfileGenerations);
+
+		wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","initFilenameLetterReplacements",__FILE__,__LINE__,"Letter Replacements for Filenames:");
+			std::map<wchar_t,wchar_t>::const_iterator it;
+			for (it=filenameLetterReplacements.begin();it!=filenameLetterReplacements.end();it++) {
+				wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","initFilenameLetterReplacements",__FILE__,__LINE__,"%d => %d (\"%lc\" => \"%lc\")",it->first, it->second, it->first, it->second);
+			}
 	} else {
 		if (wmlog) wmlog->Terminate();
 	}
@@ -1676,7 +1682,6 @@ void CWmClient::initFilenameLetterReplacements()
 	addFilenameLetterReplacement(ppl6::CWString(L"$"),L'S');
 	addFilenameLetterReplacement(ppl6::CWString(L"°"),L'o');
 	addFilenameLetterReplacement(ppl6::CWString(L"þ"),L'b');
-
 	/*
 	addFilenameLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
 	addFilenameLetterReplacement(ppl6::CWString(L"çćĉċč"),L'c');
@@ -1707,14 +1712,15 @@ void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
 
 void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
 {
-	for (size_t i=0;i<letters.Size();i++) {
+	for (size_t i=0;i<letters.Len();i++) {
 		addLetterReplacement(letters[i],replacement);
 	}
 }
 
 void CWmClient::addFilenameLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
 {
-	for (size_t i=0;i<letters.Size();i++) {
+	printf ("Adding Letters: %ls (%i letters)",(const wchar_t*)letters,letters.Len());
+	for (size_t i=0;i<letters.Len();i++) {
 		filenameLetterReplacements[letters[i]]=replacement;
 	}
 }
