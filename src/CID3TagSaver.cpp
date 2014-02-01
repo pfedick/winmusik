@@ -202,7 +202,6 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 		changes=true;
 	}
 	if (Tag.GetGenre()!=Tags->ToCString("genre")) {
-		printf ("Genre Alt: %s, Neu: %s\n", (const char*)Tag.GetGenre(),Tags->Get("genre") );
 		Tag.SetGenre(Tags->Get("genre"));
 		changes=true;
 	}
