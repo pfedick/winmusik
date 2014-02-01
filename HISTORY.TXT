@@ -30,6 +30,7 @@ Version 3.2.0
     - MP3-Files mit defektem Header werden besser erkannt.
     - Bugfix: Problem beim Lesen von MP3-Dateien mit internationalen Zeichen
       (z.B. deutsche Umlaute) im Dateinamen behoben.
+    - ID3-Tags werden nur dann geschrieben, wenn sich auch was geändert hat.
       
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
