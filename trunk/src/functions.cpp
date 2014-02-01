@@ -170,29 +170,8 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		NormalizeImportString(Comment);
 
 		// Genre
-		Tmp=Tag.GetGenre();
-		NormalizeImportString(Tmp);
-		// Manchmal beginnt das Genre mit einer in Klemmern gesetzten Ziffer.
-		// Diese entspricht der GenreId des ID3v1-Tags
-		if (Tmp.PregMatch("/^\\(([0-9]+)\\)(.*)$/")) {
-			// Wir bevorzugen den Text nach der Klammer
-			Genre=Tmp.GetMatch(2);
-			Genre.Trim();
-			if (Genre.IsEmpty()) {
-				// Nur wenn er leer ist, verwenden wir die GenreId
-				Genre=Tmp.GetMatch(1);
-				Genre.Trim();
-				Genre=ppl6::GetID3GenreName(Genre.ToInt());
-			}
-		} else if (Tmp.PregMatch("/^([0-9]+)$/")) {
-			// Manchmal haben wir aber auch nur eine Genre-Ziffer
-			Genre=Tmp.GetMatch(1);
-			Genre.Trim();
-			Genre=ppl6::GetID3GenreName(Genre.ToInt());
-		} else {
-			Genre=Tmp;
-		}
-		Genre.Trim();
+		Genre=Tag.GetGenre();
+		NormalizeImportString(Genre);
 		if (Genre.NotEmpty()) {
 			info.Genre=Genre;
 		}

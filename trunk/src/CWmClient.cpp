@@ -1719,7 +1719,7 @@ void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t repl
 
 void CWmClient::addFilenameLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
 {
-	printf ("Adding Letters: %ls (%i letters)",(const wchar_t*)letters,letters.Len());
+	//printf ("Adding Letters: %ls (%i letters)",(const wchar_t*)letters,letters.Len());
 	for (size_t i=0;i<letters.Len();i++) {
 		filenameLetterReplacements[letters[i]]=replacement;
 	}

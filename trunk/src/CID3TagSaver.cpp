@@ -172,26 +172,69 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 			return 0;
 		}
 	}
-
+	bool changes=false;
 	if (cleartag) {
 		// Cover retten, falls vorhanden
 		ppl6::CBinary Cover;
 		Tag.GetPicture(3,Cover);
 		Tag.ClearTags();
 		if (Cover.Size()>0) Tag.SetPicture(3,Cover,"image/jpeg");
+		changes=true;
 	}
-	Tag.SetArtist(Tags->Get("artist"));
-	Tag.SetTitle(Tags->Get("title"));
-	Tag.SetRemixer(Tags->Get("version"));
-	Tag.SetYear(Tags->Get("year"));
-	Tag.SetTrack(Tags->Get("track"));
-	Tag.SetGenre(Tags->Get("genre"));
-	Tag.SetComment(Tags->Get("comment"));
-	Tag.SetAlbum(Tags->Get("album"));
-	Tag.SetLabel(Tags->Get("publisher"));
-	Tag.SetBPM(Tags->Get("bpm"));
-	Tag.SetEnergyLevel(Tags->Get("EnergyLevel"));
-	Tag.SetKey(Tags->Get("key"));
+	if (Tag.GetArtist()!=Tags->ToCString("artist")) {
+		Tag.SetArtist(Tags->Get("artist"));
+		changes=true;
+	}
+	if (Tag.GetTitle()!=Tags->ToCString("title")) {
+		Tag.SetTitle(Tags->Get("title"));
+		changes=true;
+	}
+	if (Tag.GetRemixer()!=Tags->ToCString("version")) {
+		Tag.SetRemixer(Tags->Get("version"));
+		changes=true;
+	}
+	if (Tag.GetYear()!=Tags->ToCString("year")) {
+		Tag.SetYear(Tags->Get("year"));
+		changes=true;
+	}
+	if (Tag.GetTrack()!=Tags->ToCString("track")) {
+		Tag.SetTrack(Tags->Get("track"));
+		changes=true;
+	}
+	if (Tag.GetGenre()!=Tags->ToCString("genre")) {
+		printf ("Genre Alt: %s, Neu: %s\n", (const char*)Tag.GetGenre(),Tags->Get("genre") );
+		Tag.SetGenre(Tags->Get("genre"));
+		changes=true;
+	}
+	if (Tag.GetComment()!=Tags->ToCString("comment")) {
+		Tag.SetComment(Tags->Get("comment"));
+		changes=true;
+	}
+	if (Tag.GetAlbum()!=Tags->ToCString("album")) {
+		Tag.SetAlbum(Tags->Get("album"));
+		changes=true;
+	}
+	if (Tag.GetLabel()!=Tags->ToCString("publisher")) {
+		Tag.SetLabel(Tags->Get("publisher"));
+		changes=true;
+	}
+	if (Tag.GetBPM()!=Tags->ToCString("bpm")) {
+		Tag.SetBPM(Tags->Get("bpm"));
+		changes=true;
+	}
+	if (Tag.GetEnergyLevel()!=Tags->ToCString("EnergyLevel")) {
+		Tag.SetEnergyLevel(Tags->Get("EnergyLevel"));
+		changes=true;
+	}
+	if (Tag.GetKey()!=Tags->ToCString("key")) {
+		Tag.SetKey(Tags->Get("key"));
+		changes=true;
+	}
+
+	if (changes==false) {
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Tags did not change, skipping update: %s",filename);
+		return 1;
+	}
 
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Saving: %s",filename);
 	if (!Tag.Save(writev1, writev2)) {
