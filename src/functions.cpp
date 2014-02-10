@@ -136,7 +136,7 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 	ppl6::CString Tmp;
 	ppl6::CID3Tag Tag;
 	ppl6::CString Title, Version, Genre, Comment, Artist;
-	if (Tag.Load(&File)) {
+	if (Tag.Load(File)) {
 		Title=Tag.GetTitle();
 		NormalizeImportString(Title);
 
@@ -446,6 +446,7 @@ void getHarmonicKeys(std::map<int,int> &harmonics, int key)
 
 bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
 {
+	if (!wm_main->conf.bWriteID3Tags) return false;
 	if (filename.IsEmpty()) return false;
 	if (Cover.isNull()) return false;
 	ppl6::CID3Tag Tag;
@@ -457,7 +458,7 @@ bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
 		ppl6::CBinary bin;
 		bin.Copy(bytes.data(),bytes.size());
 		Tag.SetPicture(3,bin,"image/jpeg");
-		return Tag.Save(wm_main->conf.bWriteId3v1,wm_main->conf.bWriteId3v2);
+		return Tag.Save();
 	}
 	return 0;
 }

@@ -111,7 +111,7 @@ void CID3TagSaver::Add(const char *filename, ppl6::CAssocArray *Tags, bool clear
 }
 
 
-int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool cleartag, bool writev1, bool writev2)
+int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool cleartag)
 /*!\brief Auftrag ausführen
  *
  * Mit dieser Funktion wird ein ID3-Tag sofort in die angegebene Datei geschrieben, ohne
@@ -236,7 +236,7 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 	}
 
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Saving: %s",filename);
-	if (!Tag.Save(writev1, writev2)) {
+	if (!Tag.Save()) {
 		ppl6::PushError();
 		if (wmlog) {
 			wmlog->LogError();
@@ -307,8 +307,7 @@ void CID3TagSaver::ThreadMain(void *)
 				wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"Key: >>%s<<",(const char*)key);
 				wmlog->PrintArray(ppl6::LOG::DEBUG,5,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,&MyJob,"MyJob");
 			}
-			if (!UpdateNow(MyJob.Get("filename"),MyJob.GetArray("tags"),MyJob.IsTrue("cleartag"),
-					MyJob.IsTrue("writev1"),MyJob.IsTrue("writev2"))) {
+			if (!UpdateNow(MyJob.Get("filename"),MyJob.GetArray("tags"),MyJob.IsTrue("cleartag"))) {
 				// Update hat nicht funktioniert
 				int e=ppl6::GetErrorCode();
 				if (e!=364) {	// Datei existiert nicht

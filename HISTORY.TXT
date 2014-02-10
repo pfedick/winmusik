@@ -31,6 +31,9 @@ Version 3.2.0
     - Bugfix: Problem beim Lesen von MP3-Dateien mit internationalen Zeichen
       (z.B. deutsche Umlaute) im Dateinamen behoben.
     - ID3-Tags werden nur dann geschrieben, wenn sich auch was geändert hat.
+    - Beim Schreiben von ID3-Tags gibt es keine Wahl mehr zwischen Version 1
+      und Version 2 Tags, es werden immer beide geschrieben.
+    - Schreiben von ID3-Tags kann nun deaktiviert werden
       
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt

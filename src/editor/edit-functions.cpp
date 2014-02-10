@@ -667,7 +667,7 @@ void Edit::SaveTrack()
 	wm->DeviceStore.Update(DeviceType,DeviceId);
 	UpdateDevice();
 
-	if (DeviceType==7) {
+	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
 		if (!wm->SaveID3Tags(Track.DeviceId, Page, Track.Track,Ti)) {
 			wm->RaiseError(this,tr("Could not save ID3 Tags"));
 		}
@@ -864,7 +864,7 @@ void Edit::UpdateCover()
 {
 	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	wm->UpdateCoverViewer(Cover);
-	if (DeviceType==7) {
+	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
 		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
 			QPixmap pixmap;
@@ -878,7 +878,7 @@ void Edit::UpdateCover()
 			ppl6::CID3Tag Tag;
 			Tag.Load(&Path);
 			Tag.SetPicture(3,bin,"image/jpeg");
-			Tag.Save(wm->conf.bWriteId3v1,wm->conf.bWriteId3v2);
+			Tag.Save();
 		}
 	}
 }
