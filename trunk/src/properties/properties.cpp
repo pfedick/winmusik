@@ -74,8 +74,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.mp3Player->setText(c->MP3Player);
 	if (c->ReadId3Tag==1) ui.readID3v1->setChecked(true);
 	if (c->ReadId3Tag==2) ui.readID3v2->setChecked(true);
-	ui.writeID3v1->setChecked(c->bWriteId3v1);
-	ui.writeID3v2->setChecked(c->bWriteId3v2);
+	ui.writeID3->setChecked(c->bWriteID3Tags);
 	ui.removeOriginalTags->setChecked(c->bRemoveOriginalId3Tags);
 	Tmp.Setf("%i",c->ID3v2Padding);
 	ui.ID3v2Padding->setText(Tmp);
@@ -334,8 +333,7 @@ int Properties::Save()
 	c->MP3Player=ui.mp3Player->text();
 	if (ui.readID3v1->isChecked()) c->ReadId3Tag=1;
 	else c->ReadId3Tag=2;
-	c->bWriteId3v1=ui.writeID3v1->isChecked();
-	c->bWriteId3v2=ui.writeID3v2->isChecked();
+	c->bWriteID3Tags=ui.writeID3->isChecked();
 	c->bRemoveOriginalId3Tags=ui.removeOriginalTags->isChecked();
 	c->ID3v2Padding=ui.ID3v2Padding->text().toInt();
 	c->bSaveOriginalMp3Tags=ui.saveOriginalTags->isChecked();

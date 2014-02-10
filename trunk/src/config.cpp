@@ -51,8 +51,7 @@ Config::Config()
 	bCacheDirectorySearch=true;
 	bAutomaticEditSearch=true;
 	ReadId3Tag=2;
-	bWriteId3v1=true;
-	bWriteId3v2=true;
+	bWriteID3Tags=true;
 	bRemoveOriginalId3Tags=false;
 	ID3v2Padding=1024;
 	LogfileSize=10;
@@ -138,8 +137,7 @@ int Config::Save()
 	//c.Add("mp3","mp3path",(const char*)DevicePathMP3);
 	c.Add("mp3","mp3player",(const char*)MP3Player);
 	c.Add("mp3","readid3tag",ReadId3Tag);
-	c.Add("mp3","writeid3v1tag",bWriteId3v1);
-	c.Add("mp3","writeid3v2tag",bWriteId3v2);
+	c.Add("mp3","bWriteID3Tags",bWriteID3Tags);
 	c.Add("mp3","removeoriginalid3tags",bRemoveOriginalId3Tags);
 	c.Add("mp3","id3v2padding",ID3v2Padding);
 	c.Add("mp3","normalizefilename",bNormalizeFilename);
@@ -252,8 +250,7 @@ int Config::Load()
 
 	MP3Player=c.Get("mp3","mp3player",NULL);
 	ReadId3Tag=c.GetInt("mp3","readid3tag",2);
-	bWriteId3v1=c.GetBool("mp3","writeid3v1tag",true);
-	bWriteId3v2=c.GetBool("mp3","writeid3v2tag",true);
+	bWriteID3Tags=c.GetBool("mp3","bWriteID3Tags",true);
 	bRemoveOriginalId3Tags=c.GetBool("mp3","removeoriginalid3tags",false);
 	ID3v2Padding=c.GetInt("mp3","id3v2padding",1024);
 	bNormalizeFilename=c.GetBool("mp3","normalizefilename",true);

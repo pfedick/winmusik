@@ -320,8 +320,7 @@ class Config
 		bool			bAutomaticArtistSuggestion;
 		bool			bAutomaticTitleSuggestion;
 		int				ReadId3Tag;
-		bool			bWriteId3v1;
-		bool			bWriteId3v2;
+		bool			bWriteID3Tags;
 		bool			bRemoveOriginalId3Tags;
 		int				ID3v2Padding;
 		bool			bSaveOriginalMp3Tags;
@@ -371,7 +370,7 @@ class CID3TagSaver : public ppl6::CThread
 
 		virtual void ThreadMain(void *param);
 		void Add(const char *filename, ppl6::CAssocArray *Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
-		int UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
+		int UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool cleartag=false);
 };
 
 class CStringCounterItem : public ppl6::CTreeItem

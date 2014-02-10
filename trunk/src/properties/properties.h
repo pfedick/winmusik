@@ -113,8 +113,7 @@ private slots:
 
     // MP3
     void on_mp3Player_textChanged(const QString &) {Change();};
-    void on_writeID3v1_stateChanged(int ) {Change();}
-    void on_writeID3v2_stateChanged(int ) {Change();}
+    void on_writeID3_stateChanged(int ) {Change();}
     void on_removeOriginalTags_stateChanged(int ) {Change();}
     void on_ID3v2Padding_textChanged(const QString &) {Change();}
     void on_readID3v2_toggled(bool ) {Change();};

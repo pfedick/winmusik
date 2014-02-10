@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>8</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -365,41 +365,24 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QCheckBox" name="writeID3v1">
+             <widget class="QCheckBox" name="writeID3">
               <property name="text">
-               <string>write ID3v1-Tag</string>
+               <string>write ID3-Tags</string>
               </property>
               <property name="checked">
                <bool>false</bool>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QCheckBox" name="writeID3v2">
-              <property name="text">
-               <string>write ID3v2-Tag</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="removeOriginalTags">
-              <property name="text">
-               <string>remove original ID3-Tags</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>ID3v2-Tag padding-size:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>ID3v2-Tag padding-size:</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <widget class="QLineEdit" name="ID3v2Padding">
                 <property name="maximumSize">
@@ -442,7 +425,7 @@
               </item>
              </layout>
             </item>
-            <item row="1" column="1">
+            <item row="2" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
                <widget class="QLabel" name="label_19">
@@ -486,10 +469,30 @@
               </item>
              </layout>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QCheckBox" name="normalizeFilenames">
               <property name="text">
                <string>normalize filenames</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="removeOriginalTags">
+              <property name="text">
+               <string>remove original ID3-Tags</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_57">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>(Attention: 3rd party tags, including private tags will be lost!)</string>
               </property>
              </widget>
             </item>
@@ -2230,9 +2233,7 @@
   <tabstop>readID3v2</tabstop>
   <tabstop>saveOriginalTags</tabstop>
   <tabstop>saveOriginalTagsOnAutoImport</tabstop>
-  <tabstop>writeID3v1</tabstop>
-  <tabstop>writeID3v2</tabstop>
-  <tabstop>removeOriginalTags</tabstop>
+  <tabstop>writeID3</tabstop>
   <tabstop>retryIntervall</tabstop>
   <tabstop>ID3v2Padding</tabstop>
   <tabstop>normalizeFilenames</tabstop>

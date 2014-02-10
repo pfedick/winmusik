@@ -2177,13 +2177,13 @@ void Edit::on_coverDeleteButton_clicked()
 	Cover=QPixmap();
 	ui.cover->setPixmap(Cover);
 	wm->UpdateCoverViewer(Cover);
-	if (DeviceType==7) {
+	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
 		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
 			ppl6::CID3Tag Tag;
 			Tag.Load(&Path);
 			Tag.RemovePicture(3);
-			Tag.Save(wm->conf.bWriteId3v1,wm->conf.bWriteId3v2);
+			Tag.Save();
 		}
 	}
 
