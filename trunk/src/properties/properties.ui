@@ -342,9 +342,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="writeID3">
          <property name="title">
           <string>Export</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="spacing">
@@ -364,17 +367,7 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="writeID3">
-              <property name="text">
-               <string>write ID3-Tags</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
+            <item row="2" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
                <widget class="QLabel" name="label">
@@ -425,7 +418,7 @@
               </item>
              </layout>
             </item>
-            <item row="2" column="1">
+            <item row="1" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
                <widget class="QLabel" name="label_19">
@@ -469,21 +462,21 @@
               </item>
              </layout>
             </item>
-            <item row="4" column="0">
+            <item row="3" column="0">
              <widget class="QCheckBox" name="normalizeFilenames">
               <property name="text">
                <string>normalize filenames</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="0" column="0">
              <widget class="QCheckBox" name="removeOriginalTags">
               <property name="text">
                <string>remove original ID3-Tags</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="0" column="1">
              <widget class="QLabel" name="label_57">
               <property name="font">
                <font>
@@ -2233,7 +2226,6 @@
   <tabstop>readID3v2</tabstop>
   <tabstop>saveOriginalTags</tabstop>
   <tabstop>saveOriginalTagsOnAutoImport</tabstop>
-  <tabstop>writeID3</tabstop>
   <tabstop>retryIntervall</tabstop>
   <tabstop>ID3v2Padding</tabstop>
   <tabstop>normalizeFilenames</tabstop>
