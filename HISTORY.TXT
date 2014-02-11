@@ -34,6 +34,7 @@ Version 3.2.0
     - Beim Schreiben von ID3-Tags gibt es keine Wahl mehr zwischen Version 1
       und Version 2 Tags, es werden immer beide geschrieben.
     - Schreiben von ID3-Tags kann nun deaktiviert werden
+    - Anpassungen an Refakturierung von ppl6::CDir in Version > 6.4.18
       
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt

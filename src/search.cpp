@@ -1142,7 +1142,7 @@ void Search::RecursiveDirSearch(ppl6::CArray &search, const ppl6::CString &dir)
 	ppl6::CString File,Tmp;
 	const char *tmp;
 	if (Dir.Open(dir,ppl6::CDir::Sort_None)) {
-		ppl6::CDirEntry *entry;
+		const ppl6::CDirEntry *entry;
 		Dir.Reset();
 		while ((entry=Dir.GetNext())) {
 			if (entry->IsDir()==true) {

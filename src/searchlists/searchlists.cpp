@@ -71,7 +71,7 @@ void Searchlists::Update()
     CSearchlist sl;
 	ppl6::CDir Dir;
 	if (Dir.Open(wm->conf.DataPath)) {
-		ppl6::CDirEntry *entry;
+		const ppl6::CDirEntry *entry;
 		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
 		while (entry) {
 			//printf ("%s\n",(const char*)entry->File);
@@ -127,7 +127,7 @@ void Searchlists::on_newSearchlistButton_clicked()
 	ppl6::CArray Matches;
 	ppl6::CDir Dir;
 	if (Dir.Open(wm->conf.DataPath)) {
-		ppl6::CDirEntry *entry;
+		const ppl6::CDirEntry *entry;
 		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
 		while (entry) {
 			//printf ("%s\n",(const char*)entry->File);
@@ -159,7 +159,7 @@ void Searchlists::on_deleteSearchlistButton_clicked()
 	delete it;
 }
 
-void Searchlists::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column )
+void Searchlists::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int )
 {
 	SearchlistTreeItem *it=(SearchlistTreeItem*) item;
 	if (!it) return;

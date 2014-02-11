@@ -216,7 +216,7 @@ int MassImport::load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppl
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
 	Pattern.Setf("*.mp3");
 	ppl6::CDir Dir;
-	ppl6::CDirEntry *entry;
+	const ppl6::CDirEntry *entry;
 	int count=0;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	qApp->processEvents();
