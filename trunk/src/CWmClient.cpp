@@ -989,7 +989,7 @@ ppl6::CString CWmClient::MP3Filename(ppluint32 DeviceId, ppluint8 Page, ppluint3
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
 	Pattern.Setf("%03u-*.mp3",Track);
 	ppl6::CDir Dir;
-	ppl6::CDirEntry *de;
+	const ppl6::CDirEntry *de;
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
 		if ((de=Dir.GetFirstPattern(Pattern,true))) {
 			Path=de->File;
@@ -1032,7 +1032,7 @@ ppl6::CDirEntry CWmClient::StatMP3File(ppluint32 DeviceId, ppluint8 Page, ppluin
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
 	Pattern.Setf("%03u-*.mp3",Track);
 	ppl6::CDir Dir;
-	ppl6::CDirEntry *de;
+	const ppl6::CDirEntry *de;
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
 		if ((de=Dir.GetFirstPattern(Pattern,true))) {
 			Path=de->File;
@@ -1074,7 +1074,7 @@ ppl6::CString CWmClient::NextMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint3
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
 	Pattern.Setf("*.mp3");
 	ppl6::CDir Dir;
-	ppl6::CDirEntry *entry;
+	const ppl6::CDirEntry *entry;
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextMP3File",__FILE__,__LINE__,"Öffne Verzeichnis: %s",(const char*)Path);
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextMP3File",__FILE__,__LINE__,"%i Dateien vorhanden, suche nach Pattern...",Dir.Num());
