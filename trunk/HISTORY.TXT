@@ -45,6 +45,7 @@ Version 3.2.0, Releasedate: ??.??.2014	(SVN-Tag: REL_3_2_0)
       und Version 2 Tags, es werden immer beide geschrieben.
     - Schreiben von ID3-Tags kann nun deaktiviert werden
     - Anpassungen an Refakturierung von ppl6::CDir in Version > 6.4.18
+    - Hauptmenue hat nun ein Suchfeld
       
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt

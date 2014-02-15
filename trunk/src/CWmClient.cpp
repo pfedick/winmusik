@@ -33,7 +33,7 @@
 #include "winmusik3.h"
 #include "version.h"
 
-#include "menue.h"
+#include "src/menue/menue.h"
 #include "src/editor/edit.h"
 #include "search.h"
 #include "firststart.h"

@@ -245,6 +245,13 @@ void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title,
 
 }
 
+void Search::FastSearch(const ppl6::CString &Words)
+{
+	ui.tabWidget->setCurrentIndex(1);
+	ui.query->setText(Words);
+	on_quicksearchButton_clicked();
+}
+
 
 void Search::CheckAllowedDevices()
 {

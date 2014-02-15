@@ -58,7 +58,7 @@ HEADERS += widgets/fkeys.h \
     include/winmusik3.h \
     include/backgroundjobs.h \
     include/search.h \
-    include/menue.h \
+    src/menue/menue.h \
     include/regexpcapture.h \
     src/playlist/playlistStatusBar.h \
     src/playlist/playlist.h \
@@ -116,7 +116,7 @@ SOURCES += widgets/fkeys.cpp \
     src/firststart.cpp \
     src/config.cpp \
     src/search.cpp \
-    src/menue.cpp \
+    src/menue/menue.cpp \
     src/main.cpp \
     src/playlist/playlist.cpp \
     src/playlist/playlistStatusBar.cpp \
@@ -151,7 +151,7 @@ FORMS += widgets/fkeys.ui \
     forms/langselect.ui \
     forms/firststart.ui \
     forms/search.ui \
-    forms/menue.ui \
+    src/menue/menue.ui \
     src/playlist/playlist.ui \
     src/playlist/playlistedit.ui \
     forms/devicelist.ui \

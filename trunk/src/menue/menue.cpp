@@ -28,7 +28,7 @@
 #include "version.h"
 #include "menue.h"
 #include "search.h"
-#include "properties/properties.h"
+#include "src/properties/properties.h"
 #include "about.h"
 #include "updater.h"
 #include "wmtoolbutton.h"
@@ -40,6 +40,7 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.setupUi(this);
 	wm=client;
+	searchWindow=NULL;
 	QString Title=tr("WinMusik");
 	Title+=" ";
 	Title+=WM_VERSION;
@@ -52,6 +53,7 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(on_TimerUpdate()));
 	timer->start(3000);
+	ui.searchEdit->setFocus();
 }
 
 Menue::~Menue()
@@ -92,16 +94,19 @@ void Menue::closeEvent(QCloseEvent *event)
 void Menue::OpenEditDialog(int traeger)
 {
 	if (wm) wm->OpenEditor(traeger);
+	ui.searchEdit->setFocus();
 }
 
 void Menue::OpenDeviceList(int traeger)
 {
 	if (wm) wm->OpenDeviceList(traeger);
+	ui.searchEdit->setFocus();
 }
 
 void Menue::OpenSearchDialog()
 {
 	if (wm) wm->OpenSearch();
+	ui.searchEdit->setFocus();
 	/*
 	Search *w=new Search(NULL,wm);
 	//w->Init();
@@ -118,6 +123,7 @@ void Menue::OpenPropertiesDialog()
 	w->exec();
 
 	delete w;
+	ui.searchEdit->setFocus();
 
 }
 
@@ -127,21 +133,25 @@ void Menue::OpenAboutDialog()
 	About w;
 	//w.setWindowFlags(Qt::Dialog|Qt::CustomizeWindowHint|Qt::WindowTitleHint|Qt::WindowSystemMenuHint);
 	w.exec();
+	ui.searchEdit->setFocus();
 }
 
 void Menue::OpenCoverPrinterDialog()
 {
 	if (wm) wm->OpenCoverPrinter();
+	ui.searchEdit->setFocus();
 }
 
 void Menue::OpenPlaylistDialog()
 {
 	if (wm) wm->OpenPlaylistDialog();
+	ui.searchEdit->setFocus();
 }
 
 void Menue::OpenSearchlistDialog()
 {
 	if (wm) wm->OpenSearchlistOverview();
+	ui.searchEdit->setFocus();
 }
 
 
@@ -160,4 +170,15 @@ void Menue::on_TimerUpdate()
 		delete w;
 
 	}
+}
+
+
+void Menue::on_searchEdit_returnPressed()
+{
+	ppl6::CString words=ui.searchEdit->text();
+	words.Trim();
+	searchWindow=wm->OpenOrReuseSearch(searchWindow);
+	Search *win=(Search*)searchWindow;
+	win->FastSearch(words);
+	ui.searchEdit->setFocus();
 }
