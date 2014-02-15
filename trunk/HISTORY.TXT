@@ -2,15 +2,15 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.2.0
+Version 3.2.0, Releasedate: ??.??.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
       In der normalen Ansicht werden nur Informationen über Interpret, Titel,
       Version, Genre, Länge und Bewertung angezeigt. Die DJ-Ansicht zeigt
       zusätzliche Daten wie BPM, Music-Key, Ein- und Aussprungspunkt, Länge
       im Mix und Gesamtlänge. Der Editor unterstützt zudem die ID3-Tags
       von "Traktor Pro 2" und zeigt dessen Cue-Points an.
-    - NEU: Vollständige Unterstützung für AIFF-Dateien, einschließlich ID3-
-      Tags
+    - NEU: Unterstützung für AIFF-Dateien, einschließlich Lesen und Schreiben
+      von ID3-Tags
     - NEU: Es ist nun bei allen Datenträger-Typen möglich ein Filesystem
       zu hinterlegen und verwenden
     - Wird im Editor, Suchergebnis oder Playlist auf einen Track geklickt und
@@ -23,13 +23,13 @@ Version 3.2.0
     - Music-Key kann im Editor über das Kontextmenü gesetzt werden
     - Music-Key kann im Suchergebnis über das Kontextmenü gesetzt werden
     - Music-Key unterstützt jetzt neben der bisherigen "MusicalSharps"-
-      Schreibweise auch OpenKey und Benutzerdefinierte Einstellungen
+      Schreibweise auch OpenKey und benutzerdefinierte Einstellungen
     - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
       werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
       der Editor mit dem entsprechenden Track zum Editieren geöffnet.
     - Beim Masseneinlesen von MusicKeys über das Kontextmenü im Editor werden
       die Keys nur dann aus dem ID3-Tag übernommen, wenn vorher noch kein Key
-      in der Datenbank war oder diese noch nicht verifiziert war. Im Klartext:
+      in der Datenbank war oder dieser noch nicht verifiziert war. Im Klartext:
       Keys, die schon verifiziert waren, werden nicht überschrieben.
     - Neues Datenfeld für Titel: EnergyLevel (Tanzbarkeit des Titels auf einer
       Skala von 1 bis 10)
