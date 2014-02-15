@@ -522,7 +522,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 		item->cutEndPosition[z]=0;
 	}
 	item->CoverPreview=ti->CoverPreview;
-	item->File=wm->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
+	item->File=wm->GetAudioFilename(ti->DeviceType,ti->DeviceId,ti->Page,ti->Track);
 	item->useTraktorCues(item->File);
 	return true;
 }
@@ -910,7 +910,7 @@ void Playlist::saveTitle(PlaylistItem *item)
 		if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
 	}
 
-	if (!wm->SaveID3Tags(ti->DeviceId, ti->Page, ti->Track,Ti)) {
+	if (!wm->SaveID3Tags(ti->DeviceType,ti->DeviceId, ti->Page, ti->Track,Ti)) {
 		wm->RaiseError(this,tr("Could not save ID3 Tags"));
 	}
 }
@@ -1218,7 +1218,7 @@ void Playlist::on_contextSetMusicKey(int k)
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		return;
 	}
-	if (!wm->SaveID3Tags(t->DeviceId, t->Page, t->Track,tUpdate)) {
+	if (!wm->SaveID3Tags(t->DeviceType,t->DeviceId, t->Page, t->Track,tUpdate)) {
 		wm->RaiseError(this,tr("Could not save ID3 Tags"));
 	}
 }

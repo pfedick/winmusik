@@ -788,8 +788,8 @@ void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 void Search::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item,int )
 {
 	DataTitle *t=wm->GetTitle(((WMTreeItem*)item)->Id);
-	if (t!=NULL && t->DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
+	if (t!=NULL) {
+		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
 		if (Path.IsEmpty()) return;
 		//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (char*)Path);
 		wm->PlayFile(Path);
@@ -858,8 +858,8 @@ void Search::on_contextFindMoreTitle_triggered()
 void Search::on_contextPlayTrack_triggered()
 {
 	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
-	if (t!=NULL && t->DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
+	if (t!=NULL) {
+		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
 		if (Path.IsEmpty()) return;
 		//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (char*)Path);
 		wm->PlayFile(Path);
@@ -885,8 +885,8 @@ void Search::on_contextCopyTrack_triggered()
 void Search::on_contextCopyFile_triggered()
 {
 	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
-	if (t!=NULL && t->DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
+	if (t!=NULL) {
+		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
 		if (Path.IsEmpty()) return;
 		QClipboard *clipboard = QApplication::clipboard();
 		QList<QUrl> list;
@@ -993,14 +993,14 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
 		DataTitle *t=wm->GetTitle(item->Id);
 		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
-		if (t!=NULL && t->DeviceType==7) {
+		if (t!=NULL) {
 			if (Icon.isNull()) {
 				if (t->CoverPreview.Size()>0) {
 					Icon.loadFromData((const uchar*)t->CoverPreview.GetPtr(),t->CoverPreview.GetSize());
 				}
 			}
 
-			File=wm->MP3Filename(t->DeviceId,t->Page,t->Track);
+			File=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
 			if (File.NotEmpty()) {
 				xml+="<File>"+ppl6::EscapeHTMLTags(File)+"</File>";
 #ifdef _WIN32

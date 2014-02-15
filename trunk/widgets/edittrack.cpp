@@ -378,22 +378,20 @@ const TrackInfo &EditTrack::getData()
 	data.Ti.Rating=ui.rating->currentIndex();
 
 	// Cover
-	if (data.Ti.DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(data.Ti.DeviceId,data.Ti.Page,data.Ti.Track);
-		if (Path.NotEmpty()) {
-			ppl6::CDirEntry de;
-			if (ppl6::CFile::Stat(Path,de)) {
-				data.Ti.Size=de.Size;
-				if (Cover.isNull()) {
-					data.Ti.CoverPreview.Clear();
-				} else {
-					QPixmap icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					QByteArray bytes;
-					QBuffer buffer(&bytes);
-					buffer.open(QIODevice::WriteOnly);
-					icon.save(&buffer, "JPEG",70);
-					data.Ti.CoverPreview.Copy(bytes.data(),bytes.size());
-				}
+	ppl6::CString Path=wm->GetAudioFilename(data.Ti.DeviceType,data.Ti.DeviceId,data.Ti.Page,data.Ti.Track);
+	if (Path.NotEmpty()) {
+		ppl6::CDirEntry de;
+		if (ppl6::CFile::Stat(Path,de)) {
+			data.Ti.Size=de.Size;
+			if (Cover.isNull()) {
+				data.Ti.CoverPreview.Clear();
+			} else {
+				QPixmap icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				QByteArray bytes;
+				QBuffer buffer(&bytes);
+				buffer.open(QIODevice::WriteOnly);
+				icon.save(&buffer, "JPEG",70);
+				data.Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 			}
 		}
 	}

@@ -670,18 +670,18 @@ class CWmClient
 		void SaveGeometry(const char *name, QByteArray Geometry);
 		void ReloadTranslation();
 		QString Unknown();
-		ppl6::CString MP3Filename(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-		ppl6::CDirEntry StatMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+		ppl6::CString GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+		ppl6::CDirEntry StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 
-		int TrashMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-		int RenameMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack);
-		ppl6::CString NextMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-		int SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename="");
-		ppl6::CString NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti);
+		int TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+		int RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack);
+		ppl6::CString NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+		int SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename="");
+		ppl6::CString NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Suffix);
 
-		int SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp);
-		int WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device=NULL);
-		int UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list);
+		int SaveOriginalAudioInfo(ppl6::CString &File, DataOimp &oimp);
+		int WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device=NULL);
+		int UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList *list);
 
 		int PlayFile(const ppl6::CString &Filename);
 
