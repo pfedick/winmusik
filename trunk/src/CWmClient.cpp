@@ -1418,7 +1418,8 @@ int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 int CWmClient::PlayFile(const ppl6::CString &Filename)
 {
 	ppl6::CString Player=conf.MP3Player;
-	if (Filename.PregMatch("/\\.aif[f]{0,2}$/i")) Player=conf.AIFFPlayer;
+	ppl6::CArray matches;
+	if (Filename.PregMatch("/\\.aif[f]{0,2}$/i",matches)) Player=conf.AIFFPlayer;
 	if (Player.IsEmpty()) Player=conf.MP3Player;
 
 #ifdef _WIN32
