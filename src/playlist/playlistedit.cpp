@@ -168,7 +168,7 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 			wmlog->LogError("WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__);
 			wmlog->Printf(ppl6::LOG::DEBUG,9,"WinMusik","PlaylistEdit::filloutFields",__FILE__,__LINE__,"Load ID3-Tag failed: %s",(const char*)ppl6::Error2String());
 		}
-		ppl6::CString Tmp=wm->MP3Filename(item->DeviceId,item->DevicePage,item->DeviceTrack);
+		ppl6::CString Tmp=wm->GetAudioFilename(item->DeviceType,item->DeviceId,item->DevicePage,item->DeviceTrack);
 
 		if (Tmp.NotEmpty()==true && Tmp!=item->File) {
 			item->File=Tmp;

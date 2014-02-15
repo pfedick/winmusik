@@ -3,7 +3,16 @@
 \section WM3History_ WinMusik 3 Historie
 
 Version 3.2.0
-    - NEU: Erstellung von Playlists
+    - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
+      In der normalen Ansicht werden nur Informationen über Interpret, Titel,
+      Version, Genre, Länge und Bewertung angezeigt. Die DJ-Ansicht zeigt
+      zusätzliche Daten wie BPM, Music-Key, Ein- und Aussprungspunkt, Länge
+      im Mix und Gesamtlänge. Der Editor unterstützt zudem die ID3-Tags
+      von "Traktor Pro 2" und zeigt dessen Cue-Points an.
+    - NEU: Vollständige Unterstützung für AIFF-Dateien, einschließlich ID3-
+      Tags
+    - NEU: Es ist nun bei allen Datenträger-Typen möglich ein Filesystem
+      zu hinterlegen und verwenden
     - Wird im Editor, Suchergebnis oder Playlist auf einen Track geklickt und
       gleichzeitig die Meta-Taste (aka. Windows-Taste) gedrückt gehalten, wird
       nur Interpret und Titel in die Zwischenablage kopiert

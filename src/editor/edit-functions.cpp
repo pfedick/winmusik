@@ -108,30 +108,29 @@ bool Edit::EditTrack()
 	}
 	if (Ti.TitleId) FillEditFields();
 	// Dateiname
-	if (DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
-		if (Path.IsEmpty()) {
-			ui.filename->setText("");
-			ui.filesize->setText("");
-		} else {
-			ui.filename->setText(Path);
-			ppl6::CDirEntry de;
-			if (ppl6::CFile::Stat(Path,de)) {
-				Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
-				ui.filesize->setText(Tmp);
-				ppl6::CID3Tag Tag;
-				if (Tag.Load(Path)) {
-					// Cover?
-					ppl6::CBinary cover;
-					if (Tag.GetPicture(3,cover)) {
-						Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-						ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-						wm->UpdateCoverViewer(Cover);
-					}
+	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
+	if (Path.IsEmpty()) {
+		ui.filename->setText("");
+		ui.filesize->setText("");
+	} else {
+		ui.filename->setText(Path);
+		ppl6::CDirEntry de;
+		if (ppl6::CFile::Stat(Path,de)) {
+			Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
+			ui.filesize->setText(Tmp);
+			ppl6::CID3Tag Tag;
+			if (Tag.Load(Path)) {
+				// Cover?
+				ppl6::CBinary cover;
+				if (Tag.GetPicture(3,cover)) {
+					Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+					ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+					wm->UpdateCoverViewer(Cover);
 				}
 			}
 		}
 	}
+
 	QApplication::restoreOverrideCursor();
 	return true;
 }
@@ -359,9 +358,7 @@ void Edit::UpdateTrackListing()
 					count++;
 					length+=title->Length;
 					RenderTrack(item,title);
-					if (title->DeviceType==7) {
-						size+=title->Size;
-					}
+					size+=title->Size;
 				}
 			}
 			trackList->addTopLevelItem(item);
@@ -445,58 +442,54 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 		break;
 	}
 
-	if (title->DeviceType==7) {
-		if (title->Size==0) {
-			//printf ("title->Size ist Null, führe Stat durch\n");
-			ppl6::CString Path=wm->MP3Filename(title->DeviceId,title->Page,title->Track);
-			if (Path.NotEmpty()) {
-				ppl6::CDirEntry de;
-				if (ppl6::CFile::Stat(Path,de)) {
-					//printf ("Stat erfolgreich\n");
-					DataTitle ti;
-					ti.CopyFrom(title);
-					ti.Size=de.Size;
-					title->Size=ti.Size;
+	if (title->Size==0) {
+		//printf ("title->Size ist Null, führe Stat durch\n");
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType, title->DeviceId,title->Page,title->Track);
+		if (Path.NotEmpty()) {
+			ppl6::CDirEntry de;
+			if (ppl6::CFile::Stat(Path,de)) {
+				//printf ("Stat erfolgreich\n");
+				DataTitle ti;
+				ti.CopyFrom(title);
+				ti.Size=de.Size;
+				title->Size=ti.Size;
 
-					ppl6::CID3Tag Tag;
-					if (Tag.Load(&Path)) {
-						// Cover?
-						ppl6::CBinary cover;
-						QPixmap pix, icon;
-						if (Tag.GetPicture(3,cover)) {
-							pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-							icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				ppl6::CID3Tag Tag;
+				if (Tag.Load(&Path)) {
+					// Cover?
+					ppl6::CBinary cover;
+					QPixmap pix, icon;
+					if (Tag.GetPicture(3,cover)) {
+						pix.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+						icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 
-							item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
+						item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
 
-							QByteArray bytes;
-							QBuffer buffer(&bytes);
-							buffer.open(QIODevice::WriteOnly);
-							icon.save(&buffer, "JPEG",70);
-							ti.CoverPreview.Copy(bytes.data(),bytes.size());
-						}
+						QByteArray bytes;
+						QBuffer buffer(&bytes);
+						buffer.open(QIODevice::WriteOnly);
+						icon.save(&buffer, "JPEG",70);
+						ti.CoverPreview.Copy(bytes.data(),bytes.size());
 					}
+				}
 
-					if (!wm->TitleStore.Put(&ti)) {
-						printf ("Speichern fehlgeschlagen!\n");
-						ppl6::PrintError();
-
-					}
+				if (!wm->TitleStore.Put(&ti)) {
+					printf ("Speichern fehlgeschlagen!\n");
+					ppl6::PrintError();
 
 				}
-			}
-		} else {
-			//printf("Wir haben die Größe schon\n");
-			if (title->CoverPreview.Size()>0) {
-				QPixmap pix, icon;
-				pix.loadFromData((const uchar*)title->CoverPreview.GetPtr(),title->CoverPreview.Size());
-				icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-				item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
+
 			}
 		}
-
+	} else {
+		//printf("Wir haben die Größe schon\n");
+		if (title->CoverPreview.Size()>0) {
+			QPixmap pix, icon;
+			pix.loadFromData((const uchar*)title->CoverPreview.GetPtr(),title->CoverPreview.Size());
+			icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+			item->setIcon(TRACKLIST_COVER_ROW,icon.copy(0,0,64,16));
+		}
 	}
-
 }
 
 
@@ -624,25 +617,24 @@ void Edit::SaveTrack()
 	Ti.Track=TrackNum;
 
 	// Cover
-	if (DeviceType==7) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
-		if (Path.NotEmpty()) {
-			ppl6::CDirEntry de;
-			if (ppl6::CFile::Stat(Path,de)) {
-				Ti.Size=de.Size;
-				if (Cover.isNull()) {
-					Ti.CoverPreview.Clear();
-				} else {
-					QPixmap icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					QByteArray bytes;
-					QBuffer buffer(&bytes);
-					buffer.open(QIODevice::WriteOnly);
-					icon.save(&buffer, "JPEG",70);
-					Ti.CoverPreview.Copy(bytes.data(),bytes.size());
-				}
+	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
+	if (Path.NotEmpty()) {
+		ppl6::CDirEntry de;
+		if (ppl6::CFile::Stat(Path,de)) {
+			Ti.Size=de.Size;
+			if (Cover.isNull()) {
+				Ti.CoverPreview.Clear();
+			} else {
+				QPixmap icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				QByteArray bytes;
+				QBuffer buffer(&bytes);
+				buffer.open(QIODevice::WriteOnly);
+				icon.save(&buffer, "JPEG",70);
+				Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 			}
 		}
 	}
+
 
 	// Titel speichern
 	if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
@@ -667,8 +659,8 @@ void Edit::SaveTrack()
 	wm->DeviceStore.Update(DeviceType,DeviceId);
 	UpdateDevice();
 
-	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
-		if (!wm->SaveID3Tags(Track.DeviceId, Page, Track.Track,Ti)) {
+	if (wm_main->conf.bWriteID3Tags==true) {
+		if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track,Ti)) {
 			wm->RaiseError(this,tr("Could not save ID3 Tags"));
 		}
 	}
@@ -864,8 +856,8 @@ void Edit::UpdateCover()
 {
 	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	wm->UpdateCoverViewer(Cover);
-	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
+	if (wm_main->conf.bWriteID3Tags==true) {
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
 			QPixmap pixmap;
 			QByteArray bytes;

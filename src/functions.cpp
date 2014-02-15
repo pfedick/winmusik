@@ -282,18 +282,16 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	info.Ti.ReleaseDate=0;
 	info.Ti.LabelId=0;
 
-	ppl6::PPL_MPEG_HEADER pmp3;
 	ppl6::CFile File;
-	//printf ("Oeffne File: %s\n",(const char*)Filename);
 	if (!File.Open(Filename,"rb")) return false;
-	//printf ("Ok. rufe Ident auf\n");
-	if (!ppl6::IdentMPEG(&File,&pmp3)) return false;
+	ppl6::AudioInfo ai;
+	if (!ppl6::IdentAudioFile(File,ai)) return false;
 	//printf ("Ok\n");
-	info.Ti.Length=pmp3.length;
-	info.Ti.Bitrate=pmp3.bitrate;
+	info.Ti.Length=ai.Length/1000;
+	info.Ti.Bitrate=ai.Bitrate;
 	//info.Ti.Channels=pmp3.
 	int ret=0;
-	if (preferedId3Version==1) ret=CopyFromID3v1Tag(info,Filename,File);
+	if (ai.Format==ppl6::AudioInfo::MP3 && preferedId3Version==1) ret=CopyFromID3v1Tag(info,Filename,File);
 	else if (preferedId3Version==2) ret=CopyFromID3v2Tag(info,Filename,File);
 	else ret=CopyFromFilename(info,Filename);
 	if (ret) {

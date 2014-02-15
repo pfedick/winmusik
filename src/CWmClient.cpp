@@ -677,7 +677,6 @@ bool CWmClient::IsCoverViewerVisible() const
 }
 
 
-
 void CWmClient::SearchClosed(void *object)
 {
 	Mutex.Lock();
@@ -976,142 +975,144 @@ QString CWmClient::Unknown()
 }
 
 
-ppl6::CString CWmClient::MP3Filename(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","MP3Filename",__FILE__,__LINE__,"MP3-Datei suchen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Search for audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
 	ppl6::CString Path, Pattern;
-	ppl6::CString MP3Path=conf.DevicePath[7];
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
 
-	if (MP3Path.IsEmpty()) return Path;
-	Path=MP3Path;
+	if (DevicePath.IsEmpty()) return Path;
+	Path=DevicePath;
 	Path.RTrim("/");
 	Path.RTrim("\\");
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
-	Pattern.Setf("%03u-*.mp3",Track);
+	Pattern.Setf("%03u-*.(mp3|aiff)",Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *de;
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
 		if ((de=Dir.GetFirstPattern(Pattern,true))) {
 			Path=de->File;
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","MP3Filename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 			return Path;
 		}
 
 	}
-	Pattern.Setf("%03u.mp3",Track);
+	Pattern.Setf("%03u.(mp3|aiff)",Track);
 	if ((de=Dir.GetFirstPattern(Pattern,true))) {
 		Path=de->File;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","MP3Filename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 		return Path;
 	}
-	Pattern.Setf("/^%03u\\-.*\\.mp3$/i8",Track);
+	Pattern.Setf("/^%03u\\-.*\\.(mp3|aiff)$/i8",Track);
 	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","MP3Filename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 		return Path;
 	}
 
 
 
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","MP3Filename",__FILE__,__LINE__,"Nicht gefunden");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Nicht gefunden");
 	Path.Clear();
 	return Path;
 }
 
-ppl6::CDirEntry CWmClient::StatMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatMP3File",__FILE__,__LINE__,"MP3-Datei suchen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Search for audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
 	ppl6::CDirEntry ret;
 	ppl6::CString Path, Pattern;
-	ppl6::CString MP3Path=conf.DevicePath[7];
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
 
-	if (MP3Path.IsEmpty()) return ret;
-	Path=MP3Path;
+	if (DevicePath.IsEmpty()) return ret;
+	Path=DevicePath;
 	Path.RTrim("/");
 	Path.RTrim("\\");
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
-	Pattern.Setf("%03u-*.mp3",Track);
+	Pattern.Setf("%03u-*.(mp3|aiff)",Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *de;
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
 		if ((de=Dir.GetFirstPattern(Pattern,true))) {
 			Path=de->File;
 			ret=*de;
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatMP3File",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 			return ret;
 		}
 
 	}
-	Pattern.Setf("%03u.mp3",Track);
+	Pattern.Setf("%03u.(mp3|aiff)",Track);
 	if ((de=Dir.GetFirstPattern(Pattern,true))) {
 		Path=de->File;
 		ret=*de;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatMP3File",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 		return ret;
 	}
-	Pattern.Setf("/^%03u\\-.*\\.mp3$/i8",Track);
+	Pattern.Setf("/^%03u\\-.*\\.(mp3|aiff)$/i8",Track);
 	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
 		ret=*de;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatMP3File",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 		return ret;
 	}
 
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatMP3File",__FILE__,__LINE__,"Nicht gefunden");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Nicht gefunden");
 	return ret;
 }
 
-ppl6::CString CWmClient::NextMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","NextMP3File",__FILE__,__LINE__,"Nächste MP3-Datei suchen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Find next audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
 	ppl6::CString Path, Filename, Pattern;
-	ppl6::CString MP3Path=conf.DevicePath[7];
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
 
-	if (MP3Path.IsEmpty()) return Path;
-	Path=MP3Path;
+	if (DevicePath.IsEmpty()) return Path;
+	Path=DevicePath;
 	Path.RTrim("/");
 	Path.RTrim("\\");
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
-	Pattern.Setf("*.mp3");
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *entry;
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextMP3File",__FILE__,__LINE__,"Öffne Verzeichnis: %s",(const char*)Path);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Öffne Verzeichnis: %s",(const char*)Path);
 	if (Dir.Open(Path,ppl6::CDir::Sort_Filename_IgnoreCase)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextMP3File",__FILE__,__LINE__,"%i Dateien vorhanden, suche nach Pattern...",Dir.Num());
-		while ((entry=Dir.GetNextPattern(Pattern,true))) {
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextAudioFile",__FILE__,__LINE__,"%i Dateien vorhanden, suche nach Pattern...",Dir.Num());
+		while ((entry=Dir.GetNext())) {
 			Filename=entry->Filename;
 			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
 			if (!Filename.PregMatch("/^[0-9]{3}\\-.*/")) {
-				// Muss aber mit .mp3 enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
-				if (Filename.PregMatch("/^.*\\.mp3$/i")==true && entry->Size>256) {
-					// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
-					if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextMP3File",__FILE__,__LINE__,"Datei passt auf Pattern: %s",(const char*)Filename);
-					ppl6::CString newFilename;
-					newFilename.Setf("%s/%03u-%s",(const char*)entry->Path,Track,(const char*)Filename);
-					if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","NextMP3File",__FILE__,__LINE__,"Rename %s => %s",(const char*)entry->File, (const char*)newFilename);
-					// Wir versuchen sie umzubenennen
-					if (ppl6::CFile::RenameFile(entry->File,newFilename)) {
-						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","NextMP3File",__FILE__,__LINE__,"Erfolgreich. Datei: %s",(const char*)newFilename);
-						return newFilename;
+				// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
+				if (entry->Size>256) {
+					if (Filename.PregMatch("/^.*\\.mp3$/i")==true
+							|| Filename.PregMatch("/^.*\\.aiff$/i")==true) {
+						// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
+						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Datei passt auf Pattern: %s",(const char*)Filename);
+						ppl6::CString newFilename;
+						newFilename.Setf("%s/%03u-%s",(const char*)entry->Path,Track,(const char*)Filename);
+						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Rename %s => %s",(const char*)entry->File, (const char*)newFilename);
+						// Wir versuchen sie umzubenennen
+						if (ppl6::CFile::RenameFile(entry->File,newFilename)) {
+							if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Erfolgreich. Datei: %s",(const char*)newFilename);
+							return newFilename;
+						}
+						if (wmlog) wmlog->LogError();
+						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Error, versuche nächste Datei");
+						// Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
 					}
-					if (wmlog) wmlog->LogError();
-					if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextMP3File",__FILE__,__LINE__,"Error, versuche nächste Datei");
-					// Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
 				}
 			}
 		}
 	}
 	// Nichts passendes gefunden, wir geben einen leeren String zurück
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextMP3File",__FILE__,__LINE__,"Nichts passendes gefunden");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,8,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Nichts passendes gefunden");
 	Path.Clear();
 	return Path;
 }
 
-ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti)
+ppl6::CString CWmClient::NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Suffix)
 {
+	// TODO: Übergabeparameter für Audio-Format oder Suffix
 	ppl6::CString Filename;
-	ppl6::CString MP3Path=conf.DevicePath[7];
-
+	ppl6::CString MP3Path=conf.DevicePath[DeviceType];
 	if (MP3Path.IsEmpty()) return Filename;
 	Filename=MP3Path;
 	Filename.RTrim("/");
@@ -1129,7 +1130,8 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	if (Version!="Single") {
 		Tmp+=" ("+Version+")";
 	}
-	Tmp+=".mp3";
+	Tmp+=".";
+	Tmp+=Suffix;
 	// Problematische Zeichen rausfiltern
 	Tmp.Replace("ß","ss");
 	Tmp.Trim();
@@ -1137,21 +1139,22 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint32 DeviceId, ppluint8 Page, pp
 	ppl6::CWString w=Tmp;
 	NormalizeLetters(filenameLetterReplacements,w);
 	if (w.Len()>(size_t)conf.MaxFilenameLength) {
-		w.Cut(conf.MaxFilenameLength-4);
-		w+=".mp3";
+		w.Cut(conf.MaxFilenameLength-Suffix.Len()-1);
+		w+=".";
+		w+=Suffix;
 	}
 	Tmp=w;
 	Filename+=Tmp;
 	return Filename;
 }
 
-int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename)
+int CWmClient::SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Filename)
 {
 	if (conf.bWriteID3Tags==false) return 0;
 	ppl6::CString InternalFilename;
 	ppl6::CString Tmp;
 	if (Filename.NotEmpty()) InternalFilename=Filename;
-	else InternalFilename=MP3Filename(DeviceId, Page, Track);
+	else InternalFilename=GetAudioFilename(DeviceType,DeviceId, Page, Track);
 	if (InternalFilename.IsEmpty()) {
 		Tmp=tr("Track: %i");
 		ppl6::SetError(20022,Tmp,Track);
@@ -1164,8 +1167,10 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 		// Unter Windows würde ein rename an dieser Stelle fehlschlagen, wenn die Datei
 		// bereits geöffnet ist (z.B. im MP3-Player). Daher geben wir die Aufgabe an den
 		// TagSaver
-		Tmp=NormalizeFilename(DeviceId,Page,Track,Ti);
-		Job.Set("renamefile",Tmp);
+		if (InternalFilename.PregMatch("/.*\\.(.*?)$/")) {
+			Tmp=NormalizeFilename(DeviceType,DeviceId,Page,Track,Ti,InternalFilename.GetMatch(1));
+			Job.Set("renamefile",Tmp);
+		}
 	}
 
 	ID3TagSaver.SetPaddingSize(conf.ID3v2Padding);
@@ -1197,7 +1202,7 @@ int CWmClient::SaveID3Tags(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, D
 	return 1;
 }
 
-int CWmClient::SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp)
+int CWmClient::SaveOriginalAudioInfo(ppl6::CString &File, DataOimp &oimp)
 {
 	ppl6::CFile ff;
 	ppl6::CString Tmp;
@@ -1260,7 +1265,7 @@ int CWmClient::SaveOriginalMP3Info(ppl6::CString &File, DataOimp &oimp)
 
 
 
-int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device)
+int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device)
 {
 	ppl6::CString Path, Filename, Tmp, Minuten, FilePath;
 	DataTrack *track;
@@ -1337,7 +1342,7 @@ int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 				Tmp+=GetVersionText(Ti->VersionId);
 				Tmp+=")";
 
-				FilePath=MP3Filename(DeviceId,Page,i);
+				FilePath=GetAudioFilename(DeviceType,DeviceId,Page,i);
 				Filename=ppl6::GetFilename(FilePath);
 				m3u.Putsf("#EXTINF:%u,%s\n",Ti->Length,(const char*)Tmp);
 				m3u.Putsf("%s\n",(const char*)Filename);
@@ -1377,7 +1382,7 @@ int CWmClient::WritePlaylist(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 	return 1;
 }
 
-int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list)
+int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList *list)
 {
 	ppl6::CString Path, Filename, Tmp, Minuten;
 	DataTrack *track;
@@ -1390,8 +1395,8 @@ int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 		ppl6::SetError(20041);
 		return 0;
 	}
-	ppl6::CString MP3Path=conf.DevicePath[7];
-	if (MP3Path.IsEmpty()) {
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
+	if (DevicePath.IsEmpty()) {
 		ppl6::SetError(20042);
 		return 0;
 	}
@@ -1402,7 +1407,7 @@ int CWmClient::UpdateID3Tags(ppluint32 DeviceId, ppluint8 Page, CTrackList *list
 		if (track) {
 			Ti=GetTitle(track->TitleId);
 			if (Ti) {
-				if (!SaveID3Tags(DeviceId, Page, track->Track, *Ti)) return 0;
+				if (!SaveID3Tags(DeviceType, DeviceId, Page, track->Track, *Ti)) return 0;
 			}
 		}
 	}
@@ -1442,62 +1447,62 @@ int CWmClient::PlayFile(const ppl6::CString &Filename)
 	return 1;
 }
 
-int CWmClient::TrashMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+int CWmClient::TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Datei löschen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
-	ppl6::CString MP3Path=conf.DevicePath[7];
-	if (MP3Path.IsEmpty()) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Kein MP3-Pfad angegeben");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Datei löschen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
+	if (DevicePath.IsEmpty()) {
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Kein MP3-Pfad angegeben");
 		return 0;
 	}
 	ppl6::CString Path;
-	Path=MP3Path;
+	Path=DevicePath;
 	Path.RTrim("/");
 	Path.RTrim("\\");
 	Path.Concatf("/Trash");
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Pfad für gelöschte Dateien: %s",(const char*)Path);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Pfad für gelöschte Dateien: %s",(const char*)Path);
 	if (!ppl6::CFile::Exists(Path)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Pfad existiert nicht und wird angelegt");
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Pfad existiert nicht und wird angelegt");
 		if (!ppl6::MkDir(Path,1)) {
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Anlegen fehlgeschlagen");
-			if (wmlog) wmlog->LogError("CWMClient","TrashMP3File",__FILE__,__LINE__);
+			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Anlegen fehlgeschlagen");
+			if (wmlog) wmlog->LogError("CWMClient","TrashAudioFile",__FILE__,__LINE__);
 			return 0;
 		}
 		if (!ppl6::CFile::Exists(Path)) {
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Pfad wirde zwar angelegt, existiert aber trotzdem nicht");
+			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Pfad wirde zwar angelegt, existiert aber trotzdem nicht");
 			return 0;
 		}
 	}
 	if (!ppl6::IsDir(Path)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Pfad ist kein Verzeichnis: %s",(const char*)Path);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Pfad ist kein Verzeichnis: %s",(const char*)Path);
 		return 0;
 	}
-	ppl6::CString old=MP3Filename(DeviceId,Page,Track);
+	ppl6::CString old=GetAudioFilename(DeviceType,DeviceId,Page,Track);
 	if (old.IsEmpty()) return 1;
 	ppl6::CString file=Path;
 	file.Concatf("/%03u-%02u-",DeviceId,Page);
 	file+=ppl6::GetFilename(old);
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Umbenennung: %s ==> %s",(const char*)old, (const char*)file);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Umbenennung: %s ==> %s",(const char*)old, (const char*)file);
 	if (!ppl6::CFile::RenameFile(old,file)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Rename fehlgeschlagen");
-		if (wmlog) wmlog->LogError("CWMClient","TrashMP3File",__FILE__,__LINE__);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Rename fehlgeschlagen");
+		if (wmlog) wmlog->LogError("CWMClient","TrashAudioFile",__FILE__,__LINE__);
 		return 0;
 	}
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","TrashMP3File",__FILE__,__LINE__,"Erfolgreich");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Erfolgreich");
 	return 1;
 }
 
-int CWmClient::RenameMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack)
+int CWmClient::RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Datei umbenennen: DeviceId=%u, Page=%u, OldTrack=%u, NewTrack=%u",DeviceId,Page,OldTrack,NewTrack);
-	ppl6::CString MP3Path=conf.DevicePath[7];
-	if (MP3Path.IsEmpty()) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Kein MP3-Pfad angegeben");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Datei umbenennen: DeviceId=%u, Page=%u, OldTrack=%u, NewTrack=%u",DeviceId,Page,OldTrack,NewTrack);
+	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
+	if (DevicePath.IsEmpty()) {
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Kein MP3-Pfad angegeben");
 		return 0;
 	}
-	ppl6::CString Old=MP3Filename(DeviceId,Page,OldTrack);
+	ppl6::CString Old=GetAudioFilename(DeviceType,DeviceId,Page,OldTrack);
 	if (Old.IsEmpty()) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Alter Track %u ist nicht vorhanden",OldTrack);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Alter Track %u ist nicht vorhanden",OldTrack);
 		return 1;
 	}
 
@@ -1506,13 +1511,13 @@ int CWmClient::RenameMP3File(ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTra
 	Filename=Filename.Mid(4);
 	ppl6::CString NewFile;
 	NewFile.Setf("%s/%03u-%s",(const char *)Path,NewTrack,(const char*)Filename);
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Umbenennung: %s ==> %s",(const char*)Old, (const char*)NewFile);
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Umbenennung: %s ==> %s",(const char*)Old, (const char*)NewFile);
 	if (!ppl6::CFile::RenameFile(Old,NewFile)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Rename fehlgeschlagen");
-		if (wmlog) wmlog->LogError("CWMClient","RenameMP3File",__FILE__,__LINE__);
+		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Rename fehlgeschlagen");
+		if (wmlog) wmlog->LogError("CWMClient","RenameAudioFile",__FILE__,__LINE__);
 		return 0;
 	}
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","RenameMP3File",__FILE__,__LINE__,"Erfolgreich");
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","RenameAudioFile",__FILE__,__LINE__,"Erfolgreich");
 	return 1;
 }
 

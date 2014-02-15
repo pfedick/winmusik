@@ -849,7 +849,7 @@ void Edit::handleDropEvent(QDropEvent *event)
 	QUrl url=list.first();
 	QString file=url.encodedPath();
 	ppl6::CString f=file;
-	ppl6::CString path=wm->conf.DevicePath[7];
+	ppl6::CString path=wm->conf.DevicePath[DeviceType];
 	int p=f.Instr(path);
 	if (p<0) return;
 	f=f.Mid(p);
@@ -931,14 +931,14 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 	} else if (key==Qt::Key_F5 && position>7) {
 		return on_f5_CheckDupes(target);
 		// *************************************************************************** F6
-	} else if (DeviceType==7 && key==Qt::Key_F6 && modifier==Qt::ControlModifier && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
-		wm->TrashMP3File(DeviceId,Page,Track.Track);
+	} else if (key==Qt::Key_F6 && modifier==Qt::ControlModifier && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+		wm->TrashAudioFile(DeviceType,DeviceId,Page,Track.Track);
 		return on_f6_Pressed(target,Qt::NoModifier);
 
-	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f6_Pressed(target,modifier);
 
-	} else if (DeviceType==7 && key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (key==Qt::Key_F6 && ui.fkeys->isEnabled(6)==true && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f6_MassImport();
 		// *************************************************************************** F7
 	} else if (key==Qt::Key_F7 && position>3 && modifier==Qt::NoModifier) {
@@ -947,7 +947,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 	} else if (key==Qt::Key_F8 && position>3 && modifier==Qt::NoModifier) {
 		return on_f8_InsertTrack();
 		// *************************************************************************** F9
-	} else if (DeviceType==7 && key==Qt::Key_F9 && modifier==Qt::NoModifier && position>3 && Ti.ImportData>0) {
+	} else if (key==Qt::Key_F9 && modifier==Qt::NoModifier && position>3 && Ti.ImportData>0) {
 		if (oimpInfo) {
 			delete oimpInfo;
 			oimpInfo=NULL;
@@ -956,10 +956,10 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		}
 		return true;
 		// *************************************************************************** F9
-	} else if (DeviceType==7 && key==Qt::Key_F9 && modifier==Qt::NoModifier && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (key==Qt::Key_F9 && modifier==Qt::NoModifier && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f9_UpdateAllID3Tags();
 		// *************************************************************************** F10
-	} else if (key==Qt::Key_F10 && position>2 && modifier==Qt::NoModifier && DeviceType==7 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
+	} else if (key==Qt::Key_F10 && position>2 && modifier==Qt::NoModifier && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f10_WritePlaylist();
 		// *************************************************************************** F11 => Printing
 	} else if (key==Qt::Key_F11 && position>2 && modifier==Qt::NoModifier) {
@@ -1340,10 +1340,10 @@ bool Edit::on_f5_CheckDupes(QObject *target)
 bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 {
 	ppl6::CString Tmp;
-	ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
+	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 	if (Path.IsEmpty()) {
 		// Vielleicht gibt es noch einen Titel ohne Index
-		Path=wm->NextMP3File(DeviceId,Page,TrackNum);
+		Path=wm->NextAudioFile(DeviceType,DeviceId,Page,TrackNum);
 		if (Path.IsEmpty()) {
 			QMessageBox::information(this, tr("WinMusik: Notice"),
 					tr("There are no further titles without an index in the directory of this device"));
@@ -1361,6 +1361,7 @@ bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 	}
 
 	Songname.PregReplace("/\\.mp3$/i","");
+	Songname.PregReplace("/\\.aiff$/i","");
 	Songname.PregReplace("/^[0-9]+-/","");
 	Songname.Replace("_"," ");
 	Songname.Replace("\t"," ");
@@ -1368,7 +1369,7 @@ bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
 	clipboard->setText(Songname);
 	if (modifier==Qt::NoModifier) {
 		if (wm->conf.bSaveOriginalMp3Tags) {
-			if (wm->SaveOriginalMP3Info(Path,Oimp)) {
+			if (wm->SaveOriginalAudioInfo(Path,Oimp)) {
 				Ti.ImportData=Oimp.Id;
 				//ShowOimpInfo();
 			}
@@ -1404,9 +1405,7 @@ bool Edit::on_f7_DeleteTrack()
 			ui.artist->setFocus();
 		} else {
 			// Track löschen
-			if (DeviceType==7) {
-				wm->TrashMP3File(DeviceId,Page,Track.Track);
-			}
+			wm->TrashAudioFile(DeviceType,DeviceId,Page,Track.Track);
 			// Nachfolgende Tracks nach oben rücken
 			TrackList->DeleteShift(Track.Track,&wm->TitleStore);
 			UpdateTrackListing();
@@ -1439,7 +1438,7 @@ bool Edit::on_f8_InsertTrack()
 
 bool Edit::on_f10_WritePlaylist()
 {
-	if (wm->WritePlaylist(DeviceId,Page,TrackList,&datadevice)) {
+	if (wm->WritePlaylist(DeviceType,DeviceId,Page,TrackList,&datadevice)) {
 		QMessageBox::information(this, tr("WinMusik: Notice"),
 				tr("Playlists wurden erfolgreich erstellt"));
 		return true;
@@ -1543,8 +1542,8 @@ void Edit::on_f5_clicked()
 }
 void Edit::on_f6_clicked()
 {
-	if (DeviceType==7 && position==3) on_f6_MassImport();
-	else if (DeviceType==7 && position>3) on_f6_Pressed(GetWidgetFromPosition(position),Qt::NoModifier);
+	if (position==3) on_f6_MassImport();
+	else if (position>3) on_f6_Pressed(GetWidgetFromPosition(position),Qt::NoModifier);
 }
 
 void Edit::on_f7_clicked()
@@ -1559,8 +1558,8 @@ void Edit::on_f8_clicked()
 
 void Edit::on_f9_clicked()
 {
-	if (DeviceType==7 && position==3) on_f9_UpdateAllID3Tags();
-	else if (DeviceType==7 && position>3 && Ti.ImportData>0) {
+	if (position==3) on_f9_UpdateAllID3Tags();
+	else if (position>3 && Ti.ImportData>0) {
 		if (oimpInfo) {
 			delete oimpInfo;
 			oimpInfo=NULL;
@@ -1573,7 +1572,7 @@ void Edit::on_f9_clicked()
 
 void Edit::on_f10_clicked()
 {
-	if (position>2 && DeviceType==7) on_f10_WritePlaylist();
+	if (position>2) on_f10_WritePlaylist();
 }
 
 void Edit::on_f11_clicked()
@@ -1629,7 +1628,6 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 		//QTreeWidget::mouseMoveEvent(event);
 		return false;
 	}
-	if (DeviceType!=7) return false;
 	if (event->pos().x()> trackList->columnViewportPosition (TRACKLIST_RATING_ROW)) return false;
 	//QTreeWidgetItem *	itemAt ( const QPoint & p ) const
 
@@ -1662,7 +1660,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
 		}
 		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
-		File=wm->MP3Filename(DeviceId,Page,item->Track);
+		File=wm->GetAudioFilename(DeviceType,DeviceId,Page,item->Track);
 		if (File.NotEmpty()) {
 			xml+="<File>"+ppl6::EscapeHTMLTags(File)+"</File>\n";
 
@@ -1700,7 +1698,7 @@ bool Edit::on_f9_UpdateAllID3Tags()
 		tr("Update ID3-Tags of all tracks?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
 		==QMessageBox::No) return true;
 
-	if (wm->UpdateID3Tags(DeviceId,Page,TrackList)) {
+	if (wm->UpdateID3Tags(DeviceType,DeviceId,Page,TrackList)) {
 		QMessageBox::information(this, tr("WinMusik: Notice"),
 				tr("Update of ID3-Tags on all tracks has been started"));
 		return true;
@@ -1793,7 +1791,7 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 			//printf ("Rating: %i, %i\n",ratePos.x(),x);
 		} else if (column==TRACKLIST_COVER_ROW && wm->IsCoverViewerVisible()==true) {
 			ppl6::CID3Tag Tag;
-			ppl6::CString File=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
+			ppl6::CString File=wm->GetAudioFilename(DeviceType,DeviceId,Page,((WMTreeItem*)item)->Track);
 			if (Tag.Load(&File)) {
 				ppl6::CBinary cover;
 				if (Tag.GetPicture(3,cover)) {
@@ -1845,25 +1843,23 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 
 void Edit::on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column )
 {
-	if (DeviceType==7) {
-		if (column==TRACKLIST_RATING_ROW) return;
-		else if (column==TRACKLIST_COVER_ROW) {
-			ppl6::CID3Tag Tag;
-			ppl6::CString File=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
-			if (Tag.Load(&File)) {
-				ppl6::CBinary cover;
-				if (Tag.GetPicture(3,cover)) {
-					QPixmap trackCover;
-					trackCover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-					wm->OpenCoverViewer(trackCover);
-				}
+	if (column==TRACKLIST_RATING_ROW) return;
+	else if (column==TRACKLIST_COVER_ROW) {
+		ppl6::CID3Tag Tag;
+		ppl6::CString File=wm->GetAudioFilename(DeviceType,DeviceId,Page,((WMTreeItem*)item)->Track);
+		if (Tag.Load(&File)) {
+			ppl6::CBinary cover;
+			if (Tag.GetPicture(3,cover)) {
+				QPixmap trackCover;
+				trackCover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+				wm->OpenCoverViewer(trackCover);
 			}
-		} else {
-			ppl6::CString Path=wm->MP3Filename(DeviceId,Page,((WMTreeItem*)item)->Track);
-			if (Path.IsEmpty()) return;
-			//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
-			wm->PlayFile(Path);
 		}
+	} else {
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,((WMTreeItem*)item)->Track);
+		if (Path.IsEmpty()) return;
+		//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
+		wm->PlayFile(Path);
 	}
 	//FixFocus();
 }
@@ -1888,7 +1884,7 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     QMenu *m=new QMenu(this);
     QAction *a=NULL;
     //m->setTitle("Ein Titel");
-    if (DeviceType==7 && TrackList != NULL &&
+    if (TrackList != NULL &&
     		(trackList->currentColumn()==TRACKLIST_KEY_ROW
     				|| trackList->currentColumn()==TRACKLIST_BPM_ROW
     				|| trackList->currentColumn()==TRACKLIST_ENERGYLEVEL_ROW
@@ -1902,14 +1898,14 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
     	m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
     	m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
-    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
-    	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
+    	m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
     	m->addSeparator();
     	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()));
-    	if (DeviceType==7 && TrackList != NULL && trackList->currentColumn()==TRACKLIST_BPM_ROW) {
+    	if (TrackList != NULL && trackList->currentColumn()==TRACKLIST_BPM_ROW) {
     		m->addSeparator();
     		m->addAction (QIcon(":/icons/resources/edit.png"),tr("Read BPM and Key from ID3-Tag","trackList Context Menue"),this,SLOT(on_contextReadBpmAndKey_triggered()));
     	}
@@ -2000,7 +1996,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 		if (track) {
 			// Titel holen
 			DataTitle *title=wm->GetTitle(track->TitleId);
-			ppl6::CString Path=wm->MP3Filename(track->DeviceId,track->Page,track->Track);
+			ppl6::CString Path=wm->GetAudioFilename(DeviceType,track->DeviceId,track->Page,track->Track);
 			if (title!=NULL && Path.NotEmpty()==true) {
 				//printf ("Path: %s\n",(const char*)Path);
 				progress.setLabelText(Path);
@@ -2010,7 +2006,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 					Ti.CopyFrom(title);
 					bool modified=false;
 					if (tinfo.Ti.Key != title->Key && (title->Flags&16)==16) {
-						if (!wm->SaveID3Tags(title->DeviceId, title->Page, title->Track,Ti)) {
+						if (!wm->SaveID3Tags(title->DeviceType,title->DeviceId, title->Page, title->Track,Ti)) {
 							wm->RaiseError(this,tr("Could not save ID3 Tags"));
 						}
 					} else if (tinfo.Ti.Key != title->Key && (title->Flags&16)==0) {
@@ -2069,7 +2065,7 @@ void Edit::on_contextFindMoreTitle_triggered()
 
 void Edit::on_contextPlayTrack_triggered()
 {
-	ppl6::CString Path=wm->MP3Filename(DeviceId,Page,currentTrackListItem->Track);
+	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,currentTrackListItem->Track);
 	if (Path.IsEmpty()) return;
 	//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
 	wm->PlayFile(Path);
@@ -2093,8 +2089,8 @@ void Edit::on_contextCopyTrack_triggered()
 
 void Edit::on_contextCopyFile_triggered()
 {
-	if (DeviceType==7 && currentTrackListItem->Track>0) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,currentTrackListItem->Track);
+	if (currentTrackListItem->Track>0) {
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,currentTrackListItem->Track);
 		if (Path.IsEmpty()) return;
 		QClipboard *clipboard = QApplication::clipboard();
 		QList<QUrl> list;
@@ -2177,8 +2173,8 @@ void Edit::on_coverDeleteButton_clicked()
 	Cover=QPixmap();
 	ui.cover->setPixmap(Cover);
 	wm->UpdateCoverViewer(Cover);
-	if (DeviceType==7 && wm_main->conf.bWriteID3Tags==true) {
-		ppl6::CString Path=wm->MP3Filename(DeviceId,Page,TrackNum);
+	if (wm_main->conf.bWriteID3Tags==true) {
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
 			ppl6::CID3Tag Tag;
 			Tag.Load(&Path);
@@ -2225,10 +2221,7 @@ void Edit::on_coverSaveButton_clicked()
 	if (position<3) return;
 	if (Cover.isNull()) return;
 	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
-	Dir+=ppl6::Mid(ppl6::GetFilename(wm->NormalizeFilename(Track.DeviceId,Page,Track.Track,Ti)),4);
-	Dir.Cut(Dir.Length()-4);
-	Dir+=".jpg";
-	Dir.Print(true);
+	Dir+=ppl6::Mid(ppl6::GetFilename(wm->NormalizeFilename(Track.Device,Track.DeviceId,Page,Track.Track,Ti,".jpg")),4);
 
 	QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"),
 				Dir,

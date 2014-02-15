@@ -1522,13 +1522,6 @@
             <number>1</number>
            </property>
            <item>
-            <widget class="QLabel" name="label_21">
-             <property name="text">
-              <string>Cover</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <property name="topMargin">
               <number>0</number>
@@ -1581,6 +1574,20 @@
                <property name="topMargin">
                 <number>0</number>
                </property>
+               <item>
+                <widget class="QLabel" name="label_21">
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Cover</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QPushButton" name="coverCopyButton">
                  <property name="maximumSize">

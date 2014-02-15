@@ -749,7 +749,7 @@ bool MassImport::importTrack(TreeItem *item)
 	}
 	// Datei muss umbenannt werden
 
-	if (!wm->SaveID3Tags(Track.DeviceId, Page, Track.Track,Ti,item->Filename)) {
+	if (!wm->SaveID3Tags(Track.Device, Track.DeviceId, Page, Track.Track,Ti,item->Filename)) {
 		wm->RaiseError(this,tr("Could not save ID3 Tags"));
 		return false;
 	}

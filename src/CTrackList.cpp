@@ -412,8 +412,8 @@ int CTrackList::Delete(int track)
 				if (i<min) min=i;
 			}
 		}
-		if (DeviceType==7 && wm_main!=NULL) {
-			wm_main->TrashMP3File(DeviceId,Page,track);
+		if (wm_main!=NULL) {
+			wm_main->TrashAudioFile(DeviceType,DeviceId,Page,track);
 		}
 
 	}
@@ -462,9 +462,9 @@ int CTrackList::DeleteShift(int track, CTitleStore *tistore)
 					tistore->Put(Ti);
 				}
 			}
-			if (DeviceType==7 && wm_main!=NULL) {
+			if (wm_main!=NULL) {
 				// File umbenennen
-				wm_main->RenameMP3File(DeviceId,Page,i,i-1);
+				wm_main->RenameAudioFile(DeviceType,DeviceId,Page,i,i-1);
 			}
 		}
 	}
@@ -529,9 +529,9 @@ int CTrackList::InsertShift(int track, CTitleStore *tistore)
 					tistore->Put(Ti);
 				}
 			}
-			if (DeviceType==7 && wm_main!=NULL) {
+			if (wm_main!=NULL) {
 				// File umbenennen
-				wm_main->RenameMP3File(DeviceId,Page,i,i+1);
+				wm_main->RenameAudioFile(DeviceType,DeviceId,Page,i,i+1);
 			}
 		}
 	}

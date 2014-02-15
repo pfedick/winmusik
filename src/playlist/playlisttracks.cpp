@@ -96,9 +96,9 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 
 ppl6::CString PlaylistItem::getExistingFilename() const
 {
-	if (File.IsEmpty()) return wm_main->MP3Filename(DeviceId,DevicePage,DeviceTrack);
+	if (File.IsEmpty()) return wm_main->GetAudioFilename(DeviceType,DeviceId,DevicePage,DeviceTrack);
 	if (ppl6::CFile::Exists(File)) return File;
-	return wm_main->MP3Filename(DeviceId,DevicePage,DeviceTrack);
+	return wm_main->GetAudioFilename(DeviceType,DeviceId,DevicePage,DeviceTrack);
 }
 
 void PlaylistItem::importFromXML(QDomElement &e)
@@ -293,7 +293,7 @@ void PlaylistItem::updateFromDatabase()
 	DeviceTrack=ti->Track;
 	DeviceType=ti->DeviceType;
 	DevicePage=ti->Page;
-	File=wm_main->MP3Filename(ti->DeviceId,ti->Page,ti->Track);
+	File=wm_main->GetAudioFilename(ti->DeviceType,ti->DeviceId,ti->Page,ti->Track);
 }
 
 void PlaylistItem::useTraktorCues(const ppl6::CString &file)
@@ -404,7 +404,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 	//QTreeWidget::dragMoveEvent(e);
 }
 
-bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action)
+bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction)
 {
 	printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
 	ppl6::CString Tmp;
