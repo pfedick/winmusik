@@ -32,7 +32,7 @@
    <string>WinMusik 3.0</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/logo/resources/icon64.png</normaloff>:/logo/resources/icon64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -89,7 +89,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0001.png</normaloff>:/devices25/resources/tr25x25-0001.png</iconset>
           </property>
           <property name="iconSize">
@@ -115,7 +115,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0002.png</normaloff>:/devices25/resources/tr25x25-0002.png</iconset>
           </property>
           <property name="iconSize">
@@ -141,7 +141,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0003.png</normaloff>:/devices25/resources/tr25x25-0003.png</iconset>
           </property>
           <property name="iconSize">
@@ -167,7 +167,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0004.png</normaloff>:/devices25/resources/tr25x25-0004.png</iconset>
           </property>
           <property name="iconSize">
@@ -193,7 +193,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0005.png</normaloff>:/devices25/resources/tr25x25-0005.png</iconset>
           </property>
           <property name="iconSize">
@@ -219,7 +219,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0006.png</normaloff>:/devices25/resources/tr25x25-0006.png</iconset>
           </property>
           <property name="iconSize">
@@ -245,7 +245,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0007.png</normaloff>:/devices25/resources/tr25x25-0007.png</iconset>
           </property>
           <property name="iconSize">
@@ -271,7 +271,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0008.png</normaloff>:/devices25/resources/tr25x25-0008.png</iconset>
           </property>
           <property name="iconSize">
@@ -300,7 +300,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0009.png</normaloff>:/devices25/resources/tr25x25-0009.png</iconset>
           </property>
           <property name="iconSize">
@@ -372,7 +372,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0012.png</normaloff>:/devices25/resources/tr25x25-0012.png</iconset>
           </property>
           <property name="iconSize">
@@ -401,7 +401,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0011.png</normaloff>:/devices25/resources/tr25x25-0011.png</iconset>
           </property>
           <property name="iconSize">
@@ -430,7 +430,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0010.png</normaloff>:/devices25/resources/tr25x25-0010.png</iconset>
           </property>
           <property name="iconSize">
@@ -459,7 +459,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/wanted.png</normaloff>:/devices25/resources/wanted.png</iconset>
           </property>
           <property name="iconSize">
@@ -488,7 +488,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0016.png</normaloff>:/devices25/resources/tr25x25-0016.png</iconset>
           </property>
           <property name="iconSize">
@@ -517,7 +517,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources.qrc">
+           <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/home.png</normaloff>:/devices25/resources/home.png</iconset>
           </property>
           <property name="iconSize">
@@ -551,6 +551,15 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="leftMargin">
+      <number>4</number>
+     </property>
+     <property name="rightMargin">
+      <number>4</number>
+     </property>
+     <property name="bottomMargin">
+      <number>2</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
@@ -585,7 +594,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
