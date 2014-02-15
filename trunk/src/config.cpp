@@ -136,6 +136,7 @@ int Config::Save()
 
 	//c.Add("mp3","mp3path",(const char*)DevicePathMP3);
 	c.Add("mp3","mp3player",(const char*)MP3Player);
+	c.Add("mp3","aiffplayer",(const char*)AIFFPlayer);
 	c.Add("mp3","readid3tag",ReadId3Tag);
 	c.Add("mp3","bWriteID3Tags",bWriteID3Tags);
 	c.Add("mp3","removeoriginalid3tags",bRemoveOriginalId3Tags);
@@ -249,6 +250,7 @@ int Config::Load()
 	if (Tmp.NotEmpty()) DevicePath[7]=Tmp;	// Kompatibilität mit Version 3.0.0
 
 	MP3Player=c.Get("mp3","mp3player",NULL);
+	AIFFPlayer=c.Get("mp3","aiffplayer",NULL);
 	ReadId3Tag=c.GetInt("mp3","readid3tag",2);
 	bWriteID3Tags=c.GetBool("mp3","bWriteID3Tags",true);
 	bRemoveOriginalId3Tags=c.GetBool("mp3","removeoriginalid3tags",false);

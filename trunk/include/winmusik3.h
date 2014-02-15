@@ -295,6 +295,7 @@ class Config
 		ppl6::CString	TmpPath;
 		//ppl6::CString	MP3Path;
 		ppl6::CString	MP3Player;
+		ppl6::CString	AIFFPlayer;
 		ppl6::CString	Locale;
 		ppl6::CString	UserName;
 		ppl6::CString	UserCompany;

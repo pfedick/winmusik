@@ -72,6 +72,7 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 
 	// MP3
 	ui.mp3Player->setText(c->MP3Player);
+	ui.aiffPlayer->setText(c->AIFFPlayer);
 	if (c->ReadId3Tag==1) ui.readID3v1->setChecked(true);
 	if (c->ReadId3Tag==2) ui.readID3v2->setChecked(true);
 	ui.writeID3->setChecked(c->bWriteID3Tags);
@@ -331,6 +332,7 @@ int Properties::Save()
 
 	// MP3
 	c->MP3Player=ui.mp3Player->text();
+	c->AIFFPlayer=ui.aiffPlayer->text();
 	if (ui.readID3v1->isChecked()) c->ReadId3Tag=1;
 	else c->ReadId3Tag=2;
 	c->bWriteID3Tags=ui.writeID3->isChecked();
@@ -532,6 +534,20 @@ void Properties::on_mp3PlayerButton_clicked()
 	                                                 p);
 	if(file.length()) {
 		ui.mp3Player->setText(file);
+		Change();
+	}
+}
+
+void Properties::on_aiffPlayerButton_clicked()
+{
+	QString p=ui.aiffPlayer->text();
+	if (p.length()==0) {
+		p=QDir::homePath();
+	}
+	QString file = QFileDialog::getOpenFileName(this, tr("Select the program with which you want to use for playing AIFF-Files"),
+	                                                 p);
+	if(file.length()) {
+		ui.aiffPlayer->setText(file);
 		Change();
 	}
 }
