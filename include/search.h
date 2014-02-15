@@ -53,6 +53,7 @@ public:
 
     //void StartSearch(const char *artist, const char *title);
     void FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version=ppl6::CString(),const ppl6::CString &Genre=ppl6::CString(),const ppl6::CString &Tags=ppl6::CString(),const ppl6::CString &Label=ppl6::CString());
+    void FastSearch(const ppl6::CString &Words);
     void ReloadTranslation();
 
     void DoSearch();

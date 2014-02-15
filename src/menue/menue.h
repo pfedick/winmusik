@@ -49,6 +49,7 @@ private:
     Ui::MenueClass ui;
     CWmClient *wm;
     QTimer *timer;
+    QWidget *searchWindow;
 
     bool UpdateInformed;
 
@@ -91,6 +92,7 @@ private slots:
 	void on_searchlistButton_clicked() {OpenSearchlistDialog();};
 
 	void on_TimerUpdate();
+	void on_searchEdit_returnPressed();
 
 
 };

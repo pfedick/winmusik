@@ -24,7 +24,7 @@
  */
 
 
-#include "menue.h"
+#include "src/menue/menue.h"
 #include "winmusik3.h"
 #include <ppl6-grafix.h>
 #include "version.h"
