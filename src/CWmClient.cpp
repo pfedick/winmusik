@@ -1417,31 +1417,35 @@ int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 
 int CWmClient::PlayFile(const ppl6::CString &Filename)
 {
+	ppl6::CString Player=conf.MP3Player;
+	if (Filename.PregMatch("/\\.aif[f]{0,2}$/i")) Player=conf.AIFFPlayer;
+	if (Player.IsEmpty()) Player=conf.MP3Player;
+
 #ifdef _WIN32
 	ppl6::CWString f=Filename;
 	// Windows mag keine Vorwärts-Slashes
 	f.Replace("/","\\");
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","PlayFile",__FILE__,__LINE__,"Datei abspielen: %s",(const char*)f);
-	if (conf.MP3Player.IsEmpty()) {
+	if (Player.IsEmpty()) {
 		ShellExecuteW(NULL,L"open", (const wchar_t*)f,
 			L"",L"", SW_SHOWNORMAL);
 	} else {
 		f="\""+f;
 		f+="\"";
-		ppl6::CWString prog=conf.MP3Player;
+		ppl6::CWString prog=Player;
 		ShellExecuteW(NULL,L"open", (const wchar_t*)prog,(const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
 	}
 #else
-	if (conf.MP3Player.IsEmpty()) {
+	if (Player.IsEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),
-				tr("There is no MP3 player specified.\nPlease go to preferences and open the MP3 page. There you can specify your favorite player."),
+				tr("There is no Audio player specified.\nPlease go to preferences and open the MP3 page. You can specify your favorite player there."),
 				QMessageBox::Ok,QMessageBox::Ok);
 		return 0;
 	}
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","PlayFile",__FILE__,__LINE__,"Datei abspielen: %s",(const char*)Filename);
 	ppl6::CString cmd;
-	cmd.Setf("%s \"%s\" > /dev/null 2>&1 &",(const char*)conf.MP3Player,(const char*)Filename);
+	cmd.Setf("%s \"%s\" > /dev/null 2>&1 &",(const char*)Player,(const char*)Filename);
 	system ((const char*)cmd);
 #endif
 	return 1;

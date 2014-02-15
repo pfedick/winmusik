@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -248,7 +248,7 @@
         <normaloff>:/devices25/resources/tr25x25-0007.png</normaloff>:/devices25/resources/tr25x25-0007.png</iconset>
       </attribute>
       <attribute name="title">
-       <string>MP3</string>
+       <string>MP3/AIFF</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
@@ -271,6 +271,33 @@
          </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="mp3PlayerButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources.qrc">
+             <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_58">
+           <property name="text">
+            <string>AIFF-Player:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="aiffPlayer"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="aiffPlayerButton">
            <property name="text">
             <string/>
            </property>

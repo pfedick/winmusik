@@ -10,7 +10,8 @@ Version 3.2.0, Releasedate: ??.??.2014	(SVN-Tag: REL_3_2_0)
       im Mix und Gesamtlänge. Der Editor unterstützt zudem die ID3-Tags
       von "Traktor Pro 2" und zeigt dessen Cue-Points an.
     - NEU: Unterstützung für AIFF-Dateien, einschließlich Lesen und Schreiben
-      von ID3-Tags
+      von ID3-Tags. In den Optionen kann ein separater Player für AIFF-Dateien
+      definiert werden.
     - NEU: Es ist nun bei allen Datenträger-Typen möglich ein Filesystem
       zu hinterlegen und verwenden
     - Wird im Editor, Suchergebnis oder Playlist auf einen Track geklickt und
