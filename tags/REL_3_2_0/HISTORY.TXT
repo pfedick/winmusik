@@ -1,0 +1,241 @@
+/*!\page WM3History WinMusik Historie
+
+\section WM3History_ WinMusik 3 Historie
+
+Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
+    - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
+      In der normalen Ansicht werden nur Informationen über Interpret, Titel,
+      Version, Genre, Länge und Bewertung angezeigt. Die DJ-Ansicht zeigt
+      zusätzliche Daten wie BPM, Music-Key, Ein- und Aussprungspunkt, Länge
+      im Mix und Gesamtlänge. Der Editor unterstützt zudem die ID3-Tags
+      von "Traktor Pro 2" und zeigt dessen Cue-Points an.
+    - NEU: Unterstützung für AIFF-Dateien, einschließlich Lesen und Schreiben
+      von ID3-Tags. In den Optionen kann ein separater Player für AIFF-Dateien
+      definiert werden.
+    - NEU: Es ist nun bei allen Datenträger-Typen möglich ein Filesystem
+      zu hinterlegen und verwenden
+    - Wird im Editor, Suchergebnis oder Playlist auf einen Track geklickt und
+      gleichzeitig die Meta-Taste (aka. Windows-Taste) gedrückt gehalten, wird
+      nur Interpret und Titel in die Zwischenablage kopiert
+    - Interpretation des Music-Key wurde verbessert
+    - Zum Music-Key kann jetzt angegeben werden, ob dieser verifiziert wurde.
+    - Nicht-verifizierte Keys werden im Editor und Suchergebnis hellgrau
+      dargestellt
+    - Music-Key kann im Editor über das Kontextmenü gesetzt werden
+    - Music-Key kann im Suchergebnis über das Kontextmenü gesetzt werden
+    - Music-Key unterstützt jetzt neben der bisherigen "MusicalSharps"-
+      Schreibweise auch OpenKey und benutzerdefinierte Einstellungen
+    - In den Editor können jetzt Dateien per Drag und Drop hineingezogen
+      werden. Liegt die Datei innerhalb des WinMusik Musikarchivs, wird
+      der Editor mit dem entsprechenden Track zum Editieren geöffnet.
+    - Beim Masseneinlesen von MusicKeys über das Kontextmenü im Editor werden
+      die Keys nur dann aus dem ID3-Tag übernommen, wenn vorher noch kein Key
+      in der Datenbank war oder dieser noch nicht verifiziert war. Im Klartext:
+      Keys, die schon verifiziert waren, werden nicht überschrieben.
+    - Neues Datenfeld für Titel: EnergyLevel (Tanzbarkeit des Titels auf einer
+      Skala von 1 bis 10)
+    - Massenimport prüft nurnoch innerhalb der MP3-Files auf Duplikate
+    - Cover geht nicht mehr verloren, wenn die Option "Original ID3-Tags
+      entfernen" in den Einstellungen aktiviert ist.
+    - MP3-Files mit defektem Header werden besser erkannt.
+    - Bugfix: Problem beim Lesen von MP3-Dateien mit internationalen Zeichen
+      (z.B. deutsche Umlaute) im Dateinamen behoben.
+    - ID3-Tags werden nur dann geschrieben, wenn sich auch was geändert hat.
+    - Beim Schreiben von ID3-Tags gibt es keine Wahl mehr zwischen Version 1
+      und Version 2 Tags, es werden immer beide geschrieben.
+    - Schreiben von ID3-Tags kann nun deaktiviert werden
+    - Anpassungen an Refakturierung von ppl6::CDir in Version > 6.4.18
+    - Hauptmenue hat nun ein Suchfeld
+      
+Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
+    - Laden der Datenbank wurde beschleunigt
+    - Neues Datenfeld für Titel: Music-Key (initiale Tonart)
+    - Neue Spalten im Tracklisting des Editors für BPM und Key
+    - Klickt man im Tracklisting einen Music-Key an, werden harmonisch dazu
+      passende Tracks grün markiert
+    - BPM und Key werden auch im Suchergebnis angezeigt
+    - Öffnet man das Kontextmenü im Tracklisting des Editors in der Spalte
+      BPM oder Key, kann man BPM und Key nun nachträglich aus den ID3-Tags
+      aller Tracks importieren.
+    - Bugfix: Beim Löschen eines Tracks im Editor wurde der Titel nicht aus
+      den internen Suchbäumen gelöscht. Das konnte zu seltsamen Suchergeb-
+      nissen und Abstürzen führen.
+    - Bugfix: Beim Löschen oder Einfügen eines Tracks im Editor werden die
+      nachfolgenden Tracks um eine Position nach oben oder unten verschoben.
+      Die Trackliste in der Datenbank und die Dateinamen beim Datentyp MP3
+      wurden auch korrekt aktualisiert, aber nicht der Titel selbst. Bei
+      der Suche hat man daher immer noch die alte Track-Position vorgefunden.
+    - Ladefunktion für Cover im Editor ist nun implementiert
+    - Speicherfunktion für Cover im Editor ist nun implementiert
+	- Normalisierung Dateinamen: Hochkommata werden weggefiltert
+	- Wenn Name der Version "Single" ist, wird dieser nicht mehr dem Titel im
+	  ID3-Tag hinzugefügt
+	- Refaktorierung: Es gibt jetzt eine zentrale Funktion zum Einlesen der
+	  MP3-Daten
+	- Windows: Qt verwendet ein Plugin zum lesen von JPEGs. Dieses wurde vom
+	  Installer nicht mit installiert. Dadurch wurden keine Plattencover ange-
+	  zeigt
+	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das Kontext-
+	  menü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert werden	
+	- Suchliste: Die Bewertung eines Titels kann nun ebenfalls über das
+	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert
+	  werden
+	- Suchliste: Der Button "Neuer Track" funktioniert wieder
+	- Suche unterstützt nun auch Suche nach Plattenlabel
+	- Definierbare RegularExpressions für die Titelerkennung über die
+	  Zwischenablage
+	- Suchlisten haben jetzt eine Spalte "selected", mit der man eine Vor-
+	  auswahl der Tracks treffen kann, die man als nächstes kaufen möchte.
+	- Suchliste hat jetzt eine Statuszeile am unteren Rand, die die Anzahl
+	  Tracks und die Anzahl aktuell markierter Tracks anzeigt.
+	- In der Suchliste können jetzt mehrere Tracks auf einmal gelöscht werden,
+	  wobei eine Sicherheitsabfrage eingebaut wurde.
+	- Länge des Dateinamens kann jetzt zuzsätzlich auch auf 255 Zeichen
+	  beschränkt werden (FAT32-kompatibel)
+	- Das Zeichen "ß" wird im Dateinamen jetzt durch ein "ss" ersetzt, da "ß"
+	  mit einigen Dateisystemen Probleme bereitet hat
+	- Beim Massenimport wird das Erscheinungsjahr jetzt auf das aktuelle
+	  Jahr gesetzt, sofern in der MP3-Datei keins vermerkt war.
+	- Im Editor wird das Erscheinungsjahr jetzt auf das aktuelle Jahr gesetzt,
+	  sofern vorher noch keins gespeichert war.
+	- Problem beim Umgang mit MP3-Dateinamen gefixt, bei denen ein Prozent-
+	  zeichen enthalten ist.
+	- Format der XSPF-Playlisten korrigiert
+	- Kommandozeilenparameter "-c" hinzugefügt, womit eine alternative
+	  Konfigurationsdatei angegeben werden kann (nützlich zum Debuggen)
+	- Bugfix: Absturz beim ID3-Tag-Import von leeren MP3-Files behoben.
+	- Registrierungsinterface deaktiviert
+	  
+Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
+	- Umbenennung des Binaries von WinMusik3 in WinMusik
+    - Filter für Schnellsuche über Zwischenablage
+    - Suchbuttons für Amazon, Google, Beatport und Soundcloud
+    - Bugfix beim Einlesen von MP3-Covern
+    - Fehlende DLL "libstdc++-6.dll" im Windows-Setup ergänzt
+    - Beim Anlegen eines neuen Titels in einer Suchliste, wird geprüft,
+      ob dieser in der Datenbank vorhanden ist
+    - Inhalt der Zwischenablage wird automatisch in den offenen
+      Suchlisten gesucht und der erste passende Track wird angezeigt
+    - Titel in der Suchliste können bewertet werden (Rating)
+    - Bugfix: Memory-Leak in DataOimp::Export gefixt
+    - Bugfix: Memory-Leak in CTitleStore::Clear gefixt
+    - Änderung ID3-Tags: Die Version wird nun dem Titel in Klammern
+      hinzugefügt. Dies scheint gängige Praxis zu sein. Die Version wird
+      folglich auch nicht mehr in der Bemerkung gespeichert.
+    - Editor-Trackliste: Doppelklick auf Cover öffnet die Cover-Ansicht.
+      Ist die Cover-Ansicht schon offen, genügt auch ein normaler Click.
+    - Beim Öffnen des Editors ist der Edit-Bereich nun per Default nicht
+      mehr sichtbar. Er kann per Button ein und ausgeschaltet werden.
+    
+Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
+	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
+	  dadurch in anderen Dialogen wiederverwendet werden
+	- Bugfix: Absturz behoben, der in der Suche auftrat, wenn die
+	  Zwischenablage beobachtet wurde und eine Grafik in die Zwischenablage
+	  kopiert wurde.
+	- Suchlisten eingeführt
+	- Massenimport eingeführt
+	- Track editieren ist jetzt in einem eigenen Widget untergebracht
+	- Titelbewertung wird jetzt in der Trackliste des Editors angezeigt und
+	  kann dort auch direkt per Mausklick geändert werden
+	- Titelbewertung wird im Suchergebnis angezeigt	
+
+Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)
+	- Im Suchergebnis wird jetzt die Gesamtlänge aller gefundenen
+	  Tracks angezeigt
+	- Beim Erfassen von Titeln wird beim neuen Track das Tags-Eingabefeld
+	  nicht mehr gelöscht
+	- Bugfix in der Suchfunktion. Bei Angabe mehrerer Suchwörter kam es
+	  vor, dass ein Ergebnis angezeigt wurde, auch wenn eins der Wörter
+	  nicht gefunden wurde
+	- Bugfix: Unter Windows funktioniert Drag- und Drop nun auch bei
+	  Dateien mit Umlauten oder anderen Nicht-US-ASCII-Zeichen.
+	- Aufbau der Suchbäume beim Start um etwa 75% beschleunigt.
+
+Version 3.0.3, Releasedate: 28.11.2010	(CVS-Tag: REL_3_0_3)
+	- Debian-Pakete korrigiert, zwei überflüssige Dateien wurden im
+	  Root-Verzeichnis installiert
+	- Es können jetzt zusätzliche Suchtags im Titel gespeichert werden
+	- Ausführliche Suche nach Suchtags, Versionen und Genre
+	- In den Schnellsuche kann man nun auswählen, welche Datenfelder bei
+	  der Suche berücksichtigt werden sollen.
+	- "Sternchen-Wildcard" in Suchworten ist nun erlaubt
+	- Suchergenis kann limitiert werden
+	- Suchergebnis per Zufall
+	- Im Menü öffnet ein Klick auf ein Tonträgersymbol bei gedrückter
+	  Strg-Taste nun eine Liste mit allen Tonträgern dieses Typs
+	- Im Editor öffnet die Taste F4 ebenfalls die Liste aller Tonträger,
+	  wenn sich der Cursor im Index-Feld befindet
+	- Ein Doppelklick in der Tonträgerliste auf einen Tonträger öffnet
+	  das gewohnte Editor-Fenster
+	- Im Kontext-Menü des Suchergebnisses funktioniert jetzt der Menüpunkt
+	  "Titel editieren"
+
+Version 3.0.2, Releasedate: 17.10.2010	(CVS-Tag: REL_3_0_2)
+	- Lokalisierung überabeitet: Es gab Probleme bei der Übersetzung von
+	  deutschen Default-Texten mit Umlauten, daher wurden alle Default-Text
+	  in Englisch übersetzt.
+	- Englische Doku begonnen
+
+Version 3.0.1, Releasedate: 16.10.2010	(CVS-Tag: REL_3_0_1)
+	- Update auf PPL 6.4.3
+	- Dokumentation angepasst auf neue Versionen, Download-Links angepasst auf Sourceforge.net
+	- MP3-Pfad kann nun für jeden Datenträger festgelegt werden
+	- Unter der Trackliste im Editor wird nun eine Summenzeile angezeigt,
+	  die bei MP3-File auch die Dateigröße aufführt
+	- Beim Einlesen von ID3-Tags mit F6 wird nun automatisch auch eine Suche
+	  nach dem Titel gestartet. TODO: Das sollte konfigurierbar sein
+	- Drückt man beim Editieren eines Tracks "Strg & F6", wird der Track gelöscht
+	  und wie bei F6 das nächste File eingelesen
+	- Länge von MP3-Dateien mit variabler Bitrate wird nun korrekt berechnet
+	- Unterstützung von MP3-Cover und ID3v2 APIC-Tag
+	- Framegröße bei ID3v2-Tags Version 2.3 wird nun korrekt interpretiert.
+
+Version 3.0.0, Releasedate: 04.12.2009	(CVS-Tag: REL_3_0_0)
+	- Kompletter Rewrite des Programmcodes in C++
+	- Open Source unter GPL Lizenz (siehe http://www.gnu.de/documents/gpl.de.html)
+	- Sourcecode teilweise dokumentiert
+	- Verwendung von Patrick's Programming Library PPL, Version 6.3.0 als
+	  Basis (siehe http://www.pfp.de/ppl/)
+	- Verwendung von Qt als Oberfläche (siehe http://www.qtsoftware.com)
+	- Läuft unter Windows (XP, Vista, Windows 7) und Unix (Linux, FreeBSD)
+	- Bei einem Titel können nun zusätzliche Daten gespeichert werden:
+		- Album
+		- Bitrate
+		- Label
+	- Angabe der Bewertung ist nun ein formales Feld mit einer Skala von
+	  1-6 Sternen, kein Freitext mehr. Der Wert kann dadurch aber nicht
+	  von WinMusik 2 importiert werden.
+	- Angabe der Qualität ist ebenfalls ein formales Feld und kein
+	  Freitext mehr. Auch hier ist daher der Import von WinMusik 2
+	  nicht möglich
+	- Daten werden nun im UTF-8-Format gespeichert statt ISO-8859-1
+	  bzw. dem nativen Windows-Format.
+	- GUI unterstützt Unicode
+	- Sämtliche Daten werden in einer einzigen Datei gespeichert
+	- Jeder Datensatz hat eine Format-Version. Bei Änderungen im Format
+	  müssen die vorhandenen Datensätze in der Datenbank nicht angepaßt
+	  werden.
+	- Komplette Übersetzung in Deutsch und Englisch, mit der Möglichkeit
+	  weitere Sprachen einzubauen (Qt-Linguist)
+	- Setup-Programm "Inno Setup" aktualisiert auf Version 5.3.1-beta mit
+	  Unicode unterstützung. Siehe http://www.jrsoftware.org/
+	- Speichern der Original-Daten (ID3v1, ID3v2 und Dateiname) beim Import
+	  von MP3-Dateien
+	- Anzeigemöglichkeit der Originaldaten (Popup)
+	- MP3-Dateinamen werden nun auf Wunsch automatisch "normalisiert"
+	- xspf Playlist-Export
+	- Context-abhängige Menüs mit rechter Maustaste im Editor
+	  und in der Suche
+	- Multiple Editor- und Suchfenster
+	- Ausdrucke können nun auch als PDF oder Postscript gespeichert werden
+	- Interface zum Registrieren von WinMusik
+	- Dupe-Checker: Bei Eingabe eines neuen Titels wird geprüft, ob
+	  der gleiche Titel in der gleichen Version schon in der Datenbank
+	  vorhanden ist
+	- Allgemeiner Tracklist-Ausdruck eines Tonträgers als Tabelle
+	- Interpreten-Abkürzungen (Shortcuts) können nun beliebig angelegt,
+	  verändert und gelöscht werden.
+	- CoverPrinter integriert
+
+*/
