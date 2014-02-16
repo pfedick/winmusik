@@ -447,7 +447,7 @@
         <item>
          <widget class="QToolButton" name="searchlistButton">
           <property name="toolTip">
-           <string>Manage Playlists</string>
+           <string>Manage Searchlists</string>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
