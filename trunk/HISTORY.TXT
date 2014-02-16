@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.2.0, Releasedate: ??.??.2014	(SVN-Tag: REL_3_2_0)
+Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
       In der normalen Ansicht werden nur Informationen über Interpret, Titel,
       Version, Genre, Länge und Bewertung angezeigt. Die DJ-Ansicht zeigt
