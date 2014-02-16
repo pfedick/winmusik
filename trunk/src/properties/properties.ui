@@ -514,6 +514,9 @@
               <property name="text">
                <string>(Attention: 3rd party tags, including private tags will be lost!)</string>
               </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
            </layout>
