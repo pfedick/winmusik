@@ -2021,6 +2021,14 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						Ti.BPM=tinfo.Ti.BPM;
 						modified=true;
 					}
+					if (tinfo.Ti.Bitrate>0 && tinfo.Ti.Bitrate!=Ti.Bitrate) {
+						Ti.Bitrate=tinfo.Ti.Bitrate;
+						modified=true;
+					}
+					if (tinfo.Ti.Length>0 && tinfo.Ti.Length!=Ti.Length) {
+						Ti.Length=tinfo.Ti.Length;
+						modified=true;
+					}
 					if (modified) {
 						if (!wm->TitleStore.Put(&Ti)) {
 							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
