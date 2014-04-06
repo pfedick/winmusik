@@ -975,17 +975,31 @@ QString CWmClient::Unknown()
 }
 
 
-ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl6::CString CWmClient::GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page)
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Search for audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
-	ppl6::CString Path, Pattern;
 	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-
+	ppl6::CString Path;
 	if (DevicePath.IsEmpty()) return Path;
 	Path=DevicePath;
 	Path.RTrim("/");
 	Path.RTrim("\\");
 	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
+
+	DataDevice data;
+	if (LoadDevice(DeviceType,DeviceId, &data)) {
+		if (data.Pages>1) {
+			Path.Concatf("%01u/",Page);
+		}
+	}
+	return Path;
+}
+
+ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+{
+	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Search for audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
+	ppl6::CString Pattern;
+	ppl6::CString Path=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Path.IsEmpty()) return Path;
 	Pattern.Setf("%03u-*.(mp3|aiff)",Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *de;
@@ -1021,14 +1035,9 @@ ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","StatAudioFile",__FILE__,__LINE__,"Search for audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
 	ppl6::CDirEntry ret;
-	ppl6::CString Path, Pattern;
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-
-	if (DevicePath.IsEmpty()) return ret;
-	Path=DevicePath;
-	Path.RTrim("/");
-	Path.RTrim("\\");
-	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
+	ppl6::CString Pattern;
+	ppl6::CString Path=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Path.IsEmpty()) return ret;
 	Pattern.Setf("%03u-*.(mp3|aiff)",Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *de;
@@ -1063,14 +1072,10 @@ ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId
 ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Find next audio file: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
-	ppl6::CString Path, Filename, Pattern;
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-
-	if (DevicePath.IsEmpty()) return Path;
-	Path=DevicePath;
-	Path.RTrim("/");
-	Path.RTrim("\\");
-	Path.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
+	ppl6::CString Filename;
+	ppl6::CString Pattern;
+	ppl6::CString Path=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Path.IsEmpty()) return Path;
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry *entry;
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"CWMClient","NextAudioFile",__FILE__,__LINE__,"Öffne Verzeichnis: %s",(const char*)Path);
@@ -1111,13 +1116,8 @@ ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, 
 ppl6::CString CWmClient::NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle &Ti, const ppl6::CString &Suffix)
 {
 	// TODO: Übergabeparameter für Audio-Format oder Suffix
-	ppl6::CString Filename;
-	ppl6::CString MP3Path=conf.DevicePath[DeviceType];
-	if (MP3Path.IsEmpty()) return Filename;
-	Filename=MP3Path;
-	Filename.RTrim("/");
-	Filename.RTrim("\\");
-	Filename.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId,Track);
+	ppl6::CString Filename=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Filename.IsEmpty()) return Filename;
 	ppl6::CString Tmp;
 	Tmp.Setf("%03u-",Track);
 	if (Ti.Artist) Tmp+=Ti.Artist;
@@ -1267,7 +1267,7 @@ int CWmClient::SaveOriginalAudioInfo(ppl6::CString &File, DataOimp &oimp)
 
 int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList *list, DataDevice *device)
 {
-	ppl6::CString Path, Filename, Tmp, Minuten, FilePath;
+	ppl6::CString Filename, Tmp, Minuten, FilePath;
 	DataTrack *track;
 	DataTitle *Ti;
 	if (!DeviceId) {
@@ -1278,17 +1278,13 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 		ppl6::SetError(20041);
 		return 0;
 	}
-	ppl6::CString MP3Path=conf.DevicePath[7];
-	if (MP3Path.IsEmpty()) {
+	ppl6::CString Path=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Path.IsEmpty()) {
 		ppl6::SetError(20042);
 		return 0;
 	}
-	Minuten=tr("min","Minutes in Tracklisting of Playlist");
-	Path=MP3Path;
-	Path.RTrim("/");
-	Path.RTrim("\\");
-	Path.Concatf("/%02u/%03u",(ppluint32)(DeviceId/100),DeviceId);
 
+	Minuten=tr("min","Minutes in Tracklisting of Playlist");
 
 	ppl6::CFile m3u;
 	if (!m3u.Openf("%s/000index.m3u","wb",(const char*)Path)) return 0;
@@ -1455,15 +1451,11 @@ int CWmClient::PlayFile(const ppl6::CString &Filename)
 int CWmClient::TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Datei löschen: DeviceId=%u, Page=%u, Track=%u",DeviceId,Page,Track);
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-	if (DevicePath.IsEmpty()) {
+	ppl6::CString Path=GetAudioPath(DeviceType,DeviceId,Page);
+	if (Path.IsEmpty()) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,6,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Kein MP3-Pfad angegeben");
 		return 0;
 	}
-	ppl6::CString Path;
-	Path=DevicePath;
-	Path.RTrim("/");
-	Path.RTrim("\\");
 	Path.Concatf("/Trash");
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,9,"CWMClient","TrashAudioFile",__FILE__,__LINE__,"Pfad für gelöschte Dateien: %s",(const char*)Path);
 	if (!ppl6::CFile::Exists(Path)) {

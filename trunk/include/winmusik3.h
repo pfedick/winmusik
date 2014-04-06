@@ -671,6 +671,7 @@ class CWmClient
 		void SaveGeometry(const char *name, QByteArray Geometry);
 		void ReloadTranslation();
 		QString Unknown();
+		ppl6::CString GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page);
 		ppl6::CString GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 		ppl6::CDirEntry StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 

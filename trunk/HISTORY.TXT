@@ -7,7 +7,9 @@ Version 3.2.1
       Bitrate und Tracklänge synchronisiert
     - Beim Anlegen eines Tonträgers wird automatisch die Verzeichnisstruktur
       angelegt, falls noch nicht vorhanden
-      
+    - Alle Tonträger unterstützen nun mehrere Seiten bzw. mehrere CDs.
+      Die Verzeichnisstruktur erhält in diesem Fall noch eine weitere Ebene
+      für die Seite.
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
