@@ -235,6 +235,12 @@ bool EditDevice::Save()
 
 	if (wm->DeviceStore.Put(&Device)) {
 		DeviceId=Device.DeviceId;
+		for (int i=1;i<=Device.Pages;i++) {
+			ppl6::CString Path=wm->GetAudioPath(DeviceType,DeviceId,i);
+			if (Path.NotEmpty()) {
+				ppl6::MkDir(Path,1);
+			}
+		}
 		return true;
 	}
 	return false;
