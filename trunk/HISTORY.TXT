@@ -5,6 +5,9 @@
 Version 3.2.1
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
       Bitrate und Tracklänge synchronisiert
+    - Beim Anlegen eines Tonträgers wird automatisch die Verzeichnisstruktur
+      angelegt, falls noch nicht vorhanden
+      
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
