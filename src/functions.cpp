@@ -452,7 +452,7 @@ bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
 		QByteArray bytes;
 		QBuffer buffer(&bytes);
 		buffer.open(QIODevice::WriteOnly);
-		Cover.save(&buffer, "JPEG",70);
+		Cover.save(&buffer, "JPEG",wm_main->conf.JpegQualityCover);
 		ppl6::CBinary bin;
 		bin.Copy(bytes.data(),bytes.size());
 		Tag.SetPicture(3,bin,"image/jpeg");

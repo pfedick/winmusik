@@ -75,6 +75,10 @@ Config::Config()
 	customMusicKeyName=tr("custom format");
 	for (int i=0;i<26;i++) customMusicKey[i]=DataTitle::keyName(i,musicKeyTypeMusicalSharps);
 	playlistView=0;
+
+	JpegQualityCover=80;
+	JpegQualityPreview=80;
+
 }
 
 int Config::setConfigFile(const ppl6::CString &filename)
@@ -146,6 +150,9 @@ int Config::Save()
 	c.Add("mp3","saveoriginalmp3tagsonautoimport",bSaveOriginalMp3TagsOnAutoImport);
 	c.Add("mp3","retryintervall",TagSaverRetryIntervall);
 	c.Add("mp3","maxfilenamelength",MaxFilenameLength);
+
+	c.Add("mp3","JpegQualityCover",JpegQualityCover);
+	c.Add("mp3","JpegQualityPreview",JpegQualityPreview);
 
 	ppl6::CString Key;
 	for (int i=1;i<MAX_DEVICE_TYPES;i++) {
@@ -261,6 +268,13 @@ int Config::Load()
 	TagSaverRetryIntervall=c.GetInt("mp3","retryintervall",60);
 	MaxFilenameLength=c.GetInt("mp3","maxfilenamelength",64);
 	if (MaxFilenameLength<64) MaxFilenameLength=64;
+
+	JpegQualityCover=c.GetInt("mp3","JpegQualityCover",80);
+	JpegQualityPreview=c.GetInt("mp3","JpegQualityPreview",80);
+	if (JpegQualityCover>100) JpegQualityCover=100;
+	if (JpegQualityPreview>100) JpegQualityPreview=100;
+	if (JpegQualityCover<30) JpegQualityCover=30;
+	if (JpegQualityPreview<30) JpegQualityPreview=30;
 
 	bEnableDebug=c.GetBool("debug","enabledebug",false);
 	Logfile=c.Get("debug","logfile","");
