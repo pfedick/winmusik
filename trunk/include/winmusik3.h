@@ -336,6 +336,9 @@ class Config
 		bool			bAutomaticEditSearch;
 		int				MaxFilenameLength;
 
+		int				JpegQualityCover;
+		int				JpegQualityPreview;
+
 		// Server
 		bool			bserverEnabled;
 		bool			bserverEnableSSL;

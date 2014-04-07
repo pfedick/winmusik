@@ -89,6 +89,9 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	else if (c->MaxFilenameLength<=255) ui.maxFilenameLength->setCurrentIndex(3);
 	else ui.maxFilenameLength->setCurrentIndex(4);
 
+	ui.JpegQualityCover->setValue(c->JpegQualityCover);
+	ui.JpegQualityPreview->setValue(c->JpegQualityPreview);
+
 
 	// User
 	ui.name->setText(c->UserName);
@@ -347,6 +350,8 @@ int Properties::Save()
 	else if (ui.maxFilenameLength->currentIndex()==2) c->MaxFilenameLength=207;
 	else if (ui.maxFilenameLength->currentIndex()==3) c->MaxFilenameLength=255;
 	else c->MaxFilenameLength=1024;
+	c->JpegQualityCover=ui.JpegQualityCover->value();
+	c->JpegQualityPreview=ui.JpegQualityPreview->value();
 
 	// User
 	Tmp=c->Locale;
@@ -743,4 +748,22 @@ void Properties::on_regexpTable_itemDoubleClicked ( QTreeWidgetItem * item, int 
 {
 	current_regexp_item=item;
 	on_regexpEdit_clicked();
+}
+
+
+void Properties::on_JpegQualityPreview_valueChanged (int value)
+{
+	Change();
+	ppl6::CString Tmp;
+	Tmp.Setf("%d",value);
+	ui.JpegQualityPreviewValue->setText(Tmp);
+}
+
+void Properties::on_JpegQualityCover_valueChanged (int value)
+{
+	Change();
+	ppl6::CString Tmp;
+	Tmp.Setf("%d",value);
+	ui.JpegQualityCoverValue->setText(Tmp);
+
 }

@@ -10,6 +10,8 @@ Version 3.2.1
     - Alle Tonträger unterstützen nun mehrere Seiten bzw. mehrere CDs.
       Die Verzeichnisstruktur erhält in diesem Fall noch eine weitere Ebene
       für die Seite.
+    - Komprimierungsqualität für Cover und Preview-Icon wurde von 70 auf 80
+      verbessert und ist nun über die Einstellungen frei konfigurierbar.
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".

@@ -122,6 +122,9 @@ private slots:
     void on_readID3v1_toggled(bool ) {Change();};
     void on_retryIntervall_valueChanged(const QString &) {Change();};
     void on_maxFilenameLength_currentIndexChanged(int ) {Change();};
+    void on_JpegQualityPreview_valueChanged (int value);
+    void on_JpegQualityCover_valueChanged (int value);
+
 
     // User
     void on_name_textChanged(const QString &) {Change();};

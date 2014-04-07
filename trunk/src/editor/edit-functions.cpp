@@ -629,7 +629,7 @@ void Edit::SaveTrack()
 				QByteArray bytes;
 				QBuffer buffer(&bytes);
 				buffer.open(QIODevice::WriteOnly);
-				icon.save(&buffer, "JPEG",70);
+				icon.save(&buffer, "JPEG",wm->conf.JpegQualityPreview);
 				Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 			}
 		}
@@ -859,18 +859,7 @@ void Edit::UpdateCover()
 	if (wm_main->conf.bWriteID3Tags==true) {
 		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 		if (Path.NotEmpty()) {
-			QPixmap pixmap;
-			QByteArray bytes;
-			QBuffer buffer(&bytes);
-			buffer.open(QIODevice::WriteOnly);
-			Cover.save(&buffer, "JPEG",70);
-			ppl6::CBinary bin;
-			bin.Copy(bytes.data(),bytes.size());
-
-			ppl6::CID3Tag Tag;
-			Tag.Load(&Path);
-			Tag.SetPicture(3,bin,"image/jpeg");
-			Tag.Save();
+			saveCover(Path,Cover);
 		}
 	}
 }

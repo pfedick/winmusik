@@ -365,6 +365,122 @@
             </property>
            </widget>
           </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_19">
+            <property name="topMargin">
+             <number>9</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_60">
+              <property name="text">
+               <string>Cover icon quality:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_63">
+              <property name="text">
+               <string>low</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="JpegQualityPreview">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>30</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="value">
+               <number>80</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBelow</enum>
+              </property>
+              <property name="tickInterval">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_64">
+              <property name="text">
+               <string>high</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="JpegQualityPreviewValue">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Sunken</enum>
+              </property>
+              <property name="text">
+               <string>80</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_15">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>
@@ -394,6 +510,58 @@
             <property name="verticalSpacing">
              <number>0</number>
             </property>
+            <item row="4" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <widget class="QComboBox" name="maxFilenameLength">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>64 Characters (Joliet compatible)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>100 Characters (Joliet compatible)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>207 Characters (ISO 9660:1999 compatible)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>255 Characters (FAT32 compatible)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>unlimited</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_11">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
             <item row="2" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
@@ -519,64 +687,109 @@
               </property>
              </widget>
             </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_14">
-            <item>
+            <item row="4" column="0">
              <widget class="QLabel" name="label_22">
               <property name="text">
                <string>Maximum Filename length:</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QComboBox" name="maxFilenameLength">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_59">
+              <property name="text">
+               <string>Cover picture quality:</string>
               </property>
-              <item>
-               <property name="text">
-                <string>64 Characters (Joliet compatible)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>100 Characters (Joliet compatible)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>207 Characters (ISO 9660:1999 compatible)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>255 Characters (FAT32 compatible)</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>unlimited</string>
-               </property>
-              </item>
              </widget>
             </item>
-            <item>
-             <spacer name="horizontalSpacer_11">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+            <item row="5" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <item>
+               <widget class="QLabel" name="label_61">
+                <property name="text">
+                 <string>low</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="JpegQualityCover">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <number>30</number>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+                <property name="value">
+                 <number>80</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="tickPosition">
+                 <enum>QSlider::TicksBelow</enum>
+                </property>
+                <property name="tickInterval">
+                 <number>10</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_62">
+                <property name="text">
+                 <string>high</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="JpegQualityCoverValue">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Sunken</enum>
+                </property>
+                <property name="text">
+                 <string>80</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_14">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
