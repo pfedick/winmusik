@@ -13,6 +13,14 @@ Version 3.2.1
     - Komprimierungsqualität für Cover und Preview-Icon wurde von 70 auf 80
       verbessert und ist nun über die Einstellungen frei konfigurierbar.
     - Fehler beim Schreiben von ID3-Tags in AIFF-Files behoben
+    - Im Editor hat das Kontextmenü zwei neue Funktionen bekommen, wenn man
+      es mit rechtem Mausklick über einem Cover in der Trackliste öffnet:
+         1. Cover anzeigen
+         2. Cover für alle Tracks laden
+      Mit letzterer Funktion kann ein Cover aus einer Datei geladen werden,
+      welches dann für alle vorhandenen Tracks des Datenträgers verwendet
+      wird. Ideal beim Import von Alben, wo jeder Track das gleiche Cover
+      bekommt.
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
