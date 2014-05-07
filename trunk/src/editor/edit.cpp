@@ -1895,9 +1895,15 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	if (t!=NULL && (t->Flags&16)==0) m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
     	else if (t!=NULL && (t->Flags&16)==16) m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
     } else {
-    	a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
-    	m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
-    	m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+    	if (trackList->currentColumn()==TRACKLIST_COVER_ROW) {
+    		a=m->addAction (QIcon(),tr("Show cover","trackList Context Menue"),this,SLOT(on_contextShowCover_triggered()));
+    		m->addAction (QIcon(),tr("Load Cover for all Tracks","trackList Context Menue"),this,SLOT(on_contextLoadCoverAllTracks_triggered()));
+
+    	} else {
+    		a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
+    		m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
+    		m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+    	}
     	m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
@@ -2045,6 +2051,63 @@ void Edit::on_contextSynchronizeKeys_triggered()
 	UpdateTrackListing();
 }
 
+void Edit::on_contextShowCover_triggered()
+{
+	if (!currentTrackListItem) return;
+	on_trackList_itemDoubleClicked(currentTrackListItem,TRACKLIST_COVER_ROW);
+}
+
+void Edit::on_contextLoadCoverAllTracks_triggered()
+{
+	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
+	if (Dir.IsEmpty()) {
+		Dir=QDir::homePath();
+	}
+	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
+			Dir,
+			tr("Images (*.png *.bmp *.jpg)"));
+	if (newfile.isNull()) return;
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.Save();
+
+	QPixmap GlobalCover;
+
+	if (!GlobalCover.load(newfile)) {
+		QApplication::restoreOverrideCursor();
+		QMessageBox::critical(this,tr("Error: could not load Cover"),
+				tr("The specified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
+				);
+		return;
+	}
+	QPixmap icon=GlobalCover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+	QByteArray bytes;
+	QBuffer buffer(&bytes);
+	buffer.open(QIODevice::WriteOnly);
+	icon.save(&buffer, "JPEG",wm->conf.JpegQualityPreview);
+	//Ti.CoverPreview.Copy(bytes.data(),bytes.size());
+
+	for (int i=TrackList->GetMin();i<=TrackList->GetMax();i++) {
+		DataTrack track;
+		if (TrackList->GetCopy(i,&track)) {
+			DataTitle *ti=wm->GetTitle(track.TitleId);
+			if (ti) {
+				DataTitle Title;
+				Title.CopyFrom(ti);
+				ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,i);
+				saveCover(Path,GlobalCover);
+				Title.CoverPreview.Copy(bytes.data(),bytes.size());
+				if (!wm->TitleStore.Put(&Title)) {
+					wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+					return;
+				}
+			}
+		}
+	}
+	UpdateTrackListing();
+	QApplication::restoreOverrideCursor();
+}
 
 
 void Edit::on_contextFindMoreVersions_triggered()
