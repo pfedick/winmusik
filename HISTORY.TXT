@@ -21,6 +21,7 @@ Version 3.2.1
       welches dann für alle vorhandenen Tracks des Datenträgers verwendet
       wird. Ideal beim Import von Alben, wo jeder Track das gleiche Cover
       bekommt.
+    - Playlist: SelectBox für die Tonart ist jetzt aktiviert 
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".

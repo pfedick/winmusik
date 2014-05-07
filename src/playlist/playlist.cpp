@@ -192,7 +192,7 @@ void Playlist::createToolbar()
 void Playlist::createStatusBar()
 {
 	statusbar=new PlaylistStatusBar;
-	statusbar->setMusicKeySelectionEnabled(false);
+	statusbar->setMusicKeySelectionEnabled(true);
 	ui.centralwidget->layout()->addWidget(statusbar);
 	//this->layout()->addWidget(statusbar);
 	//this->statusBar()->addWidget(statusbar);
