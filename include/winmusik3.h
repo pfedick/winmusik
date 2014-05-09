@@ -387,91 +387,36 @@ class CStringCounterItem : public ppl6::CTreeItem
 
 };
 
-class CTitleHashTree : public ppl6::CAVLTree
-{
-	public:
-		virtual int	Compare(const void *value1, const void *value2) const
-		{
-			DataTitle *t1=(DataTitle*)value1;
-			DataTitle *t2=(DataTitle*)value2;
-			if (t2->TitleId<t1->TitleId) return -1;
-			if (t2->TitleId>t1->TitleId) return 1;
-			return 0;
-		}
-
-		virtual int GetValue(const void *item, ppl6::CString &buffer) const
-		{
-			buffer.Setf("%u",((DataTitle*)item)->TitleId);
-			return 1;
-		}
-
-		virtual int DestroyValue(void *item) const
-		{
-			(void)item;
-			// Wir brauchen nichts zu löschen
-			return 1;
-		}
-};
-
-class CWord
-{
-	public:
-		ppl6::CString 	Word;
-		CTitleHashTree	Titles;
-};
-
-class CWordTree : public ppl6::CAVLTree
-{
-	public:
-		ppl6::CString Name;
-		virtual int	Compare(const void *value1, const void *value2) const
-		{
-			CWord *t1=(CWord*)value1;
-			CWord *t2=(CWord*)value2;
-			int ret=t1->Word.StrCmp(t2->Word);
-			if (ret>0) return 1;
-			if (ret<0) return -1;
-			return 0;
-		}
-		virtual int GetValue(const void *item, ppl6::CString &buffer) const
-		{
-			buffer.Setf(((CWord*)item)->Word);
-			return 1;
-		}
-		virtual int DestroyValue(void *item) const
-		{
-			delete ((CWord *)item);
-			return 1;
-		}
-
-
-};
-
 class CHashes : public ppl6::CThread
 {
 	friend class CWmClient;
+	public:
+		typedef std::set<ppluint32> TitleTree;
 	private:
+		typedef std::map<ppl6::CString,TitleTree >	WordTree;
+
 		ppl6::CMutex	Mutex;
 		CWmClient		*wm;
-		CWordTree		Artist;
-		CWordTree		Title;
-		CWordTree		Version;
-		CWordTree		Genre;
-		CWordTree		Tags;
-		CWordTree		Remarks;
-		CWordTree		Album;
-		CWordTree		Label;
+		WordTree		Artist;
+		WordTree		Title;
+		WordTree		Version;
+		WordTree		Genre;
+		WordTree		Tags;
+		WordTree		Remarks;
+		WordTree		Album;
+		WordTree		Label;
+		std::map<ppluint8,TitleTree>		MusicKeys;
 		//CWordTree		Global;
 		ppl6::CLog		*log;
 
 		int AddTitleInternal(ppluint32 TitleId, const DataTitle *title=NULL);
-		void AddWords(CWordTree &Tree, ppl6::CArray &words,const DataTitle *title);
-		void FindWords(CWordTree &Tree, ppl6::CArray &words, CTitleHashTree &Result);
-		void FindSingleWord(CWordTree &Tree, const ppl6::CString &Word, CTitleHashTree &Result);
-		void RemoveWords(CWordTree &Tree, ppl6::CArray &words,const DataTitle *title);
-		void Union(CTitleHashTree &Result, CTitleHashTree &Tree1,CTitleHashTree &Tree2);
-		void Copy(CTitleHashTree &Result, CTitleHashTree &src);
-		void Add(CTitleHashTree &Result, CTitleHashTree &src);
+		void AddWords(WordTree &Tree, ppl6::CArray &words,const DataTitle *title);
+		void FindWords(const WordTree &Tree, ppl6::CArray &words, TitleTree &Result);
+		void FindSingleWord(const WordTree &Tree, const ppl6::CString &Word, TitleTree &Result);
+		void RemoveWords(WordTree &Tree, ppl6::CArray &words, const DataTitle *title);
+		void Union(TitleTree &Result, const TitleTree &Tree1, const TitleTree &Tree2);
+		void Copy(TitleTree &Result, const TitleTree &src);
+		void Add(TitleTree &Result, const TitleTree &src);
 	public:
 		enum SearchFlags {
 			SearchArtist=1,
@@ -494,9 +439,9 @@ class CHashes : public ppl6::CThread
 		int AddTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 		int RemoveTitle(ppluint32 TitleId, const DataTitle *title=NULL);
 
-		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, CTitleHashTree &Result);
-		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, const ppl6::CString &Label, CTitleHashTree &Result);
-		int FindGlobal(const ppl6::CString &Query, CTitleHashTree &Result, int Flags=SearchAll);
+		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, TitleTree &Result);
+		int Find(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version, const ppl6::CString &Genre, const ppl6::CString &Tags, const ppl6::CString &Label, TitleTree &Result);
+		int FindGlobal(const ppl6::CString &Query, TitleTree &Result, int Flags=SearchAll);
 		int CheckDupes(const ppl6::CString &Artist, const ppl6::CString &Title, ppluint32 Version, ppluint32 Ignore=0);
 
 };

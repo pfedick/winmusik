@@ -209,18 +209,18 @@ void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem *item)
 {
 	ppl6::CString Tmp;
 	// Titel in Datenbank suchen
-	CTitleHashTree Result;
+	CHashes::TitleTree Result;
 	int dupePresumption=0;
 	wm->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","","",Result);
-	if (Result.Num()>1) {
+	if (Result.size()>1) {
 		dupePresumption=100;
-	} else if (Result.Num()>0) {
+	} else if (Result.size()>0) {
 		dupePresumption=90;
 	} else {
 		wm->Hashes.Find(item->Track.Artist,item->Track.Title,Result);
-		if (Result.Num()>3) {
+		if (Result.size()>3) {
 			dupePresumption=70;
-		} else if (Result.Num()>0) {
+		} else if (Result.size()>0) {
 			dupePresumption=40;
 		}
 	}

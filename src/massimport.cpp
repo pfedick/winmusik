@@ -273,14 +273,12 @@ void MassImport::addTrack(const ppl6::CString Filename)
 }
 
 
-static void FilterResult(const CTitleHashTree &in, ppl6::CGenericList &out)
+static void FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out)
 {
-	ppl6::CAVLTree::Walker walk;
-	DataTitle *ti;
-	while ((ti=(DataTitle*)in.GetPrevious(walk))) {
-		if (ti->DeviceType==7) {
-			out.Add(ti);
-		}
+	CHashes::TitleTree::const_iterator it;
+	for (it=in.begin();it!=in.end();it++) {
+		DataTitle *ti=wm_main->GetTitle(*it);
+		if (ti->DeviceType==7) out.Add(ti);
 	}
 }
 
@@ -301,14 +299,14 @@ void MassImport::checkDupes(TreeItem *item)
 		item->import=false;
 	} else {
 		LocalDupeCheck.insert(Key);
-		CTitleHashTree Result;
+		CHashes::TitleTree Result;
 		ppl6::CGenericList list;
 		wm->Hashes.Find(item->info.Ti.Artist,item->info.Ti.Title,Version,"","","",Result);
 		FilterResult(Result,list);
 		if (list.Num()>1) {
 			item->dupePresumption=100;
 			item->import=false;
-		} else if (Result.Num()>0) {
+		} else if (Result.size()>0) {
 			item->dupePresumption=90;
 			item->import=false;
 		} else {
