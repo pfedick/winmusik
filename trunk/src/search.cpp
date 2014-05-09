@@ -224,9 +224,9 @@ void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title,
 
 	ppl6::CString Tmp;
 	ui.progressBar->setValue(0);
-	CTitleHashTree res;
+	CHashes::TitleTree res;
 	if (wm->Hashes.Find(Artist,Title,Version,Genre,Tags,Label,res)) {
-		Tmp.Setf("%u",res.Num());
+		Tmp.Setf("%zu",res.size());
 		ui.numTracks->setText(Tmp);
 	}
 	ui.progressBar->setValue(30);
@@ -346,11 +346,12 @@ void Search::DoSearch()
 }
 
 
-void Search::FilterResult(const CTitleHashTree &in, ppl6::CGenericList &out)
+void Search::FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out)
 {
-	ppl6::CAVLTree::Walker walk;
+	CHashes::TitleTree::const_iterator it;
 	DataTitle *ti;
-	while ((ti=(DataTitle*)in.GetPrevious(walk))) {
+	for (it=in.begin();it!=in.end();it++) {
+		ti=wm->GetTitle(*it);
 		if (ti->DeviceType<20 && AllowedDevices[ti->DeviceType]==1) {
 			out.Add(ti);
 		}
@@ -559,7 +560,7 @@ void Search::on_quicksearchButton_clicked()
 	ppl6::CString Tmp;
 	ppl6::CString Query=ui.query->text();
 	ui.progressBar->setValue(0);
-	CTitleHashTree res;
+	CHashes::TitleTree res;
 	int flags=0;
 	if (ui.searchArtist->isChecked()) flags|=CHashes::SearchArtist;
 	if (ui.searchTitle->isChecked()) flags|=CHashes::SearchTitle;
@@ -571,7 +572,7 @@ void Search::on_quicksearchButton_clicked()
 	if (ui.searchAlbum->isChecked()) flags|=CHashes::SearchAlbum;
 
 	if (wm->Hashes.FindGlobal(Query,res,flags)) {
-		Tmp.Setf("%u",res.Num());
+		Tmp.Setf("%zu",res.size());
 		ui.numTracks->setText(Tmp);
 	}
 	ui.progressBar->setValue(30);

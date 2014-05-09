@@ -410,7 +410,7 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 	// BPM, Key und EnergyLevel
 	Text.Setf("%d",(int)title->BPM);
 	item->setText(TRACKLIST_BPM_ROW,Text);
-	item->setText(TRACKLIST_KEY_ROW,ppl6::Trim(title->getKeyName(musicKeyDisplay)));
+	item->setText(TRACKLIST_KEY_ROW,title->getKeyName(musicKeyDisplay));
 	if ((title->Flags&16)) item->setTextColor(TRACKLIST_KEY_ROW,QColor(0,0,0));
 	else item->setTextColor(TRACKLIST_KEY_ROW,QColor(192,192,192));
 	Text.Setf("%d",(int)title->EnergyLevel);
