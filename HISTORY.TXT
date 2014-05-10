@@ -27,6 +27,8 @@ Version 3.2.1
       beschleunigt.
     - Bugfix: Dateien, die nur aus Nummern und Dateiendung bestehen, zum
       Beispiel 001.mp3 oder 123.aiff, werden wieder korrekt erkannt.
+    - Coverbild kann nun auch dann gespeichert werden, wenn die Audiodatei
+      noch keine ID3-Tags hat.
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
