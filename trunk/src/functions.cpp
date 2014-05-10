@@ -448,17 +448,16 @@ bool saveCover(const ppl6::CString &filename, const QPixmap &Cover)
 	if (filename.IsEmpty()) return false;
 	if (Cover.isNull()) return false;
 	ppl6::CID3Tag Tag;
-	if (Tag.Load(filename)) {
-		QByteArray bytes;
-		QBuffer buffer(&bytes);
-		buffer.open(QIODevice::WriteOnly);
-		Cover.save(&buffer, "JPEG",wm_main->conf.JpegQualityCover);
-		ppl6::CBinary bin;
-		bin.Copy(bytes.data(),bytes.size());
-		Tag.SetPicture(3,bin,"image/jpeg");
-		return Tag.Save();
-	}
-	return 0;
+	Tag.Load(filename);
+	// Fehler beim Laden wird ignoriert, es koennte eine Datei ohne ID3-Tags sein
+	QByteArray bytes;
+	QBuffer buffer(&bytes);
+	buffer.open(QIODevice::WriteOnly);
+	Cover.save(&buffer, "JPEG",wm_main->conf.JpegQualityCover);
+	ppl6::CBinary bin;
+	bin.Copy(bytes.data(),bytes.size());
+	Tag.SetPicture(3,bin,"image/jpeg");
+	return Tag.Save();
 }
 
 void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover)
