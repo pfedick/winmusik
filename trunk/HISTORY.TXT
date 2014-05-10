@@ -25,6 +25,8 @@ Version 3.2.1
     - Interne Suchbäume verwenden nun die Funktionen der Standard Template
       Library aus C++. Dadurch wurde das Laden und die Suchfunktion deutlich
       beschleunigt.
+    - Bugfix: Dateien, die nur aus Nummern und Dateiendung bestehen, zum
+      Beispiel 001.mp3 oder 123.aiff, werden wieder korrekt erkannt.
 
 Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - NEU: Erstellung von Playlists mit zwei Ansichten: "Normal" und "DJ".
