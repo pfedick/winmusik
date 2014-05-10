@@ -1011,8 +1011,8 @@ ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceI
 		}
 
 	}
-	Pattern.Setf("%03u.(mp3|aiff)",Track);
-	if ((de=Dir.GetFirstPattern(Pattern,true))) {
+	Pattern.Setf("/^%03u\\.(mp3|aiff)$/i8",Track);
+	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,3,"CWMClient","GetAudioFilename",__FILE__,__LINE__,"Gefunden: %s",(const char*)Path);
 		return Path;
