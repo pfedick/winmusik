@@ -43,6 +43,8 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QMimeData>
+#include <QDrag>
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -847,7 +849,7 @@ void Edit::handleDropEvent(QDropEvent *event)
 	if (!mime->hasUrls()) return;
 	QList<QUrl>	list=mime->urls ();
 	QUrl url=list.first();
-	QString file=url.encodedPath();
+	QString file=url.path(QUrl::FullyDecoded);
 	ppl6::CString f=file;
 	ppl6::CString path=wm->conf.DevicePath[DeviceType];
 	int p=f.Instr(path);
@@ -1337,7 +1339,7 @@ bool Edit::on_f5_CheckDupes(QObject *target)
 
 // *****************************************************************************************************
 // EVENT: F6 - MP3 ID3-Tag einlesen
-bool Edit::on_f6_Pressed(__unused__ QObject *target, int modifier)
+bool Edit::on_f6_Pressed(QObject *, int modifier)
 {
 	ppl6::CString Tmp;
 	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);

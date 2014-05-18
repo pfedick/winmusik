@@ -28,7 +28,7 @@
 #define SPLASHSCREEN_H
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_splashscreen.h"
 
 class SplashScreen : public QDialog, public CCallback

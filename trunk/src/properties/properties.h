@@ -28,7 +28,7 @@
 #define PROPERTIES_H
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_properties.h"
 
 

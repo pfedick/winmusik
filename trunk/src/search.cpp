@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QList>
 #include <QUrl>
+#include <QDrag>
 #include <QMimeData>
 #include <QMouseEvent>
 #include "../include/search.h"

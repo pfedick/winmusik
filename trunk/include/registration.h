@@ -28,7 +28,7 @@
 #define REGISTRATION_H
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_registration.h"
 
 class Registration : public QDialog

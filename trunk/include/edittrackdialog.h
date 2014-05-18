@@ -27,7 +27,7 @@
 #ifndef EDITTRACKDIALOG_H
 #define EDITTRACKDIALOG_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_edittrackdialog.h"
 #include "winmusik3.h"

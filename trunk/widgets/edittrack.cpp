@@ -627,7 +627,7 @@ void EditTrack::on_DupeTimer_update()
 	}
 }
 
-bool EditTrack::checkKeyPress(QObject *target, int key, int modifier)
+bool EditTrack::checkKeyPress(QObject *, int key, int modifier)
 /*!\brief Globale KeyPress Events behandeln
  *
  * Diese Funktion behandelt globale KeyPress Events, als Beispielsweise das Drücken der ESC-Taste,

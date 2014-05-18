@@ -1,7 +1,7 @@
 #ifndef FKEYS_H
 #define FKEYS_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_fkeys.h"
 
 class Fkeys : public QWidget

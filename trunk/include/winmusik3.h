@@ -47,9 +47,6 @@
 
 #include <ppl6.h>
 
-#ifndef __unused__
-#define __unused__ __attribute__ ((unused))
-#endif
 
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2014"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data

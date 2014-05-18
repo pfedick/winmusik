@@ -27,7 +27,7 @@
 #ifndef ASYNCHRONOUSMESSAGE_H
 #define ASYNCHRONOUSMESSAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_asynchronousMessage.h"
 #include "winmusik3.h"

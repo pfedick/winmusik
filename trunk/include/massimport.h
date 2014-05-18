@@ -27,7 +27,7 @@
 #ifndef MASSIMPORT_H
 #define MASSIMPORT_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_massimport.h"
 #include "winmusik3.h"

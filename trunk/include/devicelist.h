@@ -27,7 +27,7 @@
 #ifndef DEVICELIST_H
 #define DEVICELIST_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_devicelist.h"
 #include "winmusik3.h"
