@@ -70,11 +70,21 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.8.4\bin\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.8.4\bin\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.8.4\bin\QtXml4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\Qt\4.8.4\plugins\imageformats\qjpeg4.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\Qt\4.8.4\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5XmlPatterns.dll"; DestDir: "{app}"; Flags: ignoreversion;
+; Qt5WinExtras
+; Qt5MultimediaWidgets
+; Qt5OpenGL
+; Qt5Network
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
