@@ -70,6 +70,9 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -84,9 +87,10 @@ Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\Qt5XmlPatterns.dll"; DestDir: "{app}
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
+
+;Source: "C:\Qt\Qt5.2.1\5.2.1\mingw48_32\bin\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion;
+;Source: "C:\mingw\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+;Source: "C:\mingw\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 [Icons]
