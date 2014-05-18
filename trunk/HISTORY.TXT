@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.2.1
+Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
       Bitrate und Tracklänge synchronisiert
     - Beim Anlegen eines Tonträgers wird automatisch die Verzeichnisstruktur
