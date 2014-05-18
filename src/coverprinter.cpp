@@ -108,8 +108,8 @@ void CoverPrinter::on_loadcover_clicked()
 	     tr("Select cover"), wm->conf.CoverPath, tr("Grafik-Dateien (*.png *.jpg *.bmp *.gif *.tif)"));
 	ui.cover_file->setText(fileName);
 	if (fileName.isEmpty()) {
-		pix.load(NULL);
-		ui.cover->setPixmap(NULL);
+		pix=QPixmap();
+		ui.cover->setPixmap(pix);
 		return;
 	}
 	ppl6::CString s=ppl6::GetPath(fileName);

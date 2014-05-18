@@ -27,7 +27,7 @@
 #ifndef PLAYLISTEDIT_H
 #define PLAYLISTEDIT_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QTreeWidgetItem>
 #include "ui_playlistedit.h"
 #include "winmusik3.h"

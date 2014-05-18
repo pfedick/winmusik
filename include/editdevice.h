@@ -28,7 +28,7 @@
 
 #include "winmusik3.h"
 #include "tablecontrol.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QKeyEvent>
 #include "ui_editdevice.h"
 

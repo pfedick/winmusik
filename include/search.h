@@ -27,7 +27,7 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_search.h"
 #include "winmusik3.h"

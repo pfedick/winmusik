@@ -29,7 +29,7 @@
 #define UPDATER_H_
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QProgressDialog>
 #include <QTimer>
 #include "ui_updater.h"

@@ -28,7 +28,7 @@
 #define REGEXPEDIT_H
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_regexpedit.h"
 #include <QTimer>
 

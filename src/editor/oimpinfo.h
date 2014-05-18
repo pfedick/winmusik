@@ -27,7 +27,7 @@
 #ifndef OIMPINFO_H
 #define OIMPINFO_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_oimpinfo.h"
 #include "winmusik3.h"
 

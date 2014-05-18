@@ -27,7 +27,7 @@
 #ifndef MENUE_H
 #define MENUE_H
 #include "winmusik3.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_menue.h"
 #include <QTimer>
 

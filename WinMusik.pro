@@ -18,6 +18,8 @@ TEMPLATE = app
 TARGET = WinMusik
 QT += core \
     gui \
+    widgets \
+    printsupport \
     xml
 CONFIG += debug_and_release
 CONFIG(debug, debug|release) { 

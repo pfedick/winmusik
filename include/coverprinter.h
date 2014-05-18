@@ -27,7 +27,7 @@
 
 #define WITH_QT
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>

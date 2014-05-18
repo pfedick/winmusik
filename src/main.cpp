@@ -55,8 +55,9 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    // Deprecated in Qt5, Qt5 geht davon aus, dass der Sourcecode UTF-8 kodiert ist
+    //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     if (setlocale(LC_CTYPE,"")==NULL) {
 		printf ("setlocale fehlgeschlagen\n");
 		throw std::exception();

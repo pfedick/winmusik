@@ -1,7 +1,7 @@
 #ifndef COVERVIEWER_H
 #define COVERVIEWER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_coverviewer.h"
 #include "winmusik3.h"
 

@@ -1,7 +1,7 @@
 #ifndef EDITTRACK_H
 #define EDITTRACK_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_edittrack.h"
 #include "winmusik3.h"
 #include <ppl6-sound.h>

@@ -27,7 +27,7 @@
 #ifndef SEARCHLISTS_H
 #define SEARCHLISTS_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include "ui_searchlists.h"

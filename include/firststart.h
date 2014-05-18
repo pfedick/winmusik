@@ -29,7 +29,7 @@
 #include "winmusik3.h"
 #include "wm20import.h"
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_firststart.h"
 
 class FirstStart;

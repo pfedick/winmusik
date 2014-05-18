@@ -28,7 +28,7 @@
 #define PRINTDEVICEDIALOG_H
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_printdevicedialog.h"
 
 class PrintDeviceDialog : public QDialog

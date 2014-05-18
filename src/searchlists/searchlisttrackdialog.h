@@ -27,7 +27,7 @@
 #ifndef SEARCHLISTTRACKDIALOG_H
 #define SEARCHLISTTRACKDIALOG_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QTimer>
 #include "ui_searchlisttrackdialog.h"
 #include "winmusik3.h"

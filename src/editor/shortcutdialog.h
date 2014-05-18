@@ -28,7 +28,7 @@
 #define SHORTCUTDIALOG_H_
 
 #include "winmusik3.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_shortcutdialog.h"
 
 class ShortcutDialog : public QDialog

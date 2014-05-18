@@ -26,7 +26,7 @@
 #ifndef LANGSELECT_H
 #define LANGSELECT_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_langselect.h"
 
 class LangSelect : public QDialog

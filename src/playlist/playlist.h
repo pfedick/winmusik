@@ -27,7 +27,7 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <QTimer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

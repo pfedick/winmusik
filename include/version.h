@@ -8,7 +8,7 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define WM_VERSION	"3.2.1"
+#define WM_VERSION	"3.3.0"
 #define WM_RELEASEDATE	20140518
 
 

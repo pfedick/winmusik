@@ -29,7 +29,7 @@
 #include "winmusik3.h"
 #include <ppl6-sound.h>
 #include "tablecontrol.h"
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QRegExpValidator>
 #include <QKeyEvent>
 #include <QTreeWidget>
