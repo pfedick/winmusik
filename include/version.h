@@ -9,7 +9,7 @@
 #define VERSION_H_
 
 #define WM_VERSION	"3.2.1"
-#define WM_RELEASEDATE	20140510
+#define WM_RELEASEDATE	20140518
 
 
 #endif /* VERSION_H_ */
