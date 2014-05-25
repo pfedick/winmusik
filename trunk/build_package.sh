@@ -43,8 +43,8 @@ WORK=$MYPWD/tmp
 DISTFILES=$MYPWD/distfiles
 
 MAKE="make"
-QTVERSION=4.8.4
-QMAKE="qmake-qt4"
+QTVERSION=5.2.1
+QMAKE="qmake-qt5"
 QTDIR=""
 QMAKESPEC=""
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
@@ -119,6 +119,8 @@ identify_system()
 				PATH="/c/Qt/$QTVERSION/bin:$PATH"
 				QMAKE=qmake
 				;;
+			FreeBSD*)
+				QMAKE=/usr/local/lib/qt5/bin/qmake
 		esac
 	fi
 	
