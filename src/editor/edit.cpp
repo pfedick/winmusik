@@ -674,25 +674,20 @@ void Edit::UpdateFkeys()
 	t[11]=tr("shortcut");
 	t[12]=tr("original Tags");
 	t[13]=tr("dupes?");
-	t[14]=tr("playlist");
-	t[15]=tr("autoimport");
-	t[16]=tr("save all ID3");
-	t[17]=tr("list devices");
-	t[18]=tr("mass import");
 
 	switch (position) {
 		case 1:		// Device Index
 			ui.fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-1000.png",t[0]);
 			ui.fkeys->setFkey(2,":/fkeys/resources/fkeys/f-key-1002.png",t[1]);
-			ui.fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-2004.png",t[17]);
+			ui.fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-2004.png",tr("list devices"));
 			break;
 		case 2:		// Device Page
 			break;
 		case 3:		// Device Track
-			//if (DeviceType==7) SetFkey(ui.f6,":/fkeys/resources/fkeys/f-key-2006.png",t[15]);
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",t[16]);
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",t[18]);
-
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-2007.png",tr("synchronize Tag"));
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-2008.png",tr("import cover"));
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",tr("save all ID3"));
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",tr("mass import"));
 			break;
 		case 4:		// Interpret
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
@@ -732,7 +727,7 @@ void Edit::UpdateFkeys()
 	if (position>2) {
 		ui.fkeys->setFkey(11,":/fkeys/resources/fkeys/f-key-1011.png",t[5]);
 		if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
-			ui.fkeys->setFkey(10,":/fkeys/resources/fkeys/f-key-1010.png",t[14]);
+			ui.fkeys->setFkey(10,":/fkeys/resources/fkeys/f-key-1010.png",tr("playlist"));
 		}
 	}
 	if (position>3) {
@@ -945,9 +940,15 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		// *************************************************************************** F7
 	} else if (key==Qt::Key_F7 && position>3 && modifier==Qt::NoModifier) {
 		return on_f7_DeleteTrack();
+	} else if (key==Qt::Key_F7 && position==3 && modifier==Qt::NoModifier) {
+		on_contextSynchronizeKeys_triggered();
+		return true;
 		// *************************************************************************** F8
 	} else if (key==Qt::Key_F8 && position>3 && modifier==Qt::NoModifier) {
 		return on_f8_InsertTrack();
+	} else if (key==Qt::Key_F8 && position==3 && modifier==Qt::NoModifier) {
+		on_contextLoadCoverAllTracks_triggered();
+		return true;
 		// *************************************************************************** F9
 	} else if (key==Qt::Key_F9 && modifier==Qt::NoModifier && position>3 && Ti.ImportData>0) {
 		if (oimpInfo) {
@@ -1898,8 +1899,8 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	else if (t!=NULL && (t->Flags&16)==16) m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
     } else {
     	if (trackList->currentColumn()==TRACKLIST_COVER_ROW) {
-    		a=m->addAction (QIcon(),tr("Show cover","trackList Context Menue"),this,SLOT(on_contextShowCover_triggered()));
-    		m->addAction (QIcon(),tr("Load Cover for all Tracks","trackList Context Menue"),this,SLOT(on_contextLoadCoverAllTracks_triggered()));
+    		a=m->addAction (QIcon(":/icons/resources/view_cover.png"),tr("Show cover","trackList Context Menue"),this,SLOT(on_contextShowCover_triggered()));
+    		m->addAction (QIcon(":/icons/resources/load_cover.png"),tr("Load Cover for all Tracks","trackList Context Menue"),this,SLOT(on_contextLoadCoverAllTracks_triggered()));
 
     	} else {
     		a=m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));

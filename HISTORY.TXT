@@ -4,6 +4,9 @@
 
 Version 3.3.0
     - Update auf Qt5.2
+    - Icons für Cover laden, anzeigen und neue F-Keys
+    - Cover laden ist nun auch über F-Key möglich
+    - Tags synchronisieren ist nun auch über F-Key möglich
     
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
