@@ -133,6 +133,8 @@
     <file>resources/tr48x48-0015.png</file>
   </qresource>
   <qresource prefix="/fkeys">
+    <file>resources/fkeys/f-key-2007.png</file>
+    <file>resources/fkeys/f-key-2008.png</file>
     <file>resources/fkeys/f-key-2004.png</file>
     <file>resources/fkeys/f-key-2009.png</file>
     <file>resources/fkeys/f-key-0000.png</file>
@@ -168,6 +170,8 @@
     <file>resources/fkeys/f-key-3006.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/load_cover.png</file>
+    <file>resources/view_cover.png</file>
     <file>resources/cuetocut.png</file>
     <file>resources/cuein.png</file>
     <file>resources/cueload.png</file>
