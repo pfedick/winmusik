@@ -70,20 +70,22 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5XmlPatterns.dll"; DestDir: "{app}"; Flags: ignoreversion;
-; Qt5WinExtras
-; Qt5MultimediaWidgets
-; Qt5OpenGL
-; Qt5Network
+;;;Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5XmlPatterns.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icuin52.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icuuc52.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icudt52.dll"; DestDir: "{app}"; Flags: ignoreversion;
+
+;;;Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
+
+
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
