@@ -85,7 +85,7 @@ Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icudt52.dll"; DestDir: "{app}"; Flags
 
 ;;;Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
-
+Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\platforms\qwindows.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
