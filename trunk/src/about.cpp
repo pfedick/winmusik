@@ -66,8 +66,9 @@ About::About(QWidget *parent)
 	ui.libs->setTextFormat(Qt::RichText);
 	ui.libs->setText(Tmp);
 
-	Tmp=tr("WinMusik Version %v% vom %d%");
+	Tmp=tr("WinMusik Version %v% build %b% vom %d%");
 	Tmp.Replace("%v%",WM_VERSION);
+	Tmp.Replace("%b%",WM_SVN_REVISION);
 	DateFormat=tr("%d.%m.%Y");
 
 	int a,year,month,day;

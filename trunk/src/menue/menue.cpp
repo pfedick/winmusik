@@ -1,10 +1,10 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.5 $
- * $Date: 2010/11/28 16:06:16 $
- * $Id: menue.cpp,v 1.5 2010/11/28 16:06:16 pafe Exp $
+ * $Author$
+ * $Revision$
+ * $Date$
+ * $Id$
  *
  *
  * Copyright (c) 2010 Patrick Fedick
@@ -44,6 +44,11 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	QString Title=tr("WinMusik");
 	Title+=" ";
 	Title+=WM_VERSION;
+	Title+=" ";
+	Title+=tr("build");
+	Title+=" ";
+	Title+=WM_SVN_REVISION;
+
 	this->setWindowTitle(Title);
 	QByteArray r=wm->GetGeometry("menue");
 	this->restoreGeometry(r);
