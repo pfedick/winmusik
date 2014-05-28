@@ -5,12 +5,12 @@
  *      Author: patrick
  */
 
-#ifndef VERSION_H_
-#define VERSION_H_
+#ifndef WINMUSIK_VERSION_H_
+#define WINMUSIK_VERSION_H_
 
 #define WM_VERSION	"3.3.0"
 #define WM_SVN_REVISION	"0"
 #define WM_RELEASEDATE	20140518
 
 
-#endif /* VERSION_H_ */
+#endif /* WINMUSIK_VERSION_H_ */

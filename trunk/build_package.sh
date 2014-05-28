@@ -44,7 +44,7 @@ DISTFILES=$MYPWD/distfiles
 
 MAKE="make"
 QTVERSION=5.2.1
-QMAKE="qmake-qt5"
+QMAKE="qmake"
 QTDIR=""
 QMAKESPEC=""
 INNOSETUP=/c/Programme/Inno\ Setup\ 5/ISCC.exe
@@ -181,11 +181,12 @@ gather_sources()
 	fi
 	BUILDDATE=`date '+%Y%m%d'`
 	(
-		echo "#ifndef VERSION_H_"
-		echo "#define VERSION_H_"
+		echo "#ifndef WINMUSIK_VERSION_H_"
+		echo "#define WINMUSIK_VERSION_H_"
 		echo "#define WM_VERSION	\"$VERSION\""
+		echo "#define WM_SVN_REVISION	\"$REVISION\""
 		echo "#define WM_RELEASEDATE	$BUILDDATE"
-		echo "#endif /* VERSION_H_ */"
+		echo "#endif /* WINMUSIK_VERSION_H_ */"
 	) > $WINMUSIKDIR/include/version.h
 	cd $CUR
 }
@@ -699,7 +700,7 @@ build_mingw32()
 #################################################################################
 freebsd_dep ()
 {
-	NAME=`pkg_info | grep "^$1-" | awk '{print $1}'`
+	NAME=`pkg info | grep "^$1-" | awk '{print $1}'`
 	if [ $? -ne 0 ] ; then
 		exit 1
 	fi
