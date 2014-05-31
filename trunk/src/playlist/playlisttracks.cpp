@@ -241,7 +241,7 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		if (endPositionSec==0) endPositionSec=trackLength;
 		updateMixLength();
 	}
-
+	if (titleId==0) titleId=findTitleIdByFilename(File);
 	loadCoverPreview();
 }
 
