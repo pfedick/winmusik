@@ -265,7 +265,7 @@ class TrackInfo
 };
 
 bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int preferedId3Version=2);
-
+ppluint32 findTitleIdByFilename(const ppl6::CString &Filename);
 
 
 
