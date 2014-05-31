@@ -8,8 +8,10 @@ Version 3.3.0
     - Cover laden ist nun auch über F-Key möglich
     - Tags synchronisieren ist nun auch über F-Key möglich
     - Cover werden nun proportional korrekt dargestellt
-    - Drop in der Playlist erkennt jetzt alle WinMusik Datentypen, nicht
+    - Playlist: Drag und Drop erkennt jetzt alle WinMusik Datentypen, nicht
       nur MP3
+    - Playlist: Änderung des Titels wird als Änderung erkannt, Speicherbutton
+      wird aktiviert
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch

@@ -1440,3 +1440,8 @@ void Playlist::on_searchTriggered()
 	}
 
 }
+
+void Playlist::on_playlistName_textChanged ( const QString & )
+{
+	setChanged(true);
+}

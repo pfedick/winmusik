@@ -171,6 +171,9 @@ public slots:
 	void on_tracks_customContextMenuRequested ( const QPoint & pos );
 	void on_tracks_itemSelectionChanged ();
 
+
+	void on_playlistName_textChanged ( const QString & text );
+
 	void on_contextEditTrack_triggered();
 	void on_contextCopyTrack_triggered();
 	void on_contextPasteTrack_triggered();
