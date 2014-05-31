@@ -17,7 +17,7 @@ CoverViewer::~CoverViewer()
 
 void CoverViewer::setCover(const QPixmap &pix)
 {
-	ui.cover->setPixmap(pix);
+	ui.cover->setPixmap(pix.scaled(ui.cover->width(),ui.cover->height(),Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
 
 
