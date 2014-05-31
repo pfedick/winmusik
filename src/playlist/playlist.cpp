@@ -458,32 +458,14 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem)
 {
 //	printf ("Playlist::handleURLDrop\n");
-	ppl6::CString path=wm->conf.DevicePath[7];
+
 	for (int i=0;i<list.size();i++) {
 		QUrl url=list[i];
 		QString file=url.toLocalFile();
 		PlaylistItem *item=new PlaylistItem;
-		ppl6::CString f=file;
-		int p=f.Instr(path);
-		if (p>=0) {
-			f=f.Mid(p);
-			f.Replace(path,"");
-			if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
-				int myDeviceId=ppl6::atoi(f.GetMatch(1));
-				int myTrack=ppl6::atoi(f.GetMatch(2));
-				//printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
-				const DataTrack *tr=wm->GetTrack(7,myDeviceId,1,myTrack);
-				if (tr) {
-					if (!loadTrackFromDatabase(item,tr->TitleId)) {
-						delete item;
-						continue;
-					} else {
-						item->File=file;
-					}
-				}
-			}
-		}
-		if (item->titleId==0) loadTrackFromFile(item,file);
+		item->File=file;
+		ppluint32 titleId=findTitleIdByFilename(file);
+		if (titleId) loadTrackFromDatabase(item,titleId);
 		renderTrack(item);
 		setChanged(true);
 		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);

@@ -7,7 +7,9 @@ Version 3.3.0
     - Icons für Cover laden, anzeigen und neue F-Keys
     - Cover laden ist nun auch über F-Key möglich
     - Tags synchronisieren ist nun auch über F-Key möglich
-    
+    - Cover werden nun proportional korrekt dargestellt
+    - Drop in der Playlist erkennt jetzt alle WinMusik Datentypen, nicht
+      nur MP3
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch

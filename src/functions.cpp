@@ -303,6 +303,29 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 	return true;
 }
 
+ppluint32 findTitleIdByFilename(const ppl6::CString &Filename)
+{
+	for (int myDeviceId=0;myDeviceId<MAX_DEVICE_TYPES;myDeviceId++) {
+		ppl6::CString path=wm_main->conf.DevicePath[myDeviceId];
+		if (path.NotEmpty()) {
+			int p=Filename.Instr(path);
+			if (p>=0) {
+				ppl6::CString f=Filename.Mid(p);
+				f.Replace(path,"");
+				if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})[^0-9]+.*$/")) {
+					int myDeviceId=ppl6::atoi(f.GetMatch(1));
+					int myTrack=ppl6::atoi(f.GetMatch(2));
+					//printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
+					const DataTrack *tr=wm_main->GetTrack(7,myDeviceId,1,myTrack);
+					if (tr) {
+						return tr->TitleId;
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
 
 static int harms[24][6] = {
 		{1,3,23,2,0,0},			// 1:  G#m
