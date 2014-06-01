@@ -90,6 +90,7 @@ private:
     void FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out);
     void LimitResult(const ppl6::CGenericList &in, ppl6::CGenericList &out);
     void RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out, size_t num);
+    void SortResult(const ppl6::CGenericList &in, ppl6::CGenericList &out);
     void rateCurrentTrack(int value);
 
     void updateTrackListing();
