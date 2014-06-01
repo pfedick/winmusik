@@ -29,6 +29,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QThread>
 #include "ui_searchlistdialog.h"
 #include "winmusik3.h"
 #include "csearchlist.h"
@@ -44,6 +45,24 @@
 #define SL_COLUMN_DONE			8
 
 
+class DupeCheckThread : public QThread
+{
+	Q_OBJECT
+	private:
+		bool stop;
+		QTreeWidget *trackList;
+
+	public:
+		DupeCheckThread(QObject * parent = 0);
+		void setTracklist(QTreeWidget *trackList);
+		void run();
+		void stopThread();
+		void startThread();
+		int dupeCheckOnTrack(QTreeWidgetItem *item);
+
+	signals:
+		void updateItem(QTreeWidgetItem *item, int dupePresumption);
+};
 
 class SearchlistDialog : public QWidget
 {
@@ -55,15 +74,17 @@ public:
     void ReloadTranslation();
     void addTrack(const SearchlistItem &track);
 
-protected:
-    bool eventFilter(QObject *target, QEvent *event);
-
-private:
     class SearchlistTreeItem : public QTreeWidgetItem
     {
     	public:
     		SearchlistItem	Track;
+    		int	dupePresumption;
     };
+
+protected:
+    bool eventFilter(QObject *target, QEvent *event);
+
+private:
     SearchlistTreeItem *currentTrackListItem;
 
     Ui::SearchlistDialogClass ui;
@@ -78,6 +99,8 @@ private:
     void rateCurrentTrack(int value);
     void setupStatusBar();
     void updateStatusBar();
+
+    DupeCheckThread *dupeCheckThread;
 
     SearchlistItem	copyItem;
     bool			haveCopyItem;
@@ -120,6 +143,7 @@ public slots:
 	void on_saveExitButton_clicked();
 	void on_saveButton_clicked();
 	void on_ClipBoardTimer_update();
+	void updateDupeCheckItem(QTreeWidgetItem *item, int dupePresumption);
 };
 
 

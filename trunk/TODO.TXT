@@ -10,11 +10,6 @@ Background-Jobs
   sinnvoll eine generische Funktion zu implementieren, die verschiedene
   Arten von Aufgaben unterstützt.
   
-Suchliste
-  Schön wäre, wenn sich die Ladezeit verkürzen liesse. Was dauert da
-  eigentlich so lange? Das Rendering oder das Parsen des XML-Files?
-  Ups, weder noch, es ist der Dupe-Check!
- 
 Character Replacement beim Import
   Im Konfigurationsmenü soll eine Liste von Zeichen definiert werden können,
   die beim Import von MP3-Dateien durch andere ersetzt werden. Es sollen nicht

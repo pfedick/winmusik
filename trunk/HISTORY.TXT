@@ -12,6 +12,9 @@ Version 3.3.0
       nur MP3
     - Playlist: Änderung des Titels wird als Änderung erkannt, Speicherbutton
       wird aktiviert
+    - Suchlisten: Die Prüfung auf Duplikate beim Aufruf einer Liste wurde in
+      einen asynchronen Thread ausgelagert. Dadurch wurde das Laden erheblich
+      beschleunigt, insbesondere bei grossen Suchlisten.
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
