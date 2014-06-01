@@ -232,9 +232,10 @@ void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title,
 	}
 	ui.progressBar->setValue(30);
 
-	ppl6::CGenericList list;
+	ppl6::CGenericList list, sorted_list;
 	FilterResult(res,list);
-	LimitResult(list,Results);
+	LimitResult(list,sorted_list);
+	SortResult(sorted_list,Results);
 
 	ui.progressBar->setValue(60);
 	PresentResults();
@@ -359,6 +360,23 @@ void Search::FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out)
 	}
 }
 
+void Search::SortResult(const ppl6::CGenericList &in, ppl6::CGenericList &out)
+{
+	out.Clear();
+	std::map<ppl6::CString,DataTitle*> sorter;
+	DataTitle *ti;
+	ppl6::CGenericList::Walker walk;
+	while((ti=(DataTitle*)in.GetNext(walk))) {
+		sorter.insert(std::pair<ppl6::CString,DataTitle*>(
+				ppl6::ToString("%08u:%08u",ti->ReleaseDate,ti->TitleId),
+				ti));
+	}
+	std::map<ppl6::CString,DataTitle*>::const_reverse_iterator it;
+	for (it=sorter.rbegin();it!=sorter.rend();++it) {
+		out.Add(it->second);
+	}
+}
+
 void Search::RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out, size_t num)
 {
 	// Zuerst kopieren wir die Eingangsliste zum besseren Zugriff in einen vector
@@ -393,8 +411,6 @@ void Search::RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out,
 
 void Search::LimitResult(const ppl6::CGenericList &in, ppl6::CGenericList &out)
 {
-
-
 	ppl6::CGenericList::Walker walk;
 	DataTitle *ti;
 	int limit=ui.limitResultSpinBox->value();
@@ -522,7 +538,7 @@ void Search::PresentResults()
 
 	Results.Reset();
 	ppluint32 i=0;
-	while ((ti=(DataTitle*)Results.GetPrevious())) {
+	while ((ti=(DataTitle*)Results.GetNext())) {
 		i++;
 		WMTreeItem *item=new WMTreeItem;
 		item->Track=i;
@@ -577,9 +593,10 @@ void Search::on_quicksearchButton_clicked()
 		ui.numTracks->setText(Tmp);
 	}
 	ui.progressBar->setValue(30);
-	ppl6::CGenericList list1;
+	ppl6::CGenericList list1, sorted_list1;
 	FilterResult(res,list1);
-	LimitResult(list1,Results);
+	LimitResult(list1,sorted_list1);
+	SortResult(sorted_list1,Results);
 
 	/*
 	DataTitle *ti;
