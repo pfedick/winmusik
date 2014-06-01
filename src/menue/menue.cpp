@@ -28,6 +28,7 @@
 #include "version.h"
 #include "menue.h"
 #include "search.h"
+#include "src/search/search.h"
 #include "src/properties/properties.h"
 #include "about.h"
 #include "updater.h"

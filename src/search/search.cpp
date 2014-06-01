@@ -31,7 +31,7 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QMouseEvent>
-#include "../include/search.h"
+#include "search.h"
 
 #include <vector>
 
