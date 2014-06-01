@@ -76,6 +76,7 @@ SOURCES += widgets/fkeys.cpp \
     src/searchlists/searchlists.cpp \
     src/searchlists/searchlistdialog.cpp \
     src/searchlists/searchlisttrackdialog.cpp \
+    src/searchlists/dupecheckthread.cpp \
     src/properties/properties.cpp \
     src/properties/regexpedit.cpp \
     src/editor/edit.cpp \

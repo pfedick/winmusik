@@ -40,6 +40,7 @@
 SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::CString &Filename)
     : QWidget(parent)
 {
+	dupeCheckThread=new DupeCheckThread (this);
 	statusbar=NULL;
 	ui.setupUi(this);
 	this->wm=wm;
@@ -78,6 +79,7 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	for (size_t i=0;i<List.size();i++) {
 		item=new SearchlistTreeItem;
 		item->Track=List[i];
+		item->dupePresumption=0;
 		renderTrack(item);
 		ui.trackList->addTopLevelItem(item);
 	}
@@ -86,18 +88,24 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 
 	setupStatusBar();
 
+
 	// Das müssen wir irgendwie asynchron hinbekommen
+	/*
 	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
 		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
 		dupeCheckOnTrack(item);
 	}
+	*/
 
-
+	dupeCheckThread->setTracklist(ui.trackList);
+	connect(dupeCheckThread, SIGNAL(updateItem(QTreeWidgetItem *, int)), this, SLOT(updateDupeCheckItem(QTreeWidgetItem *, int)));
+	dupeCheckThread->start();
 	ClipBoardTimer.start(200);
 }
 
 SearchlistDialog::~SearchlistDialog()
 {
+	dupeCheckThread->stopThread();
 	if (wm) {
 		wm->SearchlistDialogClosed(this);
 	}
@@ -207,24 +215,8 @@ bool SearchlistDialog::eventFilter(QObject *target, QEvent *event)
 
 void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem *item)
 {
+	int dupePresumption=dupeCheckThread->dupeCheckOnTrack(item);
 	ppl6::CString Tmp;
-	// Titel in Datenbank suchen
-	CHashes::TitleTree Result;
-	int dupePresumption=0;
-	wm->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","","",Result);
-	if (Result.size()>1) {
-		dupePresumption=100;
-	} else if (Result.size()>0) {
-		dupePresumption=90;
-	} else {
-		wm->Hashes.Find(item->Track.Artist,item->Track.Title,Result);
-		if (Result.size()>3) {
-			dupePresumption=70;
-		} else if (Result.size()>0) {
-			dupePresumption=40;
-		}
-	}
-
 	Tmp.Setf("%3i %%",dupePresumption);
 	item->setText(SL_COLUMN_EXISTING,Tmp);
 }
@@ -494,8 +486,10 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 {
 	SearchlistTreeItem *item=new SearchlistTreeItem;
 	item->Track=track;
+	item->dupePresumption=0;
 	renderTrack(item);
 	dupeCheckOnTrack(item);
+	dupeCheckThread->wait();
 	ui.trackList->addTopLevelItem(item);
 	save();
 	updateStatusBar();
@@ -518,6 +512,7 @@ void SearchlistDialog::on_contextDeleteTrack_triggered()
 
 void SearchlistDialog::on_deleteTrackButton_clicked()
 {
+	dupeCheckThread->wait();
 	QList<QTreeWidgetItem *> list=ui.trackList->selectedItems();
 	if (list.size()>1) {
 		int ret = QMessageBox::question(this, tr("delete tracks"),
@@ -660,4 +655,11 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 
 	ClipBoardTimer.start(200);
 
+}
+
+void SearchlistDialog::updateDupeCheckItem(QTreeWidgetItem *item, int dupePresumption)
+{
+	ppl6::CString Tmp;
+	Tmp.Setf("%3i %%",dupePresumption);
+	item->setText(SL_COLUMN_EXISTING,Tmp);
 }
