@@ -35,7 +35,7 @@
 
 #include "src/menue/menue.h"
 #include "src/editor/edit.h"
-#include "search.h"
+#include "src/search/search.h"
 #include "firststart.h"
 #include "langselect.h"
 #include "splashscreen.h"
