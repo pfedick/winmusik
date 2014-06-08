@@ -112,6 +112,7 @@ public:
     void showEditor();
     void showEditorWithoutFocusChange();
     void createSetMusicKeyContextMenu(QMenu *m);
+    void importFromCddb();
 
 
 private:
