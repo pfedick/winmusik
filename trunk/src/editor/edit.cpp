@@ -684,10 +684,15 @@ void Edit::UpdateFkeys()
 		case 2:		// Device Page
 			break;
 		case 3:		// Device Track
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-2007.png",tr("synchronize Tag"));
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-2008.png",tr("import cover"));
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",tr("save all ID3"));
-			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true) ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",tr("mass import"));
+			if (wm->conf.DevicePath[DeviceType].NotEmpty()==true)  {
+				ui.fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-2007.png",tr("synchronize Tag"));
+				ui.fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-2008.png",tr("import cover"));
+				ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",tr("save all ID3"));
+				ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",tr("mass import"));
+				if (ppl6::AudioCD::isSupported()==true && ppl6::CDDB::isSupported()==true) {
+					ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-3005.png",tr("cddb import"));
+				}
+			}
 			break;
 		case 4:		// Interpret
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
@@ -927,6 +932,9 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		return on_f5_ShortCut(modifier);
 	} else if (key==Qt::Key_F5 && position>7) {
 		return on_f5_CheckDupes(target);
+	} else if (key==Qt::Key_F5 && position==3) {
+		importFromCddb();
+		return true;
 		// *************************************************************************** F6
 	} else if (key==Qt::Key_F6 && modifier==Qt::ControlModifier && ui.fkeys->isEnabled(6)==true && position>3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		wm->TrashAudioFile(DeviceType,DeviceId,Page,Track.Track);
@@ -1350,7 +1358,7 @@ bool Edit::on_f6_Pressed(QObject *, int modifier)
 		if (Path.IsEmpty()) {
 			QMessageBox::information(this, tr("WinMusik: Notice"),
 					tr("There are no further titles without an index in the directory of this device"));
-			return false;
+			return true;
 		}
 	}
 
@@ -1394,7 +1402,7 @@ bool Edit::on_f6_Pressed(QObject *, int modifier)
 		wm->PlayFile(Path);
 	}
 
-	return false;
+	return true;
 
 }
 

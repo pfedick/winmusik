@@ -40,6 +40,8 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QDesktopServices>
+#include <QMessageBox>
+#include "../include/asynchronousMessage.h"
 
 
 void Edit::UpdateDevice()
@@ -883,4 +885,40 @@ void Edit::showEditorWithoutFocusChange()
 	ui.titleEdit->setVisible(true);
 	ui.titleEdit->setEnabled(true);
 	ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
+}
+
+void Edit::importFromCddb()
+{
+	if (ppl6::AudioCD::isSupported()!=true || ppl6::CDDB::isSupported()!=true) return;
+	ppl6::CDDB::Matches matches;
+	asynchronousMessage msg;
+	msg.setMessageText(tr("Reading and querying cd in internet database, please wait."));
+	msg.show();
+	try {
+		ppl6::AudioCD cd;
+		cd.openDevice();
+		ppl6::CDDB cddb;
+		cddb.query(cd,matches);
+	} catch (const ppl6::Exception &e) {
+		msg.setVisible(false);
+		QString intro=tr("An error occured, when trying to access the audio cd or querying the internet database");
+		QMessageBox::critical(NULL,tr("Error"),
+				intro,
+				QMessageBox::Ok, QMessageBox::Ok);
+		return;
+	}
+	msg.setVisible(false);
+	if (matches.size()<1) {
+		 QMessageBox::information(NULL,tr("audio cd not found"),
+				 tr("The audio cd was not found in the internet cd database"),
+				 QMessageBox::Ok, QMessageBox::Ok);
+		return;
+	}
+	ppl6::CDDB::Disc disc;
+	if (matches.size()>1) {
+		return;
+	} else {
+		disc=matches.front();
+	}
+
 }
