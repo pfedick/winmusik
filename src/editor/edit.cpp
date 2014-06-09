@@ -693,6 +693,7 @@ void Edit::UpdateFkeys()
 					ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-3005.png",tr("cddb import"));
 				}
 			}
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-3010.png",tr("renumber"));
 			break;
 		case 4:		// Interpret
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
@@ -914,7 +915,10 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		if (ret==DeviceId) UpdateDevice();
 		return true;
 		// *************************************************************************** F3
-	} else if (key==Qt::Key_F3 && modifier==Qt::NoModifier && ui.fkeys->isEnabled(3)==true) {
+	} else if (key==Qt::Key_F3 && modifier==Qt::NoModifier && position==3) {
+		renumber();
+		return true;
+	} else if (key==Qt::Key_F3 && modifier==Qt::NoModifier && position>3 && ui.fkeys->isEnabled(3)==true) {
 		QLineEdit *LineEdit=(QLineEdit*)target;
 		ppl6::CWString Tmp=LineEdit->text().toLower();
 		Tmp.UCWords();

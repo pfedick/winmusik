@@ -29,6 +29,7 @@
 #include "tablesearch.h"
 #include "shortcutdialog.h"
 #include "massimport.h"
+#include "renumberdialog.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -921,4 +922,72 @@ void Edit::importFromCddb()
 		disc=matches.front();
 	}
 
+}
+
+void Edit::renumber()
+{
+	ppl6::CString Tmp;
+	RenumberDialog Dialog(this,wm);
+	Dialog.setModal(true);
+	Dialog.setOldNumber(DeviceId);
+	if (!Dialog.exec()) return;
+	ppluint32 newDeviceId=Dialog.getNewNumber();
+
+	if (!Dialog.isTargetPathUsable(DeviceType,newDeviceId)) return;
+	if (!Dialog.isTargetDeviceFree(DeviceType,newDeviceId)) return;
+
+	return;
+
+	for (int i=1;i<=datadevice.Pages;i++) {
+		ppl6::CString Path=wm->GetAudioPath(DeviceType,newDeviceId,i);
+		if (Path.NotEmpty()) {
+			ppl6::MkDir(Path,1);
+		}
+	}
+	// Datenbank updaten
+	for (int p=1;p<=datadevice.Pages;p++) {
+		CTrackList *tl=wm->GetTracklist(DeviceType, DeviceId, p);
+		if (tl) {
+			printf ("Tracks auf Seite %i: %i",p,tl->Num());
+			tl->Reset();
+			DataTrack *track;
+			while ((track=tl->GetNext())) {
+				track->DeviceId=newDeviceId;
+				tl->Put(track);
+				DataTitle *ti=wm->GetTitle(track->TitleId);
+				if (ti) {
+					ti->DeviceId=newDeviceId;
+					wm->TitleStore.Put(ti);
+				}
+			}
+		}
+	}
+	/*
+	// Titel speichern
+	if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
+	if (!wm->TitleStore.Put(&Ti)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		ui.artist->setFocus();
+		if (Ti.TitleId>0) wm->Hashes.AddTitle(Ti.TitleId);
+		return;
+	}
+	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
+	// sondern den Pointer innerhalb der Datenbank
+	DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
+	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
+	// Track speichern
+	Track.TitleId=Ti.TitleId;
+	if (!TrackList->Put(&Track)) {
+		wm->RaiseError(this,tr("Could not save Track in TrackList"));
+		ui.artist->setFocus();
+		return;
+	}
+	*/
+	// Vorhandene Dateien verschieben
+
+
+
+	datadevice.DeviceId=newDeviceId;
+	wm->DeviceStore.Update(DeviceType,DeviceId);
+	OpenTrack(newDeviceId, Page, 0);
 }

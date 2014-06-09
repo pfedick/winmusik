@@ -131,6 +131,15 @@ void CStorageItem::Clear()
  * sicherstellen, dass am Ende diese Funktion ebenfalls aufgerufen wird.
  */
 {
+	ClearStorageData();
+}
+
+void CStorageItem::ClearStorageData()
+/*!\brief Setzt alle Variablen der Klasse auf 0
+ *
+ * Setzt alle Variablen der Klasse auf 0.
+ */
+{
 	filepos=0;
 	fileid=0;
 	lastchange=0;
