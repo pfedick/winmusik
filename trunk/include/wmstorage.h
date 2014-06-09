@@ -56,6 +56,7 @@ class CStorageItem
 		CStorageItem(const CStorageItem &other);
 		~CStorageItem();
 		void Clear();
+		void ClearStorageData();
 		void CopyStorageFrom(const CStorageItem &other);
 		void CopyStorageFrom(const CStorageItem *item);
 		void CopyStorageFrom(CWMFileChunk *chunk);

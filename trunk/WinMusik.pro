@@ -38,9 +38,10 @@ HEADERS += widgets/fkeys.h \
     src/properties/properties.h \
     src/properties/regexpedit.h \
     src/editor/shortcutdialog.h \
+    src/editor/renumberdialog.h \
     src/editor/oimpinfo.h \
-	src/editor/tablesearch.h \
-    src/editor/edit.h \    
+    src/editor/tablesearch.h \
+    src/editor/edit.h \
  	include/coverviewer.h \
     include/csearchlist.h \
     include/massimport.h \
@@ -82,9 +83,10 @@ SOURCES += widgets/fkeys.cpp \
     src/editor/edit.cpp \
     src/editor/edit-functions.cpp \
     src/editor/shortcutdialog.cpp \
+    src/editor/renumberdialog.cpp \
     src/editor/oimpinfo.cpp \
     src/editor/tablesearch.cpp \
-	src/coverviewer.cpp \
+    src/coverviewer.cpp \
     src/CSearchlist.cpp \
     src/edittrackdialog.cpp \
     src/CTrackList.cpp \
@@ -135,15 +137,16 @@ FORMS += widgets/fkeys.ui \
     src/editor/oimpinfo.ui \
     src/editor/tablesearch.ui \
     src/editor/shortcutdialog.ui \
+    src/editor/renumberdialog.ui \
     src/editor/edit.ui \
     src/searchlists/searchlists.ui \
     src/searchlists/searchlistdialog.ui \
     src/searchlists/searchlisttrackdialog.ui \
     src/properties/properties.ui \
     src/properties/regexpedit.ui \
-	forms/coverviewer.ui \
+    forms/coverviewer.ui \
     forms/massimport.ui \
-	forms/edittrackdialog.ui \
+    forms/edittrackdialog.ui \
     forms/coverprinter.ui \
     forms/updater.ui \
     forms/registration.ui \

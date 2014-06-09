@@ -112,7 +112,6 @@ public:
     void showEditor();
     void showEditorWithoutFocusChange();
     void createSetMusicKeyContextMenu(QMenu *m);
-    void importFromCddb();
 
 
 private:
@@ -233,6 +232,9 @@ private:
     void CheckDupes();
     void UpdateCover();
     //void index_LostFocus();
+    void importFromCddb();
+    void renumber();
+
 
 public slots:
 	void on_trackList_customContextMenuRequested ( const QPoint & pos );
