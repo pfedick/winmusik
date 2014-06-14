@@ -15,6 +15,7 @@ Version 3.3.0
     - Suchlisten: Die Prüfung auf Duplikate beim Aufruf einer Liste wurde in
       einen asynchronen Thread ausgelagert. Dadurch wurde das Laden erheblich
       beschleunigt, insbesondere bei grossen Suchlisten.
+    - Umnummerieren: Tonträger können jetzt umnummeriert werden
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch

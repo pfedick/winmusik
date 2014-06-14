@@ -285,6 +285,7 @@ class CDeviceStore : public CStorageType
 		virtual void Clear();
 		virtual const char *GetChunkName();
 		int Put(DataDevice *entry);
+		int Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId);
 		DataDevice *Get(ppluint8 DeviceType, ppluint32 DeviceId);
 		int GetCopy(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice *t);
 		virtual int LoadChunk(CWMFileChunk *chunk);
