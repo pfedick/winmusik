@@ -936,58 +936,47 @@ void Edit::renumber()
 	if (!Dialog.isTargetPathUsable(DeviceType,newDeviceId)) return;
 	if (!Dialog.isTargetDeviceFree(DeviceType,newDeviceId)) return;
 
-	return;
-
+	// Zielverzeichnisse anlegen
 	for (int i=1;i<=datadevice.Pages;i++) {
 		ppl6::CString Path=wm->GetAudioPath(DeviceType,newDeviceId,i);
 		if (Path.NotEmpty()) {
 			ppl6::MkDir(Path,1);
 		}
 	}
-	// Datenbank updaten
+
+	// Titel updaten
 	for (int p=1;p<=datadevice.Pages;p++) {
 		CTrackList *tl=wm->GetTracklist(DeviceType, DeviceId, p);
 		if (tl) {
-			printf ("Tracks auf Seite %i: %i",p,tl->Num());
+			//printf ("Tracks auf Seite %i: %i\n",p,tl->Num());
 			tl->Reset();
 			DataTrack *track;
 			while ((track=tl->GetNext())) {
 				track->DeviceId=newDeviceId;
-				tl->Put(track);
+				wm->TrackStore.Put(track);
 				DataTitle *ti=wm->GetTitle(track->TitleId);
 				if (ti) {
+					ppl6::CString OldFile=wm->GetAudioFilename(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track);
+					if (OldFile.NotEmpty()) {
+						ppl6::CString NewPath=wm->GetAudioPath(DeviceType,newDeviceId,ti->Page);
+						if (NewPath.NotEmpty()) {
+							ppl6::CFile::MoveFile(OldFile,NewPath+"/"+GetFilename(OldFile));
+						}
+					}
 					ti->DeviceId=newDeviceId;
 					wm->TitleStore.Put(ti);
+
 				}
 			}
 		}
 	}
-	/*
-	// Titel speichern
-	if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
-	if (!wm->TitleStore.Put(&Ti)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-		ui.artist->setFocus();
-		if (Ti.TitleId>0) wm->Hashes.AddTitle(Ti.TitleId);
-		return;
-	}
-	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
-	// sondern den Pointer innerhalb der Datenbank
-	DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
-	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
-	// Track speichern
-	Track.TitleId=Ti.TitleId;
-	if (!TrackList->Put(&Track)) {
-		wm->RaiseError(this,tr("Could not save Track in TrackList"));
-		ui.artist->setFocus();
-		return;
-	}
-	*/
 	// Vorhandene Dateien verschieben
 
-
-
-	datadevice.DeviceId=newDeviceId;
-	wm->DeviceStore.Update(DeviceType,DeviceId);
-	OpenTrack(newDeviceId, Page, 0);
+	if (wm->DeviceStore.Renumber(DeviceType, DeviceId, newDeviceId)) {
+		//printf ("Renumber ok\n");
+		wm->DeviceStore.Update(DeviceType,DeviceId);
+		OpenTrack(newDeviceId, Page, 0);
+		return;
+	}
+	//printf ("Renumber FAILED!\n");
 }

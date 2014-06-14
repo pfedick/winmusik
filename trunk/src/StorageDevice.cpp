@@ -545,6 +545,51 @@ int CDeviceStore::Save(DataDevice *t)
 	return 1;
 }
 
+
+int CDeviceStore::Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId)
+{
+	DATADEVICE dd;
+	Mutex.Lock();
+
+	// Neue ID darf nicht existieren
+	dd.DeviceId=newId;
+	dd.DeviceType=DeviceType;
+	DataDevice *t=(DataDevice *)Tree.Find((void *)&dd);
+	if (t) {
+		printf ("ERROR: Neue DeviceId bereits vorhanden!\n");
+		Mutex.Unlock();
+		return 0;
+	}
+
+	// Alte ID muss vorhanden sein
+	dd.DeviceId=oldId;
+	dd.DeviceType=DeviceType;
+	t=(DataDevice *)Tree.Find((void *)&dd);
+	if (!t) {
+		printf ("ERROR: Alte DeviceId nicht gefunden!\n");
+		Mutex.Unlock();
+		return 0;
+	}
+
+	// Alten Datensatz aus dem Suchbaum enfernen
+	Tree.Delete(t);
+
+	// Datensatz mit neuer ID speichern
+	t->DeviceId=newId;
+	if (!Save(t)) {
+		printf ("ERROR: Speichern fehlgeschlagen!\n");
+		t->DeviceId=oldId;
+		Tree.Add(t);
+		Mutex.Unlock();
+		return 0;
+	}
+	if (t->DeviceId>highest[t->DeviceType]) highest[t->DeviceType]=t->DeviceId;
+	// Datensatz mit neuer ID in den Suchbaum aufnehmen
+	Tree.Add(t);
+	Mutex.Unlock();
+	return 1;
+}
+
 int CDeviceStore::Put(DataDevice *entry)
 /*!\brief Datensatz speichern
  *
