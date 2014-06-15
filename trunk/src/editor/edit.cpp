@@ -690,7 +690,7 @@ void Edit::UpdateFkeys()
 				ui.fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-2009.png",tr("save all ID3"));
 				ui.fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-3006.png",tr("mass import"));
 				if (ppl6::AudioCD::isSupported()==true && ppl6::CDDB::isSupported()==true) {
-					ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-3005.png",tr("cddb import"));
+					ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-4005.png",tr("cddb import"));
 				}
 			}
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-3010.png",tr("renumber"));

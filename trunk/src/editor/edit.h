@@ -233,6 +233,7 @@ private:
     void UpdateCover();
     //void index_LostFocus();
     void importFromCddb();
+    void copyTrackFromCddb(const ppl6::CDDB::Disc &disc, const ppl6::CDDB::Track &track);
     void renumber();
 
 
