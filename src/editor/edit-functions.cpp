@@ -30,6 +30,7 @@
 #include "shortcutdialog.h"
 #include "massimport.h"
 #include "renumberdialog.h"
+#include "cddbimport.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -921,6 +922,52 @@ void Edit::importFromCddb()
 	} else {
 		disc=matches.front();
 	}
+
+	CDDBImport Dialog(this,wm);
+	Dialog.setModal(true);
+	Dialog.setDisc(disc);
+	if (!Dialog.exec()) return;
+
+	return;
+	ppl6::CString Album;
+	Album=disc.Artist+ " - "+disc.Title;
+	datadevice.SetTitle(Album);
+	datadevice.SetSubTitle(NULL);
+
+	// Tonträger aktualisieren
+	wm->DeviceStore.Put(&datadevice);
+	wm->DeviceStore.Update(DeviceType,DeviceId);
+
+	ppl6::CDDB::Disc::TrackList::const_iterator it;
+	for (it=disc.Tracks.begin();it!=disc.Tracks.end();++it) {
+		copyTrackFromCddb(disc,*it);
+	}
+
+
+	UpdateDevice();
+
+}
+
+void Edit::copyTrackFromCddb(const ppl6::CDDB::Disc &disc, const ppl6::CDDB::Track &track)
+{
+	ppl6::CString Tmp;
+
+	Ti.Clear();
+	Ti.DeviceType=DeviceType;
+	Ti.DeviceId=DeviceId;
+	Ti.Page=Page;
+	Ti.Track=track.number;
+
+	Ti.SetTitle(track.Title);
+	Ti.SetArtist(track.Artist);
+
+	Tmp=disc.Artist+ " - "+disc.Title;
+	Ti.SetAlbum(Tmp);
+	Ti.ReleaseDate=disc.year*10000;
+
+	Tmp=QDate::currentDate().toString("yyyyMMdd");
+	Ti.RecordDate=Tmp.ToInt();
+
 
 }
 

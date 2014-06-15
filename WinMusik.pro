@@ -39,6 +39,7 @@ HEADERS += widgets/fkeys.h \
     src/properties/regexpedit.h \
     src/editor/shortcutdialog.h \
     src/editor/renumberdialog.h \
+    src/editor/cddbimport.h \
     src/editor/oimpinfo.h \
     src/editor/tablesearch.h \
     src/editor/edit.h \
@@ -84,6 +85,7 @@ SOURCES += widgets/fkeys.cpp \
     src/editor/edit-functions.cpp \
     src/editor/shortcutdialog.cpp \
     src/editor/renumberdialog.cpp \
+    src/editor/cddbimport.cpp \
     src/editor/oimpinfo.cpp \
     src/editor/tablesearch.cpp \
     src/coverviewer.cpp \
@@ -138,6 +140,7 @@ FORMS += widgets/fkeys.ui \
     src/editor/tablesearch.ui \
     src/editor/shortcutdialog.ui \
     src/editor/renumberdialog.ui \
+    src/editor/cddbimport.ui \
     src/editor/edit.ui \
     src/searchlists/searchlists.ui \
     src/searchlists/searchlistdialog.ui \
