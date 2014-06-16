@@ -267,6 +267,9 @@ class DataDevice : public CStorageItem, public ppl6::CTreeItem
 		int CopyFrom(DataDevice *t);
 		int SetTitle(const char *title);
 		int SetSubTitle(const char *artist);
+		ppl6::CString GetTitle() const;
+		ppl6::CString GetSubTitle() const;
+
 		ppl6::CBinary *Export();
 		int Import(ppl6::CBinary *bin, int version);
 };

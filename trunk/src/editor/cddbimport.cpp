@@ -217,7 +217,7 @@ bool CDDBImport::consumeEvent(QObject *target, QEvent *event)
 	return false;
 }
 
-bool CDDBImport::on_KeyPress(QObject *target, int key, int modifier)
+bool CDDBImport::on_KeyPress(QObject *, int key, int modifier)
 /*!\brief Globale KeyPress Events behandeln
  *
  * Diese Funktion behandelt globale KeyPress Events, als Beispielsweise das Drücken der ESC-Taste,
@@ -319,6 +319,23 @@ void CDDBImport::FixFocus()
 
 void CDDBImport::on_okButton_clicked()
 {
+	// Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
+	if (!TCGenre.Finish()) {
+		ui.genreId->setFocus();
+		return;
+	}
+	if (!TCLabel.Finish()) {
+		ui.labelId->setFocus();
+		return;
+	}
+	if (!TCRecordSource.Finish()) {
+		ui.recordSourceId->setFocus();
+		return;
+	}
+	if (!TCRecordDevice.Finish()) {
+		ui.recordDeviceId->setFocus();
+		return;
+	}
 	done(1);
 }
 
@@ -326,3 +343,176 @@ void CDDBImport::on_cancelButton_clicked()
 {
 	done(0);
 }
+
+bool CDDBImport::checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page)
+{
+	CTrackList *tracklist=wm->GetTracklist(devicetype,deviceid,page);
+	if (tracklist->Num()==0) return true;
+
+	int ret=QMessageBox::warning(this, tr("WinMusik: Attention"),
+			tr("This device already has tracks in the database. When you start "
+					"the import from the CDDB now, the new tracks will be appended, which is "
+					"probably not what you want.\n\n"
+					"Do you really want to append the tracks?"),
+			QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+	if (ret==QMessageBox::No) return false;
+	return true;
+}
+
+void CDDBImport::startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page)
+{
+	ppl6::CString Tmp;
+	CTrackList *tracklist=wm->GetTracklist(devicetype,deviceid,page);
+	DataDevice datadevice;
+	if (!wm->DeviceStore.GetCopy(devicetype, deviceid, &datadevice)) {
+		wm->RaiseError(NULL,tr("Unexpected Error, Device does not exist"));
+		return;
+	}
+	if (datadevice.GetTitle().IsEmpty()) {
+		Tmp=ui.album->text();
+		datadevice.SetTitle(Tmp);
+	}
+	int trackNum=tracklist->GetMax()+1;
+	ppl6::CDDB::Disc::TrackList::const_iterator it;
+	for (it=disc.Tracks.begin();it!=disc.Tracks.end();++it) {
+		DataTitle Ti;
+		getTitle(Ti,*it);
+		Ti.DeviceType=devicetype;
+		Ti.DeviceId=deviceid;
+		Ti.Page=page;
+		Ti.Track=trackNum;
+		addDataFromFile(Ti);
+		if (!saveTitle(tracklist,Ti)) {
+			it=disc.Tracks.end();
+			break;
+		}
+		trackNum++;
+	}
+
+	// Tonträger aktualisieren
+	wm->DeviceStore.Put(&datadevice);
+	wm->DeviceStore.Update(devicetype,deviceid);
+}
+
+
+void CDDBImport::getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track)
+{
+	ppl6::CString Tmp;
+
+	Ti.SetTitle(track.Title);
+	Tmp=ppl6::Trim(track.Artist);
+	if (Tmp.IsEmpty()) Tmp=ui.artist->text();
+	Ti.SetArtist(Tmp);
+
+	// Tags
+	Tmp=ui.tags->text();
+	Tmp=ppl6::Trim(ppl6::LCase(Tmp));
+	Ti.SetTags(Tmp);
+
+
+	ppl6::CString Title=track.Title;
+	ppl6::CString Version="";
+	if (Title.PregMatch("/^(.*)\\((.*?)\\)$")) {
+		Title=Title.GetMatch(1);
+		Version=Title.GetMatch(2);
+	}
+	Ti.SetTitle(Title);
+
+	// Version
+	Ti.VersionId=wm->VersionStore.FindOrAdd(Version);
+	// Genre
+	Ti.GenreId=ui.genreId->text().toInt();
+	// Label
+	Ti.LabelId=ui.labelId->text().toInt();
+	// Aufnahmequelle
+	Ti.RecordSourceId=ui.recordSourceId->text().toInt();
+	// Aufnahmegerät
+	Ti.RecordDeviceId=ui.recordDeviceId->text().toInt();
+
+	// Länge
+	Ti.Length=track.length;
+
+	Tmp=ui.album->text();
+	Ti.SetAlbum(Tmp);
+
+	// Erscheinungsjahr
+	QDate Date=ui.releaseDate->date();
+	Tmp=Date.toString("yyyyMMdd");
+	Ti.ReleaseDate=Tmp.ToInt();
+
+	// Aufnahmedatum
+	Date=ui.recordDate->date();
+	Tmp=Date.toString("yyyyMMdd");
+	//printf ("Date: %s\n",(const char*)Tmp);
+	Ti.RecordDate=Tmp.ToInt();
+
+
+	// Ton
+	Ti.Channels=2;
+
+	// Qualität
+	Ti.Quality=0;
+
+	// Bewertung
+	Ti.Rating=0;
+
+	// Flags
+	Ti.Flags=3;
+}
+
+void CDDBImport::addDataFromFile(DataTitle &Ti)
+{
+	ppl6::CString Path=wm->GetAudioFilename(Ti.DeviceType,Ti.DeviceId,Ti.Page,Ti.Track);
+	if (Path.NotEmpty()==true) {
+		TrackInfo tinfo;
+		if (getTrackInfoFromFile(tinfo,Path)) {
+			if (tinfo.Ti.Key != Ti.Key) {
+				Ti.Key=tinfo.Ti.Key;
+			}
+			if (Ti.EnergyLevel==0 && tinfo.Ti.EnergyLevel>0) {
+				Ti.EnergyLevel=tinfo.Ti.EnergyLevel;
+			}
+			if (Ti.BPM==0 && tinfo.Ti.BPM>0) {
+				Ti.BPM=tinfo.Ti.BPM;
+			}
+			if (tinfo.Ti.Bitrate>0 && tinfo.Ti.Bitrate!=Ti.Bitrate) {
+				Ti.Bitrate=tinfo.Ti.Bitrate;
+			}
+			if (tinfo.Ti.Length>0 && tinfo.Ti.Length!=Ti.Length) {
+				Ti.Length=tinfo.Ti.Length;
+			}
+			if (tinfo.Ti.CoverPreview.Size()>0) {
+				Ti.CoverPreview=tinfo.Ti.CoverPreview;
+			}
+		}
+	}
+
+}
+
+int CDDBImport::saveTitle(CTrackList *tracklist, DataTitle &Ti)
+{
+	// Titel speichern
+	if (!wm->TitleStore.Put(&Ti)) {
+		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		return 0;
+	}
+	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
+	// sondern den Pointer innerhalb der Datenbank
+	DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
+	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
+	// Track speichern
+	DataTrack Track;
+	Track.SetValue(Ti.DeviceType,Ti.DeviceId,Ti.Page,Ti.Track,Ti.TitleId);
+	if (!tracklist->Put(&Track)) {
+		wm->RaiseError(this,tr("Could not save Track in TrackList"));
+		ui.artist->setFocus();
+		return 0;
+	}
+
+	if (wm_main->conf.bWriteID3Tags==true) {
+		wm->SaveID3Tags(Track.Device, Track.DeviceId, Track.Page, Track.Track,Ti);
+	}
+
+	return 1;
+}
+

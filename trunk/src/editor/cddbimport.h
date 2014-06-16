@@ -43,6 +43,9 @@ public:
 
     void setDisc(ppl6::CDDB::Disc &disc);
 
+    bool checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
+    void startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
+
 private:
     Ui::CDDBImport ui;
     CWmClient *wm;
@@ -64,8 +67,9 @@ private:
     void FixFocus();
 
     void updateTracklist(ppl6::CDDB::Disc &disc);
-
-
+    void getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track);
+    void addDataFromFile(DataTitle &Ti);
+    int saveTitle(CTrackList *tracklist, DataTitle &Ti);
 
 public slots:
 

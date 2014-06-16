@@ -344,6 +344,19 @@ int DataDevice::SetSubTitle(const char *subtitle)
 	return 1;
 }
 
+ppl6::CString DataDevice::GetTitle() const
+{
+	if (Title) return ppl6::CString(Title);
+	return ppl6::CString();
+}
+
+ppl6::CString DataDevice::GetSubTitle() const
+{
+	if (SubTitle) return ppl6::CString(SubTitle);
+	return ppl6::CString();
+}
+
+
 ppl6::CBinary *DataDevice::Export()
 /*!\brief Binäre Exportfunktion
  *
