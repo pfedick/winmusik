@@ -129,13 +129,9 @@ void CDDBImport::updateTracklist(ppl6::CDDB::Disc &disc)
 		QTreeWidgetItem *item=new QTreeWidgetItem;
 		Tmp.Setf("%i",(*it).number);
 		item->setText(0,Tmp);
-		ppl6::CString Artist=(*it).Artist;
-		ppl6::CString Title=(*it).Title;
-		ppl6::CString Version="";
-		if (Title.PregMatch("/^(.*)\\((.*?)\\)$")) {
-			Title=Title.GetMatch(1);
-			Version=Title.GetMatch(2);
-		}
+		ppl6::CString Artist=ppl6::Trim((*it).Artist);
+		ppl6::CString Title=ppl6::Trim((*it).Title);
+		ppl6::CString Version=getVersionFromTitle(Title,(*it).length);
 
 		item->setText(1,Artist + "- "+Title);
 		item->setText(2,Version);
@@ -395,13 +391,29 @@ void CDDBImport::startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluin
 }
 
 
+ppl6::CString CDDBImport::getVersionFromTitle(ppl6::CString &Title, int length)
+{
+	ppl6::CString Version="";
+	if (Title.PregMatch("/^(.*)\\((.*?)\\)$")) {
+		Title=ppl6::Trim(Title.GetMatch(1));
+		Version=ppl6::Trim(Title.GetMatch(2));
+	} else {
+		if (length<300) Version=tr("Single");
+		else Version=tr("Original Version");
+	}
+	return Version;
+}
+
 void CDDBImport::getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track)
 {
 	ppl6::CString Tmp;
 
 	Ti.SetTitle(track.Title);
 	Tmp=ppl6::Trim(track.Artist);
-	if (Tmp.IsEmpty()) Tmp=ui.artist->text();
+	if (Tmp.IsEmpty()) {
+		Tmp=ui.artist->text();
+		Tmp.Trim();
+	}
 	Ti.SetArtist(Tmp);
 
 	// Tags
@@ -410,11 +422,12 @@ void CDDBImport::getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track)
 	Ti.SetTags(Tmp);
 
 
-	ppl6::CString Title=track.Title;
-	ppl6::CString Version="";
+	ppl6::CString Title=ppl6::Trim(track.Title);
+	ppl6::CString Version=getVersionFromTitle(Title,track.length);
+
 	if (Title.PregMatch("/^(.*)\\((.*?)\\)$")) {
-		Title=Title.GetMatch(1);
-		Version=Title.GetMatch(2);
+		Title=ppl6::Trim(Title.GetMatch(1));
+		Version=ppl6::Trim(Title.GetMatch(2));
 	}
 	Ti.SetTitle(Title);
 
