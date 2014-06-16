@@ -927,6 +927,9 @@ void Edit::importFromCddb()
 	Dialog.setModal(true);
 	Dialog.setDisc(disc);
 	if (!Dialog.exec()) return;
+	if (Dialog.checkAndConfirmOverwrite(DeviceType,DeviceId,Page)!=true) return;
+	Dialog.startImport(disc, DeviceType,DeviceId,Page);
+	OpenTrack(DeviceId, Page, 0);
 
 	return;
 	ppl6::CString Album;

@@ -210,7 +210,7 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 			QByteArray bytes;
 			QBuffer buffer(&bytes);
 			buffer.open(QIODevice::WriteOnly);
-			icon.save(&buffer, "JPEG",70);
+			icon.save(&buffer, "JPEG",wm_main->conf.JpegQualityPreview);
 			info.Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 		}
 
