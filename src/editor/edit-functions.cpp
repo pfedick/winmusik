@@ -31,6 +31,7 @@
 #include "massimport.h"
 #include "renumberdialog.h"
 #include "cddbimport.h"
+#include "cddbselect.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -910,6 +911,7 @@ void Edit::importFromCddb()
 		return;
 	}
 	msg.setVisible(false);
+	// If we don't have any results, we show a message and exit
 	if (matches.size()<1) {
 		 QMessageBox::information(NULL,tr("audio cd not found"),
 				 tr("The audio cd was not found in the internet cd database"),
@@ -917,62 +919,28 @@ void Edit::importFromCddb()
 		return;
 	}
 	ppl6::CDDB::Disc disc;
+	// If we have more than one result, we show a selection dialog
 	if (matches.size()>1) {
-		return;
+		CDDBSelect cddbselect(this,wm);
+		cddbselect.setMatches(matches);
+		if (!cddbselect.exec()) return;
+		disc=cddbselect.getSelected();
 	} else {
 		disc=matches.front();
 	}
 
+	// Now we can show the import dialog
 	CDDBImport Dialog(this,wm);
 	Dialog.setModal(true);
 	Dialog.setDisc(disc);
 	if (!Dialog.exec()) return;
 	if (Dialog.checkAndConfirmOverwrite(DeviceType,DeviceId,Page)!=true) return;
+	// Now lets to the import
 	Dialog.startImport(disc, DeviceType,DeviceId,Page);
+	// reopen this device
 	OpenTrack(DeviceId, Page, 0);
-
-	return;
-	ppl6::CString Album;
-	Album=disc.Artist+ " - "+disc.Title;
-	datadevice.SetTitle(Album);
-	datadevice.SetSubTitle(NULL);
-
-	// Tonträger aktualisieren
-	wm->DeviceStore.Put(&datadevice);
-	wm->DeviceStore.Update(DeviceType,DeviceId);
-
-	ppl6::CDDB::Disc::TrackList::const_iterator it;
-	for (it=disc.Tracks.begin();it!=disc.Tracks.end();++it) {
-		copyTrackFromCddb(disc,*it);
-	}
-
-
-	UpdateDevice();
-
 }
 
-void Edit::copyTrackFromCddb(const ppl6::CDDB::Disc &disc, const ppl6::CDDB::Track &track)
-{
-	ppl6::CString Tmp;
-
-	Ti.Clear();
-	Ti.DeviceType=DeviceType;
-	Ti.DeviceId=DeviceId;
-	Ti.Page=Page;
-	Ti.Track=track.number;
-
-	Ti.SetTitle(track.Title);
-	Ti.SetArtist(track.Artist);
-
-	Tmp=disc.Artist+ " - "+disc.Title;
-	Ti.SetAlbum(Tmp);
-	Ti.ReleaseDate=disc.year*10000;
-
-	Tmp=QDate::currentDate().toString("yyyyMMdd");
-	Ti.RecordDate=Tmp.ToInt();
-
-
-}
 
 void Edit::renumber()
 {
