@@ -662,7 +662,7 @@ void Edit::UpdateFkeys()
 	t[0]=tr("close");
 	t[1]=tr("new");
 	t[2]=tr("back");
-	t[3]=tr("master data");
+	t[3]=tr("edit device");
 	t[4]=tr("search");
 	t[5]=tr("print");
 	t[6]=tr("save");
@@ -1091,6 +1091,7 @@ bool Edit::on_page_FocusIn()
 				ui.index->setFocus();
 				return true;
 			}
+			showEditor();
 		}
 		UpdateDevice();
 		Tmp="1";
@@ -1566,12 +1567,14 @@ void Edit::on_f6_clicked()
 
 void Edit::on_f7_clicked()
 {
+	if (position==3) on_contextSynchronizeKeys_triggered();
 	if (position>3) on_f7_DeleteTrack();
 }
 
 void Edit::on_f8_clicked()
 {
-	if (position>3) on_f8_InsertTrack();
+	if (position==3) on_contextLoadCoverAllTracks_triggered();
+	else if (position>3) on_f8_InsertTrack();
 }
 
 void Edit::on_f9_clicked()
