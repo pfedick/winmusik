@@ -1536,7 +1536,9 @@ void Edit::on_f2_clicked()
 }
 void Edit::on_f3_clicked()
 {
-	if (position==4 || position==5 || position==7 || position==9 || position==14
+	if (position==3) {
+		renumber();
+	} else if (position==4 || position==5 || position==7 || position==9 || position==14
 			|| position==16 || position==18 || position==20 || position==21) {
 		QWidget *target=GetWidgetFromPosition(position);
 		if (!target) return;
@@ -1552,6 +1554,7 @@ void Edit::on_f4_clicked()
 }
 void Edit::on_f5_clicked()
 {
+	if (position==3) importFromCddb();
 	if (position==4) on_f5_ShortCut(Qt::NoModifier);
 	else if(position>7) on_f5_CheckDupes(NULL);
 }

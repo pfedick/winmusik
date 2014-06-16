@@ -931,7 +931,7 @@ void Edit::importFromCddb()
 
 	// Now we can show the import dialog
 	CDDBImport Dialog(this,wm);
-	Dialog.setModal(true);
+	//Dialog.setModal(true);
 	Dialog.setDisc(disc);
 	if (!Dialog.exec()) return;
 	if (Dialog.checkAndConfirmOverwrite(DeviceType,DeviceId,Page)!=true) return;
