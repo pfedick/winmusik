@@ -240,7 +240,7 @@ bool CDDBImport::on_KeyPress(QObject *, int key, int modifier)
 		MoveToNextWidget();
 		return true;
 		// *************************************************************************** F12
-	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier && position>3) {
+	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier) {
 		on_okButton_clicked();
 		return true;
 	}
