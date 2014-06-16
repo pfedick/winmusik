@@ -309,14 +309,13 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 		UpdateTrackListing();
 		ui.titleEdit->setEnabled(true);
 		ui.track->setFocus();
-		if (track>0) {
+		if (track>0 || TrackList->Num()==0) {
 			showEditor();
 			ui.track->setText(ppl6::ToString("%i",track));
 			ui.artist->setFocus();
 		}
 
 	}
-
 }
 
 void Edit::SetupTrackList()
@@ -1145,6 +1144,7 @@ bool Edit::on_track_FocusIn()
 		delete oimpInfo;
 		oimpInfo=NULL;
 	}
+	if (TrackList->Num()==0) showEditor();
 	ui.track->deselect();
 	ui.track->selectAll();
 	return false;

@@ -59,6 +59,7 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
     void resizeEvent ( QResizeEvent * event );
+    ppl6::CString getVersionFromTitle(ppl6::CString &Title, int length);
 
     // Globale Events
     bool on_KeyPress(QObject *target, int key,int modifier);

@@ -44,6 +44,7 @@
 #include <QBuffer>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include "../include/asynchronousMessage.h"
 
 
@@ -897,11 +898,17 @@ void Edit::importFromCddb()
 	asynchronousMessage msg;
 	msg.setMessageText(tr("Reading and querying cd in internet database, please wait."));
 	msg.show();
+	QCoreApplication::processEvents();
+	QCoreApplication::sendPostedEvents();
+	QCoreApplication::processEvents();
 	try {
 		ppl6::AudioCD cd;
+		QCoreApplication::processEvents();
 		cd.openDevice();
+		QCoreApplication::processEvents();
 		ppl6::CDDB cddb;
 		cddb.query(cd,matches);
+		QCoreApplication::processEvents();
 	} catch (const ppl6::Exception &e) {
 		msg.setVisible(false);
 		QString intro=tr("An error occured, when trying to access the audio cd or querying the internet database");
@@ -931,7 +938,7 @@ void Edit::importFromCddb()
 
 	// Now we can show the import dialog
 	CDDBImport Dialog(this,wm);
-	//Dialog.setModal(true);
+	Dialog.setModal(false);
 	Dialog.setDisc(disc);
 	if (!Dialog.exec()) return;
 	if (Dialog.checkAndConfirmOverwrite(DeviceType,DeviceId,Page)!=true) return;
