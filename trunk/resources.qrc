@@ -112,6 +112,7 @@
     <file>resources/tr25x25-0013.png</file>
     <file>resources/tr25x25-0014.png</file>
     <file>resources/tr25x25-0015.png</file>
+    <file>resources/tr25x25-0018.png</file>
   </qresource>
   <qresource prefix="/devices48">
     <file>resources/tr48x48-0017.png</file>
@@ -131,6 +132,7 @@
     <file>resources/tr48x48-0013.png</file>
     <file>resources/tr48x48-0014.png</file>
     <file>resources/tr48x48-0015.png</file>
+    <file>resources/tr48x48-0018.png</file>
   </qresource>
   <qresource prefix="/fkeys">
     <file>resources/fkeys/f-key-2007.png</file>
@@ -164,10 +166,12 @@
     <file>resources/fkeys/f-key-1012.png</file>
     <file>resources/fkeys/f-key-2000.png</file>
     <file>resources/fkeys/f-key-2002.png</file>
+    <file>resources/fkeys/f-key-2003.png</file>
     <file>resources/fkeys/f-key-2005.png</file>
     <file>resources/fkeys/f-key-2006.png</file>
     <file>resources/fkeys/f-key-3005.png</file>
     <file>resources/fkeys/f-key-3006.png</file>
+    <file>resources/fkeys/f-key-4005.png</file>
   </qresource>
   <qresource prefix="/icons">
     <file>resources/load_cover.png</file>
