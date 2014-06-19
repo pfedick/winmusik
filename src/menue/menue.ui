@@ -387,35 +387,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="propertiesButton">
-          <property name="toolTip">
-           <string>Properties</string>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../../resources.qrc">
-            <normaloff>:/devices25/resources/tr25x25-0011.png</normaloff>:/devices25/resources/tr25x25-0011.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="autoRaise">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QToolButton" name="coverButton">
           <property name="toolTip">
            <string>Print Cover</string>
@@ -490,6 +461,42 @@
           <property name="icon">
            <iconset resource="../../resources.qrc">
             <normaloff>:/devices25/resources/tr25x25-0016.png</normaloff>:/devices25/resources/tr25x25-0016.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="propertiesButton">
+          <property name="toolTip">
+           <string>Properties</string>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../resources.qrc">
+            <normaloff>:/devices25/resources/tr25x25-0018.png</normaloff>:/devices25/resources/tr25x25-0018.png</iconset>
           </property>
           <property name="iconSize">
            <size>

@@ -20,7 +20,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Properties</string>
+   <string>WinMusik Properties</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
