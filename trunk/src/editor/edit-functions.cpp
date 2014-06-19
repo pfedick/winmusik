@@ -957,6 +957,12 @@ void Edit::renumber()
 	Dialog.setOldNumber(DeviceId);
 	if (!Dialog.exec()) return;
 	ppluint32 newDeviceId=Dialog.getNewNumber();
+	if (newDeviceId<1) {
+		QMessageBox::critical(NULL,tr("Error"),
+				tr("Invalid number"),
+				QMessageBox::Ok, QMessageBox::Ok);
+		return;
+	}
 
 	if (!Dialog.isTargetPathUsable(DeviceType,newDeviceId)) return;
 	if (!Dialog.isTargetDeviceFree(DeviceType,newDeviceId)) return;
