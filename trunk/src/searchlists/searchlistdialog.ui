@@ -10,8 +10,11 @@
     <height>625</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
   <property name="windowTitle">
-   <string>Searchlist</string>
+   <string>WinMusik Searchlist</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">

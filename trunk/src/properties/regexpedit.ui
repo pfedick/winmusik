@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Regular Expression Editor</string>
+   <string>WinMusik Regular Expression Editor</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
