@@ -692,7 +692,7 @@ void Edit::UpdateFkeys()
 					ui.fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-4005.png",tr("cddb import"));
 				}
 			}
-			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-3010.png",tr("renumber"));
+			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-2003.png",tr("renumber"));
 			break;
 		case 4:		// Interpret
 			ui.fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
