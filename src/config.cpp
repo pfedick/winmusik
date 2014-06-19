@@ -81,6 +81,12 @@ Config::Config()
 
 }
 
+Config::CDDB::CDDB()
+{
+	port=80;
+	server="freedb.org";
+}
+
 int Config::setConfigFile(const ppl6::CString &filename)
 {
 	ppl6::CDirEntry res;
@@ -211,6 +217,10 @@ int Config::Save()
 	c.Add("musicKey","customMusicKeyName",(const char*)customMusicKeyName);
 	for (int i=0;i<26;i++) c.Add("musicKey",(const char*)ppl6::ToString("customMusicKey[%i]",i),(const char*)customMusicKey[i]);
 
+	// CDDB
+	c.Add("cddb","cddevice",(const char*)cddb.cddevice);
+	c.Add("cddb","server",(const char*)cddb.server);
+	c.Add("cddb","port",cddb.port);
 
 	if (!c.Save(ConfigFile)) return 0;
 	return 1;
@@ -327,6 +337,10 @@ int Config::Load()
 			(const char*)ppl6::ToString("customMusicKey[%i]",i),
 			(const char*)DataTitle::keyName(i,musicKeyTypeMusicalSharps));
 
+	// CDDB
+	cddb.cddevice=c.Get("cddb","cddevice","");
+	cddb.server=c.Get("cddb","server","freedb.org");
+	cddb.port=c.GetInt("cddb","port",80);
 
 	return 1;
 }

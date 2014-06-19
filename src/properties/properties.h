@@ -204,6 +204,10 @@ private slots:
     void on_customMusicalKey_25_textChanged(const QString & ) {Change();};
     void on_customMusicKeyName_textChanged(const QString & ) {Change();};
 
+    // CDDB
+    void on_cdioDevice_currentIndexChanged(int ) {Change();};
+    void on_cddbServer_textChanged(const QString &) {Change();};
+    void on_cddbPort_textChanged(const QString &) {Change();};
 };
 
 #endif // PROPERTIES_H

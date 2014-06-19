@@ -350,7 +350,15 @@ class Config
 		MusicKeyType	musicKeyTag;
 		int				playlistView;
 
+		class CDDB {
+			public:
+				CDDB();
+				ppl6::CString	cddevice;
+				ppl6::CString	server;
+				int				port;
 
+		};
+		CDDB			cddb;
 
 };
 

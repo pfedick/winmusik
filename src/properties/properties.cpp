@@ -30,6 +30,7 @@
 #include "properties.h"
 #include "registration.h"
 #include "regexpedit.h"
+#include <ppl6-sound.h>
 
 #include <QTableWidgetItem>
 
@@ -187,8 +188,28 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.customMusicalKey_24->setText(c->customMusicKey[24]);
 	ui.customMusicalKey_25->setText(c->customMusicKey[25]);
 
-	ui.acceptButton->setEnabled(false);
+	// CDDB
+	if (ppl6::AudioCD::isSupported()==true && ppl6::CDDB::isSupported()==true) {
+		ui.cddbServer->setText(c->cddb.server);
+		Tmp.Setf("%i",c->cddb.port);
+		ui.cddbPort->setText(Tmp);
+		ui.cdioDevice->clear();
+		std::list<ppl6::CString> devices=ppl6::AudioCD::getDevices();
+		ui.cdioDevice->addItem(tr("Default"),"default");
+		std::list<ppl6::CString>::const_iterator it;
+		for (it=devices.begin();it!=devices.end();++it) {
+			ui.cdioDevice->addItem((*it),(*it));
 
+		}
+		index=ui.cdioDevice->findData(c->cddb.cddevice);
+		if (index>=0) ui.cdioDevice->setCurrentIndex(index);
+	} else {
+		ui.tab_cddb->setEnabled(false);
+	}
+
+
+	// Finish
+	ui.acceptButton->setEnabled(false);
 	QString Style="QTreeView::item {\n"
 	    		"border-right: 1px solid #b9b9b9;\n"
 	    		"border-bottom: 1px solid #b9b9b9;\n"
@@ -295,6 +316,7 @@ int Properties::CheckValues()
 int Properties::Save()
 {
 	ppl6::CString Tmp;
+	int index;
 
 	if (!wm) {
 		// This should never happen
@@ -452,7 +474,15 @@ int Properties::Save()
 	c->customMusicKey[24]=ui.customMusicalKey_24->text();
 	c->customMusicKey[25]=ui.customMusicalKey_25->text();
 
+	// CDDB
+	if (ppl6::AudioCD::isSupported()==true && ppl6::CDDB::isSupported()==true) {
+		c->cddb.server=ui.cddbServer->text();
+		c->cddb.port=ui.cddbPort->text().toInt();
+		index=ui.cdioDevice->currentIndex();
+		if (index>=0) c->cddb.cddevice=ui.cdioDevice->itemData(index).toString();
+	}
 
+	// Save
 
 	if (!wm->conf.Save()) {
 		return 0;
