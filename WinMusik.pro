@@ -194,6 +194,7 @@ else {
         --libs \
         release`
 }
+win32:LIBS += -lwinmm
 CODECFORSRC = UTF-8
 CODECFORTR = UTF-8
 TRANSLATIONS = winmusik_de.ts \
