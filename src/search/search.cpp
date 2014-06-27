@@ -354,10 +354,12 @@ void Search::FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out)
 {
 	CHashes::TitleTree::const_iterator it;
 	DataTitle *ti;
+	int key=ui.keywheel->currentKey();
 	for (it=in.begin();it!=in.end();it++) {
 		ti=wm->GetTitle(*it);
 		if (ti->DeviceType<20 && AllowedDevices[ti->DeviceType]==1) {
-			out.Add(ti);
+			if (key==0 || key==ti->Key)
+				out.Add(ti);
 		}
 	}
 }
@@ -1223,6 +1225,8 @@ void Search::on_displayMusicKey_currentIndexChanged(int)
 
 void Search::on_keywheel_clicked(int)
 {
+	ppl6::CString Query=ui.query->text().trimmed();
+	if (Query.IsEmpty()) ui.query->setText("*");
 	on_quicksearchButton_clicked();
 }
 
