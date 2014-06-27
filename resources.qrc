@@ -4,6 +4,33 @@
     <file>winmusik_de.qm</file>
     <file>winmusik_en.qm</file>
   </qresource>
+  <qresource prefix="openkey">
+    <file>resources/keywheel/key0000.png</file>
+    <file>resources/keywheel/key0001.png</file>
+    <file>resources/keywheel/key0002.png</file>
+    <file>resources/keywheel/key0003.png</file>
+    <file>resources/keywheel/key0004.png</file>
+    <file>resources/keywheel/key0005.png</file>
+    <file>resources/keywheel/key0006.png</file>
+    <file>resources/keywheel/key0007.png</file>
+    <file>resources/keywheel/key0008.png</file>
+    <file>resources/keywheel/key0009.png</file>
+    <file>resources/keywheel/key0010.png</file>
+    <file>resources/keywheel/key0011.png</file>
+    <file>resources/keywheel/key0012.png</file>
+    <file>resources/keywheel/key0013.png</file>
+    <file>resources/keywheel/key0014.png</file>
+    <file>resources/keywheel/key0015.png</file>
+    <file>resources/keywheel/key0016.png</file>
+    <file>resources/keywheel/key0017.png</file>
+    <file>resources/keywheel/key0018.png</file>
+    <file>resources/keywheel/key0019.png</file>
+    <file>resources/keywheel/key0020.png</file>
+    <file>resources/keywheel/key0021.png</file>
+    <file>resources/keywheel/key0022.png</file>
+    <file>resources/keywheel/key0023.png</file>
+    <file>resources/keywheel/key0024.png</file>
+  </qresource>
   <qresource prefix="logo">
     <file>resources/icon16.png</file>
     <file>resources/icon24.png</file>

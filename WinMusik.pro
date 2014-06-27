@@ -32,6 +32,7 @@ else {
 }
 HEADERS += widgets/fkeys.h \
     widgets/edittrack.h \
+    widgets/keywheel.h \
     src/searchlists/searchlists.h \
     src/searchlists/searchlistdialog.h \
     src/searchlists/searchlisttrackdialog.h \
@@ -76,6 +77,7 @@ HEADERS += widgets/fkeys.h \
     include/droparea.h
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
+    widgets/keywheel.cpp \
     src/searchlists/searchlists.cpp \
     src/searchlists/searchlistdialog.cpp \
     src/searchlists/searchlisttrackdialog.cpp \

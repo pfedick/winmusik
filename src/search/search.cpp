@@ -69,7 +69,9 @@ Search::Search(QWidget *parent, CWmClient *wm)
 		default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
 	ui.displayMusicKey->setItemText(2,wm->conf.customMusicKeyName);
-
+	for (int i=1;i<=24;i++) {
+		ui.keywheel->setKeyName(i,DataTitle::keyName(i,musicKeyDisplay));
+	}
 	update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
@@ -1213,4 +1215,14 @@ void Search::on_displayMusicKey_currentIndexChanged(int)
 		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	updateTrackListing();
+	for (int i=1;i<=24;i++) {
+		ui.keywheel->setKeyName(i,DataTitle::keyName(i,musicKeyDisplay));
+	}
+	ui.keywheel->repaint();
 }
+
+void Search::on_keywheel_clicked(int)
+{
+	on_quicksearchButton_clicked();
+}
+
