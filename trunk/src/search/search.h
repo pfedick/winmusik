@@ -171,6 +171,8 @@ public slots:
 	void on_tags_returnPressed();
 	void on_query_returnPressed();
 	void on_recordLabel_returnPressed();
+
+	void on_keywheel_clicked(int key);
 };
 
 class CSearchTrackList : public QTreeWidget
