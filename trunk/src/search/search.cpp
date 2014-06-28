@@ -75,6 +75,9 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	}
 	on_setThisYear_clicked();
 	on_setRecordingDate0_clicked();
+	ui.filter->setVisible(false);
+	ui.useFilter->setChecked(false);
+
 
 	update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
@@ -567,6 +570,8 @@ void Search::PresentResults()
 
 void Search::configureFilter(ResultFilter &filter)
 {
+	if (ui.useFilter->isChecked()!=true ) return;
+
 	if (ui.enableGenreSearch->isChecked())
 		filter.setGenres(true,ui.qs_genre->text());
 	if (ui.enableBpmSearch->isChecked())
@@ -1349,4 +1354,9 @@ void Search::on_setRecordingDate2_clicked()
 	ui.recordDateStart->setDate(now);
 	now.setDate(now.year(),now.month(),now.daysInMonth());
 	ui.recordDateEnd->setDate(now);
+}
+
+void Search::on_useFilter_toggled(bool enabled)
+{
+	ui.filter->setVisible(enabled);
 }

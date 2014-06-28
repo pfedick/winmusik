@@ -187,6 +187,8 @@ public slots:
 	void on_setRecordingDate0_clicked();
 	void on_setRecordingDate1_clicked();
 	void on_setRecordingDate2_clicked();
+
+	void on_useFilter_toggled(bool);
 };
 
 class CSearchTrackList : public QTreeWidget
