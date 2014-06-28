@@ -35,6 +35,7 @@
 
 class Search;
 class CSearchTrackList;
+class ResultFilter;
 
 #define SEARCH_TRACKLIST_BPM_ROW	6
 #define SEARCH_TRACKLIST_KEY_ROW	7
@@ -96,6 +97,8 @@ private:
     void updateTrackListing();
     void renderTrack(WMTreeItem *item, DataTitle *ti);
     void createSetMusicKeyContextMenu(QMenu *m);
+
+    void configureFilter(ResultFilter &filter);
 
 
 
@@ -173,6 +176,16 @@ public slots:
 	void on_recordLabel_returnPressed();
 
 	void on_keywheel_clicked(int key);
+
+	void on_enableGenreSearch_toggled(bool);
+	void on_enableBpmSearch_toggled(bool);
+	void on_enableYearSearch_toggled(bool);
+	void on_enableRecordingDateSearch_toggled(bool);
+	void on_setThisYear_clicked();
+	void on_setLastYear_clicked();
+	void on_setRecordingDate0_clicked();
+	void on_setRecordingDate1_clicked();
+	void on_setRecordingDate2_clicked();
 };
 
 class CSearchTrackList : public QTreeWidget

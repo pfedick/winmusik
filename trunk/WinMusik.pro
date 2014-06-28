@@ -45,7 +45,7 @@ HEADERS += widgets/fkeys.h \
     src/editor/oimpinfo.h \
     src/editor/tablesearch.h \
     src/editor/edit.h \
- 	include/coverviewer.h \
+    include/coverviewer.h \
     include/csearchlist.h \
     include/massimport.h \
     include/edittrackdialog.h \
@@ -63,6 +63,7 @@ HEADERS += widgets/fkeys.h \
     include/firststart.h \
     include/winmusik3.h \
     include/backgroundjobs.h \
+    include/resultfilter.h \
     src/search/search.h \
     src/menue/menue.h \
     include/regexpcapture.h \
@@ -98,6 +99,7 @@ SOURCES += widgets/fkeys.cpp \
     src/CTrackList.cpp \
     src/massimport.cpp \
     src/coverprinter.cpp \
+    src/resultfilter.cpp \
     src/regexpcapture.cpp \
     src/updater.cpp \
     src/registration.cpp \

@@ -32,6 +32,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "search.h"
+#include "resultfilter.h"
 
 #include <vector>
 
@@ -72,6 +73,9 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	for (int i=1;i<=24;i++) {
 		ui.keywheel->setKeyName(i,DataTitle::keyName(i,musicKeyDisplay));
 	}
+	on_setThisYear_clicked();
+	on_setRecordingDate0_clicked();
+
 	update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
@@ -354,12 +358,10 @@ void Search::FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out)
 {
 	CHashes::TitleTree::const_iterator it;
 	DataTitle *ti;
-	int key=ui.keywheel->currentKey();
 	for (it=in.begin();it!=in.end();it++) {
 		ti=wm->GetTitle(*it);
 		if (ti->DeviceType<20 && AllowedDevices[ti->DeviceType]==1) {
-			if (key==0 || key==ti->Key)
-				out.Add(ti);
+			out.Add(ti);
 		}
 	}
 }
@@ -563,6 +565,35 @@ void Search::PresentResults()
 
 }
 
+void Search::configureFilter(ResultFilter &filter)
+{
+	if (ui.enableGenreSearch->isChecked())
+		filter.setGenres(true,ui.qs_genre->text());
+	if (ui.enableBpmSearch->isChecked())
+		filter.setBpmRange(true,ui.bpmStart->value(), ui.bpmEnd->value());
+	if (ui.enableYearSearch->isChecked()) {
+		QDate Date=ui.releaseDateStart->date();
+		Date.setDate(Date.year(),01,01);
+		ppl6::CString Tmp=Date.toString("yyyyMMdd");
+		ppluint32 start=Tmp.ToInt();
+		Date=ui.releaseDateEnd->date();
+		Date.setDate(Date.year(),12,31);
+		Tmp=Date.toString("yyyyMMdd");
+		ppluint32 end=Tmp.ToInt();
+		filter.setYearRange(true,start,end);
+	}
+	if (ui.enableRecordingDateSearch->isChecked()) {
+		QDate Date=ui.recordDateStart->date();
+		ppl6::CString Tmp=Date.toString("yyyyMMdd");
+		ppluint32 start=Tmp.ToInt();
+		Date=ui.recordDateEnd->date();
+		Tmp=Date.toString("yyyyMMdd");
+		ppluint32 end=Tmp.ToInt();
+		filter.setRecordingRange(true,start,end);
+	}
+	if (ui.keywheel->currentKey()>0) filter.setMusicKey(true,ui.keywheel->currentKey());
+}
+
 void Search::on_searchButton_clicked()
 {
 	DoSearch();
@@ -571,6 +602,9 @@ void Search::on_searchButton_clicked()
 
 void Search::on_quicksearchButton_clicked()
 {
+	ResultFilter filter;
+	configureFilter(filter);
+
 	ui.numTracks->setText("");
 	currentTrackListItem=NULL;
 	trackList->clear();
@@ -587,12 +621,12 @@ void Search::on_quicksearchButton_clicked()
 	if (ui.searchTitle->isChecked()) flags|=CHashes::SearchTitle;
 	if (ui.searchVersion->isChecked()) flags|=CHashes::SearchVersion;
 	if (ui.searchLabel->isChecked()) flags|=CHashes::SearchLabel;
-	if (ui.searchGenre->isChecked()) flags|=CHashes::SearchGenre;
+	//if (ui.searchGenre->isChecked()) flags|=CHashes::SearchGenre;
 	if (ui.searchTags->isChecked()) flags|=CHashes::SearchTags;
 	if (ui.searchRemarks->isChecked()) flags|=CHashes::SearchRemarks;
 	if (ui.searchAlbum->isChecked()) flags|=CHashes::SearchAlbum;
 
-	if (wm->Hashes.FindGlobal(Query,res,flags)) {
+	if (wm->Hashes.FindGlobal(Query,res,flags,filter)) {
 		Tmp.Setf("%zu",res.size());
 		ui.numTracks->setText(Tmp);
 	}
@@ -1226,7 +1260,82 @@ void Search::on_displayMusicKey_currentIndexChanged(int)
 void Search::on_keywheel_clicked(int)
 {
 	ppl6::CString Query=ui.query->text().trimmed();
-	if (Query.IsEmpty()) ui.query->setText("*");
 	on_quicksearchButton_clicked();
 }
 
+void Search::on_enableGenreSearch_toggled(bool enabled)
+{
+	ui.qs_genre->setEnabled(enabled);
+	ui.qs_genre->setFocus();
+}
+
+void Search::on_enableBpmSearch_toggled(bool enabled)
+{
+	ui.bpmStart->setEnabled(enabled);
+	ui.bpmEnd->setEnabled(enabled);
+	ui.bpmStart->setFocus();
+}
+
+void Search::on_enableYearSearch_toggled(bool enabled)
+{
+	ui.releaseDateStart->setEnabled(enabled);
+	ui.releaseDateEnd->setEnabled(enabled);
+	ui.setThisYear->setEnabled(enabled);
+	ui.setLastYear->setEnabled(enabled);
+	ui.releaseDateStart->setFocus();
+}
+
+void Search::on_enableRecordingDateSearch_toggled(bool enabled)
+{
+	ui.recordDateStart->setEnabled(enabled);
+	ui.recordDateEnd->setEnabled(enabled);
+	ui.setRecordingDate0->setEnabled(enabled);
+	ui.setRecordingDate1->setEnabled(enabled);
+	ui.setRecordingDate2->setEnabled(enabled);
+	ui.recordDateStart->setFocus();
+}
+
+void Search::on_setThisYear_clicked()
+{
+	QDate now=QDate::currentDate();
+	now.setDate(now.year(),01,01);
+	ui.releaseDateStart->setDate(now);
+	now.setDate(now.year(),12,31);
+	ui.releaseDateEnd->setDate(now);
+}
+
+void Search::on_setLastYear_clicked()
+{
+	QDate now=QDate::currentDate();
+	now.setDate(now.year()-1,01,01);
+	ui.releaseDateStart->setDate(now);
+	now.setDate(now.year(),12,31);
+	ui.releaseDateEnd->setDate(now);
+}
+
+void Search::on_setRecordingDate0_clicked()
+{
+	QDate now=QDate::currentDate();
+	now.setDate(now.year(),now.month(),01);
+	ui.recordDateStart->setDate(now);
+	now.setDate(now.year(),now.month(),now.daysInMonth());
+	ui.recordDateEnd->setDate(now);
+}
+
+void Search::on_setRecordingDate1_clicked()
+{
+	QDate now=QDate::currentDate().addMonths(-1);
+	now.setDate(now.year(),now.month(),01);
+	ui.recordDateStart->setDate(now);
+	now.setDate(now.year(),now.month(),now.daysInMonth());
+	ui.recordDateEnd->setDate(now);
+}
+
+void Search::on_setRecordingDate2_clicked()
+{
+	QDate now=QDate::currentDate().addMonths(-2);
+	now.setDate(now.year(),now.month(),01);
+	ui.recordDateStart->setDate(now);
+	now.setDate(now.year(),now.month(),now.daysInMonth());
+	ui.recordDateEnd->setDate(now);
+}

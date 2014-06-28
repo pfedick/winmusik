@@ -26,6 +26,7 @@
 
 #include "winmusik3.h"
 #include "asynchronousMessage.h"
+#include "resultfilter.h"
 
 CHashes::CHashes()
 {
@@ -85,12 +86,28 @@ void CHashes::Copy(TitleTree &Result, const TitleTree &src)
 	}
 }
 
-void CHashes::Add(TitleTree &Result, const TitleTree &src)
+ppluint32 CHashes::Add(TitleTree &Result, const TitleTree &src, const ResultFilter &filter)
 {
+	ppluint32 counter=0;
+	TitleTree::const_iterator it;
+	for (it=src.begin();it!=src.end();it++) {
+		if (filter.pass(*it)) {
+			Result.insert(*it);
+			counter++;
+		}
+	}
+	return counter;
+}
+
+ppluint32 CHashes::Add(TitleTree &Result, const TitleTree &src)
+{
+	ppluint32 counter=0;
 	TitleTree::const_iterator it;
 	for (it=src.begin();it!=src.end();it++) {
 		Result.insert(*it);
+		counter++;
 	}
+	return counter;
 }
 
 void CHashes::Union(TitleTree &Result, const TitleTree &Tree1, const TitleTree &Tree2)
@@ -161,7 +178,7 @@ void CHashes::FindWords(const WordTree &Tree, ppl6::CArray &words, TitleTree &Re
 }
 
 
-void CHashes::FindSingleWord(const WordTree &Tree, const ppl6::CString &Word, TitleTree &Result)
+void CHashes::FindSingleWord(const WordTree &Tree, const ppl6::CString &Word, TitleTree &Result, const ResultFilter &filter)
 {
 	if (Word.Instr("*")>=0) {
 		ppl6::CString Tmp=Word;
@@ -173,8 +190,7 @@ void CHashes::FindSingleWord(const WordTree &Tree, const ppl6::CString &Word, Ti
 		WordTree::const_iterator it;
 		for (it=Tree.begin();it!=Tree.end();it++) {
 			if(ppl6::PregMatch(expression,it->first)) {
-				found=true;
-				Add(Result,it->second);
+				if (Add(Result,it->second,filter)) found=true;
 			}
 		}
 		if (!found) {
@@ -184,7 +200,7 @@ void CHashes::FindSingleWord(const WordTree &Tree, const ppl6::CString &Word, Ti
 	} else {
 		WordTree::const_iterator it=Tree.find(Word);
 		if (it!=Tree.end()) {
-			Add(Result,it->second);
+			Add(Result,it->second,filter);
 		} else {
 			return;
 		}
@@ -531,17 +547,19 @@ int CHashes::CheckDupes(const ppl6::CString &Artist, const ppl6::CString &Title,
 	return Result.size();
 }
 
-int CHashes::FindGlobal(const ppl6::CString &Query, TitleTree &Result, int Flags)
+int CHashes::FindGlobal(const ppl6::CString &Query, TitleTree &Result, int Flags, const ResultFilter &filter)
 {
 	Result.clear();
 	if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,"Query=%s",(const char*)Query);
 	// Zuerst die Wortliste erstellen
 	ppl6::CArray WordsQuery;
 	wm->GetWords(Query,WordsQuery);
+	/*
 	if (WordsQuery.Num()==0) {
 		ppl6::SetError(20028);
 		return 0;
 	}
+	*/
 	if (!Mutex.TryLock()) {
 		if (log) log->Printf(ppl6::LOG::DEBUG,10,"CHashes","FindGlobal",__FILE__,__LINE__,"Search Trees are not ready yet, waiting...");
 		asynchronousMessage message;
@@ -554,35 +572,46 @@ int CHashes::FindGlobal(const ppl6::CString &Query, TitleTree &Result, int Flags
 			ppl6::USleep(100);
 		}
 	}
-	TitleTree TmpResult;
-	WordsQuery.Reset();
-	ppl6::CString key;
-	int wordnum=0;
-	const char*tmp;
-	while ((tmp=WordsQuery.GetNext())) {
-		key=tmp;
-		TmpResult.clear();
-		if (Flags&SearchArtist) FindSingleWord(Artist,key,TmpResult);
-		if (Flags&SearchTitle) FindSingleWord(Title,key,TmpResult);
-		if (Flags&SearchVersion) FindSingleWord(Version,key,TmpResult);
-		if (Flags&SearchGenre) FindSingleWord(Genre,key,TmpResult);
-		if (Flags&SearchTags) FindSingleWord(Tags,key,TmpResult);
-		if (Flags&SearchRemarks) FindSingleWord(Remarks,key,TmpResult);
-		if (Flags&SearchAlbum) FindSingleWord(Album,key,TmpResult);
-		if (Flags&SearchLabel) FindSingleWord(Label,key,TmpResult);
-		if (TmpResult.size()>0) {
-			if (wordnum==0) Copy(Result,TmpResult);
-			else {
-				TitleTree LastResult;
-				Copy(LastResult,Result);
-				Union(Result,LastResult,TmpResult);
+	if (WordsQuery.Num()>0) {
+		TitleTree TmpResult;
+		WordsQuery.Reset();
+		ppl6::CString key;
+		int wordnum=0;
+		const char*tmp;
+		while ((tmp=WordsQuery.GetNext())) {
+			key=tmp;
+			TmpResult.clear();
+			if (Flags&SearchArtist) FindSingleWord(Artist,key,TmpResult,filter);
+			if (Flags&SearchTitle) FindSingleWord(Title,key,TmpResult,filter);
+			if (Flags&SearchVersion) FindSingleWord(Version,key,TmpResult,filter);
+			if (Flags&SearchGenre) FindSingleWord(Genre,key,TmpResult,filter);
+			if (Flags&SearchTags) FindSingleWord(Tags,key,TmpResult,filter);
+			if (Flags&SearchRemarks) FindSingleWord(Remarks,key,TmpResult,filter);
+			if (Flags&SearchAlbum) FindSingleWord(Album,key,TmpResult,filter);
+			if (Flags&SearchLabel) FindSingleWord(Label,key,TmpResult,filter);
+			if (TmpResult.size()>0) {
+				if (wordnum==0) Copy(Result,TmpResult);
+				else {
+					TitleTree LastResult;
+					Copy(LastResult,Result);
+					Union(Result,LastResult,TmpResult);
+				}
+				wordnum++;
+			} else {
+				Result.clear();
+				break;
 			}
-			wordnum++;
-		} else {
-			Result.clear();
-			break;
-		}
 
+		}
+	} else {
+		// Leerer Query, alle Titel kommen ins Result-Set, sofern sie den Filter bestehen
+		ppluint32 max=wm_main->TitleStore.MaxId();
+		for (ppluint32 i=0;i<=max;i++) {
+			DataTitle *ti=wm_main->TitleStore.Get(i);
+			if (ti) {
+				if (filter.pass(*ti)) Result.insert(i);
+			}
+		}
 	}
 	Mutex.Unlock();
 	return 1;
