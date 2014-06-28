@@ -44,7 +44,11 @@ class ResultFilter
 		ppluint32 recordingStart, recordingEnd;
 		ppluint8 musicKey;
 		ppluint8 ratingStart, ratingEnd;
-		std::set<ppluint16> genreSet;
+		typedef std::set<ppluint32> IndexTree;
+
+		IndexTree genreSet;
+
+
 
 		bool passBpm(const DataTitle &ti) const;
 		bool passYear(const DataTitle &ti) const;

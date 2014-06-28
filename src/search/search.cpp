@@ -698,6 +698,11 @@ void Search::on_query_returnPressed()
 	on_quicksearchButton_clicked();
 }
 
+void Search::on_qs_genre_returnPressed()
+{
+	on_quicksearchButton_clicked();
+}
+
 void Search::on_markAllButton_clicked()
 {
 	WMTreeItem * item;
