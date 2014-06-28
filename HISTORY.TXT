@@ -19,6 +19,8 @@ Version 3.3.0
     - Unterstützung für CDDB implementiert: Im Editor können Titel nun
       automatisch beim Einlegen einer Audio CD importiert werden, sofern diese
       in der Internet CDDB gefunden wird.
+    - Die Suche (Quicksearch) wurde überarbeitet und unterstützt nun Filter
+      für Genres, BPM-Bereiche, Erscheinungsjahr, Aufnahmedatum und Tonart.
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
