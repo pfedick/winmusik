@@ -103,6 +103,7 @@ CSimpleTable::CSimpleTable(const CSimpleTable &other)
  *
  * Konstruktor der Klasse
  */
+: CStorageItem(other), CTreeItem()
 {
 	Id=0;
 	References=0;
@@ -516,6 +517,7 @@ int CTableStore::Put(CSimpleTable *entry)
 		id=highestId;
 	} else {
 		id=entry->Id;
+		removeFromWordTree(id);
 		if (id>highestId) highestId=id;
 	}
 
@@ -554,6 +556,7 @@ int CTableStore::Put(CSimpleTable *entry)
 		}
 		// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
 		entry->CopyStorageFrom(TableIndex[id].t);
+		addToWordTree(id);
 		Mutex.Unlock();
 		return 1;
 	}
@@ -592,6 +595,7 @@ int CTableStore::Put(CSimpleTable *entry)
 	// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
 	entry->CopyStorageFrom(TableIndex[id].t);
 	entry->Id=id;
+	addToWordTree(id);
 	Mutex.Unlock();
 	return 1;
 }
@@ -721,6 +725,97 @@ int CTableStore::LoadChunk(CWMFileChunk *chunk)
 		return 0;
 	}
 	return 1;
+}
+
+
+void CTableStore::removeFromWordTree(ppluint32 id)
+{
+	CSimpleTable *t=Get(id);
+	if (t==NULL || t->Value==NULL) return;
+
+	ppl6::CArray words;
+	if (wm_main->GetWords(t->Value,words)) {
+		const char *tmp;
+		ppl6::CString key;
+		words.Reset();
+		while ((tmp=words.GetNext())) {
+			key=tmp;
+			Words[key].erase(id);
+		}
+	}
+
+}
+
+void CTableStore::addToWordTree(ppluint32 id)
+{
+	CSimpleTable *t=Get(id);
+	if (t==NULL || t->Value==NULL) return;
+
+	ppl6::CArray words;
+	if (wm_main->GetWords(t->Value,words)) {
+		const char *tmp;
+		ppl6::CString key;
+		words.Reset();
+		while ((tmp=words.GetNext())) {
+			key=tmp;
+			Words[key].insert(id);
+		}
+	}
+}
+
+void CTableStore::makeUnion(IndexTree &Result, const IndexTree &Tree1, const IndexTree &Tree2)
+{
+	Result.clear();
+	// Nur was in Tree1 und Tree2 vorhanden ist, wandert in Result
+	const IndexTree *small, *big;
+	if (Tree1.size()<Tree2.size()) {
+		small=&Tree1;
+		big=&Tree2;
+	} else {
+		small=&Tree2;
+		big=&Tree1;
+	}
+	IndexTree::const_iterator it;
+	for (it=small->begin();it!=small->end();it++) {
+		if (big->find(*it)!=big->end()) Result.insert(*it);
+	}
+}
+
+void CTableStore::copy(IndexTree &Result, const IndexTree &src)
+{
+	Result.clear();
+	IndexTree::const_iterator it;
+	for (it=src.begin();it!=src.end();it++) {
+		Result.insert(*it);
+	}
+}
+
+ppluint32 CTableStore::findWords(IndexTree &Result, const ppl6::CString &words)
+{
+	ppluint32 count=0;
+	ppl6::CArray w;
+	if (wm_main->GetWords(words,w)) {
+		const char *tmp;
+		ppl6::CString key;
+		w.Reset();
+		while ((tmp=w.GetNext())) {
+			key=tmp;
+			WordTree::const_iterator it=Words.find(key);
+			if (it!=Words.end()) {
+				if (!count) copy(Result,it->second);
+				else {
+					IndexTree res2;
+					makeUnion(res2,Result,it->second);
+					copy(Result,res2);
+				}
+			} else {
+				Result.clear();
+				return 0;
+			}
+			count++;
+		}
+	}
+	return count;
 }
 
 
