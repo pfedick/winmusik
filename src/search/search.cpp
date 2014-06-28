@@ -591,6 +591,9 @@ void Search::configureFilter(ResultFilter &filter)
 		ppluint32 end=Tmp.ToInt();
 		filter.setRecordingRange(true,start,end);
 	}
+	if (ui.enableRatingSearch->isChecked()) {
+		filter.setRatingRange(true,ui.ratingStart->currentIndex(), ui.ratingEnd->currentIndex());
+	}
 	if (ui.keywheel->currentKey()>0) filter.setMusicKey(true,ui.keywheel->currentKey());
 }
 
@@ -1293,6 +1296,14 @@ void Search::on_enableRecordingDateSearch_toggled(bool enabled)
 	ui.setRecordingDate1->setEnabled(enabled);
 	ui.setRecordingDate2->setEnabled(enabled);
 	ui.recordDateStart->setFocus();
+}
+
+void Search::on_enableRatingSearch_toggled(bool enabled)
+{
+	ui.ratingStart->setEnabled(enabled);
+	ui.ratingEnd->setEnabled(enabled);
+
+	ui.ratingStart->setFocus();
 }
 
 void Search::on_setThisYear_clicked()

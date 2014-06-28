@@ -181,6 +181,7 @@ public slots:
 	void on_enableBpmSearch_toggled(bool);
 	void on_enableYearSearch_toggled(bool);
 	void on_enableRecordingDateSearch_toggled(bool);
+	void on_enableRatingSearch_toggled(bool);
 	void on_setThisYear_clicked();
 	void on_setLastYear_clicked();
 	void on_setRecordingDate0_clicked();

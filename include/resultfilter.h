@@ -27,6 +27,7 @@
 #define RESULTFILTER_H_
 
 #include <ppl6.h>
+#include <set>
 
 class ResultFilter
 {
@@ -36,23 +37,28 @@ class ResultFilter
 		bool recordingDateEnabled;
 		bool musicKeyEnabled;
 		bool genresEnabled;
+		bool ratingEnabled;
 
 		ppluint32 bpmStart, bpmEnd;
 		ppluint32 yearStart, yearEnd;
 		ppluint32 recordingStart, recordingEnd;
 		ppluint8 musicKey;
+		ppluint8 ratingStart, ratingEnd;
+		std::set<ppluint16> genreSet;
 
 		bool passBpm(const DataTitle &ti) const;
 		bool passYear(const DataTitle &ti) const;
 		bool passRecordingDate(const DataTitle &ti) const;
 		bool passMusicKey(const DataTitle &ti) const;
 		bool passGenres(const DataTitle &ti) const;
+		bool passRating(const DataTitle &ti) const;
 
 	public:
 		ResultFilter();
 		void disableAll();
 		void setBpmRange(bool enabled, int start=0, int end=999);
 		void setYearRange(bool enabled, int start=0, int end=9999);
+		void setRatingRange(bool enabled, int start=0, int end=6);
 		void setRecordingRange(bool enabled, int start=0, int end=99999999);
 		void setMusicKey(bool enabled, int key=0);
 		void setGenres(bool enabled, const ppl6::CString &genres=ppl6::CString());
