@@ -40,6 +40,7 @@ void ResultFilter::disableAll()
 	recordingDateEnabled=false;
 	musicKeyEnabled=false;
 	genresEnabled=false;
+	ratingEnabled=false;
 	bpmStart=0;
 	bpmEnd=999;
 	yearStart=0;
@@ -47,6 +48,8 @@ void ResultFilter::disableAll()
 	recordingStart=0;
 	recordingEnd=99999999;
 	musicKey=0;
+	ratingStart=0;
+	ratingEnd=6;
 }
 
 void ResultFilter::setBpmRange(bool enabled, int start, int end)
@@ -61,6 +64,13 @@ void ResultFilter::setYearRange(bool enabled, int start, int end)
 	yearEnabled=enabled;
 	yearStart=start;
 	yearEnd=end;
+}
+
+void ResultFilter::setRatingRange(bool enabled, int start, int end)
+{
+	ratingEnabled=enabled;
+	ratingStart=start;
+	ratingEnd=end;
 }
 
 void ResultFilter::setRecordingRange(bool enabled, int start, int end)
@@ -79,11 +89,27 @@ void ResultFilter::setMusicKey(bool enabled, int key)
 void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
 {
 	genresEnabled=enabled;
+	genreSet.clear();
+	// genres nach Komma splitten
+	ppl6::CArray gens(genres,",");
+	for (int i=0;i<gens.Num();i++) {
+		// genre nach worten spitten
+		ppl6::CArray words(gens[i]," ");
+		for (int i=0;i<words.Num();i++) {
+			ppl6::CString word=words[i];
+			word.Trim();
+
+
+		}
+	}
+
+
 }
 
 bool ResultFilter::pass(const DataTitle &ti) const
 {
 	if (bpmEnabled==true && passBpm(ti)==false) return false;
+	if (ratingEnabled==true && passRating(ti)==false) return false;
 	if (yearEnabled==true && passYear(ti)==false) return false;
 	if (recordingDateEnabled==true && passRecordingDate(ti)==false) return false;
 	if (musicKeyEnabled==true && passMusicKey(ti)==false) return false;
@@ -101,6 +127,12 @@ bool ResultFilter::pass(ppluint32 titleId) const
 bool ResultFilter::passBpm(const DataTitle &ti) const
 {
 	if (ti.BPM>=bpmStart && ti.BPM<=bpmEnd) return true;
+	return false;
+}
+
+bool ResultFilter::passRating(const DataTitle &ti) const
+{
+	if (ti.Rating>=ratingStart && ti.Rating<=ratingEnd) return true;
 	return false;
 }
 
@@ -125,6 +157,8 @@ bool ResultFilter::passMusicKey(const DataTitle &ti) const
 
 bool ResultFilter::passGenres(const DataTitle &ti) const
 {
-	return true;
+	std::set<ppluint16>::iterator it=genreSet.find(ti.GenreId);
+	if (it!=genreSet.end()) return true;
+	return false;
 }
 
