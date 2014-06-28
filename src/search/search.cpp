@@ -70,7 +70,7 @@ Search::Search(QWidget *parent, CWmClient *wm)
 		default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
 	ui.displayMusicKey->setItemText(2,wm->conf.customMusicKeyName);
-	for (int i=1;i<=24;i++) {
+	for (int i=1;i<=25;i++) {
 		ui.keywheel->setKeyName(i,DataTitle::keyName(i,musicKeyDisplay));
 	}
 	on_setThisYear_clicked();

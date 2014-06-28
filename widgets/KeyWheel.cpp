@@ -28,7 +28,7 @@ KeyWheel::~KeyWheel()
 
 void KeyWheel::setKeyName(int key, const QString &name)
 {
-	if (key<0 || key>24) return;
+	if (key<0 || key>25) return;
 	keyname[key]=name;
 }
 
@@ -73,6 +73,8 @@ void KeyWheel::paintEvent ( QPaintEvent * event)
 	painter.setPen(PenWhite);
 
 	painter.setFont(Font);
+
+	drawKey(painter,PenWhite, PenBlack, 63,63,25);
 
 	drawKey(painter,PenWhite, PenBlack, 63,29,15);
 	drawKey(painter,PenWhite, PenBlack, 80,34,17);
