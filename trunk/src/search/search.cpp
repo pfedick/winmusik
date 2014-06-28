@@ -119,7 +119,7 @@ void Search::Resize()
 		trackList->setColumnWidth(SEARCH_TRACKLIST_RATING_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_SOURCE_ROW,120);
 	} else {
-		printf ("resultmpode=%i\n",resultmode);
+		//printf ("resultmpode=%i\n",resultmode);
 		trackList->setColumnWidth(1,w-100);
 		trackList->setColumnWidth(2,50);
 	}
