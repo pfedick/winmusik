@@ -27,7 +27,7 @@ class KeyWheel : public QLabel
 
 		int key;
 
-		QString keyname[25];
+		QString keyname[26];
 
 	public:
 		KeyWheel(QWidget *parent = 0);
