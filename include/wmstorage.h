@@ -457,6 +457,8 @@ typedef struct {
 
 class CTableStore : public CStorageType
 {
+	public:
+		typedef std::set<ppluint32> IndexTree;
 	private:
 		ppl6::CMutex Mutex;
 		ppl6::CTree Tree;
@@ -465,6 +467,14 @@ class CTableStore : public CStorageType
 		ppluint32 highestId;
 		int Increase(ppluint32 maxid);
 		int Save(CSimpleTable *t);
+		typedef std::map<ppl6::CString,IndexTree >	WordTree;
+
+		void removeFromWordTree(ppluint32 id);
+		void addToWordTree(ppluint32 id);
+		void makeUnion(IndexTree &Result, const IndexTree &Tree1, const IndexTree &Tree2);
+		void copy(IndexTree &Result, const IndexTree &src);
+
+		WordTree Words;
 
 	public:
 		CTableStore();
@@ -479,6 +489,8 @@ class CTableStore : public CStorageType
 		int FindOrAdd(const char *value);
 		int FindAll(ppl6::CWString &value, ppl6::CTree &Result);
 		int GetCopy(ppluint32 id, CSimpleTable *t);
+
+		ppluint32 findWords(IndexTree &tree, const ppl6::CString &words);
 };
 
 class CVersionStore : public CTableStore
