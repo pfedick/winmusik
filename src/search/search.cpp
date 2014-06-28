@@ -470,10 +470,8 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	if (ti->CoverPreview.Size()) {
 		icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
 		item->setIcon(1,icon.scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-
 	} else {
 		item->setIcon(1,QIcon(":/icons/resources/cover16.png"));
-
 	}
 	Tmp=ti->Artist;
 	item->setText(1,Tmp);
