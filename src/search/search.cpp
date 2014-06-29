@@ -258,7 +258,7 @@ void Search::FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title,
 
 void Search::FastSearch(const ppl6::CString &Words)
 {
-	ui.tabWidget->setCurrentIndex(1);
+	ui.tabWidget->setCurrentIndex(0);
 	ui.query->setText(Words);
 	on_quicksearchButton_clicked();
 }
@@ -1160,7 +1160,7 @@ void Search::on_ClipBoardTimer_update()
 
 	}
 	if (ui.watchClipboard->isChecked()) {
-		ui.tabWidget->setCurrentIndex(1);
+		ui.tabWidget->setCurrentIndex(0);
 		ui.query->setText(s);
 		on_quicksearchButton_clicked();
 	}
