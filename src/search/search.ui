@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1185</width>
-    <height>761</height>
+    <width>781</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1752,7 +1752,7 @@
  <resources>
   <include location="../../resources.qrc"/>
   <include location="../../resources.qrc"/>
-  <include location="svn/winmusik/resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
