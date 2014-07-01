@@ -82,6 +82,7 @@ Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\libstdc++-6.dll"; DestDir: "{app}"; F
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icuin52.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icuuc52.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\icudt52.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "D:\usr\local\bin\libgnurx-0.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
 
 ;;;Source: "D:\Qt\Qt5.3.0\5.3\mingw482_32\bin\Qt5Multimedia.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
