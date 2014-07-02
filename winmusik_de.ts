@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="de" sourcelanguage="en">
+<defaultcodec>UTF-8</defaultcodec>
 <context>
     <name>About</name>
     <message>
@@ -1543,6 +1544,7 @@ Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="915"/>
+        <location filename="src/editor/edit-functions.cpp" line="961"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -1555,6 +1557,11 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <location filename="src/editor/edit-functions.cpp" line="924"/>
         <source>The audio cd was not found in the internet cd database</source>
         <translation>Die Audio CD wurde in der Internet-Datenbank nicht gefunden</translation>
+    </message>
+    <message>
+        <location filename="src/editor/edit-functions.cpp" line="962"/>
+        <source>Invalid number</source>
+        <translation>Ungültige Nummer</translation>
     </message>
     <message>
         <location filename="src/editor/edit.cpp" line="1924"/>
@@ -3853,68 +3860,68 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
 <context>
     <name>PlaylistTracks</name>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="521"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="526"/>
         <source>Unknown playlist format:</source>
         <translation>Unbekanntes Format der Playlist:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="523"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="569"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="583"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="593"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="602"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="528"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="574"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="588"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="598"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="607"/>
         <source>WinMusik Error</source>
         <translation>WinMusik Fehler</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="532"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="537"/>
         <source>Could not open File</source>
         <translation>Konnte Datei nicht öffnen</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="567"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="572"/>
         <source>Could not open file:</source>
         <translation>Konnte Datei nicht öffnen:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="578"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="583"/>
         <source>Could not read playlist, invalid XML-format:</source>
         <translation>Konnte Playlist nicht lesen, ungültiges XML-Format:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="579"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="592"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="600"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="584"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="597"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="605"/>
         <source>Filename:</source>
         <translation>Dateiname:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="580"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="585"/>
         <source>Error:</source>
         <translation>Fehler:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="581"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="586"/>
         <source>Line:</source>
         <translation>Zeile:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="582"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="587"/>
         <source>Column:</source>
         <translation>Spalte:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="590"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="595"/>
         <source>File is not a WinMusik playlist</source>
         <translation>Datei ist keine gültige WinMusik Playlist</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="598"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="603"/>
         <source>Unknown or unsupported version of WinMusik playlist</source>
         <translation>Unbekannte oder nicht unterstützte Version der WinMusik Playlist</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="601"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="606"/>
         <source>Version:</source>
         <translation>Version:</translation>
     </message>
@@ -4127,6 +4134,13 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <location filename="src/properties/properties.ui" line="750"/>
         <source>high</source>
         <translation>hoch</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="465"/>
+        <location filename="src/properties/properties.ui" line="775"/>
+        <location filename="src/properties/properties.ui" line="893"/>
+        <source>80</source>
+        <translation>80</translation>
     </message>
     <message>
         <location filename="src/properties/properties.ui" line="700"/>
@@ -5207,145 +5221,145 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Search</name>
     <message>
-        <location filename="src/search/search.cpp" line="178"/>
+        <location filename="src/search/search.cpp" line="187"/>
         <source>Pos</source>
         <comment>trackList</comment>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="179"/>
+        <location filename="src/search/search.cpp" line="188"/>
         <source>Artist</source>
         <comment>trackList</comment>
         <translation>Interpret</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="180"/>
+        <location filename="src/search/search.cpp" line="189"/>
         <source>Title</source>
         <comment>trackList</comment>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="181"/>
+        <location filename="src/search/search.cpp" line="190"/>
         <source>Version</source>
         <comment>trackList</comment>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="182"/>
+        <location filename="src/search/search.cpp" line="191"/>
         <source>Genre</source>
         <comment>trackList</comment>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="183"/>
+        <location filename="src/search/search.cpp" line="192"/>
         <source>Length</source>
         <comment>trackList</comment>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="184"/>
+        <location filename="src/search/search.cpp" line="193"/>
         <source>BPM</source>
         <comment>trackList</comment>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="185"/>
+        <location filename="src/search/search.cpp" line="194"/>
         <source>Key</source>
         <comment>trackList</comment>
         <translation>Tonart</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="186"/>
+        <location filename="src/search/search.cpp" line="195"/>
         <source>Energy</source>
         <comment>trackList</comment>
         <translation>Energie</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="187"/>
+        <location filename="src/search/search.cpp" line="196"/>
         <source>Medium</source>
         <comment>trackList</comment>
         <translation>Tonträger</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="188"/>
+        <location filename="src/search/search.cpp" line="197"/>
         <source>Rating</source>
         <comment>trackList</comment>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="704"/>
+        <location filename="src/search/search.cpp" line="753"/>
         <source>Music Key is verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart wurde überprüft</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="705"/>
+        <location filename="src/search/search.cpp" line="754"/>
         <source>Music Key is not verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart wurde nicht geprüft</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="706"/>
+        <location filename="src/search/search.cpp" line="755"/>
         <source>Set Music-Key</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart festlegen</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="709"/>
+        <location filename="src/search/search.cpp" line="758"/>
         <source>select all</source>
         <comment>trackList Context Menue</comment>
         <translation>alle auswählen</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="710"/>
+        <location filename="src/search/search.cpp" line="759"/>
         <source>select none</source>
         <comment>trackList Context Menue</comment>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="713"/>
+        <location filename="src/search/search.cpp" line="762"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Versionen finden</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="714"/>
+        <location filename="src/search/search.cpp" line="763"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Mehr von diesem Interpreten</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="716"/>
+        <location filename="src/search/search.cpp" line="765"/>
         <source>All tracks on this medium</source>
         <comment>trackList Context Menue</comment>
         <translation>Alle Titel auf diesem Tonträger</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="718"/>
+        <location filename="src/search/search.cpp" line="767"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel abspielen</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="719"/>
+        <location filename="src/search/search.cpp" line="768"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel editieren</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="720"/>
+        <location filename="src/search/search.cpp" line="769"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Interpret und Titel in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="721"/>
+        <location filename="src/search/search.cpp" line="770"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>Dateinamen in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="730"/>
+        <location filename="src/search/search.cpp" line="779"/>
         <source>unknown</source>
         <comment>trackList Context Menue</comment>
         <translation>Unbekannt</translation>
@@ -5471,29 +5485,29 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Gm</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="767"/>
-        <location filename="src/search/search.cpp" line="783"/>
-        <location filename="src/search/search.cpp" line="939"/>
+        <location filename="src/search/search.cpp" line="816"/>
+        <location filename="src/search/search.cpp" line="832"/>
+        <location filename="src/search/search.cpp" line="988"/>
         <source>Could not save Title in TitleStore</source>
         <translation>Konnte Titel nicht in TitleStore speichern</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1131"/>
+        <location filename="src/search/search.cpp" line="1180"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1132"/>
+        <location filename="src/search/search.cpp" line="1181"/>
         <source>Filename</source>
         <translation>Dateiname</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1133"/>
+        <location filename="src/search/search.cpp" line="1182"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="715"/>
+        <location filename="src/search/search.cpp" line="764"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Interpreten mit diesem Titel</translation>
@@ -6022,7 +6036,7 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
 <context>
     <name>asynchronousMessage</name>
     <message>
-        <location filename="src/CHashes.cpp" line="548"/>
+        <location filename="src/CHashes.cpp" line="571"/>
         <source>search trees are created, please wait...</source>
         <translation>Suchbäume werden aufgebaut, bitte warten...</translation>
     </message>
@@ -6564,172 +6578,250 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="92"/>
-        <location filename="src/search/search.ui" line="159"/>
-        <location filename="src/search/search.ui" line="237"/>
-        <location filename="src/search/search.ui" line="460"/>
+        <location filename="src/search/search.ui" line="319"/>
+        <location filename="src/search/search.ui" line="970"/>
+        <location filename="src/search/search.ui" line="1037"/>
+        <location filename="src/search/search.ui" line="1111"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="112"/>
+        <location filename="src/search/search.ui" line="990"/>
         <source>Artist:</source>
         <translation>Interpret:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="122"/>
+        <location filename="src/search/search.ui" line="1000"/>
         <source>Title:</source>
         <translation>Titel:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="132"/>
+        <location filename="src/search/search.ui" line="1010"/>
         <source>Version:</source>
         <translation>Version:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="139"/>
+        <location filename="src/search/search.ui" line="1017"/>
         <source>Genre:</source>
         <translation>Genre:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="146"/>
+        <location filename="src/search/search.ui" line="1024"/>
         <source>Tags:</source>
         <translation>Tags:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="187"/>
+        <location filename="src/search/search.ui" line="1065"/>
         <source>Label:</source>
         <translation>Label:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="202"/>
+        <location filename="src/search/search.ui" line="92"/>
         <source>Quicksearch</source>
         <translation>Schnellsuche</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="222"/>
-        <location filename="src/search/search.ui" line="450"/>
+        <location filename="src/search/search.ui" line="120"/>
+        <location filename="src/search/search.ui" line="1101"/>
         <source>Query:</source>
         <translation>Abfrage:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="265"/>
+        <location filename="src/search/search.ui" line="143"/>
         <source>Search in:</source>
         <translation>Suche in:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="301"/>
+        <location filename="src/search/search.ui" line="179"/>
         <source>Artist</source>
         <translation>Interpret</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="311"/>
+        <location filename="src/search/search.ui" line="189"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="321"/>
+        <location filename="src/search/search.ui" line="199"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="331"/>
         <source>Genre</source>
-        <translation>Genre</translation>
+        <translation type="obsolete">Genre</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="341"/>
+        <location filename="src/search/search.ui" line="216"/>
         <source>Album</source>
         <translation>Album</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="351"/>
+        <location filename="src/search/search.ui" line="226"/>
         <source>Remarks</source>
         <translation>Bemerkungen</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="361"/>
+        <location filename="src/search/search.ui" line="236"/>
         <source>Tags</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="371"/>
+        <location filename="src/search/search.ui" line="246"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="386"/>
         <source>MusicKeys:</source>
-        <translation>Tonarten:</translation>
+        <translation type="obsolete">Tonarten:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="432"/>
-        <location filename="src/search/search.ui" line="497"/>
+        <location filename="src/search/search.ui" line="352"/>
+        <location filename="src/search/search.ui" line="1148"/>
         <source>watch Clipboard</source>
         <translation>Zwischenablage beobachten</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="442"/>
+        <location filename="src/search/search.ui" line="363"/>
+        <source>Use Filter</source>
+        <translation>Filter verwenden</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="392"/>
+        <source>Genres:</source>
+        <translation>Genres:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="399"/>
+        <source>BPM-Range:</source>
+        <translation>BPM-Bereich:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="431"/>
+        <location filename="src/search/search.ui" line="572"/>
+        <location filename="src/search/search.ui" line="727"/>
+        <location filename="src/search/search.ui" line="831"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="466"/>
+        <source>Rating:</source>
+        <translation>Bewertung:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="685"/>
+        <source>Year:</source>
+        <translation>Jahr:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="717"/>
+        <location filename="src/search/search.ui" line="754"/>
+        <source>yyyy</source>
+        <translation>yyyy</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="767"/>
+        <source>this</source>
+        <translation>dieses</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="777"/>
+        <source>last</source>
+        <translation>letztes</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="799"/>
+        <source>Recording date:</source>
+        <translation>Aufnahmedatum:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="821"/>
+        <location filename="src/search/search.ui" line="848"/>
+        <source>dd.MM.yyyy</source>
+        <translation>dd.MM.yyyy</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="861"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="871"/>
+        <source>-1</source>
+        <translation>-1</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="881"/>
+        <source>-2</source>
+        <translation>-2</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="909"/>
+        <source>Music key:</source>
+        <translation>Tonart:</translation>
+    </message>
+    <message>
+        <location filename="src/search/search.ui" line="1093"/>
         <source>Harddisk search</source>
         <translation>Festplattensuche</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="521"/>
+        <location filename="src/search/search.ui" line="1172"/>
         <source>Devices</source>
         <translation>Tonträger</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="803"/>
+        <location filename="src/search/search.ui" line="1454"/>
         <source>Result</source>
         <translation>Ergebnis</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="823"/>
+        <location filename="src/search/search.ui" line="1474"/>
         <source>Limit:</source>
         <translation>Limit:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="842"/>
+        <location filename="src/search/search.ui" line="1493"/>
         <source>random</source>
         <translation>Zufällige Tracks</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="906"/>
+        <location filename="src/search/search.ui" line="1579"/>
         <source>select all</source>
         <translation>alle auswählen</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="920"/>
+        <location filename="src/search/search.ui" line="1593"/>
         <source>unselect all</source>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="934"/>
+        <location filename="src/search/search.ui" line="1607"/>
         <source>Musical key:</source>
         <translation>Tonart:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="942"/>
+        <location filename="src/search/search.ui" line="1615"/>
         <source>musical sharps</source>
         <translation>musical sharps</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="947"/>
+        <location filename="src/search/search.ui" line="1620"/>
         <source>open key</source>
         <translation>open key</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="952"/>
+        <location filename="src/search/search.ui" line="1625"/>
         <source>custom format</source>
         <translation>eigenes Format</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="976"/>
+        <location filename="src/search/search.ui" line="1649"/>
         <source>Tracks found:</source>
         <translation>Gefundene Titel:</translation>
     </message>
     <message>
-        <location filename="src/search/search.ui" line="1014"/>
+        <location filename="src/search/search.ui" line="1687"/>
         <source>Total length:</source>
         <translation>Gesamtlänge:</translation>
     </message>
