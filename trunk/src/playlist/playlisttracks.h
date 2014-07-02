@@ -80,6 +80,7 @@ class PlaylistItem : public QTreeWidgetItem
 
 class PlaylistTracks : public QTreeWidget
 {
+		Q_OBJECT
 	private:
 		void mouseMoveEvent ( QMouseEvent * event );
 		void mousePressEvent ( QMouseEvent * event );
@@ -103,6 +104,7 @@ class PlaylistTracks : public QTreeWidget
 
 	public:
 		PlaylistTracks(QWidget * parent = 0);
+		~PlaylistTracks();
 		void setPlaylist(Playlist *p);
 
 		void unselectItems();

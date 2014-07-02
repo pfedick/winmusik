@@ -58,6 +58,11 @@ PlaylistItem::PlaylistItem()
 	DevicePage=0;
 }
 
+PlaylistTracks::~PlaylistTracks()
+{
+
+}
+
 ppl6::CString PlaylistItem::exportAsXML(int indention) const
 {
 	ppl6::CString Indent, ret;
@@ -406,7 +411,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 
 bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction)
 {
-	printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
+	//printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
 	ppl6::CString Tmp;
 	playlist->handleDropEvent(data,parent);
 	lastmoveitem=NULL;
