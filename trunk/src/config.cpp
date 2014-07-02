@@ -84,7 +84,12 @@ Config::Config()
 Config::CDDB::CDDB()
 {
 	port=80;
-	server="freedb.org";
+	server="freedb.freedb.org";
+	proxy_port=8080;
+	username="anonymous";
+	hostname="localhost";
+	querypath="/~cddb/cddb.cgi";
+	useProxy=false;
 }
 
 int Config::setConfigFile(const ppl6::CString &filename)
@@ -221,6 +226,12 @@ int Config::Save()
 	c.Add("cddb","cddevice",(const char*)cddb.cddevice);
 	c.Add("cddb","server",(const char*)cddb.server);
 	c.Add("cddb","port",cddb.port);
+	c.Add("cddb","useProxy",cddb.useProxy);
+	c.Add("cddb","proxy_server",(const char*)cddb.proxy_server);
+	c.Add("cddb","proxy_port",cddb.proxy_port);
+	c.Add("cddb","username",(const char*)cddb.username);
+	c.Add("cddb","hostname",(const char*)cddb.hostname);
+	c.Add("cddb","querypath",(const char*)cddb.querypath);
 
 	if (!c.Save(ConfigFile)) return 0;
 	return 1;
@@ -339,8 +350,15 @@ int Config::Load()
 
 	// CDDB
 	cddb.cddevice=c.Get("cddb","cddevice","");
-	cddb.server=c.Get("cddb","server","freedb.org");
+	cddb.server=c.Get("cddb","server","freedb.freedb.org");
 	cddb.port=c.GetInt("cddb","port",80);
+	cddb.useProxy=c.GetBool("cddb","useProxy",false);
+	cddb.proxy_server=c.Get("cddb","proxy_server","");
+	cddb.proxy_port=c.GetInt("cddb","proxy_port",8080);
+	cddb.username=c.Get("cddb","username","anonymous");
+	cddb.hostname=c.Get("cddb","hostname","localhost");
+	cddb.querypath=c.Get("cddb","querypath","/~cddb/cddb.cgi");
+
 
 	return 1;
 }

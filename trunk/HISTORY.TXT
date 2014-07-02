@@ -4,6 +4,13 @@
 
 Version 3.3.0
     - Update auf Qt5
+    - Umnummerieren: Tonträger können jetzt umnummeriert werden
+    - Unterstützung für CDDB implementiert: Im Editor können Titel nun
+      automatisch beim Einlegen einer Audio CD importiert werden, sofern diese
+      in der Internet CDDB gefunden wird.
+    - Die Suche (Quicksearch) wurde überarbeitet und unterstützt nun Filter
+      für Genres, Bewertung, BPM-Bereiche, Erscheinungsjahr, Aufnahmedatum
+      und Tonart.
     - Icons für Cover laden, anzeigen und neue F-Keys
     - Cover laden ist nun auch über F-Key möglich
     - Tags synchronisieren ist nun auch über F-Key möglich
@@ -15,13 +22,6 @@ Version 3.3.0
     - Suchlisten: Die Prüfung auf Duplikate beim Aufruf einer Liste wurde in
       einen asynchronen Thread ausgelagert. Dadurch wurde das Laden erheblich
       beschleunigt, insbesondere bei grossen Suchlisten.
-    - Umnummerieren: Tonträger können jetzt umnummeriert werden
-    - Unterstützung für CDDB implementiert: Im Editor können Titel nun
-      automatisch beim Einlegen einer Audio CD importiert werden, sofern diese
-      in der Internet CDDB gefunden wird.
-    - Die Suche (Quicksearch) wurde überarbeitet und unterstützt nun Filter
-      für Genres, Bewertung, BPM-Bereiche, Erscheinungsjahr, Aufnahmedatum
-      und Tonart.
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch

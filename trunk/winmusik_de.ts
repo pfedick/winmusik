@@ -604,7 +604,7 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
     <name>Config</name>
     <message>
         <location filename="src/config.cpp" line="75"/>
-        <location filename="src/config.cpp" line="333"/>
+        <location filename="src/config.cpp" line="344"/>
         <source>custom format</source>
         <translation>Eigenes Format</translation>
     </message>
@@ -3977,17 +3977,17 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
 <context>
     <name>Properties</name>
     <message>
-        <location filename="src/properties/properties.cpp" line="323"/>
+        <location filename="src/properties/properties.cpp" line="333"/>
         <source>WinMusik - Internal error!</source>
         <translation>WinMusik - Interner Fehler!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="324"/>
+        <location filename="src/properties/properties.cpp" line="334"/>
         <source>An internal data pointer is NULL, this should never happen and is a Bug. Please write a bugreport.</source>
         <translation>Ein interner Datenzeiger ist NULL. Dies sollte niemals vorkommen und ist ein Bug. Bitte schreiben Sie eine Bugmeldung.</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="532"/>
+        <location filename="src/properties/properties.cpp" line="550"/>
         <source>Select directory for WinMusik database.
 Attention: Changing this directory can result in loss of data!</source>
         <translation>Bitte geben Sie das Verzeichnis an, in dem sich die WinMusik Datenbank befindet
@@ -3995,22 +3995,22 @@ Attention: Changing this directory can result in loss of data!</source>
 ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="548"/>
+        <location filename="src/properties/properties.cpp" line="566"/>
         <source>Select directory with your files for device type: %s</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, in dem die Dateien von diesem Audiotyp zu finden sind: %s</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="582"/>
+        <location filename="src/properties/properties.cpp" line="600"/>
         <source>Select the program with which you want to use for playing AIFF-Files</source>
         <translation>Bitte wählen Sie das Programm aus, mit dem Sie AIFF-Dateien abspielen wollen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="680"/>
+        <location filename="src/properties/properties.cpp" line="698"/>
         <source>Select File with SSL private server key</source>
         <translation>Datei mit dem privaten SSL-Schlüssel des Servers auswählen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="568"/>
+        <location filename="src/properties/properties.cpp" line="586"/>
         <source>Select the program with which you want to use for playing MP3-Files</source>
         <translation>Bitte wählen Sie einen Player aus, mit dem Sie MP3-Dateien abspielen wollen</translation>
     </message>
@@ -4020,27 +4020,27 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="597"/>
+        <location filename="src/properties/properties.cpp" line="615"/>
         <source>Select directory for temporary files</source>
         <translation>Bitte wählen Sie aus, in welchem Verzeichnis temporäre Daten gespeichert werden sollen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="652"/>
+        <location filename="src/properties/properties.cpp" line="670"/>
         <source>Select the directory you want to add to the harddisk search</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, das bei der Festplattensuche durchsucht werden soll</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="306"/>
+        <location filename="src/properties/properties.cpp" line="316"/>
         <source>WinMusik - Change database directory</source>
         <translation>WinMusik - Datenbank-Verzeichnis ändern</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="307"/>
+        <location filename="src/properties/properties.cpp" line="317"/>
         <source>Are you sure you want to change the directory of the database? This could result in loss of data!</source>
         <translation>Sind Sie sicher, dass Sie das Datenbank-Verzeichnis ändern wollen? Dies kann zu Datenverlust führen!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="612"/>
+        <location filename="src/properties/properties.cpp" line="630"/>
         <source>Select location and filename for debug logfile</source>
         <translation>Bitte Pfad und Dateinamen für das Logfile auswählen</translation>
     </message>
@@ -4139,6 +4139,7 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <location filename="src/properties/properties.ui" line="465"/>
         <location filename="src/properties/properties.ui" line="775"/>
         <location filename="src/properties/properties.ui" line="893"/>
+        <location filename="src/properties/properties.ui" line="981"/>
         <source>80</source>
         <translation>80</translation>
     </message>
@@ -4168,336 +4169,358 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation></translation>
     </message>
     <message>
+        <location filename="src/properties/properties.ui" line="902"/>
+        <source>use proxy</source>
+        <translation>Proxy verwenden</translation>
+    </message>
+    <message>
         <location filename="src/properties/properties.ui" line="909"/>
+        <source>Query-Path:</source>
+        <translation>Query-Path:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="919"/>
+        <source>Username:</source>
+        <translation>Benutzername:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="926"/>
+        <location filename="src/properties/properties.ui" line="951"/>
+        <source>Hostname:</source>
+        <translation>Rechnername:</translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.ui" line="998"/>
         <source>MusicalKey</source>
         <translation>Tonart</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="920"/>
+        <location filename="src/properties/properties.ui" line="1009"/>
         <source>Display musical key as:</source>
         <translation>Tonart anzeigen als:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="928"/>
-        <location filename="src/properties/properties.ui" line="959"/>
+        <location filename="src/properties/properties.ui" line="1017"/>
+        <location filename="src/properties/properties.ui" line="1048"/>
         <source>musical sharps</source>
         <translation>musical sharps</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="933"/>
-        <location filename="src/properties/properties.ui" line="964"/>
+        <location filename="src/properties/properties.ui" line="1022"/>
+        <location filename="src/properties/properties.ui" line="1053"/>
         <source>open key</source>
         <translation>open key</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="938"/>
-        <location filename="src/properties/properties.ui" line="969"/>
+        <location filename="src/properties/properties.ui" line="1027"/>
+        <location filename="src/properties/properties.ui" line="1058"/>
         <source>custom format</source>
         <translation>eigenes Format</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="946"/>
+        <location filename="src/properties/properties.ui" line="1035"/>
         <source>Save musical key as:</source>
         <translation>Tonart speichern als:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="954"/>
+        <location filename="src/properties/properties.ui" line="1043"/>
         <source>don&apos;t save</source>
         <translation>nicht speichern</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="977"/>
+        <location filename="src/properties/properties.ui" line="1066"/>
         <source>Custom keys:</source>
         <translation>Eigene Tonart:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="992"/>
+        <location filename="src/properties/properties.ui" line="1081"/>
         <source>Em</source>
         <translation>Em</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="999"/>
+        <location filename="src/properties/properties.ui" line="1088"/>
         <source>F#m</source>
         <translation>F#m</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1009"/>
+        <location filename="src/properties/properties.ui" line="1098"/>
         <source>Bm</source>
         <translation>Bm</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1019"/>
+        <location filename="src/properties/properties.ui" line="1108"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1026"/>
+        <location filename="src/properties/properties.ui" line="1115"/>
         <source>F#</source>
         <translation>F#</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1046"/>
+        <location filename="src/properties/properties.ui" line="1135"/>
         <source>Am</source>
         <translation>Am</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1068"/>
+        <location filename="src/properties/properties.ui" line="1157"/>
         <source>C#m</source>
         <translation>C#m</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1075"/>
+        <location filename="src/properties/properties.ui" line="1164"/>
         <source>G#m</source>
         <translation>G#m</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1082"/>
+        <location filename="src/properties/properties.ui" line="1171"/>
         <source>Dm</source>
         <translation>Dm</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1089"/>
+        <location filename="src/properties/properties.ui" line="1178"/>
         <source>Gm</source>
         <translation>Gm</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1096"/>
+        <location filename="src/properties/properties.ui" line="1185"/>
         <source>Cm</source>
         <translation>Cm</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1103"/>
+        <location filename="src/properties/properties.ui" line="1192"/>
         <source>Fm</source>
         <translation>Fm</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1110"/>
+        <location filename="src/properties/properties.ui" line="1199"/>
         <source>A#m</source>
         <translation>A#m</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1117"/>
+        <location filename="src/properties/properties.ui" line="1206"/>
         <source>D#m</source>
         <translation>D#m</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1139"/>
+        <location filename="src/properties/properties.ui" line="1228"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1146"/>
+        <location filename="src/properties/properties.ui" line="1235"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1153"/>
+        <location filename="src/properties/properties.ui" line="1242"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1160"/>
+        <location filename="src/properties/properties.ui" line="1249"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1167"/>
+        <location filename="src/properties/properties.ui" line="1256"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1174"/>
+        <location filename="src/properties/properties.ui" line="1263"/>
         <source>C#</source>
         <translation>C#</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1181"/>
+        <location filename="src/properties/properties.ui" line="1270"/>
         <source>G#</source>
         <translation>G#</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1188"/>
+        <location filename="src/properties/properties.ui" line="1277"/>
         <source>D#</source>
         <translation>D#</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1195"/>
+        <location filename="src/properties/properties.ui" line="1284"/>
         <source>A#</source>
         <translation>A#</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1202"/>
+        <location filename="src/properties/properties.ui" line="1291"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1209"/>
+        <location filename="src/properties/properties.ui" line="1298"/>
         <source>none</source>
         <translation>keiner</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1251"/>
+        <location filename="src/properties/properties.ui" line="1340"/>
         <source>Name of custom keys:</source>
         <translation>Name des eigenen Formats:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1281"/>
+        <location filename="src/properties/properties.ui" line="1370"/>
         <source>User</source>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1289"/>
+        <location filename="src/properties/properties.ui" line="1378"/>
         <source>Language:</source>
         <translation>Sprache:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1304"/>
+        <location filename="src/properties/properties.ui" line="1393"/>
         <source>english</source>
         <translation>englisch</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1327"/>
+        <location filename="src/properties/properties.ui" line="1416"/>
         <source>Currency:</source>
         <translation>Währung:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1361"/>
+        <location filename="src/properties/properties.ui" line="1450"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1368"/>
+        <location filename="src/properties/properties.ui" line="1457"/>
         <source>Company:</source>
         <translation>Firma:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1378"/>
+        <location filename="src/properties/properties.ui" line="1467"/>
         <source>Serial:</source>
         <translation>Registrierungsschlüssel:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1400"/>
+        <location filename="src/properties/properties.ui" line="1489"/>
         <source>Register</source>
         <translation>Registrieren</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1413"/>
+        <location filename="src/properties/properties.ui" line="1502"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2059"/>
+        <location filename="src/properties/properties.ui" line="2148"/>
         <source>Regular Expressions</source>
         <translation>Reguläre Ausdrücke</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2077"/>
+        <location filename="src/properties/properties.ui" line="2166"/>
         <source>Pos.</source>
         <translation>Pos.</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2082"/>
+        <location filename="src/properties/properties.ui" line="2171"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2087"/>
+        <location filename="src/properties/properties.ui" line="2176"/>
         <source>Regular Expression</source>
         <translation>Regulrärer Ausdruck</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2100"/>
+        <location filename="src/properties/properties.ui" line="2189"/>
         <source>add</source>
         <translation>hinzufügen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2117"/>
+        <location filename="src/properties/properties.ui" line="2206"/>
         <source>edit</source>
         <translation>bearbeiten</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2134"/>
+        <location filename="src/properties/properties.ui" line="2223"/>
         <source>delete</source>
         <translation>löschen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2207"/>
+        <location filename="src/properties/properties.ui" line="2296"/>
         <source>Harddisk search</source>
         <translation>Festplattensuche</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2213"/>
+        <location filename="src/properties/properties.ui" line="2302"/>
         <source>cache directories</source>
         <translation>Verzeichnissinhalt zwischenspeichern</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2283"/>
+        <location filename="src/properties/properties.ui" line="2372"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2292"/>
+        <location filename="src/properties/properties.ui" line="2381"/>
         <source>start as server</source>
         <translation>als Server starten</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2312"/>
+        <location filename="src/properties/properties.ui" line="2401"/>
         <source>Hostname or IP:</source>
         <translation>Servername oder IP:</translation>
     </message>
     <message>
         <location filename="src/properties/properties.ui" line="877"/>
-        <location filename="src/properties/properties.ui" line="2322"/>
+        <location filename="src/properties/properties.ui" line="965"/>
+        <location filename="src/properties/properties.ui" line="2411"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2335"/>
+        <location filename="src/properties/properties.ui" line="2424"/>
         <source>00009; </source>
         <translation>00000;  {00009;?}</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2342"/>
+        <location filename="src/properties/properties.ui" line="2431"/>
         <source>Encryption:</source>
         <translation>Verschlüsselung:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2349"/>
+        <location filename="src/properties/properties.ui" line="2438"/>
         <source>Enable SSL</source>
         <translation>SSL aktivieren</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2363"/>
+        <location filename="src/properties/properties.ui" line="2452"/>
         <source>Private Keyfile:</source>
         <translation>Privater Schlüssel:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2370"/>
+        <location filename="src/properties/properties.ui" line="2459"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2415"/>
+        <location filename="src/properties/properties.ui" line="2504"/>
         <source>Manage User</source>
         <translation>Benutzer verwalten</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2471"/>
+        <location filename="src/properties/properties.ui" line="2560"/>
         <source>ok</source>
         <translation>ok</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2501"/>
+        <location filename="src/properties/properties.ui" line="2590"/>
         <source>accept</source>
         <translation>übernehmen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="2525"/>
+        <location filename="src/properties/properties.ui" line="2614"/>
         <source>cancel</source>
         <translation>abbrechen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1299"/>
+        <location filename="src/properties/properties.ui" line="1388"/>
         <source>german</source>
         <translation>deutsch</translation>
     </message>
@@ -4553,6 +4576,7 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
     <message>
         <location filename="src/properties/properties.ui" line="583"/>
         <location filename="src/properties/properties.ui" line="890"/>
+        <location filename="src/properties/properties.ui" line="978"/>
         <source>00000; </source>
         <translation>00000; </translation>
     </message>
@@ -4562,32 +4586,32 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation>(0=nicht auffüllen)</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1448"/>
+        <location filename="src/properties/properties.ui" line="1537"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1465"/>
+        <location filename="src/properties/properties.ui" line="1554"/>
         <source>Logfile:</source>
         <translation>Logfile:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1496"/>
+        <location filename="src/properties/properties.ui" line="1585"/>
         <source>Debuglevel:</source>
         <translation>Debuglevel:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1530"/>
+        <location filename="src/properties/properties.ui" line="1619"/>
         <source>Maximum Size:</source>
         <translation>Maximale Größe:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1540"/>
+        <location filename="src/properties/properties.ui" line="1629"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1563"/>
+        <location filename="src/properties/properties.ui" line="1652"/>
         <source>Generations:</source>
         <translation>Generationen:</translation>
     </message>
@@ -4657,72 +4681,72 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation>unlimitiert</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1616"/>
+        <location filename="src/properties/properties.ui" line="1705"/>
         <source>Devices</source>
         <translation>Tonträger</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1622"/>
+        <location filename="src/properties/properties.ui" line="1711"/>
         <source>The following devices should be visible in the WinMusik Menu:</source>
         <translation>Die folgenden Tonträger werden in WinMusik Menü angezeigt:</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1640"/>
+        <location filename="src/properties/properties.ui" line="1729"/>
         <source>Device</source>
         <translation>Tonträger Art</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1647"/>
+        <location filename="src/properties/properties.ui" line="1736"/>
         <source>Digitalisation Path</source>
         <translation>Pfad der digitalen Daten</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1654"/>
+        <location filename="src/properties/properties.ui" line="1743"/>
         <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1671"/>
+        <location filename="src/properties/properties.ui" line="1760"/>
         <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1688"/>
+        <location filename="src/properties/properties.ui" line="1777"/>
         <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1705"/>
+        <location filename="src/properties/properties.ui" line="1794"/>
         <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1722"/>
+        <location filename="src/properties/properties.ui" line="1811"/>
         <source>VHS-Tape</source>
         <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1739"/>
+        <location filename="src/properties/properties.ui" line="1828"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1756"/>
+        <location filename="src/properties/properties.ui" line="1845"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1773"/>
+        <location filename="src/properties/properties.ui" line="1862"/>
         <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1790"/>
+        <location filename="src/properties/properties.ui" line="1879"/>
         <source>Audio DVD</source>
         <translation>Musik DVD</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.ui" line="1454"/>
+        <location filename="src/properties/properties.ui" line="1543"/>
         <source>activate debug output</source>
         <translation>Debug-Ausgabe aktivieren</translation>
     </message>

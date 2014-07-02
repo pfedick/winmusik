@@ -208,6 +208,13 @@ private slots:
     void on_cdioDevice_currentIndexChanged(int ) {Change();};
     void on_cddbServer_textChanged(const QString &) {Change();};
     void on_cddbPort_textChanged(const QString &) {Change();};
+    void on_cddbQueryPath_textChanged(const QString &) {Change();};
+    void on_cddbUserName_textChanged(const QString &) {Change();};
+    void on_cddbHostName_textChanged(const QString &) {Change();};
+    void on_cddbProxyServer_textChanged(const QString &) {Change();};
+    void on_cddbProxyPort_textChanged(const QString &) {Change();};
+    void on_cddbUseProxy_toggled(bool checked);
+
 };
 
 #endif // PROPERTIES_H
