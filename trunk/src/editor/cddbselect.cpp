@@ -72,7 +72,7 @@ void CDDBSelect::setMatches(const ppl6::CDDB::Matches &matches)
 		Tmp.Setf("%i",(*it).year);
 		item->setText(1,Tmp);
 
-		Tmp.Setf("%zi",(*it).Tracks.size());
+		Tmp.Setf("%i",(int)(*it).Tracks.size());
 		item->setText(2,Tmp);
 
 		Tmp.Setf("%i:%02i",(*it).length/60, (*it).length%60);
