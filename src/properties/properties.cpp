@@ -203,6 +203,16 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 		}
 		index=ui.cdioDevice->findData(c->cddb.cddevice);
 		if (index>=0) ui.cdioDevice->setCurrentIndex(index);
+
+		ui.cddbQueryPath->setText(c->cddb.querypath);
+		ui.cddbUserName->setText(c->cddb.username);
+		ui.cddbHostName->setText(c->cddb.hostname);
+		ui.cddbProxyServer->setText(c->cddb.proxy_server);
+		Tmp.Setf("%i",c->cddb.proxy_port);
+		ui.cddbProxyPort->setText(Tmp);
+		ui.cddbUseProxy->setChecked(c->cddb.useProxy);
+		ui.cddbProxyLayout_2->setEnabled(c->cddb.useProxy);
+
 	} else {
 		ui.tab_cddb->setEnabled(false);
 	}
@@ -480,6 +490,14 @@ int Properties::Save()
 		c->cddb.port=ui.cddbPort->text().toInt();
 		index=ui.cdioDevice->currentIndex();
 		if (index>=0) c->cddb.cddevice=ui.cdioDevice->itemData(index).toString();
+
+		c->cddb.proxy_server=ui.cddbProxyServer->text();
+		c->cddb.proxy_port=ui.cddbProxyPort->text().toInt();
+		c->cddb.username=ui.cddbUserName->text();
+		c->cddb.hostname=ui.cddbHostName->text();
+		c->cddb.querypath=ui.cddbQueryPath->text();
+		c->cddb.useProxy=ui.cddbUseProxy->isChecked();
+
 	}
 
 	// Save
@@ -796,4 +814,11 @@ void Properties::on_JpegQualityCover_valueChanged (int value)
 	Tmp.Setf("%d",value);
 	ui.JpegQualityCoverValue->setText(Tmp);
 
+}
+
+
+void Properties::on_cddbUseProxy_toggled(bool checked)
+{
+	Change();
+	ui.cddbProxyLayout_2->setEnabled(ui.cddbUseProxy->isChecked());
 }

@@ -356,6 +356,13 @@ class Config
 				ppl6::CString	cddevice;
 				ppl6::CString	server;
 				int				port;
+				bool			useProxy;
+				ppl6::CString	proxy_server;
+				int				proxy_port;
+				ppl6::CString	username;
+				ppl6::CString	hostname;
+				ppl6::CString	querypath;
+
 
 		};
 		CDDB			cddb;

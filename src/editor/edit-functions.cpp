@@ -46,6 +46,7 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include "../include/asynchronousMessage.h"
+#include "version.h"
 
 
 void Edit::UpdateDevice()
@@ -901,12 +902,20 @@ void Edit::importFromCddb()
 	QCoreApplication::processEvents();
 	QCoreApplication::sendPostedEvents();
 	QCoreApplication::processEvents();
+
+	ppl6::CDDB cddb;
+	cddb.setHttpServer(wm->conf.cddb.server, wm->conf.cddb.port);
+	cddb.setUser(wm->conf.cddb.username, wm->conf.cddb.hostname);
+	cddb.setClient(WM_APPNAME,WM_VERSION);
+	if (wm->conf.cddb.useProxy) {
+		cddb.setProxy(wm->conf.cddb.proxy_server, wm->conf.cddb.proxy_port);
+	}
+
 	try {
 		ppl6::AudioCD cd;
 		QCoreApplication::processEvents();
 		cd.openDevice();
 		QCoreApplication::processEvents();
-		ppl6::CDDB cddb;
 		cddb.query(cd,matches);
 		QCoreApplication::processEvents();
 	} catch (const ppl6::Exception &e) {

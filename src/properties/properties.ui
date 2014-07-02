@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>697</width>
-    <height>444</height>
+    <width>658</width>
+    <height>432</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -895,6 +895,95 @@
             </widget>
            </item>
           </layout>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="cddbUseProxy">
+           <property name="text">
+            <string>use proxy</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_69">
+           <property name="text">
+            <string>Query-Path:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="cddbQueryPath"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_70">
+           <property name="text">
+            <string>Username:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_71">
+           <property name="text">
+            <string>Hostname:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="cddbUserName"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="cddbHostName"/>
+         </item>
+         <item row="5" column="1">
+          <widget class="QWidget" name="cddbProxyLayout_2" native="true">
+           <layout class="QHBoxLayout" name="cddbProxyLayout">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_72">
+              <property name="text">
+               <string>Hostname:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="cddbProxyServer">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_68">
+              <property name="text">
+               <string>Port:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="cddbProxyPort">
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="inputMask">
+               <string>00000; </string>
+              </property>
+              <property name="text">
+               <string>80</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>
