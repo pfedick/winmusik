@@ -28,6 +28,11 @@
 #include "asynchronousMessage.h"
 #include "resultfilter.h"
 
+/*
+ TRANSLATOR CHashes
+ */
+
+
 CHashes::CHashes()
 {
 	wm=NULL;

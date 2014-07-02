@@ -396,6 +396,8 @@ class ResultFilter;
 
 class CHashes : public ppl6::CThread
 {
+		Q_DECLARE_TR_FUNCTIONS(CHashes)
+
 	friend class CWmClient;
 	public:
 		typedef std::set<ppluint32> TitleTree;
