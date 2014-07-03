@@ -49,7 +49,8 @@ gather_sources()
 		echo "INFO: Ziel: $TARGET/ppl6"
 		create_dir "$TARGET/ppl6"
 		cd $PPL6SOURCE
-		find *.m4 autoconf config configure configure.in docs Doxyfile HISTORY.TXT include LICENSE.TXT Makefile.in ppl6-config.in README.TXT TODO.TXT resource tools src tests/gcovr tests/Makefile.in tests/ppl6-tests.h tests/src tests/testdata | cpio -pdm "$TARGET/ppl6" > /dev/null 2>&1
+		# ohne Tests: tests/gcovr tests/ppl6-tests.h tests/src tests/testdata 
+		find *.m4 autoconf config configure configure.in docs Doxyfile HISTORY.TXT include LICENSE.TXT Makefile.in ppl6-config.in README.TXT TODO.TXT resource tools src tests/Makefile.in | cpio -pdm "$TARGET/ppl6" > /dev/null 2>&1
 		echo "INFO: done"
 	else
 		echo "INFO: checkout PPL6-sources from svn repository..."
