@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=WinMusik
+Comment=Music database to maintain songs on various devices
+Exec=@prefix@/bin/WinMusik
+Terminal=false
+Type=Application
+Categories=GTK;GNOME;Audio;AudioVideo;
+Icon=@prefix@/share/pixmaps/WinMusik.png

@@ -1,0 +1,75 @@
+###############################################################################
+###
+### WinMusik Makefile
+###
+###############################################################################
+#
+# This file is part of WinMusik 3 by Patrick Fedick
+#
+# $Author: pafe $
+# $Revision: 404 $
+# $Date: 2014-05-28 19:15:08 +0200 (Mi, 28 Mai 2014) $
+# $Id: build_package.sh 404 2014-05-28 17:15:08Z pafe $
+#
+#
+# Copyright (c) 2014 Patrick Fedick <patrick@pfp.de>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+### Global Options
+###############################################################################
+
+PREFIX		?= @prefix@
+CC		= @CC@
+CXX		= @CXX@
+CFLAGS		= @CFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+QMAKE		= @QMAKE@
+LIBS		= @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ @FT2_LIBS@ @ICONV_LIBS@ @LIBCDIO_LIBS@
+
+
+###########################################################################
+### Targets
+###########################################################################
+
+release: tmp/lib/libppl6.a winmusik/release/WinMusik
+
+install: winmusik/release/WinMusik
+	mkdir -p $(PREFIX)/bin $(PREFIX)/share/pixmaps $(PREFIX)/share/applications $(PREFIX)/share/doc/WinMusik
+	cp winmusik/release/WinMusik $(PREFIX)/bin
+	cp winmusik/resources/icon64.png $(PREFIX)/share/pixmaps/WinMusik.png
+	cp WinMusik.desktop $(PREFIX)/share/applications
+	cp winmusik/docs/Userguide_de.pdf $(PREFIX)/share/doc/WinMusik
+
+deinstall:
+	rm -rf $(PREFIX)/bin/WinMusik
+	rm -rf $(PREFIX)/share/pixmaps/WinMusik.png
+	rm -rf $(PREFIX)/share/doc/WinMusik
+	rm -rf $(PREFIX)/share/applications/WinMusik.desktop
+	
+clean:
+	cd ppl6; make clean
+	rm -rf tmp
+	rm -rf winmusik/release winmusik/debug
+
+winmusik/release/WinMusik: tmp/lib/libppl6.a
+	cd winmusik; $(QMAKE) INCLUDEPATH+=../tmp/include WinMusik.pro; make -f Makefile.Release
+
+tmp/lib/libppl6.a: ppl6/Makefile
+	cd ppl6; make install TARGETLIB=../tmp/lib TARGETINCLUDE=../tmp/include TARGETBIN=../tmp/bin
+
+
+
