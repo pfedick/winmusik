@@ -18,9 +18,10 @@ TEMPLATE = app
 TARGET = WinMusik
 QT += core \
     gui \
-    widgets \
-    printsupport \
     xml
+    
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+
 CONFIG += debug_and_release
 CONFIG(debug, debug|release) { 
     win32:TARGET = WinMusik
