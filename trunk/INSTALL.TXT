@@ -33,7 +33,10 @@ can simply type
 	./configure
 
 and the script will finds everything automatically. In practice, it probably
-will not, and you have to specify some paths manually. See "configure --help"
+will not, and you have to specify some paths manually. See 
+
+	configure --help=recursive
+	
 for a description of all parameters.
 
 On a RedHat 6 based Linux or Ubuntu 12.04, the following configure will work:
