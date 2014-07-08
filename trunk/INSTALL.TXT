@@ -35,7 +35,7 @@ can simply type
 and the script will finds everything automatically. In practice, it probably
 will not, and you have to specify some paths manually. See 
 
-	configure --help=recursive
+	./configure --help=recursive
 	
 for a description of all parameters.
 
