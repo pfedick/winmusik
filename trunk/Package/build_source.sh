@@ -87,7 +87,7 @@ gather_sources()
 		echo "#define WM_VERSION		\"$VERSION\""
 		echo "#define WM_SVN_REVISION		\"$SVN_REVISION\""
 		BUILDDATE=`date '+%Y%m%d'`
-		echo "#define WM_RELEASEDATE		\"$BUILDDATE\""
+		echo "#define WM_RELEASEDATE		$BUILDDATE"
 		echo "#endif /* WINMUSIK_VERSION_H_ */"
 	) > $TARGET/winmusik/include/version.h
 	
@@ -99,6 +99,8 @@ create_configure()
 	TARGET=$1
 	cd $WORK/$PROGNAME-$VERSION
 	cp $CUR/Package/configure.ac configure.ac
+	create_dir autoconf
+	cp $CUR/Package/autoconf/* autoconf
 	aclocal
 	automake --add-missing --copy
 	autoconf
