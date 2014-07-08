@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.3.0
+Version 3.3.0, Releasedate: 08.07.2014	(SVN-Tag: REL_3_3_0)
     - Update auf Qt5
     - Umnummerieren: Tonträger können jetzt umnummeriert werden
     - Unterstützung für CDDB implementiert: Im Editor können Titel nun
