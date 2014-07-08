@@ -849,7 +849,11 @@ void Edit::handleDropEvent(QDropEvent *event)
 	if (!mime->hasUrls()) return;
 	QList<QUrl>	list=mime->urls ();
 	QUrl url=list.first();
+#if QT_VERSION >= 0x050000
 	QString file=url.path(QUrl::FullyDecoded);
+#else
+	QString file=url.encodedPath();
+#endif
 	ppl6::CString f=file;
 	ppl6::CString path=wm->conf.DevicePath[DeviceType];
 	int p=f.Instr(path);
