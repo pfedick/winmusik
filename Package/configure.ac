@@ -39,6 +39,10 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([WinMusik.desktop])
 
+
+sinclude(autoconf/ax_find_qmake.m4)
+
+
 AC_PROG_CC
 AC_PROG_CXX
 
@@ -62,26 +66,9 @@ AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([strings.h])
 AC_CHECK_HEADERS([math.h])
 
-# find qmake
-AC_MSG_CHECKING([for qmake])
-AC_ARG_WITH([qmake],
-	[  --with-qmake=PATH       Path and name of the qmake program (optional)],
-	[QMAKE="$withval"],
-	[QMAKE="no"])
+AC_PROG_AWK
 
-if test "$QMAKE" = "no" -o -n "$QMAKE" ; then
-	AC_CHECK_PROGS(qmake,[qmake-qt4 qmake],no)
-	if test "$qmake" = "no" ; then
-		AC_MSG_ERROR(qmake not found)
-	fi
-	QMAKE=$qmake
-else
-	if test ! -x "$QMAKE"  ; then
-		AC_MSG_ERROR(qmake not found)
-	fi
-	AC_MSG_RESULT($QMAKE)
-fi
-AC_SUBST(QMAKE)
+AX_FIND_QMAKE
 
 AC_CONFIG_SUBDIRS([ppl6])
 
@@ -94,5 +81,6 @@ AC_MSG_RESULT([
 ** Target: $target_os        CPU: $target_cpu
 **
 ** qmake:             $QMAKE
+** Qt-Version:        $qt_version
 ])
 
