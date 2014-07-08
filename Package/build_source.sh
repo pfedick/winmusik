@@ -107,6 +107,24 @@ create_configure()
 	
 }
 
+create_build_scripts()
+{
+	cd $CUR
+	(
+		echo "#!/bin/sh"
+		echo "VERSION=$VERSION"
+		echo "SVN_REVISION=$SVN_REVISION"
+		echo ""
+		cat $CUR/Package/config.sh
+	) > $WORK/build_pre.sh
+	(
+		cat $WORK/build_pre.sh
+		cat $CUR/Package/build_ubuntu.sh
+	) > $WORK/$PROGNAME-$VERSION/build_ubuntu.sh
+	chmod 755 $WORK/$PROGNAME-$VERSION/build_ubuntu.sh
+	
+}
+
 echo "Building source package for $PROGNAME $VERSION..."
 echo ""
 
@@ -117,6 +135,7 @@ create_dir $DISTFILES
 create_dir "$WORK/$PROGNAME-$VERSION"
 gather_sources "$WORK/$PROGNAME-$VERSION"
 create_configure "$WORK/$PROGNAME-$VERSION"
+create_build_scripts
 
 cd $CUR
 cp Package/Makefile.in $WORK/$PROGNAME-$VERSION
