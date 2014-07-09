@@ -2060,6 +2060,10 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						Ti.Length=tinfo.Ti.Length;
 						modified=true;
 					}
+					if (tinfo.Ti.Size>0 && tinfo.Ti.Size!=Ti.Size) {
+						Ti.Size=tinfo.Ti.Size;
+						modified=true;
+					}
 					if (modified) {
 						if (!wm->TitleStore.Put(&Ti)) {
 							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
