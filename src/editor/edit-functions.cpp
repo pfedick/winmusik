@@ -73,8 +73,10 @@ void Edit::UpdateDevice()
 		ui.page->setText(Tmp);
 		OpenTrack(DeviceId, 1);
 	}
-
-
+	if (ui.page->text().toInt()==0) {
+		Tmp="1";
+		ui.page->setText(Tmp);
+	}
 }
 
 ppluint32 Edit::EditDeviceDialog(ppluint32 id)
