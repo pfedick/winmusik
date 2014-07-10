@@ -55,8 +55,6 @@ void Edit::UpdateDevice()
 	wm->LoadDevice(DeviceType,DeviceId,&datadevice);
 	Tmp.Setf("%u",datadevice.Pages);
 	ui.devicePages->setText(Tmp);
-	Tmp="1";
-	ui.page->setText(Tmp);
 	Tmp.Setf("%u",datadevice.NumTracks);
 	ui.deviceTracks->setText(Tmp);
 	if (datadevice.Length>0) {
@@ -70,6 +68,11 @@ void Edit::UpdateDevice()
 
 	Tmp.Setf("%s\n%s",(datadevice.Title?datadevice.Title:""),(datadevice.SubTitle?datadevice.SubTitle:""));
 	ui.deviceTitle->setText(Tmp);
+	if (ui.page->text().toInt()>datadevice.Pages) {
+		Tmp="1";
+		ui.page->setText(Tmp);
+		OpenTrack(DeviceId, 1);
+	}
 
 
 }
