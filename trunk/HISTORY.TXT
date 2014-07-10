@@ -22,6 +22,9 @@ Version 3.3.0, Releasedate: 08.07.2014	(SVN-Tag: REL_3_3_0)
     - Suchlisten: Die Prüfung auf Duplikate beim Aufruf einer Liste wurde in
       einen asynchronen Thread ausgelagert. Dadurch wurde das Laden erheblich
       beschleunigt, insbesondere bei grossen Suchlisten.
+    - Bugfix im Editor: Nach dem Editieren/Import eines Titels wurde die
+      Seite des Tonträgers immer auf "1" geändert, auch wenn man auf einer
+      anderen Seite ist.
     
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
