@@ -431,10 +431,6 @@ void CDDBImport::getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track)
 	ppl6::CString Title=ppl6::Trim(track.Title);
 	ppl6::CString Version=getVersionFromTitle(Title,track.length);
 
-	if (Title.PregMatch("/^(.*)\\((.*?)\\)$")) {
-		Title=ppl6::Trim(Title.GetMatch(1));
-		Version=ppl6::Trim(Title.GetMatch(2));
-	}
 	Ti.SetTitle(Title);
 
 	// Version
