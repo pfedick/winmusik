@@ -368,6 +368,12 @@ void CDDBImport::startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluin
 		Tmp=ui.album->text();
 		datadevice.SetTitle(Tmp);
 	}
+	if (datadevice.LabelId==0) {
+		datadevice.LabelId=ui.labelId->text().toInt();
+	}
+	if (datadevice.PurchaseId==0) {
+		datadevice.PurchaseId=ui.recordSourceId->text().toInt();
+	}
 	int trackNum=tracklist->GetMax()+1;
 	ppl6::CDDB::Disc::TrackList::const_iterator it;
 	for (it=disc.Tracks.begin();it!=disc.Tracks.end();++it) {
