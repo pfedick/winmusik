@@ -96,6 +96,18 @@ void CDDBImport::setDisc(ppl6::CDDB::Disc &disc)
 	Tmp=disc.Artist+ " - "+disc.Title;
 	ui.album->setText(Tmp);
 
+	if (disc.genre.NotEmpty()) {
+		ui.genreId->setText("*");
+		ui.genre->setText(disc.genre);
+		int id=wm->GenreStore.GetId(disc.genre);
+		if (id>0) {
+			Tmp.Setf("%i",id);
+			ui.genreId->setText(Tmp);
+			ui.genre->setText(wm->GetGenreText(id));
+		}
+	}
+
+
 	// Releasedate
 	if (disc.year>0) {
 		Tmp.Setf("%u",disc.year*10000);
