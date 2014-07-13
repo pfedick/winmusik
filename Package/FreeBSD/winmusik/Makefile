@@ -60,15 +60,8 @@ do-install:
 	${MKDIR} ${STAGEDIR}${PREFIX}/bin ${STAGEDIR}${PREFIX}/share/pixmaps ${STAGEDIR}${PREFIX}/share/applications \
 		${STAGEDIR}${PREFIX}/share/doc/${PORTNAME}
 	${INSTALL_PROGRAM} ${WRKSRC}/winmusik/release/${PORTNAME} ${STAGEDIR}${PREFIX}/bin/${PORTNAME}
-	${INSTALL_DATA} ${WRKSRC}/osm/winmusik/icon64.png ${STAGEDIR}${PREFIX}/share/pixmaps/${PORTNAME}.png
-	${INSTALL_DATA} ${WRKSRC}/osm/docs/Userguide_de.pdf ${STAGEDIR}${PREFIX}/share/doc/${PORTNAME}
+	${INSTALL_DATA} ${WRKSRC}/winmusik/resources/icon64.png ${STAGEDIR}${PREFIX}/share/pixmaps/${PORTNAME}.png
+	${INSTALL_DATA} ${WRKSRC}/winmusik/docs/Userguide_de.pdf ${STAGEDIR}${PREFIX}/share/doc/${PORTNAME}
 	${INSTALL_DATA} ${WRKSRC}/WinMusik.desktop ${STAGEDIR}${PREFIX}/share/applications/${PORTNAME}.desktop
-
-
-	${MKDIR} ${PREFIX}/bin ${PREFIX}/share/pixmaps ${PREFIX}/share/applications ${PREFIX}/share/doc/${PORTNAME}
-	${INSTALL_PROGRAM} ${WRKSRC}/WinMusik/release/${PORTNAME} ${PREFIX}/bin
-	${INSTALL_DATA} ${WRKSRC}/WinMusik/docs/Userguide_de.pdf ${PREFIX}/share/doc/${PORTNAME}
-	${INSTALL_DATA} ${WRKSRC}/WinMusik/resources/icon64.png ${PREFIX}/share/pixmaps/${PORTNAME}.png
-	${INSTALL_DATA} ${FILESDIR}/WinMusik.desktop ${PREFIX}/share/applications/${PORTNAME}.desktop
 
 .include <bsd.port.post.mk>
