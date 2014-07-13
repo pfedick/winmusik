@@ -42,21 +42,25 @@ for a description of all parameters.
 On a RedHat 6 based Linux or Ubuntu 12.04, the following configure will work:
 
 	./configure --with-pcre=/usr --with-libiconv-prefix \
-	--with-nasm --with-libmcrypt-prefix --with-png --with-jpeg \
-	--with-libcurl
+	--with-nasm --with-libmcrypt-prefix --with-libpng --with-libjpeg \
+	--with-libcurl --with-libcdio
 	
 On FreeBSD, you can use this one:
 	./configure --with-pcre=/usr/local --with-openssl=/usr \
-	--with-libiconv-prefix=/usr/local --with-nasm --with-jpeg --with-png \
-	--with-libmcrypt-prefix=/usr/local --with-libcurl=/usr/local
+	--with-libiconv-prefix=/usr/local --with-nasm --with-libjpeg \
+	--with-libpng --with-libmcrypt-prefix=/usr/local \
+	--with-libcurl=/usr/local --with-libcdio=/usr/local
 
 
 You should also specify the base directory for the installation with
-"--prefix=", it defaults to "/usr/local"
+"--prefix=", it defaults to "/usr/local". Un Linux you probably want to
+install in "/usr".
 
 
 Then type
 
 	make
 	make install
+
+You should find a WinMusik icon below "multimedia" in your menue.
 
