@@ -2368,11 +2368,10 @@ void Edit::on_coverSearchAmazon_clicked()
 
 	Url="http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
 
-	//Url="http://www.pfp.de/";
-	ppl6::CString Cmd;
-	Cmd="firefox \""+Url+"\" &";
-	system(Cmd);
-	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+	//ppl6::CString Cmd;
+	//Cmd="firefox \""+Url+"\" &";
+	//system(Cmd);
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
 void Edit::on_coverSearchGoogle_clicked()
@@ -2387,11 +2386,36 @@ void Edit::on_coverSearchGoogle_clicked()
 	Title.Trim();
 
 	Url="https://www.google.com/search?num=10&site=imghp&tbm=isch&q="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
-	ppl6::CString Cmd;
-	Cmd="firefox \""+Url+"\" &";
-	system(Cmd);
-	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+	//ppl6::CString Cmd;
+	//Cmd="firefox \""+Url+"\" &";
+	//system(Cmd);
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
+
+void Edit::on_coverSearchDiscogs_clicked()
+{
+	FixFocus();
+	if (position<3) return;
+	ppl6::CString Url;
+	// Interpret und Titel
+	ppl6::CString Artist=ui.artist->text();
+	Artist.Trim();
+	ppl6::CString Title=ui.title->text();
+	Title.Trim();
+
+	ppl6::CString Version=ui.version->text();
+	Version.Trim();
+
+	ppl6::CString Query=Artist+" "+Title+" "+Version;
+	Query.Replace("&"," ");
+
+	Url="http://www.discogs.com/search/?q="+ppl6::UrlEncode(Query);
+	//ppl6::CString Cmd;
+	//Cmd="firefox \""+Url+"\" &";
+	//system(Cmd);
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+}
+
 
 void Edit::on_coverSearchBeatport_clicked()
 {
@@ -2406,10 +2430,10 @@ void Edit::on_coverSearchBeatport_clicked()
 
 	Url="http://www.beatport.com/search?query="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
 
-	ppl6::CString Cmd;
-	Cmd="firefox \""+Url+"\" &";
-	system(Cmd);
-	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+	//ppl6::CString Cmd;
+	//Cmd="firefox \""+Url+"\" &";
+	//system(Cmd);
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
 void Edit::on_coverSearchSoundcloud_clicked()
@@ -2425,10 +2449,10 @@ void Edit::on_coverSearchSoundcloud_clicked()
 
 	Url="https://soundcloud.com/search?q="+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title);
 
-	ppl6::CString Cmd;
-	Cmd="firefox \""+Url+"\" &";
-	system(Cmd);
-	//QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
+	//ppl6::CString Cmd;
+	//Cmd="firefox \""+Url+"\" &";
+	//system(Cmd);
+	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
 bool Edit::on_f6_MassImport()
