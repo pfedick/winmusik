@@ -457,7 +457,7 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 
 void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem)
 {
-//	printf ("Playlist::handleURLDrop\n");
+	//printf ("Playlist::handleURLDrop\n");
 
 	for (int i=0;i<list.size();i++) {
 		QUrl url=list[i];
@@ -466,6 +466,7 @@ void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertIte
 		item->File=file;
 		ppluint32 titleId=findTitleIdByFilename(file);
 		if (titleId) loadTrackFromDatabase(item,titleId);
+		else loadTrackFromFile(item,file);
 		renderTrack(item);
 		setChanged(true);
 		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
