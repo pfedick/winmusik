@@ -1,0 +1,48 @@
+/*!\page WM3TODO WinMusik TODO-Liste
+
+Zwischenablage
+  Import über Zwischenablage soll HTML unterstützen
+
+Background-Jobs
+  Bisher gibt es einen speziellen Background-Job zum Speichern der MP3-Tags.
+  Weitere Jobs könnten in den Hintergrund gelegt werden, z.B. umbenennen
+  von Files oder automatisches Speichern der Tracklisten. Dazu wäre es
+  sinnvoll eine generische Funktion zu implementieren, die verschiedene
+  Arten von Aufgaben unterstützt.
+  
+Character Replacement beim Import
+  Im Konfigurationsmenü soll eine Liste von Zeichen definiert werden können,
+  die beim Import von MP3-Dateien durch andere ersetzt werden. Es sollen nicht
+  nur einzelne Zeichen erlaubt sein, sondern auch Zeichenketten. Das Feature
+  soll im Editor und beim Massenimport angewendet werden.
+  
+Existenzprüfung
+  Beim Massenimport soll definiert werden können, welche Tonträger zum
+  Prüfen auf Duplikate verwendet werden sollen. So kann man z.B. Kassetten
+  bei der Suche ausschließen
+  
+Verbesserungen beim Massenimport
+  - Im Editor für Titel im Massenimport funktioniert das Klicken auf die
+    Funktionstasten nicht -> fixen
+    
+Fallback-Mechanismus für MP3-Suche
+  Es sollen alternative Verzeichnisstrukturen unterstützt werden, die als
+  Fallback geprüft werden:
+	1. $PATH/$PREFIX/$INDEX/$TRACK
+	2. $PATH/$INDEX/$TRACK
+	3. $PATH/$TRACK
+
+Anbieter für Cover-Suche konfigurierbar machen
+  Statt der 4 statischen Suchicons sollen diese im Konfigurationsmenü
+  beliebig selbst definierbar sein. Pro Anbieter sind folgende Daten
+  auzufüllen:
+    - Name
+    - Icon (16x16 Pixel, sonst automatisches downscale)
+    - Such-URL
+  In der Such-Url können Platzhalter für Interpret, Titel und Version
+  gesetzt werden, z.B. $1, $2, $3. Es sollen keine sprechenden Namen verwendet
+  werden, da dies zusätzliche Komplexität wegen der Übersetzungen bedeuten
+  würde (stattdessen: Legende)
+  
+
+*/
