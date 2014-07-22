@@ -46,7 +46,8 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	SetupTrackList();
 	ui.tabWidget->setCurrentIndex(0);
-	ui.artist->setFocus(Qt::ActiveWindowFocusReason);
+	ui.query->setFocus(Qt::ActiveWindowFocusReason);
+	ui.query->setFocus();
 	ui.searchButton->setDefault(true);
 	ui.searchButton->setAutoDefault(true);
 	currentTrackListItem=NULL;
@@ -79,7 +80,7 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	ui.useFilter->setChecked(false);
 
 
-	update();
+	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
 

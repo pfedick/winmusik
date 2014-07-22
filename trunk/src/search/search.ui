@@ -1732,22 +1732,52 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>query</tabstop>
+  <tabstop>quicksearchButton</tabstop>
+  <tabstop>searchArtist</tabstop>
+  <tabstop>searchTitle</tabstop>
+  <tabstop>searchVersion</tabstop>
+  <tabstop>searchAlbum</tabstop>
+  <tabstop>searchRemarks</tabstop>
+  <tabstop>searchTags</tabstop>
+  <tabstop>searchLabel</tabstop>
+  <tabstop>watchClipboard</tabstop>
+  <tabstop>useFilter</tabstop>
+  <tabstop>enableGenreSearch</tabstop>
+  <tabstop>qs_genre</tabstop>
+  <tabstop>enableBpmSearch</tabstop>
+  <tabstop>bpmStart</tabstop>
+  <tabstop>bpmEnd</tabstop>
+  <tabstop>enableRatingSearch</tabstop>
+  <tabstop>ratingStart</tabstop>
+  <tabstop>ratingEnd</tabstop>
+  <tabstop>enableYearSearch</tabstop>
+  <tabstop>releaseDateStart</tabstop>
+  <tabstop>releaseDateEnd</tabstop>
+  <tabstop>setThisYear</tabstop>
+  <tabstop>setLastYear</tabstop>
+  <tabstop>enableRecordingDateSearch</tabstop>
+  <tabstop>recordDateStart</tabstop>
+  <tabstop>recordDateEnd</tabstop>
+  <tabstop>setRecordingDate0</tabstop>
+  <tabstop>setRecordingDate1</tabstop>
+  <tabstop>setRecordingDate2</tabstop>
+  <tabstop>markAllButton</tabstop>
+  <tabstop>markNoneButton</tabstop>
+  <tabstop>displayMusicKey</tabstop>
+  <tabstop>limitResultSpinBox</tabstop>
+  <tabstop>randomResultCheckBox</tabstop>
   <tabstop>artist</tabstop>
+  <tabstop>searchButton</tabstop>
   <tabstop>title</tabstop>
   <tabstop>version</tabstop>
   <tabstop>genre</tabstop>
   <tabstop>recordLabel</tabstop>
   <tabstop>tags</tabstop>
-  <tabstop>searchButton</tabstop>
-  <tabstop>limitResultSpinBox</tabstop>
-  <tabstop>randomResultCheckBox</tabstop>
   <tabstop>query_harddisk</tabstop>
   <tabstop>hardDiskSearchButton</tabstop>
   <tabstop>watchClipboardHarddisk</tabstop>
-  <tabstop>markAllButton</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>displayMusicKey</tabstop>
-  <tabstop>markNoneButton</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
