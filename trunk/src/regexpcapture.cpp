@@ -140,7 +140,7 @@ void RegularExpressionCapture::save()
 	size_t pos=0;
 	ppl6::CString Group;
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
-		Group.Setf("%zi",pos);
+		Group.Setf("%i",(int)pos);
 		settings.beginGroup(Group);
 		settings.setValue("Name",(*it).Name);
 		settings.setValue("Pattern",(*it).Pattern);
