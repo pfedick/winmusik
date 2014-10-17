@@ -246,7 +246,7 @@ void Properties::UpdateRegExpPatternTable()
 	for (size_t i=0;i<wm->RegExpCapture.size();i++) {
 		const RegExpPattern &p=wm->RegExpCapture.getPattern(i);
 		QTreeWidgetItem *item=new QTreeWidgetItem;
-		Tmp.Setf("%zi",i+1);
+		Tmp.Setf("%i",(int)i+1);
 		item->setText(0,Tmp);
 		item->setText(1,p.Name);
 		item->setText(2,p.Pattern);

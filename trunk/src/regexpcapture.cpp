@@ -88,7 +88,7 @@ void RegularExpressionCapture::load()
 	size_t pos=0;
 	ppl6::CString Group;
 	while (1) {
-		Group.Setf("%zi",pos);
+		Group.Setf("%i",(int)pos);
 		settings.beginGroup(Group);
 		RegExpPattern p;
 		p.Name=settings.value("Name").toString();
