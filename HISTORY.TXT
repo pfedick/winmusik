@@ -4,6 +4,9 @@
 
 Version 3.3.1
     - Problem mit RegularExpressions unter Windows gefixt
+    - Bugfix im Massenimport: Label wird jetzt korrekt übernommen
+    - NEU: Im Massenimport kann nun auch Erscheinungsjahr und Aufnahmedatum
+      gesetzt werden
 
 Version 3.3.0, Releasedate: 13.07.2014	(SVN-Tag: REL_3_3_0)
     - Update auf Qt5

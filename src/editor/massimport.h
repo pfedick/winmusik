@@ -113,6 +113,8 @@ public slots:
 	void on_recordDeviceApplyButton_clicked();
 	void on_albumApplyButton_clicked();
 	void on_tagsApplyButton_clicked();
+	void on_remarksApplyButton_clicked();
+	void on_dateApplyButton_clicked();
 
 	void on_markImportSelectedTracksButton_clicked();
 	void on_markIgnoreSelectedTracksButton_clicked();

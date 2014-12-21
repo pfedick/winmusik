@@ -30,12 +30,13 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QMouseEvent>
-#include "../include/massimport.h"
+#include "massimport.h"
 #include "../include/edittrackdialog.h"
 
 MassImport::MassImport(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
 {
+	ppl6::CString Tmp;
 	ui.setupUi(this);
 	this->wm=wm;
 	searchWindow=NULL;
@@ -77,6 +78,14 @@ MassImport::MassImport(QWidget *parent, CWmClient *wm)
 	TCRecordDevice.Title=tr("Record Device");
 	TCRecordDevice.Init(this,wm,ui.recordDeviceId,ui.recordDevice,&wm->RecordDeviceStore);
 	TCRecordDevice.SetNextWidget(ui.recordDeviceApplyButton);
+
+
+	QDate Date=QDate::currentDate();
+	Tmp=Date.toString("yyyyMMdd");
+	ui.releaseDate->setDate(Date);
+	ui.recordDate->setDate(Date);
+
+
 
 	InstallFilter(ui.versionId,6);
 	InstallFilter(ui.version,7);
@@ -135,7 +144,6 @@ void MassImport::resizeEvent(QResizeEvent * event)
 	Resize();
 	QDialog::resizeEvent(event);
 }
-
 
 
 void MassImport::ReloadTranslation()
@@ -485,9 +493,8 @@ void MassImport::on_genreApplyButton_clicked()
 
 void MassImport::on_labelApplyButton_clicked()
 {
-	ppl6::CString Value=ui.label->text();
+	ppl6::CString Value=ui.labelName->text();
 	int id=wm->LabelStore.GetId(Value);
-
 	QList<QTreeWidgetItem *> list;
 	TreeItem *item;
 	list=ui.treeWidget->selectedItems();
@@ -564,6 +571,49 @@ void MassImport::on_tagsApplyButton_clicked()
 		}
 	}
 }
+
+void MassImport::on_remarksApplyButton_clicked()
+{
+	QList<QTreeWidgetItem *> list;
+	TreeItem *item;
+	list=ui.treeWidget->selectedItems();
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item) {
+			item->info.Ti.SetRemarks(ui.remarks->text());
+			renderTrack(item);
+		}
+	}
+}
+
+void MassImport::on_dateApplyButton_clicked()
+{
+	ppl6::CString Tmp;
+	// Erscheinungsjahr
+	QDate Date=ui.releaseDate->date();
+	Tmp=Date.toString("yyyyMMdd");
+	ppluint32 ReleaseDate=Tmp.ToInt();
+
+	// Aufnahmedatum
+	Date=ui.recordDate->date();
+	Tmp=Date.toString("yyyyMMdd");
+	//printf ("Date: %s\n",(const char*)Tmp);
+	ppluint32 RecordDate=Tmp.ToInt();
+
+
+	QList<QTreeWidgetItem *> list;
+	TreeItem *item;
+	list=ui.treeWidget->selectedItems();
+	for (int i = 0; i < list.size(); ++i) {
+		item=(TreeItem*)list.at(i);
+		if (item) {
+			item->info.Ti.ReleaseDate=ReleaseDate;
+			item->info.Ti.RecordDate=RecordDate;
+			renderTrack(item);
+		}
+	}
+}
+
 
 void MassImport::on_markImportSelectedTracksButton_clicked()
 {
@@ -704,9 +754,12 @@ bool MassImport::importTrack(TreeItem *item)
 	if (!Ti.RecordDeviceId) Ti.RecordDeviceId=wm->RecordDeviceStore.FindOrAdd(item->info.RecordingDevice);
 
 	// Aufnahmedatum
-	ppl6::CDateTime now;
-	now.setCurrentTime();
-	Ti.RecordDate=now.get("%Y%m%d").ToInt();
+	Ti.RecordDate=item->info.Ti.RecordDate;
+	if (Ti.RecordDate==0) {
+		ppl6::CDateTime now;
+		now.setCurrentTime();
+		Ti.RecordDate=now.get("%Y%m%d").ToInt();
+	}
 
 	// Erscheinungsjahr
 	Ti.ReleaseDate=item->info.Ti.ReleaseDate;
