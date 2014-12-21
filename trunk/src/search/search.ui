@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>searchClass</class>
  <widget class="QWidget" name="searchClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>781</width>
-    <height>451</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>WinMusik Search</string>
   </property>
@@ -706,18 +698,18 @@
                        <day>1</day>
                       </datetime>
                      </property>
+                     <property name="displayFormat">
+                      <string>yyyy</string>
+                     </property>
+                     <property name="calendarPopup">
+                      <bool>false</bool>
+                     </property>
                      <property name="date">
                       <date>
                        <year>2008</year>
                        <month>1</month>
                        <day>1</day>
                       </date>
-                     </property>
-                     <property name="displayFormat">
-                      <string>yyyy</string>
-                     </property>
-                     <property name="calendarPopup">
-                      <bool>false</bool>
                      </property>
                     </widget>
                    </item>
@@ -743,18 +735,18 @@
                        <day>1</day>
                       </datetime>
                      </property>
+                     <property name="displayFormat">
+                      <string>yyyy</string>
+                     </property>
+                     <property name="calendarPopup">
+                      <bool>false</bool>
+                     </property>
                      <property name="date">
                       <date>
                        <year>2008</year>
                        <month>1</month>
                        <day>1</day>
                       </date>
-                     </property>
-                     <property name="displayFormat">
-                      <string>yyyy</string>
-                     </property>
-                     <property name="calendarPopup">
-                      <bool>false</bool>
                      </property>
                     </widget>
                    </item>
@@ -810,18 +802,18 @@
                      <property name="enabled">
                       <bool>false</bool>
                      </property>
+                     <property name="displayFormat">
+                      <string>dd.MM.yyyy</string>
+                     </property>
+                     <property name="calendarPopup">
+                      <bool>true</bool>
+                     </property>
                      <property name="date">
                       <date>
                        <year>2008</year>
                        <month>1</month>
                        <day>1</day>
                       </date>
-                     </property>
-                     <property name="displayFormat">
-                      <string>dd.MM.yyyy</string>
-                     </property>
-                     <property name="calendarPopup">
-                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
@@ -837,18 +829,18 @@
                      <property name="enabled">
                       <bool>false</bool>
                      </property>
+                     <property name="displayFormat">
+                      <string>dd.MM.yyyy</string>
+                     </property>
+                     <property name="calendarPopup">
+                      <bool>true</bool>
+                     </property>
                      <property name="date">
                       <date>
                        <year>2008</year>
                        <month>1</month>
                        <day>1</day>
                       </date>
-                     </property>
-                     <property name="displayFormat">
-                      <string>dd.MM.yyyy</string>
-                     </property>
-                     <property name="calendarPopup">
-                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
@@ -973,7 +965,16 @@
           <property name="spacing">
            <number>2</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
            <number>9</number>
           </property>
           <item>
@@ -1175,7 +1176,16 @@
            <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="_2">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>4</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
             <number>4</number>
            </property>
            <property name="spacing">
@@ -1457,7 +1467,16 @@
            <property name="spacing">
             <number>2</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>2</number>
+           </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -1527,7 +1546,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
      </layout>

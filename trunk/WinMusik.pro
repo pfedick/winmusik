@@ -48,7 +48,7 @@ HEADERS += widgets/fkeys.h \
     src/editor/edit.h \
     include/coverviewer.h \
     include/csearchlist.h \
-    include/massimport.h \
+    src/editor/massimport.h \
     include/edittrackdialog.h \
     include/coverprinter.h \
     include/updater.h \
@@ -98,7 +98,7 @@ SOURCES += widgets/fkeys.cpp \
     src/CSearchlist.cpp \
     src/edittrackdialog.cpp \
     src/CTrackList.cpp \
-    src/massimport.cpp \
+    src/editor/massimport.cpp \
     src/coverprinter.cpp \
     src/resultfilter.cpp \
     src/regexpcapture.cpp \
@@ -156,7 +156,7 @@ FORMS += widgets/fkeys.ui \
     src/properties/properties.ui \
     src/properties/regexpedit.ui \
     forms/coverviewer.ui \
-    forms/massimport.ui \
+    src/editor/massimport.ui \
     forms/edittrackdialog.ui \
     forms/coverprinter.ui \
     forms/updater.ui \
