@@ -7,6 +7,12 @@ Version 3.3.1
     - Bugfix im Massenimport: Label wird jetzt korrekt übernommen
     - NEU: Im Massenimport kann nun auch Erscheinungsjahr und Aufnahmedatum
       gesetzt werden
+    - NEU: In den Playlists können nun die Traktor-Cues IN und OUT über das
+      Kontext-Menü der Trackliste (Spalte Länge) für alle markierten Tracks
+      neu eingelesen werden.
+    - NEU: In den Playlists kann nun die gespielte BPM für alle markierten
+      Tracks über das Kontext-Menü (Spalte MixBpm) gesetzt werden.
+      
 
 Version 3.3.0, Releasedate: 13.07.2014	(SVN-Tag: REL_3_3_0)
     - Update auf Qt5

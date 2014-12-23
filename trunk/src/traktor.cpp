@@ -146,5 +146,14 @@ void getTraktorCues(std::list <TraktorTagCue> &cuelist, const ppl6::CID3Tag &Tag
 	}
 }
 
-
+int getTraktorCuesFromFile(std::list <TraktorTagCue> &cuelist, const ppl6::CString &Filename)
+{
+	ppl6::CID3Tag Tag;
+	if (!Tag.Load(Filename)) return 0;
+	if (Tag.FrameCount()>0) {
+		getTraktorCues(cuelist, Tag);
+		return 1;
+	}
+	return 0;
+}
 

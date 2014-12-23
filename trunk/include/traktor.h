@@ -69,5 +69,6 @@ class TraktorTagCue
 void getTraktorFrames(std::map<ppl6::CString,TraktorTagFrame> &frames, const char *adr, size_t size);
 void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &cuep);
 void getTraktorCues(std::list <TraktorTagCue> &cuelist, const ppl6::CID3Tag &Tag);
+int getTraktorCuesFromFile(std::list <TraktorTagCue> &cuelist, const ppl6::CString &Filename);
 
 #endif /* TRAKTOR_H_ */

@@ -89,6 +89,7 @@ private:
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
     void renderTrack(PlaylistItem *item);
+    void calcMixLength(PlaylistItem *item);
     void updateLengthStatus();
     void renumberTracks();
     void saveTitle(PlaylistItem *item);
@@ -182,6 +183,8 @@ public slots:
 	void on_contextFindMoreArtist_triggered();
 	void on_contextFindMoreTitle_triggered();
 	void on_contextPlayTrack_triggered();
+	void on_contextSetBPMPlayed_triggered();
+	void on_contextReReadInAndOuts_triggered();
 
 
 	void on_contextRate0_clicked();
