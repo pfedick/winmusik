@@ -1379,10 +1379,12 @@ void Playlist::on_contextSetBPMPlayed_triggered()
 	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 	if (selected.count()>0) {
 		SetBPMPlayed dialog;
-		dialog.setValue(((PlaylistItem*)selected[0])->bpmPlayed);
+		int bpm=((PlaylistItem*)selected[0])->bpmPlayed;
+		if (!bpm) bpm=((PlaylistItem*)selected[0])->bpm;
+		dialog.setValue(bpm);
 		if (dialog.exec()==1) {
 			QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-			int bpm=dialog.getValue();
+			bpm=dialog.getValue();
 			for (int i=0;i<selected.count();i++) {
 				PlaylistItem *item=(PlaylistItem*)selected[i];
 				item->bpmPlayed=bpm;
@@ -1390,6 +1392,7 @@ void Playlist::on_contextSetBPMPlayed_triggered()
 				renderTrack(item);
 			}
 			updateLengthStatus();
+			setChanged(true);
 		}
 	}
 }
@@ -1427,6 +1430,7 @@ void Playlist::on_contextReReadInAndOuts_triggered()
 			renderTrack(item);
 		}
 		updateLengthStatus();
+		setChanged(true);
 	}
 }
 
