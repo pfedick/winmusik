@@ -41,6 +41,7 @@
 #include "playlist.h"
 #include "playlistedit.h"
 #include "traktor.h"
+#include "setbpmplayed.h"
 #include <stdio.h>
 
 
@@ -815,6 +816,13 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 
 }
 
+void Playlist::calcMixLength(PlaylistItem *item)
+{
+	item->mixLength=item->endPositionSec-item->startPositionSec;
+	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
+	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*item->bpm/item->bpmPlayed;
+}
+
 void Playlist::showEvent(QShowEvent * event)
 {
 	Resize();
@@ -1102,6 +1110,10 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 	} else if (column==columnEnergyLevel) {
 		a=m->addAction(tr("Energy Level"));
 		createSetEnergyLevelContextMenu(m);
+	} else if (column==columnBpmPlayed) {
+		a=m->addAction(QIcon(""),tr("Set BPM played","trackList Context Menue"),this,SLOT(on_contextSetBPMPlayed_triggered()));
+	} else if (column==columnLength) {
+		a=m->addAction(QIcon(""),tr("Reread Traktor IN and OUTs","trackList Context Menue"),this,SLOT(on_contextReReadInAndOuts_triggered()));
 
 	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {
 		a=m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Paste Cover","trackList Context Menue"),this,SLOT(on_contextPasteCover_triggered()));
@@ -1361,6 +1373,64 @@ void Playlist::on_contextPlayTrack_triggered()
 	if(!currentTreeItem) return;
 	wm->PlayFile(((PlaylistItem*)currentTreeItem)->File);
 }
+
+void Playlist::on_contextSetBPMPlayed_triggered()
+{
+	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+	if (selected.count()>0) {
+		SetBPMPlayed dialog;
+		dialog.setValue(((PlaylistItem*)selected[0])->bpmPlayed);
+		if (dialog.exec()==1) {
+			QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+			int bpm=dialog.getValue();
+			for (int i=0;i<selected.count();i++) {
+				PlaylistItem *item=(PlaylistItem*)selected[i];
+				item->bpmPlayed=bpm;
+				calcMixLength(item);
+				renderTrack(item);
+			}
+			updateLengthStatus();
+		}
+	}
+}
+
+static void updateInAndOut(PlaylistItem *item)
+{
+	std::list <TraktorTagCue> cuelist;
+	std::list <TraktorTagCue>::const_iterator it;
+	if (!getTraktorCuesFromFile(cuelist, item->File)) return;
+	if (cuelist.size()==0) return;
+	int traktorIn=-1;
+	int traktorOut=-1;
+	for (it=cuelist.begin();it!=cuelist.end();it++) {
+		int sec=(int)(it->start/1000.0);
+		if (it->type==TraktorTagCue::IN) traktorIn=sec;
+		if (it->type==TraktorTagCue::OUT) traktorOut=sec;
+	}
+	item->startPositionSec=0;
+	item->endPositionSec=item->trackLength;
+
+	if (traktorIn>=0) item->startPositionSec=traktorIn;
+	if (traktorOut>=0) item->endPositionSec=traktorOut;
+}
+
+
+void Playlist::on_contextReReadInAndOuts_triggered()
+{
+	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+	if (selected.count()>0) {
+		QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+		for (int i=0;i<selected.count();i++) {
+			PlaylistItem *item=(PlaylistItem*)selected[i];
+			updateInAndOut(item);
+			calcMixLength(item);
+			renderTrack(item);
+		}
+		updateLengthStatus();
+	}
+}
+
+
 
 void Playlist::on_statusbar_musicKeySelectionChanged(int newValue)
 {

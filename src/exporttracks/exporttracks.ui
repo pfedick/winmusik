@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExportTracks</class>
+ <widget class="QDialog" name="ExportTracks">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>275</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Export Tracks</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Targetpath:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="targetPath"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="targetPathButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources.qrc">
+           <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Audioformat:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="radioButton">
+       <property name="text">
+        <string>as is (keep audio format unchanged)</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="radioButton_2">
+       <property name="text">
+        <string>MP3 (tracks in other format will be encoded)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>32</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="frameMP3Selection">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QFormLayout" name="formLayout_2">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Encoding:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QComboBox" name="bitrateMinimum_2">
+                <property name="currentText">
+                 <string>CBR</string>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>CBR</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>ABR</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>VBR</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="labelBitrateMinimum">
+              <property name="text">
+               <string>Bitrate:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QComboBox" name="bitrateMinimum">
+                <property name="currentText">
+                 <string>32</string>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>32</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>40</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>48</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>64</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>80</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>96</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>112</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>128</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>160</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>192</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>224</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>256</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>320</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelBitrateMaximum">
+                <property name="text">
+                 <string>Maximum:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="bitrateMaximum">
+                <property name="currentText">
+                 <string>320</string>
+                </property>
+                <property name="currentIndex">
+                 <number>12</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>32</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>40</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>48</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>64</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>80</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>96</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>112</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>128</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>160</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>192</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>224</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>256</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>320</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Quality:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QSlider" name="qualitySlider">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>10</number>
+                </property>
+                <property name="pageStep">
+                 <number>1</number>
+                </property>
+                <property name="value">
+                 <number>2</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="invertedAppearance">
+                 <bool>false</bool>
+                </property>
+                <property name="invertedControls">
+                 <bool>false</bool>
+                </property>
+                <property name="tickPosition">
+                 <enum>QSlider::TicksBelow</enum>
+                </property>
+                <property name="tickInterval">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="qualityDescription">
+                <property name="text">
+                 <string>high</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>number tracks serially</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Filenames:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>ok</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/resources/button_ok.png</normaloff>:/icons/resources/button_ok.png</iconset>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/resources/cancel.png</normaloff>:/icons/resources/cancel.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

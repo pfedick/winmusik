@@ -72,11 +72,12 @@ HEADERS += widgets/fkeys.h \
     src/playlist/playlist.h \
     src/playlist/playlisttracks.h \
     src/playlist/playlistedit.h \
+    src/playlist/setbpmplayed.h \
     include/devicelist.h \
     include/traktor.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
-    include/droparea.h
+    include/droparea.h 
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     widgets/keywheel.cpp \
@@ -136,6 +137,7 @@ SOURCES += widgets/fkeys.cpp \
     src/playlist/playlistStatusBar.cpp \
     src/playlist/playlistedit.cpp \
     src/playlist/playlisttracks.cpp \
+    src/playlist/setbpmplayed.cpp \
     src/devicelist.cpp \
     src/traktor.cpp \
     src/wmtoolbutton.cpp \
@@ -171,6 +173,7 @@ FORMS += widgets/fkeys.ui \
     src/menue/menue.ui \
     src/playlist/playlist.ui \
     src/playlist/playlistedit.ui \
+    src/playlist/setbpmplayed.ui \
     forms/devicelist.ui \
     forms/asynchronousMessage.ui
 RESOURCES += resources.qrc
