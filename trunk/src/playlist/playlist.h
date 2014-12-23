@@ -112,7 +112,7 @@ private:
     void setItemBackgroundColor(PlaylistItem *item, const QColor &c);
     void setItemBackground(PlaylistItem *item, const QBrush &b);
     void highlightHarmonicKeys(PlaylistItem *track);
-
+    void unHighlightHarmonicKeys();
 
     bool on_tracks_MouseMove(QMouseEvent *event);
     bool on_tracks_MouseButtonPress(QMouseEvent * event);
@@ -149,6 +149,7 @@ private:
 
     QPoint startPos;	// Für Drag/Drop und multiple Markierungen
     QPoint	ratePos;	// Für Rating-Spalte
+    bool	harmonicsHighlighted;
 
 
 public slots:
