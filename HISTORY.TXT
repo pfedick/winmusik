@@ -12,6 +12,8 @@ Version 3.3.1
       neu eingelesen werden.
     - NEU: In den Playlists kann nun die gespielte BPM für alle markierten
       Tracks über das Kontext-Menü (Spalte MixBpm) gesetzt werden.
+    - Verbesserung: Highlighting der harmonischen Tonarten in der Playlist
+      wird jetzt wieder abgeschaltet, wenn man in eine andere Spalte klickt.
       
 
 Version 3.3.0, Releasedate: 13.07.2014	(SVN-Tag: REL_3_3_0)

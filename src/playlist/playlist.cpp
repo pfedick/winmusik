@@ -111,6 +111,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	ui.setupUi(this);
 	this->setStatusBar(NULL);
 	this->wm=wm;
+	harmonicsHighlighted=false;
 	currentTreeItem=NULL;
 	searchWindow=NULL;
 	saveWidget=saveAsWidget=NULL;
@@ -1066,6 +1067,7 @@ void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int column)
 	if (column==columnMusicKey && playlistView==playlistViewDJ) {
 		highlightHarmonicKeys(t);
 	} else {
+		if (harmonicsHighlighted) unHighlightHarmonicKeys();
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
 		if (key&Qt::MetaModifier) {
@@ -1479,11 +1481,22 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 					if (it!=harmonics.end()) setItemBackgroundColor(item,QColor(218,255,192,255));
 				}
 			}
-
-
 		}
 	}
+	harmonicsHighlighted=true;
+}
 
+void Playlist::unHighlightHarmonicKeys()
+{
+	int count=ui.tracks->topLevelItemCount();
+	for (int i=0;i<count;i++) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		if (item) {
+			QBrush b=item->background(columnTrack);
+			setItemBackground(item,b);
+		}
+	}
+	harmonicsHighlighted=false;
 }
 
 void Playlist::on_searchTriggered()
