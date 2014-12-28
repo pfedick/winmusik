@@ -201,6 +201,7 @@
     <file>resources/fkeys/f-key-4005.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/copycover.png</file>
     <file>resources/load_cover.png</file>
     <file>resources/view_cover.png</file>
     <file>resources/cuetocut.png</file>
