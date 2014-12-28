@@ -30,6 +30,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QLabel>
+#include <QClipboard>
 
 
 static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename);
@@ -504,6 +505,22 @@ void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover)
 	bin.Copy(bytes.data(),bytes.size());
 }
 
+void loadCoverToClipboard(const ppl6::CString &Filename)
+{
+	ppl6::CID3Tag Tag;
+	if (Tag.Load(Filename)) {
+		ppl6::CBinary Cover;
+		Tag.GetPicture(3,Cover);
+		if (Cover.Size()>0) {
+			QPixmap pix;
+			if (pix.loadFromData((const uchar*)Cover.GetPtr(),Cover.GetSize())) {
+				QClipboard *clipboard = QApplication::clipboard();
+				if (!clipboard) return;
+				clipboard->setPixmap(pix);
+			}
+		}
+	}
+}
 
 void setReadableLength(QLabel *label, int length)
 {

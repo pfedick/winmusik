@@ -127,6 +127,7 @@ public slots:
 	void on_contextEditTrack_triggered();
 	void on_contextCopyTrack_triggered();
 	void on_contextCopyFile_triggered();
+	void on_contextCopyCover_triggered();
 
 	void on_contextRate0_clicked();
 	void on_contextRate1_clicked();

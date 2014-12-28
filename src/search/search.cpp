@@ -33,6 +33,7 @@
 #include <QMouseEvent>
 #include "search.h"
 #include "resultfilter.h"
+#include <ppl6-sound.h>
 
 #include <vector>
 
@@ -768,6 +769,7 @@ void Search::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
+    	m->addAction (QIcon(":/icons/resources/copycover.png"),tr("Copy Cover","trackList Context Menue"),this,SLOT(on_contextCopyCover_triggered()));
     	if (DeviceType==7) m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
     }
     m->popup(p,a);
@@ -975,6 +977,16 @@ void Search::on_contextCopyFile_triggered()
 	    clipboard->setMimeData(mimeData,QClipboard::Clipboard);
 	}
 	ui.artist->setFocus();
+}
+
+void Search::on_contextCopyCover_triggered()
+{
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (t!=NULL) {
+		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
+		if (Path.IsEmpty()) return;
+		loadCoverToClipboard(Path);
+	}
 }
 
 void Search::rateCurrentTrack(int value)

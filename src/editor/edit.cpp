@@ -1933,6 +1933,7 @@ void Edit::on_trackList_customContextMenuRequested ( const QPoint & pos )
     	m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy Artist and Title","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/copyfile.png"),tr("Copy MP3-File","trackList Context Menue"),this,SLOT(on_contextCopyFile_triggered()));
+    	m->addAction (QIcon(":/icons/resources/copycover.png"),tr("Copy Cover","trackList Context Menue"),this,SLOT(on_contextCopyCover_triggered()));
     	m->addSeparator();
     	m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete Track","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
     	m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Insert Track","trackList Context Menue"),this,SLOT(on_contextInsertTrack_triggered()));
@@ -2136,6 +2137,16 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 	}
 	UpdateTrackListing();
 	QApplication::restoreOverrideCursor();
+}
+
+void Edit::on_contextCopyCover_triggered()
+{
+	DataTitle *t=wm->GetTitle(currentTrackListItem->Id);
+	if (t!=NULL) {
+		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType,t->DeviceId,t->Page,t->Track);
+		if (Path.IsEmpty()) return;
+		loadCoverToClipboard(Path);
+	}
 }
 
 

@@ -190,6 +190,7 @@ bool saveCover(const ppl6::CString &filename, const QPixmap &Cover);
 void getIconFromCover(ppl6::CBinary &bin, const QPixmap &Cover);
 void NormalizeImportString(ppl6::CString &Buffer);
 void setReadableLength(QLabel *label, int length);
+void loadCoverToClipboard(const ppl6::CString &Filename);
 
 /*******************************************************
  * Global Variablen                                    *

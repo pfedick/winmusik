@@ -255,6 +255,7 @@ public slots:
 
 	void on_contextShowCover_triggered();
 	void on_contextLoadCoverAllTracks_triggered();
+	void on_contextCopyCover_triggered();
 	void on_DupeTimer_update();
 
 	void on_contextSetMusicKey(int k);
