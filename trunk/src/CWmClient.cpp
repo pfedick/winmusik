@@ -1672,6 +1672,7 @@ void CWmClient::initLetterReplacements()
 	addLetterReplacement(ppl6::CWString(L"ŵ"),L'w');
 	addLetterReplacement(ppl6::CWString(L"ýÿŷ"),L'y');
 	addLetterReplacement(ppl6::CWString(L"źżž"),L'z');
+	addLetterReplacement(ppl6::CWString(L"–"),L' ');
 }
 
 void CWmClient::initFilenameLetterReplacements()
