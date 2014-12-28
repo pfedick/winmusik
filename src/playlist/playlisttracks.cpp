@@ -298,6 +298,9 @@ void PlaylistItem::updateFromDatabase()
 	DeviceTrack=ti->Track;
 	DeviceType=ti->DeviceType;
 	DevicePage=ti->Page;
+	if (File.NotEmpty()) {
+		if (ppl6::CFile::Exists(File)) return;
+	}
 	File=wm_main->GetAudioFilename(ti->DeviceType,ti->DeviceId,ti->Page,ti->Track);
 }
 
