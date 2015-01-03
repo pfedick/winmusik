@@ -52,7 +52,7 @@ BackgroundJobs::~BackgroundJobs()
  *
  * \see BackgroundJobs::updateMp3Tags, BackgroundJobs::renameFile, BackgroundJobs::writeTracklists
  */
-void BackgroundJobs::add(const ppl6::CString &type, const ppl6::CAssocArray &data)
+void BackgroundJobs::add(JobType type, const ppl6::CAssocArray &data)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"BackgroundJobs","add",__FILE__,__LINE__,"Adding Job %s", (const char*)type);
 
@@ -154,9 +154,9 @@ void BackgroundJobs::ThreadMain(void *)
 			Queue.pop();
 			Mutex.Unlock();
 			try {
-				if (j.Type=="writeTracklists") writeTracklists(j.Data);
-				else if (j.Type=="renameFile") renameFile(j.Data);
-				else if (j.Type=="updateMp3Tags") updateMp3Tags(j.Data);
+				if (j.Type==TypeWriteTracklist) writeTracklists(j.Data);
+				else if (j.Type==TypeRenameFile) renameFile(j.Data);
+				else if (j.Type==TypeWriteTracklist) updateMp3Tags(j.Data);
 				else {
 					if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,5,"BackgroundJobs","ThreadMain",__FILE__,__LINE__,"Unknown Job is ignored an removed from queue: %s",(const char*)j.Type);
 					continue;

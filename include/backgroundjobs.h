@@ -36,19 +36,29 @@ class BackgroundJobs : private ppl6::CThread
 	private:
 		ppl6::CMutex Mutex;
 
+		enum JobType {
+			TypeUpdateMp3Tags,
+			TypeRenameFile,
+			TypeWriteTracklist,
+			TypeEncodeMp3File,
+
+
+		};
+
 		class Job
 		{
 			public:
-				Job(const ppl6::CString &type, const ppl6::CAssocArray &data) {
+				Job(JobType type, const ppl6::CAssocArray &data) {
 					this->Type=type;
 					this->Data=data;
 					ErrorCount=0;
 				}
-				ppl6::CString		Type;
+				JobType				Type;
 				ppl6::CAssocArray	Data;
 				int					ErrorCount;
 				ppl6::CString		LastError;
 		};
+		ppluint64 JobIdCount;
 
 		std::queue<Job>	Queue;
 		std::queue<Job>	Errors;
@@ -59,7 +69,7 @@ class BackgroundJobs : private ppl6::CThread
 
 		virtual void ThreadMain(void *param);
 
-		void add(const ppl6::CString &Type, const ppl6::CAssocArray &data);
+		void add(JobType type, const ppl6::CAssocArray &data);
 		void shutdown();
 		void triggerShutdown();
 		size_t size() const;
