@@ -41,6 +41,7 @@ SetBPMPlayed::~SetBPMPlayed()
 void SetBPMPlayed::setValue(int bpm)
 {
 	ui.bpmValue->setValue(bpm);
+	ui.bpmValue->selectAll();
 }
 
 int SetBPMPlayed::getValue() const
