@@ -80,6 +80,17 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	ui.filter->setVisible(false);
 	ui.useFilter->setChecked(false);
 
+	ui.bpmStart->installEventFilter(this);
+	ui.bpmEnd->installEventFilter(this);
+	ui.qs_genre->installEventFilter(this);
+	ui.lengthStart->installEventFilter(this);
+	ui.lengthEnd->installEventFilter(this);
+	ui.energyStart->installEventFilter(this);
+	ui.energyEnd->installEventFilter(this);
+	ui.releaseDateStart->installEventFilter(this);
+	ui.releaseDateEnd->installEventFilter(this);
+	ui.recordDateStart->installEventFilter(this);
+	ui.recordDateEnd->installEventFilter(this);
 
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
@@ -137,6 +148,26 @@ void Search::resizeEvent(QResizeEvent * event)
 {
 	Resize();
 	QWidget::resizeEvent(event);
+}
+
+bool Search::eventFilter(QObject *target, QEvent *event)
+/*!\brief Event Handler
+ */
+{
+	int type=event->type();
+	if (type==QEvent::FocusIn) {
+		if (target==ui.lengthStart || target==ui.lengthEnd
+				|| target==ui.qs_genre) {
+			((QLineEdit*)target)->selectAll();
+		} else if (target==ui.energyStart || target==ui.energyEnd
+				|| target==ui.bpmStart || target==ui.bpmEnd) {
+			((QSpinBox*)target)->selectAll();
+		} else if (target==ui.releaseDateStart || target==ui.releaseDateEnd
+				|| target==ui.recordDateStart || target==ui.recordDateEnd) {
+			((QDateEdit*)target)->selectAll();
+		}
+	}
+	return QWidget::eventFilter(target,event);
 }
 
 void Search::SetupTrackList()
@@ -599,6 +630,15 @@ void Search::configureFilter(ResultFilter &filter)
 	if (ui.enableRatingSearch->isChecked()) {
 		filter.setRatingRange(true,ui.ratingStart->currentIndex(), ui.ratingEnd->currentIndex());
 	}
+	if (ui.enableLengthSearch->isChecked()) {
+		ppl6::CString Tmp;
+		filter.setLengthRange(true, Time2Int(Tmp=ui.lengthStart->text()),Time2Int(Tmp=ui.lengthEnd->text()));
+	}
+	if (ui.enableEnergySearch->isChecked()) {
+		filter.setEnergyRange(true,ui.energyStart->value(), ui.energyEnd->value());
+	}
+
+
 	if (ui.keywheel->currentKey()>0) filter.setMusicKey(true,ui.keywheel->currentKey());
 }
 
@@ -1292,6 +1332,21 @@ void Search::on_enableGenreSearch_toggled(bool enabled)
 	ui.qs_genre->setEnabled(enabled);
 	ui.qs_genre->setFocus();
 }
+
+void Search::on_enableLengthSearch_toggled(bool enabled)
+{
+	ui.lengthStart->setEnabled(enabled);
+	ui.lengthEnd->setEnabled(enabled);
+	ui.lengthStart->setFocus();
+}
+
+void Search::on_enableEnergySearch_toggled(bool enabled)
+{
+	ui.energyStart->setEnabled(enabled);
+	ui.energyEnd->setEnabled(enabled);
+	ui.energyStart->setFocus();
+}
+
 
 void Search::on_enableBpmSearch_toggled(bool enabled)
 {

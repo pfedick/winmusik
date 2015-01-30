@@ -78,6 +78,7 @@ private:
     void SetupTrackList();
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
+    bool eventFilter(QObject *target, QEvent *event);
 
     bool on_trackList_MousePress(QMouseEvent *event);
     bool on_trackList_MouseRelease(QMouseEvent *event);
@@ -184,6 +185,8 @@ public slots:
 	void on_enableYearSearch_toggled(bool);
 	void on_enableRecordingDateSearch_toggled(bool);
 	void on_enableRatingSearch_toggled(bool);
+	void on_enableLengthSearch_toggled(bool);
+	void on_enableEnergySearch_toggled(bool);
 	void on_setThisYear_clicked();
 	void on_setLastYear_clicked();
 	void on_setRecordingDate0_clicked();
@@ -191,6 +194,7 @@ public slots:
 	void on_setRecordingDate2_clicked();
 
 	void on_useFilter_toggled(bool);
+
 };
 
 class CSearchTrackList : public QTreeWidget

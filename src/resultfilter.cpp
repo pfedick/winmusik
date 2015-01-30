@@ -41,6 +41,8 @@ void ResultFilter::disableAll()
 	musicKeyEnabled=false;
 	genresEnabled=false;
 	ratingEnabled=false;
+	lengthEnabled=false;
+	energyEnabled=false;
 	bpmStart=0;
 	bpmEnd=999;
 	yearStart=0;
@@ -50,6 +52,10 @@ void ResultFilter::disableAll()
 	musicKey=0;
 	ratingStart=0;
 	ratingEnd=6;
+	lengthStart=0;
+	lengthEnd=9999;
+	energyStart=0;
+	energyEnd=10;
 }
 
 void ResultFilter::setBpmRange(bool enabled, int start, int end)
@@ -78,6 +84,20 @@ void ResultFilter::setRecordingRange(bool enabled, int start, int end)
 	recordingDateEnabled=enabled;
 	recordingStart=start;
 	recordingEnd=end;
+}
+
+void ResultFilter::setLengthRange(bool enabled, int start, int end)
+{
+	lengthEnabled=enabled;
+	lengthStart=start;
+	lengthEnd=end;
+}
+
+void ResultFilter::setEnergyRange(bool enabled, int start, int end)
+{
+	energyEnabled=enabled;
+	energyStart=start;
+	energyEnd=end;
 }
 
 void ResultFilter::setMusicKey(bool enabled, int key)
@@ -119,6 +139,8 @@ bool ResultFilter::pass(const DataTitle &ti) const
 	if (recordingDateEnabled==true && passRecordingDate(ti)==false) return false;
 	if (musicKeyEnabled==true && passMusicKey(ti)==false) return false;
 	if (genresEnabled==true && passGenres(ti)==false) return false;
+	if (lengthEnabled==true && passLength(ti)==false) return false;
+	if (energyEnabled==true && passEnergyLevel(ti)==false) return false;
 	return true;
 }
 
@@ -167,3 +189,16 @@ bool ResultFilter::passGenres(const DataTitle &ti) const
 	return false;
 }
 
+bool ResultFilter::passLength(const DataTitle &ti) const
+{
+	if (ti.Length>=lengthStart && ti.Length<=lengthEnd) return true;
+	return false;
+
+}
+
+bool ResultFilter::passEnergyLevel(const DataTitle &ti) const
+{
+	if (ti.EnergyLevel>=energyStart && ti.EnergyLevel<=energyEnd) return true;
+	return false;
+
+}
