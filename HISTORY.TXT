@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-
+Version 3.3.2
     - Im Suchfilter kann nun auch die Tracklänge eingeschränkt werden,
       sowie der EnergyLevel
     - Inhalt der Eingabefelder im Suchfilter wird markiert, wenn das Feld
