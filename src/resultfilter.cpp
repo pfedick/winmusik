@@ -68,8 +68,8 @@ void ResultFilter::setBpmRange(bool enabled, int start, int end)
 void ResultFilter::setYearRange(bool enabled, int start, int end)
 {
 	yearEnabled=enabled;
-	yearStart=start;
-	yearEnd=end;
+	yearStart=start*10000;
+	yearEnd=end*10000+1231;
 }
 
 void ResultFilter::setRatingRange(bool enabled, int start, int end)
