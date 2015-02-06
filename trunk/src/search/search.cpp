@@ -608,15 +608,7 @@ void Search::configureFilter(ResultFilter &filter)
 	if (ui.enableBpmSearch->isChecked())
 		filter.setBpmRange(true,ui.bpmStart->value(), ui.bpmEnd->value());
 	if (ui.enableYearSearch->isChecked()) {
-		QDate Date=ui.releaseDateStart->date();
-		Date.setDate(Date.year(),01,01);
-		ppl6::CString Tmp=Date.toString("yyyyMMdd");
-		ppluint32 start=Tmp.ToInt();
-		Date=ui.releaseDateEnd->date();
-		Date.setDate(Date.year(),12,31);
-		Tmp=Date.toString("yyyyMMdd");
-		ppluint32 end=Tmp.ToInt();
-		filter.setYearRange(true,start,end);
+		filter.setYearRange(true,ui.releaseDateStart->date().year(),ui.releaseDateEnd->date().year());
 	}
 	if (ui.enableRecordingDateSearch->isChecked()) {
 		QDate Date=ui.recordDateStart->date();
