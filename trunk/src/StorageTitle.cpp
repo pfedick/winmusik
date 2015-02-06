@@ -885,6 +885,30 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 	BPM=ppl6::Peek32(a+21);
 	RecordDate=ppl6::Peek32(a+25);
 	ReleaseDate=ppl6::Peek32(a+29);
+	if (ReleaseDate<10000000) {			// Korrektur fehlerhafter Timestamps
+		if (ReleaseDate>1900 && ReleaseDate<2015) {
+			ReleaseDate=ReleaseDate*10000;
+		} else {
+			ReleaseDate=RecordDate;
+			if (ReleaseDate>1900 && ReleaseDate<2015) {
+				ReleaseDate=ReleaseDate*10000;
+			}
+		}
+	}
+	if (RecordDate<10000000) {			// Korrektur fehlerhafter Timestamps
+		if (RecordDate>1900 && RecordDate<2015) {
+			RecordDate=RecordDate*10000+0101;
+		} else {
+			RecordDate=ReleaseDate;
+		}
+	}
+	if (ReleaseDate<10000000) {
+		printf ("ReleaseDate: %d, RecordDate: %d\n",ReleaseDate,RecordDate);
+	}
+	if (RecordDate<10000000) {
+		printf ("RecordDate: %d, ReleaseDate: %d\n",RecordDate, ReleaseDate);
+	}
+
 	RecordSourceId=ppl6::Peek16(a+33);
 	Track=ppl6::Peek16(a+35);
 	Bitrate=ppl6::Peek16(a+37);
