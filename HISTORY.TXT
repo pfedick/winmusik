@@ -7,9 +7,6 @@ Version 3.3.2
       sowie der EnergyLevel
     - Inhalt der Eingabefelder im Suchfilter wird markiert, wenn das Feld
       den Fokus erhält, damit der Wert schnell überschrieben werden kann
-    - Bugfix: Beim Import von CDs über die CDDB wird das Jahr nun richtig in
-      die WinMusik-Datenbank übertragen. Tracks mit fehlerhaftem Erscheinungs-
-      jahr werden beim Laden der Datenbank automatisch erkannt und korrigiert.
     - Im Suchfilter wird das Erscheinungsjahr nun korrekt behandelt
       
 

@@ -465,7 +465,7 @@ void CDDBImport::getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track)
 	// Erscheinungsjahr
 	QDate Date=ui.releaseDate->date();
 	Tmp=Date.toString("yyyyMMdd");
-	Ti.ReleaseDate=Tmp.ToInt()*10000;
+	Ti.ReleaseDate=Tmp.ToInt();
 
 	// Aufnahmedatum
 	Date=ui.recordDate->date();
