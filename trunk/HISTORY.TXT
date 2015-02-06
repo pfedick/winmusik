@@ -6,7 +6,11 @@ Version 3.3.2
     - Im Suchfilter kann nun auch die Tracklänge eingeschränkt werden,
       sowie der EnergyLevel
     - Inhalt der Eingabefelder im Suchfilter wird markiert, wenn das Feld
-      den Fokus erhält, damit der Wert schnell überschrieben werden kann 
+      den Fokus erhält, damit der Wert schnell überschrieben werden kann
+    - Bugfix: Beim Import von CDs über die CDDB wird das Jahr nun richtig in
+      die WinMusik-Datenbank übertragen. Tracks mit fehlerhaftem Erscheinungs-
+      jahr werden beim Laden der Datenbank automatisch erkannt und korrigiert.
+    - Im Suchfilter wird das Erscheinungsjahr nun korrekt behandelt
       
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
