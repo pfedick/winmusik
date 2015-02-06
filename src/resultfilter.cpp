@@ -70,6 +70,7 @@ void ResultFilter::setYearRange(bool enabled, int start, int end)
 	yearEnabled=enabled;
 	yearStart=start*10000;
 	yearEnd=end*10000+1231;
+	//printf ("start: %d, End: %d\n",start,end);
 }
 
 void ResultFilter::setRatingRange(bool enabled, int start, int end)
