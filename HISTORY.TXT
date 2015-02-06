@@ -8,6 +8,8 @@ Version 3.3.2
     - Inhalt der Eingabefelder im Suchfilter wird markiert, wenn das Feld
       den Fokus erhält, damit der Wert schnell überschrieben werden kann
     - Im Suchfilter wird das Erscheinungsjahr nun korrekt behandelt
+    - Werden beim Einlesen der Datenbank fehlerhafte Timestamps in den
+      Titeln festgestellt, wird versucht diese automatisch zu korrigieren.
       
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
