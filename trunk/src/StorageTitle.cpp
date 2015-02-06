@@ -885,9 +885,6 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 	BPM=ppl6::Peek32(a+21);
 	RecordDate=ppl6::Peek32(a+25);
 	ReleaseDate=ppl6::Peek32(a+29);
-	if (ReleaseDate<2016) {					// Bugfix
-		ReleaseDate=ReleaseDate*10000;
-	}
 	RecordSourceId=ppl6::Peek16(a+33);
 	Track=ppl6::Peek16(a+35);
 	Bitrate=ppl6::Peek16(a+37);
