@@ -88,6 +88,9 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 
 	setupStatusBar();
 
+	this->show();
+	this->restoreGeometry(wm_main->GetGeometry("SearchlistDialog"));
+
 
 	// Das müssen wir irgendwie asynchron hinbekommen
 	/*
@@ -308,6 +311,11 @@ void SearchlistDialog::resizeEvent(QResizeEvent * event)
 	QWidget::resizeEvent(event);
 }
 
+void SearchlistDialog::closeEvent(QCloseEvent *event)
+{
+	wm_main->SaveGeometry("SearchlistDialog",this->saveGeometry());
+	QWidget::closeEvent(event);
+}
 
 
 void SearchlistDialog::ReloadTranslation()

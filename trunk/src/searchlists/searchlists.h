@@ -55,6 +55,7 @@ private:
     CWmClient *wm;
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
+    void closeEvent(QCloseEvent *event);
     void Resize();
 
 

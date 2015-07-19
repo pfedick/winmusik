@@ -52,6 +52,9 @@ Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
     		"}\n"
     		"";
     ui.treeWidget->setStyleSheet(Style);
+	this->show();
+	this->restoreGeometry(wm_main->GetGeometry("Searchlists"));
+
     Update();
 }
 
@@ -113,6 +116,11 @@ void Searchlists::resizeEvent(QResizeEvent * event)
 	QWidget::resizeEvent(event);
 }
 
+void Searchlists::closeEvent(QCloseEvent *event)
+{
+	wm_main->SaveGeometry("Searchlists",this->saveGeometry());
+	QWidget::closeEvent(event);
+}
 
 
 void Searchlists::ReloadTranslation()

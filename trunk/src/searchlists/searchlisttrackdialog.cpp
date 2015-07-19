@@ -38,11 +38,20 @@ SearchlistTrackDialog::SearchlistTrackDialog(QWidget *parent)
     : QDialog(parent)
 {
 	ui.setupUi(this);
+	this->show();
+	this->restoreGeometry(wm_main->GetGeometry("SearchlistTrackDialog"));
 }
 
 SearchlistTrackDialog::~SearchlistTrackDialog()
 {
 }
+
+void SearchlistTrackDialog::closeEvent(QCloseEvent *event)
+{
+	wm_main->SaveGeometry("SearchlistTrackDialog",this->saveGeometry());
+	QDialog::closeEvent(event);
+}
+
 
 
 void SearchlistTrackDialog::Resize()

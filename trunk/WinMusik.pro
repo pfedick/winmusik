@@ -77,7 +77,8 @@ HEADERS += widgets/fkeys.h \
     include/traktor.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
-    include/droparea.h 
+    include/droparea.h \
+    include/plugins.h
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     widgets/keywheel.cpp \
@@ -142,7 +143,8 @@ SOURCES += widgets/fkeys.cpp \
     src/traktor.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
-    src/DropArea.cpp
+    src/DropArea.cpp \
+    src/plugins.cpp
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
     src/editor/oimpinfo.ui \
@@ -184,6 +186,8 @@ unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
+QMAKE_CXXFLAGS += `python-config --cflags`
+
 CONFIG(debug, debug|release) { 
     # Debug
     unix:LIBS += `ppl6-config \
@@ -191,7 +195,7 @@ CONFIG(debug, debug|release) {
         debug`
     win32:LIBS += `ppl6-config \
         --libs \
-        debug`
+        debug` 
 }
 else { 
     # Release
@@ -202,6 +206,7 @@ else {
         --libs \
         release`
 }
+LIBS += `python-config --ldflags`
 win32:LIBS += -lwinmm
 CODECFORSRC = UTF-8
 CODECFORTR = UTF-8

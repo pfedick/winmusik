@@ -10,6 +10,7 @@ Version 3.3.2
     - Im Suchfilter wird das Erscheinungsjahr nun korrekt behandelt
     - Werden beim Einlesen der Datenbank fehlerhafte Timestamps in den
       Titeln festgestellt, wird versucht diese automatisch zu korrigieren.
+    - Die Fenster der Suchlisten merken sich ihre letzte Position
       
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
