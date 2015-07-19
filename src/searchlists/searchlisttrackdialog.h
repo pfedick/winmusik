@@ -50,9 +50,9 @@ public:
 private:
     SearchlistItem Track;
     Ui::SearchlistTrackDialogClass ui;
-    CWmClient *wm;
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
+    void closeEvent(QCloseEvent *event);
     void Resize();
 
 

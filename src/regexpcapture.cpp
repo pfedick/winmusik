@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <exception>
 #include <stdexcept>
+#include <Python.h>
 
 void RegExpClipboard::copyFromClipboard()
 {
@@ -81,6 +82,7 @@ RegularExpressionCapture::~RegularExpressionCapture()
 
 void RegularExpressionCapture::load()
 {
+	//loadScripts();
 	patterns.clear();
 	if (!wm_main) return;
 	ppl6::CString File=wm_main->conf.DataPath+"/regexp.conf";
@@ -232,14 +234,88 @@ void RegularExpressionCapture::copyToMatch(const RegExpPattern &p, const ppl6::C
 }
 
 
+static bool matchBeatPortPro100_getArtist(const ppl6::CString &html, RegExpMatch &match)
+{
+	ppl6::CArray Lines, List, matches;
+	if (!html.PregMatch("/<p class=\"buk-track-artists\">(.*?)<\\/p>/is",matches)) return false;
+	Lines.Explode(matches.GetString(1),"\n");
+	List.Clear();
+	for (size_t i=0;i<Lines.Size();i++) {
+		ppl6::CString Line=Lines.GetString(i);
+		if (Line.PregMatch("/<a href=\".*?\" data-artist=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+			List.Add(matches.GetString(1));
+		}
+	}
+	if (List.Size()==0) return false;
+	match.Artist=ppl6::UnescapeHTMLTags(List.Implode(", "));
+	return true;
+}
+
+static bool matchBeatPortPro100_getLabels(const ppl6::CString &html, RegExpMatch &match)
+{
+	ppl6::CArray Lines, List, matches;
+	if (!html.PregMatch("/<p class=\"buk-track-labels\">(.*?)<\\/p>/is",matches)) return false;
+	Lines.Explode(matches.GetString(1),"\n");
+	List.Clear();
+	for (size_t i=0;i<Lines.Size();i++) {
+		ppl6::CString Line=Lines.GetString(i);
+		if (Line.PregMatch("/<a href=\".*?\" data-label=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+			List.Add(matches.GetString(1));
+		}
+	}
+	if (List.Size()==0) return false;
+	match.Label=ppl6::UnescapeHTMLTags(List.Implode(", "));
+	return true;
+}
+
+static bool matchBeatPortPro100_getGenres(const ppl6::CString &html, RegExpMatch &match)
+{
+	ppl6::CArray Lines, List, matches;
+	if (!html.PregMatch("/<p class=\"buk-track-genre\">(.*?)<\\/p>/is",matches)) return false;
+	Lines.Explode(matches.GetString(1),"\n");
+	List.Clear();
+	for (size_t i=0;i<Lines.Size();i++) {
+		ppl6::CString Line=Lines.GetString(i);
+		if (Line.PregMatch("/<a href=\".*?\" data-genre=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+			List.Add(matches.GetString(1));
+		}
+	}
+	if (List.Size()==0) return false;
+	match.Genre=ppl6::UnescapeHTMLTags(List.Implode(", "));
+	return true;
+}
+
+static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
+{
+	ppl6::CArray matches;
+	//printf ("Try match: %s\n\n",(const char*)html);
+	//<span class="buk-track-primary-title">Access</span>
+	if (!html.PregMatch("/<span class=\"buk-track-primary-title\">(.*?)<\\/span>/is",matches)) return false;
+	//printf ("ok\n");
+	match.Title=ppl6::UnescapeHTMLTags(matches.GetString(1));
+	if (!html.PregMatch("/<span class=\"buk-track-remixed\">(.*?)<\\/span>/is",matches)) return false;
+	match.Version=ppl6::UnescapeHTMLTags(matches.GetString(1));
+	if (html.PregMatch("/<p class=\"buk-track-released\">([0-9\\-]+)<\\/p>/is",matches))
+		match.ReleaseDate=ppl6::UnescapeHTMLTags(matches.GetString(1));
+	if (!matchBeatPortPro100_getArtist(html,match)) return false;
+	matchBeatPortPro100_getLabels(html,match);
+	matchBeatPortPro100_getGenres(html,match);
+	return true;
+}
+
+
 bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &match) const
 {
+	//if (matchAgainstScripts(data,match)) return true;
 	//if (this->match(data.Html,match)) return true;
+	if (matchBeatPortPro100(data.Html,match)) return true;
 	return this->match(data.PlainText,match);
 }
 
 bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &match) const
 {
+	if (matchBeatPortPro100(data,match)) return true;
+
 	if (patterns.empty()) return false;
 	std::vector<RegExpPattern>::const_iterator it;
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
@@ -299,6 +375,84 @@ bool RegularExpressionCapture::testMatch(const ppl6::CString &data, RegExpMatch 
 	if (data.PregMatch(Pattern,res)) {
 		copyToMatch(pattern,res,match);
 		return true;
+	}
+	return false;
+}
+
+
+void RegularExpressionCapture::loadScripts()
+{
+	ppl6::CString Path=wm_main->conf.DataPath+"/scripts";
+	ppl6::CDir Dir;
+	printf ("RegularExpressionCapture::loadScripts\n");
+
+	if (!Dir.Open(Path)) return;
+
+	PyObject *sysPath = PySys_GetObject("path");
+	PyObject *path = PyString_FromString(Path);
+	int result = PyList_Insert(sysPath, 0, path);
+	Py_DECREF(path);
+
+
+	Dir.Reset();
+	const ppl6::CDirEntry *entry;
+	while ((entry=Dir.GetNextPattern("*.py"))) {
+		ppl6::CArray matches;
+		if (entry->Filename.PregMatch("/^(.*?)\\.py$/i",matches)) {
+			ppl6::CString ModuleName=matches.GetString(1);
+			printf ("Loading Module: %s\n",(const char*)ModuleName);
+			PyObject *pName = PyString_FromString(ModuleName);
+			PyObject *pModule = PyImport_Import(pName);
+		    Py_DECREF(pName);
+		    if (pModule) {
+		    	printf ("Module loaded\n");
+		    	PyObject* pFunc = PyObject_GetAttrString(pModule, "winmusik_init");
+		    	if (pFunc) {
+		    		printf ("Rufe Init auf\n");
+		    		PyObject *pReturn = PyObject_CallObject(pFunc,NULL);
+		    		if (pReturn) Py_DECREF(pReturn);
+		    		Py_XDECREF(pFunc);
+		    	}
+				python_modules.push_back(PythonModule(ModuleName,pModule));
+		    }
+			//PyRun_SimpleString("import "+ModuleName+"\n");
+		}
+	}
+}
+
+bool RegularExpressionCapture::matchScript(const PythonModule &module, const RegExpClipboard &data, RegExpMatch &match) const
+{
+	PyObject* pFunc = PyObject_GetAttrString(module.pModule, "winmusik_parse_clipboard");
+	if (pFunc && PyCallable_Check(pFunc)) {
+		PyObject *pArgs = PyTuple_New(2);
+		PyObject * pValueText = PyString_FromString(data.PlainText);
+		PyObject * pValueHtml = PyString_FromString(data.Html);
+		PyTuple_SetItem(pArgs, 0, pValueText);
+		PyTuple_SetItem(pArgs, 1, pValueHtml);
+		PyObject *pReturn = PyObject_CallObject(pFunc, pArgs);
+		Py_DECREF(pArgs);
+		Py_DECREF(pValueText);
+		Py_DECREF(pValueHtml);
+
+		if (pReturn!=NULL && PyObject_IsTrue(pReturn)==1) {
+			printf("Result of call: %s\n", PyString_AsString(pReturn));
+			Py_DECREF(pReturn);
+		} else {
+			printf ("Return not ok\n");
+		}
+		//Py_XDECREF(pFunc);
+	}
+	Py_XDECREF(pFunc);
+	//Py_DECREF(pModule);
+	return false;
+}
+
+bool RegularExpressionCapture::matchAgainstScripts(const RegExpClipboard &data, RegExpMatch &match) const
+{
+	std::list<PythonModule>::const_iterator it;
+	for (it=python_modules.begin(); it != python_modules.end(); ++it) {
+		printf ("Matching against module: %s\n",(const char*)(*it).name);
+		if (matchScript((*it),data,match)) return true;
 	}
 	return false;
 }

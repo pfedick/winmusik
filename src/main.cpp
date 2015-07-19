@@ -34,6 +34,7 @@
 
 #include <QtGui>
 #include <QApplication>
+#include <Python.h>
 
 ppl6::CLog *wmlog=NULL;
 
@@ -56,7 +57,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-
     QApplication a(argc, argv);
 
     // Deprecated in Qt5, Qt5 geht davon aus, dass der Sourcecode UTF-8 kodiert ist
@@ -71,18 +71,23 @@ int main(int argc, char *argv[])
     }
     //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
 
+    Py_InitializeEx(0);
+
     CWmClient Client;
     if (!Client.Init(argc,argv,&a)) {
     	Client.RaiseError();
-    	return ppl6::GetErrorCode();
+    	Py_Finalize();
+    	return 1;
     }
     if (!Client.Start()) {
     	if (ppl6::GetErrorCode()>0) {
     		Client.RaiseError();
     	}
-    	return ppl6::GetErrorCode();
+    	Py_Finalize();
+    	return 1;
     }
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     int ret=a.exec();
+    Py_Finalize();
     return ret;
 }

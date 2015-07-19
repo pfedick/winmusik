@@ -902,12 +902,14 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 			RecordDate=ReleaseDate;
 		}
 	}
+	/*
 	if (ReleaseDate<10000000) {
 		printf ("ReleaseDate: %d, RecordDate: %d\n",ReleaseDate,RecordDate);
 	}
 	if (RecordDate<10000000) {
 		printf ("RecordDate: %d, ReleaseDate: %d\n",RecordDate, ReleaseDate);
 	}
+	*/
 
 	RecordSourceId=ppl6::Peek16(a+33);
 	Track=ppl6::Peek16(a+35);

@@ -10,6 +10,8 @@
 
 
 #include <vector>
+#include <list>
+#include <Python.h>
 
 class RegExpPattern
 {
@@ -60,12 +62,28 @@ class RegExpClipboard
 };
 
 
+class PythonModule
+{
+	public:
+		PythonModule(const ppl6::CString &name, PyObject *pModule) {
+			this->name=name;
+			this->pModule=pModule;
+		}
+		ppl6::CString	name;
+		PyObject 		*pModule;
+};
+
 class RegularExpressionCapture
 {
 	private:
 		std::vector<RegExpPattern> patterns;
+		std::list<PythonModule> python_modules;
 		void copyToMatch(const RegExpPattern &p, const ppl6::CArray &res, RegExpMatch &match) const;
 		void addDefaultPatterns();
+		void loadScripts();
+		bool matchAgainstScripts(const RegExpClipboard &data, RegExpMatch &match) const;
+		bool matchScript(const PythonModule &module, const RegExpClipboard &data, RegExpMatch &match) const;
+
 	public:
 		RegularExpressionCapture();
 		~RegularExpressionCapture();
