@@ -1705,7 +1705,8 @@ bool Edit::on_trackList_MouseMove(QMouseEvent *event)
     QMimeData *mimeData = new QMimeData;
     if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
     drag->setPixmap(Icon);
-    mimeData->setText(xml);
+    QByteArray ba((const char*)xml,xml.Size());
+    mimeData->setData("application/winmusik+xml",ba);
     mimeData->setUrls(list);
     drag->setMimeData(mimeData);
     // start drag
