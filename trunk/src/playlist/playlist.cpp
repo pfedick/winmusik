@@ -378,7 +378,8 @@ bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
     QMimeData *mimeData = new QMimeData;
     if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
     drag->setPixmap(Icon);
-    mimeData->setText(xml);
+    QByteArray ba((const char*)xml,xml.Size());
+    mimeData->setData("application/winmusik+xml",ba);
     mimeData->setUrls(list);
     drag->setMimeData(mimeData);
     // start drag
@@ -418,9 +419,17 @@ void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertIte
 	QApplication::processEvents();
 
 	ui.tracks->setSortingEnabled(false);
-	ppl6::CString xml=mime->text();
-	if (xml.Left(18)=="<winmusikTracklist") {
-		handleXMLDrop(xml,insertItem);
+	if (mime->hasFormat("application/winmusik+xml")) {
+		QByteArray ba=mime->data("application/winmusik+xml");
+		ppl6::CString xml;
+		xml.Set(ba.constData(), ba.size());
+		if (xml.Left(18)=="<winmusikTracklist") {
+			printf ("XML-Drop\n");
+			handleXMLDrop(xml,insertItem);
+		} else {
+			QList<QUrl>	list=mime->urls();
+			handleURLDrop(list,insertItem);
+		}
 	} else {
 		QList<QUrl>	list=mime->urls();
 		handleURLDrop(list,insertItem);
