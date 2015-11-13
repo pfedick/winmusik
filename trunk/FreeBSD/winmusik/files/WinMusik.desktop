@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=WinMusik
-Comment=Webcam capture program for creating stopmotion video
-Exec=/usr/local/bin/WinMusik
-Terminal=false
-Type=Application
-Categories=GTK;GNOME;AudioVideo;
-Icon=/usr/local/share/pixmaps/WinMusik.png
