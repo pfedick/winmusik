@@ -491,7 +491,7 @@ void PlaylistEdit::on_trackStartFromBeginning_clicked()
 
 void PlaylistEdit::on_trackEndUntilEnd_clicked()
 {
-	ui.trackStart->setText(ui.trackLength->text());
+	ui.trackEnd->setText(ui.trackLength->text());
 }
 
 
