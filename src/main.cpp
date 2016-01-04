@@ -34,7 +34,9 @@
 
 #include <QtGui>
 #include <QApplication>
+#ifdef HAVE_PYTHON
 #include <Python.h>
+#endif
 
 ppl6::CLog *wmlog=NULL;
 
@@ -70,24 +72,31 @@ int main(int argc, char *argv[])
 		throw std::exception();
     }
     //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
-
+#ifdef HAVE_PYTHON
     Py_InitializeEx(0);
+#endif
 
     CWmClient Client;
     if (!Client.Init(argc,argv,&a)) {
     	Client.RaiseError();
+#ifdef HAVE_PYTHON
     	Py_Finalize();
+#endif
     	return 1;
     }
     if (!Client.Start()) {
     	if (ppl6::GetErrorCode()>0) {
     		Client.RaiseError();
     	}
+#ifdef HAVE_PYTHON
     	Py_Finalize();
+#endif
     	return 1;
     }
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     int ret=a.exec();
+#ifdef HAVE_PYTHON
     Py_Finalize();
+#endif
     return ret;
 }

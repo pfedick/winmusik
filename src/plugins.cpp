@@ -1,5 +1,7 @@
 #include "plugins.h"
+#ifdef HAVE_PYTHON
 #include <Python.h>
+#endif
 
 Plugins::Plugins()
 {
@@ -15,6 +17,7 @@ Plugins::~Plugins()
 
 void Plugins::loadFromPath(const ppl6::CString &Path)
 {
+#ifdef HAVE_PYTHON
 	ppl6::CDir Dir;
 	if (!Dir.Open(Path)) return;
 
@@ -35,4 +38,5 @@ void Plugins::loadFromPath(const ppl6::CString &Path)
 			PyRun_SimpleString("import "+ModuleName+"\n");
 		}
 	}
+#endif
 }
