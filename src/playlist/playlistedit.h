@@ -93,6 +93,11 @@ public slots:
 	void on_coverLoadButton_clicked();
 	void on_coverSaveButton_clicked();
 
+	void on_cueTrackStart_clicked();
+	void on_cueTrackEnd_clicked();
+	void on_trackStartFromBeginning_clicked();
+	void on_trackEndUntilEnd_clicked();
+
 	void on_cueCutStart_0_clicked() { cue2CutStart(0); };
 	void on_cueCutStart_1_clicked() { cue2CutStart(1); };
 	void on_cueCutStart_2_clicked() { cue2CutStart(2); };

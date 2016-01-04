@@ -466,4 +466,32 @@ void PlaylistEdit::cutDelete(int cut)
 	updateTotalTime();
 }
 
+void PlaylistEdit::on_cueTrackStart_clicked()
+{
+	QTreeWidgetItem *item=ui.traktorCues->currentItem();
+	if (!item) return;
+	QString Tmp=item->text(2);
+	ui.trackStart->setText(Tmp);
+	updateTotalTime();
+}
+
+void PlaylistEdit::on_cueTrackEnd_clicked()
+{
+	QTreeWidgetItem *item=ui.traktorCues->currentItem();
+	if (!item) return;
+	QString Tmp=item->text(2);
+	ui.trackStart->setText(Tmp);
+	updateTotalTime();
+}
+
+void PlaylistEdit::on_trackStartFromBeginning_clicked()
+{
+	ui.trackStart->setText("0:00");
+}
+
+void PlaylistEdit::on_trackEndUntilEnd_clicked()
+{
+	ui.trackStart->setText(ui.trackLength->text());
+}
+
 

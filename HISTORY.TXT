@@ -11,7 +11,10 @@ Version 3.3.2
     - Werden beim Einlesen der Datenbank fehlerhafte Timestamps in den
       Titeln festgestellt, wird versucht diese automatisch zu korrigieren.
     - Die Fenster der Suchlisten merken sich ihre letzte Position
-      
+    - Playlist, Track-Editor: markierte Traktor Cuepoints können nun auch
+      Track-Start und -Ende zugewiesen werden.
+    - Playlist, Track-Editor: Buttons sum setzen des Trackstarts auf 0:00,
+      bzw. Ende auf das Ende des Tracks  
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
     - Problem mit RegularExpressions unter Windows gefixt

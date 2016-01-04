@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>802</width>
-    <height>556</height>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -301,6 +301,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="spacing">
+           <number>2</number>
+          </property>
           <item>
            <widget class="QLabel" name="label_9">
             <property name="text">
@@ -318,6 +321,40 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="trackStartFromBeginning">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetotrackstart.png</normaloff>:/icons/resources/cuetotrackstart.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="cueTrackStart">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -342,6 +379,40 @@
            </widget>
           </item>
           <item>
+           <widget class="QToolButton" name="trackEndUntilEnd">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetotrackend.png</normaloff>:/icons/resources/cuetotrackend.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="cueTrackEnd">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources.qrc">
+              <normaloff>:/icons/resources/cuetocut.png</normaloff>:/icons/resources/cuetocut.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>12</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -359,7 +430,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout">
           <property name="spacing">
-           <number>-1</number>
+           <number>5</number>
           </property>
           <item row="1" column="4">
            <widget class="QToolButton" name="cueCutStart_0">
