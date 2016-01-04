@@ -11,8 +11,9 @@
 
 #include <vector>
 #include <list>
+#ifdef HAVE_PYTHON
 #include <Python.h>
-
+#endif
 class RegExpPattern
 {
 	public:
@@ -61,7 +62,7 @@ class RegExpClipboard
 		ppl6::CString Html;
 };
 
-
+#ifdef HAVE_PYTHON
 class PythonModule
 {
 	public:
@@ -73,16 +74,22 @@ class PythonModule
 		PyObject 		*pModule;
 };
 
+#endif
+
 class RegularExpressionCapture
 {
 	private:
 		std::vector<RegExpPattern> patterns;
+#ifdef HAVE_PYTHON
 		std::list<PythonModule> python_modules;
+#endif
 		void copyToMatch(const RegExpPattern &p, const ppl6::CArray &res, RegExpMatch &match) const;
 		void addDefaultPatterns();
 		void loadScripts();
+#ifdef HAVE_PYTHON
 		bool matchAgainstScripts(const RegExpClipboard &data, RegExpMatch &match) const;
 		bool matchScript(const PythonModule &module, const RegExpClipboard &data, RegExpMatch &match) const;
+#endif
 
 	public:
 		RegularExpressionCapture();
@@ -106,5 +113,6 @@ class RegularExpressionCapture
 
 
 };
+
 
 #endif /* REGEXPCAPTURE_H_ */

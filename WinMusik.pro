@@ -186,7 +186,7 @@ unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
-QMAKE_CXXFLAGS += `python-config --cflags`
+#QMAKE_CXXFLAGS += `python-config --cflags`
 
 CONFIG(debug, debug|release) { 
     # Debug
@@ -206,7 +206,7 @@ else {
         --libs \
         release`
 }
-LIBS += `python-config --ldflags`
+#LIBS += `python-config --ldflags`
 win32:LIBS += -lwinmm
 CODECFORSRC = UTF-8
 CODECFORTR = UTF-8

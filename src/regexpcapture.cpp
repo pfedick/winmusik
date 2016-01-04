@@ -29,7 +29,9 @@
 #include <QClipboard>
 #include <exception>
 #include <stdexcept>
+#ifdef HAVE_PYTHON
 #include <Python.h>
+#endif
 
 void RegExpClipboard::copyFromClipboard()
 {
@@ -69,6 +71,7 @@ void RegExpPattern::copyFrom(const RegExpPattern &other)
 	seconds=other.seconds;
 	releasedate=other.releasedate;
 }
+
 
 RegularExpressionCapture::RegularExpressionCapture()
 {
@@ -382,6 +385,7 @@ bool RegularExpressionCapture::testMatch(const ppl6::CString &data, RegExpMatch 
 
 void RegularExpressionCapture::loadScripts()
 {
+#ifdef HAVE_PYTHON
 	ppl6::CString Path=wm_main->conf.DataPath+"/scripts";
 	ppl6::CDir Dir;
 	printf ("RegularExpressionCapture::loadScripts\n");
@@ -418,8 +422,10 @@ void RegularExpressionCapture::loadScripts()
 			//PyRun_SimpleString("import "+ModuleName+"\n");
 		}
 	}
+#endif
 }
 
+#ifdef HAVE_PYTHON
 bool RegularExpressionCapture::matchScript(const PythonModule &module, const RegExpClipboard &data, RegExpMatch &match) const
 {
 	PyObject* pFunc = PyObject_GetAttrString(module.pModule, "winmusik_parse_clipboard");
@@ -456,3 +462,5 @@ bool RegularExpressionCapture::matchAgainstScripts(const RegExpClipboard &data, 
 	}
 	return false;
 }
+#endif
+
