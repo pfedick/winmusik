@@ -79,6 +79,7 @@ private:
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
     bool eventFilter(QObject *target, QEvent *event);
+    void closeEvent(QCloseEvent *event);
 
     bool on_trackList_MousePress(QMouseEvent *event);
     bool on_trackList_MouseRelease(QMouseEvent *event);

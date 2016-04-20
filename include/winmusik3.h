@@ -192,6 +192,10 @@ void NormalizeImportString(ppl6::CString &Buffer);
 void setReadableLength(QLabel *label, int length);
 void loadCoverToClipboard(const ppl6::CString &Filename);
 
+
+void SetWindowGeometry(QWidget *widget, const ppl6::CString &name);
+void SaveWindowGeometry(QWidget *widget, const ppl6::CString &name);
+
 /*******************************************************
  * Global Variablen                                    *
  *******************************************************/

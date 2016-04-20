@@ -92,6 +92,7 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	ui.recordDateStart->installEventFilter(this);
 	ui.recordDateEnd->installEventFilter(this);
 
+	SetWindowGeometry(this,"search");
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
@@ -148,6 +149,13 @@ void Search::resizeEvent(QResizeEvent * event)
 {
 	Resize();
 	QWidget::resizeEvent(event);
+}
+
+void Search::closeEvent(QCloseEvent *event)
+{
+	ppl6::CString Name;
+	SaveWindowGeometry(this,"search");
+    QWidget::closeEvent(event);
 }
 
 bool Search::eventFilter(QObject *target, QEvent *event)

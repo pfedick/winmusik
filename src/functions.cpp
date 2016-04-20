@@ -27,6 +27,7 @@
 #include "winmusik3.h"
 #include <ppl6-sound.h>
 
+#include <QWidget>
 #include <QPixmap>
 #include <QBuffer>
 #include <QLabel>
@@ -533,4 +534,18 @@ void setReadableLength(QLabel *label, int length)
 	}
 	label->setText(ppl6::ToString("%0d:%02d:%02d",hh,mm,ss));
 }
+
+
+void SetWindowGeometry(QWidget *widget, const ppl6::CString &name)
+{
+	widget->restoreGeometry(wm_main->GetGeometry(name));
+	if (widget->pos().x()<0) widget->move(0,widget->pos().y());
+	if (widget->pos().y()<0) widget->move(widget->pos().x(),0);
+}
+
+void SaveWindowGeometry(QWidget *widget, const ppl6::CString &name)
+{
+	wm_main->SaveGeometry(name,widget->saveGeometry());
+}
+
 
