@@ -99,11 +99,23 @@ class DataTitle : public CStorageData
 };
 
 
+class CDataBase
+{
+	private:
+	public:
+		CDataBase();
+		~CDataBase();
+		void clear();
+};
 
 class CStorage
 {
 	private:
 	public:
+		CStorage();
+		~CStorage();
+
+		void loadDatabase(const ppl7::String &filename, CDataBase &db);
 
 
 };
