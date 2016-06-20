@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>PPL6 - SVN</project>
+		<project>PPL7</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
