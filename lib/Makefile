@@ -3,7 +3,7 @@ LIBS = -L/usr/local/lib `ppl7-config --libs release`  -lstdc++
 LIBDEP	:= $(shell ppl7-config --ppllib release)
 
 OBJS =		compile/object_title.o \
-			compile/storage.o compile/database.o
+			compile/CStorage.o compile/CDatabase.o compile/CWMFile.o
 
 TARGET =	compile/libwinmusik3.a
 
@@ -21,11 +21,15 @@ compile/object_title.o: src/object_title.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/object_title.o -c src/object_title.cpp $(CXXFLAGS)
 	
-compile/storage.o: src/storage.cpp include/libwinmusik3.h Makefile
+compile/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
-	$(CXX) -o compile/storage.o -c src/storage.cpp $(CXXFLAGS)
+	$(CXX) -o compile/CStorage.o -c src/CStorage.cpp $(CXXFLAGS)
 
-compile/database.o: src/database.cpp include/libwinmusik3.h Makefile
+compile/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
-	$(CXX) -o compile/database.o -c src/database.cpp $(CXXFLAGS)
+	$(CXX) -o compile/CDatabase.o -c src/CDatabase.cpp $(CXXFLAGS)
+
+compile/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/CWMFile.o -c src/CWMFile.cpp $(CXXFLAGS)
 	

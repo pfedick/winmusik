@@ -32,6 +32,14 @@ TEST_F(StorageTest, ConstructorWithoutParam) {
 	});
 }
 
+TEST_F(StorageTest, loadDatabase) {
+	CDataBase db;
+	CStorage storage;
+	storage.loadDatabase("/home/patrick/ownCloud/WinMusik3/winmusik.dat",db);
+
+}
+
+
 
 
 } // EOF namespace

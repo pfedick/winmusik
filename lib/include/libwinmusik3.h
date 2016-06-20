@@ -98,6 +98,12 @@ class DataTitle : public CStorageData
 		//static int keyId(const ppl6::CString &name);
 };
 
+class CProgressUpdate
+{
+	public:
+		virtual ~CProgressUpdate()=0;
+		virtual void Update(int progress)=0;
+};
 
 class CDataBase
 {
