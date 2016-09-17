@@ -551,11 +551,11 @@ int COimpDataStore::GetCopy(ppluint32 id, DataOimp *t)
 {
 	if (id>highestId) {
 		ppl6::SetError(20015,"%u",id);
-		return NULL;
+		return 0;
 	}
 	if (TableIndex==NULL || TableIndex[id].t==NULL) {
 		ppl6::SetError(20015,"%u",id);
-		return NULL;
+		return 0;
 	}
 	DataOimp *entry=TableIndex[id].t;
 	t->CopyFrom(entry);
