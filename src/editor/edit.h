@@ -74,6 +74,11 @@ class CTitleList : public QTreeWidget
 		//void contextMenuEvent(QContextMenuEvent *event);
 		//void customContextMenuRequested ( const QPoint & pos );
 		void focusInEvent ( QFocusEvent * event );
+		//void dragEnterEvent ( QDragEnterEvent * event );
+		//bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
+		void dropEvent ( QDropEvent * event );
+		QStringList mimeTypes () const;
+		Qt::DropActions supportedDropActions () const;
 };
 
 class Edit;
@@ -112,6 +117,8 @@ public:
     void showEditor();
     void showEditorWithoutFocusChange();
     void createSetMusicKeyContextMenu(QMenu *m);
+
+    void handleDropOnTracklist(const QList<QUrl> &urlList, int dropAction);
 
 
 private:
@@ -223,7 +230,8 @@ private:
     void SetFkey(QToolButton *button,const char *Icon, QString Text, bool enabled=true);
     void InstallFilter(QObject *object, int id);
 
-    void SaveTrack();
+    void SaveEditorTrack();
+    bool SaveTrack(DataTitle &Ti);
     void resizeEvent ( QResizeEvent * event );
     void CopyFromTrackInfo(TrackInfo &info);
 

@@ -15,6 +15,8 @@ Version 3.3.2
       Track-Start und -Ende zugewiesen werden.
     - Playlist, Track-Editor: Buttons sum setzen des Trackstarts auf 0:00,
       bzw. Ende auf das Ende des Tracks  
+    - Editor: Dateien können nun per Drag'n'Drop in das WinMusik-Verzeichnis
+      des ausgewählten Tonträgers kopiert und importiert werden.
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
     - Problem mit RegularExpressions unter Windows gefixt

@@ -25,6 +25,7 @@
 
 #include "winmusik3.h"
 #include <ppl6-grafix.h>
+#include <stdio.h>
 #include "edit.h"
 #include "editdevice.h"
 #include "tablesearch.h"
@@ -45,6 +46,7 @@
 #include <QProgressDialog>
 #include <QMimeData>
 #include <QDrag>
+#include <list>
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -67,6 +69,8 @@ CTitleList::CTitleList(QWidget * parent)
 {
 	edit=NULL;
 	wm=NULL;
+	this->setAcceptDrops(true);
+	this->setDropIndicatorShown(true);
 }
 
 
@@ -96,6 +100,51 @@ void CTitleList::focusInEvent ( QFocusEvent * event )
 {
 	QTreeWidget::focusInEvent(event);
 	edit->FixFocus();
+}
+
+/*
+void CTitleList::dragEnterEvent ( QDragEnterEvent * event )
+{
+	if( event->mimeData()->hasFormat( "text/uri-list" ) ) {
+		event->acceptProposedAction();
+	}
+}
+*/
+
+QStringList CTitleList::mimeTypes () const
+{
+    QStringList qstrList;
+    // list of accepted mime types for drop
+    qstrList.append("text/uri-list");
+    return qstrList;
+}
+
+
+Qt::DropActions CTitleList::supportedDropActions () const
+{
+    // returns what actions are supported when dropping
+    return Qt::CopyAction | Qt::MoveAction;
+}
+
+/*
+bool CTitleList::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action)
+{
+	printf("CTitleList::dropMimeData\n");
+	//edit->handleTrackListDropEvent(data,parent);
+	return true;
+}
+*/
+
+void CTitleList::dropEvent ( QDropEvent * event )
+{
+	if (event->source()==this || event->source()==edit) {
+		event->ignore();
+		return;
+	}
+	//printf ("CTitleList::dropEvent, action: %i\n",event->dropAction());
+	QList<QUrl> urlList=event->mimeData()->urls();
+	edit->handleDropOnTracklist(urlList, event->dropAction());
+	event->acceptProposedAction();
 }
 
 /*!\class Edit
@@ -338,7 +387,8 @@ void Edit::SetupTrackList()
 	//trackList->installEventFilter(this);
 	//trackList->setMouseTracking(true);
     trackList->setDragEnabled(false);
-    trackList->setDragDropMode(QAbstractItemView::DragOnly);
+    trackList->setDragDropMode(QAbstractItemView::DragDrop);
+    //trackList->setDropIndicatorShown(true);
 
 
     trackList->setObjectName(QString::fromUtf8("trackList"));
@@ -878,6 +928,144 @@ void Edit::handleDropEvent(QDropEvent *event)
 
 }
 
+
+static void addFileIfSuitable(const ppl6::CString &filename, std::list<ppl6::CString> &fileList)
+{
+	ppl6::CString lowerFile=filename;
+	lowerFile.LCase();
+	if (lowerFile.Right(4)==".mp3")
+		fileList.push_back(filename);
+	else if (lowerFile.Right(4)==".aif")
+		fileList.push_back(filename);
+	else if (lowerFile.Right(5)==".aiff")
+		fileList.push_back(filename);
+
+}
+
+static void traverseDirectoryForFiles(const ppl6::CString &path, std::list<ppl6::CString> &fileList)
+{
+	ppl6::CDir dir;
+	if (dir.Open(path, ppl6::CDir::Sort_Filename)) {
+		dir.Reset();
+		const ppl6::CDirEntry *entry;
+		while ((entry=dir.GetNext())) {
+			//printf ("DIREntgry: >>%s<<\n",(const char*)entry->Filename);
+			if (entry->Filename=="." || entry->Filename=="..") continue;
+			if (entry->IsDir()) {
+				traverseDirectoryForFiles(entry->File, fileList);
+			} else if (entry->IsFile()) {
+				addFileIfSuitable(entry->File, fileList);
+			}
+		}
+	}
+}
+
+static int getHighestIdOfDirectory(const ppl6::CString &path)
+{
+	int max=0;
+	ppl6::CDir dir;
+	if (dir.Open(path, ppl6::CDir::Sort_Filename)) {
+		ppl6::CArray matches;
+		dir.Reset();
+		const ppl6::CDirEntry *entry;
+		while ((entry=dir.GetNext())) {
+			if (entry->Filename.PregMatch("/^([0-9]{3}_.*$", matches)) {
+				int v=matches.GetString(1).ToInt();
+				if (v>max) max=v;
+				printf ("match: %d\n",v);
+			}
+		}
+	}
+	return max;
+}
+
+void Edit::handleDropOnTracklist(const QList<QUrl> &urlList, int dropAction)
+{
+	if (position<3) return;
+	std::list<ppl6::CString> fileList, filteredFileList;
+	foreach(QUrl url, urlList) {
+		ppl6::CString filename=url.toLocalFile();
+		ppl6::CDirEntry file;
+		if (ppl6::CFile::Stat(filename, file)) {
+			if (file.IsDir()) {
+				traverseDirectoryForFiles(filename, fileList);
+			} else if (file.IsFile()) {
+				addFileIfSuitable(filename, fileList);
+			}
+		}
+	}
+
+	std::list<ppl6::CString>::const_iterator it;
+	ppl6::CString TargetPath=wm->conf.DevicePath[DeviceType];
+	if (TargetPath.IsEmpty()) return;
+	TargetPath.RTrim("/");
+	TargetPath.RTrim("\\");
+	TargetPath.Concatf("/%02u/%03u/",(ppluint32)(DeviceId/100),DeviceId);
+
+	for (it=fileList.begin();it!=fileList.end();++it) {
+		if ((*it).Left(TargetPath.Size())!=TargetPath) filteredFileList.push_back((*it));
+	}
+	if (filteredFileList.size()==0) return;
+
+	int highestId=getHighestIdOfDirectory(TargetPath);
+	//printf ("Target: %s\n",(const char*)TargetPath);
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	QProgressDialog progress(tr("Copy Files into WinMusik directory..."), tr("Abort"), 0, fileList.size(), this);
+	progress.setWindowModality(Qt::WindowModal);
+	progress.setWindowTitle(QString(WM_APPNAME)+QString(": ")+tr("Copy Files into WinMusik directory..."));
+	progress.setMinimumWidth(500);
+	progress.setMaximumWidth(500);
+	progress.show();
+
+	QCoreApplication::processEvents();
+	int i=0;
+
+	ppl6::CString NewFile;
+	for (it=filteredFileList.begin();it!=filteredFileList.end();++it) {
+		progress.setValue(i);
+		QCoreApplication::processEvents();
+		if (progress.wasCanceled())	break;
+		i++;
+		//printf ("Import: %s\n",(const char*)ppl6::GetFilename((*it)));
+		progress.setLabelText(ppl6::GetFilename((*it)));
+		highestId++;
+		NewFile=TargetPath+ppl6::ToString("%03d_",highestId)+ppl6::GetFilename((*it));
+		//printf (" ==> %s\n",(const char*)NewFile);
+		if (dropAction==Qt::DropAction::MoveAction)
+			ppl6::CFile::MoveFile((*it),NewFile);
+		else
+			ppl6::CFile::CopyFile((*it),NewFile);
+	}
+	QApplication::restoreOverrideCursor();
+	progress.close();
+
+	if (filteredFileList.size()>1) {
+		on_f6_MassImport();
+		return;
+	}
+	ppl6::CString Tmp, FinalFile;
+
+	TrackNum=TrackList->GetMax()+1;
+	FinalFile.Setf("%s/%03u-%s",(const char*)TargetPath,TrackNum,(const char*)ppl6::GetFilename(NewFile));
+	ppl6::CFile::RenameFile(NewFile,FinalFile);
+	Tmp.Setf("%u",TrackNum);
+	ui.track->setFocus();
+	ui.track->setText(Tmp);
+	EditTrack();
+	//position=4;
+	ui.artist->setFocus();
+
+	TrackInfo tinfo;
+	//printf ("DEBUG: %s\n",(const char*)FinalFile);
+	if (getTrackInfoFromFile(tinfo,FinalFile)) {
+		//printf ("CopyFromTrackInfo\n");
+		CopyFromTrackInfo(tinfo);
+
+	}
+}
+
+
 // Globale Events, Fkeys
 bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 /*!\brief Globale KeyPress Events behandeln
@@ -985,7 +1173,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		return true;
 		// *************************************************************************** F12
 	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier && position>3) {
-		SaveTrack();
+		SaveEditorTrack();
 		return true;
 		// *************************************************************************** Alt & b
 	} else if (key==Qt::Key_B && modifier==Qt::AltModifier && position>3) {
@@ -1607,7 +1795,7 @@ void Edit::on_f11_clicked()
 
 void Edit::on_f12_clicked()
 {
-	SaveTrack();
+	SaveEditorTrack();
 }
 
 bool Edit::on_trackList_MousePress(QMouseEvent * event)
