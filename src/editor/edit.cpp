@@ -1032,7 +1032,7 @@ void Edit::handleDropOnTracklist(const QList<QUrl> &urlList, int dropAction)
 		highestId++;
 		NewFile=TargetPath+ppl6::ToString("%03d_",highestId)+ppl6::GetFilename((*it));
 		//printf (" ==> %s\n",(const char*)NewFile);
-		if (dropAction==Qt::DropAction::MoveAction)
+		if (dropAction==Qt::MoveAction)
 			ppl6::CFile::MoveFile((*it),NewFile);
 		else
 			ppl6::CFile::CopyFile((*it),NewFile);
