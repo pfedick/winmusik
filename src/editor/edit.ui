@@ -32,7 +32,16 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <item>
@@ -47,11 +56,20 @@
       <number>1</number>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>4</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <property name="verticalSpacing">
        <number>2</number>
-      </property>
-      <property name="margin">
-       <number>4</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -62,7 +80,16 @@
       </item>
       <item row="0" column="1">
        <layout class="QGridLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <property name="spacing">
@@ -273,7 +300,16 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -360,6 +396,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
      </property>
      <layout class="QHBoxLayout">
       <property name="spacing">
@@ -683,7 +722,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
        <number>2</number>
       </property>
       <item>
@@ -696,7 +744,16 @@
           <property name="spacing">
            <number>2</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -705,7 +762,16 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -851,7 +917,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -875,7 +950,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -899,7 +983,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -948,7 +1041,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1062,7 +1164,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1138,18 +1249,18 @@
                 <day>1</day>
                </datetime>
               </property>
+              <property name="displayFormat">
+               <string>yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>false</bool>
+              </property>
               <property name="date">
                <date>
                 <year>2008</year>
                 <month>1</month>
                 <day>1</day>
                </date>
-              </property>
-              <property name="displayFormat">
-               <string>yyyy</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -1175,18 +1286,18 @@
             </item>
             <item>
              <widget class="QDateEdit" name="recordDate">
+              <property name="displayFormat">
+               <string>dd.MM.yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
               <property name="date">
                <date>
                 <year>2008</year>
                 <month>1</month>
                 <day>1</day>
                </date>
-              </property>
-              <property name="displayFormat">
-               <string>dd.MM.yyyy</string>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -1197,7 +1308,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1248,7 +1368,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1324,7 +1453,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1348,7 +1486,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1372,7 +1519,16 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -1518,7 +1674,16 @@
            <property name="spacing">
             <number>1</number>
            </property>
-           <property name="margin">
+           <property name="leftMargin">
+            <number>1</number>
+           </property>
+           <property name="topMargin">
+            <number>1</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
             <number>1</number>
            </property>
            <item>
@@ -1937,7 +2102,16 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -2054,7 +2228,16 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -2141,7 +2324,16 @@
              <property name="spacing">
               <number>6</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
