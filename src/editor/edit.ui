@@ -361,6 +361,9 @@
             <height>50</height>
            </size>
           </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -396,6 +399,9 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="acceptDrops">
+      <bool>true</bool>
      </property>
      <property name="acceptDrops">
       <bool>true</bool>

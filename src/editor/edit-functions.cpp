@@ -505,7 +505,7 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 }
 
 
-void Edit::SaveTrack()
+void Edit::SaveEditorTrack()
 {
 	ppl6::CString Tmp, Artist, Title;
 	// Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
@@ -647,14 +647,26 @@ void Edit::SaveTrack()
 		}
 	}
 
+	if (!SaveTrack(Ti)) return;
 
+	FillEditFields();
+	UpdateTrackListing();
+	UpdateCompleters();
+	Tmp.Setf("%u",Track.Track+1);
+	ui.track->setText(Tmp);
+	ui.track->setFocus();
+
+}
+
+bool Edit::SaveTrack(DataTitle &Ti)
+{
 	// Titel speichern
 	if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
 	if (!wm->TitleStore.Put(&Ti)) {
 		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 		ui.artist->setFocus();
 		if (Ti.TitleId>0) wm->Hashes.AddTitle(Ti.TitleId);
-		return;
+		return false;
 	}
 	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
 	// sondern den Pointer innerhalb der Datenbank
@@ -665,7 +677,7 @@ void Edit::SaveTrack()
 	if (!TrackList->Put(&Track)) {
 		wm->RaiseError(this,tr("Could not save Track in TrackList"));
 		ui.artist->setFocus();
-		return;
+		return false;
 	}
 	// Tonträger aktualisieren
 	wm->DeviceStore.Update(DeviceType,DeviceId);
@@ -676,16 +688,8 @@ void Edit::SaveTrack()
 			wm->RaiseError(this,tr("Could not save ID3 Tags"));
 		}
 	}
-	FillEditFields();
-	UpdateTrackListing();
-	UpdateCompleters();
-	Tmp.Setf("%u",Track.Track+1);
-	ui.track->setText(Tmp);
-	ui.track->setFocus();
-
+	return true;
 }
-
-
 
 void Edit::UpdateCompleters()
 {
