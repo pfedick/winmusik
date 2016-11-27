@@ -91,7 +91,7 @@ void Searchlists::Update()
 			} else {
 				ppl6::PrintError();
 			}
-			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
+			entry=Dir.GetNextRegExp("/^searchlist.*\\.xml$/");
 		}
 	}
 }
