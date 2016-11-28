@@ -75,7 +75,7 @@ void Searchlists::Update()
 	ppl6::CDir Dir;
 	if (Dir.Open(wm->conf.DataPath)) {
 		const ppl6::CDirEntry *entry;
-		entry=Dir.GetFirstRegExp("/^searchlist[0-9]+\\.xml$/");
+		entry=Dir.GetFirstRegExp("/^searchlist.*\\.xml$/");
 		while (entry) {
 			//printf ("%s\n",(const char*)entry->File);
 			if (sl.load(entry->File)) {
@@ -91,7 +91,7 @@ void Searchlists::Update()
 			} else {
 				ppl6::PrintError();
 			}
-			entry=Dir.GetNextRegExp("/^searchlist[0-9]+\\.xml$/");
+			entry=Dir.GetNextRegExp("/^searchlist.*\\.xml$/");
 		}
 	}
 }
