@@ -86,6 +86,12 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	ui.trackList->setSortingEnabled(true);
 	ui.trackList->sortItems(SL_COLUMN_ARTIST,Qt::AscendingOrder);
 
+	ui.trackList->setDragEnabled(true);
+	ui.trackList->setDropIndicatorShown(true);
+	//ui.trackList->viewport()->setAcceptDrops(true);
+	ui.trackList->setAcceptDrops(true);
+	ui.trackList->setDragDropMode(QAbstractItemView::DragDrop);
+
 	setupStatusBar();
 
 	this->show();
@@ -418,6 +424,24 @@ void SearchlistDialog::on_trackList_itemSelectionChanged()
 	updateStatusBar();
 }
 
+void SearchlistDialog::on_trackList_itemDropped(SearchlistItem *item)
+{
+	SearchlistTreeItem *insert=new SearchlistTreeItem();
+	insert->Track=(*item);
+	ui.trackList->addTopLevelItem(insert);
+	renderTrack((SearchlistTreeItem*)insert);
+	dupeCheckOnTrack(insert);
+	delete (item);
+}
+
+void SearchlistDialog::on_trackList_changed()
+{
+	updateStatusBar();
+	save();
+}
+
+
+
 void SearchlistDialog::rateCurrentTrack(int value)
 {
 	if (!currentTrackListItem) return;
@@ -671,3 +695,9 @@ void SearchlistDialog::updateDupeCheckItem(QTreeWidgetItem *item, int dupePresum
 	Tmp.Setf("%3i %%",dupePresumption);
 	item->setText(SL_COLUMN_EXISTING,Tmp);
 }
+
+void SearchlistDialog::deleteSelectedTracks()
+{
+	on_deleteTrackButton_clicked();
+}
+

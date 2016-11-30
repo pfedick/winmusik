@@ -36,6 +36,7 @@ HEADERS += widgets/fkeys.h \
     widgets/keywheel.h \
     src/searchlists/searchlists.h \
     src/searchlists/searchlistdialog.h \
+    src/searchlists/searchlisttracks.h \
     src/searchlists/searchlisttrackdialog.h \
     src/properties/properties.h \
     src/properties/regexpedit.h \
@@ -84,6 +85,7 @@ SOURCES += widgets/fkeys.cpp \
     widgets/keywheel.cpp \
     src/searchlists/searchlists.cpp \
     src/searchlists/searchlistdialog.cpp \
+    src/searchlists/searchlisttracks.cpp \
     src/searchlists/searchlisttrackdialog.cpp \
     src/searchlists/dupecheckthread.cpp \
     src/properties/properties.cpp \

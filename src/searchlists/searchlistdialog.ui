@@ -24,7 +24,16 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -152,7 +161,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QTreeWidget" name="trackList">
+        <widget class="SearchlistTracks" name="trackList">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>
@@ -284,6 +293,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SearchlistTracks</class>
+   <extends>QTreeWidget</extends>
+   <header>src/searchlists/searchlisttracks.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>searchlistName</tabstop>
   <tabstop>trackList</tabstop>

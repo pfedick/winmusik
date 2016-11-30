@@ -73,6 +73,7 @@ public:
     ~SearchlistDialog();
     void ReloadTranslation();
     void addTrack(const SearchlistItem &track);
+    void deleteSelectedTracks();
 
     class SearchlistTreeItem : public QTreeWidgetItem
     {
@@ -86,6 +87,7 @@ protected:
 
 private:
     SearchlistTreeItem *currentTrackListItem;
+    QPoint startPos;	// Für Drag/Drop und multiple Markierungen
 
     Ui::SearchlistDialogClass ui;
     CWmClient *wm;
@@ -124,6 +126,8 @@ public slots:
 	void on_trackList_itemClicked ( QTreeWidgetItem * item, int column );
 	void on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column );
 	void on_trackList_itemSelectionChanged();
+	void on_trackList_itemDropped(SearchlistItem *item);
+	void on_trackList_changed();
 
 	void on_contextEditTrack_triggered();
 	void on_contextInsertTrack_triggered();

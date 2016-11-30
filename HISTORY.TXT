@@ -17,6 +17,8 @@ Version 3.3.2
       bzw. Ende auf das Ende des Tracks  
     - Editor: Dateien können nun per Drag'n'Drop in das WinMusik-Verzeichnis
       des ausgewählten Tonträgers kopiert und importiert werden.
+    - Suchlisten: Tracks können nun per Drag'n'Drop zwischen mehreren
+      Suchlisten verschoben oder kopiert werden
 
 Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
     - Problem mit RegularExpressions unter Windows gefixt
