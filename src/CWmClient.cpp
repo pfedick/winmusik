@@ -1778,7 +1778,9 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ReplaceIfExists(s,L" pres. ",replace);
 	ReplaceIfExists(s,L" presents ",replace);
 	ReplaceIfExists(s,L" vs. ",replace);
+	ReplaceIfExists(s,L" vs ",replace);
 	ReplaceIfExists(s,L" ft. ",replace);
+	ReplaceIfExists(s,L" ft ",replace);
 	ReplaceIfExists(s,L" feat. ",replace);
 	ReplaceIfExists(s,L" featuring ",replace);
 	ReplaceIfExists(s,L" und ",replace);
