@@ -289,7 +289,7 @@ static bool matchBeatPortPro100_getGenres(const ppl6::CString &html, RegExpMatch
 }
 
 
-static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match)
+static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match, const ppl6::CString prefix_replace)
 {
 	ppl6::CString regex="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
 	ppl6::CArray Matches;
@@ -301,17 +301,19 @@ static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match)
 		match.Artist.Trim();
 		match.Artist.Trim(",");
 		match.Artist.Replace(",,",",");
-		match.Artist+=" feat. "+Matches.GetString(2);
+		match.Artist+=" "+prefix_replace+" "+Matches.GetString(2);
 	}
 }
 
 static void fixIt(RegExpMatch &match)
 {
 	ppl6::CArray Matches;
-	fixArtistAndTitle("feat\\.",match);
-	fixArtistAndTitle("featuring",match);
-	fixArtistAndTitle("pres\\.",match);
-	fixArtistAndTitle("presents",match);
+	fixArtistAndTitle("feat\\.",match, "feat.");
+	fixArtistAndTitle("featuring",match, "feat.");
+	fixArtistAndTitle("\\s+ft\\s+",match, "feat.");
+	fixArtistAndTitle("\\s+ft.\\s+",match, "feat.");
+	fixArtistAndTitle("pres\\.",match, "pres.");
+	fixArtistAndTitle("presents",match, "pres.");
 }
 
 static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)

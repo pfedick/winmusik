@@ -88,7 +88,7 @@ void NormalizeImportString(ppl6::CString &Buffer)
 	Buffer.Trim();
 }
 
-static void fixArtistAndTitle(const ppl6::CString &prefix, TrackInfo &info)
+static void fixArtistAndTitle(const ppl6::CString &prefix, TrackInfo &info, const ppl6::CString prefix_replace)
 {
 	ppl6::CString regex="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
 	ppl6::CArray Matches;
@@ -102,7 +102,7 @@ static void fixArtistAndTitle(const ppl6::CString &prefix, TrackInfo &info)
 		Artist.Trim();
 		Artist.Trim(",");
 		Artist.Replace(",,",",");
-		Artist+=" feat. "+Matches.GetString(2);
+		Artist+=" "+prefix_replace+" "+Matches.GetString(2);
 		info.Ti.SetArtist(Artist);
 		info.Ti.SetTitle(Title);
 	}
@@ -111,10 +111,12 @@ static void fixArtistAndTitle(const ppl6::CString &prefix, TrackInfo &info)
 static void fixIt(TrackInfo &info)
 {
 	ppl6::CArray Matches;
-	fixArtistAndTitle("feat\\.",info);
-	fixArtistAndTitle("featuring",info);
-	fixArtistAndTitle("pres\\.",info);
-	fixArtistAndTitle("presents",info);
+	fixArtistAndTitle("feat\\.",info, "feat.");
+	fixArtistAndTitle("featuring",info, "feat.");
+	fixArtistAndTitle("\\s+ft\\s+",info, "feat.");
+	fixArtistAndTitle("\\s+ft.\\s+",info, "feat.");
+	fixArtistAndTitle("pres\\.",info, "pres.");
+	fixArtistAndTitle("presents",info, "pres.");
 }
 
 static bool CopyFromID3v1Tag(TrackInfo &info, const ppl6::CString &Filename, ppl6::CFile &File)
