@@ -1649,7 +1649,7 @@ static void SubstituteLetter(ppl6::CWString &Text, const ppl6::CWString &Letters
 
 void CWmClient::initLetterReplacements()
 {
-	addLetterReplacement(ppl6::CWString(L"&+()_,!?"),L' ');
+	addLetterReplacement(ppl6::CWString(L"&+()_,!?/"),L' ');
 	addLetterReplacement(ppl6::CWString(L".:''`"),0);
 	addLetterReplacement(ppl6::CWString(L"°"),L'o');
 	addLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
