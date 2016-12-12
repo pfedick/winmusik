@@ -88,6 +88,35 @@ void NormalizeImportString(ppl6::CString &Buffer)
 	Buffer.Trim();
 }
 
+static void fixArtistAndTitle(const ppl6::CString &prefix, TrackInfo &info)
+{
+	ppl6::CString regex="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
+	ppl6::CArray Matches;
+	ppl6::CString Title=info.Ti.Title;
+	ppl6::CString Artist=info.Ti.Artist;
+	if (Title.PregMatch(regex, Matches)) {
+		ppl6::CString feat=Matches.GetString(2);
+		feat.Trim();
+		Title=Matches[1];
+		Artist.Replace(feat,"");
+		Artist.Trim();
+		Artist.Trim(",");
+		Artist.Replace(",,",",");
+		Artist+=" feat. "+Matches.GetString(2);
+		info.Ti.SetArtist(Artist);
+		info.Ti.SetTitle(Title);
+	}
+}
+
+static void fixIt(TrackInfo &info)
+{
+	ppl6::CArray Matches;
+	fixArtistAndTitle("feat\\.",info);
+	fixArtistAndTitle("featuring",info);
+	fixArtistAndTitle("pres\\.",info);
+	fixArtistAndTitle("presents",info);
+}
+
 static bool CopyFromID3v1Tag(TrackInfo &info, const ppl6::CString &Filename, ppl6::CFile &File)
 {
 	ppl6::CString Tmp,Title;
@@ -128,6 +157,7 @@ static bool CopyFromID3v1Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		info.Ti.SetRemarks(Tmp);
 		info.Genre=ppl6::GetID3GenreName(id3.Genre);
 		NormalizeImportString(info.Genre);
+		fixIt(info);
 		return true;
 	}
 	return CopyFromFilename(info,Filename);
@@ -253,6 +283,7 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		Comment.Trim();
 		info.Ti.SetTitle(Title);
 		info.Ti.SetRemarks(Comment);
+		fixIt(info);
 		if (Title.Len()>0 && Artist.Len()>0) return true;
 	}
 	return CopyFromFilename(info,Filename);
@@ -295,6 +326,7 @@ static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename)
 			}
 		}
 	}
+	fixIt(info);
 	return true;
 }
 
