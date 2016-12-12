@@ -179,17 +179,44 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		}
 
 		// Remixer
-		if (Title.PregMatch("/^(.*)\\((.*?)\\).*$/")) {
+		if (Title.PregMatch("/^(.*?)\\s*\\((.*?)\\)\\s*\\((.*?)\\).*$/")) {
+			//printf ("Match 0\n");
+			ppl6::CString Tmp1=Title.GetMatch(2);
+			ppl6::CString Tmp2=Title.GetMatch(3);
+			Title=Title.GetMatch(1);
+			Tmp1.Trim();
+			Tmp2.Trim();
+			Title.Trim();
+			//printf ("Tmp1=%s, Tmp2=%s\n",(const char*)Tmp1,(const char*)Tmp2);
+			if (Tmp1.PregMatch("/feat\\.\\s+/i")) {
+				//printf ("xxx 1\n");
+				Tmp=Tmp2;
+				Artist+=" "+Tmp1;
+				info.Ti.SetArtist(Artist);
+			} else if (Tmp2.PregMatch("/feat\\.\\s+/i")) {
+				//printf ("xxx 2\n");
+				Tmp=Tmp1;
+				Artist+=" "+Tmp2;
+				info.Ti.SetArtist(Artist);
+			} else {
+				//printf ("xxx 3\n");
+				Title+=" ("+Tmp1+")";
+				Tmp=Tmp2;
+			}
+		} else if (Title.PregMatch("/^(.*)\\((.*?)\\).*$/")) {
+			//printf ("Match 1\n");
 			Tmp=Title.GetMatch(2);
 			Title=Title.GetMatch(1);
 			Tmp.Trim();
 			Title.Trim();
 		} else if (Title.PregMatch("/^(.*)\\[(.*?)\\].*$/")) {
+			//printf ("Match 2\n");
 			Tmp=Title.GetMatch(2);
 			Title=Title.GetMatch(1);
 			Tmp.Trim();
 			Title.Trim();
 		} else {
+			//printf ("Match 3\n");
 			Tmp=Tag.GetRemixer();
 			NormalizeImportString(Tmp);
 		}
