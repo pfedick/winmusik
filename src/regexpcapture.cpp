@@ -310,8 +310,8 @@ static void fixIt(RegExpMatch &match)
 	ppl6::CArray Matches;
 	fixArtistAndTitle("feat\\.",match, "feat.");
 	fixArtistAndTitle("featuring",match, "feat.");
-	fixArtistAndTitle("\\s+ft\\s+",match, "feat.");
-	fixArtistAndTitle("\\s+ft.\\s+",match, "feat.");
+	fixArtistAndTitle("ft",match, "feat.");
+	fixArtistAndTitle("ft.",match, "feat.");
 	fixArtistAndTitle("pres\\.",match, "pres.");
 	fixArtistAndTitle("presents",match, "pres.");
 }

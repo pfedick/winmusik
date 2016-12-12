@@ -113,8 +113,8 @@ static void fixIt(TrackInfo &info)
 	ppl6::CArray Matches;
 	fixArtistAndTitle("feat\\.",info, "feat.");
 	fixArtistAndTitle("featuring",info, "feat.");
-	fixArtistAndTitle("\\s+ft\\s+",info, "feat.");
-	fixArtistAndTitle("\\s+ft.\\s+",info, "feat.");
+	fixArtistAndTitle("ft",info, "feat.");
+	fixArtistAndTitle("ft.",info, "feat.");
 	fixArtistAndTitle("pres\\.",info, "pres.");
 	fixArtistAndTitle("presents",info, "pres.");
 }
