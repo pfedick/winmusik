@@ -69,6 +69,7 @@ void RegExpEdit::setPattern(const RegExpPattern &pat)
 	ui.capture_hours->setValue(pat.hours);
 	ui.capture_minutes->setValue(pat.minutes);
 	ui.capture_seconds->setValue(pat.seconds);
+	ui.capture_releasedate->setValue(pat.releasedate);
 	ui.name->setText(pat.Name);
 	ui.pattern->setText(pat.Pattern);
 }
@@ -88,6 +89,7 @@ RegExpPattern RegExpEdit::getPattern() const
 	pat.hours=ui.capture_hours->value();
 	pat.minutes=ui.capture_minutes->value();
 	pat.seconds=ui.capture_seconds->value();
+	pat.releasedate=ui.capture_releasedate->value();
 	return pat;
 }
 
@@ -113,6 +115,7 @@ void RegExpEdit::on_teststring_textChanged()
 				ui.test_label->setText(match.Label);
 				ui.test_bpm->setText(match.Bpm);
 				ui.test_album->setText(match.Album);
+				ui.test_releasedate->setText(match.ReleaseDate);
 				ppl6::CString Tmp;
 				Tmp.Setf("%i:%02i",match.Length/60,match.Length%60);
 				ui.test_length->setText(Tmp);
@@ -131,6 +134,7 @@ void RegExpEdit::on_teststring_textChanged()
 	ui.test_bpm->setText("");
 	ui.test_album->setText("");
 	ui.test_length->setText("");
+	ui.test_releasedate->setText("");
 }
 
 void RegExpEdit::on_copyPlaintext_clicked()

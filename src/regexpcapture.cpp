@@ -288,6 +288,32 @@ static bool matchBeatPortPro100_getGenres(const ppl6::CString &html, RegExpMatch
 	return true;
 }
 
+
+static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match)
+{
+	ppl6::CString regex="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
+	ppl6::CArray Matches;
+	if (match.Title.PregMatch(regex, Matches)) {
+		ppl6::CString feat=Matches.GetString(2);
+		feat.Trim();
+		match.Title=Matches[1];
+		match.Artist.Replace(feat,"");
+		match.Artist.Trim();
+		match.Artist.Trim(",");
+		match.Artist.Replace(",,",",");
+		match.Artist+=" feat. "+Matches.GetString(2);
+	}
+}
+
+static void fixIt(RegExpMatch &match)
+{
+	ppl6::CArray Matches;
+	fixArtistAndTitle("feat\\.",match);
+	fixArtistAndTitle("featuring",match);
+	fixArtistAndTitle("pres\\.",match);
+	fixArtistAndTitle("presents",match);
+}
+
 static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
 {
 	ppl6::CArray matches;
@@ -303,8 +329,10 @@ static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
 	if (!matchBeatPortPro100_getArtist(html,match)) return false;
 	matchBeatPortPro100_getLabels(html,match);
 	matchBeatPortPro100_getGenres(html,match);
+	fixIt(match);
 	return true;
 }
+
 
 
 bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &match) const
@@ -322,7 +350,10 @@ bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &mat
 	if (patterns.empty()) return false;
 	std::vector<RegExpPattern>::const_iterator it;
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
-		if(testMatch(data,match,*it)) return true;
+		if(testMatch(data,match,*it)) {
+			fixIt(match);
+			return true;
+		}
 	}
 	if (buildinMatch(data,match)) return true;
 	return false;
@@ -367,6 +398,7 @@ bool RegularExpressionCapture::buildinMatch(const ppl6::CString &data, RegExpMat
 		match.Title=Matches[1];
 		match.Artist+=Matches[2];
 	}
+	fixIt(match);
 	return true;
 }
 

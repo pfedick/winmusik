@@ -206,6 +206,16 @@
           <item row="4" column="1">
            <widget class="QSpinBox" name="capture_seconds"/>
           </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Releasedate:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QSpinBox" name="capture_releasedate"/>
+          </item>
          </layout>
         </item>
         <item>
@@ -538,6 +548,32 @@
            <widget class="QLabel" name="label_24">
             <property name="text">
              <string>minutes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Releasedate:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="test_releasedate">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>

@@ -66,6 +66,7 @@ private slots:
     void on_capture_hours_valueChanged() {on_teststring_textChanged();};
     void on_capture_minutes_valueChanged() {on_teststring_textChanged();};
     void on_capture_seconds_valueChanged() {on_teststring_textChanged();};
+    void on_capture_releasedate_valueChanged() {on_teststring_textChanged();};
 
 
 };
