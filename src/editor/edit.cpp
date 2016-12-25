@@ -24,7 +24,6 @@
  */
 
 #include "winmusik3.h"
-#include <ppl6-grafix.h>
 #include <stdio.h>
 #include "edit.h"
 #include "editdevice.h"
