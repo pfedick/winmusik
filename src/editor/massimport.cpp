@@ -167,21 +167,21 @@ bool MassImport::eventFilter(QObject *target, QEvent *event)
 bool MassImport::consumeEvent(QObject *target, QEvent *event)
 {
 	ppl6::CString Tmp;
-	QKeyEvent *keyEvent=NULL;
-	int key=0;
-	int modifier=Qt::NoModifier;
-	QFocusEvent *focusEvent=NULL;
+    //QKeyEvent *keyEvent=NULL;
+    //int key=0;
+    //int modifier=Qt::NoModifier;
+    //QFocusEvent *focusEvent=NULL;
 
 	// Id auslesen
 	int id=target->property("id").toInt();
 	int type=event->type();
 	if (type==QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent *>(event);
-		key=keyEvent->key();
-		modifier=keyEvent->modifiers();
+        //keyEvent= static_cast<QKeyEvent *>(event);
+        //key=keyEvent->key();
+        //modifier=keyEvent->modifiers();
 		//if (on_KeyPress(target,key,modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
 	} else if (type==QEvent::FocusIn || type==QEvent::FocusOut) {
-		focusEvent=static_cast<QFocusEvent *>(event);
+        //focusEvent=static_cast<QFocusEvent *>(event);
 		if (type==QEvent::FocusIn) {
 			position=id;
 		}

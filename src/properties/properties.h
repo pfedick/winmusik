@@ -213,7 +213,7 @@ private slots:
     void on_cddbHostName_textChanged(const QString &) {Change();};
     void on_cddbProxyServer_textChanged(const QString &) {Change();};
     void on_cddbProxyPort_textChanged(const QString &) {Change();};
-    void on_cddbUseProxy_toggled(bool checked);
+    void on_cddbUseProxy_toggled(bool);
 
 };
 

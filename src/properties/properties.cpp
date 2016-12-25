@@ -817,7 +817,7 @@ void Properties::on_JpegQualityCover_valueChanged (int value)
 }
 
 
-void Properties::on_cddbUseProxy_toggled(bool checked)
+void Properties::on_cddbUseProxy_toggled(bool)
 {
 	Change();
 	ui.cddbProxyLayout_2->setEnabled(ui.cddbUseProxy->isChecked());

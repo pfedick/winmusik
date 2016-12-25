@@ -186,20 +186,21 @@ INCLUDEPATH += include
 INCLUDEPATH += widgets
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
+win32:INCLUDEPATH += D:/jenkins/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 #QMAKE_CXXFLAGS += `python-config --cflags`
 
-CONFIG(debug, debug|release) { 
+CONFIG(debug, debug|release) {
     # Debug
     unix:LIBS += `ppl6-config \
         --libs \
         debug`
     win32:LIBS += `ppl6-config \
         --libs \
-        debug` 
+        debug`
 }
-else { 
+else {
     # Release
     unix:LIBS += `ppl6-config \
         --libs \
@@ -214,3 +215,8 @@ CODECFORSRC = UTF-8
 CODECFORTR = UTF-8
 TRANSLATIONS = winmusik_de.ts \
     winmusik_en.ts
+
+DISTFILES += \
+    setup.iss \
+    setup64.iss \
+    HISTORY.TXT

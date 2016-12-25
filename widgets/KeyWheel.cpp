@@ -110,8 +110,8 @@ void KeyWheel::paintEvent ( QPaintEvent * event)
 void KeyWheel::mousePressEvent ( QMouseEvent * event )
 {
 	QPoint p=event->pos();
-	int angle=shiftAngle(getAngle(p.x(),p.y()));
-	int radius=getRadius(p.x(),p.y());
+        //int angle=shiftAngle(getAngle(p.x(),p.y()));
+        //int radius=getRadius(p.x(),p.y());
 	int newkey=getKeyFromClickPosition(p);
 	if (newkey!=key) {
 		setCurrentKey(newkey);

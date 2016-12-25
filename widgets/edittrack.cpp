@@ -448,7 +448,7 @@ bool EditTrack::consumeEvent(QObject *target, QEvent *event)
 	QKeyEvent *keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
-	QFocusEvent *focusEvent=NULL;
+    //QFocusEvent *focusEvent=NULL;
 
 	// Id auslesen
 	int id=target->property("id").toInt();
@@ -459,7 +459,7 @@ bool EditTrack::consumeEvent(QObject *target, QEvent *event)
 		modifier=keyEvent->modifiers();
 		if (checkKeyPress(target,key,modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
 	} else if (type==QEvent::FocusIn || type==QEvent::FocusOut) {
-		focusEvent=static_cast<QFocusEvent *>(event);
+        //focusEvent=static_cast<QFocusEvent *>(event);
 		if (type==QEvent::FocusIn) {
 			position=id;
 			UpdateFkeys();
