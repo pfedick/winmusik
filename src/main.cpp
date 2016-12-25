@@ -52,8 +52,10 @@ void help()
 
 int main(int argc, char *argv[])
 {
-	ppl6::PPLInit();
-	ppl6::grafix::CGrafix gfx;
+    printf ("DEBUG\n");
+    ppl6::PPLInit();
+    //ppl6::grafix::CGrafix gfx;
+    //return 0;
 	if (ppl6::getargv(argc,argv,"-h")!=NULL || ppl6::getargv(argc,argv,"--help")!=NULL) {
 		help();
 		return 0;
