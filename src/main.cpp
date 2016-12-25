@@ -29,7 +29,7 @@
 
 #include "src/menue/menue.h"
 #include "winmusik3.h"
-//#include <ppl6-grafix.h>
+#include <ppl6-grafix.h>
 #include "version.h"
 
 #include <QtGui>
@@ -54,8 +54,7 @@ int main(int argc, char *argv[])
 {
     printf ("DEBUG\n");
     ppl6::PPLInit();
-    //ppl6::grafix::CGrafix gfx;
-    //return 0;
+    ppl6::grafix::CGrafix gfx;
 	if (ppl6::getargv(argc,argv,"-h")!=NULL || ppl6::getargv(argc,argv,"--help")!=NULL) {
 		help();
 		return 0;
