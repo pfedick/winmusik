@@ -75,15 +75,16 @@ Source: "C:\msys64\mingw64\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversi
 Source: "C:\msys64\mingw64\bin\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
+Source: "C:\msys64\mingw64\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libicuuc57.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libicuin57.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libicudt57.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpcre16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libicudt57.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
