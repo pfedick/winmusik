@@ -48,7 +48,7 @@
 #include <ppl6.h>
 
 
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2014"
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2017"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
