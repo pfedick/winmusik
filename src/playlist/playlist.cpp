@@ -122,6 +122,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 
 	ui.tracks->installEventFilter(this);
 	ui.playlistName->installEventFilter(this);
+    ui.issueDate->setDate(QDate::currentDate());
 
 	createMenue();
 	createToolbar();
@@ -260,7 +261,11 @@ QMessageBox::StandardButton Playlist::saveFirst()
 		PlaylistFileName=Tmp;
 	}
 
-	ui.tracks->setName(ui.playlistName->text());
+    ui.tracks->setName(ui.playlistName->text());
+    ui.tracks->setSubName(ui.playlistSubName->text());
+    ui.tracks->setIssueNumber(ui.issueNumber->value());
+    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString()));
+
 	if (!ui.tracks->save(PlaylistFileName)) return QMessageBox::Abort;
 	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
 	updateLastPlaylist();
@@ -948,7 +953,14 @@ void Playlist::on_menuNew_triggered()
 	if (saveFirst()!=QMessageBox::Ok) return;
 	PlaylistFileName.Clear();
 	ui.tracks->setName("");
+    ui.tracks->setSubName("");
+    ui.tracks->setIssueNumber(1);
+    ui.tracks->setIssueDate(ppl6::CDateTime::currentTime());
+
 	ui.playlistName->setText("");
+    ui.playlistSubName->setText("");
+    ui.issueNumber->setValue(1);
+    ui.issueDate->setDate(QDate::currentDate());
 	ui.tracks->clear();
 	updatePlaylist();
 	setChanged(false);
@@ -998,6 +1010,10 @@ void Playlist::on_menuSave_triggered()
 		return;
 	}
 	ui.tracks->setName(ui.playlistName->text());
+    ui.tracks->setSubName(ui.playlistSubName->text());
+    ui.tracks->setIssueNumber(ui.issueNumber->value());
+    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString()));
+
 	if (!ui.tracks->save(PlaylistFileName)) return;
 	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
 	updateLastPlaylist();
@@ -1542,3 +1558,4 @@ void Playlist::on_playlistName_textChanged ( const QString & )
 {
 	setChanged(true);
 }
+

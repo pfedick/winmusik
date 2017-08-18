@@ -330,6 +330,8 @@ PlaylistTracks::PlaylistTracks(QWidget * parent)
 {
 	playlist=NULL;
 	lastmoveitem=NULL;
+    IssueNumber=0;
+    IssueDate=ppl6::CDateTime::currentTime();
 }
 
 void PlaylistTracks::mouseMoveEvent ( QMouseEvent * event )
@@ -514,6 +516,36 @@ ppl6::CString PlaylistTracks::getName() const
 	return Name;
 }
 
+void PlaylistTracks::setSubName(const ppl6::CString &Name)
+{
+    this->SubName=Name;
+}
+
+ppl6::CString PlaylistTracks::getSubName() const
+{
+    return SubName;
+}
+
+void PlaylistTracks::setIssueNumber(int number)
+{
+    this->IssueNumber=number;
+}
+
+int PlaylistTracks::getIssueNumber() const
+{
+    return IssueNumber;
+}
+
+void PlaylistTracks::setIssueDate(const ppl6::CDateTime &Date)
+{
+    this->IssueDate=Name;
+}
+
+ppl6::CDateTime PlaylistTracks::getIssueDate() const
+{
+    return IssueDate;
+}
+
 bool PlaylistTracks::save(const ppl6::CString &Filename)
 {
 	ppl6::CString ext=ppl6::UCase(ppl6::FileSuffix(Filename));
@@ -544,6 +576,9 @@ bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	xml+="<WinMusikPlaylist version=\"1\">\n";
 	xml+="   <name>"+ppl6::EscapeHTMLTags(Name)+"</name>\n";
+    xml+="   <subname>"+ppl6::EscapeHTMLTags(SubName)+"</subname>\n";
+    xml+="   <issue>"+ppl6::ToString("%d",IssueNumber)+"</issue>\n";
+    xml+="   <date>"+IssueDate.getDate()+"</date>\n";
 	int count=topLevelItemCount();
 	xml+="   <totalTracks>"+ppl6::ToString("%u",count)+"</totalTracks>\n";
 	ppluint64 totalTrackLength=0;
@@ -617,6 +652,18 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	if (node.isNull()==false && node.isElement()==true) {
 		Name=node.toElement().text();
 	}
+    node=root.namedItem("subname");
+    if (node.isNull()==false && node.isElement()==true) {
+        SubName=node.toElement().text();
+    }
+    node=root.namedItem("issue");
+    if (node.isNull()==false && node.isElement()==true) {
+        IssueNumber=node.toElement().text().toInt();
+    }
+    node=root.namedItem("date");
+    if (node.isNull()==false && node.isElement()==true) {
+        IssueDate=node.toElement().text();
+    }
 	QDomNode tracks=root.namedItem("tracks");
 	if (tracks.isNull()==false) {
 		//printf ("Parsing tracks...\n");

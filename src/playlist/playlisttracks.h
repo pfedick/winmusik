@@ -101,6 +101,9 @@ class PlaylistTracks : public QTreeWidget
 		PlaylistItem *lastmoveitem;
 
 		ppl6::CString Name;
+        ppl6::CString SubName;
+        int IssueNumber;
+        ppl6::CDateTime IssueDate;
 
 	public:
 		PlaylistTracks(QWidget * parent = 0);
@@ -116,8 +119,16 @@ class PlaylistTracks : public QTreeWidget
 		bool load(const ppl6::CString &Filename);
 		void setName(const ppl6::CString &Name);
 		ppl6::CString getName() const;
+        void setSubName(const ppl6::CString &Name);
+        ppl6::CString getSubName() const;
+        void setIssueNumber(int number);
+        int getIssueNumber() const;
+        void setIssueDate(const ppl6::CDateTime &Date);
+        ppl6::CDateTime getIssueDate() const;
+
 
 };
 
 
 #endif /* PLAYLISTTRACKS_H_ */
+

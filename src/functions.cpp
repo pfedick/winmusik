@@ -533,8 +533,6 @@ void getHarmonicKeys(std::map<int,int> &harmonics, int key)
 	int openkey=wm2openkey[key]&31;
 	int minor=wm2openkey[key]&KEY_MINOR;
 	harmonics.clear();
-
-
 }
 
 
