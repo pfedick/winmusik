@@ -218,6 +218,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Released</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Existing</string>
           </property>
          </column>

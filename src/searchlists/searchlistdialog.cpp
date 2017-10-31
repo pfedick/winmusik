@@ -243,6 +243,7 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem *item)
 		item->setText(SL_COLUMN_LENGTH,Tmp);
 	}
 	item->setText(SL_COLUMN_DATEADDED,item->Track.DateAdded.get("%Y-%m-%d"));
+	item->setText(SL_COLUMN_DATERELEASE,item->Track.ReleaseDate);
 
 	if (item->Track.found==true) {
 		item->setIcon(SL_COLUMN_DONE,QIcon(":/icons/resources/button_ok.png"));

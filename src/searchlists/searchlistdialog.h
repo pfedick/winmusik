@@ -40,9 +40,10 @@
 #define SL_COLUMN_LENGTH		3
 #define SL_COLUMN_RATING		4
 #define SL_COLUMN_DATEADDED		5
-#define SL_COLUMN_EXISTING		6
-#define SL_COLUMN_SELECTED		7
-#define SL_COLUMN_DONE			8
+#define SL_COLUMN_DATERELEASE	6
+#define SL_COLUMN_EXISTING		7
+#define SL_COLUMN_SELECTED		8
+#define SL_COLUMN_DONE			9
 
 
 class DupeCheckThread : public QThread
