@@ -538,7 +538,7 @@ int PlaylistTracks::getIssueNumber() const
 
 void PlaylistTracks::setIssueDate(const ppl6::CDateTime &Date)
 {
-    this->IssueDate=Name;
+    this->IssueDate=Date;
 }
 
 ppl6::CDateTime PlaylistTracks::getIssueDate() const
