@@ -295,13 +295,14 @@ void SearchlistDialog::Resize()
 	ui.trackList->setColumnWidth(SL_COLUMN_DONE,60);
 	ui.trackList->setColumnWidth(SL_COLUMN_SELECTED,60);
 	ui.trackList->setColumnWidth(SL_COLUMN_EXISTING,60);
+	ui.trackList->setColumnWidth(SL_COLUMN_DATERELEASE,90);
 	ui.trackList->setColumnWidth(SL_COLUMN_DATEADDED,90);
 	ui.trackList->setColumnWidth(SL_COLUMN_LENGTH,70);
 	ui.trackList->setColumnWidth(SL_COLUMN_GENRE,100);
 
 	ui.trackList->setColumnWidth(SL_COLUMN_RATING,64);
 
-	s=s-62-62-92-72-108-66-62;
+	s=s-62-62-92-72-108-66-62-92;
 	if (s<300) s=300;
 	ui.trackList->setColumnWidth(SL_COLUMN_VERSION,s*30/100);
 	ui.trackList->setColumnWidth(SL_COLUMN_ARTIST,s*70/100);

@@ -128,10 +128,18 @@ ppl6::CString SearchlistItem::exportXML() const
 			"	<title>"+ppl6::EscapeHTMLTags(Title)+"</title>\n"
 			"	<version>"+ppl6::EscapeHTMLTags(Version)+"</version>\n"
 			"	<genre>"+ppl6::EscapeHTMLTags(Genre)+"</genre>\n"
-			"	<comment>"+ppl6::EscapeHTMLTags(Comment)+"</comment>\n"
-			"	<releasedate>"+ReleaseDate.getISO8601()+"</releasedate>\n"
-			"	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n"
-			"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
+			"	<comment>"+ppl6::EscapeHTMLTags(Comment)+"</comment>\n";
+	try {
+		s+="	<releasedate>"+ReleaseDate.getISO8601()+"</releasedate>\n";
+	} catch (...) {
+
+	}
+	try {
+		s+="	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n";
+	} catch (...) {
+
+	}
+	s+=		"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
 			"	<found>"+(found?"true":"false")+"</found>\n"
 			"	<selected>"+(selected?"true":"false")+"</selected>\n"
 			"	<rating>"+ppl6::ToString("%i",Rating)+"</rating>\n"
