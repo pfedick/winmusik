@@ -36,6 +36,7 @@
 #include <QKeyEvent>
 #include <QDomDocument>
 #include <QBuffer>
+#include <QDate>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -1012,7 +1013,7 @@ void Playlist::on_menuSave_triggered()
 	ui.tracks->setName(ui.playlistName->text());
     ui.tracks->setSubName(ui.playlistSubName->text());
     ui.tracks->setIssueNumber(ui.issueNumber->value());
-    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString()));
+    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString(Qt::ISODate)));
 
 	if (!ui.tracks->save(PlaylistFileName)) return;
 	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
@@ -1558,4 +1559,5 @@ void Playlist::on_playlistName_textChanged ( const QString & )
 {
 	setChanged(true);
 }
+
 
