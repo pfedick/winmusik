@@ -592,9 +592,10 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::Drop) {
 		handleDropEvent(static_cast<QDropEvent *>(event));
 		return true;
-//	} else if ((target==ui.artist || ui.title) && type==QEvent::Drop) {
-//		handleDropOnArtistOrTitle(static_cast<QDropEvent *>(event));
-//		return true;
+    } else if ((target==ui.artist || ui.title) && type==QEvent::Drop) {
+        if (handleDropFromSearchlist(static_cast<QDropEvent *>(event))) {
+            return true;
+        }
 
 	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
@@ -902,7 +903,7 @@ void Edit::handleDropEvent(QDropEvent *event)
 	event->accept();
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
-	if (handleDropFromSearchlist(mime)) {
+    if (handleDropFromSearchlist(event)) {
 		event->accept();
 		return;
 	}
@@ -938,21 +939,55 @@ void Edit::handleDropEvent(QDropEvent *event)
 
 }
 
-bool Edit::handleDropFromSearchlist(const QMimeData *mime)
+bool Edit::handleDropFromSearchlist(QDropEvent *event)
 {
+    const QMimeData *mime=event->mimeData();
+    if (!mime) return false;
+
+    //printf ("Edit::handleDropFromSearchlist\n");
 	if (!mime->hasText()) return false;
+    //printf ("we have text\n");
 	QDomDocument doc("winmusikSearchlist");
 	if (!doc.setContent(mime->text())) return false;
+    //printf ("we have xml\n");
 	QDomElement root=doc.documentElement();
+    //QByteArray ba = root.tagName().toUtf8();
+    //printf ("tagName=%s\n",(const char*)ba.data());
+    //ba = root.attribute("version").toUtf8();
+    //printf ("version=%s\n",(const char*)ba.data());
 	if (root.tagName()!="winmusikSearchlist" || root.attribute("version")!="1") {
 		return false;
 	}
 	ppl6::CArray rows;
 	rows.Explode(mime->text(),"<searchlistitem>");
-	if (rows.Size()==0) return false;
+    //printf ("we have winmusikSearchlist, %d rows\n",(int)rows.Size() );
+    //ba = mime->text().toUtf8();
+    //printf ("%s\n",ba.data());
+    if (rows.Size()<2) return false;
 	SearchlistItem item;
-	item.importXML(rows.GetString(0));
+    item.importXML(rows.GetString(1));
 	ui.artist->setText(item.Artist);
+    ui.title->setText(item.Title);
+    ui.versionId->setText("*");
+    ui.version->setText(item.Version);
+    ui.genreId->setText("*");
+    ui.genre->setText(item.Genre);
+    ui.labelId->setText("*");
+    ui.labelName->setText(item.Comment);
+    ui.releaseDate->setDate(QDate::currentDate());
+    ui.recordDate->setDate(QDate::currentDate());
+
+    ppl6::CDateTime date=ppl6::CDateTime::currentTime();
+    if (item.ReleaseDate.notEmpty()) {
+        date=item.ReleaseDate;
+    } else if (item.DateAdded.notEmpty()){
+        date=item.DateAdded;
+    }
+    QDate qdate(date.year(),date.month(),date.day());
+    ui.releaseDate->setDate(qdate);
+    ui.recordDate->setDate(qdate);
+    ui.rating->setCurrentIndex(item.Rating);
+    
 	QApplication::processEvents();
 	ui.artist->setFocus();
 	QApplication::setActiveWindow(this);
@@ -960,6 +995,7 @@ bool Edit::handleDropFromSearchlist(const QMimeData *mime)
 	position=4;
 	FixFocus();
 	on_artist_FocusIn();
+    return true;
 }
 
 
