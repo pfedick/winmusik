@@ -1190,6 +1190,7 @@ void Search::on_ClipBoardTimer_update()
 	clip.copyFromClipboard();
 	if (clip.PlainText==LastClipboardString) return;
 	LastClipboardString=clip.PlainText;
+	if (LastClipboardString.IsEmpty()) return;
 	RegExpMatch match;
 	ppl6::CString s;
 	if (wm->RegExpCapture.match(clip,match)) {
