@@ -50,7 +50,7 @@ WizardImageFile=resources\setup.bmp
 WizardSmallImageFile=resources\setup-icon.bmp
 LicenseFile=LICENSE.TXT
 PrivilegesRequired=none
-
+ArchitecturesAllowed=x64
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: README_en.TXT
@@ -92,6 +92,8 @@ Source: "C:\msys64\mingw64\bin\libintl-8.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "C:\msys64\mingw64\bin\libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\SSLEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\LIBEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 Source: "C:\msys64\mingw64\share\qt5\plugins\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
