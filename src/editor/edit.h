@@ -166,6 +166,7 @@ private:
     QWidget *searchWindow;
 
     void handleDropEvent(QDropEvent *event);
+    bool handleDropFromSearchlist(const QMimeData *mime);
 
     void SetupTrackList();
 

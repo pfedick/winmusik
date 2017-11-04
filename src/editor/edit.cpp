@@ -30,6 +30,7 @@
 #include "tablesearch.h"
 #include "shortcutdialog.h"
 #include "massimport.h"
+#include "csearchlist.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -45,7 +46,9 @@
 #include <QProgressDialog>
 #include <QMimeData>
 #include <QDrag>
+#include <QDomDocument>
 #include <list>
+
 
 
 AsynchronousTrackUpdate::AsynchronousTrackUpdate()
@@ -589,6 +592,10 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::Drop) {
 		handleDropEvent(static_cast<QDropEvent *>(event));
 		return true;
+//	} else if ((target==ui.artist || ui.title) && type==QEvent::Drop) {
+//		handleDropOnArtistOrTitle(static_cast<QDropEvent *>(event));
+//		return true;
+
 	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::DragEnter) {
 			(static_cast<QDragEnterEvent *>(event))->accept();
 			return true;
@@ -895,6 +902,10 @@ void Edit::handleDropEvent(QDropEvent *event)
 	event->accept();
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
+	if (handleDropFromSearchlist(mime)) {
+		event->accept();
+		return;
+	}
 	if (!mime->hasUrls()) return;
 	QList<QUrl>	list=mime->urls ();
 	QUrl url=list.first();
@@ -921,10 +932,34 @@ void Edit::handleDropEvent(QDropEvent *event)
 		FixFocus();
 		on_artist_FocusIn();
 	}
-
+	event->accept();
 
 	//printf ("lala: %s, path: %s\n",(const char*)f, (const char*)path);
 
+}
+
+bool Edit::handleDropFromSearchlist(const QMimeData *mime)
+{
+	if (!mime->hasText()) return false;
+	QDomDocument doc("winmusikSearchlist");
+	if (!doc.setContent(mime->text())) return false;
+	QDomElement root=doc.documentElement();
+	if (root.tagName()!="winmusikSearchlist" || root.attribute("version")!="1") {
+		return false;
+	}
+	ppl6::CArray rows;
+	rows.Explode(mime->text(),"<searchlistitem>");
+	if (rows.Size()==0) return false;
+	SearchlistItem item;
+	item.importXML(rows.GetString(0));
+	ui.artist->setText(item.Artist);
+	QApplication::processEvents();
+	ui.artist->setFocus();
+	QApplication::setActiveWindow(this);
+	QApplication::processEvents();
+	position=4;
+	FixFocus();
+	on_artist_FocusIn();
 }
 
 
