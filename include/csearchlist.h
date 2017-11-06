@@ -52,18 +52,14 @@ class CSearchlist
 {
 	private:
 		std::vector<SearchlistItem> list;
-		std::map<ppl6::CString, int> Words;
+		//std::map<ppl6::CString, int> Words;
 		ppl6::CString Name;
 		ppl6::CDateTime DateCreated;
 		ppl6::CDateTime DateUpdated;
 
-		CWmClient *wm;
-
 	public:
 		CSearchlist();
 		~CSearchlist();
-
-		void setWmClient(CWmClient *wm);
 
 		void setName(const ppl6::CString &name);
 		const ppl6::CString &name() const;

@@ -44,7 +44,7 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 	statusbar=NULL;
 	ui.setupUi(this);
 	this->wm=wm;
-	List.setWmClient(wm);
+	//List.setWmClient(wm);
 	ui.trackList->installEventFilter(this);
 	currentTrackListItem=NULL;
 	searchWindow=NULL;

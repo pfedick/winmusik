@@ -152,17 +152,11 @@ CSearchlist::CSearchlist()
 {
 	DateUpdated.setCurrentTime();
 	DateCreated.setCurrentTime();
-	wm=NULL;
 }
 
 CSearchlist::~CSearchlist()
 {
 
-}
-
-void CSearchlist::setWmClient(CWmClient *wm)
-{
-	this->wm=wm;
 }
 
 void CSearchlist::setName(const ppl6::CString &name)
