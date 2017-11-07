@@ -3,7 +3,14 @@ LIBS = -L/usr/local/lib `ppl7-config --libs release`  -lstdc++
 LIBDEP	:= $(shell ppl7-config --ppllib release)
 
 OBJS =		compile/object_title.o \
-			compile/CStorage.o compile/CDatabase.o compile/CWMFile.o
+			compile/CStorage.o \
+			compile/CDatabase.o \
+			compile/Playlist.o \
+			compile/Searchlist.o \
+			compile/MusicalKeys.o \
+			
+			
+			#compile/CWMFile.o
 
 TARGET =	compile/libwinmusik3.a
 
@@ -32,4 +39,16 @@ compile/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
 compile/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/CWMFile.o -c src/CWMFile.cpp $(CXXFLAGS)
+
+compile/Playlist.o: src/Playlist.cpp include/wm_playlist.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/Playlist.o -c src/Playlist.cpp $(CXXFLAGS)
+
+compile/Searchlist.o: src/Searchlist.cpp include/wm_searchlist.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/Searchlist.o -c src/Searchlist.cpp $(CXXFLAGS)
+
+compile/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/MusicalKeys.o -c src/MusicalKeys.cpp $(CXXFLAGS)
 	

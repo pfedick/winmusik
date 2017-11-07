@@ -11,19 +11,13 @@
 #include <ppl7.h>
 #include <ppl7-config.h>
 
+#include <wm_musicalkeys.h>
+
 namespace de {
 namespace pfp {
 namespace winmusik {
 
 class CStorage;
-
-enum MusicKeyType
-{
-	musicKeyTypeNone=0,
-	musicKeyTypeMusicalSharps,
-	musicKeyTypeOpenKey,
-	musicKeyTypeCustom=99
-};
 
 
 class CStorageData
