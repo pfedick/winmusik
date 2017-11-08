@@ -480,7 +480,7 @@ void PlaylistEdit::on_cueTrackEnd_clicked()
 	QTreeWidgetItem *item=ui.traktorCues->currentItem();
 	if (!item) return;
 	QString Tmp=item->text(2);
-	ui.trackStart->setText(Tmp);
+	ui.trackEnd->setText(Tmp);
 	updateTotalTime();
 }
 
