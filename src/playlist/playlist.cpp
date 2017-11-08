@@ -865,6 +865,10 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 		updateLastPlaylist();
 		updateRecentPlaylistsMenu();
 		ui.playlistName->setText(ui.tracks->getName());
+		ui.playlistSubName->setText(ui.tracks->getSubName());
+		ui.issueNumber->setValue(ui.tracks->getIssueNumber());
+		ppl6::CDateTime d=ui.tracks->getIssueDate();
+		ui.issueDate->setDate(QDate(d.year(),d.month(),d.day()));
 		updatePlaylist();
 		setChanged(false);
 		ppl6::CString Title=tr("WinMusik Playlist");
