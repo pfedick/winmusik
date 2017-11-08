@@ -1564,4 +1564,20 @@ void Playlist::on_playlistName_textChanged ( const QString & )
 	setChanged(true);
 }
 
+void Playlist::on_playlistSubName_textChanged ( const QString & )
+{
+	setChanged(true);
+}
+
+void Playlist::on_issueNumber_valueChanged ( int  )
+{
+	setChanged(true);
+}
+
+void Playlist::on_issueDate_dateChanged(const QDate &)
+{
+	setChanged(true);
+}
+
+
 

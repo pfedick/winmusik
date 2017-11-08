@@ -175,6 +175,9 @@ public slots:
 
 
 	void on_playlistName_textChanged ( const QString & text );
+	void on_playlistSubName_textChanged ( const QString & text );
+	void on_issueNumber_valueChanged ( int value );
+	void on_issueDate_dateChanged(const QDate &date);
 
 	void on_contextEditTrack_triggered();
 	void on_contextCopyTrack_triggered();
