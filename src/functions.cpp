@@ -368,10 +368,14 @@ bool getTrackInfoFromFile(TrackInfo &info, const ppl6::CString &Filename, int pr
 
 ppluint32 findTitleIdByFilename(const ppl6::CString &Filename)
 {
+	ppl6::CString LowerFilename=Filename;
+	LowerFilename.LCase();
 	for (int DeviceType=0;DeviceType<MAX_DEVICE_TYPES;DeviceType++) {
 		ppl6::CString path=wm_main->conf.DevicePath[DeviceType];
+		ppl6::CString LowerPath=path;
+		LowerPath.LCase();
 		if (path.NotEmpty()) {
-			int p=Filename.Instr(path);
+			int p=LowerFilename.Instr(LowerPath);
 			if (p>=0) {
 				ppl6::CString f=Filename.Mid(p);
 				f.Replace(path,"");
