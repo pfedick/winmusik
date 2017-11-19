@@ -219,4 +219,5 @@ TRANSLATIONS = winmusik_de.ts \
 DISTFILES += \
     setup.iss \
     setup64.iss \
-    HISTORY.TXT
+    HISTORY.TXT \
+    build_mingw64.sh
