@@ -2334,8 +2334,6 @@ void Edit::on_contextSynchronizeKeys_triggered()
 			}
 		}
 	}
-
-
 	QApplication::restoreOverrideCursor();
 	UpdateTrackListing();
 }

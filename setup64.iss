@@ -94,7 +94,7 @@ Source: "C:\msys64\mingw64\bin\libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "C:\msys64\mingw64\bin\libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\SSLEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\LIBEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
+Source: "C:\msys64\mingw64\bin\libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 Source: "C:\msys64\mingw64\share\qt5\plugins\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
