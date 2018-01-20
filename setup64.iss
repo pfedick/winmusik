@@ -73,6 +73,7 @@ Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\Qt5Svg.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -97,13 +98,12 @@ Source: "C:\msys64\mingw64\bin\LIBEAY32.dll"; DestDir: "{app}"; Flags: ignorever
 Source: "C:\msys64\mingw64\bin\libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
-Source: "C:\msys64\mingw64\share\qt5\plugins\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qtiff.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qgif.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qsvg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\imageformats\qtga.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\printsupport\windowsprintersupport.dll"; DestDir: "{app}\printsupport"; Flags: ignoreversion;
+Source: "release\deploy\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion;
+Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
+Source: "release\deploy\imageformats\*"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
+Source: "release\deploy\printsupport\*"; DestDir: "{app}\printsupport"; Flags: ignoreversion;
+Source: "release\deploy\styles\*"; DestDir: "{app}\styles"; Flags: ignoreversion;
+Source: "release\deploy\translations\*"; DestDir: "{app}\translations"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\share\qt5\plugins\audio\qtaudio_windows.dll"; DestDir: "{app}\audio"; Flags: ignoreversion;
 
 [Icons]
