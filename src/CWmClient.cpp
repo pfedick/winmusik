@@ -1786,6 +1786,7 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ReplaceIfExists(s,L" und ",replace);
 	ReplaceIfExists(s,L" and ",replace);
 	ReplaceIfExists(s,L" - ",replace);
+	ReplaceIfExists(s,L" /\\ ",replace);
 	ReplaceIfExists(s,L"DJ ",replace);
 	ReplaceIfExists(s,L" ",replace);		// U+00A0, c2 a0, NO-BREAK SPACE
 	s.Trim();
