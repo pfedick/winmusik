@@ -122,7 +122,7 @@ bool Edit::EditTrack()
 	// Dateiname
 	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 	if (Path.IsEmpty()) {
-		ui.filename->setText("");
+		ui.filename->setText("<font color='red'>"+tr("no file found")+"</font>");
 		ui.filesize->setText("");
 	} else {
 		ui.filename->setText(Path);
@@ -683,9 +683,13 @@ bool Edit::SaveTrack(DataTitle &Ti)
 	wm->DeviceStore.Update(DeviceType,DeviceId);
 	UpdateDevice();
 
+	// ID3-Tags speichern, sofern gewünscht und eine Datei vorhanden ist
 	if (wm_main->conf.bWriteID3Tags==true) {
-		if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track,Ti)) {
-			wm->RaiseError(this,tr("Could not save ID3 Tags"));
+		ppl6::CString Path=wm->GetAudioFilename(DeviceType,Track.DeviceId,Page,Track.Track);
+		if (Path.NotEmpty()) {
+			if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track,Ti)) {
+				wm->RaiseError(this,tr("Could not save ID3 Tags"));
+			}
 		}
 	}
 	return true;
