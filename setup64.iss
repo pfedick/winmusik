@@ -70,12 +70,7 @@ Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: 
 Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5Svg.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
+
 Source: "C:\msys64\mingw64\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libicuuc58.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libicuin58.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -85,7 +80,6 @@ Source: "C:\msys64\mingw64\bin\libpcre16-0.dll"; DestDir: "{app}"; Flags: ignore
 Source: "C:\msys64\mingw64\bin\libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -97,7 +91,20 @@ Source: "C:\msys64\mingw64\bin\SSLEAY32.dll"; DestDir: "{app}"; Flags: ignorever
 Source: "C:\msys64\mingw64\bin\LIBEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libjpeg-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
+; Dependencies of qt imageplugins
+Source: "C:\msys64\mingw64\bin\libjasper-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libmng-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libtiff-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libwebp-7.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libwebpdemux-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
+
+; Qt specific
+Source: "release\deploy\*.dll"; DestDir: "{app}"; Flags: ignoreversion;
+; Qt Plugins
 Source: "release\deploy\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion;
 Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
 Source: "release\deploy\imageformats\*"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
