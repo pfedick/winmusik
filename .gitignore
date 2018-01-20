@@ -41,3 +41,5 @@
 /object_script.WinMusik.Release
 /distfiles/
 /WinMusik.pro.user
+/.qmake.stash
+/.settings/
