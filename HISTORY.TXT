@@ -2,6 +2,35 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.5.0, Releasedate: 20.01.2018 (Tag: REL_3_5_0)
+    - Editor:
+      - Wenn es keine Datei zu dem Track gibt, wird unter Dateiname ein
+        roter Info-String angezeigt. Es gibt kein Fehler-Popup mehr beim
+        speichern
+      - Drag-/Drop aus einer Suchliste in den Editor implementiert
+    - Playlist:
+      - Beim Suchen nach Dateien in der Playlist werden Pfade Lowercase
+        betrachtet
+      - Changes in SubName-, Issue- and Date-Field are recognized as changes
+        and enable save-button
+      - Fixed text written to Trackstart-Inputbox when pressing cueTrackEnd-
+        Button
+      - fixed playlist loading of subtitle, Issue and Date
+      - fixed PlaylistTracks::setIssueDate
+      - fixed date export
+    - Suchliste:
+      - releasedate ist CDateTime
+      - Release-Date-Spalte hinzugefügt
+    - Suche:
+      - Clipboard-search fixed when a none text object (like an image) is
+        copied to clipboard
+    - Verschiedenes:
+      - MingW64-/GCC-Update, Dependencies für Setup aktualisiert
+      - Zeichenkombination "/\" wird als Trenner im Interpreten erkannt
+      - removed unused variables
+      - removed ppl6::grafix::CGrafix initialisation, because it is not used
+      - removed includes for ppl6-grafix.h      
+
 Version 3.4.0, Releasedate: 25.12.2016 (Tag: REL_3_4_0)
     - Im Suchfilter kann nun auch die Tracklänge eingeschränkt werden,
       sowie der EnergyLevel
