@@ -122,10 +122,12 @@ bool Edit::EditTrack()
 	// Dateiname
 	ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
 	if (Path.IsEmpty()) {
-		ui.filename->setText("<font color='red'>"+tr("no file found")+"</font>");
+		ui.filename->setText(tr("file not found"));
+		ui.filename->setStyleSheet("color: red");
 		ui.filesize->setText("");
 	} else {
 		ui.filename->setText(Path);
+		ui.filename->setStyleSheet("");
 		ppl6::CDirEntry de;
 		if (ppl6::CFile::Stat(Path,de)) {
 			Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
