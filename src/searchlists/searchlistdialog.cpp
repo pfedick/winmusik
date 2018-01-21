@@ -94,8 +94,6 @@ SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::C
 
 	setupStatusBar();
 
-	this->show();
-	this->restoreGeometry(wm_main->GetGeometry("SearchlistDialog"));
 
 
 	// Das müssen wir irgendwie asynchron hinbekommen
@@ -119,6 +117,14 @@ SearchlistDialog::~SearchlistDialog()
 		wm->SearchlistDialogClosed(this);
 	}
 }
+
+
+void SearchlistDialog::show()
+{
+	SetWindowGeometry(this, "SearchlistDialog");
+	QWidget::show();
+}
+
 
 
 void SearchlistDialog::setupStatusBar()

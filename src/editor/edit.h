@@ -117,6 +117,7 @@ public:
     void showEditor();
     void showEditorWithoutFocusChange();
     void createSetMusicKeyContextMenu(QMenu *m);
+    void show();
 
     void handleDropOnTracklist(const QList<QUrl> &urlList, int dropAction);
 

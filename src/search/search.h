@@ -59,6 +59,7 @@ public:
 
     void DoSearch();
     void Resize();
+    void show();
 
 private:
     Ui::searchClass ui;

@@ -75,6 +75,7 @@ public:
     void ReloadTranslation();
     void addTrack(const SearchlistItem &track);
     void deleteSelectedTracks();
+    void show();
 
     class SearchlistTreeItem : public QTreeWidgetItem
     {

@@ -52,9 +52,6 @@ Searchlists::Searchlists(QWidget *parent, CWmClient *wm)
     		"}\n"
     		"";
     ui.treeWidget->setStyleSheet(Style);
-	this->show();
-	this->restoreGeometry(wm_main->GetGeometry("Searchlists"));
-
     Update();
 }
 
@@ -65,6 +62,11 @@ Searchlists::~Searchlists()
 	}
 }
 
+void Searchlists::show()
+{
+	SetWindowGeometry(this, "Searchlists");
+	QWidget::show();
+}
 
 void Searchlists::Update()
 {

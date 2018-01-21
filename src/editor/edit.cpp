@@ -315,10 +315,11 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 		ui.index->setText(Tmp);
 	}
 	ui.index->setFocus();
+	/*
 	ppl6::CString Name;
 	Name.Setf("edit_type_%i",typ);
 	this->restoreGeometry(wm->GetGeometry(Name));
-
+	*/
 	hideEditor();
 }
 
@@ -332,6 +333,15 @@ Edit::~Edit()
 	if (artistCompleter) delete artistCompleter;
 	if (albumCompleter) delete albumCompleter;
 	//if (searchWindow) delete searchWindow;
+}
+
+
+void Edit::show()
+{
+	ppl6::CString Name;
+	Name.Setf("edit_type_%i",DeviceType);
+	SetWindowGeometry(this, Name);
+	QWidget::show();
 }
 
 void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
@@ -2026,7 +2036,7 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 	if (t) {
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		if (key&(Qt::ShiftModifier|Qt::ControlModifier)) {
+		if (key&(Qt::AltModifier)) {
 			Text.Setf("%s %s",t->Artist,t->Title);
 		} else {
 			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,

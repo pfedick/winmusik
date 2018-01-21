@@ -49,6 +49,7 @@ public:
     ~Searchlists();
     void ReloadTranslation();
     void Update();
+    void show();
 
 private:
     Ui::SearchlistsClass ui;

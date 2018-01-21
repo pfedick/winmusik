@@ -92,7 +92,6 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	ui.recordDateStart->installEventFilter(this);
 	ui.recordDateEnd->installEventFilter(this);
 
-	SetWindowGeometry(this,"search");
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
@@ -113,6 +112,12 @@ Search::~Search()
 	wm->conf.Save();
 	wm->SearchClosed(this);
 	}
+}
+
+void Search::show()
+{
+	SetWindowGeometry(this, "search");
+	QWidget::show();
 }
 
 
@@ -887,7 +892,7 @@ void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 	if (t) {
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		if (key&(Qt::ShiftModifier|Qt::ControlModifier)) {
+		if (key&(Qt::AltModifier)) {
 			Text.Setf("%s %s",t->Artist,t->Title);
 		} else {
 			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
