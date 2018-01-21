@@ -887,7 +887,7 @@ void Search::on_trackList_itemClicked ( QTreeWidgetItem * item,int  )
 	if (t) {
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		if (key&Qt::MetaModifier) {
+		if (key&(Qt::ShiftModifier|Qt::ControlModifier)) {
 			Text.Setf("%s %s",t->Artist,t->Title);
 		} else {
 			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
