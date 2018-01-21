@@ -2,7 +2,7 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.5.0, Releasedate: 20.01.2018 (Tag: REL_3_5_0)
+Version 3.5.0, Releasedate: 21.01.2018 (Tag: REL_3_5_0)
     - Editor:
       - Wenn es keine Datei zu dem Track gibt, wird unter Dateiname ein
         roter Info-String angezeigt. Es gibt kein Fehler-Popup mehr beim
@@ -10,7 +10,9 @@ Version 3.5.0, Releasedate: 20.01.2018 (Tag: REL_3_5_0)
       - Drag-/Drop aus einer Suchliste in den Editor implementiert
       - Klick auf Trackliste: Key-Modifier geändert. Statt Meta-Key
         (Windows-/Apfel-Taste) kann jetzt Shift oder Strg verwendet werden,
-        um nur Interpret und Titel in die Zwischenablage zu kopieren       
+        um nur Interpret und Titel in die Zwischenablage zu kopieren 
+      - F3 Anfangsbuchstaben gross machen: Tick (') wird nicht mehr als Word-
+        trenner erkannt      
     - Playlist:
       - Beim Suchen nach Dateien in der Playlist werden Pfade Lowercase
         betrachtet
