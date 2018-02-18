@@ -361,6 +361,7 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 	ui.index->setText(ppl6::ToString("%i",deviceId));
 	if (!Page) Page=1;
 	ui.page->setText(ppl6::ToString("%i",Page));
+	wm->UpdateDevice(DeviceType,DeviceId);
 	if (wm->LoadDevice(DeviceType,DeviceId,&datadevice)) {
 		UpdateDevice();
 		if (datadevice.Pages==1) {
@@ -1353,12 +1354,14 @@ bool Edit::on_page_FocusIn()
 			ui.index->setFocus();
 			return true;
 		}
+		wm->UpdateDevice(DeviceType,DeviceId);
 		if (!wm->LoadDevice(DeviceType,DeviceId,&datadevice)) {
 			DeviceId=EditDeviceDialog(DeviceId);
 			if (!DeviceId) {
 				ui.index->setFocus();
 				return true;
 			}
+			wm->UpdateDevice(DeviceType,DeviceId);
 			if (!wm->LoadDevice(DeviceType,DeviceId,&datadevice)) {
 				ui.index->setFocus();
 				return true;

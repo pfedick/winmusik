@@ -862,8 +862,13 @@ void CWmClient::SetLatestPurchaseDate(QDate Date)
 int CWmClient::LoadDevice(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice *data)
 {
 	data->Clear();
-	DeviceStore.Update(DeviceType,DeviceId);
+	//DeviceStore.Update(DeviceType,DeviceId);
 	return DeviceStore.GetCopy(DeviceType,DeviceId,data);
+}
+
+void CWmClient::UpdateDevice(ppluint8 DeviceType, ppluint32 DeviceId)
+{
+	DeviceStore.Update(DeviceType,DeviceId);
 }
 
 CTrackList *CWmClient::GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page)
