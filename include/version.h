@@ -10,7 +10,7 @@
 
 #define WM_VERSION	"3.5.1"
 #define WM_SVN_REVISION	"0"
-#define WM_RELEASEDATE	20180121
+#define WM_RELEASEDATE	20180218
 
 
 #endif /* WINMUSIK_VERSION_H_ */
