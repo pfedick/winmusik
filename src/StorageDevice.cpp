@@ -754,13 +754,13 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 	DataTitle *ti;
 	Mutex.Lock();
 	t=(DataDevice *)Tree.Find((void*)&dd);
-	DataDevice previous;
-	previous.NumTracks=t->NumTracks;
-	previous.Recorded=t->Recorded;
-	previous.FirstDate=t->FirstDate;
-	previous.LastDate=t->LastDate;
-
 	if (t) {
+		DataDevice previous;
+		previous.NumTracks=t->NumTracks;
+		previous.Recorded=t->Recorded;
+		previous.FirstDate=t->FirstDate;
+		previous.LastDate=t->LastDate;
+
 		t->NumTracks=0;
 		t->Recorded=0;
 		t->FirstDate=0;
