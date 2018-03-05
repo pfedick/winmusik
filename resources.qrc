@@ -277,6 +277,7 @@
         <file>resources/user.png</file>
         <file>resources/viewmag.png</file>
         <file>resources/printer16.png</file>
+        <file>resources/export.png</file>
     </qresource>
     <qresource prefix="/other">
         <file>resources/pfp-logo-48x25.png</file>

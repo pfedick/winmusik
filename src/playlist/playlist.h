@@ -36,6 +36,7 @@
 #include "winmusik3.h"
 #include "playlisttracks.h"
 #include "playlistStatusBar.h"
+#include "playlistexport.h"
 #include <ppl6-sound.h>
 
 class PlaylistTracks;
@@ -118,6 +119,13 @@ private:
     bool on_tracks_MouseButtonPress(QMouseEvent * event);
     bool on_tracks_MouseButtonRelease(QMouseEvent * event);
 
+    // Export Playlist
+    void exportFile(PlaylistExport &dialog, int track, const ppl6::CString &SourceFile);
+    void exportM3U();
+    void exportPLS();
+    void exportXSPF();
+    void exportTXT();
+    ppl6::CString getExportFilename(int track, const ppl6::CString &SourceFile);
 
     // Aktionen
     void editTrack(PlaylistItem *item);
@@ -158,6 +166,8 @@ public slots:
 	void on_menuOpen_triggered();
 	void on_menuSave_triggered();
 	void on_menuSaveAs_triggered();
+
+    void on_menuExport_triggered();
 
 	void on_menuOpenRecent0_triggered();
 	void on_menuOpenRecent1_triggered();

@@ -37,12 +37,15 @@
 #include <QDomDocument>
 #include <QBuffer>
 #include <QDate>
+#include <QDir>
 
 #include "playlisttracks.h"
 #include "playlist.h"
 #include "playlistedit.h"
 #include "traktor.h"
 #include "setbpmplayed.h"
+#include "playlistexport.h"
+#include "version.h"
 #include <stdio.h>
 
 
@@ -163,6 +166,8 @@ void Playlist::createMenue()
 	menu->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
 	menu->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
 	menu->addSeparator();
+    menu->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
+    menu->addSeparator();
 
 	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"),tr("&recent Playlists"));
 	updateRecentPlaylistsMenu();
@@ -187,6 +192,8 @@ void Playlist::createToolbar()
 	action=tb->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
 	saveAsWidget=tb->widgetForAction(action);
 	tb->addSeparator();
+    tb->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
+    tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
 
@@ -1042,6 +1049,47 @@ void Playlist::on_menuSaveAs_triggered()
 	on_menuSave_triggered();
 }
 
+static void clearDir(const QString &dirName)
+{
+    QDir dir(dirName);
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                clearDir(info.absoluteFilePath());
+            }
+            else {
+                QFile::remove(info.absoluteFilePath());
+            }
+        }
+    }
+}
+
+void Playlist::on_menuExport_triggered()
+{
+    PlaylistExport exportdialog(this,wm);
+    if (exportdialog.exec()==1) {
+        exportdialog.show();
+        exportdialog.start(ui.tracks->topLevelItemCount());
+        QCoreApplication::processEvents();
+        clearDir(wm->conf.playlist_export.TargetPath);
+        ppl6::MkDir(wm->conf.playlist_export.TargetPath);
+        //QDir newdir;
+        //newdir.mkpath(wm->conf.playlist_export.TargetPath);
+        for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+            exportdialog.setTotalProgress(i);
+            PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+            if (wm->conf.playlist_export.option_copy_files) {
+                exportFile(exportdialog, i+1, item->File);
+            }
+            QCoreApplication::processEvents();
+        }
+        if (wm->conf.playlist_export.export_m3u) exportM3U();
+        if (wm->conf.playlist_export.export_pls) exportPLS();
+        if (wm->conf.playlist_export.export_xspf) exportXSPF();
+        if (wm->conf.playlist_export.export_txt) exportTXT();
+    }
+}
+
 void Playlist::updateLastPlaylist()
 {
 	ppl6::CString Tmp[WM_NUM_LASTPLAYLISTS];
@@ -1120,8 +1168,8 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 	if (!currentTreeItem) return;
 	int column=ui.tracks->currentColumn();
 
-	DataTitle *t=NULL;
-	t=wm->GetTitle(currentTreeItem->titleId);
+    //DataTitle *t=NULL;
+    //t=wm->GetTitle(currentTreeItem->titleId);
 
 	QMenu *m=new QMenu(this);
 	QAction *a=NULL;
@@ -1577,6 +1625,136 @@ void Playlist::on_issueNumber_valueChanged ( int  )
 void Playlist::on_issueDate_dateChanged(const QDate &)
 {
 	setChanged(true);
+}
+
+
+ppl6::CString Playlist::getExportFilename(int track, const ppl6::CString &SourceFile)
+{
+    if (!wm->conf.playlist_export.option_copy_files) {
+        return SourceFile;
+    }
+    ppl6::CString Tmp;
+    if (wm->conf.playlist_export.option_prepend_tracknumber) {
+        Tmp.Concatf("%03d-", track);
+    }
+    ppl6::CString Filename=ppl6::GetFilename(SourceFile);
+    if (Filename.PregMatch("/^[0-9]{3}-/")) {
+        Filename=Filename.Mid(4);
+    }
+    Tmp+=Filename;
+    return Tmp;
+}
+
+
+void Playlist::exportFile(PlaylistExport &dialog, int track, const ppl6::CString &SourceFile)
+{
+    ppl6::CString Tmp=getExportFilename(track, SourceFile);
+    dialog.setCurrentFile(Tmp,0);
+    ppl6::CString TargetFile=wm->conf.playlist_export.TargetPath+"/"+Tmp;
+    ppl6::CFile::CopyFile(SourceFile, TargetFile);
+}
+
+void Playlist::exportM3U()
+{
+    ppl6::CFile m3u;
+    ppl6::CString Tmp;
+    if (!m3u.Openf("%s/000index.m3u","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
+    m3u.Puts("#EXTM3U\n");
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        Tmp=item->Artist + " - " + item->Title;
+        Tmp+=" (";
+        Tmp+=item->Version;
+        Tmp+=")";
+        m3u.Putsf("#EXTINF:%u,%s\n",item->trackLength,(const char*)Tmp);
+        m3u.Putsf("%s\n",(const char*)getExportFilename(i+1,item->File));
+    }
+    m3u.Close();
+}
+
+void Playlist::exportPLS()
+{
+    ppl6::CFile pls;
+    ppl6::CString Tmp;
+    if (!pls.Openf("%s/000index.pls","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
+    pls.Puts("[playlist]\n");
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        Tmp=item->Artist + " - " + item->Title;
+        Tmp+=" (";
+        Tmp+=item->Version;
+        Tmp+=")";
+
+        pls.Putsf("File%i=%s\n",i+1,(const char*)getExportFilename(i+1,item->File));
+        pls.Putsf("Title%i=%s\n",i+1,(const char*)Tmp);
+        pls.Putsf("Length%i=%u\n",i+1,item->trackLength);
+    }
+    pls.Putsf("NumberOfEntries=%i\nVersion=2\n",ui.tracks->topLevelItemCount());
+    pls.Close();
+}
+
+void Playlist::exportXSPF()
+{
+    ppl6::CFile xspf;
+    ppl6::CString Tmp;
+    if (!xspf.Openf("%s/000index.xspf","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
+    xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
+    Tmp=tr("Playlist created by WinMusik");
+    Tmp.Trim();
+    Tmp.Concatf(" %s",WM_VERSION);
+    xspf.Putsf("<creator>%s</creator>\n",(const char*)Tmp);
+    xspf.Puts("<trackList>\n");
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        ppl6::CString Filename=wm->conf.playlist_export.TargetPath+"/"+getExportFilename(i+1,item->File);
+        xspf.Putsf("  <track>\n");
+        xspf.Putsf("     <trackNum>%u</trackNum>\n",i+1);
+        xspf.Putsf("     <location>file://%s</location>\n",(const char*)ppl6::EscapeHTMLTags(Filename));
+        xspf.Putsf("     <creator>%s</creator>\n",(const char*)ppl6::EscapeHTMLTags(item->Artist));
+        xspf.Putsf("     <title>%s - %s (%s)</title>\n",
+                                (const char*)ppl6::EscapeHTMLTags(item->Artist),
+                                (const char*)ppl6::EscapeHTMLTags(item->Title),
+                                (const char*)ppl6::EscapeHTMLTags(item->Version));
+        xspf.Putsf("     <duration>%u</duration>\n",item->trackLength*1000);  // Bringt VLC zum Absturz
+        xspf.Putsf("  </track>\n");
+    }
+    xspf.Putsf("</trackList>\n</playlist>\n");
+    xspf.Close();
+}
+
+void Playlist::exportTXT()
+{
+    ppl6::CFile txt;
+    ppl6::CString Tmp;
+    ppl6::CString Minuten=tr("min","Minutes in Tracklisting of Playlist");
+    if (!txt.Openf("%s/000index.txt","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
+    Tmp=ui.tracks->getName();
+    if (Tmp.IsEmpty()) {
+        Tmp=tr("Playlist");
+    }
+    txt.Puts(Tmp);
+    txt.Puts("\r\n");
+
+    Tmp=ui.tracks->getSubName();
+    if (Tmp.NotEmpty()) {
+        txt.Puts(Tmp);
+        txt.Puts("\r\n");
+    }
+    txt.Puts("\r\n");
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        Tmp=item->Artist + " - " + item->Title;
+        Tmp+=" (";
+        Tmp+=item->Version;
+        Tmp+=")";
+        ppl6::CString TmpTxt=Tmp;
+        TmpTxt.Chop(1);
+        txt.Putsf("%3u. %s, %0i:%02i %s)\r\n",i+1,(const char*)TmpTxt,(int)(item->trackLength/60),item->trackLength%60,(const char*)Minuten);
+
+    }
+    txt.Puts("\r\n");
+
 }
 
 

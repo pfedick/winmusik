@@ -92,6 +92,18 @@ Config::CDDB::CDDB()
 	useProxy=false;
 }
 
+Config::PlaylistExport::PlaylistExport()
+{
+    TargetPath=QDir::homePath();
+    option_copy_files=true;
+    option_prepend_tracknumber=true;
+    export_m3u=true;
+    export_pls=true;
+    export_xspf=true;
+    export_txt=true;
+}
+
+
 int Config::setConfigFile(const ppl6::CString &filename)
 {
 	ppl6::CDirEntry res;
@@ -233,6 +245,15 @@ int Config::Save()
 	c.Add("cddb","hostname",(const char*)cddb.hostname);
 	c.Add("cddb","querypath",(const char*)cddb.querypath);
 
+    // PlaylistExport
+    c.Add("playlistExport","TargetPath",(const char*)playlist_export.TargetPath);
+    c.Add("playlistExport","option_copy_files", playlist_export.option_copy_files);
+    c.Add("playlistExport","option_prepend_tracknumber", playlist_export.option_prepend_tracknumber);
+    c.Add("playlistExport","export_m3u", playlist_export.export_m3u);
+    c.Add("playlistExport","export_pls", playlist_export.export_pls);
+    c.Add("playlistExport","export_xspf", playlist_export.export_xspf);
+    c.Add("playlistExport","export_txt", playlist_export.export_txt);
+
 	if (!c.Save(ConfigFile)) return 0;
 	return 1;
 }
@@ -352,13 +373,21 @@ int Config::Load()
 	cddb.cddevice=c.Get("cddb","cddevice","");
 	cddb.server=c.Get("cddb","server","freedb.freedb.org");
 	cddb.port=c.GetInt("cddb","port",80);
-	cddb.useProxy=c.GetBool("cddb","useProxy",false);
+    cddb.useProxy=c.GetBool("cddb","useProxy",false);
 	cddb.proxy_server=c.Get("cddb","proxy_server","");
 	cddb.proxy_port=c.GetInt("cddb","proxy_port",8080);
 	cddb.username=c.Get("cddb","username","anonymous");
 	cddb.hostname=c.Get("cddb","hostname","localhost");
 	cddb.querypath=c.Get("cddb","querypath","/~cddb/cddb.cgi");
 
-
+    // PlaylistExport
+    Tmp=QDir::homePath();
+    playlist_export.TargetPath=c.Get("playlistExport","TargetPath",Tmp);
+    playlist_export.option_copy_files=c.GetBool("playlistExport","option_copy_files",true);
+    playlist_export.option_prepend_tracknumber=c.GetBool("playlistExport","option_prepend_tracknumber",true);
+    playlist_export.export_m3u=c.GetBool("playlistExport","export_m3u",true);
+    playlist_export.export_pls=c.GetBool("playlistExport","export_pls",true);
+    playlist_export.export_xspf=c.GetBool("playlistExport","export_xspf",true);
+    playlist_export.export_txt=c.GetBool("playlistExport","export_txt",true);
 	return 1;
 }

@@ -3,6 +3,8 @@
 \section WM3History_ WinMusik 3 Historie
 
 Version 3.5.1
+    - Playlists:
+      - Export-Funktion implementiert
     - Verschiedenes
       - changed how geometry is restored
       - Reduced save on Device

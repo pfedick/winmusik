@@ -372,6 +372,19 @@ class Config
 		};
 		CDDB			cddb;
 
+        class PlaylistExport {
+        public:
+            PlaylistExport();
+            ppl6::CString	TargetPath;
+            bool option_copy_files;
+            bool option_prepend_tracknumber;
+            bool export_m3u;
+            bool export_pls;
+            bool export_xspf;
+            bool export_txt;
+        };
+        PlaylistExport playlist_export;
+
 };
 
 class CID3TagSaver : public ppl6::CThread

@@ -79,7 +79,9 @@ HEADERS += widgets/fkeys.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h \
-    include/plugins.h
+    include/plugins.h \
+    src/playlist/playlistexport.h \
+    include/version.h
 SOURCES += widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     widgets/keywheel.cpp \
@@ -146,7 +148,8 @@ SOURCES += widgets/fkeys.cpp \
     src/wmtoolbutton.cpp \
     src/asynchronousMessage.cpp \
     src/DropArea.cpp \
-    src/plugins.cpp
+    src/plugins.cpp \
+    src/playlist/playlistexport.cpp
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
     src/editor/oimpinfo.ui \
@@ -179,7 +182,8 @@ FORMS += widgets/fkeys.ui \
     src/playlist/playlistedit.ui \
     src/playlist/setbpmplayed.ui \
     forms/devicelist.ui \
-    forms/asynchronousMessage.ui
+    forms/asynchronousMessage.ui \
+    src/playlist/playlistexport.ui
 RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include
