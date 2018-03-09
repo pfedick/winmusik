@@ -167,8 +167,9 @@ private:
     QWidget *searchWindow;
 
     void handleDropEvent(QDropEvent *event);
+    bool handleDragEnterEvent(QDragEnterEvent *event);
     bool handleDropFromSearchlist(QDropEvent *event);
-
+    void handleFileDropEvent(QDropEvent *event);
     void SetupTrackList();
 
     bool eventFilter(QObject *target, QEvent *event);

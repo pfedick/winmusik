@@ -233,8 +233,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.cover,100);
 
 	ui.deviceTitle->installEventFilter(this);
-	ui.titleEdit->installEventFilter(this);
-
+    ui.titleEdit->installEventFilter(this);
 
 	/*
 	 * 	Label.Title=tr("Producer / Label");
@@ -600,18 +599,19 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		wm->OpenCoverViewer(Cover);	
 	} else if (target==ui.cover && type==QEvent::MouseButtonPress) {
 		wm->OpenCoverViewer(Cover);	
-	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::Drop) {
+    } else if (target==ui.titleEdit && type==QEvent::Drop) {
 		handleDropEvent(static_cast<QDropEvent *>(event));
 		return true;
     } else if ((target==ui.artist || ui.title) && type==QEvent::Drop) {
         if (handleDropFromSearchlist(static_cast<QDropEvent *>(event))) {
             return true;
         }
-
 	} else if ((target==ui.deviceTitle || ui.titleEdit) && type==QEvent::DragEnter) {
-			(static_cast<QDragEnterEvent *>(event))->accept();
-			return true;
-	}
+        //(static_cast<QDragEnterEvent *>(event))->accept();
+        if (handleDragEnterEvent(static_cast<QDragEnterEvent *>(event))) {
+            return true;
+        }
+    }
 	return false;
 }
 
@@ -909,6 +909,61 @@ QWidget *Edit::GetWidgetFromPosition(int position)
 // *** EVENTS                                                                                           ***
 // ********************************************************************************************************
 
+
+
+static bool isDropFromSearchlist(const QMimeData *mime)
+{
+    if (!mime->hasText()) return false;
+    //printf ("we have text\n");
+    QDomDocument doc("winmusikSearchlist");
+    if (!doc.setContent(mime->text())) return false;
+    //printf ("we have xml\n");
+    QDomElement root=doc.documentElement();
+    //QByteArray ba = root.tagName().toUtf8();
+    //printf ("tagName=%s\n",(const char*)ba.data());
+    //ba = root.attribute("version").toUtf8();
+    //printf ("version=%s\n",(const char*)ba.data());
+    if (root.tagName()!="winmusikSearchlist" || root.attribute("version")!="1") {
+        return false;
+    }
+    return true;
+}
+
+static bool isDropWithAudioFile(const QMimeData *mime)
+{
+    if (!mime->hasUrls()) return false;
+    QList<QUrl>	list=mime->urls ();
+    if (list.count()!=1) return false;
+    QUrl url=list.first();
+    /*
+#if QT_VERSION >= 0x050000
+    QString file=url.path(QUrl::FullyDecoded);
+#else
+    QString file=url.encodedPath();
+#endif
+    */
+    return true;
+}
+bool Edit::handleDragEnterEvent(QDragEnterEvent *event)
+{
+    const QMimeData *mime=event->mimeData();
+    if (!mime) {
+        //event->ignore();
+        return false;
+    }
+    if (isDropFromSearchlist(mime)) {
+         event->accept();
+         return true;
+    }
+    if (position>3 && isDropWithAudioFile(mime)) {
+         event->accept();
+         return true;
+    }
+
+    //event->ignore();
+    return false;
+}
+
 void Edit::handleDropEvent(QDropEvent *event)
 {
 	event->accept();
@@ -918,6 +973,10 @@ void Edit::handleDropEvent(QDropEvent *event)
 		event->accept();
 		return;
 	}
+    if (position>3 ) {
+        handleFileDropEvent(event);
+    }
+    return;
 	if (!mime->hasUrls()) return;
 	QList<QUrl>	list=mime->urls ();
 	QUrl url=list.first();
@@ -948,6 +1007,69 @@ void Edit::handleDropEvent(QDropEvent *event)
 
 	//printf ("lala: %s, path: %s\n",(const char*)f, (const char*)path);
 
+}
+
+void Edit::handleFileDropEvent(QDropEvent *event)
+{
+    ppl6::CString Tmp;
+    event->accept();
+    const QMimeData *mime=event->mimeData();
+    if (!mime) return;
+    if (!mime->hasUrls()) return;
+    QList<QUrl>	list=mime->urls ();
+    QUrl url=list.first();
+
+    QString file=url.toLocalFile();
+    ppl6::CString f=file;
+    ppl6::CDirEntry de;
+    if (!ppl6::CFile::Stat(f,de)) return;
+
+    int tn=ui.track->text().toInt();
+    if (tn<1) return;
+    ppl6::CString ExistingFile=wm->GetAudioFilename(DeviceType,DeviceId, Page, tn);
+    if (ExistingFile.NotEmpty()) {
+        if (QMessageBox::question(this, tr("WinMusik: overwrite existing file"),
+            tr("Do you want to overwrite the exiting file?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
+            ==QMessageBox::No) return;
+    }
+    ppl6::CString path=wm->GetAudioPath(DeviceType,DeviceId,Page);
+    path.Concatf("/%03d-", ui.track->text().toInt());
+    f=ppl6::GetFilename(f);
+    if (f.PregMatch("/^[0-9]{3}-/")) {
+        f=f.Mid(4);
+    }
+    path+=ppl6::GetFilename(f);
+    if (ExistingFile.NotEmpty()) {
+        QFile::remove(ExistingFile);
+    }
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    if (!QFile::copy(file,path)) {
+        QApplication::restoreOverrideCursor();
+        Tmp=tr("Could not copy file:");
+        Tmp+="\n";
+        Tmp+=file;
+        Tmp+=" => ";
+        Tmp+=path;
+        QMessageBox::critical(this,tr("Error: could not copy file"),Tmp);
+        return;
+    }
+    QApplication::restoreOverrideCursor();
+    ui.filename->setText(path);
+    ui.filename->setStyleSheet("");
+
+
+    Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
+    ui.filesize->setText(Tmp);
+    ppl6::CID3Tag Tag;
+    if (Tag.Load(path)) {
+        // Cover?
+        ppl6::CBinary cover;
+        if (Tag.GetPicture(3,cover)) {
+            Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
+            ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+            wm->UpdateCoverViewer(Cover);
+        }
+    }
 }
 
 bool Edit::handleDropFromSearchlist(QDropEvent *event)
