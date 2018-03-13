@@ -1070,6 +1070,9 @@ void Edit::handleFileDropEvent(QDropEvent *event)
             wm->UpdateCoverViewer(Cover);
         }
     }
+    QCoreApplication::processEvents();
+    this->activateWindow();
+    this->FixFocus();
 }
 
 bool Edit::handleDropFromSearchlist(QDropEvent *event)
@@ -2611,12 +2614,16 @@ void Edit::on_contextDeleteTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
 	//printf ("currentTrackListItem->Track=%u, currentTrackListItem->Id=%u\n",currentTrackListItem->Track,currentTrackListItem->Id);
+    /*
 	if (currentTrackListItem->Id) {
 		TrackList->Delete(currentTrackListItem->Track);
 	} else {
 		// Nachfolgende Tracks nach oben rücken
 		TrackList->DeleteShift(currentTrackListItem->Track,&wm->TitleStore);
 	}
+    */
+    // Track löschen und nachfolgende nach oben rücken
+    TrackList->DeleteShift(currentTrackListItem->Track,&wm->TitleStore);
 	UpdateTrackListing();
 	QTreeWidgetItem * w=trackList->topLevelItem(currentTrackListItem->Track);
 	if (w) {

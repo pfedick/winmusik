@@ -3,6 +3,8 @@
 \section WM3History_ WinMusik 3 Historie
 
 Version 3.5.1
+    - Editor:
+      - Drag'n'Drop von Audiodateien in den Editor implementiert
     - Playlists:
       - Export-Funktion implementiert
     - Verschiedenes
