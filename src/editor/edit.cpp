@@ -1033,6 +1033,14 @@ void Edit::handleFileDropEvent(QDropEvent *event)
             ==QMessageBox::No) return;
     }
     ppl6::CString path=wm->GetAudioPath(DeviceType,DeviceId,Page);
+    if (path.IsEmpty()) {
+        QMessageBox::information(this, tr("WinMusik: copy file"),
+                                 tr("File copy is not supported on this device.\nYou have to configure a path for this device in the settings."));
+        return;
+    }
+    if (!QDir(path).exists()) {
+        QDir().mkpath(path);
+    }
     path.Concatf("/%03d-", ui.track->text().toInt());
     f=ppl6::GetFilename(f);
     if (f.PregMatch("/^[0-9]{3}-/")) {
