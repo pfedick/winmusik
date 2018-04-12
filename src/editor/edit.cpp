@@ -420,6 +420,7 @@ void Edit::SetupTrackList()
     trackList->headerItem()->setText(TRACKLIST_BPM_ROW, tr("BPM","trackList"));
     trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key","trackList"));
     trackList->headerItem()->setText(TRACKLIST_ENERGYLEVEL_ROW, tr("Energy","trackList"));
+    trackList->headerItem()->setText(TRACKLIST_YEAR, tr("Year","trackList"));
     trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
     connect(trackList,SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -668,7 +669,9 @@ void Edit::resizeEvent ( QResizeEvent * event )
 	w-=44;
 	trackList->setColumnWidth(TRACKLIST_ENERGYLEVEL_ROW,30);
 	w-=34;
-	trackList->setColumnWidth(TRACKLIST_RATING_ROW,85);
+    trackList->setColumnWidth(TRACKLIST_YEAR,40);
+    w-=44;
+    trackList->setColumnWidth(TRACKLIST_RATING_ROW,85);
 	w-=89;
 	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100);
 	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100);
@@ -1838,10 +1841,10 @@ bool Edit::on_f7_DeleteTrack()
 				trackList->scrollToItem(w);
 			}
 			ClearEditFields();
-			ui.track->setFocus();
+            ui.artist->setFocus();
 		}
 	}
-	return false;
+    return true;
 }
 
 bool Edit::on_f8_InsertTrack()

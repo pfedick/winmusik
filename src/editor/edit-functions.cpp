@@ -430,6 +430,9 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 	Text.Setf("%d",(int)title->EnergyLevel);
 	item->setText(TRACKLIST_ENERGYLEVEL_ROW,Text);
 
+    Text.Setf("%d",(int)title->ReleaseDate/10000);
+    item->setText(TRACKLIST_YEAR,Text);
+
 
 	// Rating
 	switch (title->Rating) {
