@@ -5,11 +5,13 @@
 Version 3.5.1
     - Editor:
       - Drag'n'Drop von Audiodateien in den Editor implementiert
-      - Beim Drag'n'Drop von Audiodateien wird das Zielverzeichnis angelegt, wenn es
-        noch nicht da ist
+      - Beim Drag'n'Drop von Audiodateien wird das Zielverzeichnis angelegt,
+        wenn es noch nicht da ist
       - Erscheinungsjahr in der Trackliste hinzugefügt
       - Beim Löschen eines Tracks mit F7 bleibt der Focus im Feld Artist und es
         wird kein Rescann des Tonträgers mehr ausgeführt.
+      - Bugfix: if updating an existing file where only some characters changed
+        it's case, the file will not be deleted anymore on Windows filesystems.
     - Playlists:
       - Export-Funktion implementiert
     - Suche:

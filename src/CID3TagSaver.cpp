@@ -155,7 +155,8 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 	ppl6::CString NewFilename=Tags->Get("renamefile");
 	if ((NewFilename.NotEmpty()) && NewFilename!=filename) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,7,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"File should be renamed from >>%s<< to >>%s<<",filename,(const char*)NewFilename);
-		if (!ppl6::CFile::RenameFile(filename,NewFilename)) {
+        QFile frename(filename);
+        if (!frename.rename(NewFilename)) {
 			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"ERROR, rename failed");
 			return 0;
 		}
