@@ -12,6 +12,9 @@ Version 3.5.1
         wird kein Rescann des Tonträgers mehr ausgeführt.
       - Bugfix: if updating an existing file where only some characters changed
         it's case, the file will not be deleted anymore on Windows filesystems.
+      - When inserting text (e.g. artist and title) from the clipboard into the
+        artist field with "Shift & Ctrl & v" instead of "Ctrl & v", winmusik
+        tries to find out what's artist, title and version
     - Playlists:
       - Export-Funktion implementiert
     - Suche:

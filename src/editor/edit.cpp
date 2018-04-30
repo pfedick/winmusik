@@ -1420,7 +1420,30 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 	} else if (key==Qt::Key_J && modifier==Qt::AltModifier && position>3) {
 		ui.releaseDate->setFocus();
 		return true;
-	}
+        // *************************************************************************** Ctrl & Shift & v im Feld Artist
+    } else if (key==Qt::Key_V && modifier==(Qt::ShiftModifier|Qt::ControlModifier) && position==4) {
+        RegExpMatch match;
+        RegExpClipboard clip;
+        clip.copyFromClipboard();
+        if (wm_main->RegExpCapture.match(clip,match)) {
+            ui.artist->setText(match.Artist);
+            ui.title->setText(match.Title);
+            if (match.Version.NotEmpty()) {
+                ui.versionId->setText("*");
+                ui.version->setText(match.Version);
+            }
+            if (match.Genre.NotEmpty()) {
+                ui.genreId->setText("*");
+                ui.genre->setText(match.Genre);
+            }
+            /*
+            ui.commentEdit->setText(match.Label);
+            ui.releaseDateEdit->setText(match.ReleaseDate);
+            if (match.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",match.Length/60,match.Length%60));
+            */
+        }
+        return true;
+    }
 	return false;
 }
 
