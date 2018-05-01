@@ -2469,6 +2469,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 					Ti.CopyFrom(title);
 					bool modified=false;
 					if (tinfo.Ti.Key != title->Key && (title->Flags&16)==16) {
+						tinfo.Ti.Key=Ti.Key;
 						if (!wm->SaveID3Tags(title->DeviceType,title->DeviceId, title->Page, title->Track,Ti)) {
 							wm->RaiseError(this,tr("Could not save ID3 Tags"));
 						}
@@ -2476,11 +2477,11 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						Ti.Key=tinfo.Ti.Key;
 						modified=true;
 					}
-					if (Ti.EnergyLevel==0 && tinfo.Ti.EnergyLevel>0) {
+					if (tinfo.Ti.EnergyLevel>0 && Ti.EnergyLevel!=tinfo.Ti.EnergyLevel) {
 						Ti.EnergyLevel=tinfo.Ti.EnergyLevel;
 						modified=true;
 					}
-					if (Ti.BPM==0 && tinfo.Ti.BPM>0) {
+					if (tinfo.Ti.BPM>0 && Ti.BPM!=tinfo.Ti.BPM) {
 						Ti.BPM=tinfo.Ti.BPM;
 						modified=true;
 					}
@@ -2495,6 +2496,10 @@ void Edit::on_contextSynchronizeKeys_triggered()
 					if (tinfo.Ti.Size>0 && tinfo.Ti.Size!=Ti.Size) {
 						Ti.Size=tinfo.Ti.Size;
 						modified=true;
+					}
+					if (Ti.CoverPreview.Size()==0) {
+						Ti.CoverPreview.Copy(tinfo.Ti.CoverPreview);
+
 					}
 					if (modified) {
 						if (!wm->TitleStore.Put(&Ti)) {

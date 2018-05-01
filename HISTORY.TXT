@@ -15,6 +15,8 @@ Version 3.5.1
       - When inserting text (e.g. artist and title) from the clipboard into the
         artist field with "Shift & Ctrl & v" instead of "Ctrl & v", winmusik
         tries to find out what's artist, title and version
+      - when synchronizing with audio files, further ID3-Tag-Fields are
+        synchronized
     - Playlists:
       - Export-Funktion implementiert
     - Suche:
