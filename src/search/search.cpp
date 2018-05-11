@@ -648,9 +648,8 @@ void Search::configureFilter(ResultFilter &filter)
 	if (ui.enableEnergySearch->isChecked()) {
 		filter.setEnergyRange(true,ui.energyStart->value(), ui.energyEnd->value());
 	}
-
-
 	if (ui.keywheel->currentKey()>0) filter.setMusicKey(true,ui.keywheel->currentKey());
+    filter.setTracksWithFilesOnly(ui.tracksWithFilesOnly->isChecked());
 }
 
 void Search::on_searchButton_clicked()

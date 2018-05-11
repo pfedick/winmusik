@@ -43,6 +43,7 @@ void ResultFilter::disableAll()
 	ratingEnabled=false;
 	lengthEnabled=false;
 	energyEnabled=false;
+    tracksWithFilesOnlyEnabled=false;
 	bpmStart=0;
 	bpmEnd=999;
 	yearStart=0;
@@ -132,6 +133,12 @@ void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
 	*/
 }
 
+void ResultFilter::setTracksWithFilesOnly(bool enabled)
+{
+    tracksWithFilesOnlyEnabled=enabled;
+}
+
+
 bool ResultFilter::pass(const DataTitle &ti) const
 {
 	if (bpmEnabled==true && passBpm(ti)==false) return false;
@@ -142,6 +149,7 @@ bool ResultFilter::pass(const DataTitle &ti) const
 	if (genresEnabled==true && passGenres(ti)==false) return false;
 	if (lengthEnabled==true && passLength(ti)==false) return false;
 	if (energyEnabled==true && passEnergyLevel(ti)==false) return false;
+    if (tracksWithFilesOnlyEnabled==true && passTrackWithFile(ti)==false) return false;
 	return true;
 }
 
@@ -201,5 +209,10 @@ bool ResultFilter::passEnergyLevel(const DataTitle &ti) const
 {
 	if (ti.EnergyLevel>=energyStart && ti.EnergyLevel<=energyEnd) return true;
 	return false;
+}
 
+bool ResultFilter::passTrackWithFile(const DataTitle &ti) const
+{
+    if (ti.Size>0 || ti.Bitrate>0) return true;
+    return false;
 }

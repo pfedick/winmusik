@@ -40,6 +40,7 @@ class ResultFilter
 		bool ratingEnabled;
 		bool lengthEnabled;
 		bool energyEnabled;
+        bool tracksWithFilesOnlyEnabled;
 
 		ppluint32 bpmStart, bpmEnd;
 		ppluint32 yearStart, yearEnd;
@@ -62,6 +63,7 @@ class ResultFilter
 		bool passLength(const DataTitle &ti) const;
 		bool passGenres(const DataTitle &ti) const;
 		bool passRating(const DataTitle &ti) const;
+        bool passTrackWithFile(const DataTitle &ti) const;
 
 	public:
 		ResultFilter();
@@ -74,6 +76,7 @@ class ResultFilter
 		void setRecordingRange(bool enabled, int start=0, int end=99999999);
 		void setMusicKey(bool enabled, int key=0);
 		void setGenres(bool enabled, const ppl6::CString &genres=ppl6::CString());
+        void setTracksWithFilesOnly(bool enabled);
 		bool pass(const DataTitle &ti) const;
 		bool pass(ppluint32 titleId) const;
 };

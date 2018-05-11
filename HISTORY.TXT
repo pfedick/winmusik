@@ -21,6 +21,8 @@ Version 3.5.1
       - Export-Funktion implementiert
     - Suche:
       - Erscheinungsjahr in der Trackliste hinzugefügt
+      - Filter für Tracks mit Files: Es werden nur Titel angezeigt, die als
+        Datei zum sofortigen Abspielen vorhanden sind
     - Verschiedenes
       - changed how geometry is restored
       - Reduced save on Device
