@@ -44,6 +44,7 @@ void ResultFilter::disableAll()
 	lengthEnabled=false;
 	energyEnabled=false;
     tracksWithFilesOnlyEnabled=false;
+    tracksWithCoverOnlyEnabled=false;
 	bpmStart=0;
 	bpmEnd=999;
 	yearStart=0;
@@ -138,6 +139,11 @@ void ResultFilter::setTracksWithFilesOnly(bool enabled)
     tracksWithFilesOnlyEnabled=enabled;
 }
 
+void ResultFilter::setTracksWithCoverOnly(bool enabled)
+{
+    tracksWithCoverOnlyEnabled=enabled;
+}
+
 
 bool ResultFilter::pass(const DataTitle &ti) const
 {
@@ -150,6 +156,7 @@ bool ResultFilter::pass(const DataTitle &ti) const
 	if (lengthEnabled==true && passLength(ti)==false) return false;
 	if (energyEnabled==true && passEnergyLevel(ti)==false) return false;
     if (tracksWithFilesOnlyEnabled==true && passTrackWithFile(ti)==false) return false;
+    if (tracksWithCoverOnlyEnabled==true && passTrackWithCover(ti)==false) return false;
 	return true;
 }
 
@@ -214,5 +221,11 @@ bool ResultFilter::passEnergyLevel(const DataTitle &ti) const
 bool ResultFilter::passTrackWithFile(const DataTitle &ti) const
 {
     if (ti.Size>0 || ti.Bitrate>0) return true;
+    return false;
+}
+
+bool ResultFilter::passTrackWithCover(const DataTitle &ti) const
+{
+	if (ti.CoverPreview.Size()>0) return true;
     return false;
 }

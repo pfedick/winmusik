@@ -650,6 +650,7 @@ void Search::configureFilter(ResultFilter &filter)
 	}
 	if (ui.keywheel->currentKey()>0) filter.setMusicKey(true,ui.keywheel->currentKey());
     filter.setTracksWithFilesOnly(ui.tracksWithFilesOnly->isChecked());
+    filter.setTracksWithCoverOnly(ui.tracksWithCoverOnly->isChecked());
 }
 
 void Search::on_searchButton_clicked()
