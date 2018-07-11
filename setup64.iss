@@ -72,9 +72,9 @@ Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf";
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
 Source: "C:\msys64\mingw64\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libicuuc58.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libicuin58.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libicudt58.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libicuuc61.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libicuin61.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libicudt61.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libpcre16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
