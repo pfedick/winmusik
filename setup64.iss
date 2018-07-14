@@ -71,9 +71,10 @@ Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
-Source: "C:\msys64\mingw64\bin\libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
+Source: "C:/msys64//mingw64/bin/libbrotlicommon.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64//mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64//mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:\msys64\mingw64\bin\libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64//mingw64/bin/LIBEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64//mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64//mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
