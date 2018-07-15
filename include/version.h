@@ -1,16 +1,6 @@
-/*
- * version.h
- *
- *  Created on: 20.06.2013
- *      Author: patrick
- */
-
-#ifndef WINMUSIK_VERSION_H_
-#define WINMUSIK_VERSION_H_
-
+#ifndef VERSION_H_
+#define VERSION_H_
 #define WM_VERSION	"3.5.1"
-#define WM_SVN_REVISION	"1"
-#define WM_RELEASEDATE	20180305
-
-
-#endif /* WINMUSIK_VERSION_H_ */
+#define WM_SVN_REVISION	"42"
+#define WM_RELEASEDATE 20180715
+#endif /* VERSION_H_ */
