@@ -3,8 +3,8 @@
 PORTNAME=		WinMusik
 PORTVERSION=		3.x.x
 CATEGORIES=		multimedia
-MASTER_SITES=		${MASTER_SITE_SOURCEFORGE}
-MASTER_SITE_SUBDIR=	winmusik/client/Sourcecode
+MASTER_SITES=		https://www.pfp.de/software/download/
+MASTER_SITE_SUBDIR=	software/download
 EXTRACT_SUFX=		-src.tar.bz2
 
 MAINTAINER=		patrick@pfp.de
@@ -12,8 +12,8 @@ COMMENT=		Music database to maintain songs on various devices
 
 LICENSE=		GPLv3
 
-LIB_DEPENDS=		libjpeg.so:${PORTSDIR}/graphics/jpeg \
-			libpng15.so:${PORTSDIR}/graphics/png \
+LIB_DEPENDS=		libjpeg.so:${PORTSDIR}/graphics/jpeg-turbo \
+			libpng16.so:${PORTSDIR}/graphics/png \
 			libfreetype.so:${PORTSDIR}/print/freetype2 \
 			libpcre.so:${PORTSDIR}/devel/pcre \
 			libmcrypt.so:${PORTSDIR}/security/libmcrypt \
