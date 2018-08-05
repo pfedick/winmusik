@@ -53,13 +53,8 @@ gather_sources()
 		find *.m4 autoconf config configure configure.in docs Doxyfile HISTORY.TXT include LICENSE.TXT Makefile.in ppl6-config.in README.TXT TODO.TXT resource tools src tests/Makefile.in | cpio -pdm "$TARGET/ppl6" > /dev/null 2>&1
 		echo "INFO: done"
 	else
-		echo "INFO: checkout PPL6-sources from svn repository..."
-		svn checkout $PPL6REPO $TARGET/ppl6
-		if [ $? -ne 0 ] ; then
-			echo "ERROR: checkout failed"
-			exit 1
-		fi
-		echo "INFO: done"
+		echo "ERROR: PPL6-sources not found!"
+		exit 1
 	fi
 	cd $CUR
 	WMDIR=$TARGET/winmusik
@@ -71,13 +66,8 @@ gather_sources()
 		find *.TXT WinMusik.pro *.qm *.ts setup.iss include Doxyfile resource.rc resources resources.qrc src widgets forms docs| cpio -pdm "$TARGET/winmusik" > /dev/null 2>&1
 		echo "INFO: done"
     else
-		echo "INFO: checkout WinMusik-sources from svn repository..."
-                svn checkout $WINMUSIKREPO $TARGET/winmusik
-                if [ $? -ne 0 ] ; then
-                        echo "ERROR: checkout failed"
-                        exit 1
-                fi
-                echo "INFO: done"
+    	echo "ERROR: Winmusik Sources not found!"
+    	exit 1
 	fi
 	cat $TARGET/winmusik/WinMusik.pro | sed "s!\`ppl6-config!-L../tmp/lib \`../tmp/bin/ppl6-config!" > $TARGET/winmusik/WinMusik.pro.tmp
 	mv $TARGET/winmusik/WinMusik.pro.tmp $TARGET/winmusik/WinMusik.pro
