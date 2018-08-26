@@ -1124,7 +1124,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent *event)
     ui.releaseDate->setDate(QDate::currentDate());
     ui.recordDate->setDate(QDate::currentDate());
 
-    if (item.Length>0) ui.length->setText(ppl6::ToString("%0i:%02i",(int)(Ti.Length/60),Ti.Length%60));
+    if (item.Length>0) ui.length->setText(ppl6::ToString("%0i:%02i",(int)(item.Length/60),item.Length%60));
 
     ppl6::CDateTime date=ppl6::CDateTime::currentTime();
     if (item.ReleaseDate.notEmpty()) {
