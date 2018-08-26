@@ -2,6 +2,11 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.5.2
+    - Editor:
+      - Bei Drag'n'Drop aus der Suchliste wird die Laufzeit des Tracks
+        mit übernommen
+
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:
       - Drag'n'Drop von Audiodateien in den Editor implementiert
