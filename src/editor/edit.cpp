@@ -2200,7 +2200,7 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 	if (t) {
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		if (key&(Qt::AltModifier)) {
+		if (key&(Qt::AltModifier|Qt::MetaModifier)) {
 			Text.Setf("%s %s",t->Artist,t->Title);
 		} else {
 			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
