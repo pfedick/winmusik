@@ -431,18 +431,6 @@ void Edit::SetupTrackList()
     		this,SLOT(on_trackList_itemClicked(QTreeWidgetItem *, int)));
 
     /*
-    QPalette pal=trackList->palette();
-    pal.setColor(QPalette::Base,QColor(252,246,239,255));
-    pal.setColor(QPalette::AlternateBase,QColor(241,234,227,255));
-    trackList->setPalette(pal);
-    QTreeWidgetItem *header=trackList->headerItem();
-    int cols=header->columnCount();
-    for (int i=0;i<cols;i++) {
-    	QBrush brush=header->background(i);
-    	brush.setColor(QColor(189,175,156,150));
-    	header->setBackground(i,brush);
-    }
-    */
     QString Style="QTreeView::item {\n"
     		"border-right: 1px solid #b9b9b9;\n"
     		"border-bottom: 1px solid #b9b9b9;\n"
@@ -454,6 +442,11 @@ void Edit::SetupTrackList()
     		"color: #000000;\n"
     		"}\n"
     		"";
+    		*/
+    QString Style="QTreeView::item {\n"
+    		"margin: 0px;\n"
+    		"padding: 0px;\n"
+    		"}\n";
     //trackList->setStyleSheet(Style);
 
 }
@@ -657,25 +650,26 @@ void Edit::resizeEvent ( QResizeEvent * event )
  */
 {
 	int w=trackList->width();
+	int space=8;
 	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,60);
-	w-=64;
+	w-=(60+space);
 	trackList->setColumnWidth(TRACKLIST_COVER_ROW,64);
-	w-=68;
+	w-=(60+space);
 	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,60);
-	w-=64;
+	w-=(60+space);
 	trackList->setColumnWidth(TRACKLIST_BPM_ROW,35);
-	w-=39;
+	w-=(35+space);
 	trackList->setColumnWidth(TRACKLIST_KEY_ROW,40);
-	w-=44;
+	w-=(40+space);
 	trackList->setColumnWidth(TRACKLIST_ENERGYLEVEL_ROW,30);
-	w-=34;
+	w-=(30+space);
     trackList->setColumnWidth(TRACKLIST_YEAR,40);
-    w-=44;
+    w-=(40+space);
     trackList->setColumnWidth(TRACKLIST_RATING_ROW,85);
-	w-=89;
-	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100);
-	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100);
-	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100);
+	w-=(85+space);
+	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100-6);
+	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100-6);
+	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100-6);
 	QWidget::resizeEvent(event);
 }
 
