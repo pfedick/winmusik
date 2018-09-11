@@ -310,13 +310,30 @@ static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match, c
 
 static void fixIt(RegExpMatch &match)
 {
-	ppl6::CArray Matches;
+	//ppl6::CArray Matches;
 	fixArtistAndTitle("feat\\.",match, "feat.");
 	fixArtistAndTitle("featuring",match, "feat.");
 	fixArtistAndTitle("ft",match, "feat.");
 	fixArtistAndTitle("ft.",match, "feat.");
 	fixArtistAndTitle("pres\\.",match, "pres.");
 	fixArtistAndTitle("presents",match, "pres.");
+}
+
+static void fixHTML(ppl6::CString &text)
+{
+	text=ppl6::UnescapeHTMLTags(text);
+}
+
+static void fixHTML(RegExpMatch &match)
+{
+	fixHTML(match.Artist);
+	fixHTML(match.Title);
+	fixHTML(match.Version);
+	fixHTML(match.Genre);
+	fixHTML(match.Label);
+	fixHTML(match.Bpm);
+	fixHTML(match.Album);
+	fixHTML(match.ReleaseDate);
 }
 
 static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
@@ -350,6 +367,7 @@ bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &m
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
 		if ((*it).isHTML) {
 			if(testMatch(data.Html,match,*it)) {
+				fixHTML(match);
 				fixIt(match);
 				return true;
 			}
