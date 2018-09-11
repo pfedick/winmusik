@@ -53,6 +53,7 @@ RegExpPattern::RegExpPattern()
 	minutes=0;
 	seconds=0;
 	releasedate=0;
+	isHTML=false;
 }
 
 void RegExpPattern::copyFrom(const RegExpPattern &other)
@@ -70,6 +71,7 @@ void RegExpPattern::copyFrom(const RegExpPattern &other)
 	minutes=other.minutes;
 	seconds=other.seconds;
 	releasedate=other.releasedate;
+	isHTML=other.isHTML;
 }
 
 
@@ -110,6 +112,7 @@ void RegularExpressionCapture::load()
 		p.hours=settings.value("hours").toInt();
 		p.minutes=settings.value("minutes").toInt();
 		p.seconds=settings.value("seconds").toInt();
+		p.isHTML=settings.value("isHTML", false).toBool();
 		patterns.push_back(p);
 
 		settings.endGroup();
@@ -160,7 +163,7 @@ void RegularExpressionCapture::save()
 		settings.setValue("hours",(*it).hours);
 		settings.setValue("minutes",(*it).minutes);
 		settings.setValue("seconds",(*it).seconds);
-
+		settings.setValue("isHTML",(*it).isHTML);
 		settings.endGroup();
 
 		pos++;
@@ -342,7 +345,24 @@ bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &m
 	//if (matchAgainstScripts(data,match)) return true;
 	//if (this->match(data.Html,match)) return true;
 	if (matchBeatPortPro100(data.Html,match)) return true;
-	return this->match(data.PlainText,match);
+	if (patterns.empty()) return false;
+	std::vector<RegExpPattern>::const_iterator it;
+	for (it = patterns.begin() ; it != patterns.end(); ++it) {
+		if ((*it).isHTML) {
+			if(testMatch(data.Html,match,*it)) {
+				fixIt(match);
+				return true;
+			}
+		} else {
+			if(testMatch(data.PlainText,match,*it)) {
+				fixIt(match);
+				return true;
+			}
+		}
+	}
+	if (buildinMatch(data.PlainText,match)) return true;
+	return false;
+	//return this->match(data.PlainText,match);
 }
 
 bool RegularExpressionCapture::match(const ppl6::CString &data, RegExpMatch &match) const

@@ -34,6 +34,7 @@ class RegExpPattern
 		int minutes;
 		int seconds;
 		int releasedate;
+		bool isHTML;
 };
 
 class RegExpMatch

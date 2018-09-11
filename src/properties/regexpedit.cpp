@@ -70,6 +70,7 @@ void RegExpEdit::setPattern(const RegExpPattern &pat)
 	ui.capture_minutes->setValue(pat.minutes);
 	ui.capture_seconds->setValue(pat.seconds);
 	ui.capture_releasedate->setValue(pat.releasedate);
+	ui.isHtmlCheckBox->setChecked(pat.isHTML);
 	ui.name->setText(pat.Name);
 	ui.pattern->setText(pat.Pattern);
 }
@@ -90,6 +91,7 @@ RegExpPattern RegExpEdit::getPattern() const
 	pat.minutes=ui.capture_minutes->value();
 	pat.seconds=ui.capture_seconds->value();
 	pat.releasedate=ui.capture_releasedate->value();
+	pat.isHTML=ui.isHtmlCheckBox->isChecked();
 	return pat;
 }
 
