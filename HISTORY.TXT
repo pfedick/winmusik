@@ -9,6 +9,8 @@ Version 3.5.2
       - added Qt::MetaModifier (aka Windows key) when Click on Titlelist
         as alternative to Alt-Key to copy artist and title to clipboard  
       - RegExpCapture supports HTML
+    - Search:
+      - Genres can be excluded in search
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:

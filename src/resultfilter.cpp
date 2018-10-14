@@ -113,6 +113,7 @@ void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
 {
 	genresEnabled=enabled;
 	genreSet.clear();
+	unwantedGenreSet.clear();
 	// genres nach Komma splitten
 	ppl6::CArray gens(genres,",");
 
@@ -120,9 +121,18 @@ void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
 	CTableStore::IndexTree::const_iterator it;
 
 	for (int i=0;i<gens.Num();i++) {
-		wm_main->GenreStore.findWords(Result,gens[i]);
-		for (it=Result.begin();it!=Result.end();++it) {
-			genreSet.insert(*it);
+		Result.clear();
+		ppl6::CString g=gens[i];
+		g.Trim();
+		wm_main->GenreStore.findWords(Result,g);
+		if (g[0]=='!') {
+			for (it=Result.begin();it!=Result.end();++it) {
+				unwantedGenreSet.insert(*it);
+			}
+		} else {
+			for (it=Result.begin();it!=Result.end();++it) {
+				genreSet.insert(*it);
+			}
 		}
 	}
 	/*
@@ -200,7 +210,10 @@ bool ResultFilter::passMusicKey(const DataTitle &ti) const
 
 bool ResultFilter::passGenres(const DataTitle &ti) const
 {
-	std::set<ppluint32>::iterator it=genreSet.find(ti.GenreId);
+	std::set<ppluint32>::iterator it=unwantedGenreSet.find(ti.GenreId);
+	if (it!=unwantedGenreSet.end()) return false;
+	if (genreSet.size()==0) return true;
+	it=genreSet.find(ti.GenreId);
 	if (it!=genreSet.end()) return true;
 	return false;
 }

@@ -53,6 +53,7 @@ class ResultFilter
 		typedef std::set<ppluint32> IndexTree;
 
 		IndexTree genreSet;
+		IndexTree unwantedGenreSet;
 
 
 
