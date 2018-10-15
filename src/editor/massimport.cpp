@@ -295,7 +295,7 @@ void MassImport::checkDupes(TreeItem *item)
 	ppl6::CString Key, Version;
 	if (item->info.Ti.VersionId>0) Version=wm->GetVersionText(item->info.Ti.VersionId);
 	else Version=item->info.Version;
-	Key.Setf("%s %s ",item->info.Ti.Artist,item->info.Ti.Title);
+	Key.Setf("%s %s ",(const char*)item->info.Ti.Artist,(const char*)item->info.Ti.Title);
 	Key+=Version;
 	Key.LCase();
 
@@ -351,7 +351,7 @@ void MassImport::renderTrack(TreeItem *item)
 	}
 
 	// Interpret - Titel
-	Tmp.Setf("%s - %s",item->info.Ti.Artist,item->info.Ti.Title);
+	Tmp.Setf("%s - %s",(const char*)item->info.Ti.Artist,(const char*)item->info.Ti.Title);
 	item->setText(2,Tmp);
 
 	// Version

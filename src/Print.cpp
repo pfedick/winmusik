@@ -262,7 +262,9 @@ int CWmClient::PrintMP3Cover(QWidget *parent, int DeviceType, ppluint32 start, p
 				if (ti) {
 					Tmp.Setf("%u.",Track);
 					painter.drawText(x,y,Tmp);
-					Tmp.Setf("%s - %s ",(ti->Artist?ti->Artist:"?"),(ti->Title?ti->Title:"?"));
+					Tmp.Setf("%s - %s ",
+							(ti->Artist.NotEmpty()?(const char*)ti->Artist:"?"),
+							(ti->Title.NotEmpty()?(const char*)ti->Title:"?"));
 					bbox=painter.boundingRect ( Rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextSingleLine,Tmp);
 					painter.drawText((int)(x+4*w),y,Tmp);
 					Tmp.Setf("(%i.%02i ",(int)(ti->Length/60),ti->Length%60);
@@ -365,7 +367,7 @@ int CWmClient::PrintTracklistDisclaimer(QFont &Font, QPainter &painter)
 int CWmClient::PrintTracklistDeviceHeader(QFont &Font, QPainter &painter,int x, int y,DataDevice *device)
 {
 	ppl6::CString Tmp;
-	QRect bbox, Rect;
+	QRect Rect;
 	const QPaintDevice * paintdevice=painter.device();
 	QBrush NormalBrush(Qt::black,Qt::NoBrush);
 	QPen Pen;  // creates a default pen
@@ -550,7 +552,9 @@ int CWmClient::PrintTracklist(QWidget *parent, int DeviceType, ppluint32 start, 
 					if (ti) {
 						Tmp.Setf("%u.",t->Track);
 						painter.drawText(QRect(rx,ry,(int)(10*w),rowheight),Qt::AlignLeft,Tmp);
-						Tmp.Setf("%s - %s ",(ti->Artist?ti->Artist:"?"),(ti->Title?ti->Title:"?"));
+						Tmp.Setf("%s - %s ",
+								(ti->Artist.NotEmpty()?(const char*)ti->Artist:"?"),
+								(ti->Title.NotEmpty()?(const char*)ti->Title:"?"));
 						painter.drawText(QRect(rx+(int)(10*w),ry,(int)(80*w),rowheight),Qt::AlignLeft,Tmp);
 						painter.setPen(RedPen);
 						Tmp=GetVersionText(ti->VersionId);

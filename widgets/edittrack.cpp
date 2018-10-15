@@ -130,10 +130,8 @@ void EditTrack::setData(const TrackInfo &data)
 	ui.recordVersion->setText(Tmp);
 
 	// Interpret und Titel
-	if (Ti.Artist) ui.artist->setText(Ti.Artist);
-	else ui.artist->setText("");
-	if (Ti.Title) ui.title->setText(Ti.Title);
-	else ui.title->setText("");
+	ui.artist->setText(Ti.Artist);
+	ui.title->setText(Ti.Title);
 
 	// Version
 	ui.version->setText(data.Version);
@@ -185,8 +183,7 @@ void EditTrack::setData(const TrackInfo &data)
 	ui.recordDate->setDate(Date);
 
 	// Album
-	if (Ti.Album) ui.album->setText(Ti.Album);
-	else ui.album->setText("");
+	ui.album->setText(Ti.Album);
 
 	// Label
 	ui.labelName->setText(data.Label);
@@ -213,12 +210,10 @@ void EditTrack::setData(const TrackInfo &data)
 	ui.recordDeviceId->setText(Tmp);
 
 	// Bemerkung
-	if (Ti.Remarks) ui.remarks->setText(Ti.Remarks);
-	else ui.remarks->setText("");
+	ui.remarks->setText(Ti.Remarks);
 
 	// Tags
-	if (Ti.Tags) ui.tags->setText(Ti.Tags);
-	else ui.tags->setText("");
+	ui.tags->setText(Ti.Tags);
 
 
 	// Flags

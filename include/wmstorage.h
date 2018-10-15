@@ -166,11 +166,11 @@ class CTitleStore : public CStorageType
 class DataTitle : public CStorageItem
 {
 	public:
-		char*			Artist;
-		char*			Title;
-		char*			Remarks;
-		char*			Album;
-		char*			Tags;
+		ppl6::CString	Artist;
+		ppl6::CString	Title;
+		ppl6::CString	Remarks;
+		ppl6::CString	Album;
+		ppl6::CString	Tags;
 		ppl6::CBinary	CoverPreview;
 		ppluint32		TitleId;
 		ppluint32		DeviceId;
@@ -223,6 +223,7 @@ class DataTitle : public CStorageItem
 		int Import(ppl6::CBinary *bin, int version);
 
 		DataTitle & operator=(const DataTitle &other);
+		bool operator==(const DataTitle &other) const;
 
 		static ppl6::CString keyName(int id, MusicKeyType type);
 		static int keyId(const ppl6::CString &name);

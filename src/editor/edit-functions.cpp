@@ -218,10 +218,8 @@ void Edit::FillEditFields()
 	ui.recordVersion->setText(Tmp);
 
 	// Interpret und Titel
-	if (Ti.Artist) ui.artist->setText(Ti.Artist);
-	else ui.artist->setText("");
-	if (Ti.Title) ui.title->setText(Ti.Title);
-	else ui.title->setText("");
+	ui.artist->setText(Ti.Artist);
+	ui.title->setText(Ti.Title);
 
 	// Version
 	if (Ti.VersionId) Tmp.Setf("%u",Ti.VersionId); else Tmp="";
@@ -273,8 +271,7 @@ void Edit::FillEditFields()
 
 
 	// Album
-	if (Ti.Album) ui.album->setText(Ti.Album);
-	else ui.album->setText("");
+	ui.album->setText(Ti.Album);
 
 	// Label
 	if (Ti.LabelId) Tmp.Setf("%u",Ti.LabelId); else Tmp="";
@@ -292,12 +289,10 @@ void Edit::FillEditFields()
 	ui.recordDevice->setText(wm->GetRecordDeviceText(Ti.RecordDeviceId));
 
 	// Bemerkung
-	if (Ti.Remarks) ui.remarks->setText(Ti.Remarks);
-	else ui.remarks->setText("");
+	ui.remarks->setText(Ti.Remarks);
 
 	// Tags
-	if (Ti.Tags) ui.tags->setText(Ti.Tags);
-	else ui.tags->setText("");
+	ui.tags->setText(Ti.Tags);
 
 
 	// Flags
@@ -396,15 +391,15 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
 	//QString QTmp;
 	ppl6::CString Text,Tmp;
 	ppl6::CString Unknown=tr("unknown");
-	const char *unknown=Unknown;
+	const char *unknown=(const char*)Unknown;
 	DataVersion *version;
 	DataGenre *genre;
 	QBrush Brush(Qt::SolidPattern);
 	Brush.setColor("red");
 
 	Text.Setf("%s - %s",
-			(title->Artist?title->Artist:unknown),
-			(title->Title?title->Title:unknown));
+			(title->Artist.NotEmpty()?(const char*)title->Artist:unknown),
+			(title->Title.NotEmpty()?(const char*)title->Title:unknown));
 
 	item->setText(TRACKLIST_NAME_ROW,Text);
 	// Version holen
@@ -743,7 +738,7 @@ void Edit::UpdateCompleters()
 						} else TmpArtists.Add(item);
 					}
 					*/
-					if (title->Title) {
+					if (title->Title.NotEmpty()) {
 						item=new CStringCounterItem;
 						item->Name=title->Title;
 						item->Count=1;
@@ -753,7 +748,7 @@ void Edit::UpdateCompleters()
 							delete item;
 						} else TmpTitles.Add(item);
 					}
-					if (title->Album!=NULL && strlen(title->Album)>0) {
+					if (title->Album.NotEmpty()) {
 						item=new CStringCounterItem;
 						item->Name=title->Album;
 						item->Count=1;

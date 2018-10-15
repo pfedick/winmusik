@@ -414,7 +414,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 	//QTreeWidget::dragMoveEvent(e);
 }
 
-bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction)
+bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int , const QMimeData *data, Qt::DropAction)
 {
 	//printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
 	ppl6::CString Tmp;

@@ -11,6 +11,9 @@ Version 3.5.2
       - RegExpCapture supports HTML
     - Search:
       - Genres can be excluded in search
+    - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
+      now implemented as ppl6::CString-object instead of char *. Also added
+      a compare operator ==
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:

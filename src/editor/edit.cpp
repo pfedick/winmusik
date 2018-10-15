@@ -2195,9 +2195,9 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
 		if (key&(Qt::AltModifier|Qt::MetaModifier)) {
-			Text.Setf("%s %s",t->Artist,t->Title);
+			Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
 		} else {
-			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",t->Artist,t->Title,
+			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
 					wm->GetVersionText(t->VersionId), t->Length/60,t->Length%60, wm->GetGenreText(t->GenreId));
 			Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
 					t->DeviceId,(t->Page+'A'-1),t->Track);

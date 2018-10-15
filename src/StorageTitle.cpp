@@ -292,11 +292,6 @@ DataTitle::DataTitle()
  * Konstruktor der Klasse. Er setzt alle Variablen auf 0.
  */
 {
-	Artist=NULL;
-	Title=NULL;
-	Remarks=NULL;
-	Album=NULL;
-	Tags=NULL;
 	Clear();
 	formatversion=5;
 }
@@ -304,11 +299,6 @@ DataTitle::DataTitle()
 DataTitle::DataTitle(const DataTitle &other)
 : CStorageItem(other)
 {
-	Artist=NULL;
-	Title=NULL;
-	Remarks=NULL;
-	Album=NULL;
-	Tags=NULL;
 	formatversion=5;
 	CopyFrom(&other);
 }
@@ -320,11 +310,6 @@ DataTitle::~DataTitle()
  * wieder frei.
  */
 {
-	if (Artist) free(Artist);
-	if (Title) free(Title);
-	if (Remarks) free(Remarks);
-	if (Album) free(Album);
-	if (Tags) free(Tags);
 }
 
 #ifdef OWNHEAP
@@ -370,6 +355,40 @@ DataTitle & DataTitle::operator=(const DataTitle &other)
 	return *this;
 }
 
+bool DataTitle::operator==(const DataTitle &other) const
+{
+	if (Artist!=other.Artist) return false;
+	if (Title!=other.Title) return false;
+	if (Remarks!=other.Remarks) return false;
+	if (Album!=other.Album) return false;
+	if (Tags!=other.Tags) return false;
+	if (CoverPreview!=other.CoverPreview) return false;
+	if (TitleId!=other.TitleId) return false;
+	if (DeviceId!=other.DeviceId) return false;
+	if (Length!=other.Length) return false;
+	if (VersionId!=other.VersionId) return false;
+	if (LabelId!=other.LabelId) return false;
+	if (BPM!=other.BPM) return false;
+	if (RecordDate!=other.RecordDate) return false;
+	if (ReleaseDate!=other.ReleaseDate) return false;
+	if (ImportData!=other.ImportData) return false;
+	if (Size!=other.Size) return false;
+	if (RecordSourceId!=other.RecordSourceId) return false;
+	if (Track!=other.Track) return false;
+	if (Bitrate!=other.Bitrate) return false;
+	if (GenreId!=other.GenreId) return false;
+	if (RecordDeviceId!=other.RecordDeviceId) return false;
+	if (DeviceType!=other.DeviceType) return false;
+	if (Page!=other.Page) return false;
+	if (Channels!=other.Channels) return false;
+	if (Quality!=other.Quality) return false;
+	if (Rating!=other.Rating) return false;
+	if (Flags!=other.Flags) return false;
+	if (Key!=other.Key) return false;
+	if (EnergyLevel!=other.EnergyLevel) return false;
+	return true;
+}
+
 void DataTitle::Clear()
 /*!\brief Inhalt der Klasse löschen
  *
@@ -381,16 +400,11 @@ void DataTitle::Clear()
  * werden, wodurch eine Kopie angefertigt wird.
  */
 {
-	if (Artist) free(Artist);
-	if (Title) free(Title);
-	if (Remarks) free(Remarks);
-	if (Album) free(Album);
-	if (Tags) free(Tags);
-	Artist=NULL;
-	Title=NULL;
-	Remarks=NULL;
-	Album=NULL;
-	Tags=NULL;
+	Artist.Clear();
+	Title.Clear();
+	Remarks.Clear();
+	Album.Clear();
+	Tags.Clear();
 	TitleId=0;
 	DeviceId=0;
 	Length=0;
@@ -442,11 +456,11 @@ int DataTitle::CopyFrom(const DataTitle *t)
 		return 0;
 	}
 	Clear();
-	if (t->Artist) Artist=strdup(t->Artist);
-	if (t->Title) Title=strdup(t->Title);
-	if (t->Remarks) Remarks=strdup(t->Remarks);
-	if (t->Album) Album=strdup(t->Album);
-	if (t->Tags) Tags=strdup(t->Tags);
+	Artist=t->Artist;
+	Title=t->Title;
+	Remarks=t->Remarks;
+	Album=t->Album;
+	Tags=t->Tags;
 	TitleId=t->TitleId;
 	DeviceId=t->DeviceId;
 	Length=t->Length;
@@ -484,9 +498,7 @@ void DataTitle::SetTitle(const char *title)
  * \returns Liefert 1 zurück, wenn der Titel erfolgreich gesetzt werden konnte.
  */
 {
-	if (Title) free(Title);
-	Title=NULL;
-	if (title!=NULL && strlen(title)>0) Title=strdup(title);
+	Title.Set(title);
 }
 
 void DataTitle::SetArtist(const char *artist)
@@ -498,9 +510,7 @@ void DataTitle::SetArtist(const char *artist)
  * \returns Liefert 1 zurück, wenn der Interpret erfolgreich gesetzt werden konnte.
  */
 {
-	if (Artist) free(Artist);
-	Artist=NULL;
-	if (artist!=NULL && strlen(artist)>0) Artist=strdup(artist);
+	Artist.Set(artist);
 }
 
 void DataTitle::SetRemarks(const char *remarks)
@@ -513,9 +523,7 @@ void DataTitle::SetRemarks(const char *remarks)
  */
 
 {
-	if (Remarks) free(Remarks);
-	Remarks=NULL;
-	if (remarks!=NULL && strlen(remarks)>0) Remarks=strdup(remarks);
+	Remarks.Set(remarks);
 }
 
 void DataTitle::SetTags(const char *tags)
@@ -528,9 +536,7 @@ void DataTitle::SetTags(const char *tags)
  */
 
 {
-	if (Tags) free(Tags);
-	Tags=NULL;
-	if (tags!=NULL && strlen(tags)>0) Tags=strdup(tags);
+	Tags.Set(tags);
 }
 
 
@@ -544,9 +550,7 @@ void DataTitle::SetAlbum(const char *album)
  * \returns Liefert 1 zurück, wenn das Album erfolgreich gesetzt werden konnte.
  */
 {
-	if (Album) free(Album);
-	Album=NULL;
-	if (album!=NULL && strlen(album)>0) Album=strdup(album);
+	Album.Set(album);
 }
 
 void DataTitle::SetTitle(const ppl6::CString &title)
@@ -558,9 +562,7 @@ void DataTitle::SetTitle(const ppl6::CString &title)
  * \returns Liefert 1 zurück, wenn der Titel erfolgreich gesetzt werden konnte.
  */
 {
-	if (Title) free(Title);
-	Title=NULL;
-	if (title.NotEmpty()) Title=strdup((const char*)title);
+	Title.Set(title);
 }
 
 void DataTitle::SetArtist(const ppl6::CString &artist)
@@ -572,9 +574,7 @@ void DataTitle::SetArtist(const ppl6::CString &artist)
  * \returns Liefert 1 zurück, wenn der Interpret erfolgreich gesetzt werden konnte.
  */
 {
-	if (Artist) free(Artist);
-	Artist=NULL;
-	if (artist.NotEmpty()) Artist=strdup((const char*)artist);
+	Artist.Set(artist);
 }
 
 void DataTitle::SetRemarks(const ppl6::CString &remarks)
@@ -587,9 +587,7 @@ void DataTitle::SetRemarks(const ppl6::CString &remarks)
  */
 
 {
-	if (Remarks) free(Remarks);
-	Remarks=NULL;
-	if (remarks.NotEmpty()) Remarks=strdup((const char*)remarks);
+	Remarks.Set(remarks);
 }
 
 void DataTitle::SetTags(const ppl6::CString &tags)
@@ -602,9 +600,7 @@ void DataTitle::SetTags(const ppl6::CString &tags)
  */
 
 {
-	if (Tags) free(Tags);
-	Tags=NULL;
-	if (tags.NotEmpty()) Tags=strdup((const char*)tags);
+	Tags.Set(tags);
 }
 
 
@@ -744,9 +740,7 @@ void DataTitle::SetAlbum(const ppl6::CString &album)
  * \returns Liefert 1 zurück, wenn das Album erfolgreich gesetzt werden konnte.
  */
 {
-	if (Album) free(Album);
-	Album=NULL;
-	if (album.NotEmpty()) Album=strdup((const char*)album);
+	Album.Set(album);
 }
 
 ppl6::CBinary *DataTitle::Export()
@@ -772,11 +766,11 @@ ppl6::CBinary *DataTitle::Export()
 	int lenTags=0;
 	formatversion=5;
 
-	if (Artist) lenArtist=strlen(Artist);
-	if (Title) lenTitle=strlen(Title);
-	if (Remarks) lenRemarks=strlen(Remarks);
-	if (Tags) lenTags=strlen(Tags);
-	if (Album) lenAlbum=strlen(Album);
+	lenArtist=Artist.Size();
+	lenTitle=Title.Size();
+	lenRemarks=Remarks.Size();
+	lenTags=Tags.Size();
+	lenAlbum=Album.Size();
 	size=size+lenArtist+lenTitle+lenRemarks+lenAlbum+lenTags+CoverPreview.Size();
 	//size=size+lenArtist+lenTitle+lenRemarks+lenAlbum;
 	char *a=(char*)malloc(size);
@@ -809,19 +803,19 @@ ppl6::CBinary *DataTitle::Export()
 	ppl6::Poke8(a+57,EnergyLevel);
 	p=58;
 	ppl6::Poke16(a+p,lenArtist);
-	if (lenArtist) strncpy(a+p+2,Artist,lenArtist);
+	if (lenArtist) strncpy(a+p+2,(const char*)Artist,lenArtist);
 	p+=lenArtist+2;
 	ppl6::Poke16(a+p,lenTitle);
-	if (lenTitle) strncpy(a+p+2,Title,lenTitle);
+	if (lenTitle) strncpy(a+p+2,(const char*)Title,lenTitle);
 	p+=lenTitle+2;
 	ppl6::Poke16(a+p,lenRemarks);
-	if (lenRemarks) strncpy(a+p+2,Remarks,lenRemarks);
+	if (lenRemarks) strncpy(a+p+2,(const char*)Remarks,lenRemarks);
 	p+=lenRemarks+2;
 	ppl6::Poke16(a+p,lenAlbum);
-	if (lenAlbum) strncpy(a+p+2,Album,lenAlbum);
+	if (lenAlbum) strncpy(a+p+2,(const char*)Album,lenAlbum);
 	p+=lenAlbum+2;
 	ppl6::Poke16(a+p,lenTags);
-	if (lenTags) strncpy(a+p+2,Tags,lenTags);
+	if (lenTags) strncpy(a+p+2,(const char*)Tags,lenTags);
 	p+=lenTags+2;
 
 	ppl6::Poke16(a+p,CoverPreview.Size());
@@ -938,20 +932,20 @@ int DataTitle::Import(ppl6::CBinary *bin, int version)
 		p=58;
 	}
 	len=ppl6::Peek16(a+p);
-	if (len) Artist=ppl6::strndup(a+p+2,len);
+	if (len) Artist.Set(a+p+2,len);
 	p+=len+2;
 	len=ppl6::Peek16(a+p);
-	if (len) Title=ppl6::strndup(a+p+2,len);
+	if (len) Title.Set(a+p+2,len);
 	p+=len+2;
 	len=ppl6::Peek16(a+p);
-	if (len) Remarks=ppl6::strndup(a+p+2,len);
+	if (len) Remarks.Set(a+p+2,len);
 	p+=len+2;
 	len=ppl6::Peek16(a+p);
-	if (len) Album=ppl6::strndup(a+p+2,len);
+	if (len) Album.Set(a+p+2,len);
 	p+=len+2;
 	if (version>=3) {
 		len=ppl6::Peek16(a+p);
-		if (len) Tags=ppl6::strndup(a+p+2,len);
+		if (len) Tags.Set(a+p+2,len);
 		p+=len+2;
 	}
 	if (version>=2) {
@@ -1070,7 +1064,7 @@ int CTitleStore::Save(DataTitle *t)
 		delete bin;
 	}
 	CStringCounterItem *found, *item;
-	if (t->Artist!=NULL) {
+	if (t->Artist.NotEmpty()) {
 		item=new CStringCounterItem;
 		item->Name=t->Artist;
 		item->Count=1;

@@ -1125,10 +1125,10 @@ ppl6::CString CWmClient::NormalizeFilename(ppluint8 DeviceType, ppluint32 Device
 	if (Filename.IsEmpty()) return Filename;
 	ppl6::CString Tmp;
 	Tmp.Setf("%03u-",Track);
-	if (Ti.Artist) Tmp+=Ti.Artist;
+	if (Ti.Artist.NotEmpty()) Tmp+=Ti.Artist;
 	else Tmp+="unknown";
 	Tmp+=" - ";
-	if (Ti.Title) Tmp+=Ti.Title;
+	if (Ti.Title.NotEmpty()) Tmp+=Ti.Title;
 	else Tmp+="unknown";
 	// Version holen
 	ppl6::CString Version=GetVersionText(Ti.VersionId);
@@ -1184,10 +1184,10 @@ int CWmClient::SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Pag
 	ppl6::CString comment,version;
 	version=GetVersionText(Ti.VersionId);
 
-	Job.Set("artist",Ti.Artist);
-	if (ppl6::LCase(version)!="single")	Job.Setf("title","%s (%s)",Ti.Title,(const char*)version);
-	else Job.Setf("title","%s",Ti.Title);
-	Job.Set("album",Ti.Album);
+	Job.Set("artist",(const char*)Ti.Artist);
+	if (ppl6::LCase(version)!="single")	Job.Setf("title","%s (%s)",(const char*)Ti.Title,(const char*)version);
+	else Job.Setf("title","%s",(const char*)Ti.Title);
+	Job.Set("album",(const char*)Ti.Album);
 	comment=Ti.Remarks;
 	//if (comment.Len()>0) comment+=" - ";
 	//comment+=version;
@@ -1218,7 +1218,7 @@ int CWmClient::SaveOriginalAudioInfo(ppl6::CString &File, DataOimp &oimp)
 	}
 	// Alte Daten löschen
 	oimp.Filename=ppl6::GetFilename(File);
-	memset(&oimp.ID3v1,0,sizeof(ID3TAG));
+	oimp.ID3v1.Clear();
 	oimp.ID3v2.Clear();
 	// ID3v1-Tag einlesen falls vorhanden
 	const char *buffer=ff.Map(ff.Lof()-128,128);
@@ -1333,10 +1333,10 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 			Ti=GetTitle(track->TitleId);
 			if (Ti) {
 				count++;
-				if (Ti->Artist) Tmp=Ti->Artist;
+				if (Ti->Artist.NotEmpty()) Tmp=Ti->Artist;
 				else Tmp="unknown";
 				Tmp+=" - ";
-				if (Ti->Title) Tmp+=Ti->Title;
+				if (Ti->Title.NotEmpty()) Tmp+=Ti->Title;
 				else Tmp+="unknown";
 				Tmp+=" (";
 				// Version holen
@@ -1361,13 +1361,13 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 				//Tmp=ppl6::UrlEncode(FilePath);
 				//Tmp.Replace("+","%20");
 				xspf.Putsf("     <location>file://%s</location>\n",(const char*)ppl6::EscapeHTMLTags(FilePath));
-				if (Ti->Artist) xspf.Putsf("     <creator>%s</creator>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Artist));
-				if (Ti->Title) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
+				if (Ti->Artist.NotEmpty()) xspf.Putsf("     <creator>%s</creator>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Artist));
+				if (Ti->Title.NotEmpty()) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
 						(const char*)ppl6::EscapeHTMLTags(Ti->Artist),
 						(const char*)ppl6::EscapeHTMLTags(Ti->Title),
 						(const char*)ppl6::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
 				//xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
-				if (Ti->Album) xspf.Putsf("     <album>%s</album>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Album));
+				if (Ti->Album.NotEmpty()) xspf.Putsf("     <album>%s</album>\n",(const char*)ppl6::EscapeHTMLTags(Ti->Album));
 				xspf.Putsf("     <duration>%u</duration>\n",Ti->Length*1000);  // Bringt VLC zum Absturz
 				xspf.Putsf("  </track>\n");
 
