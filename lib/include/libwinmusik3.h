@@ -106,6 +106,8 @@ class CDataBase
 		CDataBase();
 		~CDataBase();
 		void clear();
+		static void update(const ppl7::String &oldfile, const ppl7::String &newfile);
+
 };
 
 class CStorage
@@ -119,6 +121,7 @@ class CStorage
 
 
 };
+
 
 }
 }

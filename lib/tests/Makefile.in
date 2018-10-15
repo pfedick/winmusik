@@ -1,13 +1,13 @@
 GTEST_DIR	= @GTEST_PREFIX@
 EXTRA_CFLAGS = 
-INCLUDE	= -I. -I$(GTEST_DIR)/include
+INCLUDE	= -I. -I../include -I$(GTEST_DIR)/include
 CFLAGS	= -ggdb -Wall  $(INCLUDE) @LIBPPL7_CFLAGS@ $(EXTRA_CFLAGS)
 LIBS	= -L../compile -lwinmusik3   @LIBPPL7_RELEASE_LIBS@ -lstdc++
 LIBS_COVERAGE	= -L../compile -lwinmusik3   @LIBPPL7_RELEASE_LIBS@  -lgcov -lstdc++
 PROGNAME = testsuite
 
 
-OBJECTS = compile/main.o compile/storage.o
+OBJECTS = compile/main.o compile/storage.o compile/database.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -56,4 +56,7 @@ compile/storage.o: src/storage.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/storage.o -c src/storage.cpp
 
+compile/database.o: src/database.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/database.o -c src/database.cpp
 	

@@ -1,6 +1,6 @@
-CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0  -I/usr/local/include  -I/usr/local/include -I/usr/local/include  -D_THREAD_SAFE -pthread -I/home/patrick/include -Iinclude 
-LIBS = -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lstdc++
-LIBDEP	:= $(shell /home/patrick/lib/libppl7.a)
+CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0  -no-pie  -I/usr/local/include  -pthread -I/home/patrickf/include -Iinclude 
+LIBS = -no-pie   -L/home/patrickf/lib -lppl7 -lm -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -pthread -L/usr/lib -lz -lbz2 -lpcre -L/usr/lib -lmcrypt -lmhash -ljpeg -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -L/home/patrickf/lib -lpng -lz -lm -L /usr/lib -ltiff -llzma -L/home/patrickf/lib -Wl,-rpath,/home/patrickf/lib -Wl,--enable-new-dtags -lSDL2 -Wl,--no-undefined -lm -ldl -lsndio -lpthread -lrt -lfreetype -lcurl -L/usr/local/lib -lmicrohttpd -lidn -L/usr/lib -lssl -lcrypto -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -latomic -ldl -L/usr/lib/x86_64-linux-gnu -lpq -L/usr/lib -lsqlite3 -lmpg123 -lmp3lame -lm -lstdc++  -lstdc++
+LIBDEP	:= $(shell /home/patrickf/lib/libppl7.a)
 
 OBJS =		compile/object_title.o \
 			compile/CStorage.o \

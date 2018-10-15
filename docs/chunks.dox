@@ -11,15 +11,6 @@ Ein Titel Chunk besteht aus einem 60-Byte langem Datenblock mit verschiedenen In
 gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
 ist folgendermassen: 
 
-\code
-Byte 0:  Chunkname: TITL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
-
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -133,15 +124,6 @@ bzw. \ref WM3File_Chunk_OIMP)
 Ein Titel Chunk besteht aus einem 66-Byte langem Datenblock mit verschiedenen Informationen,
 gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
 ist folgendermassen: 
-
-\code
-Byte 0:  Chunkname: TITL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
@@ -266,15 +248,6 @@ bzw. \ref WM3File_Chunk_OIMP)
 Ein Titel Chunk besteht aus einem 66-Byte langem Datenblock mit verschiedenen Informationen,
 gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
 ist folgendermassen: 
-
-\code
-Byte 0:  Chunkname: TITL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
@@ -404,15 +377,6 @@ bzw. \ref WM3File_Chunk_OIMP)
 Ein Titel Chunk besteht aus einem 67-Byte langem Datenblock mit verschiedenen Informationen,
 gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
 ist folgendermassen: 
-
-\code
-Byte 0:  Chunkname: TITL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
@@ -569,15 +533,6 @@ bzw. \ref WM3File_Chunk_OIMP)
 Ein Titel Chunk besteht aus einem 68-Byte langem Datenblock mit verschiedenen Informationen,
 gefolgt von einem variablen Block, der Interpret, Titel und Bemerkung enthält. Sein Aufbau
 ist folgendermassen: 
-
-\code
-Byte 0:  Chunkname: TITL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
@@ -740,14 +695,6 @@ bzw. \ref WM3File_Chunk_OIMP)
 
 /*!\page WM3File_Chunk_VERS Chunk: VERS - Versionen
 
-\code
-Byte 0:  Chunkname: VERS                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -763,14 +710,6 @@ Byte 17: Nutzdaten des Chunks
 
 /*!\page WM3File_Chunk_TABL Allgemeines Format für Tabellendatensätze
 
-\code
-Byte 0:  Chunkname: xxxx                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -785,15 +724,6 @@ Byte 17: Nutzdaten des Chunks
 */
 
 /*!\page WM3File_Chunk_DEVI Chunk: DEVI - Tonträger
-<b>Chunk-Header:</b>
-\code
-Byte 0:  Chunkname: DEVI                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
@@ -843,14 +773,6 @@ Dem Tonträger können pro Seite bis zu 65535 \ref WM3File_Chunk_TRAK "Tracks" z
 */
 
 /*!\page WM3File_Chunk_TRAK Chunk: TRAK - Tracks
-\code
-Byte 0:  Chunkname: TRAK                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -870,14 +792,6 @@ Byte 17: Nutzdaten des Chunks
 */
 
 /*!\page WM3File_Chunk_LABL Chunk: LABL - Plattenlables
-\code
-Byte 0:  Chunkname: LABL                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -893,14 +807,6 @@ Byte 17: Nutzdaten des Chunks
 */
 
 /*!\page WM3File_Chunk_RSRC Chunk: RSRC - Aufnahmequellen
-\code
-Byte 0:  Chunkname: RSRC                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -917,14 +823,6 @@ Byte 17: Nutzdaten des Chunks
 
 
 /*!\page WM3File_Chunk_GENR Chunk: GENR - Musik Genres
-\code
-Byte 0:  Chunkname: GENR                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -939,14 +837,6 @@ Byte 17: Nutzdaten des Chunks
 */
 
 /*!\page WM3File_Chunk_RDEV Chunk: RDEV - Aufnahmegeräte
-\code
-Byte 0:  Chunkname: RDEV                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -962,14 +852,6 @@ Byte 17: Nutzdaten des Chunks
 */
 
 /*!\page WM3File_Chunk_PCHS Chunk: PCHS - Kaufquelle
-\code
-Byte 0:  Chunkname: PCHS                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -992,26 +874,10 @@ kann zum Speichern eines neuen Datensatzes verwendet werden.
 
 Der FREE-Chunk enthält außer dem Header keine weiteren Nutzdaten.
 
-\code
-Byte 0:  Chunkname: FREE                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung: 0              4 Byte
-Byte 12: Versionsnummer: 0                              4 Byte
-Byte 16: Datensatz-Format: 0							1 Byte 
-\endcode
-
 
 */
 
 /*!\page WM3File_Chunk_SHRT Chunk: SHRT - Interpreten Abkürzungen
-\code
-Byte 0:  Chunkname: SHRT                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
 <b>Nutzdaten:</b>
 <table border="1" cellspacing="0" cellpadding="3" style="background: #f0f0f0;">
 <tr style="background: #d0d0d0" align="left">
@@ -1031,14 +897,7 @@ Byte 17: Nutzdaten des Chunks
 
 
 /*!\page WM3File_Chunk_OIMP Chunk: OIMP - Original Import Daten
-\code
-Byte 0:  Chunkname: OIMP                                4 Byte
-Byte 4:  Größe des Chunks einschließlich 17-Byte Header 4 Byte
-Byte 8:  Timestamp der letzten Änderung                 4 Byte
-Byte 12: Versionsnummer                                 4 Byte
-Byte 16: Datensatz-Format								1 Byte 
-Byte 17: Nutzdaten des Chunks
-\endcode
+
 <b>Nutzdaten:</b>
 
 Die unkomprimierten Daten haben folgendes Format:

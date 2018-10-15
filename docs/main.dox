@@ -26,6 +26,7 @@ Diese Anleitung enthält die Dokumentation des Quellcodes, ist zum jetzigen Zeit
 
 - \subpage WM3Install
 - \ref WM3File
+- \ref WM31File
 - \ref WM3File_Devices
 - \ref WM3DataTypes
 - \ref WM3StorageClasses
