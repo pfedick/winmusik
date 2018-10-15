@@ -362,7 +362,7 @@ bool DataTitle::operator==(const DataTitle &other) const
 	if (Remarks!=other.Remarks) return false;
 	if (Album!=other.Album) return false;
 	if (Tags!=other.Tags) return false;
-	if (CoverPreview!=other.CoverPreview) return false;
+	if (CoverPreview!=other.CoverPreview) { printf ("changes: CoverPreview \n"); return false; }
 	if (TitleId!=other.TitleId) return false;
 	if (DeviceId!=other.DeviceId) return false;
 	if (Length!=other.Length) return false;

@@ -660,28 +660,36 @@ void Edit::SaveEditorTrack()
 
 bool Edit::SaveTrack(DataTitle &Ti)
 {
-	// Titel speichern
-	if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
-	if (!wm->TitleStore.Put(&Ti)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-		ui.artist->setFocus();
-		if (Ti.TitleId>0) wm->Hashes.AddTitle(Ti.TitleId);
-		return false;
+	bool weHaveChanges=true;
+	if (Ti.TitleId>0) {
+		DataTitle *OldTi=wm->TitleStore.Get(Ti.TitleId);
+		if (OldTi!=NULL && *OldTi==Ti) weHaveChanges=false;
 	}
-	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
-	// sondern den Pointer innerhalb der Datenbank
-	DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
-	if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
-	// Track speichern
-	Track.TitleId=Ti.TitleId;
-	if (!TrackList->Put(&Track)) {
-		wm->RaiseError(this,tr("Could not save Track in TrackList"));
-		ui.artist->setFocus();
-		return false;
+	if (weHaveChanges) {
+		printf ("changes detected\n");
+		// Titel speichern
+		if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
+		if (!wm->TitleStore.Put(&Ti)) {
+			wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+			ui.artist->setFocus();
+			if (Ti.TitleId>0) wm->Hashes.AddTitle(Ti.TitleId);
+			return false;
+		}
+		// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
+		// sondern den Pointer innerhalb der Datenbank
+		DataTitle *dt=wm->TitleStore.Get(Ti.TitleId);
+		if (dt) wm->Hashes.AddTitle(Ti.TitleId,dt);
+		// Track speichern
+		Track.TitleId=Ti.TitleId;
+		if (!TrackList->Put(&Track)) {
+			wm->RaiseError(this,tr("Could not save Track in TrackList"));
+			ui.artist->setFocus();
+			return false;
+		}
+		// Tonträger aktualisieren
+		wm->DeviceStore.Update(DeviceType,DeviceId);
+		UpdateDevice();
 	}
-	// Tonträger aktualisieren
-	wm->DeviceStore.Update(DeviceType,DeviceId);
-	UpdateDevice();
 
 	// ID3-Tags speichern, sofern gewünscht und eine Datei vorhanden ist
 	if (wm_main->conf.bWriteID3Tags==true) {

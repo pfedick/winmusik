@@ -9,6 +9,8 @@ Version 3.5.2
       - added Qt::MetaModifier (aka Windows key) when Click on Titlelist
         as alternative to Alt-Key to copy artist and title to clipboard  
       - RegExpCapture supports HTML
+      - Reduced write operations on database when saving a track without any
+        changes
     - Search:
       - Genres can be excluded in search
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
