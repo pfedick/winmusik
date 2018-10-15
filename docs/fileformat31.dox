@@ -37,9 +37,10 @@ Byte 32: WriteCounter                                  8 Byte
 Im Unterschied zum reinen PFP3-File sind hier noch 4 Byte für
 den Timestamp der letzten Änderung hinzugekommen, 4 Byte für
 die Position des letzten Chunks (ENDF) innerhalb der Datei,
-sowie ein 64-Byte Counter, der bei jedem Schreibzugriff hochgezählt wird.
+sowie ein 8-Byte Counter, der bei jedem Schreibzugriff hochgezählt wird.
 
 \par Schreibzugriff
+
 Soll ein vorhandener Datensatz aktualisiert werden, prüft WinMusik zunächst,
 ob der WriteCounter im Header noch mit dem der im Speicher geladenen Datenbank
 übereinstimmt. Ist dies nicht der Fall, wurde die Datenbank zwischenzeitlich durch eine
