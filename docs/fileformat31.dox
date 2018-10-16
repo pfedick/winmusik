@@ -5,7 +5,7 @@ Die Dateien von WinMusik basieren auf dem PFP-File Format Version 3 mit den
 verkürzten 2-Byte Chunk-Headern und weiteren Informationen im Dateiheader.
 
 Der Aufbau der Datei ist folgendermassen:
-- 40 Byte langer Header
+- 36 Byte langer Header
 - Chunks
 
 Die WinMusik-Dateien enthalten keinen Komprimierungsheader.
@@ -18,7 +18,7 @@ Der Header einer Version 3 Datei sieht so aus:
 \code
 Byte  0: String "PFP-File"                             8 Bytes
 Byte  8: PFP-File-Version (3)                          1 Byte
-Byte  9: Länge des PFP-Header (40)                     1 Byte
+Byte  9: Länge des PFP-Header (36)                     1 Byte
 Byte 10: File-ID, 4 Byte-String "PFWM"                 4 Byte
 Byte 14: Unterversion (1)                              1 Byte
 Byte 15: Hauptversion (3)                              1 Byte
@@ -31,22 +31,23 @@ Byte 18: reserviert (0)                                2 Byte
 Byte 20: Timestamp der Erstellung (UTC)                4 Byte
 Byte 24: Timestamp der letzten Änderung (UTC)          4 Byte
 Byte 28: Position des letzten Chunks                   4 Byte
-Byte 32: WriteCounter                                  8 Byte
+Byte 32: Transaction-ID / WriteCounter                 4 Byte
 \endcode
 
 Im Unterschied zum reinen PFP3-File sind hier noch 4 Byte für
 den Timestamp der letzten Änderung hinzugekommen, 4 Byte für
 die Position des letzten Chunks (ENDF) innerhalb der Datei,
-sowie ein 8-Byte Counter, der bei jedem Schreibzugriff hochgezählt wird.
+sowie ein 4-Byte Counter, der bei jedem Schreibzugriff hochgezählt wird.
 
 \par Schreibzugriff
 
 Soll ein vorhandener Datensatz aktualisiert werden, prüft WinMusik zunächst,
 ob der WriteCounter im Header noch mit dem der im Speicher geladenen Datenbank
-übereinstimmt. Ist dies nicht der Fall, wurde die Datenbank zwischenzeitlich durch eine
-andere Instanz von WinMusik verändert und darf nicht überschrieben werden. Bei
-identischem Wert wird der Counter sowohl im Speicher als auch in der Datei um
-1 erhöht. Bei einer leeren Datenbank erhält der Write-Counter initial den Wert 0.
+übereinstimmt. Ist dies nicht der Fall, wurde die Datenbank zwischenzeitlich
+durch eine andere Instanz von WinMusik verändert und darf nicht überschrieben
+werden. Bei identischem Wert wird der Counter sowohl im Speicher als auch in
+der Datei um 1 erhöht. Bei einer leeren Datenbank erhält der Write-Counter
+initial den Wert 0.
 
 Anschließend wird der Datensatz gespeichert. Dazu wird zunächst geprüft, ob der neue
 Datensatz in den alten hineinpasst. Dies ist der Fall, wenn er entweder gleichgroß oder kleiner
@@ -57,6 +58,10 @@ Im Anschluss wird dann noch ein neuer ENDF-Chunk geschrieben. Alternativ kann au
 anderer ausreichend großer FREE-Chunk verwendet werden. FREE-Chunks werden beim erneuten
 einlesen übersprungen, bzw. können in einem Tree zur erneuten Verwendung abgelegt werden.
 
+Wenn der WriteCounter überläuft, wird er auf 0 gesetzt, ebenso die Transaktions-IDs
+sämtlicher Chunks. Bei einem Client-Server-Betrieb muss ein Client die Datenbank
+komplett neu übertragen, wenn die Transaktions-ID des Servers kleiner ist, als die
+eigene.
 
 \par Chunks
 
@@ -65,8 +70,9 @@ mit der Chunk-Header-Version 1 beginnt immer mit einem 2-Byte Integer, der die
 Größe des Chunks einschließlich des Headers angibt, gefolgt von den Nutzdaten. 
 
 Das WinMusik3-Format erweitert diesen Header noch um 1 Byte für den
-Datentyp und 1 Byte für das Datensatz-Format. Insgesammt ist der Chunk-Header
-somit 4 Byte groß.
+Datentyp, 1 Byte für das Datensatz-Format und 4 Byte für die Transaktions-ID der
+letzten Änderung, die dem WriteCounter zum Zeitpunkt der Änderung entspricht.
+Insgesammt ist der Chunk-Header somit 8 Byte groß.
 
 Ein Chunk muss nicht zwingend Nutzdaten enthalten.
 
@@ -74,7 +80,8 @@ Ein Chunk muss nicht zwingend Nutzdaten enthalten.
 Byte 0:  Größe des Chunks einschließlich Chunk-Header   2 Byte
 Byte 2:  Datentyp des Chunks                            1 Byte
 Byte 3:  Datensatz-Format								1 Byte
-Byte 4:  Nutzdaten des Chunks
+Byte 4:  Transaction-ID / WriteCounter                  4 Byte
+Byte 8:  Nutzdaten des Chunks
 \endcode
 
 
