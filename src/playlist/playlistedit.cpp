@@ -215,6 +215,11 @@ void PlaylistEdit::loadCover(const ppl6::CID3Tag &Tag)
 void PlaylistEdit::updateCover()
 {
 	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+	if (CoverPreview.Size()==0) updateCoverPreview();
+}
+
+void PlaylistEdit::updateCoverPreview()
+{
 	QPixmap icon;
 	icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 	QByteArray bytes;
@@ -334,6 +339,7 @@ void PlaylistEdit::on_coverInsertButton_clicked()
 	Cover=clipboard->pixmap();
 	saveCover(Filename,Cover);
 	updateCover();
+	updateCoverPreview();
 	QApplication::restoreOverrideCursor();
 }
 
@@ -384,6 +390,7 @@ void PlaylistEdit::on_coverLoadButton_clicked()
 		saveCover(Filename,Cover);
 		QApplication::restoreOverrideCursor();
 		updateCover();
+		updateCoverPreview();
 	}
 }
 

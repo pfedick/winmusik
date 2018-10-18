@@ -907,8 +907,9 @@ void Playlist::saveTitle(PlaylistItem *item)
 	DataTitle *ti=wm_main->GetTitle(item->titleId);
 	if (!ti) return;
 
-	DataTitle Ti;
+	DataTitle Ti, OldTi;
 	Ti.CopyFrom(ti);
+	OldTi.CopyFrom(ti);
 
 	Ti.SetArtist(item->Artist);
 	Ti.SetTitle(item->Title);
@@ -923,10 +924,13 @@ void Playlist::saveTitle(PlaylistItem *item)
 	if (Ti.CoverPreview.Size()==0 || item->CoverPreview.Size()>0) Ti.CoverPreview=item->CoverPreview;
 
 	// Titel speichern
-	if (Ti.TitleId>0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
-	if (!wm_main->TitleStore.Put(&Ti)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-		if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
+	if (Ti!=OldTi) {
+		//printf ("Changed detected, saving...\n");
+		if (Ti.TitleId>0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
+		if (!wm_main->TitleStore.Put(&Ti)) {
+			wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+			if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
+		}
 	}
 
 	if (!wm->SaveID3Tags(ti->DeviceType,ti->DeviceId, ti->Page, ti->Track,Ti)) {

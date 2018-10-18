@@ -264,6 +264,7 @@ void PlaylistItem::loadCoverPreview()
 	if (titleId>0) {
 		DataTitle *ti=wm_main->GetTitle(titleId);
 		if (ti) {
+			//printf ("Cover-Preview from Database\n");
 			CoverPreview=ti->CoverPreview;
 			return;
 		}
@@ -271,6 +272,7 @@ void PlaylistItem::loadCoverPreview()
 	if (CoverPreview.Size()==0 && File.Size()>0) {
 		TrackInfo info;
 		if (getTrackInfoFromFile(info,File)) {
+			//printf ("Cover-Preview from File\n");
 			CoverPreview=info.Ti.CoverPreview;
 		}
 	}
@@ -281,6 +283,7 @@ void PlaylistItem::updateFromDatabase()
 	if (titleId==0) return;
 	DataTitle *ti=wm_main->GetTitle(titleId);
 	if (!ti) return;
+	CoverPreview=ti->CoverPreview;
 	trackLength=ti->Length;
 	Artist=ti->Artist;
 	Title=ti->Title;

@@ -109,7 +109,7 @@ void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &c
 		int namelen=ppl6::Peek32(adr);
 		adr+=4;
 		if (namelen) {
-			ppl6::HexDump((void*)adr,namelen*2);
+			//ppl6::HexDump((void*)adr,namelen*2);
 			char *t=iconv.Transcode(adr,namelen*2);
 			cue.name.Set(t);
 			free(t);

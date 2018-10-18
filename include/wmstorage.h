@@ -224,6 +224,7 @@ class DataTitle : public CStorageItem
 
 		DataTitle & operator=(const DataTitle &other);
 		bool operator==(const DataTitle &other) const;
+		bool operator!=(const DataTitle &other) const;
 
 		static ppl6::CString keyName(int id, MusicKeyType type);
 		static int keyId(const ppl6::CString &name);

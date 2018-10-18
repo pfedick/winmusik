@@ -389,6 +389,12 @@ bool DataTitle::operator==(const DataTitle &other) const
 	return true;
 }
 
+bool DataTitle::operator!=(const DataTitle &other) const
+{
+	if (*this==other) return false;
+	return true;
+}
+
 void DataTitle::Clear()
 /*!\brief Inhalt der Klasse löschen
  *

@@ -59,6 +59,7 @@ private:
     void loadTraktorCues(const ppl6::CID3Tag &Tag);
     void loadCover(const ppl6::CID3Tag &Tag);
     void updateCover();
+    void updateCoverPreview();
 
     void installFilter(QObject *object, int id);
     bool eventFilter(QObject *target, QEvent *event);

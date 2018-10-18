@@ -13,6 +13,9 @@ Version 3.5.2
         changes
     - Search:
       - Genres can be excluded in search
+    - Playlist:
+      - Reduced write operations on database when saving a track without any
+        changes   
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
       now implemented as ppl6::CString-object instead of char *. Also added
       a compare operator ==
