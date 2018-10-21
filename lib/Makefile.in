@@ -8,7 +8,7 @@ OBJS =		compile/object_title.o \
 			compile/Playlist.o \
 			compile/Searchlist.o \
 			compile/MusicalKeys.o \
-			
+			compile/traktor.o \
 			
 			#compile/CWMFile.o
 
@@ -51,4 +51,8 @@ compile/Searchlist.o: src/Searchlist.cpp include/wm_searchlist.h Makefile
 compile/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/MusicalKeys.o -c src/MusicalKeys.cpp $(CXXFLAGS)
+
+compile/traktor.o: src/traktor.cpp include/traktor.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/traktor.o -c src/traktor.cpp $(CXXFLAGS)
 	

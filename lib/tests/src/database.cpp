@@ -27,9 +27,11 @@ protected:
 };
 
 TEST_F(DatabaseTest, UpdateDatabase) {
+	/*
 	de::pfp::winmusik::CDataBase wmdb;
 	ppl7::String Path=ppl7::Dir::homePath()+"/ownCloud/WinMusik3/";
 	wmdb.update(Path+"winmusik.dat",Path+"winmusik4.dat");
+	*/
 }
 
 

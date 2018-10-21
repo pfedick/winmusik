@@ -1,13 +1,14 @@
-GTEST_DIR	= /usr/local/googletest-release-1.7.0
+GTEST_DIR	= /usr/local/gtest-1.7.0
 EXTRA_CFLAGS = 
 INCLUDE	= -I. -I../include -I$(GTEST_DIR)/include
-CFLAGS	= -ggdb -Wall  $(INCLUDE)  -no-pie  -I/usr/local/include  -pthread -I/home/patrickf/include $(EXTRA_CFLAGS)
-LIBS	= -L../compile -lwinmusik3   -no-pie   -L/home/patrickf/lib -lppl7 -lm -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -pthread -L/usr/lib -lz -lbz2 -lpcre -L/usr/lib -lmcrypt -lmhash -ljpeg -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -L/home/patrickf/lib -lpng -lz -lm -L /usr/lib -ltiff -llzma -L/home/patrickf/lib -Wl,-rpath,/home/patrickf/lib -Wl,--enable-new-dtags -lSDL2 -Wl,--no-undefined -lm -ldl -lsndio -lpthread -lrt -lfreetype -lcurl -L/usr/local/lib -lmicrohttpd -lidn -L/usr/lib -lssl -lcrypto -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -latomic -ldl -L/usr/lib/x86_64-linux-gnu -lpq -L/usr/lib -lsqlite3 -lmpg123 -lmp3lame -lm -lstdc++ -lstdc++
-LIBS_COVERAGE	= -L../compile -lwinmusik3   -no-pie   -L/home/patrickf/lib -lppl7 -lm -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -pthread -L/usr/lib -lz -lbz2 -lpcre -L/usr/lib -lmcrypt -lmhash -ljpeg -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -lresolv -L/home/patrickf/lib -lpng -lz -lm -L /usr/lib -ltiff -llzma -L/home/patrickf/lib -Wl,-rpath,/home/patrickf/lib -Wl,--enable-new-dtags -lSDL2 -Wl,--no-undefined -lm -ldl -lsndio -lpthread -lrt -lfreetype -lcurl -L/usr/local/lib -lmicrohttpd -lidn -L/usr/lib -lssl -lcrypto -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -latomic -ldl -L/usr/lib/x86_64-linux-gnu -lpq -L/usr/lib -lsqlite3 -lmpg123 -lmp3lame -lm -lstdc++  -lgcov -lstdc++
+CFLAGS	= -ggdb -Wall  $(INCLUDE)  -I/usr/local/include  -I/usr/local/include -I/usr/local/include  -D_THREAD_SAFE -pthread -I/home/patrick/include $(EXTRA_CFLAGS)
+LIBS	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++ -lstdc++
+LIBS_COVERAGE	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lgcov -lstdc++
 PROGNAME = testsuite
 
 
-OBJECTS = compile/main.o compile/storage.o compile/database.o
+OBJECTS = compile/main.o compile/storage.o compile/database.o \
+	compile/traktor.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -59,4 +60,8 @@ compile/storage.o: src/storage.cpp Makefile wmlib-tests.h
 compile/database.o: src/database.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/database.o -c src/database.cpp
+	
+compile/traktor.o: src/traktor.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/traktor.o -c src/traktor.cpp
 	
