@@ -15,7 +15,8 @@ Version 3.5.2
       - Genres can be excluded in search
     - Playlist:
       - Reduced write operations on database when saving a track without any
-        changes   
+        changes
+      - Fixed drag'n'drop of files from playlist to other apps   
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
       now implemented as ppl6::CString-object instead of char *. Also added
       a compare operator ==
