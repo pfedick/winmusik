@@ -376,15 +376,19 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
 #ifdef _WIN32
 		list.append(QUrl::fromLocalFile(item->File));
 #else
+		printf("append: >>%s<<\n",(const char*)item->File);
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";
 
+	//xml.Print(true);
 
 	QMimeData *mimeData = new QMimeData;
-	mimeData->setText(xml);
+	QByteArray ba((const char*)xml,xml.Size());
+	mimeData->setData("application/winmusik+xml",ba);
+	//mimeData->setText(xml);
 	mimeData->setUrls(list);
 	mimeData->setImageData(Icon);
 	return mimeData;
