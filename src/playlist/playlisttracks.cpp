@@ -340,7 +340,7 @@ PlaylistTracks::PlaylistTracks(QWidget * parent)
 void PlaylistTracks::mouseMoveEvent ( QMouseEvent * event )
 {
 	//printf ("PlaylistTracks::mouseMoveEvent\n");
-	playlist->on_tracks_MouseMove(event);
+	//playlist->on_tracks_MouseMove(event);
 	QTreeWidget::mouseMoveEvent(event);
 }
 
@@ -376,7 +376,6 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
 #ifdef _WIN32
 		list.append(QUrl::fromLocalFile(item->File));
 #else
-		printf("append: >>%s<<\n",(const char*)item->File);
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
 	}
@@ -432,7 +431,7 @@ bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int , const QMimeData
 
 void PlaylistTracks::dropEvent ( QDropEvent * event )
 {
-	printf ("PlaylistTracks::dropEvent, action: %i\n",event->dropAction());
+	//printf ("PlaylistTracks::dropEvent, action: %i\n",event->dropAction());
 	if (lastmoveitem) {
 		lastmoveitem->setSelected(false);
 		lastmoveitem=NULL;
@@ -440,7 +439,7 @@ void PlaylistTracks::dropEvent ( QDropEvent * event )
 	event->acceptProposedAction();
 	playlist->handleDropEvent(event);
 	if (event->source()==this) {
-		printf ("Quelle ist gleich\n");
+		//printf ("Quelle ist gleich\n");
 		if (event->dropAction()==1) {
 			deleteSourceItems(event);
 			playlist->renumberTracks();

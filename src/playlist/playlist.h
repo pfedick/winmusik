@@ -115,7 +115,6 @@ private:
     void highlightHarmonicKeys(PlaylistItem *track);
     void unHighlightHarmonicKeys();
 
-    bool on_tracks_MouseMove(QMouseEvent *event);
     bool on_tracks_MouseButtonPress(QMouseEvent * event);
     bool on_tracks_MouseButtonRelease(QMouseEvent * event);
 

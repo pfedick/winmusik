@@ -351,57 +351,6 @@ bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent *)
 	return false;
 }
 
-bool Playlist::on_tracks_MouseMove(QMouseEvent *event)
-{
-	return false;
-	//printf ("on_tracks_MouseMove\n");
-	if (!(event->buttons() == Qt::LeftButton)) return false;
-
-	int distance=(event->pos()-startPos).manhattanLength();
-	if (distance<QApplication::startDragDistance()) return false;
-
-	QList<QTreeWidgetItem*> Items=ui.tracks->selectedItems();
-	QList<QUrl> list;
-    QPixmap Icon;
-
-    //printf ("DragStart\n");
-
-    ppl6::CString xml;
-    xml="<winmusikTracklist>\n";
-    xml+="<tracks>\n";
-	for (int i=0;i<Items.size();i++) {
-		PlaylistItem *item=(PlaylistItem *)Items[i];
-		if (Icon.isNull()) {
-			Icon.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.GetSize());
-		}
-		xml+=item->exportAsXML(0);
-
-#ifdef _WIN32
-			list.append(QUrl::fromLocalFile(item->File));
-#else
-		list.append(QUrl::fromLocalFile(item->File));
-#endif
-	}
-	xml+="</tracks>\n";
-	xml+="</winmusikTracklist>\n";
-
-	xml.Print(true);
-
-    QDrag *drag = new QDrag(this);
-    QMimeData *mimeData = new QMimeData;
-    if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
-    drag->setPixmap(Icon);
-    QByteArray ba((const char*)xml,xml.Size());
-    mimeData->setData("application/winmusik+xml",ba);
-    mimeData->setUrls(list);
-    drag->setMimeData(mimeData);
-    // start drag
-    drag->exec(Qt::CopyAction | Qt::MoveAction);
-	startPos.setX(0);
-	startPos.setY(0);
-	return true;
-}
-
 void Playlist::on_tracks_itemSelectionChanged ()
 {
 	updateLengthStatus();
@@ -437,7 +386,7 @@ void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertIte
 		ppl6::CString xml;
 		xml.Set(ba.constData(), ba.size());
 		if (xml.Left(18)=="<winmusikTracklist") {
-			printf ("XML-Drop\n");
+			//printf ("XML-Drop\n");
 			handleXMLDrop(xml,insertItem);
 		} else {
 			QList<QUrl>	list=mime->urls();
