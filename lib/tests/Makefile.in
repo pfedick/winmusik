@@ -8,7 +8,7 @@ PROGNAME = testsuite
 
 
 OBJECTS = compile/main.o compile/storage.o compile/database.o \
-	compile/traktor.o
+	compile/traktor.o compile/playlist.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -64,4 +64,8 @@ compile/database.o: src/database.cpp Makefile wmlib-tests.h
 compile/traktor.o: src/traktor.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/traktor.o -c src/traktor.cpp
+
+compile/playlist.o: src/playlist.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/playlist.o -c src/playlist.cpp
 	

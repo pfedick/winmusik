@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WinMusikPlaylist version="1">
+   <name>Powerplay 287 - 10/2018</name>
+   <subname>Subname</subname>
+   <issue>287</issue>
+   <date>2018-11-11</date>
+   <totalTracks>33</totalTracks>
+   <totalTrackLength>12298</totalTrackLength>
+   <totalMixLength>7183</totalMixLength>
+   <tracks>
+      <item>
+         <widgetId>276446928</widgetId>
+         <titleId>0</titleId>
+         <startPositionSec>0</startPositionSec>
+         <endPositionSec>60</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Patrick F.</Artist>
+         <Title>Powerplay-Intro-2003-1c</Title>
+         <Version>Single</Version>
+         <Genre></Genre>
+         <Label></Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/Musik/powerplay/Powerplay-Intro-2003-1c.mp3</File>
+         <musicKey verified="false">Dm</musicKey>
+         <energyLevel>0</energyLevel>
+         <bpm>120</bpm>
+         <bpmPlayed>0</bpmPlayed>
+         <rating>0</rating>
+         <trackLength>108</trackLength>
+         <mixLength>60</mixLength>
+      </item>
+      <item>
+         <widgetId>276444688</widgetId>
+         <titleId>90523</titleId>
+         <startPositionSec>122</startPositionSec>
+         <endPositionSec>381</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Estiva with Ruben De Ronde</Artist>
+         <Title>Rainbow</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Statement!</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/089-Estiva with Ruben De Ronde - Rainbow (Extended Mix).mp3</File>
+         <musicKey verified="false">A#</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>126</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>3</rating>
+         <trackLength>444</trackLength>
+         <mixLength>254</mixLength>
+      </item>
+      <item>
+         <widgetId>276446032</widgetId>
+         <titleId>90490</titleId>
+         <startPositionSec>90</startPositionSec>
+         <endPositionSec>247</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Cosmic Gate &amp; Third Party</Artist>
+         <Title>Like This Body of Conflict</Title>
+         <Version>Cosmic Gate Extended Mash Up</Version>
+         <Genre>Trance</Genre>
+         <Label>Wake Your Mind Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/056-Cosmic Gate + Third Party - Like This Body of Conflict (Cosmic Gate Extended Mash Up).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>3</rating>
+         <trackLength>344</trackLength>
+         <mixLength>157</mixLength>
+      </item>
+      <item>
+         <widgetId>276445136</widgetId>
+         <titleId>90467</titleId>
+         <startPositionSec>60</startPositionSec>
+         <endPositionSec>225</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>KhoMha</Artist>
+         <Title>Agua</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>A State Of Trance</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/033-KhoMha - Agua (Extended Mix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>291</trackLength>
+         <mixLength>165</mixLength>
+      </item>
+      <item>
+         <widgetId>276447376</widgetId>
+         <titleId>91340</titleId>
+         <startPositionSec>60</startPositionSec>
+         <endPositionSec>270</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Protoculture</Artist>
+         <Title>Valley Of The Red Gods</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>A State Of Trance</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/738/181-Protoculture - Valley Of The Red Gods (Extended Mix).mp3</File>
+         <musicKey verified="false">G</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>336</trackLength>
+         <mixLength>210</mixLength>
+      </item>
+      <item>
+         <widgetId>276445584</widgetId>
+         <titleId>90521</titleId>
+         <startPositionSec>118</startPositionSec>
+         <endPositionSec>314</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Dennis Sheperd &amp; DIM3NSION</Artist>
+         <Title>Amigos</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Coldharbour Recordings</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/087-Dennis Sheperd + DIM3NSION - Amigos (Extended Mix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>381</trackLength>
+         <mixLength>199</mixLength>
+      </item>
+      <item>
+         <widgetId>276446480</widgetId>
+         <titleId>90537</titleId>
+         <startPositionSec>60</startPositionSec>
+         <endPositionSec>255</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Andrew Rayel feat. Jonathan Mendelsohn</Artist>
+         <Title>Forgiven</Title>
+         <Version>Vedde Extended Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>inHarmony Music</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/103-Andrew Rayel feat. Jonathan Mendelsohn - Forgiven (Vedde Extended Remix).mp3</File>
+         <musicKey verified="false">Dm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>306</trackLength>
+         <mixLength>195</mixLength>
+      </item>
+      <item>
+         <widgetId>276447824</widgetId>
+         <titleId>91448</titleId>
+         <startPositionSec>59</startPositionSec>
+         <endPositionSec>184</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Cosmic Gate</Artist>
+         <Title>AR</Title>
+         <Version>Leo Reyes Extended Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>Wake Your Mind Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/200-Cosmic Gate - AR (Leo Reyes Extended Remix).mp3</File>
+         <musicKey verified="false">Am</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>3</rating>
+         <trackLength>265</trackLength>
+         <mixLength>126</mixLength>
+      </item>
+      <item>
+         <widgetId>401335232</widgetId>
+         <titleId>90532</titleId>
+         <startPositionSec>75</startPositionSec>
+         <endPositionSec>285</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Thomas Mengel</Artist>
+         <Title>Pelagos</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Enhanced Progressive</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/098-Thomas Mengel - Pelagos (Extended Mix).mp3</File>
+         <musicKey verified="false">Em</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>128</bpmPlayed>
+         <rating>3</rating>
+         <trackLength>378</trackLength>
+         <mixLength>210</mixLength>
+      </item>
+      <item>
+         <widgetId>401335680</widgetId>
+         <titleId>90146</titleId>
+         <startPositionSec>92</startPositionSec>
+         <endPositionSec>214</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Mark Sixma &amp; Husman</Artist>
+         <Title>Prime</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>inHarmony Music</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/738/019-Mark Sixma + Husman - Prime (Extended Mix).mp3</File>
+         <musicKey verified="false">Em</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>130</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>265</trackLength>
+         <mixLength>122</mixLength>
+      </item>
+      <item>
+         <widgetId>401337024</widgetId>
+         <titleId>91620</titleId>
+         <startPositionSec>49</startPositionSec>
+         <endPositionSec>263</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Super8 &amp; Tab feat. Sarah deCourcy</Artist>
+         <Title>Seconds Away</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Armind (Armada)</Label>
+         <Album>Seconds Away</Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/738/218-Super8 + Tab feat. Sarah deCourcy - Seconds Away (Extended Mix).mp3</File>
+         <musicKey verified="false">Bm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>130</bpmPlayed>
+         <rating>3</rating>
+         <trackLength>356</trackLength>
+         <mixLength>214</mixLength>
+      </item>
+      <item>
+         <widgetId>401337472</widgetId>
+         <titleId>91407</titleId>
+         <startPositionSec>60</startPositionSec>
+         <endPositionSec>202</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Armin van Buuren feat. Conrad Sewell</Artist>
+         <Title>Sex, Love &amp; Water</Title>
+         <Version>Extended Club Mix</Version>
+         <Genre>Big Room</Genre>
+         <Label>Armada Music</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/159-Armin van Buuren feat. Conrad Sewell - Sex, Love + Water (Extended Club Mix).mp3</File>
+         <musicKey verified="false">C#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>128</bpm>
+         <bpmPlayed>130</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>327</trackLength>
+         <mixLength>139</mixLength>
+      </item>
+      <item>
+         <widgetId>401332096</widgetId>
+         <titleId>91480</titleId>
+         <startPositionSec>44</startPositionSec>
+         <endPositionSec>206</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Friends Of Mayday</Artist>
+         <Title>We Stay Different (2018 Anthem)</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Kontor Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/740/053-Friends Of Mayday - We Stay Different (2018 Anthem) (Extended Mix).mp3</File>
+         <musicKey verified="false">G#m</musicKey>
+         <energyLevel>6</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>130</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>317</trackLength>
+         <mixLength>162</mixLength>
+      </item>
+      <item>
+         <widgetId>401330304</widgetId>
+         <titleId>90517</titleId>
+         <startPositionSec>59</startPositionSec>
+         <endPositionSec>334</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Armin van Buuren &amp; Shapov</Artist>
+         <Title>The Last Dancer</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Armind (Armada)</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/083-Armin van Buuren + Shapov - The Last Dancer (Extended Mix).mp3</File>
+         <musicKey verified="false">D#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>130</bpm>
+         <bpmPlayed>132</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>365</trackLength>
+         <mixLength>270</mixLength>
+      </item>
+      <item>
+         <widgetId>401337920</widgetId>
+         <titleId>90485</titleId>
+         <startPositionSec>86</startPositionSec>
+         <endPositionSec>422</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Nick Callaghan</Artist>
+         <Title>Jump The Chasm</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Kearnage Recordings</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/051-Nick Callaghan - Jump The Chasm (Extended Mix).mp3</File>
+         <musicKey verified="false">A#m</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>134</bpm>
+         <bpmPlayed>0</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>517</trackLength>
+         <mixLength>336</mixLength>
+      </item>
+      <item>
+         <widgetId>401334336</widgetId>
+         <titleId>90461</titleId>
+         <startPositionSec>56</startPositionSec>
+         <endPositionSec>413</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Alex M.O.R.P.H. &amp; Mark Sherry</Artist>
+         <Title>Magnetar</Title>
+         <Version>Extended</Version>
+         <Genre>Trance</Genre>
+         <Label>VANDIT Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/027-Alex M.O.R.P.H. + Mark Sherry - Magnetar (Extended).mp3</File>
+         <musicKey verified="false">A#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>136</bpm>
+         <bpmPlayed>0</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>488</trackLength>
+         <mixLength>357</mixLength>
+      </item>
+      <item>
+         <widgetId>401331200</widgetId>
+         <titleId>91409</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>375</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Carl Nicholson</Artist>
+         <Title>AK47</Title>
+         <Version>Nicholson's 2018 Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>ART Recordings</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/161-Carl Nicholson - AK47 (Nicholson's 2018 Remix).mp3</File>
+         <musicKey verified="false">A#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>0</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>457</trackLength>
+         <mixLength>320</mixLength>
+      </item>
+      <item>
+         <widgetId>401330752</widgetId>
+         <titleId>91633</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>356</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Ian Buff</Artist>
+         <Title>Power Check</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Monster Force</Label>
+         <Album>Power Check</Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/224-Ian Buff - Power Check (Extended Mix).mp3</File>
+         <musicKey verified="false">Fm</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>420</trackLength>
+         <mixLength>301</mixLength>
+      </item>
+      <item>
+         <widgetId>401333888</widgetId>
+         <titleId>91210</titleId>
+         <startPositionSec>70</startPositionSec>
+         <endPositionSec>282</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Stoneface &amp; Terminal</Artist>
+         <Title>Covenant</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>FSOE Clandestine</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/738/051-Stoneface + Terminal - Covenant (Extended Mix).mp3</File>
+         <musicKey verified="false">Cm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>136</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>397</trackLength>
+         <mixLength>205</mixLength>
+      </item>
+      <item>
+         <widgetId>401331648</widgetId>
+         <titleId>90457</titleId>
+         <startPositionSec>109</startPositionSec>
+         <endPositionSec>267</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Smith &amp; Brown</Artist>
+         <Title>We Got The Funk</Title>
+         <Version>Original Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Aria Digital</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/023-Smith + Brown - We Got The Funk (Original Mix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>381</trackLength>
+         <mixLength>158</mixLength>
+      </item>
+      <item>
+         <widgetId>401333440</widgetId>
+         <titleId>90464</titleId>
+         <startPositionSec>123</startPositionSec>
+         <endPositionSec>246</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Chris Schweizer</Artist>
+         <Title>Damage Control</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Who's Afraid Of 138?!</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/030-Chris Schweizer - Damage Control (Extended Mix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>363</trackLength>
+         <mixLength>123</mixLength>
+      </item>
+      <item>
+         <widgetId>401336128</widgetId>
+         <titleId>90544</titleId>
+         <startPositionSec>109</startPositionSec>
+         <endPositionSec>315</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Yakooza vs. DJ Sakin</Artist>
+         <Title>Cocaine</Title>
+         <Version>Liam Wilson Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>Grotesque Reworked</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/110-Yakooza vs. DJ Sakin - Cocaine (Liam Wilson Remix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>371</trackLength>
+         <mixLength>206</mixLength>
+      </item>
+      <item>
+         <widgetId>401336576</widgetId>
+         <titleId>91460</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>294</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>RAM</Artist>
+         <Title>Africa</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Who's Afraid Of 138?!</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/212-RAM - Africa (Extended Mix).mp3</File>
+         <musicKey verified="false">Gm</musicKey>
+         <energyLevel>6</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>380</trackLength>
+         <mixLength>235</mixLength>
+      </item>
+      <item>
+         <widgetId>401332544</widgetId>
+         <titleId>90514</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>240</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Richard Durand</Artist>
+         <Title>Pandora</Title>
+         <Version>Original Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Grotesque Fusion</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/080-Richard Durand - Pandora (Original Mix).mp3</File>
+         <musicKey verified="false">Am</musicKey>
+         <energyLevel>6</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>354</trackLength>
+         <mixLength>185</mixLength>
+      </item>
+      <item>
+         <widgetId>401332992</widgetId>
+         <titleId>90546</titleId>
+         <startPositionSec>111</startPositionSec>
+         <endPositionSec>361</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Liam Wilson</Artist>
+         <Title>The Bigger Picture</Title>
+         <Version>Original Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Critical Uprising</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/112-Liam Wilson - The Bigger Picture (Original Mix).mp3</File>
+         <musicKey verified="false">Am</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>452</trackLength>
+         <mixLength>246</mixLength>
+      </item>
+      <item>
+         <widgetId>401334784</widgetId>
+         <titleId>90551</titleId>
+         <startPositionSec>174</startPositionSec>
+         <endPositionSec>438</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Scot Project</Artist>
+         <Title>D (Don't Go)</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Outburst Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/117-Scot Project - D (Don't Go) (Extended Mix).mp3</File>
+         <musicKey verified="false">Em</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>531</trackLength>
+         <mixLength>260</mixLength>
+      </item>
+      <item>
+         <widgetId>412691872</widgetId>
+         <titleId>90502</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>378</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Vlind vs. Amos &amp; Riot Night</Artist>
+         <Title>Betrayed</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>AERYS RECORDS</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/068-Vlind vs. Amos + Riot Night - Betrayed (Extended Mix).mp3</File>
+         <musicKey verified="false">Bm</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>139</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>440</trackLength>
+         <mixLength>320</mixLength>
+      </item>
+      <item>
+         <widgetId>412689184</widgetId>
+         <titleId>91436</titleId>
+         <startPositionSec>54</startPositionSec>
+         <endPositionSec>315</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Carl Crellin &amp; Mark S feat. Ryun Anderson</Artist>
+         <Title>Blessed</Title>
+         <Version>NoMosk Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>TAR#138</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/188-Carl Crellin + Mark S feat. Ryun Anderson - Blessed (NoMosk Remix).mp3</File>
+         <musicKey verified="false">Bm</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>411</trackLength>
+         <mixLength>261</mixLength>
+      </item>
+      <item>
+         <widgetId>412691424</widgetId>
+         <titleId>91193</titleId>
+         <startPositionSec>68</startPositionSec>
+         <endPositionSec>315</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Etasonic &amp; Dany G</Artist>
+         <Title>Flying In A Dream</Title>
+         <Version>RAM &amp; Cari Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>Abora Recordings</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/738/034-Etasonic + Dany G - Flying In A Dream (RAM + Cari Remix).mp3</File>
+         <musicKey verified="false">F#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>383</trackLength>
+         <mixLength>247</mixLength>
+      </item>
+      <item>
+         <widgetId>412693216</widgetId>
+         <titleId>91800</titleId>
+         <startPositionSec>58</startPositionSec>
+         <endPositionSec>298</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Dash Berlin feat. Bo Bruce</Artist>
+         <Title>Coming Home</Title>
+         <Version>Standerwick Extended Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>A State Of Trance</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/741/071-Dash Berlin feat. Bo Bruce - Coming Home (Standerwick Extended Remix).mp3</File>
+         <musicKey verified="false">C#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>359</trackLength>
+         <mixLength>236</mixLength>
+      </item>
+      <item>
+         <widgetId>412694112</widgetId>
+         <titleId>91696</titleId>
+         <startPositionSec>59</startPositionSec>
+         <endPositionSec>295</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Haris C &amp; Alexis Mixail</Artist>
+         <Title>11:11</Title>
+         <Version>Steve Allen Remix</Version>
+         <Genre>Trance</Genre>
+         <Label>Alter Ego Records</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/740/218-Haris C + Alexis Mixail - 11 11 (Steve Allen Remix).mp3</File>
+         <musicKey verified="false">C#m</musicKey>
+         <energyLevel>8</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>4</rating>
+         <trackLength>356</trackLength>
+         <mixLength>232</mixLength>
+      </item>
+      <item>
+         <widgetId>412694560</widgetId>
+         <titleId>91650</titleId>
+         <startPositionSec>55</startPositionSec>
+         <endPositionSec>306</endPositionSec>
+         <cuts>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Sied van Riel &amp; Richard Durand</Artist>
+         <Title>Universal Minds</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>Reloaded Music</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/740/172-Sied van Riel + Richard Durand - Universal Minds (Extended Mix).mp3</File>
+         <musicKey verified="false">G#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>138</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>433</trackLength>
+         <mixLength>247</mixLength>
+      </item>
+      <item>
+         <widgetId>412690080</widgetId>
+         <titleId>90471</titleId>
+         <startPositionSec>54</startPositionSec>
+         <endPositionSec>322</endPositionSec>
+         <cuts>
+            <cut><start>219</start><end>262</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+            <cut><start>0</start><end>0</end></cut>
+         </cuts>
+         <Artist>Skylex</Artist>
+         <Title>Chrysippus</Title>
+         <Version>Extended Mix</Version>
+         <Genre>Trance</Genre>
+         <Label>AERYS RECORDS</Label>
+         <Album></Album>
+         <Remarks></Remarks>
+         <File>D:/musik/mp3/07/739/037-Skylex - Chrysippus (Extended Mix).mp3</File>
+         <musicKey verified="false">D#m</musicKey>
+         <energyLevel>7</energyLevel>
+         <bpm>140</bpm>
+         <bpmPlayed>140</bpmPlayed>
+         <rating>5</rating>
+         <trackLength>322</trackLength>
+         <mixLength>225</mixLength>
+      </item>
+   </tracks>
+</WinMusikPlaylist>

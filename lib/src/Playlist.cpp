@@ -71,16 +71,18 @@ void PlaylistItem::importFromXML(const ppl7::String &xml)
 	if (xml.pregMatch("/\\<startPositionSec\\>(.*)\\<\\/startPositionSec\\>/s",Matches)) startPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 	if (xml.pregMatch("/\\<endPositionSec\\>(.*)\\<\\/endPositionSec\\>/s",Matches)) endPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 
-	if (xml.pregMatch("/\\<cuts\\>(.*)\\<\\/cuts\\>/s",Matches)) {
-		ppl7::Array cuts(Matches[1],"<cut>");
+	if (xml.pregMatch("/<cuts>(.*?)<\\/cuts>/s",Matches)) {
+		ppl7::Array cuts(Matches[1],"</cut>");
 		size_t rows=cuts.size();
-		if (rows>6) rows=6;
+		if (rows>5) rows=5;
 		for (size_t i=0;i<rows;i++) {
-			ppl7::String cut=cuts[i+1];
-			if (cut.pregMatch("/\\<start\\>(.*)\\<\\/start\\>/s",Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-			if (cut.pregMatch("/\\<end\\>(.*)\\<\\/end\\>/s",Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+			ppl7::String cut=cuts[i];
+			//printf ("cut=>>%s<<\n",(const char*)cut);
+			if (cut.pregMatch("/<start>(.*?)<\\/start>/s",Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+			if (cut.pregMatch("/<end>(.*?)<\\/end>/s",Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 		}
 	}
+
 	if (xml.pregMatch("/\\<Artist\\>(.*)\\<\\/Artist\\>/s",Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	if (xml.pregMatch("/\\<Title\\>(.*)\\<\\/Title\\>/s",Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	if (xml.pregMatch("/\\<Version\\>(.*)\\<\\/Version\\>/s",Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
@@ -99,9 +101,136 @@ void PlaylistItem::importFromXML(const ppl7::String &xml)
 	if (xml.pregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s",Matches)) rating=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 	if (xml.pregMatch("/\\<trackLength\\>(.*)\\<\\/trackLength\\>/s",Matches)) trackLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 	if (xml.pregMatch("/\\<mixLength\\>(.*)\\<\\/mixLength\\>/s",Matches)) mixLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+}
 
+Playlist::Playlist()
+{
+	IssueNumber=0;
+}
+
+Playlist::~Playlist()
+{
 
 }
+
+void Playlist::clear()
+{
+	playlist.clear();
+	IssueNumber=0;
+	Name.clear();
+	SubName.clear();
+	IssueDate.setCurrentTime();
+}
+
+void Playlist::load(const ppl7::String &filename)
+{
+	clear();
+	ppl7::String xml;
+	ppl7::File::load(xml,filename);
+	if (!xml.has("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) throw InvalidXMLFileException(filename);
+	if (!xml.has("<WinMusikPlaylist version=\"1\">")) throw InvalidPlaylistException(filename);
+	ppl7::Array Matches;
+	if (!xml.pregMatch("/<WinMusikPlaylist.*?>(.*?)<tracks>/s", Matches)) throw InvalidPlaylistException(filename);
+	ppl7::String header=Matches[1];
+	if (xml.pregMatch("/<name>(.*?)<\\/name>/s",Matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/<subname>(.*?)<\\/subname>/s",Matches)) SubName=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/<issue>(.*?)<\\/issue>/s",Matches)) IssueNumber=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (xml.pregMatch("/<date>(.*?)<\\/date>/s",Matches)) IssueDate.set(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+
+	if (!xml.pregMatch("/<tracks>(.*?)<\\/tracks>/s", Matches)) return;
+	ppl7::Array tracks(Matches[1],"</item>");
+	for (size_t i=0;i<tracks.size();i++) {
+		xml=tracks[i].trimmed();
+		if (xml.has("<item>")) {
+			PlaylistItem item;
+			item.importFromXML(xml);
+			playlist.push_back(item);
+		}
+	}
+}
+
+void Playlist::setName(const ppl7::String &Name)
+{
+	this->Name=Name;
+}
+ppl7::String Playlist::getName() const
+{
+	return Name;
+}
+
+void Playlist::setSubName(const ppl7::String &Name)
+{
+	this->SubName=Name;
+}
+
+ppl7::String Playlist::getSubName() const
+{
+	return SubName;
+}
+
+void Playlist::setIssueNumber(int number)
+{
+	this->IssueNumber=number;
+}
+
+int Playlist::getIssueNumber() const
+{
+	return IssueNumber;
+}
+
+void Playlist::setIssueDate(const ppl7::DateTime &Date)
+{
+	this->IssueDate=Date;
+}
+
+ppl7::DateTime Playlist::getIssueDate() const
+{
+	return IssueDate;
+}
+
+size_t Playlist::size() const
+{
+	return playlist.size();
+}
+
+int Playlist::getTotalTracks() const
+{
+	return (int)playlist.size();
+}
+
+int Playlist::getTotalLength() const
+{
+	std::list<PlaylistItem>::const_iterator it;
+	int length=0;
+	for (it=begin();it!=end();++it) {
+		length+=(*it).trackLength;
+	}
+	return length;
+}
+
+int Playlist::getTotalMixLength() const
+{
+	const_iterator it;
+	int length=0;
+	for (it=begin();it!=end();++it) {
+		length+=(*it).mixLength;
+	}
+	return length;
+}
+
+
+Playlist::const_iterator Playlist::begin() const
+{
+	return playlist.begin();
+}
+
+Playlist::const_iterator Playlist::end() const
+{
+	return playlist.end();
+}
+
+
+
 
 
 

@@ -64,13 +64,14 @@ TEST_F(TraktorTest, load) {
 	getTraktorFrames(frames,Tag);
 	iterate(frames);
 
+	/*
 	ppl7::ByteArray ba;
 	ppl7::File::load(ba, "testdata/IJWHX0DPWJ10ZCKS5SAFBAQJKVBA");
 	ba.hexDump(1,256);
 
 	ppl7::File::load(ba, "testdata/stripes/IJWHX0DPWJ10ZCKS5SAFBAQJKVBA");
 	ba.hexDump();
-
+	*/
 }
 
 

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <ppl7.h>
 #include <ppl7-audio.h>
+#include <list>
 
 
 namespace de {
@@ -56,20 +57,46 @@ class PlaylistItem
 		ppl7::String getExistingFilename() const;
 		void importFromXML(const ppl7::String &xml);
 		void loadCoverPreview();
-		void updateFromDatabase();
-		void updateMixLength();
-		void useTraktorCues(const ppl7::String &file);
-		void useTraktorCues(const ppl7::ID3Tag &Tag);
 };
 
 class Playlist
 {
-private:
-public:
-	Playlist();
-	~Playlist();
-	void load(const ppl7::String &filename);
-	void save(const ppl7::String &filename);
+	private:
+		ppl7::String Name,SubName;
+		ppl7::DateTime IssueDate;
+		int IssueNumber;
+
+		std::list<PlaylistItem> playlist;
+
+	public:
+
+		PPL7EXCEPTION(InvalidXMLFileException, Exception);
+		PPL7EXCEPTION(InvalidPlaylistException, Exception);
+
+		typedef std::list<PlaylistItem>::const_iterator const_iterator;
+
+		Playlist();
+		~Playlist();
+		void clear();
+		void load(const ppl7::String &filename);
+		void save(const ppl7::String &filename);
+		void setName(const ppl7::String &Name);
+		ppl7::String getName() const;
+		void setSubName(const ppl7::String &Name);
+		ppl7::String getSubName() const;
+		void setIssueNumber(int number);
+		int getIssueNumber() const;
+		void setIssueDate(const ppl7::DateTime &Date);
+		ppl7::DateTime getIssueDate() const;
+		int getTotalTracks() const;
+		int getTotalLength() const;
+		int getTotalMixLength() const;
+
+		size_t size() const;
+
+		Playlist::const_iterator begin() const;
+		Playlist::const_iterator end() const;
+
 
 
 };

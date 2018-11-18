@@ -2,13 +2,13 @@ GTEST_DIR	= /usr/local/gtest-1.7.0
 EXTRA_CFLAGS = 
 INCLUDE	= -I. -I../include -I$(GTEST_DIR)/include
 CFLAGS	= -ggdb -Wall  $(INCLUDE)  -I/usr/local/include  -I/usr/local/include -I/usr/local/include  -D_THREAD_SAFE -pthread -I/home/patrick/include $(EXTRA_CFLAGS)
-LIBS	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++ -lstdc++
-LIBS_COVERAGE	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lgcov -lstdc++
+LIBS	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/local/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++ -lstdc++
+LIBS_COVERAGE	= -L../compile -lwinmusik3   -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/local/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lgcov -lstdc++
 PROGNAME = testsuite
 
 
 OBJECTS = compile/main.o compile/storage.o compile/database.o \
-	compile/traktor.o
+	compile/traktor.o compile/playlist.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -64,4 +64,8 @@ compile/database.o: src/database.cpp Makefile wmlib-tests.h
 compile/traktor.o: src/traktor.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/traktor.o -c src/traktor.cpp
+
+compile/playlist.o: src/playlist.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/playlist.o -c src/playlist.cpp
 	
