@@ -1,6 +1,9 @@
 CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0  -I/usr/local/include  -I/usr/local/include -I/usr/local/include  -D_THREAD_SAFE -pthread -I/home/patrick/include -Iinclude 
-LIBS = -no-pie   -L/home/patrick/lib -lppl7 -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -L/usr/local/lib -lmhash -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/local/lib -lssl -lcrypto -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lstdc++
+LIBS = -no-pie   -L/home/patrick/lib -lppl7 -L/usr/local/lib -lcurl -fstack-protector -L/usr/local/lib -lcrypto -lldns -L/usr/local/lib -lmicrohttpd -L/usr/local/lib -lidn -L/usr/lib -lssl -lcrypto -lm -D_THREAD_SAFE -pthread -L/usr/lib -lz -lbz2 -L/usr/local/lib -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib -L/usr/local/lib -lmcrypt -ljpeg -L/usr/local/lib -lpng16 -lz -L /usr/local/lib -ltiff -llzma -L/usr/local/lib -lSDL2 -L/usr/local/lib -lfreetype -L/usr/local/lib -lMagickWand-6 -lMagickCore-6 -L/usr/local/lib/mysql -lmysqlclient -pthread -lz -lm -lexecinfo -lssl -lcrypto -L/usr/local/lib -lpq -L/usr/local/lib -lsqlite3 -L/usr/local/lib -lcdio -lm -lcam -L /usr/local/lib -lmpg123 -L/usr/local/lib -lmp3lame -lm -lstdc++  -lstdc++
 LIBDEP	:= $(shell /home/patrick/lib/libppl7.a)
+PREFIX	?= /home/patrick
+LIBDIR = $(PREFIX)/lib
+INCLUDEDIR = $(PREFIX)/include
 
 OBJS =		compile/object_title.o \
 			compile/CStorage.o \
@@ -22,7 +25,14 @@ all:		$(TARGET)
 clean:
 	rm -rf compile $(TARGET)
 
-
+install: $(TARGET)
+	-mkdir -p $(INCLUDEDIR)/winmusik3 $(LIBDIR)
+	cp $(TARGET) $(LIBDIR)
+	cp include/*.h $(INCLUDEDIR)/winmusik3
+	
+deinstall:
+	-rm -rf $(INCLUDEDIR)/winmusik3
+	-rm -rf $(LIBDIR)/libwinmusik3.a
 	
 compile/object_title.o: src/object_title.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile

@@ -1,6 +1,9 @@
 CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0 @LIBPPL7_CFLAGS@ -Iinclude 
 LIBS = @LIBPPL7_RELEASE_LIBS@  -lstdc++
 LIBDEP	:= $(shell @LIBPPL7@)
+PREFIX	?= @prefix@
+LIBDIR = $(PREFIX)/lib
+INCLUDEDIR = $(PREFIX)/include
 
 OBJS =		compile/object_title.o \
 			compile/CStorage.o \
@@ -22,7 +25,14 @@ all:		$(TARGET)
 clean:
 	rm -rf compile $(TARGET)
 
-
+install: $(TARGET)
+	-mkdir -p $(INCLUDEDIR)/winmusik3 $(LIBDIR)
+	cp $(TARGET) $(LIBDIR)
+	cp include/*.h $(INCLUDEDIR)/winmusik3
+	
+deinstall:
+	-rm -rf $(INCLUDEDIR)/winmusik3
+	-rm -rf $(LIBDIR)/libwinmusik3.a
 	
 compile/object_title.o: src/object_title.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
