@@ -73,7 +73,7 @@ class Playlist
 		PPL7EXCEPTION(InvalidXMLFileException, Exception);
 		PPL7EXCEPTION(InvalidPlaylistException, Exception);
 
-		typedef std::list<PlaylistItem>::const_iterator const_iterator;
+		typedef std::list<de::pfp::winmusik::PlaylistItem>::const_iterator const_iterator;
 
 		Playlist();
 		~Playlist();
