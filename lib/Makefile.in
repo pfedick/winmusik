@@ -1,6 +1,6 @@
 CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0 @LIBPPL7_CFLAGS@ -Iinclude 
 LIBS = @LIBPPL7_RELEASE_LIBS@  -lstdc++
-LIBDEP	:= $(shell @LIBPPL7@)
+LIBDEP	:= @LIBPPL7@
 PREFIX	?= @prefix@
 LIBDIR = $(PREFIX)/lib
 INCLUDEDIR = $(PREFIX)/include
