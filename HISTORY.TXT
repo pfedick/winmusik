@@ -16,7 +16,9 @@ Version 3.5.2
     - Playlist:
       - Reduced write operations on database when saving a track without any
         changes
-      - Fixed drag'n'drop of files from playlist to other apps   
+      - Fixed drag'n'drop of files from playlist to other apps
+      - remember directory from last playlist load
+      - shuffle tracks    
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
       now implemented as ppl6::CString-object instead of char *. Also added
       a compare operator ==

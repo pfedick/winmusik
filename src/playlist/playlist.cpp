@@ -32,12 +32,14 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QToolBar>
 #include <QKeyEvent>
 #include <QDomDocument>
 #include <QBuffer>
 #include <QDate>
 #include <QDir>
+#include <vector>
 
 #include "playlisttracks.h"
 #include "playlist.h"
@@ -193,10 +195,10 @@ void Playlist::createToolbar()
 	saveAsWidget=tb->widgetForAction(action);
 	tb->addSeparator();
     tb->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
+    tb->addAction(QIcon(":/icons/resources/randomize.png"),tr("shuffle Playlist"),this,SLOT(on_shufflePlaylist_triggered()));
     tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
-
 	this->addToolBar(tb);
 
 }
@@ -939,6 +941,8 @@ void Playlist::on_menuOpen_triggered()
 	ppl6::CString Tmp=QFileDialog::getOpenFileName (this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
 				tr("Playlists (*.wmp)"));
 	if (Tmp.IsEmpty()) return;
+	wm->conf.LastPlaylistPath=ppl6::GetPath(Tmp);
+	wm->conf.Save();
 	loadPlaylist(Tmp);
 }
 
@@ -1580,6 +1584,33 @@ void Playlist::on_issueDate_dateChanged(const QDate &)
 	setChanged(true);
 }
 
+void Playlist::on_shufflePlaylist_triggered()
+{
+	int ret=QMessageBox::question(this,tr("shuffle playlist"),
+			tr("Do you really want to shuffle the tracks of your playlist?"),
+			QMessageBox::Yes|QMessageBox::Cancel,QMessageBox::Cancel);
+	if (ret!=QMessageBox::Yes) return;
+
+	ui.tracks->setSortingEnabled(false);
+	currentTreeItem=NULL;
+	std::vector<PlaylistItem *> tmpPlaylist;
+	tmpPlaylist.reserve(ui.tracks->topLevelItemCount()+1);
+	while(ui.tracks->topLevelItemCount()>0) {
+		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(0);
+		tmpPlaylist.push_back(item);
+	}
+	ui.tracks->clear();
+	while (tmpPlaylist.size()>0) {
+		int index=ppl6::rand(0,tmpPlaylist.size()-1);
+		PlaylistItem *item=tmpPlaylist[index];
+		ui.tracks->addTopLevelItem(item);
+		tmpPlaylist.erase(tmpPlaylist.begin()+index);
+	}
+	updatePlaylist();
+	ui.tracks->setSortingEnabled(true);
+	setChanged(true);
+	fflush(stdout);
+}
 
 ppl6::CString Playlist::getExportFilename(int track, const ppl6::CString &SourceFile)
 {

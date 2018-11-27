@@ -181,6 +181,7 @@ public slots:
 	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
 	void on_tracks_customContextMenuRequested ( const QPoint & pos );
 	void on_tracks_itemSelectionChanged ();
+	void on_shufflePlaylist_triggered();
 
 
 	void on_playlistName_textChanged ( const QString & text );

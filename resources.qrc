@@ -201,6 +201,7 @@
     <file>resources/fkeys/f-key-4005.png</file>
   </qresource>
   <qresource prefix="/icons">
+    <file>resources/randomize.png</file>
     <file>resources/drop-target.png</file>
     <file>resources/cuetotrackend.png</file>
     <file>resources/cuetotrackstart.png</file>
