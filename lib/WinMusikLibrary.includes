@@ -1,2 +1,4 @@
 include
 tests
+../../ppl7/include
+.
