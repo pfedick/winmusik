@@ -2,6 +2,7 @@ configure.ac
 include/config.h.in
 include/cwmfile.h
 include/libwinmusik3.h
+include/wm_exceptions.h
 include/wm_musicalkeys.h
 include/wm_playlist.h
 include/wm_searchlist.h

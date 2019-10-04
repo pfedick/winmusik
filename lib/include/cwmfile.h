@@ -53,26 +53,27 @@ class CWMFile
 		ppl7::File ff;
 		ppluint8	version, subversion;
 		ppluint32	timestamp, lastchange;
-		ppluint32	pos, first, eof;
-		bool		enableCompression;
+        ppluint32   pos, first, eof;
+
+        void read_chunk(CWMFileChunk &chunk, ppluint32 filepos, const char *hdr);
 
 	public:
 		CWMFile();
 		~CWMFile();
 		bool IsOpen() const;
-		int Open(const char *filename);
+        void Open(const char *filename);
 		void Close();
 		void Reset();
-		int GetNextChunk(CWMFileChunk *chunk);
-		int GetChunk(CWMFileChunk *chunk, ppluint32 filepos);
-		int SaveChunk(CWMFileChunk *chunk);
-		int DeleteChunk(CWMFileChunk *chunk);
+        bool GetNextChunk(CWMFileChunk &chunk);
+        void GetChunk(CWMFileChunk &chunk, ppluint32 filepos);
+        void SaveChunk(CWMFileChunk &chunk);
+        void DeleteChunk(const CWMFileChunk &chunk);
 		void ListChunks();
 		void EnableCompression(bool flag);
-		int IsValidChunkName(const char *name);
-		ppluint32 GetFileSize();
-		ppluint32 GetFilePosition();
-		static int CopyDatabase(CWMFile &oldfile, CWMFile &newfile, CProgressUpdate *callback=NULL);
+        bool IsValidChunkName(const char *name);
+        ppluint32 GetFileSize() const;
+        ppluint32 GetFilePosition() const;
+        static void CopyDatabase(CWMFile &oldfile, CWMFile &newfile, CProgressUpdate *callback=NULL);
 };
 
 
