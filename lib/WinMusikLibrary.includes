@@ -2,3 +2,5 @@ include
 tests
 ../../ppl7/include
 .
+tests/src
+tests/googletest-release-1.10.0/googletest/include

@@ -12,8 +12,7 @@ OBJS =		compile/object_title.o \
 			compile/Searchlist.o \
 			compile/MusicalKeys.o \
 			compile/traktor.o \
-			
-			#compile/CWMFile.o
+			compile/CWMFile.o
 
 TARGET =	compile/libwinmusik3.a
 
