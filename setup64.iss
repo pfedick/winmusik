@@ -75,16 +75,16 @@ Source: "C:/msys64/mingw64/bin/libbrotlicommon.dll"; DestDir: "{app}"; Flags: ig
 Source: "C:/msys64/mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/LIBEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicudt61.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuin61.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuuc61.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicudt64.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuin64.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuuc64.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libidn2-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libintl-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
@@ -99,7 +99,6 @@ Source: "C:/msys64/mingw64/bin/Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversi
 Source: "C:/msys64/mingw64/bin/Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/SSLEAY32.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 

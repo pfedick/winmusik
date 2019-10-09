@@ -22,6 +22,9 @@ Version 3.5.2
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
       now implemented as ppl6::CString-object instead of char *. Also added
       a compare operator ==
+    - Editor: clicking on device icon opens system file explorer with
+      current device directory
+    - Rating is stored in ID3Tag
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:
