@@ -315,6 +315,7 @@ public slots:
 	void on_coverSearchSoundcloud_clicked();
 
 	void on_hideEditor_clicked();
+	void on_deviceIcon_clicked();
 
 };
 

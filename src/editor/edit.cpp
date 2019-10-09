@@ -263,7 +263,7 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 
 
 
-	ui.deviceIcon->setPixmap(wm->GetDevicePixmap(typ));
+	ui.deviceIcon->setIcon(wm->GetDeviceIcon(typ));
 	setWindowIcon(wm->GetDeviceIcon(typ));
 
 	switch (typ) {
@@ -2216,6 +2216,21 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 					wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 					return;
 				}
+				if (wm_main->conf.bWriteID3Tags==true) {
+					ppl6::CString Path=wm->GetAudioFilename(tUpdate.DeviceType,
+							tUpdate.DeviceId,
+							tUpdate.Page,
+							tUpdate.Track);
+					if (Path.NotEmpty()) {
+						if (!wm->SaveID3Tags(tUpdate.DeviceType,
+								tUpdate.DeviceId,
+								tUpdate.Page,
+								tUpdate.Track,
+								tUpdate)) {
+							wm->RaiseError(this,tr("Could not save ID3 Tags"));
+						}
+					}
+				}
 				switch (r) {
 					case 0: item->setIcon(TRACKLIST_RATING_ROW,QIcon(":/bewertung/resources/sterne64x16-0.png"));
 						item->setText(TRACKLIST_RATING_ROW,"0");
@@ -2923,6 +2938,15 @@ void Edit::on_hideEditor_clicked()
 	} else {
 		showEditor();
 	}
+}
+
+void Edit::on_deviceIcon_clicked()
+{
+	//printf ("Edit::on_deviceIcon_clicked\n");
+    ppl6::CString path=wm->GetAudioPath(DeviceType,DeviceId,Page);
+    if (path.NotEmpty()) {
+    	QDesktopServices::openUrl( QUrl::fromLocalFile(path) );
+    }
 }
 
 void Edit::on_displayMusicKey_currentIndexChanged(int)

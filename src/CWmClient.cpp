@@ -1192,6 +1192,9 @@ int CWmClient::SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Pag
 	//if (comment.Len()>0) comment+=" - ";
 	//comment+=version;
 	Job.Set("comment",comment);
+	int r=Ti.Rating;
+	if (Ti.Rating>1) r=Ti.Rating-1;
+	Job.Setf("rating","%d",r*255/5);
 	Job.Set("version",version);
 	Job.Setf("track","%u",Track);
 	if (Ti.EnergyLevel>0) Job.Setf("EnergyLevel","%d",Ti.EnergyLevel);
