@@ -76,6 +76,7 @@ Source: "C:/msys64/mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignor
 Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libcrypto-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
