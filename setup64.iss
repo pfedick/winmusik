@@ -101,6 +101,8 @@ Source: "C:/msys64/mingw64/bin/Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ig
 Source: "C:/msys64/mingw64/bin/Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libpsl-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libdouble-conversion.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 
 ; Dependencies of qt imageplugins
@@ -137,4 +139,5 @@ Name: "{commondesktop}\WinMusik 3"; Filename: "{app}\WinMusik.exe"; Tasks: deskt
 
 [Run]
 Filename: "{app}\WinMusik.exe"; Description: "{cm:LaunchProgram,WinMusik 3}"; Flags: 64bit nowait postinstall skipifsilent;
+
 
