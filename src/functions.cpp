@@ -183,6 +183,10 @@ static bool CopyFromID3v2Tag(TrackInfo &info, const ppl6::CString &Filename, ppl
 		NormalizeImportString(Tmp);
 		info.Ti.SetAlbum(Tmp);
 
+		// POPM
+		info.Ti.Rating=Tag.GetPopularimeter("winmusik@pfp.de")*5/255;
+		if (info.Ti.Rating>0) info.Ti.Rating+=1;
+
 		// BPM
 		Tmp=Tag.GetBPM();
 		NormalizeImportString(Tmp);

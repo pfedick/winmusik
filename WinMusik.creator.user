@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.9.2, 2019-10-02T16:56:19. -->
+<!-- Written by QtCreator 4.9.2, 2019-10-10T18:37:52. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{73cae338-e04d-4557-b4da-d4c8c57231dc}</value>
+  <value type="QByteArray">{0a92baae-7953-4eff-8395-a150ab71126a}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -55,23 +55,21 @@
  <data>
   <variable>ProjectExplorer.Project.PluginSettings</variable>
   <valuemap type="QVariantMap">
-   <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey">
-    <value type="QString">-fno-delayed-template-parsing</value>
-   </valuelist>
+   <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey"/>
    <value type="bool" key="ClangCodeModel.UseGlobalConfig">true</value>
   </valuemap>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Msys</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Msys</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{a375fcc6-c280-463b-bc7e-fe61783f84b7}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{30081cae-3e6e-4f9a-9cbc-e36289c5953e}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:/git/winmusik</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/patrick/git/winmusik</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <valuelist type="QVariantList" key="GenericProjectManager.GenericMakeStep.BuildTargets">
@@ -126,7 +124,7 @@
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy Configuration</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deployment-Konfiguration</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.DefaultDeployConfiguration</value>
    </valuemap>

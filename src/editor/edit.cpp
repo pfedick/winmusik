@@ -2479,13 +2479,20 @@ void Edit::on_contextSynchronizeKeys_triggered()
 					DataTitle Ti;
 					Ti.CopyFrom(title);
 					bool modified=false;
+					bool modifyid3=false;
 					if (tinfo.Ti.Key != title->Key && (title->Flags&16)==16) {
 						tinfo.Ti.Key=Ti.Key;
-						if (!wm->SaveID3Tags(title->DeviceType,title->DeviceId, title->Page, title->Track,Ti)) {
-							wm->RaiseError(this,tr("Could not save ID3 Tags"));
-						}
+						modifyid3=true;
 					} else if (tinfo.Ti.Key != title->Key && (title->Flags&16)==0) {
 						Ti.Key=tinfo.Ti.Key;
+						modified=true;
+					}
+					if (tinfo.Ti.Rating!=Ti.Rating && Ti.Rating!=0) {
+						tinfo.Ti.Rating=Ti.Rating;
+						//printf ("Rating will be saved: %d\n",track->Track);
+						modifyid3=true;
+					} else if (tinfo.Ti.Rating>Ti.Rating) {
+						Ti.Rating=tinfo.Ti.Rating;
 						modified=true;
 					}
 					if (tinfo.Ti.EnergyLevel>0 && Ti.EnergyLevel!=tinfo.Ti.EnergyLevel) {
@@ -2516,6 +2523,11 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						if (!wm->TitleStore.Put(&Ti)) {
 							wm->RaiseError(this,tr("Could not save Title in TitleStore"));
 							break;
+						}
+					}
+					if (modifyid3) {
+						if (!wm->SaveID3Tags(title->DeviceType,title->DeviceId, title->Page, title->Track,Ti)) {
+							wm->RaiseError(this,tr("Could not save ID3 Tags"));
 						}
 					}
 				}

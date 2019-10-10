@@ -230,17 +230,11 @@ int CID3TagSaver::UpdateNow(const char *filename, ppl6::CAssocArray *Tags, bool 
 		Tag.SetKey(Tags->Get("key"));
 		changes=true;
 	}
-	if (Tag.GetPopularimeter("winmusik@pfp.de")!=Tags->ToInt("rating")) {
+	if (Tag.GetPopularimeter()!=Tags->ToInt("rating")) {
+		Tag.RemovePopularimeter();
 		Tag.SetPopularimeter("winmusik@pfp.de", Tags->ToInt("rating"));
 		changes=true;
 	}
-	if (Tag.HasPopularimeter("traktor@native-instruments.de")) {
-		if (Tag.GetPopularimeter("traktor@native-instruments.de")!=Tags->ToInt("rating")) {
-			Tag.SetPopularimeter("traktor@native-instruments.de", Tags->ToInt("rating"));
-			changes=true;
-		}
-	}
-
 
 	if (changes==false) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Tags did not change, skipping update: %s",filename);
