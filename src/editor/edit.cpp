@@ -2488,9 +2488,9 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						modified=true;
 					}
 					if (tinfo.Ti.Rating!=Ti.Rating && Ti.Rating!=0) {
-						tinfo.Ti.Rating=Ti.Rating;
+						//tinfo.Ti.Rating=Ti.Rating;
 						//printf ("Rating will be saved: %d\n",track->Track);
-						modifyid3=true;
+						//modifyid3=true;
 					} else if (tinfo.Ti.Rating>Ti.Rating) {
 						Ti.Rating=tinfo.Ti.Rating;
 						modified=true;
