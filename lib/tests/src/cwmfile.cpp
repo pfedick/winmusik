@@ -5,7 +5,7 @@
 #include <ppl7.h>
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
-#include "cwmfile.h"
+#include "wm_cwmfile.h"
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 #include <map>

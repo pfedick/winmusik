@@ -25,8 +25,13 @@ then
 				AC_SUBST([GTEST_PREFIX])
 			fi
 		fi
+		if test -f "$enable_gtest/googletest/src/gtest-all.cc"
+		then
+			HAVE_GTEST="yes"
+			GTEST_PREFIX="$enable_gtest/googletest"
+			AC_SUBST([GTEST_PREFIX])
+		fi
 	fi
-	
 	if test "$HAVE_GTEST" = "yes"
 	then
 		AC_MSG_RESULT(yes: $enable_gtest)

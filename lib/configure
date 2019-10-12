@@ -10202,8 +10202,13 @@ then
 
 			fi
 		fi
-	fi
+		if test -f "$enable_gtest/googletest/src/gtest-all.cc"
+		then
+			HAVE_GTEST="yes"
+			GTEST_PREFIX="$enable_gtest/googletest"
 
+		fi
+	fi
 	if test "$HAVE_GTEST" = "yes"
 	then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes: $enable_gtest" >&5
@@ -10843,8 +10848,13 @@ then
 
 			fi
 		fi
-	fi
+		if test -f "$enable_gtest/googletest/src/gtest-all.cc"
+		then
+			HAVE_GTEST="yes"
+			GTEST_PREFIX="$enable_gtest/googletest"
 
+		fi
+	fi
 	if test "$HAVE_GTEST" = "yes"
 	then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes: $enable_gtest" >&5

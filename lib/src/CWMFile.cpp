@@ -28,7 +28,7 @@
 #include <string.h>
 #include "libwinmusik3.h"
 #include "wm_exceptions.h"
-#include "cwmfile.h"
+#include "wm_cwmfile.h"
 
 namespace de {
 namespace pfp {
@@ -48,7 +48,6 @@ CWMFileChunk::CWMFileChunk()
 	size=0;
 	timestamp=0;
 	datasize=0;
-	formatversion=1;
 	data=NULL;
 	version=0;
 }
@@ -65,26 +64,31 @@ void CWMFileChunk::Clear()
 	size=0;
 	timestamp=0;
 	datasize=0;
-	formatversion=1;
 	data=NULL;
 }
 
-ppluint32 CWMFileChunk::GetChunkDataSize()
+ppluint32 CWMFileChunk::GetChunkDataSize() const
 {
 	return datasize;
 }
 
-const char *CWMFileChunk::GetChunkData()
+const char *CWMFileChunk::GetChunkData() const
 {
     return static_cast<const char*>(data);
 }
 
-const char	*CWMFileChunk::GetChunkName()
+const char *CWMFileChunk::GetChunkName() const
 {
 	return chunkname;
 }
 
-int CWMFileChunk::SetChunkData(const char *chunkname, const char *data, ppluint32 size, ppluint32 oldfilepos, ppluint32 version, ppluint8 formatversion)
+ppl7::ByteArrayPtr CWMFileChunk::GetData() const
+{
+    return ppl7::ByteArrayPtr(static_cast<const char*>(data), datasize);
+}
+
+
+int CWMFileChunk::SetChunkData(const char *chunkname, const char *data, ppluint32 size, ppluint32 oldfilepos, ppluint32 version)
 {
 	Clear();
 	if (chunkname==NULL || strlen(chunkname)!=4) {
@@ -95,32 +99,20 @@ int CWMFileChunk::SetChunkData(const char *chunkname, const char *data, ppluint3
 	this->datasize=size;
 	filepos=oldfilepos;
 	this->version=version;
-	this->formatversion=formatversion;
 	return 1;
 }
 
-void CWMFileChunk::SetFormatVersion(ppluint8 v)
-{
-	formatversion=v;
-}
-
-ppluint8 CWMFileChunk::GetFormatVersion()
-{
-	return formatversion;
-}
-
-
-ppluint32 CWMFileChunk::GetFilepos()
+ppluint32 CWMFileChunk::GetFilepos() const
 {
 	return filepos;
 }
 
-ppluint32 CWMFileChunk::GetVersion()
+ppluint32 CWMFileChunk::GetVersion() const
 {
 	return version;
 }
 
-ppluint32 CWMFileChunk::GetTimestamp()
+ppluint32 CWMFileChunk::GetTimestamp() const
 {
 	return timestamp;
 }
@@ -223,8 +215,7 @@ void CWMFile::read_chunk(CWMFileChunk &chunk, ppluint32 filepos, const char *ptr
     chunk.datasize=chunk.size-17;
     chunk.timestamp=ppl7::Peek32(ptr+8);
     chunk.version=ppl7::Peek32(ptr+12);
-    chunk.formatversion=static_cast<unsigned char>(ppl7::Peek8(ptr+16));
-    chunk.data=ff.map(filepos+17,chunk.datasize);
+    chunk.data=ff.map(filepos+16,chunk.datasize);
 }
 
 bool CWMFile::GetNextChunk(CWMFileChunk &chunk)
@@ -233,7 +224,7 @@ bool CWMFile::GetNextChunk(CWMFileChunk &chunk)
     if (!pos) throw DatabaseNotOpenException();
     if (pos>=eof) return false;
     // Header des nächsten Chunks einlesen
-    const char *ptr=ff.map(pos,17);
+    const char *ptr=ff.map(pos,16);
     if (strncmp(ptr,"ENDF",4)==0) return false;
     read_chunk(chunk,pos,ptr);
     pos+=chunk.size;
@@ -244,7 +235,7 @@ void CWMFile::GetChunk(CWMFileChunk &chunk, ppluint32 filepos)
 {
     if (filepos==0) throw ppl7::InvalidArgumentsException();
     ff.seek(filepos);
-    const char *ptr=ff.map(filepos,17);
+    const char *ptr=ff.map(filepos,16);
 	char tmp[5];
 	strncpy(tmp,ptr,4);
 	tmp[4]=0;
@@ -280,22 +271,21 @@ void CWMFile::SaveChunk(CWMFileChunk &chunk)
     if (!IsValidChunkName(chunk.chunkname)) throw UnknownDataChunkException("Chunkname: %s",chunk.chunkname);
     if (chunk.filepos) {
 		// Haben wir genug Platz, um den alten Chunk zu überschreiben?
-        if (ff.read(header,17,chunk.filepos)!=17) throw CouldNotReadDatabaseRecordException();
+        if (ff.read(header,16,chunk.filepos)!=16) throw CouldNotReadDatabaseRecordException();
         ppluint32 oldsize=ppl7::Peek32(header+4);
         ppluint32 oldversion=ppl7::Peek32(header+12);
         if (chunk.version!=oldversion)
             throw DatabaseRecordWasModifiedException("Gespeicherte Version: %i, diese Version: %i",oldversion, chunk.version);
         ff.unmap();
-        if (oldsize>=(chunk.datasize+17)) {
+        if (oldsize>=(chunk.datasize+16)) {
             chunk.version++;
             chunk.timestamp=static_cast<ppluint32>(ppl7::GetTime());
             strncpy(header,chunk.chunkname,4);
             ppl7::Poke32(header+4,oldsize);
             ppl7::Poke32(header+8,chunk.timestamp);
             ppl7::Poke32(header+12,chunk.version);
-            ppl7::Poke8(header+16,chunk.formatversion);
-            ff.write(header,17,chunk.filepos);
-            ff.write(chunk.data,chunk.datasize,chunk.filepos+17);
+            ff.write(header,16,chunk.filepos);
+            ff.write(chunk.data,chunk.datasize,chunk.filepos+16);
             ppl7::Poke32(timestamp,static_cast<ppluint32>(ppl7::GetTime()));
             ff.write(timestamp,4,24);
             return;
@@ -312,19 +302,17 @@ void CWMFile::SaveChunk(CWMFileChunk &chunk)
     ppl7::Poke32(header+4,chunk.size);
     ppl7::Poke32(header+8,chunk.timestamp);
     ppl7::Poke32(header+12,chunk.version);
-    ppl7::Poke8(header+16,chunk.formatversion);
-    ff.write(header,17,eof);
-    ff.write(chunk.data,chunk.datasize,eof+17);
+    ff.write(header,16,eof);
+    ff.write(chunk.data,chunk.datasize,eof+16);
 
 	// Neuen ENDF-Chunk schreiben
-    eof=eof+17+chunk.datasize;
+    eof=eof+16+chunk.datasize;
 	pos=eof;
 	strcpy(header,"ENDF");
     ppl7::Poke32(header+4,0);
     ppl7::Poke32(header+8,0);
     ppl7::Poke32(header+12,0);
-    ppl7::Poke8(header+16,0);
-    ff.write(header,17,eof);
+    ff.write(header,16,eof);
 
 	// Position des ENDF-Chunks in den Header schreiben
     ppl7::Poke32(header,eof);
@@ -342,7 +330,7 @@ void CWMFile::DeleteChunk(const CWMFileChunk &chunk)
     if (!IsValidChunkName(chunk.chunkname)) throw UnknownDataChunkException("Chunkname: %s",chunk.chunkname);
     if (chunk.filepos) {
         ff.unmap();
-        if (ff.read(header,17,chunk.filepos)!=17) throw CouldNotReadDatabaseRecordException();
+        if (ff.read(header,16,chunk.filepos)!=16) throw CouldNotReadDatabaseRecordException();
 		strncpy(header,"FREE",4);
         ff.write(header,4,chunk.filepos);
         // Timestamp in den Header schreiben

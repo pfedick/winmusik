@@ -28,23 +28,20 @@ class CWMFileChunk
 		ppluint32	timestamp;
 		ppluint32	version;
 		ppluint32	datasize;
-		ppluint8	formatversion;
 		const char	*data;
 
 	public:
 		CWMFileChunk();
 		~CWMFileChunk();
 		void		Clear();
-		ppluint32	GetChunkDataSize();
-		const char	*GetChunkData();
-		const char	*GetChunkName();
-		int			SetChunkData(const char *chunkname, const char *data, ppluint32 size, ppluint32 oldfilepos=0, ppluint32 version=0, ppluint8 formatversion=1);
-		void		SetFormatVersion(ppluint8 v);
-		ppluint32	GetFilepos();
-		ppluint32	GetTimestamp();
-		ppluint32	GetVersion();
-		ppluint8	GetFormatVersion();
-		// int			SetChunkData(const char *chunkname, ppl6::CBinary *bin, CStorageItem *item);
+        ppluint32	GetChunkDataSize() const;
+        const char	*GetChunkData() const;
+        const char	*GetChunkName() const;
+        int			SetChunkData(const char *chunkname, const char *data, ppluint32 size, ppluint32 oldfilepos=0, ppluint32 version=0);
+        ppluint32	GetFilepos() const;
+        ppluint32	GetTimestamp() const;
+        ppluint32	GetVersion() const;
+        ppl7::ByteArrayPtr GetData() const;
 };
 
 class CWMFile

@@ -5,14 +5,16 @@ PREFIX	?= @prefix@
 LIBDIR = $(PREFIX)/lib
 INCLUDEDIR = $(PREFIX)/include
 
-OBJS =		compile/object_title.o \
-			compile/CStorage.o \
-			compile/CDatabase.o \
-			compile/Playlist.o \
-			compile/Searchlist.o \
-			compile/MusicalKeys.o \
-			compile/traktor.o \
-			compile/CWMFile.o
+OBJS =	compile/object_title.o \
+	compile/CStorage.o \
+	compile/CDatabase.o \
+	compile/Playlist.o \
+	compile/Searchlist.o \
+	compile/MusicalKeys.o \
+	compile/object_title.o \
+	compile/object_storagedata.o \
+	compile/functions.o \
+	compile/CWMFile.o
 
 TARGET =	compile/libwinmusik3.a
 
@@ -33,10 +35,6 @@ deinstall:
 	-rm -rf $(INCLUDEDIR)/winmusik3
 	-rm -rf $(LIBDIR)/libwinmusik3.a
 	
-compile/object_title.o: src/object_title.cpp include/libwinmusik3.h Makefile
-	-mkdir -p compile
-	$(CXX) -o compile/object_title.o -c src/object_title.cpp $(CXXFLAGS)
-	
 compile/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/CStorage.o -c src/CStorage.cpp $(CXXFLAGS)
@@ -45,7 +43,15 @@ compile/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/CDatabase.o -c src/CDatabase.cpp $(CXXFLAGS)
 
-compile/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h Makefile
+compile/object_title.o: src/object_title.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/object_title.o -c src/object_title.cpp $(CXXFLAGS)
+
+compile/object_storagedata.o: src/object_storagedata.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/object_storagedata.o -c src/object_storagedata.cpp $(CXXFLAGS)
+
+compile/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h include/wm_cwmfile.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/CWMFile.o -c src/CWMFile.cpp $(CXXFLAGS)
 
@@ -64,4 +70,9 @@ compile/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
 compile/traktor.o: src/traktor.cpp include/traktor.h Makefile
 	-mkdir -p compile
 	$(CXX) -o compile/traktor.o -c src/traktor.cpp $(CXXFLAGS)
+	
+
+compile/functions.o: src/functions.cpp include/wm_functions.h Makefile
+	-mkdir -p compile
+	$(CXX) -o compile/functions.o -c src/functions.cpp $(CXXFLAGS)
 	

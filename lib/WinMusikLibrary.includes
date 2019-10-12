@@ -4,3 +4,16 @@ tests
 .
 tests/src
 tests/googletest-release-1.10.0/googletest/include
+src
+tests/googletest-release-1.10.0/googletest/samples
+tests/googletest-release-1.10.0/googletest/test
+autoconf
+tests/googletest-release-1.10.0/googlemock/include/gmock/internal
+tests/googletest-release-1.10.0/googlemock/src
+tests/googletest-release-1.10.0/googlemock/include/gmock
+tests/googletest-release-1.10.0/googlemock/include/gmock/internal/custom
+tests/googletest-release-1.10.0/googletest/src
+tests/googletest-release-1.10.0/googlemock/test
+tests/googletest-release-1.10.0/googletest/include/gtest/internal/custom
+tests/googletest-release-1.10.0/googletest/include/gtest
+tests/googletest-release-1.10.0/googletest/include/gtest/internal
