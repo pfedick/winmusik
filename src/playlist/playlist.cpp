@@ -48,6 +48,7 @@
 #include "setbpmplayed.h"
 #include "playlistexport.h"
 #include "version.h"
+#include "musickey.h"
 #include <stdio.h>
 
 
@@ -135,7 +136,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	createStatusBar();
 
 	playlistView=(playlistViewType)wm->conf.playlistView;
-	musicKeyDisplay=wm->conf.musicKeyDisplay;
+    musicKeyDisplay=wm->conf.musicKeyDisplay;
 
 	recreatePlaylist();
 	changed=true;
@@ -674,18 +675,26 @@ void Playlist::renderTrack(PlaylistItem *item)
 	for (int i=1;i<item->columnCount();i++) {
 		item->setText(i,"");
 		item->setIcon(i,QIcon());
-		item->setTextColor(i,color);
+        //item->setTextColor(i,color);
 	}
 	QFont f=item->font(columnMusicKey);
 	f.setBold(false);
 	item->setFont(columnMusicKey,f);
 
 
+    //QRect rr=ui.tracks->visualItemRect(item);
+
+    int ch=16;
+    //if (rr.height()>ch) ch=rr.height();
+    //if (ch>64) ch=64;
+
 	if (item->CoverPreview.Size()>0) {
 		QPixmap pix, icon;
 		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.Size());
 		icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-		item->setIcon(columnCover,icon.copy(0,0,64,16));
+        item->setIcon(columnCover,icon.copy(0,0,64,ch));
+        //ui.tracks->setIconSize(QSize(64,ch));
+
 	}
 	ppl6::CString Tmp;
 	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
@@ -756,11 +765,13 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,musicKeyDisplay));
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
-		item->setTextColor(columnMusicKey,QColor(0,0,0));
+        //item->setTextColor(columnMusicKey,QColor(0,0,0));
 		f.setBold(true);
+        f.setWeight(QFont::Black);
 	} else {
-		item->setTextColor(columnMusicKey,QColor(192,192,192));
+        //item->setTextColor(columnMusicKey,QColor(192,192,192));
 		f.setBold(false);
+        f.setWeight(QFont::ExtraLight);
 	}
 	item->setFont(columnMusicKey,f);
 
@@ -781,11 +792,18 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	Tmp.Setf("%02i:%02i",(int)(cuts/60),(int)cuts%60);
 	item->setText(columnCuts,Tmp);
 
-	QColor grey(192,192,192);
+    //QColor grey(192,192,192);
+    QColor basecolor=QApplication::palette().base().color();
+    QBrush grey=item->foreground(columnStart);
+    if (basecolor.lightness()<127) {
+        grey.setColor(QColor(128,128,128));
+    } else {
+        grey.setColor(QColor(192,192,192));
+    }
 
-	if (item->startPositionSec==0) item->setTextColor(columnStart,grey);
-	if (item->endPositionSec==item->trackLength) item->setTextColor(columnEnd,grey);
-	if (cuts==0) item->setTextColor(columnCuts,grey);
+    if (item->startPositionSec==0) item->setForeground(columnStart,grey);
+    if (item->endPositionSec==item->trackLength) item->setForeground(columnEnd,grey);
+    if (cuts==0) item->setForeground(columnCuts,grey);
 
 
 }
@@ -1479,13 +1497,6 @@ void Playlist::on_statusbar_musicKeySelectionChanged(int newValue)
 	updatePlaylist();
 }
 
-
-void Playlist::setItemBackgroundColor(PlaylistItem *item, const QColor &c)
-{
-	item->setBackgroundColor(columnTitle,c);
-	item->setBackgroundColor(columnMusicKey,c);
-}
-
 void Playlist::setItemBackground(PlaylistItem *item, const QBrush &b)
 {
 	item->setBackground(columnTitle,b);
@@ -1498,23 +1509,64 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 	if (!track) {
 		return;
 	}
-	std::set<int> harmonics;
-	std::set<int>::const_iterator it;
+    std::map<int,HarmonicType> harmonics;
+    std::map<int,HarmonicType>::const_iterator it;
 	getHarmonicKeys(harmonics,track->musicKey);
 
 	int count=ui.tracks->topLevelItemCount();
+    if (count==0) return;
+    PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(0);
+    QColor basecolor=QApplication::palette().base().color();
+    QBrush background=item->background(0);
+    QColor bgc=background.color();
+    QBrush samekey=background;
+    QBrush relatedkey=background;
+    QBrush boostkey=background;
+    QBrush boostkey2=background;
+    samekey.setStyle(Qt::SolidPattern);
+    relatedkey.setStyle(Qt::SolidPattern);
+    boostkey.setStyle(Qt::SolidPattern);
+    boostkey2.setStyle(Qt::SolidPattern);
+    if (basecolor.lightness()<127) {
+        samekey.setColor(QColor(bgc.lightness(),127,bgc.lightness()));
+        relatedkey.setColor(QColor(bgc.lightness(),64,bgc.lightness()));
+        boostkey.setColor(QColor(128,bgc.lightness(),bgc.lightness()));
+        boostkey2.setColor(QColor(200,bgc.lightness(),bgc.lightness()));
+    } else {
+        samekey.setColor(QColor(192,230,192));
+        relatedkey.setColor(QColor(192,255,192));
+        boostkey.setColor(QColor(220,192,192));
+        boostkey2.setColor(QColor(255,192,192));
+    }
 	for (int i=0;i<count;i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		if (item) {
-			QBrush b=item->background(columnTrack);
-			setItemBackground(item,b);
+            //QBrush b=item->background(columnTrack);
+            setItemBackground(item,background);
 
 			if (item->musicKey!=0 && track->musicKey!=0) {
-				if (item->musicKey==track->musicKey) setItemBackgroundColor(item,QColor(170,255,170,255));
-				else {
-					it=harmonics.find(item->musicKey);
-					if (it!=harmonics.end()) setItemBackgroundColor(item,QColor(218,255,192,255));
-				}
+                if (item->musicKey==track->musicKey) item->setBackground(columnMusicKey,samekey);
+                else {
+                    it=harmonics.find(item->musicKey);
+                    if (it!=harmonics.end()) {
+                        switch(it->second) {
+                        case harmonicSemitoneUp:
+                        case harmonicTwoSemitoneUp:
+                            item->setBackground(columnMusicKey,boostkey);
+                            //setItemBackground(item,boostkey);
+                            break;
+                        case harmonicAvbBoost:
+                            item->setBackground(columnMusicKey,boostkey2);
+                            //setItemBackground(item,boostkey2);
+                            break;
+                        default:
+                            item->setBackground(columnMusicKey,relatedkey);
+                            //setItemBackground(item,relatedkey);
+                            break;
+                        }
+
+                    }
+                }
 			}
 		}
 	}

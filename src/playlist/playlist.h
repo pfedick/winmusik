@@ -110,7 +110,6 @@ private:
 
     void closeEvent(QCloseEvent *event);
 
-    void setItemBackgroundColor(PlaylistItem *item, const QColor &c);
     void setItemBackground(PlaylistItem *item, const QBrush &b);
     void highlightHarmonicKeys(PlaylistItem *track);
     void unHighlightHarmonicKeys();

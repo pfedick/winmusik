@@ -76,6 +76,7 @@ HEADERS += widgets/fkeys.h \
     src/playlist/setbpmplayed.h \
     include/devicelist.h \
     include/traktor.h \
+    include/musickey.h \
     include/wmtoolbutton.h \
     include/asynchronousMessage.h \
     include/droparea.h \
@@ -117,6 +118,7 @@ SOURCES += widgets/fkeys.cpp \
     src/CID3TagSaver.cpp \
     src/CTableControl.cpp \
     src/functions.cpp \
+    src/musickey.cpp \
     src/editdevice.cpp \
     src/splashscreen.cpp \
     src/StorageTrack.cpp \

@@ -1,9 +1,4 @@
-/home/patrick/svn/winmusik
-/home/patrick/svn/winmusik/include
-/home/patrick/svn/winmusik/src/editor
-/home/patrick/svn/winmusik/src/properties
-/home/patrick/svn/winmusik/src/searchlists
-/home/patrick/svn/winmusik/widgets
+../ppl6/include
 src/properties
 src/menue
 src/playlist
@@ -13,3 +8,5 @@ src
 src/searchlists
 src/editor
 src/player
+include
+.
