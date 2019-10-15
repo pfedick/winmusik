@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -580,7 +580,7 @@
                  </size>
                 </property>
                 <property name="inputMask">
-                 <string>00000; </string>
+                 <string>00000</string>
                 </property>
                </widget>
               </item>
@@ -887,7 +887,7 @@
               </size>
              </property>
              <property name="inputMask">
-              <string>00000; </string>
+              <string>00000</string>
              </property>
              <property name="text">
               <string>80</string>
@@ -975,7 +975,7 @@
                </size>
               </property>
               <property name="inputMask">
-               <string>00000; </string>
+               <string>00000</string>
               </property>
               <property name="text">
                <string>80</string>
@@ -1372,14 +1372,14 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="3" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Language:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="2" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="QComboBox" name="language">
@@ -1410,14 +1410,27 @@
            </item>
           </layout>
          </item>
-         <item row="4" column="0">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Company:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
           <widget class="QLabel" name="label_11">
            <property name="text">
             <string>Currency:</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="name"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="company"/>
+         </item>
+         <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_7">
            <item>
             <widget class="QLineEdit" name="currency">
@@ -1450,66 +1463,6 @@
             <string>Name:</string>
            </property>
           </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Company:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="serial_label">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Serial:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QLineEdit" name="serial">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="registerButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Register</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources.qrc">
-               <normaloff>:/icons/resources/edit.png</normaloff>:/icons/resources/edit.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
-             <property name="shortcut">
-              <string>Return</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="name"/>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="company"/>
          </item>
         </layout>
        </item>
@@ -1714,13 +1667,13 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_6">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <property name="horizontalSpacing">
           <number>2</number>
          </property>
          <property name="verticalSpacing">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
           <number>0</number>
          </property>
          <item row="0" column="0">
@@ -2363,193 +2316,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_6">
-      <attribute name="icon">
-       <iconset resource="../../resources.qrc">
-        <normaloff>:/icons/resources/server.png</normaloff>:/icons/resources/server.png</iconset>
-      </attribute>
-      <attribute name="title">
-       <string>Server</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_15">
-       <item>
-        <widget class="QGroupBox" name="serverEnable">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="title">
-          <string>start as server</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_14">
-          <item>
-           <layout class="QFormLayout" name="formLayout">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Hostname or IP:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="serverHostname"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_25">
-              <property name="text">
-               <string>Port:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="serverPort">
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="inputMask">
-               <string>00009; </string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_26">
-              <property name="text">
-               <string>Encryption:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QGroupBox" name="serverEnableSSL">
-              <property name="title">
-               <string>Enable SSL</string>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_10">
-               <item>
-                <layout class="QFormLayout" name="formLayout_2">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_27">
-                   <property name="text">
-                    <string>Private Keyfile:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_28">
-                   <property name="text">
-                    <string>Password:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <layout class="QHBoxLayout" name="horizontalLayout_15">
-                   <item>
-                    <widget class="QLineEdit" name="serverKeyfile"/>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="buttonSelectServerKeyfile">
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="../../resources.qrc">
-                       <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
-                     </property>
-                     <property name="iconSize">
-                      <size>
-                       <width>16</width>
-                       <height>16</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="serverKeyPassword">
-                   <property name="echoMode">
-                    <enum>QLineEdit::Password</enum>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_16">
-              <item>
-               <widget class="QPushButton" name="buttonManageUser">
-                <property name="text">
-                 <string>Manage User</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../../resources.qrc">
-                  <normaloff>:/icons/resources/user.png</normaloff>:/icons/resources/user.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>16</width>
-                  <height>16</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_12">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>70</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
    <item>
@@ -2681,8 +2447,6 @@
   <tabstop>customMusicKeyName</tabstop>
   <tabstop>name</tabstop>
   <tabstop>company</tabstop>
-  <tabstop>serial</tabstop>
-  <tabstop>registerButton</tabstop>
   <tabstop>language</tabstop>
   <tabstop>currency</tabstop>
   <tabstop>enableDebug</tabstop>
@@ -2728,17 +2492,8 @@
   <tabstop>directoryList</tabstop>
   <tabstop>addDirectory</tabstop>
   <tabstop>deleteDirectory</tabstop>
-  <tabstop>serverEnable</tabstop>
-  <tabstop>serverHostname</tabstop>
-  <tabstop>serverPort</tabstop>
-  <tabstop>serverEnableSSL</tabstop>
-  <tabstop>serverKeyfile</tabstop>
-  <tabstop>buttonSelectServerKeyfile</tabstop>
-  <tabstop>serverKeyPassword</tabstop>
-  <tabstop>buttonManageUser</tabstop>
  </tabstops>
  <resources>
-  <include location="../../resources.qrc"/>
   <include location="../../resources.qrc"/>
  </resources>
  <connections/>

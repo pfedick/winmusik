@@ -73,7 +73,6 @@ private slots:
     void on_mp3PlayerButton_clicked();
     void on_aiffPlayerButton_clicked();
     void on_tmpPathButton_clicked();
-    void on_registerButton_clicked();
     void on_checkUpdatesNow_clicked();
     void on_addDirectory_clicked();
     void on_deleteDirectory_clicked();
@@ -129,7 +128,6 @@ private slots:
     // User
     void on_name_textChanged(const QString &) {Change();};
     void on_company_textChanged(const QString &) {Change();};
-    void on_serial_textChanged(const QString &) {Change();};
     void on_language_currentIndexChanged(int ) {Change();};
 
     void on_currency_textChanged(const QString &) {Change();};
@@ -153,15 +151,6 @@ private slots:
     void on_device_7_stateChanged(int ) {Change();}
     void on_device_8_stateChanged(int ) {Change();}
     void on_device_9_stateChanged(int ) {Change();}
-
-    // Server
-    void on_buttonSelectServerKeyfile_clicked();
-    void on_serverEnable_toggled(bool ) {Change();}
-    void on_serverEnableSSL_toggled(bool ) {Change();}
-    void on_serverHostname_textChanged(const QString &) {Change();};
-    void on_serverPort_textChanged(const QString &) {Change();};
-    void on_serverKeyfile_textChanged(const QString &) {Change();};
-    void on_serverKeyPassword_textChanged(const QString &) {Change();};
 
     // Regular Expressions#
     void on_regexpAdd_clicked();

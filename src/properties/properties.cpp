@@ -44,11 +44,6 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 
 	Config *c=&wm->conf;
 
-	// Registration verbergen
-	ui.serial_label->setVisible(false);
-	ui.serial->setVisible(false);
-	ui.registerButton->setVisible(false);
-
 	// General Options
 	ui.wmDataPath->setText(c->DataPath);
 	ui.tmpPath->setText(c->TmpPath);
@@ -97,7 +92,6 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	// User
 	ui.name->setText(c->UserName);
 	ui.company->setText(c->UserCompany);
-	ui.serial->setText(c->Serial);
 	ui.currency->setText(c->Currency);
 
 	int index=ui.font->findText(c->PrinterFont);
@@ -131,19 +125,6 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	while ((row=c->DirectorySearch.GetNext())) {
 		ui.directoryList->addItem(row);
 	}
-
-	// Server
-	if (c->bserverEnabled) ui.serverEnable->setChecked(true);
-	else ui.serverEnable->setChecked(false);
-	if (c->bserverEnableSSL) ui.serverEnableSSL->setChecked(true);
-	else ui.serverEnableSSL->setChecked(false);
-	ui.serverHostname->setText(c->serverHost);
-	Tmp.Setf("%i",c->serverPort);
-	ui.serverPort->setText(Tmp);
-	ui.serverKeyfile->setText(c->serverSSLKeyfile);
-	ui.serverKeyPassword->setText(wm->DeCrypt(c->serverSSLPassword));
-
-
 
 	// MusicKey
 	switch (c->musicKeyDisplay) {
@@ -395,7 +376,6 @@ int Properties::Save()
 	}
 	c->UserName=ui.name->text();
 	c->UserCompany=ui.company->text();
-	c->Serial=ui.serial->text();
 	c->Currency=ui.currency->text();
 
 	// Debug
@@ -422,26 +402,6 @@ int Properties::Save()
 		Tmp=item->text();
 		c->DirectorySearch.Add(Tmp);
 	}
-
-	// Server
-	bool serverChanged=false;
-	if (c->bserverEnabled!=ui.serverEnable->isChecked()) serverChanged=true;
-	if (c->bserverEnableSSL!=ui.serverEnableSSL->isChecked()) serverChanged=true;
-	if (c->serverHost!=ppl6::CString(ui.serverHostname->text())) serverChanged=true;
-	if (c->serverPort!=ui.serverHostname->text().toInt()) serverChanged=true;
-	if (c->serverSSLKeyfile!=ppl6::CString(ui.serverKeyfile->text())) serverChanged=true;
-	Tmp=wm->Crypt(ppl6::CString(ui.serverKeyPassword->text()));
-	if (Tmp!=c->serverSSLPassword) serverChanged=true;
-
-	if (serverChanged) wm->StopServer();
-
-	c->bserverEnabled=ui.serverEnable->isChecked();
-	c->bserverEnableSSL=ui.serverEnableSSL->isChecked();
-	c->serverHost=ui.serverHostname->text();
-	c->serverPort=ui.serverPort->text().toInt();
-	c->serverSSLKeyfile=ui.serverKeyfile->text();
-	Tmp=ui.serverKeyPassword->text();
-	c->serverSSLPassword=wm->Crypt(Tmp);
 
 	// MusicKey
 	switch (ui.displayMusicKey->currentIndex()) {
@@ -506,9 +466,7 @@ int Properties::Save()
 		return 0;
 	}
 
-	if (c->bserverEnabled==true && serverChanged==true) wm->StartServer();
-
-	wm->InitLogging();
+    wm->InitLogging();
 	wm->UpdateMenue();
 	return 1;
 }
@@ -635,13 +593,6 @@ void Properties::on_logfileButton_clicked()
 	}
 }
 
-void Properties::on_registerButton_clicked()
-{
-	Registration reg(this,wm);
-	reg.exec();
-	ui.serial->setText(wm->conf.Serial);
-}
-
 void Properties::on_checkUpdatesNow_clicked()
 {
 	CUpdateChecker uc(this,wm);
@@ -688,20 +639,6 @@ void Properties::on_deleteDirectory_clicked()
 	Change();
 }
 
-
-void Properties::on_buttonSelectServerKeyfile_clicked()
-{
-	QString p=ui.serverKeyfile->text();
-	if (p.length()==0) {
-		p=ui.wmDataPath->text();
-	}
-	QString file = QFileDialog::getOpenFileName(this, tr("Select File with SSL private server key"),p);
-	if (file.length()) {
-		ui.serverKeyfile->setText(file);
-		Change();
-	}
-
-}
 
 /*
  * Regular Expressions
