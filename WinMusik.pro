@@ -32,6 +32,7 @@ else {
     unix:TARGET = release/WinMusik
 }
 HEADERS += widgets/fkeys.h \
+    include/colorscheme.h \
     widgets/edittrack.h \
     widgets/keywheel.h \
     src/searchlists/searchlists.h \
@@ -84,6 +85,7 @@ HEADERS += widgets/fkeys.h \
     src/playlist/playlistexport.h \
     include/version.h
 SOURCES += widgets/fkeys.cpp \
+    src/colorscheme.cpp \
     widgets/edittrack.cpp \
     widgets/keywheel.cpp \
     src/searchlists/searchlists.cpp \
@@ -223,6 +225,7 @@ TRANSLATIONS = winmusik_de.ts \
     winmusik_en.ts
 
 DISTFILES += \
+    WinMusik.includes \
     setup.iss \
     setup64.iss \
     HISTORY.TXT \
