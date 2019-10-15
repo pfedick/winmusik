@@ -37,6 +37,7 @@
 #include "fkeys.h"
 #include "ui_edit.h"
 #include "oimpinfo.h"
+#include "colorscheme.h"
 
 
 class Edit;
@@ -166,6 +167,7 @@ private:
     QPoint	ratePos;	// Für Rating-Spalte
 
     QWidget *searchWindow;
+    ColorScheme colorscheme;
 
     void handleDropEvent(QDropEvent *event);
     bool handleDragEnterEvent(QDragEnterEvent *event);

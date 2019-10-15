@@ -31,6 +31,7 @@
 #include "shortcutdialog.h"
 #include "massimport.h"
 #include "csearchlist.h"
+#include "musickey.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -2268,9 +2269,10 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 				}
 			}
 		} else if (column==TRACKLIST_KEY_ROW && t->Key>0) {
-			std::set<int> harmonics;
-			std::set<int>::const_iterator it;
-			getHarmonicKeys(harmonics,t->Key);
+            std::map<int,HarmonicType> harmonics;
+            std::map<int,HarmonicType>::const_iterator it;
+            getHarmonicKeys(harmonics,t->Key);
+
 			int count=trackList->topLevelItemCount();
 
 
@@ -2282,10 +2284,23 @@ void Edit::on_trackList_itemClicked (QTreeWidgetItem * item, int column )
 					setItemBackground(item,q);
 
 					if (title!=NULL && title->Key>0) {
-						if (title->Key==t->Key) setItemBackgroundColor(item,QColor(170,255,170,255));
+                        if (title->Key==t->Key) item->setBackground(TRACKLIST_KEY_ROW, colorscheme.sameKey);
 						else {
 							it=harmonics.find(title->Key);
-							if (it!=harmonics.end()) setItemBackgroundColor(item,QColor(218,255,192,255));
+                            if (it!=harmonics.end()) {
+                                switch(it->second) {
+                                case harmonicSemitoneUp:
+                                case harmonicTwoSemitoneUp:
+                                    item->setBackground(TRACKLIST_KEY_ROW,colorscheme.boostKey);
+                                    break;
+                                case harmonicAvbBoost:
+                                    item->setBackground(TRACKLIST_KEY_ROW,colorscheme.boostKey2);
+                                    break;
+                                default:
+                                    item->setBackground(TRACKLIST_KEY_ROW,colorscheme.relatedKey);
+                                    break;
+                                }
+                            }
 						}
 					}
 
