@@ -676,7 +676,7 @@ void Playlist::renderTrack(PlaylistItem *item)
 {
 	QColor color(0,0,0);
 	QBrush b=item->background(0);
-	setItemBackground(item,b);
+    item->setBackground(columnMusicKey,b);
 	for (int i=1;i<item->columnCount();i++) {
 		item->setText(i,"");
 		item->setIcon(i,QIcon());
@@ -1517,13 +1517,6 @@ void Playlist::on_statusbar_musicKeySelectionChanged(int newValue)
 	updatePlaylist();
 }
 
-void Playlist::setItemBackground(PlaylistItem *item, const QBrush &b)
-{
-	item->setBackground(columnTitle,b);
-	item->setBackground(columnMusicKey,b);
-}
-
-
 void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 {
 	if (!track) {
@@ -1532,55 +1525,32 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
     std::map<int,HarmonicType> harmonics;
     std::map<int,HarmonicType>::const_iterator it;
 	getHarmonicKeys(harmonics,track->musicKey);
-
+    QBrush background;
+    background.setStyle(Qt::NoBrush);
 	int count=ui.tracks->topLevelItemCount();
     if (count==0) return;
     PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(0);
-    QColor basecolor=QApplication::palette().base().color();
-    QBrush background=item->background(0);
-    QColor bgc=background.color();
-    QBrush samekey=background;
-    QBrush relatedkey=background;
-    QBrush boostkey=background;
-    QBrush boostkey2=background;
-    samekey.setStyle(Qt::SolidPattern);
-    relatedkey.setStyle(Qt::SolidPattern);
-    boostkey.setStyle(Qt::SolidPattern);
-    boostkey2.setStyle(Qt::SolidPattern);
-    if (basecolor.lightness()<127) {
-        samekey.setColor(QColor(bgc.lightness(),127,bgc.lightness()));
-        relatedkey.setColor(QColor(bgc.lightness(),64,bgc.lightness()));
-        boostkey.setColor(QColor(128,bgc.lightness(),bgc.lightness()));
-        boostkey2.setColor(QColor(200,bgc.lightness(),bgc.lightness()));
-    } else {
-        samekey.setColor(QColor(192,230,192));
-        relatedkey.setColor(QColor(192,255,192));
-        boostkey.setColor(QColor(220,192,192));
-        boostkey2.setColor(QColor(255,192,192));
-    }
 	for (int i=0;i<count;i++) {
         item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		if (item) {
-            //QBrush b=item->background(columnTrack);
-            setItemBackground(item,background);
-
+            item->setBackground(columnMusicKey,background);
 			if (item->musicKey!=0 && track->musicKey!=0) {
-                if (item->musicKey==track->musicKey) item->setBackground(columnMusicKey,samekey);
+                if (item->musicKey==track->musicKey) item->setBackground(columnMusicKey,colorscheme.sameKey);
                 else {
                     it=harmonics.find(item->musicKey);
                     if (it!=harmonics.end()) {
                         switch(it->second) {
                         case harmonicSemitoneUp:
                         case harmonicTwoSemitoneUp:
-                            item->setBackground(columnMusicKey,boostkey);
+                            item->setBackground(columnMusicKey,colorscheme.boostKey);
                             //setItemBackground(item,boostkey);
                             break;
                         case harmonicAvbBoost:
-                            item->setBackground(columnMusicKey,boostkey2);
+                            item->setBackground(columnMusicKey,colorscheme.boostKey);
                             //setItemBackground(item,boostkey2);
                             break;
                         default:
-                            item->setBackground(columnMusicKey,relatedkey);
+                            item->setBackground(columnMusicKey,colorscheme.relatedKey);
                             //setItemBackground(item,relatedkey);
                             break;
                         }
@@ -1595,12 +1565,13 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 
 void Playlist::unHighlightHarmonicKeys()
 {
+    QBrush background;
+    background.setStyle(Qt::NoBrush);
 	int count=ui.tracks->topLevelItemCount();
 	for (int i=0;i<count;i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		if (item) {
-			QBrush b=item->background(columnTrack);
-			setItemBackground(item,b);
+            item->setBackground(columnMusicKey,background);
 		}
 	}
 	harmonicsHighlighted=false;

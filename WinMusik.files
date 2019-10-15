@@ -166,6 +166,9 @@ src/menue/menue.h
 src/musickey.cpp
 src/player/player.h
 src/player/player.ui
+src/playlist/editstring.cpp
+src/playlist/editstring.h
+src/playlist/editstring.ui
 src/playlist/playlist.cpp
 src/playlist/playlist.cpp
 src/playlist/playlist.h
@@ -179,6 +182,8 @@ src/playlist/playlistedit.cpp
 src/playlist/playlistedit.cpp
 src/playlist/playlistedit.h
 src/playlist/playlistedit.h
+src/playlist/playlistedit.ui
+src/playlist/playlistexport.ui
 src/playlist/playlisttracks.cpp
 src/playlist/playlisttracks.cpp
 src/playlist/playlisttracks.h
@@ -187,6 +192,7 @@ src/playlist/setbpmplayed.cpp
 src/playlist/setbpmplayed.cpp
 src/playlist/setbpmplayed.h
 src/playlist/setbpmplayed.h
+src/playlist/setbpmplayed.ui
 src/plugins.cpp
 src/plugins.cpp
 src/printdevicedialog.cpp

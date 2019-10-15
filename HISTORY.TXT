@@ -11,6 +11,9 @@ Version 3.5.2
       - RegExpCapture supports HTML
       - Reduced write operations on database when saving a track without any
         changes
+      - clicking on device icon opens system file explorer with
+        current device directory
+      - added support for dark color scheme
     - Search:
       - Genres can be excluded in search
     - Playlist:
@@ -18,22 +21,19 @@ Version 3.5.2
         changes
       - Fixed drag'n'drop of files from playlist to other apps
       - remember directory from last playlist load
-      - shuffle tracks    
+      - shuffle tracks
+      - added support for dark color scheme
+      - when clicking on music key, more related or matching keys
+        are found: minor/major switches, +/-1 semitone, +/- 2 semitones,
+        +4 semitones
+      - new dialog for editing a comment of a track.
+        Use context menue in comment column or press c-key
     - "class DataTitle": variables Artist, Title, Remarks, Album and Tags are
       now implemented as ppl6::CString-object instead of char *. Also added
       a compare operator ==
-    - Editor: clicking on device icon opens system file explorer with
-      current device directory
     - Rating is stored in ID3Tag
-    - Playlist: added support for dark color scheme
-    - Playlist: when clicking in music key, more related or matching keys
-      are found: minor/major switches, +/-1 semitone, +/- 2 semitones,
-      +4 semitones
     - removed server settings and serial from properties
-    - added colorscheme
-    - Editor uses new colorscheme, support for dark color scheme
-    - Playlist: new dialog for editing a comment of a track.
-      Use context menue in comment column or press c-key
+    - added class for colorscheme
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:

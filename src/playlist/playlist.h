@@ -37,6 +37,7 @@
 #include "playlisttracks.h"
 #include "playlistStatusBar.h"
 #include "playlistexport.h"
+#include "colorscheme.h"
 #include <ppl6-sound.h>
 
 class PlaylistTracks;
@@ -68,6 +69,7 @@ private:
     ppl6::CString	PlaylistFileName;
     bool changed;
     MusicKeyType	musicKeyDisplay;
+    ColorScheme     colorscheme;
 
     void resizeEvent(QResizeEvent * event);
     void showEvent(QShowEvent * event);
@@ -110,7 +112,6 @@ private:
 
     void closeEvent(QCloseEvent *event);
 
-    void setItemBackground(PlaylistItem *item, const QBrush &b);
     void highlightHarmonicKeys(PlaylistItem *track);
     void unHighlightHarmonicKeys();
 
