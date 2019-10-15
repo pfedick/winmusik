@@ -49,6 +49,7 @@
 #include "playlistexport.h"
 #include "version.h"
 #include "musickey.h"
+#include "editstring.h"
 #include <stdio.h>
 
 
@@ -321,6 +322,10 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 				if(!currentTreeItem) return false;
 				editTrack(currentTreeItem);
 				return true;
+            } else if (e->key()==Qt::Key_C) {
+                if(!currentTreeItem) return false;
+                on_contextEditComment_triggered();
+                return true;
 			} else if (e->key()==Qt::Key_P) {
 				if(!currentTreeItem) return false;
 				wm->PlayFile((currentTreeItem)->File);
@@ -1167,6 +1172,8 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 		createSetEnergyLevelContextMenu(m);
 	} else if (column==columnBpmPlayed) {
 		a=m->addAction(QIcon(""),tr("Set BPM played","trackList Context Menue"),this,SLOT(on_contextSetBPMPlayed_triggered()));
+    } else if (column==columnComment) {
+        a=m->addAction(QIcon(""),tr("Edit Comment","trackList Context Menue"),this,SLOT(on_contextEditComment_triggered()));
 	} else if (column==columnLength) {
 		a=m->addAction(QIcon(""),tr("Reread Traktor IN and OUTs","trackList Context Menue"),this,SLOT(on_contextReReadInAndOuts_triggered()));
 
@@ -1451,6 +1458,19 @@ void Playlist::on_contextSetBPMPlayed_triggered()
 		}
 	}
 }
+
+void Playlist::on_contextEditComment_triggered()
+{
+    if (!currentTreeItem) return;
+    EditString dialog;
+    dialog.setTitle("Comment: "+currentTreeItem->Artist+": "+currentTreeItem->Title);
+    dialog.setString(currentTreeItem->text(columnComment));
+    if (dialog.exec()==1) {
+        currentTreeItem->setText(columnComment,dialog.getString());
+        setChanged(true);
+    }
+}
+
 
 static void updateInAndOut(PlaylistItem *item)
 {

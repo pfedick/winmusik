@@ -197,6 +197,7 @@ public slots:
 	void on_contextFindMoreTitle_triggered();
 	void on_contextPlayTrack_triggered();
 	void on_contextSetBPMPlayed_triggered();
+    void on_contextEditComment_triggered();
 	void on_contextReReadInAndOuts_triggered();
 
 

@@ -33,6 +33,7 @@ else {
 }
 HEADERS += widgets/fkeys.h \
     include/colorscheme.h \
+    src/playlist/editstring.h \
     widgets/edittrack.h \
     widgets/keywheel.h \
     src/searchlists/searchlists.h \
@@ -86,6 +87,7 @@ HEADERS += widgets/fkeys.h \
     include/version.h
 SOURCES += widgets/fkeys.cpp \
     src/colorscheme.cpp \
+    src/playlist/editstring.cpp \
     widgets/edittrack.cpp \
     widgets/keywheel.cpp \
     src/searchlists/searchlists.cpp \
@@ -155,6 +157,7 @@ SOURCES += widgets/fkeys.cpp \
     src/plugins.cpp \
     src/playlist/playlistexport.cpp
 FORMS += widgets/fkeys.ui \
+    src/playlist/editstring.ui \
     widgets/edittrack.ui \
     src/editor/oimpinfo.ui \
     src/editor/tablesearch.ui \

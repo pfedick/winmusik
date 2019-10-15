@@ -32,6 +32,8 @@ Version 3.5.2
     - removed server settings and serial from properties
     - added colorscheme
     - Editor uses new colorscheme, support for dark color scheme
+    - Playlist: new dialog for editing a comment of a track.
+      Use context menue in comment column or press c-key
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:
