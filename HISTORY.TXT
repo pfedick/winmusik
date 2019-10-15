@@ -30,6 +30,7 @@ Version 3.5.2
       are found: minor/major switches, +/-1 semitone, +/- 2 semitones,
       +4 semitones
     - removed server settings and serial from properties
+    - added colorscheme
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:
