@@ -130,6 +130,11 @@ private:
     void editTrack(PlaylistItem *item);
     void copyTracks(const QList<QTreeWidgetItem *> items);
 
+    // Filter
+    bool isFilterEnabled() const;
+    void handleFilterDropEvent(QDropEvent *event);
+    void filterChanged();
+
 
     enum playlistViewType {
     	playlistViewNormal=0,
@@ -176,6 +181,7 @@ public slots:
 
 	void on_viewPlaylist_triggered();
 	void on_viewDJ_triggered();
+    void on_viewFilter_triggered();
 
 	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
 	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
@@ -212,50 +218,68 @@ public slots:
 
 	void on_contextMusicKeyVerified_triggered();
 	void on_contextSetMusicKey(int k);
-	void on_contextMusicKey0_triggered() { on_contextSetMusicKey(0); };
-	void on_contextMusicKey1_triggered() { on_contextSetMusicKey(1); };
-	void on_contextMusicKey2_triggered() { on_contextSetMusicKey(2); };
-	void on_contextMusicKey3_triggered() { on_contextSetMusicKey(3); };
-	void on_contextMusicKey4_triggered() { on_contextSetMusicKey(4); };
-	void on_contextMusicKey5_triggered() { on_contextSetMusicKey(5); };
-	void on_contextMusicKey6_triggered() { on_contextSetMusicKey(6); };
-	void on_contextMusicKey7_triggered() { on_contextSetMusicKey(7); };
-	void on_contextMusicKey8_triggered() { on_contextSetMusicKey(8); };
-	void on_contextMusicKey9_triggered() { on_contextSetMusicKey(9); };
-	void on_contextMusicKey10_triggered() { on_contextSetMusicKey(10); };
-	void on_contextMusicKey11_triggered() { on_contextSetMusicKey(11); };
-	void on_contextMusicKey12_triggered() { on_contextSetMusicKey(12); };
-	void on_contextMusicKey13_triggered() { on_contextSetMusicKey(13); };
-	void on_contextMusicKey14_triggered() { on_contextSetMusicKey(14); };
-	void on_contextMusicKey15_triggered() { on_contextSetMusicKey(15); };
-	void on_contextMusicKey16_triggered() { on_contextSetMusicKey(16); };
-	void on_contextMusicKey17_triggered() { on_contextSetMusicKey(17); };
-	void on_contextMusicKey18_triggered() { on_contextSetMusicKey(18); };
-	void on_contextMusicKey19_triggered() { on_contextSetMusicKey(19); };
-	void on_contextMusicKey20_triggered() { on_contextSetMusicKey(20); };
-	void on_contextMusicKey21_triggered() { on_contextSetMusicKey(21); };
-	void on_contextMusicKey22_triggered() { on_contextSetMusicKey(22); };
-	void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); };
-	void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); };
-	void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); };
+    void on_contextMusicKey0_triggered() { on_contextSetMusicKey(0); }
+    void on_contextMusicKey1_triggered() { on_contextSetMusicKey(1); }
+    void on_contextMusicKey2_triggered() { on_contextSetMusicKey(2); }
+    void on_contextMusicKey3_triggered() { on_contextSetMusicKey(3); }
+    void on_contextMusicKey4_triggered() { on_contextSetMusicKey(4); }
+    void on_contextMusicKey5_triggered() { on_contextSetMusicKey(5); }
+    void on_contextMusicKey6_triggered() { on_contextSetMusicKey(6); }
+    void on_contextMusicKey7_triggered() { on_contextSetMusicKey(7); }
+    void on_contextMusicKey8_triggered() { on_contextSetMusicKey(8); }
+    void on_contextMusicKey9_triggered() { on_contextSetMusicKey(9); }
+    void on_contextMusicKey10_triggered() { on_contextSetMusicKey(10); }
+    void on_contextMusicKey11_triggered() { on_contextSetMusicKey(11); }
+    void on_contextMusicKey12_triggered() { on_contextSetMusicKey(12); }
+    void on_contextMusicKey13_triggered() { on_contextSetMusicKey(13); }
+    void on_contextMusicKey14_triggered() { on_contextSetMusicKey(14); }
+    void on_contextMusicKey15_triggered() { on_contextSetMusicKey(15); }
+    void on_contextMusicKey16_triggered() { on_contextSetMusicKey(16); }
+    void on_contextMusicKey17_triggered() { on_contextSetMusicKey(17); }
+    void on_contextMusicKey18_triggered() { on_contextSetMusicKey(18); }
+    void on_contextMusicKey19_triggered() { on_contextSetMusicKey(19); }
+    void on_contextMusicKey20_triggered() { on_contextSetMusicKey(20); }
+    void on_contextMusicKey21_triggered() { on_contextSetMusicKey(21); }
+    void on_contextMusicKey22_triggered() { on_contextSetMusicKey(22); }
+    void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); }
+    void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); }
+    void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); }
 	void on_statusbar_musicKeySelectionChanged(int newValue);
 
 	void on_contextPasteCover_triggered();
 
 	void on_contextSetEnergyLevel(int v);
-	void on_contextEnergyLevel0_triggered() {on_contextSetEnergyLevel(0); };
-	void on_contextEnergyLevel1_triggered() {on_contextSetEnergyLevel(1); };
-	void on_contextEnergyLevel2_triggered() {on_contextSetEnergyLevel(2); };
-	void on_contextEnergyLevel3_triggered() {on_contextSetEnergyLevel(3); };
-	void on_contextEnergyLevel4_triggered() {on_contextSetEnergyLevel(4); };
-	void on_contextEnergyLevel5_triggered() {on_contextSetEnergyLevel(5); };
-	void on_contextEnergyLevel6_triggered() {on_contextSetEnergyLevel(6); };
-	void on_contextEnergyLevel7_triggered() {on_contextSetEnergyLevel(7); };
-	void on_contextEnergyLevel8_triggered() {on_contextSetEnergyLevel(8); };
-	void on_contextEnergyLevel9_triggered() {on_contextSetEnergyLevel(9); };
-	void on_contextEnergyLevel10_triggered() {on_contextSetEnergyLevel(10); };
+    void on_contextEnergyLevel0_triggered() {on_contextSetEnergyLevel(0); }
+    void on_contextEnergyLevel1_triggered() {on_contextSetEnergyLevel(1); }
+    void on_contextEnergyLevel2_triggered() {on_contextSetEnergyLevel(2); }
+    void on_contextEnergyLevel3_triggered() {on_contextSetEnergyLevel(3); }
+    void on_contextEnergyLevel4_triggered() {on_contextSetEnergyLevel(4); }
+    void on_contextEnergyLevel5_triggered() {on_contextSetEnergyLevel(5); }
+    void on_contextEnergyLevel6_triggered() {on_contextSetEnergyLevel(6); }
+    void on_contextEnergyLevel7_triggered() {on_contextSetEnergyLevel(7); }
+    void on_contextEnergyLevel8_triggered() {on_contextSetEnergyLevel(8); }
+    void on_contextEnergyLevel9_triggered() {on_contextSetEnergyLevel(9); }
+    void on_contextEnergyLevel10_triggered() {on_contextSetEnergyLevel(10); }
 
 	void on_searchTriggered();
+
+    // Filter
+    void on_ct_modificationSpinBox_valueChanged(int i);
+    void on_targetTrackGroupBox_toggled(bool) { filterChanged(); }
+    void on_tt_keyModificationSpinBox_valueChanged(int) { filterChanged(); }
+    void on_tt_sameKeyCheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_nextKeyCheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_previousKeyCheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_minorMajorSwitchCheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_minorMajorJump3CheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_minorMajorJump1CheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_boostSemitone1CheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_boostSemitone2CheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_relatedKeyCheckBox_toggled(bool) { filterChanged(); }
+    void on_tt_bpmStartSpinBox_valueChanged(int) { filterChanged(); }
+    void on_tt_bpmEndSpinBox_valueChanged(int) { filterChanged(); }
+
+    void on_tt_bpmCheckBox_toggled(bool) { filterChanged(); }
 
 };
 

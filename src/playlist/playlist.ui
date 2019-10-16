@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>947</width>
-    <height>606</height>
+    <width>1071</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -134,6 +134,12 @@
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_5">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
               <property name="text">
                <string>Artist:</string>
               </property>
@@ -277,6 +283,26 @@
                </widget>
               </item>
               <item>
+               <widget class="QLabel" name="label_19">
+                <property name="text">
+                 <string>Energy:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="ct_energy">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -399,7 +425,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="tt_bpmStartSpinBox"/>
+             <widget class="QSpinBox" name="tt_bpmStartSpinBox">
+              <property name="maximum">
+               <number>999</number>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_27">
@@ -409,7 +439,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="tt_bpmEndSpinBox"/>
+             <widget class="QSpinBox" name="tt_bpmEndSpinBox">
+              <property name="maximum">
+               <number>999</number>
+              </property>
+             </widget>
             </item>
             <item>
              <spacer name="horizontalSpacer">
@@ -877,8 +911,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>947</width>
-     <height>21</height>
+     <width>1071</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>

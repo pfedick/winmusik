@@ -54,6 +54,9 @@ public:
     ppl6::CString name(MusicKeyType type=musicKeyTypeOpenKey) const;
     int wmKeyId() const;
 
+    MusicKey add(int modification) const;
+    MusicKey addSemitone(int modification) const;
+
     MusicKey nextKey() const;
     MusicKey previousKey() const;
     MusicKey minorMajorSwitch() const;
@@ -64,6 +67,8 @@ public:
     MusicKey plus2Semitone() const;
     MusicKey minus2Semitone() const;
     MusicKey avbBoost() const;
+
+    bool operator==(const MusicKey &other) const;
 };
 
 class RelatedKeys

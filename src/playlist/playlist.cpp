@@ -51,7 +51,7 @@
 #include "musickey.h"
 #include "editstring.h"
 #include <stdio.h>
-
+#include <ppl6-sound.h>
 
 /*
 class Playlist;
@@ -117,6 +117,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
 	ui.setupUi(this);
+    ui.filterFrame->setVisible(true);
 	this->setStatusBar(NULL);
 	this->wm=wm;
 	harmonicsHighlighted=false;
@@ -126,6 +127,14 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
+
+    ui.filterFrame->setAcceptDrops(true);
+    ui.currentTrackGroupBox->setAcceptDrops(true);
+    ui.ct_cover->setAcceptDrops(true);
+    ui.filterFrame->installEventFilter(this);
+    ui.currentTrackGroupBox->installEventFilter(this);
+    ui.ct_cover->installEventFilter(this);
+
 	this->setWindowTitle(tr("WinMusik Playlist"));
 
 	ui.tracks->installEventFilter(this);
@@ -179,6 +188,7 @@ void Playlist::createMenue()
 	menu=menuBar()->addMenu(tr("&View"));
 	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
+    menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&Filter"),this,SLOT(on_viewFilter_triggered()));
 
 }
 
@@ -201,6 +211,7 @@ void Playlist::createToolbar()
     tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
+    tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &Filter"),this,SLOT(on_viewFilter_triggered()));
 	this->addToolBar(tb);
 
 }
@@ -339,7 +350,23 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 			statusbar->setFocusOnSearch();
 			return true;
 		}
-	}
+    } else if (type==QEvent::DragEnter) {
+        if (target==ui.ct_cover
+                || target==ui.currentTrackGroupBox
+                || target==ui.filterFrame) {
+            QDragEnterEvent *e=static_cast<QDragEnterEvent *>(event);
+            e->accept();
+            return true;
+        }
+    } else if (type==QEvent::Drop) {
+        if (target==ui.ct_cover
+                || target==ui.currentTrackGroupBox
+                || target==ui.filterFrame) {
+            QDropEvent *e=static_cast<QDragEnterEvent *>(event);
+            handleFilterDropEvent(e);
+            return true;
+        }
+    }
 	return false;
 }
 
@@ -366,6 +393,10 @@ void Playlist::on_tracks_itemSelectionChanged ()
 
 void Playlist::handleDropEvent(QDropEvent *event)
 {
+    if (isFilterEnabled()) {
+        event->ignore();
+        return;
+    }
 	event->accept();
 	ui.tracks->unselectItems();
 	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
@@ -385,6 +416,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
 
 void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertItem)
 {
+    if (isFilterEnabled()) return;
 	//ui.tracks->unselectItems();
 	QApplication::processEvents();
 
@@ -413,6 +445,7 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 {
 //	printf ("Playlist::handleXMLDrop\n");
 	//xml.Print(true);
+    if (isFilterEnabled()) return;
 	QDomDocument doc("winmusikTracklist");
 	if (doc.setContent(xml)) {
 		QDomElement root=doc.documentElement();
@@ -439,7 +472,7 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem)
 {
 	//printf ("Playlist::handleURLDrop\n");
-
+    if (isFilterEnabled()) return;
 	for (int i=0;i<list.size();i++) {
 		QUrl url=list[i];
 		QString file=url.toLocalFile();
@@ -840,6 +873,7 @@ void Playlist::ReloadTranslation()
 
 void Playlist::loadPlaylist(ppl6::CString &Filename)
 {
+    ui.targetTrackGroupBox->setChecked(false);
 	ui.tracks->setSortingEnabled(false);
 	if (ui.tracks->load(Filename)) {
 		PlaylistFileName=Filename;
@@ -941,6 +975,7 @@ void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
 void Playlist::on_menuNew_triggered()
 {
 	if (saveFirst()!=QMessageBox::Ok) return;
+    ui.targetTrackGroupBox->setChecked(false);
 	PlaylistFileName.Clear();
 	ui.tracks->setName("");
     ui.tracks->setSubName("");
@@ -1770,19 +1805,138 @@ void Playlist::exportTXT()
     }
     txt.Puts("\r\n");
     for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
         Tmp=item->Artist + " - " + item->Title;
         Tmp+=" (";
         Tmp+=item->Version;
         Tmp+=")";
         ppl6::CString TmpTxt=Tmp;
         TmpTxt.Chop(1);
-        txt.Putsf("%3u. %s, %0i:%02i %s)\r\n",i+1,(const char*)TmpTxt,(int)(item->trackLength/60),item->trackLength%60,(const char*)Minuten);
+        txt.Putsf("%3u. %s, %0i:%02i %s)\r\n",i+1,static_cast<const char*>(TmpTxt),
+                  static_cast<int>(item->trackLength/60),item->trackLength%60,
+                  static_cast<const char*>(Minuten));
 
     }
     txt.Puts("\r\n");
 
 }
 
+void Playlist::on_viewFilter_triggered()
+{
+    if (ui.filterFrame->isVisible()) ui.filterFrame->setVisible(false);
+    else ui.filterFrame->setVisible(true);
+    filterChanged();
+}
 
+bool Playlist::isFilterEnabled() const
+{
+    if (ui.filterFrame->isVisible()) {
+        if (ui.targetTrackGroupBox->isChecked()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Playlist::handleFilterDropEvent(QDropEvent *event)
+{
+    event->accept();
+    const QMimeData *mime=event->mimeData();
+    if (!mime) return;
+    if (mime->hasFormat("application/winmusik+xml")) {
+        QByteArray ba=mime->data("application/winmusik+xml");
+        ppl6::CString xml;
+        xml.Set(ba.constData(), ba.size());
+        if (xml.Left(18)=="<winmusikTracklist") {
+            //handleXMLDrop(xml,insertItem);
+            //return;
+        }
+    }
+    QList<QUrl>	list=mime->urls();
+    if (list.size()==0) return;
+    QUrl url=list[0];
+    QString file=url.toLocalFile();
+
+
+    TrackInfo info;
+    if (!getTrackInfoFromFile(info,file)) {
+        return;
+    }
+
+
+    ui.ct_artist->setText(info.Ti.Artist);
+    ui.ct_title->setText(info.Ti.Title);
+    ui.ct_version->setText(info.Version);
+    ui.ct_bpm->setText(ppl6::ToString("%d",info.Ti.BPM));
+    ui.ct_energy->setText(ppl6::ToString("%d",info.Ti.EnergyLevel));
+    ppl6::CString Tmp;
+    Tmp.Setf("%02i:%02i",static_cast<int>(info.Ti.Length/60),static_cast<int>(info.Ti.Length%60));
+    ui.ct_length->setText(Tmp);
+
+    MusicKey key(info.Ti.Key);
+    ui.ct_key->setText(key.name(musicKeyDisplay));
+    MusicKey modified_key=key.addSemitone(ui.ct_modificationSpinBox->value());
+    ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
+
+    if (info.Cover.Size()>0) {
+        QPixmap pix, icon;
+        pix.loadFromData(static_cast<const uchar*>(info.Cover.GetPtr()),static_cast<uint>(info.Cover.Size()));
+        //icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        ui.ct_cover->setPixmap(pix);
+    }
+
+    if (ui.tt_bpmStartSpinBox->value()==0 && info.Ti.BPM>5) ui.tt_bpmStartSpinBox->setValue(static_cast<int>(info.Ti.BPM)-5);
+    if (ui.tt_bpmEndSpinBox->value()==0 && info.Ti.BPM>0) ui.tt_bpmEndSpinBox->setValue(static_cast<int>(info.Ti.BPM)+5);
+
+    filterChanged();
+}
+
+void Playlist::filterChanged()
+{
+    MusicKey key(ui.ct_modifiedKey->text());
+    ui.tt_sameKey->setText(key.name(musicKeyDisplay));
+    ui.tt_nextKey->setText(key.nextKey().name(musicKeyDisplay));
+    ui.tt_previousKey->setText(key.previousKey().name(musicKeyDisplay));
+    ui.tt_minorMajorSwitch->setText(key.minorMajorSwitch().name(musicKeyDisplay));
+    ui.tt_minorMajorJump3->setText(key.minorMajorJump3().name(musicKeyDisplay));
+    ui.tt_minorMajorJump1->setText(key.minorMajorJump1().name(musicKeyDisplay));
+    ui.tt_boostSemitone1->setText(key.plus1Semitone().name(musicKeyDisplay));
+    ui.tt_boostSemitone2->setText(key.plus2Semitone().name(musicKeyDisplay));
+    ui.tt_relatedKey->setText(key.avbBoost().name(musicKeyDisplay));
+
+    if (!isFilterEnabled()) {
+        for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+            PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+            item->setHidden(false);
+        }
+        return;
+    }
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+        item->setHidden(true);
+        if (item->bpm>=ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
+            if (item->bpm<=ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
+
+                MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
+                if (itemKey==key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.nextKey() && ui.tt_nextKeyCheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.previousKey() && ui.tt_previousKeyCheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.minorMajorSwitch() && ui.tt_minorMajorSwitchCheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.minorMajorJump3() && ui.tt_minorMajorJump3CheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.minorMajorJump1() && ui.tt_minorMajorJump1CheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.plus1Semitone() && ui.tt_boostSemitone1CheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.plus2Semitone() && ui.tt_boostSemitone2CheckBox->isChecked()) item->setHidden(false);
+                else if (itemKey==key.avbBoost() && ui.tt_relatedKeyCheckBox->isChecked()) item->setHidden(false);
+            }
+        }
+    }
+}
+
+void Playlist::on_ct_modificationSpinBox_valueChanged(int i)
+{
+    MusicKey key(ui.ct_key->text());
+    MusicKey modified_key=key.addSemitone(i);
+    ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
+    filterChanged();
+}
 

@@ -346,3 +346,26 @@ MusicKey MusicKey::avbBoost() const
     if (ok==0 || type==unknown) return MusicKey();
     return MusicKey(clampKey(ok+4),type);
 }
+
+MusicKey MusicKey::add(int modification) const
+{
+    if (ok==0 || type==unknown) return MusicKey();
+    if (modification>12) modification=12;
+    if (modification<-12) modification=-12;
+    return MusicKey(clampKey(ok+modification),type);
+}
+
+MusicKey MusicKey::addSemitone(int modification) const
+{
+    if (ok==0 || type==unknown) return MusicKey();
+    int m=(7*abs(modification))%12;
+    if (modification<0) return MusicKey(clampKey(ok-m),type);
+    return MusicKey(clampKey(ok+m),type);
+}
+
+
+bool MusicKey::operator==(const MusicKey &other) const
+{
+    if (wmid==other.wmid) return true;
+    return false;
+}
