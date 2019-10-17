@@ -245,7 +245,7 @@ void EditTrack::setFocus()
 
 void EditTrack::setFocus (Qt::FocusReason reason)
 {
-	this->setFocus(reason);
+	//this->setFocus(reason);
 	ui.artist->setFocus(reason);
 }
 
