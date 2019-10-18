@@ -27,7 +27,9 @@
 #ifndef WMSTORAGE_H_
 #define WMSTORAGE_H_
 
-
+#ifndef WINMUSIK3_H_
+#include "winmusik3.h"
+#endif
 /*******************************************************
  * Storage Classes                                     *
  *******************************************************/
@@ -115,7 +117,7 @@ class CStorage
 		int StartImport();
 		int FinishImport();
 
-		bool isDatabaseLoading() { return bLoadDatabaseRunning; };
+        bool isDatabaseLoading() { return bLoadDatabaseRunning; }
 
 		//int CreateDatabase();
 };
@@ -226,8 +228,8 @@ class DataTitle : public CStorageItem
 		bool operator==(const DataTitle &other) const;
 		bool operator!=(const DataTitle &other) const;
 
-		static ppl6::CString keyName(int id, MusicKeyType type);
-		static int keyId(const ppl6::CString &name);
+        static ppl6::CString keyName(ppluint8 id, MusicKeyType type);
+        static ppluint8 keyId(const ppl6::CString &name);
 };
 
 

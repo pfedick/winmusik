@@ -49,7 +49,7 @@ class Playlist : public QMainWindow
     friend class PlaylistTracks;
 
 public:
-    Playlist(QWidget *parent = 0, CWmClient *wm=NULL);
+    Playlist(QWidget *parent = nullptr, CWmClient *wm=nullptr);
     ~Playlist();
     void ReloadTranslation();
 

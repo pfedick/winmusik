@@ -37,10 +37,10 @@ class PlaylistItem : public QTreeWidgetItem
 {
 	public:
 		ppluint32	titleId;
-		int			startPositionSec;
-		int			endPositionSec;
-		int			cutStartPosition[5];
-		int			cutEndPosition[5];
+        ppluint32	startPositionSec;
+        ppluint32	endPositionSec;
+        ppluint32	cutStartPosition[5];
+        ppluint32	cutEndPosition[5];
 		ppl6::CString	Artist;
 		ppl6::CString	Title;
 		ppl6::CString	Version;
@@ -50,13 +50,13 @@ class PlaylistItem : public QTreeWidgetItem
 		ppl6::CString	File;
 		ppl6::CString	Remarks;
 		ppl6::CBinary	CoverPreview;
-		int				musicKey;
-		int				bpm;
-		int				bpmPlayed;
-		int				rating;
-		int				trackLength;
-		int				mixLength;
-		int				energyLevel;
+        ppluint8		musicKey;
+        ppluint32		bpm;
+        ppluint32		bpmPlayed;
+        ppluint8		rating;
+        ppluint32		trackLength;
+        ppluint32		mixLength;
+        ppluint8		energyLevel;
 		bool			keyVerified;
 
 		ppluint32		DeviceId;
@@ -106,7 +106,7 @@ class PlaylistTracks : public QTreeWidget
         ppl6::CDateTime IssueDate;
 
 	public:
-		PlaylistTracks(QWidget * parent = 0);
+        PlaylistTracks(QWidget * parent = nullptr);
 		~PlaylistTracks();
 		void setPlaylist(Playlist *p);
 

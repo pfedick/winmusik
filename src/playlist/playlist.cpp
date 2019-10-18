@@ -121,9 +121,9 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
     this->setStatusBar(nullptr);
 	this->wm=wm;
 	harmonicsHighlighted=false;
-	currentTreeItem=NULL;
-	searchWindow=NULL;
-	saveWidget=saveAsWidget=NULL;
+    currentTreeItem=nullptr;
+    searchWindow=nullptr;
+    saveWidget=saveAsWidget=nullptr;
 	setAttribute(Qt::WA_DeleteOnClose,true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
@@ -145,7 +145,7 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
 	createToolbar();
 	createStatusBar();
 
-	playlistView=(playlistViewType)wm->conf.playlistView;
+    playlistView=static_cast<playlistViewType>(wm->conf.playlistView);
     musicKeyDisplay=wm->conf.musicKeyDisplay;
 
 	recreatePlaylist();
@@ -188,7 +188,7 @@ void Playlist::createMenue()
 	menu=menuBar()->addMenu(tr("&View"));
 	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
-    menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&Filter"),this,SLOT(on_viewFilter_triggered()));
+    menu->addAction(QIcon(":/icons/resources/view_filter.png"),tr("&Filter"),this,SLOT(on_viewFilter_triggered()));
 
 }
 
@@ -211,7 +211,7 @@ void Playlist::createToolbar()
     tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
-    tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &Filter"),this,SLOT(on_viewFilter_triggered()));
+    tb->addAction(QIcon(":/icons/resources/view_filter.png"),tr("view &Filter"),this,SLOT(on_viewFilter_triggered()));
 	this->addToolBar(tb);
 
 }
@@ -314,7 +314,7 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 	if (type==QEvent::KeyPress) {
 		QKeyEvent *e=static_cast<QKeyEvent *>(event);
 		if (target==ui.tracks) {
-			currentTreeItem=(PlaylistItem*)ui.tracks->currentItem();
+            currentTreeItem=static_cast<PlaylistItem*>(ui.tracks->currentItem());
 			//printf ("Key: %i\n",e->key());
 			if (e->key()==Qt::Key_Delete) {
 				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
@@ -508,7 +508,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->musicKey=ti->Key;
 	item->keyVerified=(ti->Flags>>4)&1;
 	item->energyLevel=ti->EnergyLevel;
-	item->bpm=ti->BPM;
+    item->bpm=ti->BPM;
 	item->bpmPlayed=0;
 	item->rating=ti->Rating;
 	item->trackLength=ti->Length;

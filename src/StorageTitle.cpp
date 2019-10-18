@@ -684,7 +684,7 @@ static inline ppl6::CString keyNameOpenKey(int id)
 	}
 }
 
-ppl6::CString DataTitle::keyName(int id, MusicKeyType type)
+ppl6::CString DataTitle::keyName(ppluint8 id, MusicKeyType type)
 {
 	if (type==musicKeyTypeMusicalSharps) return keyNameSharps(id);
 	else if (type==musicKeyTypeOpenKey) return keyNameOpenKey(id);
@@ -694,14 +694,14 @@ ppl6::CString DataTitle::keyName(int id, MusicKeyType type)
 }
 
 
-int DataTitle::keyId(const ppl6::CString &name)
+ppluint8 DataTitle::keyId(const ppl6::CString &name)
 {
 	ppl6::CString k=ppl6::LCase(ppl6::Trim(name));
 	k.Replace("♯","#");
 
 	if (k.IsEmpty()) return 0;
 	if (wm_main->conf.musicKeyDisplay==musicKeyTypeCustom) {
-		for (int i=1;i<26;i++) {
+        for (ppluint8 i=1;i<26;i++) {
 			ppl6::CString tmp=ppl6::LCase(ppl6::Trim(wm_main->conf.customMusicKey[i]));
 			if (tmp==k) return i;
 		}
@@ -763,26 +763,26 @@ ppl6::CBinary *DataTitle::Export()
  */
 {
 	// Zunächst den benötigten Speicher berechnen
-	int size=70;
-	int p=0;
-	int lenArtist=0;
-	int lenTitle=0;
-	int lenRemarks=0;
-	int lenAlbum=0;
-	int lenTags=0;
+    int size=70;
+    int p=0;
+    int lenArtist=0;
+    int lenTitle=0;
+    int lenRemarks=0;
+    int lenAlbum=0;
+    int lenTags=0;
 	formatversion=5;
 
-	lenArtist=Artist.Size();
-	lenTitle=Title.Size();
-	lenRemarks=Remarks.Size();
-	lenTags=Tags.Size();
-	lenAlbum=Album.Size();
-	size=size+lenArtist+lenTitle+lenRemarks+lenAlbum+lenTags+CoverPreview.Size();
+    lenArtist=static_cast<int>(Artist.Size());
+    lenTitle=static_cast<int>(Title.Size());
+    lenRemarks=static_cast<int>(Remarks.Size());
+    lenTags=static_cast<int>(Tags.Size());
+    lenAlbum=static_cast<int>(Album.Size());
+    size=size+lenArtist+lenTitle+lenRemarks+lenAlbum+lenTags+static_cast<int>(CoverPreview.Size());
 	//size=size+lenArtist+lenTitle+lenRemarks+lenAlbum;
-	char *a=(char*)malloc(size);
+    char *a=static_cast<char*>(malloc(static_cast<size_t>(size)));
 	if (!a) {
 		ppl6::SetError(2);
-		return NULL;
+        return nullptr;
 	}
 	ppl6::Poke32(a+0,TitleId);
 	ppl6::Poke8(a+4,Flags);
@@ -808,7 +808,7 @@ ppl6::CBinary *DataTitle::Export()
 	ppl6::Poke8(a+56,Key);
 	ppl6::Poke8(a+57,EnergyLevel);
 	p=58;
-	ppl6::Poke16(a+p,lenArtist);
+    ppl6::Poke16(a+p,lenArtist&0xffff);
 	if (lenArtist) strncpy(a+p+2,(const char*)Artist,lenArtist);
 	p+=lenArtist+2;
 	ppl6::Poke16(a+p,lenTitle);

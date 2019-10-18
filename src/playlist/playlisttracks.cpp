@@ -68,7 +68,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ppl6::CString Indent, ret;
 	Indent.Repeat(" ",indention);
 	ret=Indent+"<item>\n";
-	ret+=Indent+"   <widgetId>"+ppl6::ToString("%tu",(ptrdiff_t)this)+"</widgetId>\n";
+    ret+=Indent+"   <widgetId>"+ppl6::ToString("%tu",(ptrdiff_t)this)+"</widgetId>\n";
 	ret+=Indent+"   <titleId>"+ppl6::ToString("%u",titleId)+"</titleId>\n";
 	ret+=Indent+"   <startPositionSec>"+ppl6::ToString("%u",startPositionSec)+"</startPositionSec>\n";
 	ret+=Indent+"   <endPositionSec>"+ppl6::ToString("%u",endPositionSec)+"</endPositionSec>\n";
@@ -112,38 +112,38 @@ void PlaylistItem::importFromXML(QDomElement &e)
 
 	QDomNode node =e.namedItem("titleId");
 	if (node.isNull()==false && node.isElement()==true) {
-		titleId=node.toElement().text().toInt();
+        titleId=node.toElement().text().toUInt();
 	}
 
 	node =e.namedItem("deviceType");
 	if (node.isNull()==false && node.isElement()==true) {
-		DeviceType=node.toElement().text().toInt();
+        DeviceType=static_cast<ppluint8>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceId");
 	if (node.isNull()==false && node.isElement()==true) {
-		DeviceId=node.toElement().text().toInt();
+        DeviceId=node.toElement().text().toUInt();
 	}
 	node =e.namedItem("devicePage");
 	if (node.isNull()==false && node.isElement()==true) {
-		DevicePage=node.toElement().text().toInt();
+        DevicePage=static_cast<ppluint8>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceTrack");
 	if (node.isNull()==false && node.isElement()==true) {
-		DeviceTrack=node.toElement().text().toInt();
+        DeviceTrack=node.toElement().text().toUShort();
 	}
 
 
 	node =e.namedItem("startPositionSec");
 	if (node.isNull()==false && node.isElement()==true) {
-		startPositionSec=node.toElement().text().toInt();
+        startPositionSec=node.toElement().text().toUInt();
 	}
 	node =e.namedItem("endPositionSec");
 	if (node.isNull()==false && node.isElement()==true) {
-		endPositionSec=node.toElement().text().toInt();
+        endPositionSec=node.toElement().text().toUInt();
 	}
 	node =e.namedItem("trackLength");
 	if (node.isNull()==false && node.isElement()==true) {
-		trackLength=node.toElement().text().toInt();
+        trackLength=node.toElement().text().toUInt();
 	}
 	node =e.namedItem("Artist");
 	if (node.isNull()==false && node.isElement()==true) {
@@ -180,28 +180,28 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	}
 	node =e.namedItem("musicKey");
 	if (node.isNull()==false && node.isElement()==true) {
-		musicKey=DataTitle::keyId(node.toElement().text());
+        musicKey=DataTitle::keyId(node.toElement().text());
 		Tmp=node.toElement().attribute("verified","false");
 		keyVerified=Tmp.ToBool();
 	}
 	node =e.namedItem("energyLevel");
 	if (node.isNull()==false && node.isElement()==true) {
-		energyLevel=node.toElement().text().toInt();
+        energyLevel=static_cast<ppluint8>(node.toElement().text().toUInt());
 	}
 
 	node =e.namedItem("bpm");
 	if (node.isNull()==false && node.isElement()==true) {
-		bpm=node.toElement().text().toInt();
+        bpm=node.toElement().text().toUInt();
 	}
 	node =e.namedItem("bpmPlayed");
 	if (node.isNull()==false && node.isElement()==true) {
-		bpmPlayed=node.toElement().text().toInt();
+        bpmPlayed=node.toElement().text().toUInt();
 	}
 	if (!bpmPlayed) bpmPlayed=bpm;
 
 	node =e.namedItem("rating");
 	if (node.isNull()==false && node.isElement()==true) {
-		rating=node.toElement().text().toInt();
+        rating=static_cast<ppluint8>(node.toElement().text().toUInt());
 	}
 
 	mixLength=endPositionSec-startPositionSec;
@@ -214,12 +214,12 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			//printf ("      Parsing cut...\n");
 			node =e.namedItem("start");
 			if (node.isNull()==false && node.isElement()==true) {
-				cutStartPosition[c]=node.toElement().text().toInt();
+                cutStartPosition[c]=node.toElement().text().toUInt();
 				//printf ("       start found\n");
 			}
 			node =e.namedItem("end");
 			if (node.isNull()==false && node.isElement()==true) {
-				cutEndPosition[c]=node.toElement().text().toInt();
+                cutEndPosition[c]=node.toElement().text().toUInt();
 				//printf ("       end found\n");
 			}
 			mixLength-=(cutEndPosition[c]-cutStartPosition[c]);
@@ -321,7 +321,7 @@ void PlaylistItem::useTraktorCues(const ppl6::CID3Tag &Tag)
 	getTraktorCues(cuelist, Tag);
 	if (cuelist.size()==0) return;
 	for (it=cuelist.begin();it!=cuelist.end();it++) {
-		int sec=(int)(it->start/1000.0);
+        ppluint32 sec=static_cast<ppluint32>(it->start/1000.0);
 		if (it->type==TraktorTagCue::IN) startPositionSec=sec;
 		if (it->type==TraktorTagCue::OUT) endPositionSec=sec;
 	}
@@ -331,8 +331,8 @@ void PlaylistItem::useTraktorCues(const ppl6::CID3Tag &Tag)
 PlaylistTracks::PlaylistTracks(QWidget * parent)
 	:QTreeWidget(parent)
 {
-	playlist=NULL;
-	lastmoveitem=NULL;
+    playlist=nullptr;
+    lastmoveitem=nullptr;
     IssueNumber=0;
     IssueDate=ppl6::CDateTime::currentTime();
 }
@@ -367,9 +367,10 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
 	xml="<winmusikTracklist>\n";
 	xml+="<tracks>\n";
 	for (int i=0;i<items.size();i++) {
-		PlaylistItem *item=(PlaylistItem *)items[i];
+        PlaylistItem *item=static_cast<PlaylistItem *>(items[i]);
 		if (Icon.isNull()) {
-			Icon.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.GetSize());
+            Icon.loadFromData(static_cast<const uchar*>(item->CoverPreview.GetPtr()),
+                              static_cast<unsigned int>(item->CoverPreview.GetSize()));
 		}
 		xml+=item->exportAsXML(0);
 
@@ -385,7 +386,7 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
 	//xml.Print(true);
 
 	QMimeData *mimeData = new QMimeData;
-	QByteArray ba((const char*)xml,xml.Size());
+    QByteArray ba(static_cast<const char*>(xml),static_cast<int>(xml.Size()));
 	mimeData->setData("application/winmusik+xml",ba);
 	//mimeData->setText(xml);
 	mimeData->setUrls(list);
@@ -403,7 +404,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 	e->accept();
 	//QTreeWidget::dragMoveEvent(e);
 	//return;
-	PlaylistItem *item = (PlaylistItem*)itemAt(e->pos());
+    PlaylistItem *item = static_cast<PlaylistItem*>(itemAt(e->pos()));
 	if (item) {
 		if (item!=lastmoveitem) {
 			if (lastmoveitem) lastmoveitem->setSelected(false);
@@ -413,7 +414,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 		item->setSelected(true);
 	} else if (lastmoveitem) {
 		lastmoveitem->setSelected(false);
-		lastmoveitem=NULL;
+        lastmoveitem=nullptr;
 	}
 
 	//e->ignore();
@@ -425,7 +426,7 @@ bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int , const QMimeData
 	//printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
 	ppl6::CString Tmp;
 	playlist->handleDropEvent(data,parent);
-	lastmoveitem=NULL;
+    lastmoveitem=nullptr;
 	return true;
 }
 
@@ -434,7 +435,7 @@ void PlaylistTracks::dropEvent ( QDropEvent * event )
 	//printf ("PlaylistTracks::dropEvent, action: %i\n",event->dropAction());
 	if (lastmoveitem) {
 		lastmoveitem->setSelected(false);
-		lastmoveitem=NULL;
+        lastmoveitem=nullptr;
 	}
 	event->acceptProposedAction();
 	playlist->handleDropEvent(event);
@@ -464,10 +465,10 @@ void PlaylistTracks::deleteSourceItems(QDropEvent * event)
 				while (!e.isNull()) {
 					QDomNode node =e.namedItem("widgetId");
 					if (node.isNull()==false && node.isElement()==true) {
-						QTreeWidgetItem *item=(QTreeWidgetItem*)node.toElement().text().toULongLong();
+                        QTreeWidgetItem *item=(QTreeWidgetItem*)node.toElement().text().toULongLong();
 						int id=indexOfTopLevelItem(item);
 //						printf ("delete Widget with id=%i\n",id);
-						if (item!=NULL && id>=0) this->takeTopLevelItem(id);
+                        if (item!=nullptr && id>=0) this->takeTopLevelItem(id);
 					}
 					e=e.nextSiblingElement("item");
 				}
@@ -492,7 +493,7 @@ void PlaylistTracks::deleteSelectedItems()
 {
 	QList<QTreeWidgetItem *>selected=selectedItems();
 	for (int i=0;i<selected.size();i++) {
-		PlaylistItem *item=(PlaylistItem*)takeTopLevelItem(indexOfTopLevelItem(selected.at(i)));
+        PlaylistItem *item=static_cast<PlaylistItem*>(takeTopLevelItem(indexOfTopLevelItem(selected.at(i))));
 		delete item;
 	}
 }
@@ -500,7 +501,7 @@ void PlaylistTracks::deleteSelectedItems()
 void PlaylistTracks::deleteItems(QList<QTreeWidgetItem *>items)
 {
 	for (int i=0;i<items.size();i++) {
-		PlaylistItem *item=(PlaylistItem*)takeTopLevelItem(indexOfTopLevelItem(items.at(i)));
+        PlaylistItem *item=static_cast<PlaylistItem*>(takeTopLevelItem(indexOfTopLevelItem(items.at(i))));
 		delete item;
 	}
 }
@@ -566,7 +567,7 @@ bool PlaylistTracks::load(const ppl6::CString &Filename)
 	if (ext=="WMP") return loadWMP(Filename);
 	ppl6::CString m=tr("Unknown playlist format:");
 	m+="\n\n"+Filename;
-	QMessageBox::critical(NULL, tr("WinMusik Error"),
+    QMessageBox::critical(nullptr, tr("WinMusik Error"),
 			m, QMessageBox::Ok);
 	return false;
 }
@@ -575,7 +576,7 @@ bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 {
 	ppl6::CFile ff;
 	if (!ff.Open(Filename,"wb")) {
-		CWmClient::RaiseError(NULL,tr("Could not open File"));
+        CWmClient::RaiseError(nullptr,tr("Could not open File"));
 		return false;
 	}
 	ppl6::CString xml;
@@ -590,7 +591,7 @@ bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	ppluint64 totalTrackLength=0;
 	ppluint64 totalMixLength=0;
 	for (int i=0;i<count;i++) {
-		PlaylistItem *item=(PlaylistItem*)this->topLevelItem(i);
+        PlaylistItem *item=static_cast<PlaylistItem*>(this->topLevelItem(i));
 		totalTrackLength+=item->trackLength;
 		totalMixLength+=item->mixLength;
 	}
@@ -598,7 +599,7 @@ bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	xml+="   <totalMixLength>"+ppl6::ToString("%llu",totalMixLength)+"</totalMixLength>\n";
 	xml+="   <tracks>\n";
 	for (int i=0;i<count;i++) {
-		PlaylistItem *item=(PlaylistItem*)this->topLevelItem(i);
+        PlaylistItem *item=static_cast<PlaylistItem*>(this->topLevelItem(i));
 		xml+=item->exportAsXML(6);
 	}
 	xml+="   </tracks>\n";
@@ -615,7 +616,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 	if (!file.open(QIODevice::ReadOnly)) {
 		ppl6::CString m=tr("Could not open file:");
 		m+="\n\n"+Filename;
-		QMessageBox::critical(NULL, tr("WinMusik Error"),
+        QMessageBox::critical(nullptr, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
 		return false;
 	}
@@ -629,7 +630,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 		m+=tr("Error:"); m+=" "+errorMsg+"\n";
 		m+=tr("Line:"); m+=" "+ppl6::ToString("%i\n",errorLine);
 		m+=tr("Column:"); m+=" "+ppl6::ToString("%i\n",errorColumn);
-		QMessageBox::critical(NULL, tr("WinMusik Error"),
+        QMessageBox::critical(nullptr, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
 		return false;
 	}
@@ -639,7 +640,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 		ppl6::CString m=tr("File is not a WinMusik playlist");
 		m+="\n\n";
 		m+=tr("Filename:"); m+=" "+Filename+"\n";
-		QMessageBox::critical(NULL, tr("WinMusik Error"),
+        QMessageBox::critical(nullptr, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
 		return false;
 	}
@@ -648,7 +649,7 @@ bool PlaylistTracks::loadWMP(const ppl6::CString &Filename)
 		m+="\n\n";
 		m+=tr("Filename:"); m+=" "+Filename+"\n";
 		m+=tr("Version:"); m+=" "+root.attribute("version")+"\n";
-		QMessageBox::critical(NULL, tr("WinMusik Error"),
+        QMessageBox::critical(nullptr, tr("WinMusik Error"),
 				m, QMessageBox::Ok);
 		return false;
 	}

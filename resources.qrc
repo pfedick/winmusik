@@ -282,6 +282,7 @@
         <file>resources/export.png</file>
         <file>resources/semitone_down_16x8.png</file>
         <file>resources/semitone_up_16x8.png</file>
+        <file>resources/view_filter.png</file>
     </qresource>
     <qresource prefix="/other">
         <file>resources/pfp-logo-48x25.png</file>
