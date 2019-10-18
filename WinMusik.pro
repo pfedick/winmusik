@@ -217,7 +217,7 @@ else {
         release`
     win32:LIBS += `ppl6-config \
         --libs \
-        release`
+        debug`
 }
 win32:LIBS += -lwinmm
 CODECFORSRC = UTF-8
