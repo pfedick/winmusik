@@ -117,8 +117,8 @@ Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
 	ui.setupUi(this);
-    ui.filterFrame->setVisible(true);
-	this->setStatusBar(NULL);
+    ui.filterFrame->setVisible(false);
+    this->setStatusBar(nullptr);
 	this->wm=wm;
 	harmonicsHighlighted=false;
 	currentTreeItem=NULL;
