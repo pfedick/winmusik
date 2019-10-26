@@ -49,7 +49,6 @@
 #include <QLocale>
 #include <QDesktopWidget>
 #include <QMenu>
-#include <ppl6-crypt.h>
 
 CWmClient *wm_main=NULL;
 
@@ -1522,22 +1521,6 @@ int CWmClient::RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8
 	return 1;
 }
 
-int CWmClient::CurlTalk(ppl6::CCurl &Curl, ppl6::CAssocArray &cmd, ppl6::CAssocArray &answer)
-{
-	Curl.AddPostVar(cmd,"cmd");
-	if (!Curl.Post()) return 0;
-	ppl6::CString result;
-	result=Curl.GetResultBuffer();
-	result+="\n";
-	answer.Clear();
-	answer.CreateFromTemplate((const char*)result,"\n",":","\n",true);
-	result=answer.Get("Result");
-	if (result=="SUCCESS") return 1;
-	result=answer.Get("Errortext");
-	ppl6::CString code=answer.Get("Errorcode");
-	SetError(code.ToInt(),result);
-	return 0;
-}
 
 ppl6::CString CWmClient::GetOperatingSystem()
 {
@@ -1812,35 +1795,4 @@ int CWmClient::GetWords(const ppl6::CString &str, ppl6::CArray &words)
 	words.Explode(s," ",0,true);
 	return 1;
 }
-
-const char *key="HJnD8Kj$/SDbu910LqAb§doHqc";
-
-ppl6::CString CWmClient::DeCrypt(const ppl6::CString &str)
-{
-	ppl6::CBinary bin=FromBase64(str);
-	if (!ppl6::CMCrypt::Decrypt(bin,key,ppl6::CMCrypt::Algo_TWOFISH,ppl6::CMCrypt::Mode_CFB)) {
-		throw ppl6::Exception();
-	}
-	return bin;
-}
-
-ppl6::CString CWmClient::Crypt(const ppl6::CString &str)
-{
-	ppl6::CBinary bin=str;
-	if (!ppl6::CMCrypt::Crypt(bin,key,ppl6::CMCrypt::Algo_TWOFISH,ppl6::CMCrypt::Mode_CFB)) {
-		throw ppl6::Exception();
-	}
-	return ToBase64(bin);
-}
-
-int CWmClient::StartServer()
-{
-	return 1;
-}
-
-int CWmClient::StopServer()
-{
-	return 1;
-}
-
 

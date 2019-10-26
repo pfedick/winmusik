@@ -27,7 +27,6 @@
 #include "winmusik3.h"
 
 #include "properties.h"
-#include "registration.h"
 #include "regexpedit.h"
 #include <ppl6-sound.h>
 

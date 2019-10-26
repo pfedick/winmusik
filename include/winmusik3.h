@@ -620,7 +620,6 @@ class CWmClient
 		void CoverViewerClosed();
 		bool IsCoverViewerVisible() const;
 
-		int CurlTalk(ppl6::CCurl &Curl, ppl6::CAssocArray &cmd, ppl6::CAssocArray &answer);
 		ppl6::CString GetOperatingSystem();
 		ppluint32 GetHighestDeviceId(int DeviceType);
 		ppl6::CString GetDeviceName(int DeviceType);
@@ -678,12 +677,6 @@ class CWmClient
 		void NormalizeTerm(ppl6::CString &term);
 		void NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6::CWString &term);
 		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
-
-		ppl6::CString DeCrypt(const ppl6::CString &str);
-		ppl6::CString Crypt(const ppl6::CString &str);
-
-		int StartServer();
-		int StopServer();
 
 };
 
