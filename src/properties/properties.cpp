@@ -25,7 +25,6 @@
 
 
 #include "winmusik3.h"
-#include "updater.h"
 
 #include "properties.h"
 #include "registration.h"
@@ -48,7 +47,6 @@ Properties::Properties(QWidget *parent, CWmClient *wm)
 	ui.wmDataPath->setText(c->DataPath);
 	ui.tmpPath->setText(c->TmpPath);
 	ui.showSplashscreen->setChecked(c->bShowSplashScreen);
-	ui.checkForUpdates->setChecked(c->bCheckForUpdatesOnStartup);
 	ui.suggestArtist->setChecked(c->bAutomaticArtistSuggestion);
 	ui.suggestTitle->setChecked(c->bAutomaticTitleSuggestion);
 	ui.automaticEditSearch->setChecked(c->bAutomaticEditSearch);
@@ -327,7 +325,6 @@ int Properties::Save()
 	c->DataPath=ui.wmDataPath->text();
 	c->TmpPath=ui.tmpPath->text();
 	c->bShowSplashScreen=ui.showSplashscreen->isChecked();
-	c->bCheckForUpdatesOnStartup=ui.checkForUpdates->isChecked();
 	c->bAutomaticArtistSuggestion=ui.suggestArtist->isChecked();
 	c->bAutomaticTitleSuggestion=ui.suggestTitle->isChecked();
 	c->bAutomaticEditSearch=ui.automaticEditSearch->isChecked();
@@ -593,11 +590,6 @@ void Properties::on_logfileButton_clicked()
 	}
 }
 
-void Properties::on_checkUpdatesNow_clicked()
-{
-	CUpdateChecker uc(this,wm);
-	uc.CheckNow(this);
-}
 
 /*
  * Changes

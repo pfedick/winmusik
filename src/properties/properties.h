@@ -73,7 +73,6 @@ private slots:
     void on_mp3PlayerButton_clicked();
     void on_aiffPlayerButton_clicked();
     void on_tmpPathButton_clicked();
-    void on_checkUpdatesNow_clicked();
     void on_addDirectory_clicked();
     void on_deleteDirectory_clicked();
 
@@ -82,7 +81,6 @@ private slots:
     void on_wmDataPath_textChanged(const QString &);
     void on_tmpPath_textChanged(const QString &);
     void on_showSplashscreen_stateChanged(int ) {Change();}
-    void on_checkForUpdates_stateChanged(int ) {Change();}
     void on_suggestArtist_stateChanged(int ) {Change();}
     void on_suggestTitle_stateChanged(int ) {Change();}
     void on_automaticEditSearch_stateChanged(int ) {Change();}

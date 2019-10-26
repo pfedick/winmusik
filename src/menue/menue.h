@@ -29,14 +29,13 @@
 #include "winmusik3.h"
 #include <QWidget>
 #include "ui_menue.h"
-#include <QTimer>
 
 class Menue : public QWidget
 {
     Q_OBJECT
 
 public:
-    Menue(QWidget *parent = 0, CWmClient *client=NULL);
+    Menue(QWidget *parent = nullptr, CWmClient *client=nullptr);
     ~Menue();
 
 
@@ -48,7 +47,6 @@ public:
 private:
     Ui::MenueClass ui;
     CWmClient *wm;
-    QTimer *timer;
     QWidget *searchWindow;
 
     bool UpdateInformed;
@@ -63,35 +61,34 @@ private:
     void OpenSearchlistDialog();
 
 private slots:
-	void on_toolButton_1_clicked() {OpenEditDialog(1);};
-	void on_toolButton_2_clicked() {OpenEditDialog(2);};
-	void on_toolButton_3_clicked() {OpenEditDialog(3);};
-	void on_toolButton_4_clicked() {OpenEditDialog(4);};
-	void on_toolButton_5_clicked() {OpenEditDialog(5);};
-	void on_toolButton_6_clicked() {OpenEditDialog(6);};
-	void on_toolButton_7_clicked() {OpenEditDialog(7);};
-	void on_toolButton_8_clicked() {OpenEditDialog(8);};
-	void on_toolButton_9_clicked() {OpenEditDialog(9);};
+    void on_toolButton_1_clicked() {OpenEditDialog(1);}
+    void on_toolButton_2_clicked() {OpenEditDialog(2);}
+    void on_toolButton_3_clicked() {OpenEditDialog(3);}
+    void on_toolButton_4_clicked() {OpenEditDialog(4);}
+    void on_toolButton_5_clicked() {OpenEditDialog(5);}
+    void on_toolButton_6_clicked() {OpenEditDialog(6);}
+    void on_toolButton_7_clicked() {OpenEditDialog(7);}
+    void on_toolButton_8_clicked() {OpenEditDialog(8);}
+    void on_toolButton_9_clicked() {OpenEditDialog(9);}
 
-	void on_toolButton_1_controlClicked() {OpenDeviceList(1);};
-	void on_toolButton_2_controlClicked() {OpenDeviceList(2);};
-	void on_toolButton_3_controlClicked() {OpenDeviceList(3);};
-	void on_toolButton_4_controlClicked() {OpenDeviceList(4);};
-	void on_toolButton_5_controlClicked() {OpenDeviceList(5);};
-	void on_toolButton_6_controlClicked() {OpenDeviceList(6);};
-	void on_toolButton_7_controlClicked() {OpenDeviceList(7);};
-	void on_toolButton_8_controlClicked() {OpenDeviceList(8);};
-	void on_toolButton_9_controlClicked() {OpenDeviceList(9);};
+    void on_toolButton_1_controlClicked() {OpenDeviceList(1);}
+    void on_toolButton_2_controlClicked() {OpenDeviceList(2);}
+    void on_toolButton_3_controlClicked() {OpenDeviceList(3);}
+    void on_toolButton_4_controlClicked() {OpenDeviceList(4);}
+    void on_toolButton_5_controlClicked() {OpenDeviceList(5);}
+    void on_toolButton_6_controlClicked() {OpenDeviceList(6);}
+    void on_toolButton_7_controlClicked() {OpenDeviceList(7);}
+    void on_toolButton_8_controlClicked() {OpenDeviceList(8);}
+    void on_toolButton_9_controlClicked() {OpenDeviceList(9);}
 
 
-	void on_searchButton_clicked() {OpenSearchDialog();};
-	void on_propertiesButton_clicked() {OpenPropertiesDialog();};
-	void on_aboutButton_clicked() {OpenAboutDialog();};
-	void on_coverButton_clicked() {OpenCoverPrinterDialog();};
-	void on_playlistButton_clicked() {OpenPlaylistDialog();};
-	void on_searchlistButton_clicked() {OpenSearchlistDialog();};
+    void on_searchButton_clicked() {OpenSearchDialog();}
+    void on_propertiesButton_clicked() {OpenPropertiesDialog();}
+    void on_aboutButton_clicked() {OpenAboutDialog();}
+    void on_coverButton_clicked() {OpenCoverPrinterDialog();}
+    void on_playlistButton_clicked() {OpenPlaylistDialog();}
+    void on_searchlistButton_clicked() {OpenSearchlistDialog();}
 
-	void on_TimerUpdate();
 	void on_searchEdit_returnPressed();
 
 

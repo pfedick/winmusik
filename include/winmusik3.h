@@ -89,7 +89,6 @@ typedef struct {
   char	Genre;
 } ID3TAG;
 
-class CUpdateChecker;
 class CWmClient;
 extern CWmClient *wm_main;
 
@@ -577,7 +576,6 @@ class CWmClient
 		BackgroundJobs			Background;
 		RegularExpressionCapture	RegExpCapture;
 		CHashes					Hashes;
-		CUpdateChecker			*UpdateChecker;
 
 		CWmClient();
 		~CWmClient();

@@ -41,7 +41,6 @@
 #include "splashscreen.h"
 #include "coverprinter.h"
 #include "src/playlist/playlist.h"
-#include "updater.h"
 #include "devicelist.h"
 #include "src/searchlists/searchlists.h"
 #include "src/searchlists/searchlistdialog.h"
@@ -69,7 +68,6 @@ CWmClient::CWmClient()
 	CoverViewerWindow=NULL;
 	LatestPurchaseDate=QDate::currentDate();
 	Hashes.wm=this;
-	UpdateChecker=new CUpdateChecker(NULL,this);
 	initLetterReplacements();
 	initFilenameLetterReplacements();
 }
@@ -77,7 +75,6 @@ CWmClient::CWmClient()
 CWmClient::~CWmClient()
 {
 	Background.triggerShutdown();
-	delete UpdateChecker;
 	Hashes.Clear();
 	ID3TagSaver.ThreadStop();
 	CloseDatabase();
@@ -114,7 +111,7 @@ int CWmClient::RaiseError()
 
 int CWmClient::RaiseError(QWidget *object, QString msg)
 {
-	ppluint32 err=ppl6::GetErrorCode();
+    int err=ppl6::GetErrorCode();
 	ppl6::CString descr=ppl6::GetError();
 	ppl6::CString sub=ppl6::GetExtendedError();
 
@@ -190,7 +187,6 @@ int CWmClient::Start()
 	MainMenue=w;
 	Mutex.Unlock();
 	Hashes.ThreadStart();
-	if (conf.bCheckForUpdatesOnStartup) UpdateChecker->ThreadStart();
 	return 1;
 }
 
@@ -520,7 +516,7 @@ void CWmClient::OpenEditor(int devicetype,int deviceId, int page, int track)
 	Mutex.Lock();
 	EditorWindows.Add(edit);
 	Mutex.Unlock();
-	if (deviceId>0) edit->OpenTrack(deviceId,page,track);
+    if (deviceId>0) edit->OpenTrack((unsigned int)deviceId,(unsigned char)page,(unsigned short)track);
 }
 
 void CWmClient::OpenCoverPrinter()
@@ -1798,7 +1794,7 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ReplaceIfExists(s,L" with ",replace);
 	ReplaceIfExists(s,L" /\\ ",replace);
 	ReplaceIfExists(s,L"DJ ",replace);
-	ReplaceIfExists(s,L" ",replace);		// U+00A0, c2 a0, NO-BREAK SPACE
+	ReplaceIfExists(s,L" ",replace);		// U+00A0, c2 a0, NO-BREAK SPACE
 	s.Trim();
 	s.Replace("  "," ");
 	NormalizeLetters(letterReplacements,s);

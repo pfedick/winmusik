@@ -31,7 +31,6 @@
 #include "src/search/search.h"
 #include "src/properties/properties.h"
 #include "about.h"
-#include "updater.h"
 #include "wmtoolbutton.h"
 
 
@@ -56,9 +55,6 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	UpdateMenue();
 
 	UpdateInformed=false;
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(on_TimerUpdate()));
-	timer->start(3000);
 	ui.searchEdit->setFocus();
 }
 
@@ -158,24 +154,6 @@ void Menue::OpenSearchlistDialog()
 {
 	if (wm) wm->OpenSearchlistOverview();
 	ui.searchEdit->setFocus();
-}
-
-
-void Menue::on_TimerUpdate()
-{
-	if (!wm->UpdateChecker) return;
-	if (UpdateInformed) return;
-	CUpdateChecker *cuc=(CUpdateChecker*) wm->UpdateChecker;
-	if (cuc->manualcheck==true) return;
-	//printf ("Timer\n");
-	if (cuc->updateavailable) {
-		UpdateInformed=true;
-		Updater *w=new Updater;
-		w->Init(cuc->UpdateInfo,cuc->CurrentVersion,cuc->CurrentReleasedate,cuc->DownloadLink);
-		w->exec();
-		delete w;
-
-	}
 }
 
 

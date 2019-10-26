@@ -36,7 +36,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -114,53 +114,6 @@
           <string>Show splash screen at startup</string>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QCheckBox" name="checkForUpdates">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Check for Updates on startup</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="checkUpdatesNow">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Check now</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../resources.qrc">
-             <normaloff>:/icons/resources/viewmag.png</normaloff>:/icons/resources/viewmag.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>16</width>
-             <height>16</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="QCheckBox" name="suggestArtist">
@@ -2397,8 +2350,6 @@
   <tabstop>tmpPath</tabstop>
   <tabstop>tmpPathButton</tabstop>
   <tabstop>showSplashscreen</tabstop>
-  <tabstop>checkForUpdates</tabstop>
-  <tabstop>checkUpdatesNow</tabstop>
   <tabstop>suggestArtist</tabstop>
   <tabstop>suggestTitle</tabstop>
   <tabstop>automaticEditSearch</tabstop>

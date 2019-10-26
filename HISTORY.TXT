@@ -35,6 +35,7 @@ Version 3.5.2
     - Rating is stored in ID3Tag
     - removed server settings and serial from properties
     - added class for colorscheme
+    - removed check for updates
 
 Version 3.5.1, Releasedate: 05.08.2018 (Tag: REL_3_5_1)
     - Editor:

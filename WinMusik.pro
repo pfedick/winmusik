@@ -54,7 +54,6 @@ HEADERS += widgets/fkeys.h \
     src/editor/massimport.h \
     include/edittrackdialog.h \
     include/coverprinter.h \
-    include/updater.h \
     include/registration.h \
     include/printdevicedialog.h \
     include/wmstorage.h \
@@ -113,7 +112,6 @@ SOURCES += widgets/fkeys.cpp \
     src/coverprinter.cpp \
     src/resultfilter.cpp \
     src/regexpcapture.cpp \
-    src/updater.cpp \
     src/registration.cpp \
     src/CHashes.cpp \
     src/printdevicedialog.cpp \
@@ -175,7 +173,6 @@ FORMS += widgets/fkeys.ui \
     src/editor/massimport.ui \
     forms/edittrackdialog.ui \
     forms/coverprinter.ui \
-    forms/updater.ui \
     forms/registration.ui \
     forms/printdevicedialog.ui \
     forms/editdevice.ui \
