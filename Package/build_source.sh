@@ -1,15 +1,12 @@
 #!/bin/sh
+###############################################################################
+# This file is part of WinMusik 3 by Patrick Fedick                           #
+# Web: https://www.pfp.de/winmusik/                                           #
+###############################################################################
 #
-# This file is part of WinMusik 3 by Patrick Fedick
-#
-# $Author: pafe $
-# $Revision: 404 $
-# $Date: 2014-05-28 19:15:08 +0200 (Mi, 28 Mai 2014) $
-# $Id: build_package.sh 404 2014-05-28 17:15:08Z pafe $
-#
-#
-# Copyright (c) 2014 Patrick Fedick <patrick@pfp.de>
-#
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# All rights reserved.
+# 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -23,6 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+###############################################################################
  
 CUR=`pwd`
 

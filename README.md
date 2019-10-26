@@ -17,3 +17,51 @@ smart editor and an easy to use search interface.
 
 WWW: http://www.winmusik.de/
 Author: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
+
+
+WinMusik 3 - Installation
+=========================
+
+This installation guide describes how to compile WinMusik on a Unix
+compatible operation system from sourcecode. If that's not what you want,
+please check https://sourceforge.net/projects/winmusik/files/client/
+if there is a precompiled package for your operating system. 
+
+
+Prerequirements
+===============
+
+You have to install the following packages:
+	- C++ compiler with c++11 support (gcc 4.8, clang4 or higher)
+	- QT, version 5.x or higher
+	- zlib (developer package)
+	- bzip2 (developer package)
+	- pcre (developer package)
+	- openssl (developer package)
+	- libcurl (developer package)
+	- iconv (only if you have to import files from old WinMusik version 2.x)
+	- libcdio (developer package)
+
+
+Configure and compile
+=====================
+
+WinMusik comes with an Autoconf configure-Skript. In a perfect world, you
+can simply type
+
+	./configure
+
+and the script will finds everything automatically. In practice, it probably
+will not, and you have to specify some paths manually. See 
+
+	./configure --help
+	
+for a description of all parameters.
+
+
+Then type
+
+	qmake
+	make release
+
+You should find a WinMusik binary in the release-Folder

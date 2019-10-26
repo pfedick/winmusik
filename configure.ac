@@ -477,8 +477,6 @@ AC_MSG_RESULT([
 **   Size of long long    $ac_cv_sizeof_long_long     
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
-** Assembler:
-**   Nasm (x86 assembler): $report_have_nasm
 **
 ** Threads:                $report_have_pthreads
 **
