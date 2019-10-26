@@ -43,13 +43,13 @@ DEFINES += PPL6LIB
 DEFINES += PPL7LIB
 DEFINES += HAVE_CONFIG_H
 
-QMAKE_CC = cc
-QMAKE_CXX	= c++
-QMAKE_CFLAGS = -I/usr/local/include  -I/usr/local/include  -DHAVE_CONFIG_H  -D_THREAD_SAFE -pthread -I/usr/include 
-QMAKE_CFLAGS +=  -I/usr/include -I/usr/local/include -I/usr/local/include
-QMAKE_CFLAGS += -I/usr/local/include 
-QMAKE_CXXFLAGS	= -g -O2 -I/usr/local/include
-LDFLAGS		= -L/usr/local/lib -no-pie 
+QMAKE_CC = @CC@
+QMAKE_CXX	= @CXX@
+QMAKE_CFLAGS = @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@
+QMAKE_CFLAGS += @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ @LIBCURL_CPPFLAGS@
+QMAKE_CFLAGS += @LIBCDIO_CFLAGS@
+QMAKE_CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
 
 
 RESOURCES += resources.qrc
@@ -64,10 +64,10 @@ win32:INCLUDEPATH += D:/jenkins/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
-LIBS +=  -D_THREAD_SAFE -pthread  -L/usr/lib -lz
-LIBS += -lbz2 -lpcre /usr/local/lib/libiconv.so -Wl,-rpath -Wl,/usr/local/lib
-LIBS += -L/usr/lib -lssl -lcrypto -L/usr/local/lib -lcurl
-LIBS += -L/usr/local/lib -lcdio -lm -lcam 
+LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
+LIBS += @BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@
+LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
+LIBS += @LIBCDIO_LDFLAGS@
 
 win32:LIBS += -lwinmm
 CODECFORSRC = UTF-8

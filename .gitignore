@@ -48,3 +48,9 @@
 /tmp/
 /documentation/
 /ui_editstring.h
+/autom4te.cache/
+/WinMusik.pro
+/config.log
+/config.status
+/ui_exporttracks.h
+/ui_player.h

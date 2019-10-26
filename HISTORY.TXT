@@ -2,6 +2,11 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.6.0
+    - Merged sourcecode from pplib 6 into WinMusik
+    - added configure script
+    - removed obsolete functions and files
+
 Version 3.5.2, Releasedate: 26.10.2019 (Tag: REL_3_5_2)
     - Editor:
       - Bei Drag'n'Drop aus der Suchliste wird die Laufzeit des Tracks

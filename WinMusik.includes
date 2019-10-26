@@ -1,4 +1,4 @@
-../ppl6/include
+pplib/include
 src/properties
 src/menue
 src/playlist
