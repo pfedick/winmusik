@@ -252,6 +252,7 @@ HEADERS += widgets/edittrack.h \
     include/regexpcapture.h \
     include/langselect.h \
     include/asynchronousMessage.h \
+    pplib/include/config.h \
     pplib/include/compat.h \
     pplib/include/prolog.h \
     pplib/include/ppl6-exceptions.h \

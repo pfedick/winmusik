@@ -2,7 +2,7 @@
 
 AC_DEFUN([AX_FIND_QMAKE],[
 
-AC_MSG_CHECKING([for qmake])
+AC_MSG_CHECKING([for Qt])
 AC_ARG_WITH([qmake],
 	[  --with-qmake=PATH       Path and name of the qmake program (optional)],
 	[QMAKE="$withval"],

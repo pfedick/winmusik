@@ -639,6 +639,9 @@ report_have_bzip2
 report_have_zlib
 WINDOWS_WINSOCK_LIBS
 SRCDIR
+QMAKE
+qt_version
+qmake
 LIBCDIO_LDFLAGS
 LIBCDIO_CFLAGS
 libcdio_LIBS
@@ -798,6 +801,7 @@ with_pcre
 with_openssl
 with_libcurl
 with_libcdio
+with_qmake
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1470,6 +1474,7 @@ Optional Packages:
   --with-libcurl=PREFIX   look for the curl library in PREFIX/lib and headers
                           in PREFIX/include
   --with-libcdio[=PATH]   support accesing audio cds (optional)
+  --with-qmake=PATH       Path and name of the qmake program (optional)
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -3584,6 +3589,11 @@ ac_config_files="$ac_config_files WinMusik.pro"
 
 
 
+# find qmake
+
+
+
+#sinclude(autoconf/ax_have_qt.m4)
 
 report_have_pthreads="no"
 report_have_iconv="no"
@@ -9881,6 +9891,8 @@ fi
 
 
 
+
+
 report_have_gtest="no"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if googletest should be used for unittesting" >&5
@@ -14331,6 +14343,97 @@ $as_echo "#define HAVE_LIBCDIO 1" >>confdefs.h
 
 
 
+report_have_qt="no"
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Qt" >&5
+$as_echo_n "checking for Qt... " >&6; }
+
+# Check whether --with-qmake was given.
+if test "${with_qmake+set}" = set; then :
+  withval=$with_qmake; QMAKE="$withval"
+else
+  QMAKE="yes"
+fi
+
+
+
+if test "$QMAKE" = "yes"; then
+	if test -x "/usr/local/lib/qt5/bin/qmake" ; then
+		QMAKE=/usr/local/lib/qt5/bin/qmake
+	elif test -x "/usr/lib/qt5/bin/qmake" ; then
+		QMAKE=/usr/lib/qt5/bin/qmake
+	else
+		for ac_prog in qmake-qt5 qmake
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_qmake+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$qmake"; then
+  ac_cv_prog_qmake="$qmake" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_qmake="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+qmake=$ac_cv_prog_qmake
+if test -n "$qmake"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $qmake" >&5
+$as_echo "$qmake" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$qmake" && break
+done
+test -n "$qmake" || qmake="no"
+
+		if test "$qmake" = "no" ; then
+			as_fn_error $? "qmake not found" "$LINENO" 5
+		fi
+		QMAKE=$qmake
+	fi
+elif test -x "$QMAKE" ; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $QMAKE" >&5
+$as_echo "$QMAKE" >&6; }
+
+else
+	if test ! -x "$QMAKE"  ; then
+		as_fn_error $? "qmake not found" "$LINENO" 5
+	fi
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $QMAKE" >&5
+$as_echo "$QMAKE" >&6; }
+fi
+
+qt_version=`$QMAKE -v | grep Qt`
+
+
+
+
+if test -x "$QMAKE"
+then
+	report_have_qt="yes, $qt_version"
+fi
+
 
 SRCDIR=`pwd`
 
@@ -15915,10 +16018,9 @@ fi
 **   Size of long long    $ac_cv_sizeof_long_long
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
-** Assembler:
-**   Nasm (x86 assembler): $report_have_nasm
 **
 ** Threads:                $report_have_pthreads
+** Qt:                     $report_have_qt
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib
@@ -15946,10 +16048,9 @@ $as_echo "
 **   Size of long long    $ac_cv_sizeof_long_long
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
-** Assembler:
-**   Nasm (x86 assembler): $report_have_nasm
 **
 ** Threads:                $report_have_pthreads
+** Qt:                     $report_have_qt
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib
@@ -15964,4 +16065,41 @@ $as_echo "
 **   Unittests:            $report_have_gtest
 ******************************************************************************
 " >&6; }
+
+ERR=0
+if test "$report_have_pthreads" = "no"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ERROR: no threads libraray" >&5
+$as_echo "ERROR: no threads libraray" >&6; }
+	ERR=1
+fi
+
+if test "$report_have_qt" = "no"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ERROR: Qt not found" >&5
+$as_echo "ERROR: Qt not found" >&6; }
+	ERR=1
+fi
+
+if test "$report_have_pcre" = "no"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ERROR: pcre library not found" >&5
+$as_echo "ERROR: pcre library not found" >&6; }
+	ERR=1
+fi
+
+if test "$report_have_pcre" = "no"
+then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ERROR: pcre library not found" >&5
+$as_echo "ERROR: pcre library not found" >&6; }
+	ERR=1
+fi
+
+if test $ERR -ne 0
+then
+	as_fn_error $? "Can't compile, required features or 3rd party libs not found!" "$LINENO" 5
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+fi
 

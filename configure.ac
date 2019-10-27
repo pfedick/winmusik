@@ -57,6 +57,8 @@ sinclude(autoconf/ax_check_compiler_flags.m4)
 sinclude(autoconf/ax_gcc_archflag.m4)
 sinclude(autoconf/libcdio.m4)
 sinclude(autoconf/gtest.m4)
+sinclude(autoconf/ax_find_qmake.m4)
+#sinclude(autoconf/ax_have_qt.m4)
 
 report_have_pthreads="no"
 report_have_iconv="no"
@@ -224,6 +226,8 @@ AX_TM_HAS_GMTOFF()
 AC_PATH_XTRA
 
 
+
+
 report_have_gtest="no"
 AC_CHECK_GTEST(
 	report_have_gtest="yes"
@@ -387,6 +391,13 @@ AX_CHECK_LIBCDIO(
         report_have_libcdio="yes",
         :)
 
+report_have_qt="no"
+AX_FIND_QMAKE()
+if test -x "$QMAKE"
+then
+	report_have_qt="yes, $qt_version"
+fi
+
 
 SRCDIR=`pwd`
 AC_SUBST(SRCDIR)
@@ -479,6 +490,7 @@ AC_MSG_RESULT([
 ******************************************************************************
 **
 ** Threads:                $report_have_pthreads
+** Qt:                     $report_have_qt
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib
@@ -493,4 +505,36 @@ AC_MSG_RESULT([
 **   Unittests:            $report_have_gtest
 ******************************************************************************
 ])
+
+ERR=0
+if test "$report_have_pthreads" = "no"
+then
+	AC_MSG_RESULT([ERROR: no threads libraray])
+	ERR=1
+fi
+
+if test "$report_have_qt" = "no"
+then
+	AC_MSG_RESULT([ERROR: Qt not found])
+	ERR=1
+fi
+
+if test "$report_have_pcre" = "no"
+then
+	AC_MSG_RESULT([ERROR: pcre library not found])
+	ERR=1
+fi
+
+if test "$report_have_pcre" = "no"
+then
+	AC_MSG_RESULT([ERROR: pcre library not found])
+	ERR=1
+fi
+
+if test $ERR -ne 0
+then
+	AC_MSG_ERROR([Can't compile, required features or 3rd party libs not found!])
+else
+	AC_MSG_RESULT([])
+fi
 
