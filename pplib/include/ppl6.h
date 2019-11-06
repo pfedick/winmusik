@@ -261,7 +261,7 @@ typedef struct {
 
 //! \brief Eine Struktur zum Erfassen von Uhrzeit und Datum
 typedef struct tagTime {
-        ppluint64	epoch;
+	ppluint64	epoch;
 	int			year;
 	int			month;
 	int			day;

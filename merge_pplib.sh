@@ -23,15 +23,25 @@
 ###############################################################################
 
 PPL6_DIR=../ppl6
+PPL7_DIR=../ppl7
 
 WORK=`pwd`
 if [ ! -d $PPL6_DIR ] ; then
 	echo "ERROR: ppl6 not found!"
 	exit 1
 fi
+if [ ! -d $PPL7_DIR ] ; then
+	echo "ERROR: ppl7 not found!"
+	exit 1
+fi
 
-rm -rf pplib/ppl6/* pplib/include/* && mkdir -p pplib/ppl6 pplib/include
 
+rm -rf pplib/ppl6/* pplib/ppl7/* pplib/include/* 
+mkdir -p pplib/ppl6 pplib/ppl7 pplib/include
+
+#######################################################################
+# PPL6
+#######################################################################
 cd $PPL6_DIR
 sources=`find include/compat.h include/config.h.in include/internal.h include/ppl6.h \
 	include/ppl6-algorithms.h include/ppl6-exceptions.h \
@@ -65,7 +75,46 @@ done
 
 cp LICENSE.TXT $WORK/pplib/ppl6
 
-cd ppl6
+#######################################################################
+# PPL7
+#######################################################################
+cd $PPL7_DIR
+sources=`find include/compat_ppl7.h include/config_ppl7.h.in include/ppl7.h \
+	include/ppl7-algorithms.h include/ppl7-exceptions.h include/ppl7-ppl6compat.h \
+	include/ppl7-audio.h include/ppl7-types.h include/prolog_ppl7.h include/threads_ppl7.h \
+	include/ppl7-inet.h include/ppl7-crypto.h `
+
+for source_file in $sources
+do
+	target=`basename $source_file`
+	cp $source_file $WORK/pplib/include/$target
+done	
+sources=`find src/audio/AudioCD.cpp src/audio/AudioInfo.cpp src/audio/Cddb.cpp \
+	src/audio/ID3Tag.cpp src/audio/Mp3.cpp \
+	src/core/*.cpp \
+	src/types/*.cpp \
+	src/crypto/*.cpp \
+	src/math/*.cpp \
+	src/internet/curl.cpp `
+
+for source_file in $sources
+do
+	target=`basename $source_file`
+	cp $source_file $WORK/pplib/ppl7/ppl7_$target
+done
+rm -rf $WORK/pplib/ppl7/ppl7_Resourcen.cpp
+
+cp LICENSE.TXT $WORK/pplib/ppl7
+
+
+#######################################################################
+# Final
+#######################################################################
+cd $WORK/pplib
+rm -rf debug release
 ./genMakefile.in
+
+
+
 
 

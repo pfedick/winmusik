@@ -43,10 +43,13 @@ gui          := gui
 ###########################################################################
 
 .PHONY: all $(gui) $(libraries)
-all: $(libraries) gui/Makefile release/WinMusik
+all: pplib/release/libpplib.a gui/Makefile release/WinMusik
 
-$(libraries): gui/Makefile
-	$(MAKE) --directory=$@
+pplib/release/libpplib.a: 
+	$(MAKE) --directory=pplib
+
+lib/release/libwinmusik.a: 
+	$(MAKE) --directory=lib
 
 release/WinMusik: $(libraries) gui/Makefile pplib/release/libpplib.a
 	rm -rf gui/release/WinMusik

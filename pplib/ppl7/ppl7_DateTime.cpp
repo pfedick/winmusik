@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This file is part of "Patrick's Programming Library", Version 6 (PPL6).
+ * This file is part of "Patrick's Programming Library", Version 7 (PPL7).
  * Web: http://www.pfp.de/ppl/
  *
  * $Author$
@@ -8,19 +8,16 @@
  * $Id$
  *
  *******************************************************************************
- * Copyright (c) 2010, Patrick Fedick <patrick@pfp.de>
+ * Copyright (c) 2013, Patrick Fedick <patrick@pfp.de>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the copyright holder nor the names of its
- *       contributors may be used to endorse or promote products derived
- *       from this software without specific prior written permission.
+ *    1. Redistributions of source code must retain the above copyright notice, this
+ *       list of conditions and the following disclaimer.
+ *    2. Redistributions in binary form must reproduce the above copyright notice,
+ *       this list of conditions and the following disclaimer in the documentation
+ *       and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -35,10 +32,10 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "prolog.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "prolog_ppl7.h"
 
 /*
        The glibc version of struct tm has additional fields
@@ -51,9 +48,6 @@
 #ifndef _BSD_SOURCE
 #define _BSD_SOURCE
 #endif
-#ifdef MINGW32
-#define _POSIX_THREAD_SAFE_FUNCTIONS
-#endif
 #include <time.h>
 #ifdef HAVE_SYS_TIME_H
 	#include <sys/time.h>
@@ -61,34 +55,28 @@
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#include "ppl6.h"
+#include "ppl7.h"
+#include "ppl7-types.h"
 
 
-namespace ppl6 {
-
-#ifndef HAVE_LOCALTIME_R
-// In diesem Fall ist ein Workaround für localtime_r in core/time.cpp definiert
-struct tm * localtime_r(const time_t *clock, struct tm *result);
-#endif
-
-#ifndef HAVE_GMTIME_R
-struct tm *gmtime_r(const time_t *timep, struct tm *result);
-#endif
+namespace ppl7 {
 
 
-/*!\class CDateTime
+
+/*!\class DateTime
  * \ingroup PPLGroupDataTypes
+ * \ingroup PPLGroupDateTime
  * \brief Datenobjekt zum Speichern von Datum und Uhrzeit
  *
  * \desc
  * Dies ist eine Klasse zum Speichern von Datum und Uhrzeit. Mit den Funktionen
- * \ref CDateTime::set(const ppl6::CString &datetime) "set", \ref CDateTime::setDate "setDate"
- * und \ref CDateTime::setTime "setTime" können Datum und/oder Uhrzeit gesetzt werden,
- * mit \ref CDateTime::get "get", \ref CDateTime::getDate "getDate",
- * \ref CDateTime::getTime "getTime" und \ref CDateTime::getISO8601 "getISO8601" kann der Wert ausgelesen werden.
- * Alternativ kann mit \ref CDateTime::setTime_t "setTime_t" und \ref CDateTime::time_t "time_t"
+ * \ref DateTime::set(const String &datetime) "set", \ref DateTime::setDate "setDate"
+ * und \ref DateTime::setTime "setTime" können Datum und/oder Uhrzeit gesetzt werden,
+ * mit \ref DateTime::get "get", \ref DateTime::getDate "getDate",
+ * \ref DateTime::getTime "getTime" und \ref DateTime::getISO8601 "getISO8601" kann der Wert ausgelesen werden.
+ * Alternativ kann mit \ref DateTime::setTime_t "setTime_t" und \ref DateTime::time_t "time_t"
  * ein Unix-Timestamp gesetzt oder gelesen werden (Sekunden seit 1970),
- * oder mit \ref CDateTime::setLongInt "setLongInt" und \ref CDateTime::longInt "longInt"
+ * oder mit \ref DateTime::setLongInt "setLongInt" und \ref DateTime::longInt "longInt"
  * ein 64-Bit Wert gesetzt oder gelesen werden, in dem die einzelnen Bestandteile bitweise kodiert sind.
  *
  * \since
@@ -96,27 +84,27 @@ struct tm *gmtime_r(const time_t *timep, struct tm *result);
  */
 
 
-/*!\var CDateTime::yy
+/*!\var DateTime::yy
  * \brief Jahr
  */
 
-/*!\var CDateTime::mm
+/*!\var DateTime::mm
  * \brief Monat
  */
 
-/*!\var CDateTime::dd
+/*!\var DateTime::dd
  * \brief Tag
  */
 
-/*!\var CDateTime::hh
+/*!\var DateTime::hh
  * \brief Stunden
  */
 
-/*!\var CDateTime::ii
+/*!\var DateTime::ii
  * \brief Minuten
  */
 
-/*!\var CDateTime::ss
+/*!\var DateTime::ss
  * \brief Sekunden
  */
 
@@ -131,11 +119,10 @@ struct tm *gmtime_r(const time_t *timep, struct tm *result);
  *
  * \desc
  * Mit diesem Konstruktor ohne Parameter wird der Wert der Datumsklasse auf 0 gesetzt. Die Funktion
- * CDateTime::isEmpty "isEmpty" würde \c true zurückliefern.
+ * DateTime::isEmpty "isEmpty" würde \c true zurückliefern.
  */
-CDateTime::CDateTime()
+DateTime::DateTime()
 {
-	type=CVar::CDATETIME;
 	clear();
 }
 
@@ -143,9 +130,9 @@ CDateTime::CDateTime()
 /*!\brief Konstruktor mit Datumsinitialisierung aus einem String
  *
  * \desc
- * Über diesen Konstruktor wird ein CDateTime Objekt anhand des im String \p datetime enthaltenen
+ * Über diesen Konstruktor wird ein DateTime Objekt anhand des im String \p datetime enthaltenen
  * Datums und Uhrzeit erstellt. Die unterstützten Formate sind in der Funktion
- * \ref CDateTime::set(const ppl6::CString &datetime) "set" beschrieben.
+ * \ref DateTime::set(const String &datetime) "set" beschrieben.
  *
  * @param[in] datetime String mit Datum und Uhrzeit
  *
@@ -154,20 +141,19 @@ CDateTime::CDateTime()
  * Ausnahmen: Ist der String leer oder enthält nur den
  * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  */
-CDateTime::CDateTime(const ppl6::CString &datetime)
+DateTime::DateTime(const String &datetime)
 {
-	type=CVar::CDATETIME;
-	if (!set(datetime)) throw IllegalArgumentException();
+	set(datetime);
 }
 
 /*!\brief Copy-Konstruktor
  *
  * \desc
- * Über diesen Konstruktor wird das Datum eines anderen CDateTime-Wertes übernommen.
+ * Über diesen Konstruktor wird das Datum eines anderen DateTime-Wertes übernommen.
  *
- * @param[in] other Referenz auf den zu kopierenden CDateTime-Wert
+ * @param[in] other Referenz auf den zu kopierenden DateTime-Wert
  */
-CDateTime::CDateTime(const ppl6::CDateTime &other)
+DateTime::DateTime(const DateTime &other)
 {
 	yy=other.yy;
 	us=other.us;
@@ -187,10 +173,11 @@ CDateTime::CDateTime(const ppl6::CDateTime &other)
  *
  * @param t 64-Bit Integer mit den Sekunden seit 1970.
  */
-CDateTime::CDateTime(ppluint64 t)
+DateTime::DateTime(uint64_t t)
 {
 	setTime_t(t);
 }
+
 
 //@}
 
@@ -201,10 +188,10 @@ CDateTime::CDateTime(ppluint64 t)
  *
  * \desc
  * Mit dieser Funktion wird der Datumswert der Klasse auf 0 gesetzt. Die Funktion
- * \ref CDateTime::isEmpty "isEmpty" würde \c true zurückliefern. Die Klasse wird somit
+ * \ref DateTime::isEmpty "isEmpty" würde \c true zurückliefern. Die Klasse wird somit
  * wieder in den Ausgangszustand versetzt.
  */
-void CDateTime::clear()
+void DateTime::clear()
 {
 	yy=0;
 	us=0;
@@ -214,7 +201,6 @@ void CDateTime::clear()
 	ii=0;
 	ss=0;
 }
-
 
 /*!\brief Datum anhand eines Strings setzen
  *
@@ -251,129 +237,129 @@ void CDateTime::clear()
  * optional sind.
  *
  * @param[in] datetime String mit dem zu setzenden Datum und optional der Uhrzeit
- * @return Wurde der String erfolgreich erkannt, liefert die Funktion 1 zurück, andernfalls 0. Ferner wird der
- * Fehlercode 558 gesetzt.
+ * \exception IllegalArgumentException: Wird geworfen, wenn der String \p datetime
+ * ein ungültiges oder unbekanntes Datumsformat hat.
+ * Ausnahmen: Ist der String leer oder enthält nur den
+ * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  */
-int CDateTime::set(const ppl6::CString &datetime)
+void DateTime::set(const String &datetime)
 {
-	ppl6::CString d=ppl6::UCase(ppl6::Trim(datetime));
-	ppl6::CArray m;
-	d.Replace(","," ");
-	if (d.IsEmpty()==true || d=="T" || d=="0") {
+	String d=UpperCase(Trim(datetime));
+	Array m;
+	d.replace(","," ");
+	if (d.isEmpty()==true || d=="T" || d=="0") {
 		clear();
-		return 1;
+		return;
 	}
-	if (d.PregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})/",&m)) {
+	if (d.pregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})/",m)) {
 		// yyyy-mm-ddThh:ii:ss.msecusec[[+-]oo:00]
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt(),
-				m.GetString(8).ToInt());
-	} else if (d.PregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})/",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt(),
+				m.get(8).toInt());
+	} else if (d.pregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})/",m)) {
 		// yyyy-mm-ddThh:ii:ss.msec[[+-]oo:00]
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt());
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt());
 
-	} else if (d.PregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})/",&m)) {
+	} else if (d.pregMatch("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})/",m)) {
 		// yyyy-mm-ddThh:ii:ss[[+-]oo:00]
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt());
-	} else if (d.PregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})$/",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt());
+	} else if (d.pregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})$/",m)) {
 		// yyyy.mm.dd hh:ii:ss.msecusec
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt(),
-				m.GetString(8).ToInt());
-	} else if (d.PregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})$/",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt(),
+				m.get(8).toInt());
+	} else if (d.pregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})$/",m)) {
 		// yyyy.mm.dd hh:ii:ss.msec
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt());
-	} else if (d.PregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})$/",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt());
+	} else if (d.pregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{3})([0-9]{3})$/",m)) {
 		// dd.mm.yyyy hh:ii:ss.msecusec
-		set(m.GetString(3).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(1).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt(),
-				m.GetString(8).ToInt());
-	} else if (d.PregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})$/",&m)) {
+		set(m.get(3).toInt(),
+				m.get(2).toInt(),
+				m.get(1).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt(),
+				m.get(8).toInt());
+	} else if (d.pregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})[\\.:]([0-9]{1,3})$/",m)) {
 		// dd.mm.yyyy hh:ii:ss.msec
-		set(m.GetString(3).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(1).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt(),
-				m.GetString(7).ToInt());
-	} else if (d.PregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/",&m)) {
+		set(m.get(3).toInt(),
+				m.get(2).toInt(),
+				m.get(1).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt(),
+				m.get(7).toInt());
+	} else if (d.pregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/",m)) {
 		// yyyy.mm.dd hh:ii:ss
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt());
-	} else if (d.PregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt());
+	} else if (d.pregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})\\s+([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/",m)) {
 		// dd.mm.yyyy hh:ii:ss
-		set(m.GetString(3).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(1).ToInt(),
-				m.GetString(4).ToInt(),
-				m.GetString(5).ToInt(),
-				m.GetString(6).ToInt());
-	} else if (d.PregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})$/",&m)) {
+		set(m.get(3).toInt(),
+				m.get(2).toInt(),
+				m.get(1).toInt(),
+				m.get(4).toInt(),
+				m.get(5).toInt(),
+				m.get(6).toInt());
+	} else if (d.pregMatch("/^([0-9]{1,2})[\\.-]([0-9]{1,2})[\\.-]([0-9]{4})$/",m)) {
 		// dd.mm.yyyy
-		set(m.GetString(3).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(1).ToInt());
-	} else if (d.PregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})$/",&m)) {
+		set(m.get(3).toInt(),
+				m.get(2).toInt(),
+				m.get(1).toInt());
+	} else if (d.pregMatch("/^([0-9]{4})[\\.-]([0-9]{1,2})[\\.-]([0-9]{1,2})$/",m)) {
 		// yyyy.mm.dd
-		set(m.GetString(1).ToInt(),
-				m.GetString(2).ToInt(),
-				m.GetString(3).ToInt());
-	} else if (d.PregMatch("/^null$/i",&m)) {
+		set(m.get(1).toInt(),
+				m.get(2).toInt(),
+				m.get(3).toInt());
+	} else if (d.pregMatch("/^null$/i",m)) {
 		clear();
-		return 1;
+		return;
 	} else {
 		clear();
-		ppl6::SetError(558,"%s",(const char*)datetime);
-		return 0;
+		throw IllegalArgumentException("DateTime::set("+datetime+")");
 	}
-	return 1;
 }
 
-/*!\brief Datum aus einer anderen CDateTime-Variablen übernehmen
+/*!\brief Datum aus einer anderen DateTime-Variablen übernehmen
  *
  * \desc
- * Mit dieser Funktion wird der Wert einer anderen CDateTime-Variablen übernommen.
+ * Mit dieser Funktion wird der Wert einer anderen DateTime-Variablen übernommen.
  *
- * @param[in] other Referenz auf eine andere CDateTime-Variable, dessen Wert kopiert werden soll.
+ * @param[in] other Referenz auf eine andere DateTime-Variable, dessen Wert kopiert werden soll.
  */
-void CDateTime::set(const ppl6::CDateTime &other)
+void DateTime::set(const DateTime &other)
 {
 	yy=other.yy;
 	us=other.us;
@@ -389,7 +375,7 @@ void CDateTime::set(const ppl6::CDateTime &other)
  * \desc
  * Mit dieser Funktion kann das Datum und die Uhrzeit aus zwei unterschiedlichen Strings
  * übernommen werden. Dazu werden beide Strings einfach mit Space getrennt hintereinander
- * gehangen und dann die \ref CDateTime::set(const ppl6::CString &datetime) "set-Funktion"
+ * gehangen und dann die \ref DateTime::set(const String &datetime) "set-Funktion"
  * aufgerufen, die nur einen String-Parameter erwartet.
  *
  * @param[in] date Referenz auf den String mit dem Datum. Dieses kann folgende Formate haben:
@@ -403,23 +389,25 @@ void CDateTime::set(const ppl6::CDateTime &other)
  * - hh:ii:ss[.mms]
  * - Stunde, Minute und Sekunde können ein- oder zweistellig sein, Statt Doppelpunkt kann auch Komma, Punkt oder
  *   Minus als Trennzeichen verwendet werden. Die
- * @return Wurden Datum und Uhrzeit erfolgreich erkannt, liefert die Funktion 1 zurück, andernfalls 0. Ferner wird der
- * Fehlercode 558 gesetzt.
+ * \exception IllegalArgumentException: Wird geworfen, wenn der String \p datetime
+ * ein ungültiges oder unbekanntes Datumsformat hat.
+ * Ausnahmen: Ist der String leer oder enthält nur den
+ * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  * \see
- * Eine genauere Beschreibung der Formate samt Legende ist \ref CDateTime::set(const ppl6::CString &datetime) "hier"
+ * Eine genauere Beschreibung der Formate samt Legende ist \ref DateTime::set(const String &datetime) "hier"
  * zu finden.
  */
-int CDateTime::set(const ppl6::CString &date, const ppl6::CString &time)
+void DateTime::set(const String &date, const String &time)
 {
-	ppl6::CString d,dd=ppl6::Trim(date),tt=ppl6::Trim(time);
-	dd.Replace(",",".");
-	dd.Replace(":",".");
-	tt.Replace(",",":");
-	tt.Replace(".",":");
-	tt.Replace("-",":");
+	String d,dd=Trim(date),tt=Trim(time);
+	dd.replace(",",".");
+	dd.replace(":",".");
+	tt.replace(",",":");
+	tt.replace(".",":");
+	tt.replace("-",":");
 
 	d=dd+" "+tt;
-	return set(d);
+	set(d);
 }
 
 /*!\brief Datum setzen, Uhrzeit bleibt unverändert
@@ -428,14 +416,16 @@ int CDateTime::set(const ppl6::CString &date, const ppl6::CString &time)
  * Mit dieser Funktion wird nur das Datum der Klasse verändert, die Uhrzeit bleibt erhalten.
  *
  * @param[in] date Referenz auf den String mit dem zu setzenden Datum. Das Format wird bei der
- * \ref CDateTime::set(const ppl6::CString &date, const ppl6::CString &time) "set-Funktion" genauer beschrieben.
- * @return Wurde das Datum erfolgreich erkannt, liefert die Funktion 1 zurück, andernfalls 0. Ferner wird der
- * Fehlercode 558 gesetzt.
+ * \ref DateTime::set(const String &date, const String &time) "set-Funktion" genauer beschrieben.
+ * \exception IllegalArgumentException: Wird geworfen, wenn der String \p datetime
+ * ein ungültiges oder unbekanntes Datumsformat hat.
+ * Ausnahmen: Ist der String leer oder enthält nur den
+ * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  */
-int CDateTime::setDate(const ppl6::CString &date)
+void DateTime::setDate(const String &date)
 {
-	ppl6::CString time=getTime();
-	return set(date,time);
+	String time=getTime();
+	set(date,time);
 }
 
 /*!\brief Uhrzeit setzen, Datum bleibt unverändert
@@ -444,13 +434,15 @@ int CDateTime::setDate(const ppl6::CString &date)
  * Mit dieser Funktion wird nur die Uhrzeit der Klasse verändert, das Datum bleibt erhalten.
  *
  * @param[in] time Referenz auf den String mit der zu setzenden Uhrzeit. Das Format wird bei der
- * \ref CDateTime::set(const ppl6::CString &date, const ppl6::CString &time) "set-Funktion" genauer beschrieben.
- * @return Wurde die Uhrzeit erfolgreich erkannt, liefert die Funktion 1 zurück, andernfalls 0. Ferner wird der
- * Fehlercode 558 gesetzt.
+ * \ref DateTime::set(const String &date, const String &time) "set-Funktion" genauer beschrieben.
+ * \exception IllegalArgumentException: Wird geworfen, wenn der String \p datetime
+ * ein ungültiges oder unbekanntes Datumsformat hat.
+ * Ausnahmen: Ist der String leer oder enthält nur den
+ * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  */
-int CDateTime::setTime(const ppl6::CString &time)
+void DateTime::setTime(const String &time)
 {
-	ppl6::CString date=getDate();
+	String date=getDate();
 	return set(date,time);
 }
 
@@ -472,6 +464,7 @@ int CDateTime::setTime(const ppl6::CString &time)
  * werden, aus 13 oder 12345 würde 12 werden. Dieses Verhalten wird sich in einer späteren Version noch ändern!
  * Geplant ist, dass bei Überlauf eines Wertes die anderen automatisch angepasst werden, so dass z.B. aus
  * dem 32.12.2010 automatisch der 01.01.2011 wird.
+ *
  * \par
  * Wird bei \p year, \p month und \p day der Wert "0" angegeben, wird der Timestamp auf 0 gesetzt.
  *
@@ -480,12 +473,13 @@ int CDateTime::setTime(const ppl6::CString &time)
  * Die Werte sollten daher entweder alternativ verwendet werden oder es muss sichergestellt sein,
  * dass die Mikrosekunden den Millisekundenanteil nicht enthalten.
  */
-void CDateTime::set(int year, int month, int day, int hour, int minute, int sec, int msec, int usec)
+void DateTime::set(int year, int month, int day, int hour, int minute, int sec, int msec, int usec)
 {
 	if (year==0 && month==0 && day==0) {
 		clear();
 		return;
 	}
+
 	yy=year;
 	if (year<0) yy=0;
 	if (year>9999) yy=9999;
@@ -511,6 +505,24 @@ void CDateTime::set(int year, int month, int day, int hour, int minute, int sec,
 	us=msec*1000+usec;
 }
 
+/*!\brief Datum aus PPLTIME-Struktur übernehmen
+ *
+ * \desc
+ * Mit dieser Funktion wird Datum und Zeit aus einer PPLTIME-Struktur übernommen.
+ *
+ * @param[in] t Referenz auf eine PPLTIME-Struktur
+ *
+ * \attention
+ * Gegenwärtig werden Werte ausserhalb des Gültigkeitsbereiches abgeschnitten! Aus dem Monat 0 oder -10 würde 1
+ * werden, aus 13 oder 12345 würde 12 werden. Dieses Verhalten wird sich in einer späteren Version noch ändern!
+ * Geplant ist, dass bei Überlauf eines Wertes die anderen automatisch angepasst werden, so dass z.B. aus
+ * dem 32.12.2010 automatisch der 01.01.2011 wird.
+ */
+void DateTime::set(const PPLTIME &t)
+{
+	set(t.year,t.month,t.day,t.hour,t.min,t.sec,0,0);
+}
+
 /*!\brief Datum aus Unix-Timestamp übernehmen
  *
  * \desc
@@ -520,16 +532,20 @@ void CDateTime::set(int year, int month, int day, int hour, int minute, int sec,
  *
  * @param t 64-Bit Integer mit den Sekunden seit 1970.
  */
-void CDateTime::setTime_t(ppluint64 t)
+void DateTime::setTime_t(uint64_t t)
 {
-	struct tm tt, *r;
+	struct tm tt;
 	if (t==0) {
 		clear();
 		return;
 	}
 	::time_t tp=(::time_t)t;
-	r=localtime_r(&tp,&tt);
+#ifdef WIN32
+	if (0 != localtime_s(&tt, &tp)) throw InvalidDateException();
+#else
+	struct tm *r=localtime_r(&tp,&tt);
 	if (!r) throw InvalidDateException();
+#endif
 	ss=tt.tm_sec;
 	ii=tt.tm_min;
 	hh=tt.tm_hour;
@@ -539,18 +555,81 @@ void CDateTime::setTime_t(ppluint64 t)
 	us=0;
 }
 
+/*!\brief Datum aus Unix-Timestamp übernehmen
+ *
+ * \desc
+ * Mit dieser Funktion werden Datum und Uhrzeit aus einem Unix-Timestamp übernommen (Sekunden seit 1970),
+ * wie ihn Beispielsweise die C-Funktion "time()" zurückliefert. Es ist daher nicht möglich ein Datum vor
+ * 1970 zu setzen.
+ *
+ * @param t 64-Bit Integer mit den Sekunden seit 1970.
+ * \see http://de.wikipedia.org/wiki/Unixzeit
+ */
+void DateTime::setEpoch(uint64_t t)
+{
+	struct tm tt;
+	if (t==0) {
+		clear();
+		return;
+	}
+	::time_t tp=(::time_t)t;
+#ifdef WIN32
+	if (0!=localtime_s(&tt, &tp)) throw InvalidDateException();
+#else
+	struct tm *r=localtime_r(&tp,&tt);
+	if (!r) throw InvalidDateException();
+#endif
+	ss=tt.tm_sec;
+	ii=tt.tm_min;
+	hh=tt.tm_hour;
+	dd=tt.tm_mday;
+	mm=tt.tm_mon+1;
+	yy=tt.tm_year+1900;
+	us=0;
+}
+
+/*!\brief Datum aus einem 64-Bit-Integer übernehmen
+ *
+ * \desc
+ * Mit dieser Funktion werden Datum, Uhrzeit und Millisekunden aus einem Long Integer (64 Bit) übernommen,
+ * wie ihn die Funktion CDateTime::longInt zurückgibt. Der Aufbau des Integer-Wertes ist intern und kann
+ * sich von Version zu Version ändern.
+ *
+ * @param i 64-Bit Integer
+ */
+void DateTime::setLongInt(uint64_t i)
+{
+	us=i%1000000;
+	i=i/1000000;
+	ss=i%60;
+	i=i/60;
+	ii=i%60;
+	i=i/60;
+	hh=i%24;
+	i=i/24;
+	dd=(i%31)+1;
+	i=i/31;
+	mm=(i%12)+1;
+	yy=(uint16_t)i/12;
+}
+
+
 /*!\brief Aktuelles Datum und Uhrzeit übernehmen
  *
  * \desc
  * Mit dieser Funktion wird die Variable auf das aktuelle Datum und die aktuelle Uhrzeit gesetzt.
- * Es gibt sie auch als statische Funktion \ref CDateTime::currentTime "currentTime".
+ * Es gibt sie auch als statische Funktion \ref DateTime::currentTime "currentTime".
  */
-void CDateTime::setCurrentTime()
+void DateTime::setCurrentTime()
 {
-	struct tm tt, *r;
+	struct tm tt;
 	::time_t tp=time(NULL);
-	r=localtime_r(&tp,&tt);
+#ifdef WIN32
+	if (0!=localtime_s(&tt, &tp)) throw InvalidDateException();
+#else
+	struct tm *r=localtime_r(&tp,&tt);
 	if (!r) throw InvalidDateException();
+#endif
 	ss=tt.tm_sec;
 	ii=tt.tm_min;
 	hh=tt.tm_hour;
@@ -600,41 +679,40 @@ void CDateTime::setCurrentTime()
  * \copydoc strftime.dox
  *
  */
-ppl6::CString CDateTime::get(const ppl6::CString &format) const
+String DateTime::get(const String &format) const
 {
-	ppl6::CString Tmp;
-	ppl6::CString r=format;
-	Tmp.Setf("%03i",(us/1000));
-	r.Replace("%*",Tmp);
-	Tmp.Setf("%06i",us);
-	r.Replace("%u",Tmp);
+	String Tmp;
+	String r=format;
+	Tmp.setf("%03i",us/1000);
+	r.replace("%*",Tmp);
+	Tmp.setf("%06i",us);
+	r.replace("%u",Tmp);
 
 	if (yy<1900) {
-		Tmp.Setf("%04i",yy);
-		r.Replace("%Y",Tmp);
-		Tmp.Setf("%02i",yy%100);
-		r.Replace("%y",Tmp);
+		Tmp.setf("%04i",yy);
+		r.replace("%Y",Tmp);
+		Tmp.setf("%02i",yy%100);
+		r.replace("%y",Tmp);
 
-		Tmp.Setf("%02i",mm);
-		r.Replace("%m",Tmp);
+		Tmp.setf("%02i",mm);
+		r.replace("%m",Tmp);
 
-		Tmp.Setf("%02i",dd);
-		r.Replace("%d",Tmp);
+		Tmp.setf("%02i",dd);
+		r.replace("%d",Tmp);
 
-		Tmp.Setf("%02i",hh);
-		r.Replace("%H",Tmp);
+		Tmp.setf("%02i",hh);
+		r.replace("%H",Tmp);
 
-		Tmp.Setf("%02i",ii);
-		r.Replace("%M",Tmp);
+		Tmp.setf("%02i",ii);
+		r.replace("%M",Tmp);
 
-		Tmp.Setf("%02i",ss);
-		r.Replace("%S",Tmp);
+		Tmp.setf("%02i",ss);
+		r.replace("%S",Tmp);
 
 		return r;
 	}
 
 	struct tm t;
-	memset(&t,0,sizeof(struct tm));
 	t.tm_sec=ss;
 	t.tm_min=ii;
 	t.tm_hour=hh;
@@ -644,18 +722,16 @@ ppl6::CString CDateTime::get(const ppl6::CString &format) const
 	t.tm_isdst=-1;
 	mktime(&t);
 
-	size_t size=r.Len()*2+32;
+	size_t size=r.len()*2+32;
 	char *b=(char*)malloc(size);
 	if (!b) {
-		ppl6::SetError(2);
-		return r;
+		throw OutOfMemoryException();
 	}
-	if (strftime(b, size,(const char*)r, &t)==0) {
-		ppl6::SetError(348,"CDateTime::get(\"%s\")",(const char*)r);
+	if (::strftime(b, size,(const char*)r, &t)==0) {
 		free(b);
-		return r;
+		throw IllegalArgumentException("DateTime::get(\"%s\")",(const char*)r);
 	}
-	r.Set(b);
+	r.set(b);
 	free(b);
 	return r;
 }
@@ -663,7 +739,7 @@ ppl6::CString CDateTime::get(const ppl6::CString &format) const
 /*!\brief Datum als String zurückgeben
  *
  * \desc
- * Diese Funktion ist identisch zu CDateTime::get, hat aber einen anderen Default für den optionalen
+ * Diese Funktion ist identisch zu DateTime::get, hat aber einen anderen Default für den optionalen
  * Formatstring.
  *
  * @param[in] format Formatierungsstring. Wird dieser nicht angegeben, wird das Datum in folgendem Format zurückgegeben:
@@ -672,9 +748,9 @@ ppl6::CString CDateTime::get(const ppl6::CString &format) const
  * @return String mit dem Datum im gewünschten Format
  *
  * \see
- * Siehe CDateTime::get
+ * Siehe DateTime::get
  */
-ppl6::CString CDateTime::getDate(const ppl6::CString &format) const
+String DateTime::getDate(const String &format) const
 {
 	return get(format);
 }
@@ -682,7 +758,7 @@ ppl6::CString CDateTime::getDate(const ppl6::CString &format) const
 /*!\brief Uhrzeit als String zurückgeben
  *
  * \desc
- * Diese Funktion ist identisch zu CDateTime::get, hat aber einen anderen Default für den optionalen
+ * Diese Funktion ist identisch zu DateTime::get, hat aber einen anderen Default für den optionalen
  * Formatstring.
  *
  * @param[in] format Formatierungsstring. Wird dieser nicht angegeben, wird die Uhrzeit in folgendem Format zurückgegeben:
@@ -691,9 +767,9 @@ ppl6::CString CDateTime::getDate(const ppl6::CString &format) const
  * @return String mit der Uhrzeit im gewünschten Format
  *
  * \see
- * Siehe CDateTime::get
+ * Siehe DateTime::get
  */
-ppl6::CString CDateTime::getTime(const ppl6::CString &format) const
+String DateTime::getTime(const String &format) const
 {
 	return get(format);
 }
@@ -710,10 +786,10 @@ ppl6::CString CDateTime::getTime(const ppl6::CString &format) const
  *
  * @return String mit dem Datum im ISO8601-Format
  */
-ppl6::CString CDateTime::getISO8601() const
+String DateTime::getISO8601() const
 {
-	ppl6::CString r;
-	r.Setf("%04i-%02i-%02iT%02i:%02i:%02i",yy,mm,dd,hh,ii,ss);
+	String r;
+	r.setf("%04i-%02i-%02iT%02i:%02i:%02i",yy,mm,dd,hh,ii,ss);
 
 #ifdef STRUCT_TM_HAS_GMTOFF
 	if (yy>=1900) {
@@ -727,26 +803,13 @@ ppl6::CString CDateTime::getISO8601() const
 		t.tm_isdst=-1;
 		mktime(&t);
 
-		int s=abs((int)(t.tm_gmtoff/60));
+		int s=abs(t.tm_gmtoff/60);
 		if (t.tm_gmtoff>=0) {
-			r.Concatf("+%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("+%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		} else {
-			r.Concatf("-%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("-%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		}
 	}
-#elif defined WIN32
-	/*
-	 * Leider: error: 'TIME_ZONE_INFORMATION' was not declared in this scope
-	 * error: 'GetTimeZoneInformation' was not declared in this scope
-	 * ...
-	TIME_ZONE_INFORMATION tzi;
-	memset(&tzi,0,sizeof(TIME_ZONE_INFORMATION));
-	GetTimeZoneInformation(&tzi);
-	printf ("Bias: %i\n",tzi.Bias);
-	printf ("StandardBias: %i\n",tzi.StandardBias);
-	printf ("DaylightBias: %i\n",tzi.DaylightBias);
-	*/
-
 #endif
 	return r;
 }
@@ -765,10 +828,10 @@ ppl6::CString CDateTime::getISO8601() const
  *
  * @return String mit dem Datum im ISO8601-Format
  */
-ppl6::CString CDateTime::getISO8601withMsec() const
+String DateTime::getISO8601withMsec() const
 {
-	ppl6::CString r;
-	r.Setf("%04i-%02i-%02iT%02i:%02i:%02i.%03i",yy,mm,dd,hh,ii,ss,us/1000);
+	String r;
+	r.setf("%04i-%02i-%02iT%02i:%02i:%02i.%03i",yy,mm,dd,hh,ii,ss,us/1000);
 
 #ifdef STRUCT_TM_HAS_GMTOFF
 	if (yy>=1900) {
@@ -782,11 +845,11 @@ ppl6::CString CDateTime::getISO8601withMsec() const
 		t.tm_isdst=-1;
 		mktime(&t);
 
-		int s=abs((int)(t.tm_gmtoff/60));
+		int s=abs(t.tm_gmtoff/60);
 		if (t.tm_gmtoff>=0) {
-			r.Concatf("+%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("+%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		} else {
-			r.Concatf("-%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("-%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		}
 	}
 #endif
@@ -807,10 +870,10 @@ ppl6::CString CDateTime::getISO8601withMsec() const
  *
  * @return String mit dem Datum im ISO8601-Format
  */
-ppl6::CString CDateTime::getISO8601withUsec() const
+String DateTime::getISO8601withUsec() const
 {
-	ppl6::CString r;
-	r.Setf("%04i-%02i-%02iT%02i:%02i:%02i.%06i",yy,mm,dd,hh,ii,ss,us);
+	String r;
+	r.setf("%04i-%02i-%02iT%02i:%02i:%02i.%03i",yy,mm,dd,hh,ii,ss,us/1000);
 
 #ifdef STRUCT_TM_HAS_GMTOFF
 	if (yy>=1900) {
@@ -824,16 +887,102 @@ ppl6::CString CDateTime::getISO8601withUsec() const
 		t.tm_isdst=-1;
 		mktime(&t);
 
-		int s=abs((int)(t.tm_gmtoff/60));
+		int s=abs(t.tm_gmtoff/60);
 		if (t.tm_gmtoff>=0) {
-			r.Concatf("+%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("+%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		} else {
-			r.Concatf("-%02i:%02i",(int)(s/60),(int)(t.tm_gmtoff%60));
+			r.appendf("-%02i:%02i",(int)(s/60),t.tm_gmtoff%60);
 		}
 	}
 #endif
 	return r;
 }
+
+
+/*!\ingroup PPLGroupDateTime
+ * \brief Datumstring nach RFC-822 (Mailformat) erzeugen
+ *
+ * \desc
+ * Mit dieser Funktion wird ein Datummstring nach RFC-822 erzeugt, wie er im Header einer Email verwendet wird.
+ * Das Format lautet:
+ * \code
+ * weekday, day month year time zone
+ * \endcode
+ * und hat folgende Bedeutung:
+ * - weekday: Name des Wochentags ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+ * - day: Tag des Monats mit ein oder zwei Ziffern
+ * - month: Name des Monats ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+ * - year: Das Jahr mit 4 Ziffern
+ * - time: Stunde:Minute:Sekunde (hh:mm:ss), jeweils mit zwei Ziffern und Doppelpunkt getrennt
+ * - zone: Offset zu UTC in Stunden und Minuten (+|-HHMM)
+ *
+ * @return String mit dem Datum im RFC-822-Format
+ * \exception Exception::FunctionFailed Die Funktion wirft eine Exception, wenn die Datumsinformation in der PPLTIME-Struktur ungültig ist.
+ */
+String DateTime::getRFC822Date () const
+{
+	PPLTIME t;
+	if (!GetTime(t,time_t())) throw DateOutOfRangeException();
+	String s;
+	const char *day[]={ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+	const char *month[]={ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+	// PPLTIME prüfen
+	if (t.day_of_week<0 || t.day_of_week>6) throw IllegalArgumentException("DateTime::getRFC822Date: week<0 order week>6");
+	if (t.month<1 || t.month>12) throw IllegalArgumentException("DateTime::getRFC822Date: month<0 order month>12");
+
+	s=day[t.day_of_week];
+	s+=", ";
+	s.appendf("%i ",t.day);
+	s+=month[t.month-1];
+	s.appendf(" %04i %02i:%02i:%02i ",t.year,t.hour,t.min,t.sec);
+	if (t.have_gmt_offset) {
+		if (t.gmt_offset>=0) s.appendf("+%02i%02i",abs(t.gmt_offset/3600),abs(t.gmt_offset%3600));
+		else s.appendf("-%02i%02i",abs(t.gmt_offset/3600),abs(t.gmt_offset%3600));
+	}
+	return s;
+}
+
+/*!\brief Datum mit der Funktion strftime der Standard C Bibliothek formatieren
+ *
+ * \desc
+ * Mit dieser Funktion wird das Datum mittels der Funktion strftime aus der Standard C Bibliothek
+ * formatiert.
+ *
+ * @param[in] format Siehe Manpage zu strftime: man strftime
+ * @return String im gewünschten Format
+ */
+String DateTime::strftime(const String &format) const
+{
+	size_t s=format.size()*4+64;
+	if (s<1024) s=1024;
+	char *buf=(char*)malloc(s);
+	if (!buf) throw OutOfMemoryException();
+
+	struct tm tt;
+	::time_t tp=time_t();
+#ifdef WIN32
+	if (0 != localtime_s(&tt, &tp)) {
+		free(buf);
+		throw InvalidDateException();
+	}
+#else
+	struct tm *r=localtime_r(&tp,&tt);
+	if (!r) {
+		free(buf);
+		throw InvalidDateException();
+	}
+#endif
+	size_t res=::strftime(buf, s,(const char*) format, &tt);
+	if (res==0) {
+		free(buf);
+		throw InvalidFormatException();
+	}
+	String ret(buf);
+	free(buf);
+	return ret;
+}
+
+
 
 /*!\brief Datum in Unix-Timestamp umrechnen
  *
@@ -843,7 +992,7 @@ ppl6::CString CDateTime::getISO8601withUsec() const
  *
  * @return Sekunden seit 1970 oder 0, wenn das Datum sich nicht umrechnen läßt, z.B. wenn das Jahr vor 1970 liegt.
  */
-ppluint64 CDateTime::time_t() const
+uint64_t DateTime::time_t() const
 {
 	if (yy<1970) return 0;
 	struct tm t;
@@ -854,34 +1003,32 @@ ppluint64 CDateTime::time_t() const
 	t.tm_mon=mm-1;
 	t.tm_year=yy-1900;
 	t.tm_isdst=-1;
-	return (ppluint64)mktime(&t);
+	return (uint64_t)mktime(&t);
 }
 
-/*!\brief Datum aus einem 64-Bit-Integer übernehmen
+/*!\brief Datum in Unix-Timestamp umrechnen
  *
  * \desc
- * Mit dieser Funktion werden Datum, Uhrzeit und Millisekunden aus einem Long Integer (64 Bit) übernommen,
- * wie ihn die Funktion CDateTime::longInt zurückgibt. Der Aufbau des Integer-Wertes ist intern und kann
- * sich von Version zu Version ändern.
+ * Mit dieser Funktion wird das in der Variablen enthaltene Datum und Uhrzeit in einen
+ * Unix-Timestamp umgerechnet (Sekunden seit 1970).
  *
- * @param i 64-Bit Integer
+ * @return Sekunden seit 1970 oder 0, wenn das Datum sich nicht umrechnen läßt, z.B. wenn das Jahr vor 1970 liegt.
+ *
+ * \see http://de.wikipedia.org/wiki/Unixzeit
  */
-void CDateTime::setLongInt(ppluint64 i)
+uint64_t DateTime::epoch() const
 {
-	us=i%1000000;
-	i=i/1000000;
-	ss=i%60;
-	i=i/60;
-	ii=i%60;
-	i=i/60;
-	hh=i%24;
-	i=i/24;
-	dd=(i%31)+1;
-	i=i/31;
-	mm=(i%12)+1;
-	yy=i/12;
+	if (yy<1900) return 0;
+	struct tm t;
+	t.tm_sec=ss;
+	t.tm_min=ii;
+	t.tm_hour=hh;
+	t.tm_mday=dd;
+	t.tm_mon=mm-1;
+	t.tm_year=yy-1900;
+	t.tm_isdst=-1;
+	return (uint64_t)mktime(&t);
 }
-
 
 /*!\brief Datum als 64-Bit-Integer auslesen
  *
@@ -891,27 +1038,16 @@ void CDateTime::setLongInt(ppluint64 i)
  *
  * @return 64-Bit-Integer mit dem Timestamp
  */
-ppluint64 CDateTime::longInt() const
+uint64_t DateTime::longInt() const
 {
-	ppluint64 r=yy*12+(mm-1);
+	uint64_t r=yy*12+(mm-1);
 	r=r*31+(dd-1);
 	r=r*24+hh;
 	r=r*60+ii;
 	r=r*60+ss;
 	r=r*1000000+us;
-	/*
-	r=(ppluint64)(yy&16383)<<42;
-	r|=(ppluint64)(mm&15)<<37;
-	r|=(ppluint64)(dd&31)<<31;
-	r|=(ppluint64)(hh&31)<<25;
-	r|=(ppluint64)(ii&63)<<18;
-	r|=(ppluint64)(ss&63)<<11;
-	r|=(ppluint64)((us/1000)&1023);
-	*/
 	return r;
 }
-
-
 
 /*!\brief Das Jahr als Integer auslesen
  *
@@ -920,7 +1056,7 @@ ppluint64 CDateTime::longInt() const
  *
  * @return Integer-Wert mit dem Jahr
  */
-int CDateTime::year() const
+int DateTime::year() const
 {
 	return yy;
 }
@@ -932,7 +1068,7 @@ int CDateTime::year() const
  *
  * @return Integer-Wert mit dem Monat
  */
-int CDateTime::month() const
+int DateTime::month() const
 {
 	return mm;
 }
@@ -944,7 +1080,7 @@ int CDateTime::month() const
  *
  * @return Integer-Wert mit dem Tag
  */
-int CDateTime::day() const
+int DateTime::day() const
 {
 	return dd;
 }
@@ -956,7 +1092,7 @@ int CDateTime::day() const
  *
  * @return Integer-Wert mit der Stunde
  */
-int CDateTime::hour() const
+int DateTime::hour() const
 {
 	return hh;
 }
@@ -968,7 +1104,7 @@ int CDateTime::hour() const
  *
  * @return Integer-Wert mit der Minute
  */
-int CDateTime::minute() const
+int DateTime::minute() const
 {
 	return ii;
 }
@@ -980,7 +1116,7 @@ int CDateTime::minute() const
  *
  * @return Integer-Wert mit der Sekunde
  */
-int CDateTime::second() const
+int DateTime::second() const
 {
 	return ss;
 }
@@ -992,7 +1128,7 @@ int CDateTime::second() const
  *
  * @return Integer-Wert mit den Millisekunden
  */
-int CDateTime::millisecond() const
+int DateTime::millisecond() const
 {
 	return us/1000;
 }
@@ -1004,7 +1140,7 @@ int CDateTime::millisecond() const
  *
  * @return Integer-Wert mit den Mikrosekunden
  */
-int CDateTime::microsecond() const
+int DateTime::microsecond() const
 {
 	return us;
 }
@@ -1024,7 +1160,7 @@ int CDateTime::microsecond() const
  *
  * @return Integer-Wert mit dem Jahr
  */
-int CDateTime::weekISO8601() const
+int DateTime::weekISO8601() const
 {
 	if (yy<1900) throw DateOutOfRangeException("year < 1900 [%i]",yy);
 	struct tm t;
@@ -1036,9 +1172,13 @@ int CDateTime::weekISO8601() const
 	t.tm_year=yy-1900;
 	t.tm_isdst=-1;
 	::time_t clock=mktime(&t);
+#ifdef WIN32
+	gmtime_s(&t,&clock);
+#else
 	gmtime_r(&clock, &t);
+#endif
 	char buffer[10];
-	if (strftime(buffer, 10, "%V", &t)==0) {
+	if (::strftime(buffer, 10, "%V", &t)==0) {
 		throw InvalidDateException();
 	}
 	return atoi(buffer);
@@ -1056,7 +1196,7 @@ int CDateTime::weekISO8601() const
  *
  * @return Integer-Wert mit dem Jahr
  */
-int CDateTime::week() const
+int DateTime::week() const
 {
 	if (yy<1900) throw DateOutOfRangeException("year < 1900 [%i]",yy);
 	struct tm t;
@@ -1068,9 +1208,13 @@ int CDateTime::week() const
 	t.tm_year=yy-1900;
 	t.tm_isdst=-1;
 	::time_t clock=mktime(&t);
+#ifdef WIN32
+	gmtime_s(&t, &clock);
+#else
 	gmtime_r(&clock, &t);
+#endif
 	char buffer[10];
-	if (strftime(buffer, 10, "%U", &t)==0) {
+	if (::strftime(buffer, 10, "%U", &t)==0) {
 		throw InvalidDateException();
 	}
 	return atoi(buffer);
@@ -1086,7 +1230,7 @@ int CDateTime::week() const
  * Mit dieser Funktion wird Datum und Uhrzeit auf der Konsole (STDOUT) ausgegeben. Sie ist
  * nur zu Debug-Zwecken gedacht.
  */
-void CDateTime::print() const
+void DateTime::print() const
 {
 	printf ("%04i-%02i-%02i %02i:%02i:%02i\n",yy,mm,dd,hh,ii,ss);
 }
@@ -1095,11 +1239,11 @@ void CDateTime::print() const
  *
  * \desc
  * Diese Funktion liefert \c true zurück, wenn ein Datum oder Uhrzeit gesetzt ist, der Wert also \b nicht Null ist.
- * Sie ist somit das Gegenteil zu CDateTime::isEmpty.
+ * Sie ist somit das Gegenteil zu DateTime::isEmpty.
  * @return \c true oder \c false
  *
  */
-bool CDateTime::notEmpty() const
+bool DateTime::notEmpty() const
 {
 	if (yy>0) return 1;
 	if (mm>0) return 1;
@@ -1115,11 +1259,11 @@ bool CDateTime::notEmpty() const
  *
  * \desc
  * Diese Funktion liefert \c true zurück, wenn \b kein Datum und \b keine Uhrzeit gesetzt ist,
- * der Wert also Null ist. Sie ist somit das Gegenteil zu CDateTime::notEmpty.
+ * der Wert also Null ist. Sie ist somit das Gegenteil zu DateTime::notEmpty.
  *
  * @return \c true oder \c false
  */
-bool CDateTime::isEmpty() const
+bool DateTime::isEmpty() const
 {
 	if (yy>0) return 0;
 	if (mm>0) return 0;
@@ -1142,7 +1286,7 @@ bool CDateTime::isEmpty() const
  *
  * @return Liefert \c true zurück, wenn es sich um ein Schaltjahr handelt, andernfalls \c false.
  */
-bool CDateTime::isLeapYear() const
+bool DateTime::isLeapYear() const
 {
 	return isLeapYear(yy);
 }
@@ -1156,7 +1300,7 @@ bool CDateTime::isLeapYear() const
  * @param[in] year Das zu prüfende Jahr
  * @return Liefert \c true zurück, wenn es sich um ein Schaltjahr handelt, andernfalls \c false.
  */
-bool CDateTime::isLeapYear(int year)
+bool DateTime::isLeapYear(int year)
 {
 	if (year%4!=0) return 0;
 	if (year%400==0) return 1;
@@ -1168,12 +1312,12 @@ bool CDateTime::isLeapYear(int year)
  *
  * \desc
  * Diese statische Funktion liefert das aktuelle Datum und die aktuelle Uhrzeit in Form einer
- * CDateTime-Variablen zurück.
- * @return CDateTime-Variable mit dem aktuellen Datum und Uhrzeit.
+ * DateTime-Variablen zurück.
+ * @return DateTime-Variable mit dem aktuellen Datum und Uhrzeit.
  */
-CDateTime CDateTime::currentTime()
+DateTime DateTime::currentTime()
 {
-	CDateTime d;
+	DateTime d;
 	d.setCurrentTime();
 	return d;
 }
@@ -1182,24 +1326,24 @@ CDateTime CDateTime::currentTime()
 /*!\brief Differenz in Sekunden
  *
  * \desc
- * Diese Funktion gibt die Differenz dieses CDateTime zu dem angegebenen CDateTime \p other in
+ * Diese Funktion gibt die Differenz dieses DateTime zu dem angegebenen DateTime \p other in
  * Sekunden zurück. Liegt der Zeitpunkt von \p other vor diesem, ist der Rückgabewert negativ.
  *
  * Vor dem Vergleich werden beide Zeitwerte in UTC umgewandelt.
  * @param[in] other Zu vergleichender Zeitwert
  * @return Differenz in Sekunden
  */
-pplint64 CDateTime::diffSeconds(const CDateTime &other) const
+int64_t DateTime::diffSeconds(const DateTime &other) const
 {
-	pplint64 mySecs=(pplint64)time_t();
-	pplint64 otherSecs=(pplint64)other.time_t();
+	int64_t mySecs=(int64_t)time_t();
+	int64_t otherSecs=(int64_t)other.time_t();
 	return otherSecs-mySecs;
 }
 
 /*!\brief Differenz in Sekunden mit Toleranz vergleichen
  *
  * \desc
- * Mit dieser Funktion wird die Differenz des Zeitwerts dieses CDateTime mit der angegebenen CDateTime \p other
+ * Mit dieser Funktion wird die Differenz des Zeitwerts dieses DateTime mit der angegebenen DateTime \p other
  * auf Sekundenbasis berechnet und anschließend mit der angegebenen Toleranz \p tolerance verglichen.
  *
  * @param[in] other Zu vergleichender Zeitwert
@@ -1207,11 +1351,11 @@ pplint64 CDateTime::diffSeconds(const CDateTime &other) const
  * @return Sind beide Zeitwerte identisch oder liegen im Bereich der angegebenen Toleranz, gibt die Funktion
  * 1 zurück, andernfalls 0. Es wird kein Fehlercode gesetzt.
  */
-int CDateTime::compareSeconds(const CDateTime &other, int tolerance) const
+int DateTime::compareSeconds(const DateTime &other, int tolerance) const
 {
-	pplint64 mySecs=(pplint64)time_t();
-	pplint64 otherSecs=(pplint64)other.time_t();
-	pplint64 diff=otherSecs-mySecs;
+	int64_t mySecs=(int64_t)time_t();
+	int64_t otherSecs=(int64_t)other.time_t();
+	int64_t diff=otherSecs-mySecs;
 	if (diff<0) diff=mySecs-otherSecs;
 	if (diff<=tolerance) return 1;
 	return 0;
@@ -1228,50 +1372,71 @@ int CDateTime::compareSeconds(const CDateTime &other, int tolerance) const
  * \desc
  * Mit diesem Operator werden Datum und Uhrzeit aus dem String \p datetime übernommen.
  * Die unterstützten Formate sind in der Funktion
- * \ref CDateTime::set(const ppl6::CString &datetime) "set" beschrieben.
+ * \ref DateTime::set(const String &datetime) "set" beschrieben.
  *
  * @param[in] datetime String mit Datum und Uhrzeit
- * @return Gibt eine Referenz auf den CDateTime-Wert zurück
+ * @return Gibt eine Referenz auf den DateTime-Wert zurück
  *
- * \exception
- * Enthält der String \p datetime ein ungültiges oder unbekanntes Datumsformat, wird eine
- * "InvalidFormat" Exception geworfen. Ausnahmen: Ist der String leer oder enthält nur den
+ * \exception IllegalArgumentException: Wird geworfen, wenn der String \p datetime
+ * ein ungültiges oder unbekanntes Datumsformat hat.
+ * Ausnahmen: Ist der String leer oder enthält nur den
  * Buchstaben "T" oder den Wert "0" wird keine Exception geworfen, sondern der Datumswert auf 0 gesetzt.
  */
-CDateTime& CDateTime::operator=(const ppl6::CString &datetime)
+DateTime& DateTime::operator=(const String &datetime)
 {
-	if (!set(datetime)) throw InvalidDateException(datetime);
+	set(datetime);
 	return *this;
 }
 
-/*!\brief Datum aus einem anderen CDateTime-Wert übernehmen
+/*!\brief Datum aus einem anderen DateTime-Wert übernehmen
  *
  * \desc
- * Mit diesem Operator wird der Wert eines anderen CDateTime-Wertes übernommen.
+ * Mit diesem Operator wird der Wert eines anderen DateTime-Wertes übernommen.
  *
- * @param[in] other Referenz auf den zu kopierenden CDateTime-Wert
- * @return Gibt eine Referenz auf den CDateTime-Wert zurück
+ * @param[in] other Referenz auf den zu kopierenden DateTime-Wert
+ * @return Gibt eine Referenz auf den DateTime-Wert zurück
  */
-CDateTime& CDateTime::operator=(const ppl6::CDateTime &other)
+DateTime& DateTime::operator=(const DateTime &other)
 {
 	set(other);
 	return *this;
 }
 
-/*!\brief Operator, der einen CString zurückliefert
+/*!\brief Rueckgabe des Timestamps als String
+ *
+ * \desc
+ * Liefert den Timestamp als String in folgendem Format zurück:
+ * "yyyy-mm-dd hh:ii:ss.micses".
+ * @return Datums-String
+ */
+String DateTime::toString() const
+{
+	String r;
+	r.setf("%04i-%02i-%02i %02i:%02i:%02i.%06i",yy,mm,dd,hh,ii,ss,us);
+	return r;
+}
+
+/*!\brief Rueckgabe des Timestamps als String mittles Fomatierungsvorgabe
+ * \copydoc DateTime::get
+ */
+String DateTime::toString(const String &format) const
+{
+	return get(format);
+}
+
+/*!\brief Operator, der einen String zurückliefert
  *
  * \desc
  * Dieser Operator liefert den Inhalt der Variablen als String in folgendem Format zurück:
  * "yyyy-mm-dd hh:ii:ss.micses".
  * @return Datums-String
  */
-CDateTime::operator CString() const
+DateTime::operator String() const
 {
-	CString r;
-	r.Setf("%04i-%02i-%02i %02i:%02i:%02i.%06i",yy,mm,dd,hh,ii,ss,us);
+	String r;
+	r.setf("%04i-%02i-%02i %02i:%02i:%02i.%06i",yy,mm,dd,hh,ii,ss,us);
 	return r;
 }
-
 
 /*!\brief Vergleichsoperator "kleiner": <
  *
@@ -1282,7 +1447,7 @@ CDateTime::operator CString() const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn der erste Wert kleiner ist als der Zweite.
  */
-bool CDateTime::operator<(const CDateTime &other) const
+bool DateTime::operator<(const DateTime &other) const
 {
 	if (yy<other.yy) return true;
 	else if (yy>other.yy) return false;
@@ -1315,7 +1480,7 @@ bool CDateTime::operator<(const CDateTime &other) const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn der erste Wert kleiner oder gleich gross ist wie der Zweite.
  */
-bool CDateTime::operator<=(const CDateTime &other) const
+bool DateTime::operator<=(const DateTime &other) const
 {
 	if (yy<other.yy) return true;
 	else if (yy>other.yy) return false;
@@ -1349,7 +1514,7 @@ bool CDateTime::operator<=(const CDateTime &other) const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn beide Werte identisch sind.
  */
-bool CDateTime::operator==(const CDateTime &other) const
+bool DateTime::operator==(const DateTime &other) const
 {
 	if (yy!=other.yy) return false;
 	if (mm!=other.mm) return false;
@@ -1370,7 +1535,7 @@ bool CDateTime::operator==(const CDateTime &other) const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn die Werte nicht übereinstimmen.
  */
-bool CDateTime::operator!=(const CDateTime &other) const
+bool DateTime::operator!=(const DateTime &other) const
 {
 	if (yy!=other.yy) return true;
 	if (mm!=other.mm) return true;
@@ -1381,8 +1546,8 @@ bool CDateTime::operator!=(const CDateTime &other) const
 	if (us!=other.us) return true;
 	return false;
 	/*
-	ppluint64 v1=longInt();
-	ppluint64 v2=other.longInt();
+	uint64_t v1=longInt();
+	uint64_t v2=other.longInt();
 	if (v1!=v2) return true;
 	return false;
 	*/
@@ -1397,7 +1562,7 @@ bool CDateTime::operator!=(const CDateTime &other) const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn der erste Wert größer oder gleich groß ist, wie der Zweite.
  */
-bool CDateTime::operator>=(const CDateTime &other) const
+bool DateTime::operator>=(const DateTime &other) const
 {
 	if (yy>other.yy) return true;
 	else if (yy<other.yy) return false;
@@ -1431,7 +1596,7 @@ bool CDateTime::operator>=(const CDateTime &other) const
  * @param other Der zweite Wert, mit dem der Vergleich durchgeführt werden soll
  * @return Gibt \c true zurück, wenn der erste Wert größer ist als der Zweite.
  */
-bool CDateTime::operator>(const CDateTime &other) const
+bool DateTime::operator>(const DateTime &other) const
 {
 	if (yy>other.yy) return true;
 	else if (yy<other.yy) return false;
@@ -1455,13 +1620,16 @@ bool CDateTime::operator>(const CDateTime &other) const
 	return false;
 }
 
-std::ostream& operator<<(std::ostream& s, const CDateTime &dt)
-{
-	CString str=dt.get("%Y-%m-%d %H:%M:%S.%u");
-	return s.write((const char*)str,str.Size());
-}
-
 
 //@}
 
-}		// EOF namespace ppl6
+
+std::ostream& operator<<(std::ostream& s, const DateTime &dt)
+{
+	String str=dt.get("%Y-%m-%d %H:%M:%S.%u");
+	return s.write((const char*)str,str.size());
+}
+
+
+}		// EOF namespace ppl7
+
