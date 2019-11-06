@@ -2,6 +2,6 @@
 ./merge_pplib.sh
 ./genConfigure
 sh conf.sh
-qmake
+make clean
 make -j6 release
 
