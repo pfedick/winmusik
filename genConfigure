@@ -28,12 +28,12 @@ AUTOCONF=autoconf
 
 
 
-
+cd gui
 cat WinMusik.pro.header > WinMusik.pro.in
 (
 	echo ""
 	echo -n "SOURCES += "
-	filelist=`find src widgets pplib/ppl6 -name '*.cpp'`
+	filelist=`find src widgets -name '*.cpp'`
 	for file in $filelist; do
 		echo "$file \\"
 		echo -n "    "
@@ -41,7 +41,7 @@ cat WinMusik.pro.header > WinMusik.pro.in
 	echo ""
 	echo ""
 	echo -n "HEADERS += "
-	filelist=`find widgets src include pplib/include -name '*.h'`
+	filelist=`find widgets src include -name '*.h'`
 	for file in $filelist; do
 		echo "$file \\"
 		echo -n "    "
@@ -56,6 +56,7 @@ cat WinMusik.pro.header > WinMusik.pro.in
 	done
 	echo ""	
 ) >>  WinMusik.pro.in
+cd ..
 
 
 $ACLOCAL

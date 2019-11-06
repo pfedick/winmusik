@@ -39,10 +39,6 @@ else {
     unix:TARGET = release/WinMusik
 }
 
-DEFINES += PPL6LIB
-DEFINES += PPL7LIB
-DEFINES += HAVE_CONFIG_H
-
 QMAKE_CC = @CC@
 QMAKE_CXX	= @CXX@
 QMAKE_CFLAGS = @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@
@@ -64,6 +60,7 @@ win32:INCLUDEPATH += D:/jenkins/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
+LIBS += ../pplib/release/libpplib.a
 LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
 LIBS += @BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@
 LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@

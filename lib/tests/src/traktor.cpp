@@ -8,7 +8,8 @@
 #include "../../include/libwinmusik3.h"
 #include "../wmlib-tests.h"
 #include <map>
-#include "traktor.h"
+
+#include "../../include/wm_traktor.h"
 
 namespace {
 

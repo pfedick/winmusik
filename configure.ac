@@ -26,16 +26,18 @@ AC_PREREQ(2.69)
 AC_INIT([winmusik], [3.6.0], [patrick@pfp.de], [winmusik-3.6.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
+AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
 AC_CONFIG_SRCDIR([pplib/include/ppl6.h])
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
 AC_CONFIG_SRCDIR([pplib/include/config.h.in])
 
-#AC_CONFIG_FILES([Makefile])
-#AC_CONFIG_FILES([tests/Makefile])
-#AC_CONFIG_FILES([ppl7-config])
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([pplib/Makefile])
+AC_CONFIG_FILES([lib/Makefile])
 AC_CONFIG_HEADERS([pplib/include/config.h])
-#AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
-AC_CONFIG_FILES([WinMusik.pro])
+AC_CONFIG_HEADERS([lib/include/wm_config.h])
+AC_CONFIG_FILES([gui/WinMusik.pro])
+AC_CONFIG_FILES([Package/WinMusik.desktop])
 
 
 ###############################################################################

@@ -65,4 +65,7 @@ done
 
 cp LICENSE.TXT $WORK/pplib/ppl6
 
+cd ppl6
+./genMakefile.in
+
 
