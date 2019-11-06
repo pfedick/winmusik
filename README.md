@@ -57,15 +57,23 @@ will not, and you have to specify some paths manually. See
 
 	./configure --help
 	
-for a description of all parameters.
+for a description of all parameters. By default, the application will be
+installed in below /usr/local (e.g. /usr/local/bin, /usr/local/share...).
+If you want to install somewhere else, use "--prefix=PATH" with configure.
 
 
 Then type
 
-	qmake
-	make release
+	make
 
 You should find a WinMusik binary in the release-Folder
+
+
+Type
+
+	make install
+	
+to install it.
 
 Credits
 =======

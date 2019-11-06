@@ -43,19 +43,22 @@ gui          := gui
 ###########################################################################
 
 .PHONY: all $(gui) $(libraries)
-all: $(libraries) gui/Makefile gui/release/WinMusik
+all: $(libraries) gui/Makefile release/WinMusik
 
 $(libraries): gui/Makefile
 	$(MAKE) --directory=$@
 
-gui/release/WinMusik: $(libraries) gui/Makefile
+release/WinMusik: $(libraries) gui/Makefile pplib/release/libpplib.a
+	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui
+	mkdir -p release
+	cp gui/release/WinMusik release/WinMusik
 
 
-install: $(gui)
+install: release/WinMusik
 	mkdir -p $(PREFIX)/bin $(PREFIX)/share/pixmaps $(PREFIX)/share/applications $(PREFIX)/share/doc/WinMusik
-	cp gui/release/WinMusik $(PREFIX)/bin
-	cp gui/resources/icon64.png $(PREFIX)/share/pixmaps/WinMusik.png
+	cp release/WinMusik $(PREFIX)/bin
+	cp gui/resources/icon128.png $(PREFIX)/share/pixmaps/WinMusik.png
 	cp Package/WinMusik.desktop $(PREFIX)/share/applications
 	cp docs/Userguide_de.pdf $(PREFIX)/share/doc/WinMusik
 
@@ -67,7 +70,7 @@ deinstall:
 	
 clean:
 	rm -rf documentation
-	rm -rf gui/release gui/debug release debug
+	rm -rf gui/release gui/debug release debug pplib/release pplib/debug lib/compile
 
 gui/Makefile: gui/WinMusik.pro
 	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
