@@ -5738,6 +5738,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+
+
       ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -14519,7 +14521,7 @@ qt_version=`$QMAKE -v | grep Qt`
 
 
 
-if test -x "$QMAKE"
+if test -x "$(QMAKE)$(EXEEXT)"
 then
 	report_have_qt="yes, $qt_version"
 fi

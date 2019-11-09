@@ -80,6 +80,8 @@ CFLAGS=$OLD_CFLAGS
 AC_PROG_CC
 AC_PROG_CXX
 AC_LANG(C++)
+AC_EXEEXT
+
 
 AX_CXX_COMPILE_STDCXX(11) 
 
@@ -397,7 +399,7 @@ AX_CHECK_LIBCDIO(
 
 report_have_qt="no"
 AX_FIND_QMAKE()
-if test -x "$QMAKE"
+if test -x "$(QMAKE)$(EXEEXT)"
 then
 	report_have_qt="yes, $qt_version"
 fi
