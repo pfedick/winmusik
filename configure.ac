@@ -399,7 +399,11 @@ AX_CHECK_LIBCDIO(
 
 report_have_qt="no"
 AX_FIND_QMAKE()
-if test -x "$(QMAKE)$(EXEEXT)"
+if test -x "$(QMAKE)"
+then
+	report_have_qt="yes, $qt_version"
+fi
+if test -x "$(QMAKE).exe"
 then
 	report_have_qt="yes, $qt_version"
 fi
