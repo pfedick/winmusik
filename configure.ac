@@ -399,15 +399,18 @@ AX_CHECK_LIBCDIO(
 
 report_have_qt="no"
 AX_FIND_QMAKE()
-if test -x "$(QMAKE)"
+if test -x "$QMAKE"
 then
 	report_have_qt="yes, $qt_version"
 fi
-if test -x "$(QMAKE).exe"
+if test -x "$qmake"
 then
-	report_have_qt="yes, $qt_version"
+	report_have_qt="yes 2, $qt_version"
 fi
-
+if test -x "$ac_cv_path_qmake"
+then
+	report_have_qt="yes 3, $qt_version"
+fi
 
 SRCDIR=`pwd`
 AC_SUBST(SRCDIR)
