@@ -43,18 +43,18 @@ DefaultGroupName=Patrick F.-Productions\WinMusik 3
 AllowNoIcons=yes
 OutputDir=distfiles
 OutputBaseFilename=WinMusik-3.5.1-Setup-64bit
-SetupIconFile=resources\WinMusik3.ico
+SetupIconFile=gui\resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
-WizardImageFile=resources\setup.bmp
-WizardSmallImageFile=resources\setup-icon.bmp
+WizardImageFile=gui\resources\setup.bmp
+WizardSmallImageFile=gui\resources\setup-icon.bmp
 LicenseFile=LICENSE.TXT
 PrivilegesRequired=none
 ArchitecturesAllowed=x64
 
 [Languages]
-Name: "en"; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: README_en.TXT
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: README_de.TXT
+Name: "en"; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: Package/README_en.TXT
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: Package/README_de.TXT
 
 
 [Tasks]
@@ -66,10 +66,10 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 Source: "release\WinMusik.exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "LICENSE.TXT"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "HISTORY.TXT"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: de; Flags: ignoreversion;
-Source: "README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
+Source: "Package/README_de.TXT"; DestDir: "{app}"; DestName: "LIESMICH.TXT"; Languages: de; Flags: ignoreversion;
+Source: "Package/README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Languages: de; Flags: ignoreversion;
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
-Source: "resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
 Source: "C:/msys64/mingw64/bin/libbrotlicommon.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion;

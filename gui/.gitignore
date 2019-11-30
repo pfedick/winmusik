@@ -38,3 +38,6 @@
 /ui_tablesearch.h
 /WinMusik.pro
 /release/
+/object_script.WinMusik.Debug
+/object_script.WinMusik.Release
+/debug/
