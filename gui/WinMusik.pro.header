@@ -1,0 +1,85 @@
+###############################################################################
+# This file is part of WinMusik 3 by Patrick Fedick                           #
+# Web: https://www.pfp.de/winmusik/                                           #
+###############################################################################
+#
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# All rights reserved.
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+
+TEMPLATE = app
+TARGET = WinMusik
+QT += core \
+    gui \
+    xml \
+    widgets \
+    printsupport
+    
+CONFIG += debug_and_release
+CONFIG(debug, debug|release) { 
+    win32:TARGET = WinMusik
+    unix:TARGET = debug/WinMusik
+}
+else { 
+    win32:TARGET = WinMusik
+    unix:TARGET = release/WinMusik
+}
+
+DEFINES += PPL6LIB
+DEFINES += PPL7LIB
+DEFINES += HAVE_CONFIG_H
+
+QMAKE_CC = @CC@
+QMAKE_CXX	= @CXX@
+QMAKE_CFLAGS = @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@
+QMAKE_CFLAGS += @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ @LIBCURL_CPPFLAGS@
+QMAKE_CFLAGS += @LIBCDIO_CFLAGS@
+QMAKE_CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+
+
+RESOURCES += resources.qrc
+RC_FILE = resource.rc
+INCLUDEPATH += include
+INCLUDEPATH += widgets
+INCLUDEPATH += pplib/include
+
+unix:INCLUDEPATH += /usr/local/include
+win32:INCLUDEPATH += C:/mingw/usr/local/include
+win32:INCLUDEPATH += D:/jenkins/local/include
+win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
+win32:QMAKE_LFLAGS += -static-libgcc
+
+LIBS += ../pplib/release/libpplib.a
+LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
+LIBS += @BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@
+LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
+LIBS += @LIBCDIO_LDFLAGS@
+
+win32:LIBS += -lwinmm
+CODECFORSRC = UTF-8
+CODECFORTR = UTF-8
+TRANSLATIONS = winmusik_de.ts \
+    winmusik_en.ts
+
+DISTFILES += \
+    WinMusik.includes \
+    setup.iss \
+    setup64.iss \
+    HISTORY.TXT \
+    build_mingw64.sh
+

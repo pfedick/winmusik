@@ -1,0 +1,248 @@
+###############################################################################
+# This file is part of WinMusik 3 by Patrick Fedick                           #
+# Web: https://www.pfp.de/winmusik/                                           #
+###############################################################################
+#
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# All rights reserved.
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+
+TEMPLATE = app
+TARGET = WinMusik
+QT += core \
+    gui \
+    xml \
+    widgets \
+    printsupport
+    
+CONFIG += debug_and_release
+CONFIG(debug, debug|release) { 
+    win32:TARGET = WinMusik
+    unix:TARGET = debug/WinMusik
+}
+else { 
+    win32:TARGET = WinMusik
+    unix:TARGET = release/WinMusik
+}
+
+DEFINES += PPL6LIB
+DEFINES += PPL7LIB
+DEFINES += HAVE_CONFIG_H
+
+QMAKE_CC = @CC@
+QMAKE_CXX	= @CXX@
+QMAKE_CFLAGS = @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@
+QMAKE_CFLAGS += @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ @LIBCURL_CPPFLAGS@
+QMAKE_CFLAGS += @LIBCDIO_CFLAGS@
+QMAKE_CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+
+
+RESOURCES += resources.qrc
+RC_FILE = resource.rc
+INCLUDEPATH += include
+INCLUDEPATH += widgets
+INCLUDEPATH += pplib/include
+
+unix:INCLUDEPATH += /usr/local/include
+win32:INCLUDEPATH += C:/mingw/usr/local/include
+win32:INCLUDEPATH += D:/jenkins/local/include
+win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
+win32:QMAKE_LFLAGS += -static-libgcc
+
+LIBS += ../pplib/release/libpplib.a
+LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
+LIBS += @BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@
+LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
+LIBS += @LIBCDIO_LDFLAGS@
+
+win32:LIBS += -lwinmm
+CODECFORSRC = UTF-8
+CODECFORTR = UTF-8
+TRANSLATIONS = winmusik_de.ts \
+    winmusik_en.ts
+
+DISTFILES += \
+    WinMusik.includes \
+    setup.iss \
+    setup64.iss \
+    HISTORY.TXT \
+    build_mingw64.sh
+
+
+SOURCES += src/about.cpp \
+    src/asynchronousMessage.cpp \
+    src/backgroundjobs.cpp \
+    src/CHashes.cpp \
+    src/CID3TagSaver.cpp \
+    src/colorscheme.cpp \
+    src/config.cpp \
+    src/coverprinter.cpp \
+    src/coverviewer.cpp \
+    src/CSearchlist.cpp \
+    src/CStorage.cpp \
+    src/CTableControl.cpp \
+    src/CTrackList.cpp \
+    src/CWmClient.cpp \
+    src/CWmFile.cpp \
+    src/devicelist.cpp \
+    src/DropArea.cpp \
+    src/editdevice.cpp \
+    src/editor/cddbimport.cpp \
+    src/editor/cddbselect.cpp \
+    src/editor/edit-functions.cpp \
+    src/editor/edit.cpp \
+    src/editor/massimport.cpp \
+    src/editor/oimpinfo.cpp \
+    src/editor/renumberdialog.cpp \
+    src/editor/shortcutdialog.cpp \
+    src/editor/tablesearch.cpp \
+    src/edittrackdialog.cpp \
+    src/errors.cpp \
+    src/firststart.cpp \
+    src/functions.cpp \
+    src/InitialDatabase.cpp \
+    src/langselect.cpp \
+    src/main.cpp \
+    src/menue/menue.cpp \
+    src/musickey.cpp \
+    src/playlist/editstring.cpp \
+    src/playlist/playlist.cpp \
+    src/playlist/playlistedit.cpp \
+    src/playlist/playlistexport.cpp \
+    src/playlist/playlistStatusBar.cpp \
+    src/playlist/playlisttracks.cpp \
+    src/playlist/setbpmplayed.cpp \
+    src/plugins.cpp \
+    src/Print.cpp \
+    src/printdevicedialog.cpp \
+    src/properties/properties.cpp \
+    src/properties/regexpedit.cpp \
+    src/regexpcapture.cpp \
+    src/resultfilter.cpp \
+    src/search/search.cpp \
+    src/searchlists/dupecheckthread.cpp \
+    src/searchlists/searchlistdialog.cpp \
+    src/searchlists/searchlists.cpp \
+    src/searchlists/searchlisttrackdialog.cpp \
+    src/searchlists/searchlisttracks.cpp \
+    src/splashscreen.cpp \
+    src/StorageDevice.cpp \
+    src/StorageOriginalImportData.cpp \
+    src/StorageShortcut.cpp \
+    src/StorageSimpleTable.cpp \
+    src/StorageTitle.cpp \
+    src/StorageTrack.cpp \
+    src/traktor.cpp \
+    src/wm20import.cpp \
+    src/wmtoolbutton.cpp \
+    widgets/edittrack.cpp \
+    widgets/fkeys.cpp \
+    widgets/KeyWheel.cpp \
+    
+
+HEADERS += widgets/edittrack.h \
+    widgets/fkeys.h \
+    widgets/keywheel.h \
+    src/editor/cddbimport.h \
+    src/editor/cddbselect.h \
+    src/editor/edit.h \
+    src/editor/massimport.h \
+    src/editor/oimpinfo.h \
+    src/editor/renumberdialog.h \
+    src/editor/shortcutdialog.h \
+    src/editor/tablesearch.h \
+    src/menue/menue.h \
+    src/player/player.h \
+    src/playlist/editstring.h \
+    src/playlist/playlist.h \
+    src/playlist/playlistedit.h \
+    src/playlist/playlistexport.h \
+    src/playlist/playlistStatusBar.h \
+    src/playlist/playlisttracks.h \
+    src/playlist/setbpmplayed.h \
+    src/properties/properties.h \
+    src/properties/regexpedit.h \
+    src/search/search.h \
+    src/searchlists/searchlistdialog.h \
+    src/searchlists/searchlists.h \
+    src/searchlists/searchlisttrackdialog.h \
+    src/searchlists/searchlisttracks.h \
+    include/about.h \
+    include/asynchronousMessage.h \
+    include/backgroundjobs.h \
+    include/colorscheme.h \
+    include/coverprinter.h \
+    include/coverviewer.h \
+    include/csearchlist.h \
+    include/devicelist.h \
+    include/droparea.h \
+    include/editdevice.h \
+    include/edittrackdialog.h \
+    include/firststart.h \
+    include/langselect.h \
+    include/musickey.h \
+    include/plugins.h \
+    include/printdevicedialog.h \
+    include/regexpcapture.h \
+    include/resultfilter.h \
+    include/splashscreen.h \
+    include/tablecontrol.h \
+    include/traktor.h \
+    include/version.h \
+    include/winmusik3.h \
+    include/wm20import.h \
+    include/wmstorage.h \
+    include/wmtoolbutton.h \
+    
+
+FORMS += widgets/edittrack.ui \
+    widgets/fkeys.ui \
+    src/editor/cddbimport.ui \
+    src/editor/cddbselect.ui \
+    src/editor/edit.ui \
+    src/editor/massimport.ui \
+    src/editor/oimpinfo.ui \
+    src/editor/renumberdialog.ui \
+    src/editor/shortcutdialog.ui \
+    src/editor/tablesearch.ui \
+    src/exporttracks/exporttracks.ui \
+    src/menue/menue.ui \
+    src/player/player.ui \
+    src/playlist/editstring.ui \
+    src/playlist/playlist.ui \
+    src/playlist/playlistedit.ui \
+    src/playlist/playlistexport.ui \
+    src/playlist/setbpmplayed.ui \
+    src/properties/properties.ui \
+    src/properties/regexpedit.ui \
+    src/search/search.ui \
+    src/searchlists/searchlistdialog.ui \
+    src/searchlists/searchlists.ui \
+    src/searchlists/searchlisttrackdialog.ui \
+    forms/about.ui \
+    forms/asynchronousMessage.ui \
+    forms/coverprinter.ui \
+    forms/coverviewer.ui \
+    forms/devicelist.ui \
+    forms/editdevice.ui \
+    forms/edittrackdialog.ui \
+    forms/firststart.ui \
+    forms/langselect.ui \
+    forms/printdevicedialog.ui \
+    forms/splashscreen.ui \
+    

@@ -25,7 +25,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "traktor.h"
+
+#include "../include/wm_traktor.h"
 
 TraktorTagCue::TraktorTagCue()
 {

@@ -36,10 +36,7 @@ HOMEPAGE="http://www.winmusik.de/"
 MAINTAINER="Patrick Fedick <patrick@pfp.de>"
 
 
-PPL6SOURCE=${PPL6SOURCE:="../ppl6"}
-PPL6REPO="https://svn.code.sf.net/p/pplib/code/lib/branches/RELENG_6"
-WINMUSIKREPO=https://svn.code.sf.net/p/winmusik/client/trunk
-WINMUSIKDIR="$PROGNAME-$VERSION"
+
 
 TARGETPATH=/ftp/winmusik
 QMAKE=qmake-qt4

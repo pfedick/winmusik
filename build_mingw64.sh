@@ -1,5 +1,5 @@
 #!/bin/sh
-JENKINS_VERSION="/jenkins/workspace/win64_WinMusik/include/version.h"
+JENKINS_VERSION="/jenkins/workspace/win64_WinMusik/gui/include/version.h"
 BUILDDATE=`date '+%Y%m%d'`
 VERSION=${VERSION:=integration}
 mkdir -p tmp
@@ -17,16 +17,14 @@ then
 	sed "s/WM_RELEASEDATE.*$/WM_RELEASEDATE $BUILDDATE/" $JENKINS_VERSION > tmp/version.h
 fi
 
-diff tmp/version.h include/version.h > /dev/null 2>&1
+diff tmp/version.h gui/include/version.h > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
 	cp tmp/version.h include/version.h
 fi
 
 cat include/version.h
 
-
-qmake INCLUDEPATH+=/jenkins/local/include -o Makefile WinMusik.pro
-mingw32-make -j8 release debug
+mingw32-make -j8 release
 rm -rf release/deploy
 windeployqt.exe --dir release/deploy release/WinMusik.exe
 
