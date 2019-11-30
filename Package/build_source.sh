@@ -24,7 +24,7 @@
  
 CUR=`pwd`
 
-if [ -f "WinMusik.pro" ] ; then
+if [ -d "Package" ] ; then
     CUR=`pwd`
 elif [ -f "build_source.sh" ] ; then
     cd ..
@@ -47,9 +47,15 @@ gather_sources()
 		echo "INFO: Ziel: $WMDIR"
 		create_dir "$WMDIR"
 		cd $WINMUSIKSOURCE
-		find *.TXT *.md configure configure.ac *.m4 autoconf WinMusik.pro.in \
-			*.qm *.ts include Doxyfile resource.rc resources resources.qrc src \
-			widgets forms docs pplib| cpio -pdm "$WMDIR" > /dev/null 2>&1
+		find *.TXT *.md Makefile.in configure configure.ac *.m4 autoconf lib/src lib/include \
+			lib/Makefile.in lib/tests/src lib/tests/src lib/tests/testdata lib/tests/Makefile.in \
+			pplib/include pplib/ppl* pplib/Makefile.in \
+			gui/WinMusik.pro.in \
+			gui/*.qm gui/*.ts gui/include gui/resource.rc gui/resources gui/resources.qrc gui/src \
+			gui/widgets gui/forms docs Doxyfile | cpio -pdm "$WMDIR" > /dev/null 2>&1
+		if [ $? -ne 0 ] ; then
+			exit 1
+		fi 
 		echo "INFO: done"
     else
     	echo "ERROR: Winmusik Sources not found!"
@@ -63,7 +69,7 @@ gather_sources()
 		BUILDDATE=`date '+%Y%m%d'`
 		echo "#define WM_RELEASEDATE		$BUILDDATE"
 		echo "#endif /* WINMUSIK_VERSION_H_ */"
-	) > $WMDIR/include/version.h
+	) > $WMDIR/gui/include/version.h
 	
 	cd $CUR
 }
