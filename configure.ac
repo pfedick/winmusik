@@ -56,6 +56,7 @@ sinclude(autoconf/ax_check_zlib.m4)
 sinclude(autoconf/ax_lib_crypto.m4)
 sinclude(autoconf/checkfuncs.m4)
 sinclude(autoconf/ax_gcc_x86_cpuid.m4)
+sinclude(autoconf/ax_check_compile_flag.m4)
 sinclude(autoconf/ax_check_compiler_flags.m4)
 sinclude(autoconf/ax_gcc_archflag.m4)
 sinclude(autoconf/libcdio.m4)
@@ -440,6 +441,8 @@ case "$host_os" in
 	*mingw32* )
 		MINGW32=yes
 		AC_DEFINE(MINGW32, 1, [Define if you compile on Windows MINGW32])
+		AC_DEFINE(HAVE_LOCALTIME_R,1,[on mingw-w64 we always have localtime_r])
+		AC_DEFINE(HAVE_GMTIME_R,1,[on mingw-w64 we always have gmtime_r])
 		#LIBS="$LIBS -lws2_32"
 		WINDOWS_WINSOCK_LIBS="-lws2_32"
   		;;
@@ -448,6 +451,8 @@ case "$host_os" in
 		MINGW64=yes
 		AC_DEFINE(MINGW32, 1, [Define if you compile on Windows MINGW32])
 		AC_DEFINE(MINGW64, 1, [Define if you compile on Windows MINGW64])
+		AC_DEFINE(HAVE_LOCALTIME_R,1,[on mingw-w64 we always have localtime_r])
+		AC_DEFINE(HAVE_GMTIME_R,1,[on mingw-w64 we always have gmtime_r])
 		WINDOWS_WINSOCK_LIBS="-lws2_32"
   		;;
 	* )

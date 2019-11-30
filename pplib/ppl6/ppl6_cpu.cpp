@@ -67,6 +67,7 @@ namespace ppl6 {
 
 ppluint32 HaveCPUID() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	__asm {
 		// check whether CPUID is supported
@@ -87,11 +88,13 @@ ppluint32 HaveCPUID() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
 ppluint32 HaveMMX() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	if (!HaveCPUID()) return false;
 	__asm {
@@ -111,11 +114,13 @@ ppluint32 HaveMMX() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
 ppluint32 HaveMMX2() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	if (!HaveCPUID()) return false;
 	__asm {
@@ -135,11 +140,13 @@ ppluint32 HaveMMX2() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
 ppluint32 Have3DNow() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	if (!HaveCPUID()) return false;
 	__asm {
@@ -159,11 +166,13 @@ ppluint32 Have3DNow() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
 ppluint32 Have3DNow2() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	if (!HaveCPUID()) return false;
 	__asm {
@@ -183,11 +192,13 @@ ppluint32 Have3DNow2() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
 ppluint32 HaveSSE() {
 	ppluint32 retv=0;
+#ifndef MINGW32
 	#ifdef _WIN32
 	if (!HaveCPUID()) return false;
 	__asm {
@@ -201,6 +212,7 @@ ppluint32 HaveSSE() {
 		// sti							// Interupts wieder zulassen
 	}
 	#endif
+#endif
 	return retv;
 }
 
