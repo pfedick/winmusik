@@ -33,6 +33,10 @@
 #include <Python.h>
 #endif
 
+#include <ppl7.h>
+#include <ppl7-types.h>
+#include <ppl7-ppl6compat.h>
+
 void RegExpClipboard::copyFromClipboard()
 {
 	QString subtype="html";
@@ -294,9 +298,10 @@ static bool matchBeatPortPro100_getGenres(const ppl6::CString &html, RegExpMatch
 
 static void fixArtistAndTitle(const ppl6::CString &prefix, RegExpMatch &match, const ppl6::CString prefix_replace)
 {
-	ppl6::CString regex="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
+	ppl6::CString regex1="/(.*?)\\s"+prefix+"\\s+(.*)$/i";
+	ppl6::CString regex2="/(.*?)\\("+prefix+"\\s+(.*)\\)$/i";
 	ppl6::CArray Matches;
-	if (match.Title.PregMatch(regex, Matches)) {
+	if (match.Title.PregMatch(regex1, Matches)>0 || match.Title.PregMatch(regex2, Matches)>0) {
 		ppl6::CString feat=Matches.GetString(2);
 		feat.Trim();
 		match.Title=Matches[1];
@@ -356,12 +361,76 @@ static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
 }
 
 
+static bool matchBeatPortProReleases(const ppl6::CString &html6, RegExpMatch &match)
+{
+	ppl7::String html=ppl7::to7(html6);
+	ppl7::Array matches;
+	ppl7::String Artists,Title,Version,Genre,Released,Label;
+	int found=0;
+	if (html.pregMatch("/<p class=\"buk-track-artists\".*?>(.*?)<\\/p>/i",matches)) {
+		ppl7::String todo=matches[1];
+		while (todo.pregMatch("/^(.*?)<a href=.*?>(.*?)<\\/a>(.*?)$/i",matches)) {
+			todo=matches[1]+matches[3];
+			Artists=Artists+", "+matches[2];
+		}
+		Artists.trim(" ,");
+		found++;
+	}
+	if (html.pregMatch("/<p class=\"buk-track-title\".*?>(.*?)<\\/p>/i",matches)) {
+		ppl7::String todo=matches[1];
+		if (todo.pregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/i",matches)) {
+			Title=matches[1];
+		}
+		if (todo.pregMatch("/<span class=\"buk-track-remixed\".*?>(.*?)<\\/span>/i",matches)) {
+			Version=matches[1];
+		}
+		found++;
+
+	}
+	if (html.pregMatch("/<p class=\"buk-track-genre\".*?>(.*?)<\\/p>/i",matches)) {
+		ppl7::String todo=matches[1];
+		//printf ("Match1\n");
+		//todo.printnl();
+		if (todo.pregMatch("/<a href=.*?>(.*?)<\\/a>/i",matches)) {
+			Genre=matches[1];
+		}
+		found++;
+
+	}
+	if (html.pregMatch("/<p class=\"buk-track-released\".*?>(.*?)<\\/p>/i",matches)) {
+		ppl7::String todo=matches[1];
+		Released=matches[1];
+		found++;
+	}
+	if (html.pregMatch("/<p class=\"buk-track-labels\".*?>(.*?)<\\/p>/i",matches)) {
+		ppl7::String todo=matches[1];
+		if (todo.pregMatch("/<a href=.*?>(.*?)<\\/a>/i",matches)) {
+			Label=matches[1];
+		}
+		found++;
+
+	}
+	match.Artist=ppl7::to6(Artists);
+	match.Title=ppl7::to6(Title);
+	match.Genre=ppl7::to6(Genre);
+	match.Label=ppl7::to6(Label);
+	match.ReleaseDate=ppl7::to6(Released);
+	match.Version=ppl7::to6(Version);
+	fixHTML(match);
+	fixIt(match);
+	//printf ("matches: %d\n",found);
+	if (found>1) return true;
+	return false;
+}
+
 
 bool RegularExpressionCapture::match(const RegExpClipboard &data, RegExpMatch &match) const
 {
 	//if (matchAgainstScripts(data,match)) return true;
 	//if (this->match(data.Html,match)) return true;
-	if (matchBeatPortPro100(data.Html,match)) return true;
+	//if (matchBeatPortPro100(data.Html,match)) return true;
+	if (matchBeatPortProReleases(data.Html,match)) return true;
+
 	if (patterns.empty()) return false;
 	std::vector<RegExpPattern>::const_iterator it;
 	for (it = patterns.begin() ; it != patterns.end(); ++it) {
