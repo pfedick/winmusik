@@ -384,7 +384,7 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *>) const
 #else
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
-		printf("File: %s\n",(const char*)item->File);
+		//printf("File: %s\n",(const char*)item->File);
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";
