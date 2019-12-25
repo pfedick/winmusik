@@ -1145,12 +1145,16 @@ void Playlist::on_viewDJ_triggered()
 void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column)
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
-	if (key&Qt::MetaModifier) {
+	if (key&Qt::MetaModifier || key&Qt::ControlModifier) {
 		editTrack((PlaylistItem*)item);
 		return;
 	} else if (column==columnComment) {
 		currentTreeItem=static_cast<PlaylistItem*>(item);
 		on_contextEditComment_triggered();
+		return;
+	} else if (column==columnBpmPlayed) {
+		currentTreeItem=static_cast<PlaylistItem*>(item);
+		on_contextSetBPMPlayed_triggered();
 		return;
 	}
 	wm->PlayFile(((PlaylistItem*)item)->getExistingFilename());
