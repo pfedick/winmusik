@@ -45,15 +45,17 @@ gui          := gui
 .PHONY: all $(gui) $(libraries)
 all: pplib/release/libpplib.a gui/Makefile release/WinMusik
 
+release: pplib/release/libpplib.a gui/Makefile release/WinMusik
+
 pplib/release/libpplib.a: 
-	$(MAKE) --directory=pplib
+	$(MAKE) --directory=pplib release
 
 lib/release/libwinmusik.a: 
-	$(MAKE) --directory=lib
+	$(MAKE) --directory=lib release
 
 release/WinMusik: $(libraries) gui/Makefile pplib/release/libpplib.a
 	rm -rf gui/release/WinMusik
-	$(MAKE) --directory=gui
+	$(MAKE) --directory=gui release
 	mkdir -p release
 	cp gui/release/WinMusik release/WinMusik
 
