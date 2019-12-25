@@ -359,15 +359,20 @@ void PlaylistTracks::mouseReleaseEvent ( QMouseEvent * event )
 }
 
 
-QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
+QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *>) const
 {
 	QList<QUrl> list;
 	QPixmap Icon;
 	ppl6::CString xml;
 	xml="<winmusikTracklist>\n";
 	xml+="<tracks>\n";
+	/* Order of items in the list to this function is not always identical to the order in
+	 * the tree widget. Therefore we use selectedItems()
+	 */
+	QList<QTreeWidgetItem *> items=this->selectedItems();
 	for (int i=0;i<items.size();i++) {
-        PlaylistItem *item=static_cast<PlaylistItem *>(items[i]);
+	    PlaylistItem *item=static_cast<PlaylistItem *>(items[i]);
+		//PlaylistItem *item=static_cast<PlaylistItem *>(topLevelItem[i]);
 		if (Icon.isNull()) {
             Icon.loadFromData(static_cast<const uchar*>(item->CoverPreview.GetPtr()),
                               static_cast<unsigned int>(item->CoverPreview.GetSize()));
@@ -379,6 +384,7 @@ QMimeData *PlaylistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
 #else
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
+		printf("File: %s\n",(const char*)item->File);
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";

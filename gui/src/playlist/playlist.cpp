@@ -962,6 +962,7 @@ void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
 #else
 		list.append(QUrl::fromLocalFile(item->File));
 #endif
+		//printf("File: %s\n",(const char*)item->File);
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";
@@ -1141,11 +1142,15 @@ void Playlist::on_viewDJ_triggered()
 	}
 }
 
-void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int )
+void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column)
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
 	if (key&Qt::MetaModifier) {
 		editTrack((PlaylistItem*)item);
+		return;
+	} else if (column==columnComment) {
+		currentTreeItem=static_cast<PlaylistItem*>(item);
+		on_contextEditComment_triggered();
 		return;
 	}
 	wm->PlayFile(((PlaylistItem*)item)->getExistingFilename());
@@ -1502,6 +1507,7 @@ void Playlist::on_contextEditComment_triggered()
     dialog.setString(currentTreeItem->text(columnComment));
     if (dialog.exec()==1) {
         currentTreeItem->setText(columnComment,dialog.getString());
+        currentTreeItem->Remarks=dialog.getString();
         setChanged(true);
     }
 }
