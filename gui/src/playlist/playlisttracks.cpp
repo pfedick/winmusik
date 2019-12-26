@@ -38,18 +38,18 @@
 PlaylistItem::PlaylistItem()
 {
 	titleId=0;
-	startPositionSec=0;
-	endPositionSec=0;
+	startPositionSec=0.0f;
+	endPositionSec=0.0f;
 	musicKey=0;
 	energyLevel=0;
 	bpm=0;
 	bpmPlayed=0;
 	rating=0;
 	trackLength=0;
-	mixLength=0;
+	mixLength=0.0f;
 	for (int z=0;z<5;z++) {
-		cutStartPosition[z]=0;
-		cutEndPosition[z]=0;
+		cutStartPosition[z]=0.0f;
+		cutEndPosition[z]=0.0f;
 	}
 	keyVerified=false;
 	DeviceId=0;
@@ -70,12 +70,12 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret=Indent+"<item>\n";
     ret+=Indent+"   <widgetId>"+ppl6::ToString("%tu",(ptrdiff_t)this)+"</widgetId>\n";
 	ret+=Indent+"   <titleId>"+ppl6::ToString("%u",titleId)+"</titleId>\n";
-	ret+=Indent+"   <startPositionSec>"+ppl6::ToString("%u",startPositionSec)+"</startPositionSec>\n";
-	ret+=Indent+"   <endPositionSec>"+ppl6::ToString("%u",endPositionSec)+"</endPositionSec>\n";
+	ret+=Indent+"   <startPositionSec>"+ppl6::ToString("%0.3f",startPositionSec)+"</startPositionSec>\n";
+	ret+=Indent+"   <endPositionSec>"+ppl6::ToString("%0.3f",endPositionSec)+"</endPositionSec>\n";
 	ret+=Indent+"   <cuts>\n";
 	for (int i=0;i<5;i++) {
-		ret+=Indent+"      <cut><start>"+ppl6::ToString("%u",cutStartPosition[i])+"</start>";
-		ret+="<end>"+ppl6::ToString("%u",cutEndPosition[i])+"</end></cut>\n";
+		ret+=Indent+"      <cut><start>"+ppl6::ToString("%0.3f",cutStartPosition[i])+"</start>";
+		ret+="<end>"+ppl6::ToString("%0.3f",cutEndPosition[i])+"</end></cut>\n";
 	}
 	ret+=Indent+"   </cuts>\n";
 	ret+=Indent+"   <Artist>"+ppl6::EscapeHTMLTags(Artist)+"</Artist>\n";
@@ -94,7 +94,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <bpmPlayed>"+ppl6::ToString("%u",bpmPlayed)+"</bpmPlayed>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";
 	ret+=Indent+"   <trackLength>"+ppl6::ToString("%u",trackLength)+"</trackLength>\n";
-	ret+=Indent+"   <mixLength>"+ppl6::ToString("%u",mixLength)+"</mixLength>\n";
+	ret+=Indent+"   <mixLength>"+ppl6::ToString("%0.3f",mixLength)+"</mixLength>\n";
 	ret+=Indent+"</item>\n";
 	return ret;
 }
@@ -135,11 +135,11 @@ void PlaylistItem::importFromXML(QDomElement &e)
 
 	node =e.namedItem("startPositionSec");
 	if (node.isNull()==false && node.isElement()==true) {
-        startPositionSec=node.toElement().text().toUInt();
+        startPositionSec=node.toElement().text().toFloat();
 	}
 	node =e.namedItem("endPositionSec");
 	if (node.isNull()==false && node.isElement()==true) {
-        endPositionSec=node.toElement().text().toUInt();
+        endPositionSec=node.toElement().text().toFloat();
 	}
 	node =e.namedItem("trackLength");
 	if (node.isNull()==false && node.isElement()==true) {
@@ -214,12 +214,12 @@ void PlaylistItem::importFromXML(QDomElement &e)
 			//printf ("      Parsing cut...\n");
 			node =e.namedItem("start");
 			if (node.isNull()==false && node.isElement()==true) {
-                cutStartPosition[c]=node.toElement().text().toUInt();
+                cutStartPosition[c]=node.toElement().text().toFloat();
 				//printf ("       start found\n");
 			}
 			node =e.namedItem("end");
 			if (node.isNull()==false && node.isElement()==true) {
-                cutEndPosition[c]=node.toElement().text().toUInt();
+                cutEndPosition[c]=node.toElement().text().toFloat();
 				//printf ("       end found\n");
 			}
 			mixLength-=(cutEndPosition[c]-cutStartPosition[c]);
@@ -321,7 +321,7 @@ void PlaylistItem::useTraktorCues(const ppl6::CID3Tag &Tag)
 	getTraktorCues(cuelist, Tag);
 	if (cuelist.size()==0) return;
 	for (it=cuelist.begin();it!=cuelist.end();it++) {
-        ppluint32 sec=static_cast<ppluint32>(it->start/1000.0);
+        float sec=static_cast<float>(it->start/1000.0);
 		if (it->type==TraktorTagCue::IN) startPositionSec=sec;
 		if (it->type==TraktorTagCue::OUT) endPositionSec=sec;
 	}
@@ -595,14 +595,14 @@ bool PlaylistTracks::saveWMP(const ppl6::CString &Filename)
 	int count=topLevelItemCount();
 	xml+="   <totalTracks>"+ppl6::ToString("%u",count)+"</totalTracks>\n";
 	ppluint64 totalTrackLength=0;
-	ppluint64 totalMixLength=0;
+	double totalMixLength=0;
 	for (int i=0;i<count;i++) {
         PlaylistItem *item=static_cast<PlaylistItem*>(this->topLevelItem(i));
 		totalTrackLength+=item->trackLength;
 		totalMixLength+=item->mixLength;
 	}
 	xml+="   <totalTrackLength>"+ppl6::ToString("%llu",totalTrackLength)+"</totalTrackLength>\n";
-	xml+="   <totalMixLength>"+ppl6::ToString("%llu",totalMixLength)+"</totalMixLength>\n";
+	xml+="   <totalMixLength>"+ppl6::ToString("%0.3f",totalMixLength)+"</totalMixLength>\n";
 	xml+="   <tracks>\n";
 	for (int i=0;i<count;i++) {
         PlaylistItem *item=static_cast<PlaylistItem*>(this->topLevelItem(i));

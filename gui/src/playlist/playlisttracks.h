@@ -37,10 +37,10 @@ class PlaylistItem : public QTreeWidgetItem
 {
 	public:
 		ppluint32	titleId;
-        ppluint32	startPositionSec;
-        ppluint32	endPositionSec;
-        ppluint32	cutStartPosition[5];
-        ppluint32	cutEndPosition[5];
+        float		startPositionSec;
+        float		endPositionSec;
+        float		cutStartPosition[5];
+        float		cutEndPosition[5];
 		ppl6::CString	Artist;
 		ppl6::CString	Title;
 		ppl6::CString	Version;
@@ -55,7 +55,7 @@ class PlaylistItem : public QTreeWidgetItem
         ppluint32		bpmPlayed;
         ppluint8		rating;
         ppluint32		trackLength;
-        ppluint32		mixLength;
+        float			mixLength;
         ppluint8		energyLevel;
 		bool			keyVerified;
 

@@ -48,14 +48,14 @@ public:
 private:
     Ui::playlistEditClass ui;
     CWmClient *wm;
-    int traktorIn, traktorOut;
+    float traktorIn, traktorOut;
     ppl6::CBinary CoverPreview;
     QPixmap			Cover;
     ppl6::CString	Filename;
 
     void closeEvent(QCloseEvent *event);
     void updateTotalTime();
-    int getSecondsFromLine(QLineEdit *line);
+    float getSecondsFromLine(QLineEdit *line);
     void loadTraktorCues(const ppl6::CID3Tag &Tag);
     void loadCover(const ppl6::CID3Tag &Tag);
     void updateCover();

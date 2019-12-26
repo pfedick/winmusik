@@ -115,13 +115,21 @@ void PlaylistEdit::on_cancelButton_clicked()
 	done(0);
 }
 
+static ppl6::CString floatTimeToString(float sec)
+{
+	ppl6::CString Tmp;
+	int msec=(int)(sec*1000.0f)-(int)sec*1000;
+	Tmp.Setf("%0d:%02d.%03d",(int)(sec/60.0f),(int)sec%60,msec);
+	return Tmp;
+}
 
 void PlaylistEdit::on_traktorUseInOutButton_clicked()
 {
-	if (traktorIn>=0) ui.trackStart->setText(ppl6::ToString("%0d:%02d",(int)(traktorIn/60),traktorIn%60));
-	if (traktorOut>=0) ui.trackEnd->setText(ppl6::ToString("%0d:%02d",(int)(traktorOut/60),traktorOut%60));
+	if (traktorIn>=0) ui.trackStart->setText(floatTimeToString(traktorIn));
+	if (traktorOut>=0) ui.trackEnd->setText(floatTimeToString(traktorOut));
 	updateTotalTime();
 }
+
 
 void PlaylistEdit::filloutFields(PlaylistItem *item)
 {
@@ -140,21 +148,22 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 
 	ui.rating->setCurrentIndex(item->rating);
 
-	ui.trackStart->setText(ppl6::ToString("%0d:%02d",(int)(item->startPositionSec/60),item->startPositionSec%60));
-	ui.trackEnd->setText(ppl6::ToString("%0d:%02d",(int)(item->endPositionSec/60),item->endPositionSec%60));
+	ui.trackStart->setText(floatTimeToString(item->startPositionSec));
+	ui.trackEnd->setText(floatTimeToString(item->endPositionSec));
 
-	ui.cutStart0->setText(ppl6::ToString("%0d:%02d",(int)(item->cutStartPosition[0]/60),item->cutStartPosition[0]%60));
-	ui.cutStart1->setText(ppl6::ToString("%0d:%02d",(int)(item->cutStartPosition[1]/60),item->cutStartPosition[1]%60));
-	ui.cutStart2->setText(ppl6::ToString("%0d:%02d",(int)(item->cutStartPosition[2]/60),item->cutStartPosition[2]%60));
-	ui.cutStart3->setText(ppl6::ToString("%0d:%02d",(int)(item->cutStartPosition[3]/60),item->cutStartPosition[3]%60));
-	ui.cutStart4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutStartPosition[4]/60),item->cutStartPosition[4]%60));
+	ui.cutStart0->setText(floatTimeToString(item->cutStartPosition[0]));
+	ui.cutStart1->setText(floatTimeToString(item->cutStartPosition[1]));
+	ui.cutStart2->setText(floatTimeToString(item->cutStartPosition[2]));
+	ui.cutStart3->setText(floatTimeToString(item->cutStartPosition[3]));
+	ui.cutStart4->setText(floatTimeToString(item->cutStartPosition[4]));
 
-	ui.cutEnd0->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[0]/60),item->cutEndPosition[0]%60));
-	ui.cutEnd1->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[1]/60),item->cutEndPosition[1]%60));
-	ui.cutEnd2->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[2]/60),item->cutEndPosition[2]%60));
-	ui.cutEnd3->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[3]/60),item->cutEndPosition[3]%60));
-	ui.cutEnd4->setText(ppl6::ToString("%0d:%02d",(int)(item->cutEndPosition[4]/60),item->cutEndPosition[4]%60));
-	ui.trackLength->setText(ppl6::ToString("%0d:%02d",(int)(item->trackLength/60),item->trackLength%60));
+	ui.cutEnd0->setText(floatTimeToString(item->cutEndPosition[0]));
+	ui.cutEnd1->setText(floatTimeToString(item->cutEndPosition[1]));
+	ui.cutEnd2->setText(floatTimeToString(item->cutEndPosition[2]));
+	ui.cutEnd3->setText(floatTimeToString(item->cutEndPosition[3]));
+	ui.cutEnd4->setText(floatTimeToString(item->cutEndPosition[4]));
+
+	ui.trackLength->setText(ppl6::ToString("%0d:%02d.000",(int)(item->trackLength/60),item->trackLength%60));
 
 	CoverPreview=item->CoverPreview;
 	Filename=item->File;
@@ -250,8 +259,8 @@ void PlaylistEdit::loadTraktorCues(const ppl6::CID3Tag &Tag)
 		else if (it->type==TraktorTagCue::LOOP) item->setIcon(1,QIcon(":/icons/resources/cueloop.png"));
 		else item->setIcon(1,QIcon(":/icons/resources/cuepoint.png"));
 		item->setText(3,it->name);
-		int sec=(int)(it->start/1000.0);
-		item->setText(2,ppl6::ToString("%0d:%02d",(int)(sec/60),sec%60));
+		float sec=(float)(it->start/1000.0f);
+		item->setText(2,floatTimeToString(sec));
 		ui.traktorCues->addTopLevelItem(item);
 
 		if (it->type==TraktorTagCue::IN) traktorIn=sec;
@@ -301,15 +310,18 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*item->bpm/item->bpmPlayed;
 }
 
-int PlaylistEdit::getSecondsFromLine(QLineEdit *line)
+float PlaylistEdit::getSecondsFromLine(QLineEdit *line)
 {
 	ppl6::CTok Token(line->text(),":");
-	return ppl6::atoi(Token.Get(0))*60+ppl6::atoi(Token.Get(1));
+	float seconds=(float)ppl6::atoi(Token.Get(0))*60.0f+(float)ppl6::atoi(Token.Get(1));
+	Token.Split(Token.Get(1),".");
+	if (Token.Num()>1) seconds+=(float)ppl6::atoi(Token.Get(1))/1000.0f;
+	return seconds;
 }
 
 void PlaylistEdit::updateTotalTime()
 {
-	int length=getSecondsFromLine(ui.trackEnd)-getSecondsFromLine(ui.trackStart);
+	float length=getSecondsFromLine(ui.trackEnd)-getSecondsFromLine(ui.trackStart);
 	length-=(getSecondsFromLine(ui.cutEnd0)-getSecondsFromLine(ui.cutStart0));
 	length-=(getSecondsFromLine(ui.cutEnd1)-getSecondsFromLine(ui.cutStart1));
 	length-=(getSecondsFromLine(ui.cutEnd2)-getSecondsFromLine(ui.cutStart2));
@@ -317,8 +329,8 @@ void PlaylistEdit::updateTotalTime()
 	length-=(getSecondsFromLine(ui.cutEnd4)-getSecondsFromLine(ui.cutStart4));
 	int bpm=ui.bpm->text().trimmed().toInt();
 	int bpmPlayed=ui.bpmPlayed->text().trimmed().toInt();
-	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) length=length*bpm/bpmPlayed;
-	ui.mixLength->setText(ppl6::ToString("%0d:%02d",(int)(length/60),length%60));
+	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) length=length*(float)bpm/(float)bpmPlayed;
+	ui.mixLength->setText(floatTimeToString(length));
 }
 
 void PlaylistEdit::on_coverCopyButton_clicked()
@@ -453,20 +465,20 @@ void PlaylistEdit::cue2CutEnd(int cut)
 void PlaylistEdit::cutDelete(int cut)
 {
 	switch (cut) {
-		case 0: ui.cutStart0->setText("0:00");
-				ui.cutEnd0->setText("0:00");
+		case 0: ui.cutStart0->setText("0:00.000");
+				ui.cutEnd0->setText("0:00.000");
 				break;
-		case 1: ui.cutStart1->setText("0:00");
-				ui.cutEnd1->setText("0:00");
+		case 1: ui.cutStart1->setText("0:00.000");
+				ui.cutEnd1->setText("0:00.000");
 				break;
-		case 2: ui.cutStart2->setText("0:00");
-				ui.cutEnd2->setText("0:00");
+		case 2: ui.cutStart2->setText("0:00.000");
+				ui.cutEnd2->setText("0:00.000");
 				break;
-		case 3: ui.cutStart3->setText("0:00");
-				ui.cutEnd3->setText("0:00");
+		case 3: ui.cutStart3->setText("0:00.000");
+				ui.cutEnd3->setText("0:00.000");
 				break;
-		case 4: ui.cutStart4->setText("0:00");
-				ui.cutEnd4->setText("0:00");
+		case 4: ui.cutStart4->setText("0:00.000");
+				ui.cutEnd4->setText("0:00.000");
 				break;
 
 	}
@@ -493,12 +505,13 @@ void PlaylistEdit::on_cueTrackEnd_clicked()
 
 void PlaylistEdit::on_trackStartFromBeginning_clicked()
 {
-	ui.trackStart->setText("0:00");
+	ui.trackStart->setText("0:00.000");
 }
 
 void PlaylistEdit::on_trackEndUntilEnd_clicked()
 {
 	ui.trackEnd->setText(ui.trackLength->text());
 }
+
 
 

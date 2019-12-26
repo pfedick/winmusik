@@ -850,7 +850,7 @@ void Playlist::calcMixLength(PlaylistItem *item)
 {
 	item->mixLength=item->endPositionSec-item->startPositionSec;
 	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
-	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*item->bpm/item->bpmPlayed;
+	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*(float)item->bpm/(float)item->bpmPlayed;
 }
 
 void Playlist::showEvent(QShowEvent * event)
@@ -1523,18 +1523,18 @@ static void updateInAndOut(PlaylistItem *item)
 	std::list <TraktorTagCue>::const_iterator it;
 	if (!getTraktorCuesFromFile(cuelist, item->File)) return;
 	if (cuelist.size()==0) return;
-	int traktorIn=-1;
-	int traktorOut=-1;
+	float traktorIn=-1;
+	float traktorOut=-1;
 	for (it=cuelist.begin();it!=cuelist.end();it++) {
-		int sec=(int)(it->start/1000.0);
+		float sec=(float)(it->start/1000.0);
 		if (it->type==TraktorTagCue::IN) traktorIn=sec;
 		if (it->type==TraktorTagCue::OUT) traktorOut=sec;
 	}
 	item->startPositionSec=0;
 	item->endPositionSec=item->trackLength;
 
-	if (traktorIn>=0) item->startPositionSec=traktorIn;
-	if (traktorOut>=0) item->endPositionSec=traktorOut;
+	if (traktorIn>=0.0f) item->startPositionSec=traktorIn;
+	if (traktorOut>=0.0f) item->endPositionSec=traktorOut;
 }
 
 
