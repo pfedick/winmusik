@@ -43,24 +43,27 @@ gui          := gui
 ###########################################################################
 
 .PHONY: all $(gui) $(libraries)
-all: pplib/release/libpplib.a gui/Makefile release/WinMusik
+all: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
 
-release: pplib/release/libpplib.a gui/Makefile release/WinMusik
+release: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
 
-pplib/release/libpplib.a: 
+pplib/release/libpplib.a: Makefile pplib/Makefile
+	mkdir -p pplib/release
 	$(MAKE) --directory=pplib release
 
-lib/release/libwinmusik.a: 
+lib/release/libwinmusik.a: Makefile pplib/release/libpplib.a
+	mkdir -p lib/release
 	$(MAKE) --directory=lib release
 
-release/WinMusik: $(libraries) gui/Makefile pplib/release/libpplib.a
+release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a
+	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
 	mkdir -p release
 	cp gui/release/WinMusik release/WinMusik
 
 
-install: release/WinMusik
+install: release/WinMusik Makefile
 	mkdir -p $(PREFIX)/bin $(PREFIX)/share/pixmaps $(PREFIX)/share/applications $(PREFIX)/share/doc/WinMusik
 	cp release/WinMusik $(PREFIX)/bin
 	cp gui/resources/icon128.png $(PREFIX)/share/pixmaps/WinMusik.png
