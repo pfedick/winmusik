@@ -82,7 +82,7 @@ cd $PPL7_DIR
 sources=`find include/compat_ppl7.h include/config_ppl7.h.in include/ppl7.h \
 	include/ppl7-algorithms.h include/ppl7-exceptions.h include/ppl7-ppl6compat.h \
 	include/ppl7-audio.h include/ppl7-types.h include/prolog_ppl7.h include/threads_ppl7.h \
-	include/ppl7-inet.h include/ppl7-crypto.h `
+include/ppl7-inet.h include/ppl7-crypto.h include/ppl7-config.h.in `
 
 for source_file in $sources
 do
