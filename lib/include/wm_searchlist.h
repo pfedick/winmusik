@@ -33,7 +33,7 @@ class SearchlistItem
 		int				Length;
 		bool			found;
 		bool			selected;
-		ppluint8		Rating;
+		uint8_t		Rating;
 
 		SearchlistItem();
 		SearchlistItem(const ppl7::String &Misc);

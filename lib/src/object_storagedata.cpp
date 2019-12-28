@@ -29,17 +29,17 @@ void CStorageData::clear()
     filepos=lastchange=version=0;
 }
 
-ppluint32 CStorageData::getFilePos() const
+uint32_t CStorageData::getFilePos() const
 {
     return filepos;
 }
 
-ppluint32 CStorageData::getLastchange() const
+uint32_t CStorageData::getLastchange() const
 {
     return lastchange;
 }
 
-ppluint32 CStorageData::getVersion() const
+uint32_t CStorageData::getVersion() const
 {
     return version;
 }

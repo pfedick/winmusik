@@ -19,9 +19,9 @@ class CStorageData
 {
     friend class CStorage;
 private:
-    ppluint32 filepos;
-    ppluint32 lastchange;
-    ppluint32 version;
+    uint32_t filepos;
+    uint32_t lastchange;
+    uint32_t version;
 
 protected:
     void copyFrom(const CStorageData &other);
@@ -30,9 +30,9 @@ protected:
 public:
     CStorageData();
     void clear();
-    ppluint32 getFilePos() const;
-    ppluint32 getLastchange() const;
-    ppluint32 getVersion() const;
+    uint32_t getFilePos() const;
+    uint32_t getLastchange() const;
+    uint32_t getVersion() const;
 };
 
 
@@ -49,29 +49,29 @@ public:
     ppl7::String	Album;
     ppl7::String	Tags;
     ppl7::ByteArray	CoverPreview;
-    ppluint32		TitleId;
-    ppluint32		DeviceId;
-    ppluint32		Length;
-    ppluint32		VersionId;
-    ppluint32		LabelId;
-    ppluint32		BPM;
-    ppluint32		RecordDate;
-    ppluint32		ReleaseDate;
-    ppluint32		ImportData;
-    ppluint32		Size;
-    ppluint16		RecordSourceId;
-    ppluint16		Track;
-    ppluint16		Bitrate;
-    ppluint16		GenreId;
-    ppluint16		RecordDeviceId;
-    ppluint8		DeviceType;
-    ppluint8		Page;
-    ppluint8		Channels;
-    ppluint8		Quality;
-    ppluint8		Rating;
-    ppluint8		Flags;
-    ppluint8		Key;
-    ppluint8		EnergyLevel;
+    uint32_t		TitleId;
+    uint32_t		DeviceId;
+    uint32_t		Length;
+    uint32_t		VersionId;
+    uint32_t		LabelId;
+    uint32_t		BPM;
+    uint32_t		RecordDate;
+    uint32_t		ReleaseDate;
+    uint32_t		ImportData;
+    uint32_t		Size;
+    uint16_t		RecordSourceId;
+    uint16_t		Track;
+    uint16_t		Bitrate;
+    uint16_t		GenreId;
+    uint16_t		RecordDeviceId;
+    uint8_t			DeviceType;
+    uint8_t			Page;
+    uint8_t			Channels;
+    uint8_t			Quality;
+    uint8_t			Rating;
+    uint8_t			Flags;
+    uint8_t			Key;
+    uint8_t			EnergyLevel;
 
     DataTitle();
     DataTitle(const DataTitle &other);

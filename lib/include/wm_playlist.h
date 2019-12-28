@@ -23,7 +23,7 @@ namespace winmusik {
 class PlaylistItem
 {
 	public:
-		ppluint32		titleId;
+		uint32_t		titleId;
 		int				startPositionSec;
 		int				endPositionSec;
 		int				cutStartPosition[5];
@@ -45,10 +45,10 @@ class PlaylistItem
 		int				mixLength;
 		int				energyLevel;
 		bool			keyVerified;
-		ppluint32		DeviceId;
-		ppluint16		DeviceTrack;
-		ppluint8		DeviceType;
-		ppluint8		DevicePage;
+		uint32_t		DeviceId;
+		uint16_t		DeviceTrack;
+		uint8_t		DeviceType;
+		uint8_t		DevicePage;
 
 		PlaylistItem();
 		void clear();

@@ -146,29 +146,29 @@ void DataTitle::Export(ppl7::ByteArray &buffer) const
     ppl7::Poke8(a+58,EnergyLevel);
     p=60;
 
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenArtist));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenArtist));
     if (lenArtist) strncpy(a+p+2,Artist.getPtr(),lenArtist);
     p+=lenArtist+2;
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenTitle));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenTitle));
     if (lenTitle) strncpy(a+p+2,Title.getPtr(),lenTitle);
     p+=lenTitle+2;
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenRemarks));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenRemarks));
     if (lenRemarks) strncpy(a+p+2,Remarks.getPtr(),lenRemarks);
     p+=lenRemarks+2;
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenAlbum));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenAlbum));
     if (lenAlbum) strncpy(a+p+2,Album.getPtr(),lenAlbum);
     p+=lenAlbum+2;
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenTags));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenTags));
     if (lenTags) strncpy(a+p+2,Tags.getPtr(),lenTags);
     p+=lenTags+2;
-    ppl7::Poke16(a+p,static_cast<ppluint16>(lenCoverPreview));
+    ppl7::Poke16(a+p,static_cast<uint16_t>(lenCoverPreview));
     if (lenCoverPreview) memcpy(a+p+2,CoverPreview.ptr(),lenCoverPreview);
     p+=lenCoverPreview+2;
 }
 
 void DataTitle::Import(const ppl7::ByteArrayPtr &buffer)
 {
-    ppluint8 version=Peek8(buffer,0);
+    uint8_t version=Peek8(buffer,0);
     if (version<1 || version>5) throw UnknownDataFormatVersion("%hhu",version);
     // Die Größe muss mindestens 60 Byte betragen
     if (buffer.size()<60) throw InvalidDataRecord();
