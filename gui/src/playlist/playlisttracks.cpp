@@ -241,9 +241,10 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		}
 	}
 	*/
-	if (endPositionSec==0) {
+	if (endPositionSec==0.0f) {
+		//printf ("endPositionSec==0\n");
 		this->useTraktorCues(File);
-		if (endPositionSec==0) endPositionSec=trackLength;
+		if (endPositionSec==0.0f) endPositionSec=trackLength;
 		updateMixLength();
 	}
 	if (titleId==0) titleId=findTitleIdByFilename(File);

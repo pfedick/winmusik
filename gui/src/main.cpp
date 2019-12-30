@@ -51,7 +51,7 @@ void help()
 
 int main(int argc, char *argv[])
 {
-    printf ("DEBUG\n");
+    //printf ("DEBUG\n");
     ppl6::PPLInit();
     //ppl6::grafix::CGrafix gfx;
 	if (ppl6::getargv(argc,argv,"-h")!=NULL || ppl6::getargv(argc,argv,"--help")!=NULL) {
@@ -69,6 +69,10 @@ int main(int argc, char *argv[])
 
     if (setlocale(LC_CTYPE,"")==NULL) {
 		printf ("setlocale fehlgeschlagen\n");
+		throw std::exception();
+    }
+    if (setlocale(LC_NUMERIC,"C")==NULL) {
+		printf ("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
 		throw std::exception();
     }
     //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
