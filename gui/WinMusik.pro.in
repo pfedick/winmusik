@@ -60,7 +60,6 @@ INCLUDEPATH += pplib/include
 
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
-win32:INCLUDEPATH += D:/jenkins/local/include
 win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
