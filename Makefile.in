@@ -42,11 +42,18 @@ gui          := gui
 ### Targets
 ###########################################################################
 
-.PHONY: all $(gui) $(libraries)
+#.PHONY: all $(gui) $(libraries)
+
 all: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
 
 release: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
 
+debug: pplib/debug/libpplib-debug.a lib/release/libwinmusik.a gui/Makefile debug/WinMusik
+
+
+###########################################################################
+### RELEASE
+###########################################################################
 pplib/release/libpplib.a: Makefile pplib/Makefile
 	mkdir -p pplib/release
 	$(MAKE) --directory=pplib release
@@ -62,6 +69,24 @@ release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a
 	mkdir -p release
 	cp gui/release/WinMusik release/WinMusik
 
+###########################################################################
+### DEBUG
+###########################################################################
+
+pplib/debug/libpplib-debug.a: Makefile pplib/Makefile
+	mkdir -p pplib/debug
+	$(MAKE) --directory=pplib debug
+
+debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a
+	mkdir -p gui/debug
+	rm -rf gui/debug/WinMusik
+	$(MAKE) --directory=gui debug
+	mkdir -p debug
+	cp gui/debug/WinMusik debug/WinMusik
+
+###########################################################################
+### DEBUG
+###########################################################################
 
 install: release/WinMusik Makefile
 	mkdir -p $(PREFIX)/bin $(PREFIX)/share/pixmaps $(PREFIX)/share/applications $(PREFIX)/share/doc/WinMusik
