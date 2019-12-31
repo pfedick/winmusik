@@ -254,8 +254,10 @@ void PlaylistItem::importFromXML(QDomElement &e)
 void PlaylistItem::updateMixLength()
 {
 	mixLength=endPositionSec-startPositionSec;
-	for (int i=0;i<5;i++) {
-		mixLength-=(cutEndPosition[i]-cutStartPosition[i]);
+	for (int i=0;i<5;i++) mixLength-=(cutEndPosition[i]-cutStartPosition[i]);
+	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) {
+		float perc=(float)bpmPlayed*100.0f/(float)bpm;
+		mixLength=mixLength*100.0f/perc;
 	}
 }
 

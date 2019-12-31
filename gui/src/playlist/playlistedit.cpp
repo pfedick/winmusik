@@ -304,10 +304,8 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->cutEndPosition[2]=getSecondsFromLine(ui.cutEnd2);
 	item->cutEndPosition[3]=getSecondsFromLine(ui.cutEnd3);
 	item->cutEndPosition[4]=getSecondsFromLine(ui.cutEnd4);
-	item->mixLength=item->endPositionSec-item->startPositionSec;
 	item->CoverPreview=CoverPreview;
-	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
-	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*item->bpm/item->bpmPlayed;
+	item->updateMixLength();
 }
 
 float PlaylistEdit::getSecondsFromLine(QLineEdit *line)
@@ -329,7 +327,10 @@ void PlaylistEdit::updateTotalTime()
 	length-=(getSecondsFromLine(ui.cutEnd4)-getSecondsFromLine(ui.cutStart4));
 	int bpm=ui.bpm->text().trimmed().toInt();
 	int bpmPlayed=ui.bpmPlayed->text().trimmed().toInt();
-	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) length=length*(float)bpm/(float)bpmPlayed;
+	if (bpm>0 && bpmPlayed>0 && bpmPlayed!=bpm) {
+		float perc=(float)bpmPlayed*100.0f/(float)bpm;
+		length=length*100.0f/perc;
+	}
 	ui.mixLength->setText(floatTimeToString(length));
 }
 

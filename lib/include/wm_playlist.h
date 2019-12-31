@@ -57,6 +57,8 @@ class PlaylistItem
 		ppl7::String getExistingFilename() const;
 		void importFromXML(const ppl7::String &xml);
 		void loadCoverPreview();
+
+		float calcMixLength() const;
 };
 
 class Playlist

@@ -849,9 +849,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 
 void Playlist::calcMixLength(PlaylistItem *item)
 {
-	item->mixLength=item->endPositionSec-item->startPositionSec;
-	for (int i=0;i<5;i++) item->mixLength-=(item->cutEndPosition[i]-item->cutStartPosition[i]);
-	if (item->bpm>0 && item->bpmPlayed>0 && item->bpmPlayed!=item->bpm) item->mixLength=item->mixLength*(float)item->bpm/(float)item->bpmPlayed;
+	item->updateMixLength();
 }
 
 void Playlist::showEvent(QShowEvent * event)
