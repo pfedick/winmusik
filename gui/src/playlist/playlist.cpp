@@ -397,6 +397,7 @@ void Playlist::handleDropEvent(QDropEvent *event)
         event->ignore();
         return;
     }
+    //printf("Playlist::handleDropEvent\n");
 	event->accept();
 	ui.tracks->unselectItems();
 	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");

@@ -414,13 +414,15 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
     PlaylistItem *item = static_cast<PlaylistItem*>(itemAt(e->pos()));
 	if (item) {
 		if (item!=lastmoveitem) {
-			if (lastmoveitem) lastmoveitem->setSelected(false);
+			unselectItems();
+			//if (lastmoveitem) lastmoveitem->setSelected(false);
 			this->scrollToItem(item);
 			lastmoveitem=item;
 		}
 		item->setSelected(true);
 	} else if (lastmoveitem) {
-		lastmoveitem->setSelected(false);
+		//lastmoveitem->setSelected(false);
+		unselectItems();
         lastmoveitem=nullptr;
 	}
 
@@ -430,7 +432,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent *e)
 
 bool PlaylistTracks::dropMimeData(QTreeWidgetItem *parent, int , const QMimeData *data, Qt::DropAction)
 {
-	//printf ("PlaylistTracks::dropMimeData, parent=%tu, index=%i\n",(ptrdiff_t)parent,index);
+	//printf ("PlaylistTracks::dropMimeData\n");
 	ppl6::CString Tmp;
 	playlist->handleDropEvent(data,parent);
     lastmoveitem=nullptr;
@@ -458,10 +460,18 @@ void PlaylistTracks::dropEvent ( QDropEvent * event )
 
 void PlaylistTracks::deleteSourceItems(QDropEvent * event)
 {
+	//printf("PlaylistTracks::deleteSourceItems\n");
 	const QMimeData *mime=event->mimeData();
 	if (!mime) return;
-	ppl6::CString xml=mime->text();
+	//ppl6::CString xml=mime->text();
+	QByteArray ba=mime->data("application/winmusik+xml");
+	ppl6::CString xml;
+	xml.Set(ba.constData(),ba.length());
+
+	//printf("debug 1\n");
+	//xml.Print(true);
 	if (xml.Left(18)!="<winmusikTracklist") return;
+	//printf ("winmusikTracklist\n");
 	QDomDocument doc("winmusikTracklist");
 	if (doc.setContent(xml)) {
 		QDomElement root=doc.documentElement();
