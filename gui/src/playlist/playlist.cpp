@@ -1173,7 +1173,7 @@ void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int column)
 		if (harmonicsHighlighted) unHighlightHarmonicKeys();
 		QClipboard *clipboard = QApplication::clipboard();
 		ppl6::CString Text;
-		if (key&Qt::MetaModifier) {
+		if (key&(Qt::AltModifier|Qt::MetaModifier)) {
 			Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
 		} else {
 			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
