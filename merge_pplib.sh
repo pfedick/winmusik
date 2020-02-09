@@ -54,7 +54,7 @@ do
 done	
 	
 
-sources=`find src/sound/AudioInfo.cpp src/sound/CID3Tag.cpp src/sound/mp3.cpp \
+sources=`find src/sound/AudioInfo.cpp src/sound/CID3Tag.cpp \
 	src/sound/AudioCD.cpp src/sound/Cddb.cpp \
 	src/vars/*.cpp src/core/CAVLTree.cpp src/core/CDebug.cpp src/core/CDir.cpp \
 	src/core/CFile.cpp src/core/CFileObject.cpp src/core/CIconv.cpp \
