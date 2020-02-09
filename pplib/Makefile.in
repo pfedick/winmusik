@@ -89,6 +89,7 @@ RELEASE	= release/ppl6_AudioCD.o \
 	release/ppl6_functions.o \
 	release/ppl6_md5.o \
 	release/ppl6_MemoryHeap.o \
+	release/ppl6_mp3.o \
 	release/ppl6_pplcore.o \
 	release/ppl6_random.o \
 	release/ppl6_strings.o \
@@ -186,6 +187,7 @@ DEBUG	= debug/ppl6_AudioCD.o \
 	debug/ppl6_functions.o \
 	debug/ppl6_md5.o \
 	debug/ppl6_MemoryHeap.o \
+	debug/ppl6_mp3.o \
 	debug/ppl6_pplcore.o \
 	debug/ppl6_random.o \
 	debug/ppl6_strings.o \
@@ -394,6 +396,9 @@ release/ppl6_md5.o:	ppl6/ppl6_md5.cpp Makefile
 
 release/ppl6_MemoryHeap.o:	ppl6/ppl6_MemoryHeap.cpp Makefile  
 	$(CXX) -Wall $(CXXFLAGS) -o release/ppl6_MemoryHeap.o -c ppl6/ppl6_MemoryHeap.cpp $(CFLAGS) 
+
+release/ppl6_mp3.o:	ppl6/ppl6_mp3.cpp Makefile  
+	$(CXX) -Wall $(CXXFLAGS) -o release/ppl6_mp3.o -c ppl6/ppl6_mp3.cpp $(CFLAGS) 
 
 release/ppl6_pplcore.o:	ppl6/ppl6_pplcore.cpp Makefile  
 	$(CXX) -Wall $(CXXFLAGS) -o release/ppl6_pplcore.o -c ppl6/ppl6_pplcore.cpp $(CFLAGS) 
@@ -680,6 +685,9 @@ debug/ppl6_md5.o:	ppl6/ppl6_md5.cpp Makefile
 
 debug/ppl6_MemoryHeap.o:	ppl6/ppl6_MemoryHeap.cpp Makefile  
 	$(CXX) -Wall $(CXXFLAGS) -o debug/ppl6_MemoryHeap.o -c ppl6/ppl6_MemoryHeap.cpp -ggdb -D_DEBUG $(CFLAGS) -DDEBUG=DEBUG 
+
+debug/ppl6_mp3.o:	ppl6/ppl6_mp3.cpp Makefile  
+	$(CXX) -Wall $(CXXFLAGS) -o debug/ppl6_mp3.o -c ppl6/ppl6_mp3.cpp -ggdb -D_DEBUG $(CFLAGS) -DDEBUG=DEBUG 
 
 debug/ppl6_pplcore.o:	ppl6/ppl6_pplcore.cpp Makefile  
 	$(CXX) -Wall $(CXXFLAGS) -o debug/ppl6_pplcore.o -c ppl6/ppl6_pplcore.cpp -ggdb -D_DEBUG $(CFLAGS) -DDEBUG=DEBUG 
