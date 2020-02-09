@@ -2,6 +2,7 @@
 #define WM_DATAOBJECTS_H
 
 #include <ppl7.h>
+#include <queue>
 
 namespace de {
 namespace pfp {
@@ -26,7 +27,7 @@ class CID3TagSaver : public ppl7::Thread
 		std::queue<WorkItem> Todo;
 		int PaddingSize;
 		int RetryIntervall;
-		void UpdateNow(const WorkItem &item);
+		void UpdateNow(const CID3TagSaver::WorkItem &item);
 
 	public:
 		CID3TagSaver();

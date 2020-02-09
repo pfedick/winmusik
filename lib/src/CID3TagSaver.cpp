@@ -78,10 +78,8 @@ CID3TagSaver::~CID3TagSaver()
  * Aufträge in der Queue sind, werden diese nicht mehr abgearbeitet.
  */
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","~CID3TagSaver",__FILE__,__LINE__,"Stoppe Thread");
 	threadSignalStop();
 	threadStop();
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","~CID3TagSaver",__FILE__,__LINE__,"done");
 }
 
 void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag, bool writev1, bool writev2)
@@ -117,7 +115,7 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
 }
 
 
-int CID3TagSaver::UpdateNow(const WorkItem &item)
+void CID3TagSaver::UpdateNow(const CID3TagSaver::WorkItem &item)
 /*!\brief Auftrag ausführen
  *
  * Mit dieser Funktion wird ein ID3-Tag sofort in die angegebene Datei geschrieben, ohne
@@ -129,37 +127,26 @@ int CID3TagSaver::UpdateNow(const WorkItem &item)
  */
 
 {
-	if (wmlog) {
-		wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"UpdateNow: %s",filename);
-		wmlog->PrintArray(ppl6::LOG::DEBUG,5,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,Tags,"tags:");
-	}
-
 	ppl7::ID3Tag Tag;
 	Tag.setPaddingSize(PaddingSize);
 	Tag.setMaxPaddingSpace(PaddingSize);
-
 	uint32_t e;
 
 #ifdef TODO
 	if(Tags.)
 	ppl7::String NewFilename=ppl7::to7(Tags->Get("renamefile");
 	if ((NewFilename.NotEmpty()) && NewFilename!=filename) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,7,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"File should be renamed from >>%s<< to >>%s<<",filename,(const char*)NewFilename);
         QFile frename(filename);
         if (!frename.rename(NewFilename)) {
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"ERROR, rename failed");
 			return 0;
 		}
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,7,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"File successfully renamed");
 		filename=NewFilename;
 		Tags->Delete("renamefile");
 	}
 
 	if (!Tag.Load(filename)) {
 		e=ppl6::GetErrorCode();
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"UpdateNow Tag.Load failed: %u",e);
 		if (e<402 || e> 405) {
-			if (wmlog) wmlog->LogError();
 			return 0;
 		}
 	}
@@ -227,23 +214,15 @@ int CID3TagSaver::UpdateNow(const WorkItem &item)
 	}
 
 	if (changes==false) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Tags did not change, skipping update: %s",filename);
 		return 1;
 	}
 
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Saving: %s",filename);
 	if (!Tag.Save()) {
 		ppl6::PushError();
-		if (wmlog) {
-			wmlog->LogError();
-			wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Failed: %s",filename);
-		}
 		ppl6::PopError();
 		return 0;
 	}
 #endif
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","UpdateNow",__FILE__,__LINE__,"Done: %s",filename);
-	return 1;
 }
 
 void CID3TagSaver::SetPaddingSize(int bytes)
@@ -264,7 +243,6 @@ void CID3TagSaver::SetRetryIntervall(int seconds)
 
 void CID3TagSaver::run()
 {
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","run",__FILE__,__LINE__,"ThreadMain");
 #ifdef TODO
 	ppl6::CAssocArray *Job;
 	ppl6::CAssocArray MyJob;
@@ -301,10 +279,6 @@ void CID3TagSaver::run()
 			Todo.GetCurrentKey(key);
 			Todo.Delete(key);
 			Mutex.Unlock();
-			if (wmlog) {
-				wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"Key: >>%s<<",(const char*)key);
-				wmlog->PrintArray(ppl6::LOG::DEBUG,5,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,&MyJob,"MyJob");
-			}
 			if (!UpdateNow(MyJob.Get("filename"),MyJob.GetArray("tags"),MyJob.IsTrue("cleartag"))) {
 				// Update hat nicht funktioniert
 				int e=ppl6::GetErrorCode();
@@ -312,20 +286,12 @@ void CID3TagSaver::run()
 					Mutex.Lock();
 					MyJob.Setf("retry","%llu",ppl6::GetTime()+10);
 					Todo.Set(key,MyJob);
-					if (wmlog) {
-						wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"Retry");
-					}
 					Mutex.Unlock();
-				} else {
-					if (wmlog) {
-						wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"Auftrag wird aus TODO-Liste gelöscht");
-					}
 				}
 			}
 		}
 	}
 #endif
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG,1,"CID3TagSaver","ThreadMain",__FILE__,__LINE__,"Thread wurde beendet");
 }
 
 
