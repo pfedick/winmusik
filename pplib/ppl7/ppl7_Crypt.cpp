@@ -492,6 +492,14 @@ void Encrypt::encrypt(const ByteArrayPtr &in, ByteArray &out)
 #endif
 }
 
+
+ByteArray Encrypt::encrypt(const ByteArrayPtr &in)
+{
+	ByteArray out;
+	encrypt(in,out);
+	return out;
+}
+
 /***********************************************************************************************************
  * Decrypt
  ***********************************************************************************************************/
@@ -620,6 +628,13 @@ void Decrypt::decrypt(const ByteArrayPtr &in, ByteArray &out)
     }
     out.useadr(outbuf,static_cast<size_t>(outlen+outlen_final));
 #endif
+}
+
+ByteArray Decrypt::decrypt(const ByteArrayPtr &in)
+{
+	ByteArray out;
+	decrypt(in,out);
+	return out;
 }
 
 

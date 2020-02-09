@@ -209,6 +209,8 @@ class ByteArrayPtr
 		String toHex() const;
 		String toBase64() const;
 		const char* toCharPtr() const;
+		const char*	map(size_t position, size_t size);
+		void truncate(size_t position);
 		String md5() const;
 		uint32_t crc32() const;
 		unsigned char operator[](size_t pos) const;
@@ -271,8 +273,6 @@ public:
 
 };
 std::ostream& operator<<(std::ostream& s, const ByteArray &ba);
-
-ByteArray fromBase64(const String &base64);
 
 class String
 {

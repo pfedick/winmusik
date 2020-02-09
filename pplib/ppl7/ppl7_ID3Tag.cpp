@@ -536,10 +536,14 @@ ID3Tag::AudioFormat ID3Tag::identAudioFormat(FileObject &File)
 	const char *adr=File.map(0,12);
 	if (!adr) return AF_UNKNOWN;
 	//HexDump((void*)adr,12);
-	//printf ("PeekN32(adr+4)=%d, File.Size=%d\n",ppl6::PeekN32(adr+4), (uint32_t)File.Size() );
+	//printf ("PeekN32(adr+4)=%ud, File.Size=%d\n",ppl7::PeekN32(adr+4), (uint32_t)File.size() );
 	if (PeekN32(adr+4)<File.size()
 			&& PeekN32(adr+0)==0x464F524D
 			&& PeekN32(adr+8)==0x41494646) return AF_AIFF;
+	if (Peek32(adr+4)<=File.size()-8
+			&& strncmp(adr+0,"RIFF",4)==0
+			&& strncmp(adr+8,"WAVE",4)==0) return AF_WAVE;
+
 	if (IdentMPEG(File,NULL)) return AF_MP3;
 	return AF_UNKNOWN;
 }
@@ -558,6 +562,28 @@ uint64_t ID3Tag::findId3Tag(FileObject &File)
 				return p+8;
 			}
 			p+=PeekN32(adr+4)+8;
+		}
+	} else if (myAudioFormat==AF_WAVE) {
+#ifdef ID3DEBUG
+		printf ("ID3Tag::findId3Tag: Have WAVE, Filesize: %llu\n",File.size());
+#endif
+		uint64_t p=12;
+		while (p<File.size()-8) {
+			const char *adr=File.map(p,8);
+			if (!adr) break;
+#ifdef ID3DEBUG
+			ppl7::HexDump(adr,8);
+#endif
+			if (Peek32(adr)==0x20336469) {
+#ifdef ID3DEBUG
+				printf ("found id3 tag with size %u\n",Peek32(adr+4));
+#endif
+				return p+8;
+			}
+			p+=Peek32(adr+4)+8;
+#ifdef ID3DEBUG
+			printf ("size ist: %u+8, p ist jetzt: %llu\n", Peek32(adr+4),p);
+#endif
 		}
 	}
 	return (uint64_t)-1;
@@ -578,6 +604,32 @@ void ID3Tag::load(const String &filename)
 	Filename=filename;
 }
 
+
+static size_t synchronize(unsigned char *adr, size_t size)
+{
+	size_t src=0;
+	size_t tgt=0;
+	for(src=0;src<size-3;src+=1) {
+		unsigned char byte=adr[src];
+		adr[tgt]=byte;
+		tgt++;
+
+		if (byte==255) {
+			//HexDump(adr+src,10);
+			if (adr[src+1]==0 && (adr[src+2]&(32+64+128))==(32+64+128)) {
+				adr[tgt]=adr[src+2];
+				src+=2;
+				tgt++;
+			} else if (adr[src+1]==0 && adr[src+2]==0) {
+				adr[tgt]=0;
+				src+=2;
+				tgt++;
+			}
+		}
+	}
+	return tgt;
+}
+
 /*!\brief ID3-Tags aus einem CFileObject laden
  *
  * \desc
@@ -595,9 +647,13 @@ void ID3Tag::load(FileObject &file)
 		return;
 	}
 	const char *adr=file.map(p,10);
+#ifdef ID3DEBUG
+			ppl7::HexDump(adr,10);
+#endif
 	if (strncmp(adr,"ID3",3)!=0) {
 		return;
 	}
+
 	int version=0;
 	if (Peek8(adr+3)==3 && Peek8(adr+4)==0) version=3;			// Version 2.3
 	else if (Peek8(adr+3)==4 && Peek8(adr+4)==0) version=4;		// Version 2.4
@@ -606,11 +662,18 @@ void ID3Tag::load(FileObject &file)
 	}
 	Flags=Peek8(adr+5);
 	bool extendedHeader=false;
+	bool unsyncFlag=false;
+	bool experimentalFlag=false;
+	bool footerFlag=false;
 	if (Flags&128) {		// Unsynchonisation-Flag gesetzt
-		throw UnsupportedID3TagVersionException("Unsynchonisation-Flag is not supported");
+		unsyncFlag=true;
 	}
 	if (Flags&64) {			// Extended Header Flag
 		extendedHeader=true;
+	}
+	if (version>3) {
+		if (Flags&32) experimentalFlag=true;	// Experimental Flag is set
+		if (Flags&16) footerFlag=true;			// Footer is present
 	}
 	Size=Peek8(adr+9);
 	int s=Peek8(adr+8);
@@ -620,14 +683,20 @@ void ID3Tag::load(FileObject &file)
 	s=Peek8(adr+6);
 	Size|=s<<21;
 
-	p+=10;
+	// Read Tag into Memory
+	ppl7::ByteArray buffer;
+	file.seek(p);
+	file.read(buffer,Size+10);
+	p=10;
+	int exHdrSize=0;
+	int footerSize=0;
 	if (extendedHeader) {
-		adr=file.map(p,4);
+		adr=buffer.map(p,4);
 #ifdef ID3DEBUG
 		printf ("Extended Header detected:\n");
 		HexDump(adr,4);
 #endif
-		int exHdrSize=Peek8(adr+3);
+		exHdrSize=Peek8(adr+3);
 		exHdrSize|=(Peek8(adr+2))<<7;
 		exHdrSize|=(Peek8(adr+1))<<14;
 		exHdrSize|=(Peek8(adr+0))<<21;
@@ -635,11 +704,13 @@ void ID3Tag::load(FileObject &file)
 	}
 
 	#ifdef ID3DEBUG
-		printf ("ID3 V2-Tag gefunden, Flags: %i, Länge: %i Bytes\n",Flags,Size);
+		printf ("ID3 V2-Tag gefunden, Flags: %i, Laenge: %i Bytes\n",Flags,Size);
 	#endif
+
+
 	// Jetzt lesen wir alle Frames in den Speicher
-	while (p<file.size()-10) {
-		adr=file.map(p,10);
+	while (p<buffer.size()-10-exHdrSize-footerSize) {
+		adr=buffer.map(p,10);
 		if (!adr) break;
 #ifdef ID3DEBUG
 		HexDump((void*)adr,10);
@@ -657,11 +728,17 @@ void ID3Tag::load(FileObject &file)
 			delete Frame;
 			break;
 		}
-		adr=file.map(p+10,Frame->Size);
+		adr=buffer.map(p+10,Frame->Size);
 		if (adr) {
 			//HexDump(adr,Frame->Size);
-			Frame->data=(char*)malloc(Frame->Size);
-			if (Frame->data) memcpy(Frame->data,adr,Frame->Size);
+			if (unsyncFlag) {
+				size_t newSize=synchronize((unsigned char*)adr,Frame->Size);
+				Frame->data=(char*)malloc(newSize);
+				if (Frame->data) memcpy(Frame->data,adr,newSize);
+			} else {
+				Frame->data=(char*)malloc(Frame->Size);
+				if (Frame->data) memcpy(Frame->data,adr,Frame->Size);
+			}
 			addFrame(Frame);
 		} else {
 			delete Frame;
@@ -1159,6 +1236,7 @@ void ID3Tag::save()
 	}
 	if (myAudioFormat==AF_MP3) saveMP3();
 	else if (myAudioFormat==AF_AIFF) saveAiff();
+	//else if (myAudioFormat==AF_WAVE) saveWave();
 	else throw UnsupportedAudioFormatException("FormatId=%d",myAudioFormat);
 }
 

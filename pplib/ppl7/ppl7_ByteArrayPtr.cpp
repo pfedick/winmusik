@@ -204,6 +204,20 @@ const void *ByteArrayPtr::adr() const
 	return ptradr;
 }
 
+const char*	ByteArrayPtr::map(size_t position, size_t size)
+{
+	if (position+size>=ptrsize) throw ppl7::OverflowException("ByteArrayPtr::map position (%zu) + size (%zu) exceeds size of ByteArray (%zu > %zu)",
+			position,size,position+size,ptrsize);
+	return (const char*)ptradr+position;
+}
+
+void ByteArrayPtr::truncate(size_t position)
+{
+	if (position>ptrsize) throw ppl7::OverflowException("ByteArrayPtr::truncate position exceeds size of ByteArray (%zu > %zu)",
+			position,ptrsize);
+	ptrsize=position;
+}
+
 /*!\brief Adresse des Speicherblocks auslesen
  *
  * \desc

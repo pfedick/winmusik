@@ -109,6 +109,7 @@ public:
     void update(const ByteArrayPtr &in, ByteArray &out);
     void final(ByteArray &out);
     void encrypt(const ByteArrayPtr &in, ByteArray &out);
+    ByteArray encrypt(const ByteArrayPtr &in);
 };
 
 class Decrypt : public Crypt
@@ -121,6 +122,7 @@ public:
     void update(const ByteArrayPtr &in, ByteArray &out);
     void final(ByteArray &out);
     void decrypt(const ByteArrayPtr &in, ByteArray &out);
+    ByteArray decrypt(const ByteArrayPtr &in);
 };
 
 class Digest
