@@ -44,11 +44,11 @@ gui          := gui
 
 #.PHONY: all $(gui) $(libraries)
 
-all: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
+all: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
 
-release: pplib/release/libpplib.a lib/release/libwinmusik.a gui/Makefile release/WinMusik
+release: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
 
-debug: pplib/debug/libpplib-debug.a lib/release/libwinmusik.a gui/Makefile debug/WinMusik
+debug: pplib/debug/libpplib-debug.a lib/compile/libwinmusik.a gui/Makefile debug/WinMusik
 
 
 ###########################################################################
@@ -58,11 +58,11 @@ pplib/release/libpplib.a: Makefile pplib/Makefile
 	mkdir -p pplib/release
 	$(MAKE) --directory=pplib release
 
-lib/release/libwinmusik.a: Makefile pplib/release/libpplib.a
-	mkdir -p lib/release
+lib/compile/libwinmusik.a: Makefile
+	mkdir -p lib/compile
 	$(MAKE) --directory=lib release
 
-release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a
+release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/release/libwinmusik.a
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -77,7 +77,7 @@ pplib/debug/libpplib-debug.a: Makefile pplib/Makefile
 	mkdir -p pplib/debug
 	$(MAKE) --directory=pplib debug
 
-debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a
+debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/compile/libwinmusik.a
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug
