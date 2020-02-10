@@ -1,9 +1,20 @@
+CC = @CC@
+CXX	= @CXX@
 GTEST_DIR	= googletest-release-1.10.0/googletest
 EXTRA_CFLAGS = 
-INCLUDE	= -I. -I../include -I$(GTEST_DIR)/include
-CFLAGS	= -ggdb -Wall  $(INCLUDE) @LIBPPL7_CFLAGS@ $(EXTRA_CFLAGS)
-LIBS	= -L../compile -lwinmusik3   @LIBPPL7_RELEASE_LIBS@ -lstdc++
-LIBS_COVERAGE	= -L../compile -lwinmusik3   @LIBPPL7_RELEASE_LIBS@  -lgcov -lstdc++
+INCLUDE	= -I. -I../include -I../../pplib/include -I$(GTEST_DIR)/include
+CFLAGS	= -ggdb -Wall  $(INCLUDE) @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@ \
+	 @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ @LIBCURL_CPPFLAGS@ \
+	 @LIBCDIO_CFLAGS@ $(EXTRA_CFLAGS)
+CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS	= compile/libgtest.a -L../compile -lwinmusik3 ../../pplib/release/libpplib.a \
+	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ \
+	@BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@ \
+	@OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@ \
+	@LIBCDIO_LDFLAGS@ \
+	-lstdc++
+LIBS_COVERAGE	= compile/libgtest.a -L../compile -lwinmusik3   ../../pplib/release/libpplib.a  -lgcov -lstdc++
 PROGNAME = testsuite
 
 

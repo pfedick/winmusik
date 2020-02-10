@@ -52,6 +52,7 @@ void iterate(const std::map<ppl7::String,TraktorTagFrame> frames, int indent=0)
 	}
 }
 
+#ifdef TODO
 TEST_F(TraktorTest, load) {
 	ppl7::ID3Tag Tag;
 	Tag.load("/musik/mp3/07/746/061-Mauro Picotto - Komodo (Binary Finary Extended Remix).mp3");
@@ -75,7 +76,7 @@ TEST_F(TraktorTest, load) {
 	*/
 }
 
-
+#endif
 
 
 

@@ -12,7 +12,8 @@ OBJS =	compile/object_title.o \
 	compile/object_storagedata.o \
 	compile/functions.o \
 	compile/CID3TagSaver.o \
-	compile/CWMFile.o
+	compile/CWMFile.o \
+	compile/traktor.o
 
 TARGET =	compile/libwinmusik3.a
 
@@ -58,7 +59,7 @@ compile/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
 	-mkdir -p compile
 	$(CXX) $(CXXFLAGS) -o compile/MusicalKeys.o -c src/MusicalKeys.cpp
 
-compile/traktor.o: src/traktor.cpp include/traktor.h Makefile
+compile/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
 	-mkdir -p compile
 	$(CXX) $(CXXFLAGS) -o compile/traktor.o -c src/traktor.cpp
 	

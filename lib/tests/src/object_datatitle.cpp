@@ -28,9 +28,9 @@ protected:
 
 TEST_F(DataTitleTest, Constructor) {
     DataTitle Ti;
-    ASSERT_EQ((ppluint32)0, Ti.getFilePos());
-    ASSERT_EQ((ppluint32)0, Ti.getLastchange());
-    ASSERT_EQ((ppluint32)0, Ti.getVersion());
+    ASSERT_EQ((uint32_t)0, Ti.getFilePos());
+    ASSERT_EQ((uint32_t)0, Ti.getLastchange());
+    ASSERT_EQ((uint32_t)0, Ti.getVersion());
 
 }
 
