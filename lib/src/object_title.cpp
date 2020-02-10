@@ -1,6 +1,8 @@
 #include "wm_dataobjects.h"
 #include "wm_cwmfile.h"
 #include "wm_functions.h"
+#include <stdlib.h>
+#include <string.h>
 
 namespace de {
 namespace pfp {
