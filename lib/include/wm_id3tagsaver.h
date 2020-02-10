@@ -8,8 +8,6 @@ namespace de {
 namespace pfp {
 namespace winmusik {
 
-PPL7EXCEPTION(CouldNotRenameFileException,Exception)
-
 class CID3TagSaver : public ppl7::Thread
 {
 	private:
