@@ -62,7 +62,7 @@ lib/compile/libwinmusik.a: Makefile
 	mkdir -p lib/compile
 	$(MAKE) --directory=lib release
 
-release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/release/libwinmusik.a
+release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/compile/libwinmusik.a
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
