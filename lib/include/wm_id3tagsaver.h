@@ -8,6 +8,8 @@ namespace de {
 namespace pfp {
 namespace winmusik {
 
+PPL7EXCEPTION(CouldNotRenameFileException,Exception)
+
 class CID3TagSaver : public ppl7::Thread
 {
 	private:
@@ -27,7 +29,7 @@ class CID3TagSaver : public ppl7::Thread
 		std::queue<WorkItem> Todo;
 		int PaddingSize;
 		int RetryIntervall;
-		void UpdateNow(const CID3TagSaver::WorkItem &item);
+		void UpdateNow(CID3TagSaver::WorkItem &item);
 
 	public:
 		CID3TagSaver();

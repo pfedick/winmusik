@@ -97,6 +97,7 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
  * \arg \c genre Das Genre des Titels (String)
  * \arg \c comment Kommentar
  * \arg \c album Album
+ * \arg \c renamefile Datei umbenennen in neuen Namen
  * \param[in] cleartag Hat diese Variable den Wert \c true, wird ein vorhandener ID3v2-Tag zunächst
  * gelöscht und mit dem neuen überschrieben. Ist dies nicht der Fall, werden nur die gesetzten Werte
  * überschrieben.
@@ -115,7 +116,7 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
 }
 
 
-void CID3TagSaver::UpdateNow(const CID3TagSaver::WorkItem &item)
+void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem &item)
 /*!\brief Auftrag ausführen
  *
  * Mit dieser Funktion wird ein ID3-Tag sofort in die angegebene Datei geschrieben, ohne
@@ -130,99 +131,79 @@ void CID3TagSaver::UpdateNow(const CID3TagSaver::WorkItem &item)
 	ppl7::ID3Tag Tag;
 	Tag.setPaddingSize(PaddingSize);
 	Tag.setMaxPaddingSpace(PaddingSize);
-	uint32_t e;
-
-#ifdef TODO
-	if(Tags.)
-	ppl7::String NewFilename=ppl7::to7(Tags->Get("renamefile");
-	if ((NewFilename.NotEmpty()) && NewFilename!=filename) {
-        QFile frename(filename);
-        if (!frename.rename(NewFilename)) {
-			return 0;
-		}
-		filename=NewFilename;
-		Tags->Delete("renamefile");
+	if (item.Tags.exists("renamefile")==true and item.Tags.getString("renamefile")!=item.Filename) {
+		ppl7::File::rename(item.Filename, item.Tags.getString("renamefile"));
+		item.Filename=item.Tags.getString("renamefile");
+		item.Tags.remove("renamefile");
 	}
-
-	if (!Tag.Load(filename)) {
-		e=ppl6::GetErrorCode();
-		if (e<402 || e> 405) {
-			return 0;
-		}
-	}
+	Tag.load(item.Filename);
 	bool changes=false;
-	if (cleartag) {
+	if (item.cleartag) {
 		// Cover retten, falls vorhanden
-		ppl6::CBinary Cover;
-		Tag.GetPicture(3,Cover);
-		Tag.ClearTags();
-		if (Cover.Size()>0) Tag.SetPicture(3,Cover,"image/jpeg");
+		ppl7::ByteArray Cover;
+		Tag.getPicture(3,Cover);
+		Tag.clearTags();
+		if (Cover.size()>0) Tag.setPicture(3,Cover,"image/jpeg");
 		changes=true;
 	}
-	if (Tag.GetArtist()!=Tags->ToCString("artist")) {
-		Tag.SetArtist(Tags->Get("artist"));
+	ppl7::String empty;
+	if (item.Tags.getString("artist",empty)!=Tag.getArtist()) {
+		Tag.setArtist(item.Tags.getString("artist",empty));
 		changes=true;
 	}
-	if (Tag.GetTitle()!=Tags->ToCString("title")) {
-		Tag.SetTitle(Tags->Get("title"));
+	if (Tag.getTitle()!=item.Tags.getString("title",empty)) {
+		Tag.setTitle(item.Tags.getString("title",empty));
 		changes=true;
 	}
-	if (Tag.GetRemixer()!=Tags->ToCString("version")) {
-		Tag.SetRemixer(Tags->Get("version"));
+	if (Tag.getRemixer()!=item.Tags.getString("version",empty)) {
+		Tag.setRemixer(item.Tags.getString("version",empty));
 		changes=true;
 	}
-	if (Tag.GetYear()!=Tags->ToCString("year")) {
-		Tag.SetYear(Tags->Get("year"));
+	if (Tag.getYear()!=item.Tags.getString("year",empty)) {
+		Tag.setYear(item.Tags.getString("year",empty));
 		changes=true;
 	}
-	if (Tag.GetTrack()!=Tags->ToCString("track")) {
-		Tag.SetTrack(Tags->Get("track"));
+	if (Tag.getTrack()!=item.Tags.getString("track",empty)) {
+		Tag.setTrack(item.Tags.getString("track",empty));
 		changes=true;
 	}
-	if (Tag.GetGenre()!=Tags->ToCString("genre")) {
-		Tag.SetGenre(Tags->Get("genre"));
+	if (Tag.getGenre()!=item.Tags.getString("genre",empty)) {
+		Tag.setGenre(item.Tags.getString("genre",empty));
 		changes=true;
 	}
-	if (Tag.GetComment()!=Tags->ToCString("comment")) {
-		Tag.SetComment(Tags->Get("comment"));
+	if (Tag.getComment()!=item.Tags.getString("comment",empty)) {
+		Tag.setComment(item.Tags.getString("comment",empty));
 		changes=true;
 	}
-	if (Tag.GetAlbum()!=Tags->ToCString("album")) {
-		Tag.SetAlbum(Tags->Get("album"));
+	if (Tag.getAlbum()!=item.Tags.getString("album",empty)) {
+		Tag.setAlbum(item.Tags.getString("album",empty));
 		changes=true;
 	}
-	if (Tag.GetLabel()!=Tags->ToCString("publisher")) {
-		Tag.SetLabel(Tags->Get("publisher"));
+	if (Tag.getLabel()!=item.Tags.getString("publisher",empty)) {
+		Tag.setLabel(item.Tags.getString("publisher",empty));
 		changes=true;
 	}
-	if (Tag.GetBPM()!=Tags->ToCString("bpm")) {
-		Tag.SetBPM(Tags->Get("bpm"));
+	if (Tag.getBPM()!=item.Tags.getString("bpm",empty)) {
+		Tag.setBPM(item.Tags.getString("bpm",empty));
 		changes=true;
 	}
-	if (Tag.GetEnergyLevel()!=Tags->ToCString("EnergyLevel")) {
-		Tag.SetEnergyLevel(Tags->Get("EnergyLevel"));
+	if (Tag.getEnergyLevel()!=item.Tags.getString("EnergyLevel",empty)) {
+		Tag.setEnergyLevel(item.Tags.getString("EnergyLevel",empty));
 		changes=true;
 	}
-	if (Tag.GetKey()!=Tags->ToCString("key")) {
-		Tag.SetKey(Tags->Get("key"));
+	if (Tag.getKey()!=item.Tags.getString("key",empty)) {
+		Tag.setKey(item.Tags.getString("key",empty));
 		changes=true;
 	}
-	if (Tag.GetPopularimeter()!=Tags->ToInt("rating")) {
-		Tag.RemovePopularimeter();
-		Tag.SetPopularimeter("winmusik@pfp.de", Tags->ToInt("rating"));
+	empty.set("0");
+	if (Tag.getPopularimeter()!=item.Tags.getString("rating",empty).toInt()) {
+		Tag.removePopularimeter();
+		Tag.setPopularimeter("winmusik@pfp.de", item.Tags.getString("rating",empty).toInt());
 		changes=true;
 	}
 
-	if (changes==false) {
-		return 1;
-	}
-
-	if (!Tag.Save()) {
-		ppl6::PushError();
-		ppl6::PopError();
-		return 0;
-	}
-#endif
+	if (changes==false) return;
+	Tag.save();
 }
 
 void CID3TagSaver::SetPaddingSize(int bytes)
