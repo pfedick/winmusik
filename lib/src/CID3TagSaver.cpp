@@ -108,11 +108,11 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
 {
 	CID3TagSaver::WorkItem item(filename,Tags,cleartag,writev1,writev2);
 	Mutex.lock();
-	Todo.push(item);
+	Queue.push(item);
+	Mutex.unlock();
 	if (!this->threadIsRunning()) {
 		this->threadStart();
 	}
-	Mutex.unlock();
 }
 
 
@@ -224,55 +224,36 @@ void CID3TagSaver::SetRetryIntervall(int seconds)
 
 void CID3TagSaver::run()
 {
-#ifdef TODO
-	ppl6::CAssocArray *Job;
-	ppl6::CAssocArray MyJob;
-	ppl6::CString key;
-	ppluint64 now, retry;
 	int idlecount=0;
-	while (1) {
-		if (ThreadShouldStop()) break;
-		Mutex.Lock();
-		Todo.Reset();
-		if (Todo.Count()==0) {	// Nix zu tun
+	while (this->threadShouldStop()) {
+		Mutex.lock();
+		if (Queue.empty()) {
+			Mutex.unlock();
 			idlecount++;
-			Mutex.Unlock();
-			if (idlecount>10) break;	// Thread wird beendet, da nichts zu tun ist
-			ppl6::MSleep(1000);			// Wir warten eine Sekunde
-			continue;
-		}
-		idlecount=0;
-		while ((Job=Todo.GetNextArray())) {
-			now=ppl6::GetTime();
-			if (!Job) break;
-			// Gibt es ein Retry Flag?
-			retry=ppl6::atoll(Job->Get("retry"));
-			if (!retry) break;	// Nein
-			if (retry<now) break;	// Retry-Zeitpunkt ist erreicht
-		}
-		if (!Job) {
-			Mutex.Unlock();
-			// Nichts zu tun, wir warten
-			ppl6::MSleep(1000);
-			continue;
+			if (idlecount>20) break;	// Thread wird beendet, da nichts zu tun ist
+			ppl7::MSleep(500);
 		} else {
-			MyJob.Copy(Job);
-			Todo.GetCurrentKey(key);
-			Todo.Delete(key);
-			Mutex.Unlock();
-			if (!UpdateNow(MyJob.Get("filename"),MyJob.GetArray("tags"),MyJob.IsTrue("cleartag"))) {
-				// Update hat nicht funktioniert
-				int e=ppl6::GetErrorCode();
-				if (e!=364) {	// Datei existiert nicht
-					Mutex.Lock();
-					MyJob.Setf("retry","%llu",ppl6::GetTime()+10);
-					Todo.Set(key,MyJob);
-					Mutex.Unlock();
+			idlecount=0;
+			WorkItem item=Queue.front();
+			Queue.pop();
+			ppl7::ppl_time_t now=ppl7::GetTime();
+			if (item.retry!=0 && item.retry<now) {
+				Queue.push(item);
+				Mutex.unlock();
+			} else {
+				Mutex.unlock();
+				try {
+					UpdateNow(item);
+				} catch (...) {
+					// back into queue
+					item.retry=ppl7::GetTime()+10;
+					Mutex.lock();
+					Queue.push(item);
+					Mutex.unlock();
 				}
 			}
 		}
 	}
-#endif
 }
 
 

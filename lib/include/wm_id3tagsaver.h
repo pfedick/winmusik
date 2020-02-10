@@ -26,7 +26,7 @@ class CID3TagSaver : public ppl7::Thread
 			WorkItem(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
 		};
 		ppl7::Mutex Mutex;
-		std::queue<WorkItem> Todo;
+		std::queue<WorkItem> Queue;
 		int PaddingSize;
 		int RetryIntervall;
 		void UpdateNow(CID3TagSaver::WorkItem &item);
