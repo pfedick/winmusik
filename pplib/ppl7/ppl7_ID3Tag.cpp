@@ -2079,6 +2079,20 @@ unsigned char ID3Tag::getPopularimeter(const String &email) const
 	return 0;
 }
 
+unsigned char ID3Tag::getPopularimeter() const
+{
+	ID3Frame *frame=firstFrame;
+	while (frame) {
+		if(strcmp(frame->ID,"POPM")==0) {
+			String existingemail=getNullPaddedString(frame,0);
+			return ppl7::Peek8(frame->data+existingemail.size()+1);
+		}
+		frame=frame->nextFrame;
+	}
+	return 0;
+}
+
+
 void ID3Tag::setPopularimeter(const String &email, unsigned char rating)
 {
 	if (email.isEmpty()) return;

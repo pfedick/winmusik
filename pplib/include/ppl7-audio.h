@@ -291,7 +291,7 @@ class ID3Tag
 		ByteArrayPtr getPrivateData(const String &identifier) const;
 
 		unsigned char getPopularimeter(const String &email) const;
-		unsigned char GetPopularimeter() const;
+		unsigned char getPopularimeter() const;
 		bool hasPopularimeter(const String &email) const;
 		void getAllPopularimeters(std::map<String,unsigned char> &data) const;
 		void removePopularimeter();
