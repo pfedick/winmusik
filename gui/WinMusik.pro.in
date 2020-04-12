@@ -141,6 +141,7 @@ SOURCES += src/menue/menue.cpp \
     src/playlist/playlisttracks.cpp \
     src/playlist/editstring.cpp \
     src/playlist/playlistedit.cpp \
+    src/playlist/playlistprint.cpp \
     src/DropArea.cpp \
     src/CHashes.cpp \
     src/edittrackdialog.cpp \

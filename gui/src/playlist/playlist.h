@@ -67,6 +67,7 @@ private:
     QWidget *saveWidget, *saveAsWidget;
 
     ppl6::CString	PlaylistFileName;
+    ppl6::CString   LastPrintFileName;
     bool changed;
     MusicKeyType	musicKeyDisplay;
     ColorScheme     colorscheme;
@@ -172,6 +173,7 @@ public slots:
 	void on_menuSaveAs_triggered();
 
     void on_menuExport_triggered();
+    void on_printPlaylist_triggered();
 
 	void on_menuOpenRecent0_triggered();
 	void on_menuOpenRecent1_triggered();

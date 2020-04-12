@@ -180,6 +180,7 @@ void Playlist::createMenue()
 	menu->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
 	menu->addSeparator();
     menu->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
+    menu->addAction(QIcon(":/icons/resources/printer16.png"),tr("&Print"),this,SLOT(on_printPlaylist_triggered()));
     menu->addSeparator();
 
 	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"),tr("&recent Playlists"));
@@ -207,12 +208,14 @@ void Playlist::createToolbar()
 	saveAsWidget=tb->widgetForAction(action);
 	tb->addSeparator();
     tb->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
+    tb->addAction(QIcon(":/icons/resources/printer16.png"),tr("&Print"),this,SLOT(on_printPlaylist_triggered()));
     tb->addAction(QIcon(":/icons/resources/randomize.png"),tr("shuffle Playlist"),this,SLOT(on_shufflePlaylist_triggered()));
     tb->addSeparator();
 	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
 	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
     tb->addAction(QIcon(":/icons/resources/view_filter.png"),tr("view &Filter"),this,SLOT(on_viewFilter_triggered()));
-	this->addToolBar(tb);
+
+    this->addToolBar(tb);
 
 }
 
