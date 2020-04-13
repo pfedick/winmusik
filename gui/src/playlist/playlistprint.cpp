@@ -286,7 +286,7 @@ void PlayListPrintDJ::print(const PlaylistTracks *tracks, QPrinter &Printer)
     lastbpm=0;
     w=(float)Printer.width()/(float)Printer.widthMM();
     h=(float)Printer.height()/(float)Printer.heightMM();
-    x=3;
+    x=1;
     y=10;
     printHeader(tracks);
     for (int i=0;i<tracks->topLevelItemCount();i++) {
