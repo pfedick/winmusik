@@ -58,7 +58,7 @@ pplib/release/libpplib.a: Makefile pplib/Makefile
 	mkdir -p pplib/release
 	$(MAKE) --directory=pplib release
 
-lib/compile/libwinmusik.a: Makefile
+lib/compile/libwinmusik.a: Makefile lib/Makefile pplib/release/libpplib.a
 	mkdir -p lib/compile
 	$(MAKE) --directory=lib release
 
