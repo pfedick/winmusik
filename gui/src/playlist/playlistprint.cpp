@@ -1,4 +1,5 @@
 #define WITH_QT
+#define PPL_QT_STRING_UTF8
 #include <ppl6.h>
 #include <ppl7.h>
 #include <ppl7-ppl6compat.h>
@@ -131,9 +132,9 @@ void PlayListPrintDJ::printRect(int column, const ppl7::String &text)
 {
 	painter.save();
 	const ColumnDimension &d=dimension[column];
-	painter.drawRect(d.x*w, y*h, d.width*w, 5*h);
-	painter.setClipRect(d.x*w, y*h, (d.width-1)*w, 5*h);
-	painter.drawText((d.x+1)*w,(y+4)*h,text);
+	painter.drawRect((x+d.x)*w, y*h, d.width*w, 5*h);
+	painter.setClipRect((x+d.x)*w, y*h, (d.width-1)*w, 5*h);
+	painter.drawText((x+d.x+1)*w,(y+4)*h,text);
 	painter.restore();
 }
 
@@ -141,7 +142,7 @@ void PlayListPrintDJ::highlightRect(int column)
 {
 	const ColumnDimension &d=dimension[column];
 	painter.save();
-	painter.fillRect(d.x*w, y*h, d.width*w, 5*h, QColor(240,240,240));
+	painter.fillRect((x+d.x)*w, y*h, d.width*w, 5*h, QColor(240,240,240));
 	painter.restore();
 }
 
@@ -155,14 +156,14 @@ void PlayListPrintDJ::printHeader(const PlaylistTracks *tracks)
     painter.setBrush(Brush);
     painter.setFont(Font);
     ppl6::CString Tmp=tracks->getName();
-    painter.drawText(0,(y)*h,Tmp);
+    painter.drawText(x*w,(y)*h,Tmp);
     Font.setPointSize(12);
     painter.setFont(Font);
     Tmp.Setf("Ausgabe %d vom %s", tracks->getIssueNumber(),
     		(const char*)tracks->getIssueDate().getDate("%d.%m.%Y"));
     if (tracks->getSubName().NotEmpty())
     	Tmp+=", "+tracks->getSubName();
-    painter.drawText(0,(y+8)*h,Tmp);
+    painter.drawText(x*w,(y+8)*h,Tmp);
     y+=10;
     Font.setPointSize(10);
     painter.setFont(Font);
@@ -285,7 +286,7 @@ void PlayListPrintDJ::print(const PlaylistTracks *tracks, QPrinter &Printer)
     lastbpm=0;
     w=(float)Printer.width()/(float)Printer.widthMM();
     h=(float)Printer.height()/(float)Printer.heightMM();
-    x=10;
+    x=3;
     y=10;
     printHeader(tracks);
     for (int i=0;i<tracks->topLevelItemCount();i++) {
