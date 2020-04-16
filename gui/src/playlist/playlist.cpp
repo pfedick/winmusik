@@ -681,10 +681,10 @@ void Playlist::renumberTracks()
 void Playlist::updateLengthStatus()
 {
 	ppl6::CString Tmp;
-	int trackLength=0;
-	int mixLength=0;
-	int selectedLength=0;
-	int selectedMixLength=0;
+	int trackLength=0.0f;
+	float mixLength=0.0f;
+	int selectedLength=0.0f;
+	float selectedMixLength=0.0f;
 	int selectedTracks=0;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
@@ -700,12 +700,12 @@ void Playlist::updateLengthStatus()
 			selectedMixLength+=item->mixLength;
 		}
 	}
-	statusbar->setTotalLength(trackLength);
-	statusbar->setMixLength(mixLength);
+	statusbar->setTotalLength((int)trackLength);
+	statusbar->setMixLength((int)mixLength);
 	statusbar->setTotalTracks(ui.tracks->topLevelItemCount());
 
-	statusbar->setSelectedLength(selectedLength);
-	statusbar->setSelectedMixLength(selectedMixLength);
+	statusbar->setSelectedLength((int)selectedLength);
+	statusbar->setSelectedMixLength((int)selectedMixLength);
 	statusbar->setSelectedTracks(selectedTracks);
 }
 
