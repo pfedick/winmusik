@@ -45,8 +45,13 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QMimeData>
+#include <QStringList>
 #include "../include/asynchronousMessage.h"
 #include "version.h"
+
+#include <ppl7.h>
+#include <ppl7-inet.h>
 
 
 void Edit::UpdateDevice()
@@ -1047,3 +1052,61 @@ void Edit::renumber()
 	}
 	//printf ("Renumber FAILED!\n");
 }
+
+
+bool Edit::handleCoverDragEnterEvent(QDragEnterEvent *event)
+{
+    const QMimeData *mimedata=event->mimeData();
+    if (mimedata->hasText()) {
+        ppl7::String text=mimedata->text();
+        try {
+            ppl7::AssocArray data;
+            ppl7::Json::loads(data, text);
+            if (data.exists("containerInfo/image")) {
+                event->accept();
+                return true;
+            }
+            //data.list();
+        } catch (...) {}
+        //text.printnl();
+
+    }
+
+    //fflush(stdout);
+    //event->accept();
+    return false;
+}
+
+bool Edit::handleCoverDropEvent(QDropEvent *event)
+{
+    const QMimeData *mimedata=event->mimeData();
+    if (mimedata->hasText()) {
+        ppl7::String text=mimedata->text();
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        try {
+            ppl7::AssocArray data;
+            ppl7::Json::loads(data, text);
+            if (data.exists("containerInfo/image")) {
+                const ppl7::String &uri=data.getString("containerInfo/image");
+                ppl7::Curl curl;
+                curl.setURL(uri);
+                curl.get();
+                ppl7::ByteArrayPtr baptr=curl.getResultBuffer();
+                QPixmap img;
+                if (img.loadFromData((const uchar*)baptr.ptr(), (int)baptr.size())) {
+                    Cover=img;
+                    UpdateCover();
+                    activateWindow();
+                    FixFocus();
+                }
+                QApplication::restoreOverrideCursor();
+                event->accept();
+                return true;
+            }
+        } catch (...) {}
+        QApplication::restoreOverrideCursor();
+    }
+    return false;
+}
+
+

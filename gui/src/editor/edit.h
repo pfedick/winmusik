@@ -173,6 +173,10 @@ private:
     bool handleDragEnterEvent(QDragEnterEvent *event);
     bool handleDropFromSearchlist(QDropEvent *event);
     void handleFileDropEvent(QDropEvent *event);
+
+    bool handleCoverDragEnterEvent(QDragEnterEvent *event);
+    bool handleCoverDropEvent(QDropEvent *event);
+
     void SetupTrackList();
 
     bool eventFilter(QObject *target, QEvent *event);

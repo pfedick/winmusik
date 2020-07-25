@@ -17,6 +17,9 @@ Version 3.6.0
     - Click in Playlist supports Alt-keymodifier in addition to Meta-
       keymodifier, as it is in the editor.
     - Playlist can be printed
+    - Drag'n'Drop Cover-Image between AmazonMusic App and WinMusik editor
+      (Windows only)
+    
 
 Version 3.5.2, Releasedate: 26.10.2019 (Tag: REL_3_5_2)
     - Editor:

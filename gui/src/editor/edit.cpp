@@ -593,7 +593,16 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 	} else if (target==ui.cover && type==QEvent::MouseButtonDblClick) {
 		wm->OpenCoverViewer(Cover);	
 	} else if (target==ui.cover && type==QEvent::MouseButtonPress) {
-		wm->OpenCoverViewer(Cover);	
+        wm->OpenCoverViewer(Cover);
+    } else if (target==ui.cover && type==QEvent::DragEnter) {
+        //printf("QEvent::DragEnter\n");
+        //fflush(stdout);
+        return handleCoverDragEnterEvent(static_cast<QDragEnterEvent *>(event));
+
+    } else if (target==ui.cover && type==QEvent::Drop) {
+        //printf("QEvent::Drop\n");
+        //fflush(stdout);
+        return handleCoverDropEvent(static_cast<QDropEvent *>(event));
     } else if (target==ui.titleEdit && type==QEvent::Drop) {
 		handleDropEvent(static_cast<QDropEvent *>(event));
 		return true;
