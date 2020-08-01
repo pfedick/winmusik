@@ -143,7 +143,7 @@ bool Edit::EditTrack()
 				ppl6::CBinary cover;
 				if (Tag.GetPicture(3,cover)) {
 					Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-					ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+                    ui.coverwidget->setPixmap(Cover);
 					wm->UpdateCoverViewer(Cover);
 				}
 			}
@@ -201,7 +201,7 @@ void Edit::ClearEditFields()
 	ui.rating->setCurrentIndex(0);
 
 	Cover=QPixmap();
-	ui.cover->setPixmap(QPixmap());
+    ui.coverwidget->clear();
 
 
 	if (oimpInfo) {
@@ -677,7 +677,7 @@ bool Edit::SaveTrack(DataTitle &Ti)
 		if (OldTi!=NULL && *OldTi==Ti) weHaveChanges=false;
 	}
 	if (weHaveChanges) {
-		printf ("changes detected\n");
+        //printf ("changes detected\n");
 		// Titel speichern
 		if (Ti.TitleId>0) wm->Hashes.RemoveTitle(Ti.TitleId);
 		if (!wm->TitleStore.Put(&Ti)) {
@@ -886,14 +886,13 @@ void Edit::CopyFromTrackInfo(TrackInfo &info)
 	}
 	if (info.Cover.Size()) {				// Cover
 		Cover.loadFromData((const uchar*)info.Cover.GetPtr(),info.Cover.GetSize());
-		ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+        ui.coverwidget->setPixmap(Cover);
 		wm->UpdateCoverViewer(Cover);
 	}
 }
 
 void Edit::UpdateCover()
 {
-	ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	wm->UpdateCoverViewer(Cover);
 	if (wm_main->conf.bWriteID3Tags==true) {
 		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
@@ -1054,83 +1053,32 @@ void Edit::renumber()
 }
 
 
-bool Edit::handleCoverDragEnterEvent(QDragEnterEvent *event)
+
+
+
+void Edit::on_coverwidget_imageChanged(const QPixmap &NewCover)
 {
-    const QMimeData *mimedata=event->mimeData();
-    if (mimedata->hasText()) {
-        ppl7::String text=mimedata->text();
-        if(text.left(7)=="http://" or text.left(8)=="https://") {
-            if (text.has(".png") or text.has(".jpg") or text.has(".jpeg")) {
-                event->accept();
-                return true;
-            }
+    Cover=NewCover;
+    UpdateCover();
+}
+
+void Edit::on_coverwidget_imageDeleted()
+{
+    Cover=QPixmap();
+    wm->UpdateCoverViewer(Cover);
+    if (wm_main->conf.bWriteID3Tags==true) {
+        ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
+        if (Path.NotEmpty()) {
+            ppl6::CID3Tag Tag;
+            Tag.Load(&Path);
+            Tag.RemovePicture(3);
+            Tag.Save();
         }
-        try {
-            ppl7::AssocArray data;
-            ppl7::Json::loads(data, text);
-            if (data.exists("containerInfo/image")) {
-                event->accept();
-                return true;
-            }
-            //data.list();
-        } catch (...) {}
-        //text.printnl();
-
     }
-
-    //fflush(stdout);
-    //event->accept();
-    return false;
 }
 
-bool Edit::loadImageFromUri(const QString &uri)
+void Edit::on_coverwidget_gotFocus()
 {
-    ppl7::String tmp=uri;
-    tmp.printnl();
-    ppl7::Curl curl;
-    curl.setURL(uri);
-    curl.get();
-    ppl7::ByteArrayPtr baptr=curl.getResultBuffer();
-    QPixmap img;
-    if (img.loadFromData((const uchar*)baptr.ptr(), (int)baptr.size())) {
-        Cover=img;
-        UpdateCover();
-        activateWindow();
-        FixFocus();
-        return true;
-    }
-    return false;
+    FixFocus();
 }
-
-bool Edit::handleCoverDropEvent(QDropEvent *event)
-{
-    const QMimeData *mimedata=event->mimeData();
-    if (mimedata->hasText()) {
-        ppl7::String text=mimedata->text();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        try {
-            ppl7::AssocArray data;
-            ppl7::Json::loads(data, text);
-            if (data.exists("containerInfo/image")) {
-                if (loadImageFromUri(data.getString("containerInfo/image"))) {
-                    QApplication::restoreOverrideCursor();
-                    event->accept();
-                    return true;
-                }
-            }
-        } catch (...) {}
-        try {
-            if (text.has("http://") or text.has("https://")) {
-                if (loadImageFromUri(text)) {
-                    QApplication::restoreOverrideCursor();
-                    event->accept();
-                    return true;
-                }
-            }
-        } catch (...) {}
-        QApplication::restoreOverrideCursor();
-    }
-    return false;
-}
-
 

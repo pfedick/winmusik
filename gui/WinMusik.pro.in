@@ -157,11 +157,13 @@ SOURCES += src/menue/menue.cpp \
     widgets/fkeys.cpp \
     widgets/edittrack.cpp \
     widgets/KeyWheel.cpp \
+    widgets/wmcoverwidget.cpp \
     
 
 HEADERS += widgets/fkeys.h \
     widgets/keywheel.h \
     widgets/edittrack.h \
+    widgets/wmcoverwidget.h \
     src/menue/menue.h \
     src/search/search.h \
     src/editor/shortcutdialog.h \
@@ -216,6 +218,7 @@ HEADERS += widgets/fkeys.h \
 
 FORMS += widgets/fkeys.ui \
     widgets/edittrack.ui \
+    widgets/wmcoverwidget.ui \
     src/menue/menue.ui \
     src/search/search.ui \
     src/editor/cddbselect.ui \

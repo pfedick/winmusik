@@ -25,9 +25,16 @@ fi
 cat include/version.h
 
 mingw32-make -j8 release
-if [ ?$ -ne 0 ] ; then
+if [ $? -ne 0 ] ; then
    exit 1
 fi
+cd gui
+lupdate WinMusik.pro
+if [ $? -ne 0 ] ; then
+   exit 1
+fi
+cd ..
+
 rm -rf release/deploy
 windeployqt.exe --dir release/deploy release/WinMusik.exe
 

@@ -174,10 +174,6 @@ private:
     bool handleDropFromSearchlist(QDropEvent *event);
     void handleFileDropEvent(QDropEvent *event);
 
-    bool handleCoverDragEnterEvent(QDragEnterEvent *event);
-    bool handleCoverDropEvent(QDropEvent *event);
-    bool loadImageFromUri(const QString &uri);
-
     void SetupTrackList();
 
     bool eventFilter(QObject *target, QEvent *event);
@@ -309,11 +305,9 @@ public slots:
 	void on_fkeys_clicked(int num);
 
 
-	void on_coverCopyButton_clicked();
-	void on_coverInsertButton_clicked();
-	void on_coverDeleteButton_clicked();
-	void on_coverLoadButton_clicked();
-	void on_coverSaveButton_clicked();
+    void on_coverwidget_imageChanged(const QPixmap &Cover);
+    void on_coverwidget_imageDeleted();
+    void on_coverwidget_gotFocus();
 
 	void on_coverSearchAmazon_clicked();
 	void on_coverSearchDiscogs_clicked();

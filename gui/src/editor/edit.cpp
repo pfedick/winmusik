@@ -231,7 +231,6 @@ Edit::Edit(QWidget *parent, CWmClient *wm, int typ)
 	InstallFilter(ui.musickey,30);
 	InstallFilter(ui.energyLevel,31);
 
-	InstallFilter(ui.cover,100);
 
 	ui.deviceTitle->installEventFilter(this);
     ui.titleEdit->installEventFilter(this);
@@ -590,19 +589,6 @@ bool Edit::consumeEvent(QObject *target, QEvent *event)
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.remarks);
 	} else if (target==ui.tags) {
 		if (type==QEvent::FocusIn) return on_FocusIn(ui.tags);
-	} else if (target==ui.cover && type==QEvent::MouseButtonDblClick) {
-		wm->OpenCoverViewer(Cover);	
-	} else if (target==ui.cover && type==QEvent::MouseButtonPress) {
-        wm->OpenCoverViewer(Cover);
-    } else if (target==ui.cover && type==QEvent::DragEnter) {
-        //printf("QEvent::DragEnter\n");
-        //fflush(stdout);
-        return handleCoverDragEnterEvent(static_cast<QDragEnterEvent *>(event));
-
-    } else if (target==ui.cover && type==QEvent::Drop) {
-        //printf("QEvent::Drop\n");
-        //fflush(stdout);
-        return handleCoverDropEvent(static_cast<QDropEvent *>(event));
     } else if (target==ui.titleEdit && type==QEvent::Drop) {
 		handleDropEvent(static_cast<QDropEvent *>(event));
 		return true;
@@ -1081,7 +1067,7 @@ void Edit::handleFileDropEvent(QDropEvent *event)
         ppl6::CBinary cover;
         if (Tag.GetPicture(3,cover)) {
             Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-            ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+            ui.coverwidget->setPixmap(Cover);
             wm->UpdateCoverViewer(Cover);
         }
     }
@@ -1456,6 +1442,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 // EVENT: index
 bool Edit::on_index_FocusIn()
 {
+    ui.coverwidget->setEnabled(false);
 	asyncTrackUpdate.ThreadStop();
 	if (TrackList) delete TrackList;
 	TrackList=NULL;
@@ -1492,6 +1479,7 @@ bool Edit::on_index_KeyPress(__attribute__ ((unused)) QKeyEvent *event,int key,i
 bool Edit::on_page_FocusIn()
 {
 	// Wenn wir von Index kommen, laden wir den Tonträger
+    ui.coverwidget->setEnabled(false);
 	asyncTrackUpdate.ThreadStop();
 	Page=0;
 	TrackNum=0;
@@ -1555,6 +1543,7 @@ bool Edit::on_page_FocusIn()
 bool Edit::on_track_FocusIn()
 {
 	DupeCheck=false;
+    ui.coverwidget->setEnabled(false);
 
 	TrackNum=0;
 	if (!Page) {
@@ -1622,6 +1611,7 @@ void Edit::ReloadTracks()
 bool Edit::on_artist_FocusIn()
 {
 	showEditorWithoutFocusChange();
+    ui.coverwidget->setEnabled(true);
 	ui.artist->setFocus();
 	ppl6::CString Tmp;
 	if (!TrackNum) {
@@ -2735,111 +2725,6 @@ void Edit::on_contextInsertTrack_triggered()
 	ui.track->setText(Tmp);
 	ui.track->setFocus();
 }
-
-void Edit::on_coverCopyButton_clicked()
-{
-	if (position<3) return;
-	QClipboard *clipboard = QApplication::clipboard();
-	if (!clipboard) return;
-	clipboard->setPixmap(Cover);
-	FixFocus();
-}
-
-void Edit::on_coverInsertButton_clicked()
-{
-	if (position<3) return;
-	QClipboard *clipboard = QApplication::clipboard();
-	if (!clipboard) return;
-	if (clipboard->pixmap().isNull()) return;
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	Cover=clipboard->pixmap();
-	UpdateCover();
-	FixFocus();
-	QApplication::restoreOverrideCursor();
-}
-
-void Edit::on_coverDeleteButton_clicked()
-{
-	FixFocus();
-	if (position<3) return;
-	if (Cover.isNull()) return;
-	if (QMessageBox::question(this, tr("WinMusik: delete MP3-Cover"),
-		tr("Do you want to remove the cover from the mp3 file?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No)
-		==QMessageBox::No) return;
-	Cover=QPixmap();
-	ui.cover->setPixmap(Cover);
-	wm->UpdateCoverViewer(Cover);
-	if (wm_main->conf.bWriteID3Tags==true) {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
-		if (Path.NotEmpty()) {
-			ppl6::CID3Tag Tag;
-			Tag.Load(&Path);
-			Tag.RemovePicture(3);
-			Tag.Save();
-		}
-	}
-
-
-}
-
-void Edit::on_coverLoadButton_clicked()
-{
-	FixFocus();
-	if (position<3) return;
-
-	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
-	if (Dir.IsEmpty()) {
-		Dir=QDir::homePath();
-	}
-	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
-			Dir,
-			tr("Images (*.png *.bmp *.jpg)"));
-	if (newfile.isNull()) return;
-
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
-	wm->conf.Save();
-	if (!Cover.load(newfile)) {
-		QApplication::restoreOverrideCursor();
-		QMessageBox::critical(this,tr("Error: could not load Cover"),
-				tr("The specified file could not be loaded.\nPlease check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)")
-				);
-		return;
-	} else {
-		UpdateCover();
-	}
-	QApplication::restoreOverrideCursor();
-}
-
-void Edit::on_coverSaveButton_clicked()
-{
-	FixFocus();
-	if (position<3) return;
-	if (Cover.isNull()) return;
-	ppl6::CString Dir=wm->conf.LastCoverPath+"/";
-	Dir+=ppl6::Mid(ppl6::GetFilename(wm->NormalizeFilename(Track.Device,Track.DeviceId,Page,Track.Track,Ti,".jpg")),4);
-
-	QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"),
-				Dir,
-				tr("Images (*.png *.bmp *.jpg)"));
-	if (newfile.isNull()) return;
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
-	wm->conf.Save();
-	if (!Cover.save (newfile)) {
-		/*
-		 * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton ) [static]
-		 *
-		 */
-		QApplication::restoreOverrideCursor();
-		QMessageBox::critical(this,tr("Error: could not save Cover"),
-				tr("The cover of this track could not be saved.\nPlease check if the target directory exists and is writable.\nPlease also check the file extension. WinMusik only supports .png, .jpg and .bmp")
-				);
-		return;
-	}
-	QApplication::restoreOverrideCursor();
-}
-
 
 
 void Edit::on_coverSearchAmazon_clicked()

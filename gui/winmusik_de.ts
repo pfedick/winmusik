@@ -972,98 +972,98 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Edit</name>
     <message>
-        <location filename="src/editor/edit.cpp" line="272"/>
+        <location filename="src/editor/edit.cpp" line="271"/>
         <source>Edit Music Cassette</source>
         <translation>Musikkassette bearbeiten</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="275"/>
+        <location filename="src/editor/edit.cpp" line="274"/>
         <source>Edit Audio CD</source>
         <translation>Audio CD editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="278"/>
+        <location filename="src/editor/edit.cpp" line="277"/>
         <source>Edit Data CD</source>
         <translation>Daten CD editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="281"/>
+        <location filename="src/editor/edit.cpp" line="280"/>
         <source>Edit Vinyl Record</source>
         <translation>Schallplatte editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="284"/>
+        <location filename="src/editor/edit.cpp" line="283"/>
         <source>Edit Video Tape</source>
         <translation>Videokassette editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="287"/>
+        <location filename="src/editor/edit.cpp" line="286"/>
         <source>Edit Other Media Type</source>
         <translation>Andern Datenträger editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="290"/>
+        <location filename="src/editor/edit.cpp" line="289"/>
         <source>Edit MP3 CD</source>
         <translation>MP3-CD editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="293"/>
+        <location filename="src/editor/edit.cpp" line="292"/>
         <source>Edit Music Tape</source>
         <translation>Tonband editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="296"/>
+        <location filename="src/editor/edit.cpp" line="295"/>
         <source>Edit Audio DVD</source>
         <translation>Audio DVD editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="416"/>
+        <location filename="src/editor/edit.cpp" line="415"/>
         <source>Cover</source>
         <comment>trackList</comment>
         <translation>Cover</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="421"/>
+        <location filename="src/editor/edit.cpp" line="420"/>
         <source>BPM</source>
         <comment>trackList</comment>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="422"/>
+        <location filename="src/editor/edit.cpp" line="421"/>
         <source>Key</source>
         <comment>trackList</comment>
         <translation>Tonart</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="423"/>
+        <location filename="src/editor/edit.cpp" line="422"/>
         <source>Energy</source>
         <comment>trackList</comment>
         <translation>Energie</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="424"/>
+        <location filename="src/editor/edit.cpp" line="423"/>
         <source>Year</source>
         <comment>trackList</comment>
         <translation>Jahr</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="425"/>
+        <location filename="src/editor/edit.cpp" line="424"/>
         <source>Rating</source>
         <comment>trackList</comment>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="737"/>
+        <location filename="src/editor/edit.cpp" line="723"/>
         <source>close</source>
         <translation>schließen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="738"/>
+        <location filename="src/editor/edit.cpp" line="724"/>
         <source>new</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="739"/>
+        <location filename="src/editor/edit.cpp" line="725"/>
         <source>back</source>
         <translation>zurück</translation>
     </message>
@@ -1072,90 +1072,90 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Stammdaten</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="741"/>
+        <location filename="src/editor/edit.cpp" line="727"/>
         <source>search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="764"/>
+        <location filename="src/editor/edit.cpp" line="750"/>
         <source>save all ID3</source>
         <translation>Tags speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="756"/>
+        <location filename="src/editor/edit.cpp" line="742"/>
         <source>list devices</source>
         <translation>Tonträgerliste</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="740"/>
+        <location filename="src/editor/edit.cpp" line="726"/>
         <source>edit device</source>
         <translation>Stammdaten</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="762"/>
+        <location filename="src/editor/edit.cpp" line="748"/>
         <source>synchronize Tag</source>
         <translation>Tag synchronisieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="763"/>
+        <location filename="src/editor/edit.cpp" line="749"/>
         <source>import cover</source>
         <translation>Cover importieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="765"/>
+        <location filename="src/editor/edit.cpp" line="751"/>
         <source>mass import</source>
         <translation>Massenimport</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="768"/>
+        <location filename="src/editor/edit.cpp" line="754"/>
         <source>cddb import</source>
         <translation>CDDB Import</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="770"/>
+        <location filename="src/editor/edit.cpp" line="756"/>
         <source>renumber</source>
         <translation>Umnummerieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1038"/>
+        <location filename="src/editor/edit.cpp" line="1024"/>
         <source>WinMusik: overwrite existing file</source>
         <translation>WinMusik: Vorhandene Datei überschreiben</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1039"/>
+        <location filename="src/editor/edit.cpp" line="1025"/>
         <source>Do you want to overwrite the exiting file?</source>
         <translation>Wollen Sie die vorhandene Datei überschreiben?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1044"/>
+        <location filename="src/editor/edit.cpp" line="1030"/>
         <source>WinMusik: copy file</source>
         <translation>WinMusik: Datei kopieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1045"/>
+        <location filename="src/editor/edit.cpp" line="1031"/>
         <source>File copy is not supported on this device.
 You have to configure a path for this device in the settings.</source>
         <translation>Kopieren von Dateien ist für diese Tonträgerart nicht möglich.
 Sie müssen zuerst einen Dateipfad für diese Tonträgerart in den Einstellungen angeben.</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1063"/>
+        <location filename="src/editor/edit.cpp" line="1049"/>
         <source>Could not copy file:</source>
         <translation>Konnte Datei nicht kopieren:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1068"/>
+        <location filename="src/editor/edit.cpp" line="1054"/>
         <source>Error: could not copy file</source>
         <translation>Fehler: Konnte Datei nicht kopieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1237"/>
-        <location filename="src/editor/edit.cpp" line="1239"/>
+        <location filename="src/editor/edit.cpp" line="1223"/>
+        <location filename="src/editor/edit.cpp" line="1225"/>
         <source>Copy Files into WinMusik directory...</source>
         <translation>Kopiere Dateien ins WinMusik-Verzeichnis...</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1805"/>
+        <location filename="src/editor/edit.cpp" line="1795"/>
         <source>There are no further titles without an index in the directory of this device</source>
         <oldsource>Es sind keine weiteren Titel ohne Index im Verzeichnis
 des Tonträgers vorhanden</oldsource>
@@ -1163,80 +1163,80 @@ des Tonträgers vorhanden</oldsource>
 des Tonträgers vorhanden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1902"/>
+        <location filename="src/editor/edit.cpp" line="1892"/>
         <source>Could not create playlists</source>
         <translation>Playlists konnten nicht erstellt werden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2159"/>
+        <location filename="src/editor/edit.cpp" line="2149"/>
         <source>WinMusik: update all ID3-Tags</source>
         <translation>WinMusik: Alle ID3-Tags aktualisieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2160"/>
+        <location filename="src/editor/edit.cpp" line="2150"/>
         <source>Update ID3-Tags of all tracks?</source>
         <translation>ID3-Tags aller Titel aktualisieren?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2165"/>
+        <location filename="src/editor/edit.cpp" line="2155"/>
         <source>Update of ID3-Tags on all tracks has been started</source>
         <translation>Aktualisierung aller ID3-Tags wurde im Hintergrund gestartet</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2168"/>
+        <location filename="src/editor/edit.cpp" line="2158"/>
         <source>Update of ID3-Tags failed</source>
         <translation>Aktualisierung der ID3-Tags fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2383"/>
+        <location filename="src/editor/edit.cpp" line="2373"/>
         <source>Synchronize Keys, BPM and Energy with ID3-Tag</source>
         <comment>trackList Context Menue</comment>
         <translation>Synchronisiere Tonart, BPM und Energie mit ID3-Tags</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2390"/>
+        <location filename="src/editor/edit.cpp" line="2380"/>
         <source>Show cover</source>
         <comment>trackList Context Menue</comment>
         <translation>Cover anzeigen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2391"/>
+        <location filename="src/editor/edit.cpp" line="2381"/>
         <source>Load Cover for all Tracks</source>
         <comment>trackList Context Menue</comment>
         <translation>Cover für alle Titel laden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2402"/>
+        <location filename="src/editor/edit.cpp" line="2392"/>
         <source>Copy Cover</source>
         <comment>trackList Context Menue</comment>
         <translation>Cover kopieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2408"/>
+        <location filename="src/editor/edit.cpp" line="2398"/>
         <source>Read BPM and Key from ID3-Tag</source>
         <comment>trackList Context Menue</comment>
         <translation>BPM und Tonart aus ID3-Tag einlesen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2384"/>
+        <location filename="src/editor/edit.cpp" line="2374"/>
         <source>Set Music-Key</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart festlegen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2386"/>
+        <location filename="src/editor/edit.cpp" line="2376"/>
         <source>Music Key is verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart wurde überprüft</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2387"/>
+        <location filename="src/editor/edit.cpp" line="2377"/>
         <source>Music Key is not verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Tonart wurde nicht geprüft</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2417"/>
+        <location filename="src/editor/edit.cpp" line="2407"/>
         <source>unknown</source>
         <comment>trackList Context Menue</comment>
         <translation>Unbekannt</translation>
@@ -1362,39 +1362,34 @@ des Tonträgers vorhanden</translation>
         <translation type="obsolete">Gm</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2481"/>
-        <location filename="src/editor/edit.cpp" line="2483"/>
+        <location filename="src/editor/edit.cpp" line="2471"/>
+        <location filename="src/editor/edit.cpp" line="2473"/>
         <source>Reading ID3-Tags from Files...</source>
         <translation>Lese ID3-Tags der Dateien...</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1237"/>
-        <location filename="src/editor/edit.cpp" line="2481"/>
+        <location filename="src/editor/edit.cpp" line="1223"/>
+        <location filename="src/editor/edit.cpp" line="2471"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2577"/>
-        <location filename="src/editor/edit.cpp" line="2794"/>
+        <location filename="src/editor/edit.cpp" line="2567"/>
         <source>Select cover image</source>
         <translation>Cover-Bild auswählen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2579"/>
-        <location filename="src/editor/edit.cpp" line="2796"/>
-        <location filename="src/editor/edit.cpp" line="2824"/>
+        <location filename="src/editor/edit.cpp" line="2569"/>
         <source>Images (*.png *.bmp *.jpg)</source>
         <translation>Bilddateien (*.png *.bmp *.jpg)</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2590"/>
-        <location filename="src/editor/edit.cpp" line="2804"/>
+        <location filename="src/editor/edit.cpp" line="2580"/>
         <source>Error: could not load Cover</source>
         <translation>Fehler: Konnte Cover nicht laden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2591"/>
-        <location filename="src/editor/edit.cpp" line="2805"/>
+        <location filename="src/editor/edit.cpp" line="2581"/>
         <source>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</source>
         <oldsource>The soecified file could not be loaded.
@@ -1403,21 +1398,18 @@ Please check if the file exists, is readable and contains an image format, which
 Bitte prüfen Sie, ob die Datei vorhanden und lesbar ist und ein Bildformat enthält, das von WinMusik unterstützt wird (.png, .jpg, .bmp)</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2822"/>
         <source>Save cover to file</source>
-        <translation>Cover in Datei speichern</translation>
+        <translation type="vanished">Cover in Datei speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2835"/>
         <source>Error: could not save Cover</source>
-        <translation>Fehler: Konnte Cover nicht speichern</translation>
+        <translation type="vanished">Fehler: Konnte Cover nicht speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2836"/>
         <source>The cover of this track could not be saved.
 Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</source>
-        <translation>Das Cover dieses Titels konnte nicht gespeichert werden.
+        <translation type="vanished">Das Cover dieses Titels konnte nicht gespeichert werden.
 Bitte prüfen Sie, ob das Zielverzeichnis vorhanden und schreibbar ist.
 Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und .bmp</translation>
     </message>
@@ -1427,87 +1419,85 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2766"/>
         <source>WinMusik: delete MP3-Cover</source>
-        <translation>WinMusik: MP3-Cover löschen</translation>
+        <translation type="vanished">WinMusik: MP3-Cover löschen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2767"/>
         <source>Do you want to remove the cover from the mp3 file?</source>
-        <translation>Möchten Sie das Cover-Bild von dieser MP3-Datei entfernen?</translation>
+        <translation type="vanished">Möchten Sie das Cover-Bild von dieser MP3-Datei entfernen?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="245"/>
+        <location filename="src/editor/edit.cpp" line="244"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="249"/>
+        <location filename="src/editor/edit.cpp" line="248"/>
         <source>Genre</source>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="253"/>
+        <location filename="src/editor/edit.cpp" line="252"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="742"/>
+        <location filename="src/editor/edit.cpp" line="728"/>
         <source>print</source>
         <translation>Drucken</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="743"/>
+        <location filename="src/editor/edit.cpp" line="729"/>
         <source>save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="744"/>
+        <location filename="src/editor/edit.cpp" line="730"/>
         <source>delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="745"/>
+        <location filename="src/editor/edit.cpp" line="731"/>
         <source>insert</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="746"/>
+        <location filename="src/editor/edit.cpp" line="732"/>
         <source>first letter</source>
         <translation>Initialen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="257"/>
+        <location filename="src/editor/edit.cpp" line="256"/>
         <source>Record Source</source>
         <translation>Aufnahmequelle</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="261"/>
+        <location filename="src/editor/edit.cpp" line="260"/>
         <source>Record Device</source>
         <translation>Aufnahmegerät</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="747"/>
+        <location filename="src/editor/edit.cpp" line="733"/>
         <source>read ID3</source>
         <translation>ID3 lesen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="748"/>
+        <location filename="src/editor/edit.cpp" line="734"/>
         <source>shortcut</source>
         <translation>Abkürzung</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="749"/>
+        <location filename="src/editor/edit.cpp" line="735"/>
         <source>original Tags</source>
         <translation>Original Tags</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="750"/>
+        <location filename="src/editor/edit.cpp" line="736"/>
         <source>dupes?</source>
         <translation>Duplikate?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="810"/>
+        <location filename="src/editor/edit.cpp" line="796"/>
         <source>playlist</source>
         <translation>Playlist</translation>
     </message>
@@ -1517,51 +1507,51 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="710"/>
-        <location filename="src/editor/edit.cpp" line="2240"/>
-        <location filename="src/editor/edit.cpp" line="2554"/>
+        <location filename="src/editor/edit.cpp" line="2230"/>
+        <location filename="src/editor/edit.cpp" line="2544"/>
         <source>Could not save ID3 Tags</source>
         <translation>ID3-Tags konnten nicht geschrieben werden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="415"/>
+        <location filename="src/editor/edit.cpp" line="414"/>
         <source>Track</source>
         <comment>trackList</comment>
         <translation>Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="417"/>
+        <location filename="src/editor/edit.cpp" line="416"/>
         <source>Artist - Title</source>
         <comment>trackList</comment>
         <translation>Interpret - Titel</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="418"/>
+        <location filename="src/editor/edit.cpp" line="417"/>
         <source>Version</source>
         <comment>trackList</comment>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="419"/>
+        <location filename="src/editor/edit.cpp" line="418"/>
         <source>Genre</source>
         <comment>trackList</comment>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="420"/>
+        <location filename="src/editor/edit.cpp" line="419"/>
         <source>Length</source>
         <comment>trackList</comment>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1804"/>
-        <location filename="src/editor/edit.cpp" line="1898"/>
-        <location filename="src/editor/edit.cpp" line="2164"/>
+        <location filename="src/editor/edit.cpp" line="1794"/>
+        <location filename="src/editor/edit.cpp" line="1888"/>
+        <location filename="src/editor/edit.cpp" line="2154"/>
         <source>WinMusik: Notice</source>
         <oldsource>WinMusik: Hinweis</oldsource>
         <translation>WinMusik: Hinweis</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1899"/>
+        <location filename="src/editor/edit.cpp" line="1889"/>
         <source>Playlists wurden erfolgreich erstellt</source>
         <translation>Playlists wurden erfolgreich erstellt</translation>
     </message>
@@ -1583,91 +1573,91 @@ Do you realy want to save this track?</source>
 Wollen Sie diesen Track wirklich speichern?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="932"/>
+        <location filename="src/editor/edit-functions.cpp" line="931"/>
         <source>Reading and querying cd in internet database, please wait.</source>
         <translation>Lese CD und suche danach in der Internet Datenbank, bitte warten.</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="955"/>
+        <location filename="src/editor/edit-functions.cpp" line="954"/>
         <source>An error occured, when trying to access the audio cd or querying the internet database</source>
         <translation>Es ist ein Fehler beim Zugriff auf die Audio-CD oder die Internet-Datenbank aufgetreten</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="956"/>
-        <location filename="src/editor/edit-functions.cpp" line="1002"/>
+        <location filename="src/editor/edit-functions.cpp" line="955"/>
+        <location filename="src/editor/edit-functions.cpp" line="1001"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="964"/>
+        <location filename="src/editor/edit-functions.cpp" line="963"/>
         <source>audio cd not found</source>
         <translation>Audio CD nicht gefunden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="965"/>
+        <location filename="src/editor/edit-functions.cpp" line="964"/>
         <source>The audio cd was not found in the internet cd database</source>
         <translation>Die Audio CD wurde in der Internet-Datenbank nicht gefunden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="1003"/>
+        <location filename="src/editor/edit-functions.cpp" line="1002"/>
         <source>Invalid number</source>
         <translation>Ungültige Nummer</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2394"/>
+        <location filename="src/editor/edit.cpp" line="2384"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Versionen finden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2395"/>
+        <location filename="src/editor/edit.cpp" line="2385"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Mehr von diesem Interpreten</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2398"/>
+        <location filename="src/editor/edit.cpp" line="2388"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel abspielen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2399"/>
+        <location filename="src/editor/edit.cpp" line="2389"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2400"/>
+        <location filename="src/editor/edit.cpp" line="2390"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Interpret und Titel in Zwischenablage</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2401"/>
+        <location filename="src/editor/edit.cpp" line="2391"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>MP3-Datei in Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2404"/>
+        <location filename="src/editor/edit.cpp" line="2394"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2405"/>
+        <location filename="src/editor/edit.cpp" line="2395"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="684"/>
-        <location filename="src/editor/edit.cpp" line="2226"/>
-        <location filename="src/editor/edit.cpp" line="2453"/>
-        <location filename="src/editor/edit.cpp" line="2467"/>
-        <location filename="src/editor/edit.cpp" line="2548"/>
-        <location filename="src/editor/edit.cpp" line="2613"/>
+        <location filename="src/editor/edit.cpp" line="2216"/>
+        <location filename="src/editor/edit.cpp" line="2443"/>
+        <location filename="src/editor/edit.cpp" line="2457"/>
+        <location filename="src/editor/edit.cpp" line="2538"/>
+        <location filename="src/editor/edit.cpp" line="2603"/>
         <source>Could not save Title in TitleStore</source>
         <oldsource>Konnte Titel nicht in TitleStore speichern</oldsource>
         <translation>Konnte Titel nicht in TitleStore speichern</translation>
@@ -1679,7 +1669,7 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Konnte Track nicht in TrackList speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2396"/>
+        <location filename="src/editor/edit.cpp" line="2386"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Andere Interpreten mit diesem Titel</translation>
@@ -1846,108 +1836,102 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Tags:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1493"/>
         <source>Cover</source>
-        <translation>Cover</translation>
+        <translation type="vanished">Cover</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1511"/>
         <source>copy</source>
-        <translation>kopieren</translation>
+        <translation type="vanished">kopieren</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1542"/>
         <source>insert</source>
-        <translation>einfügen</translation>
+        <translation type="vanished">einfügen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1573"/>
         <source>delete</source>
-        <translation>löschen</translation>
+        <translation type="vanished">löschen</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1607"/>
         <source>load</source>
-        <translation>laden</translation>
+        <translation type="vanished">laden</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1641"/>
         <source>save</source>
-        <translation>speichern</translation>
+        <translation type="vanished">speichern</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1694"/>
+        <location filename="src/editor/edit.ui" line="1449"/>
         <source>Search Cover:</source>
         <translation>Cover suchen:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1905"/>
+        <location filename="src/editor/edit.ui" line="1660"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1914"/>
+        <location filename="src/editor/edit.ui" line="1669"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1932"/>
+        <location filename="src/editor/edit.ui" line="1687"/>
         <source>Dolby Surround</source>
         <translation>Dolby Surround</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1941"/>
+        <location filename="src/editor/edit.ui" line="1696"/>
         <source>Dolby Digital 5.1</source>
         <translation>Dolby Digital 5.1</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1950"/>
+        <location filename="src/editor/edit.ui" line="1705"/>
         <source>Dolby Digital EX</source>
         <translation>Dolby Digital EX</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1959"/>
+        <location filename="src/editor/edit.ui" line="1714"/>
         <source>DTS 5.1</source>
         <translation>DTS 5.1</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1996"/>
+        <location filename="src/editor/edit.ui" line="1751"/>
         <source>Quality:</source>
         <oldsource>Qualität:</oldsource>
         <translation>Qualität:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2019"/>
+        <location filename="src/editor/edit.ui" line="1774"/>
         <source>sehr gut</source>
         <translation>sehr gut</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2028"/>
+        <location filename="src/editor/edit.ui" line="1783"/>
         <source>gut</source>
         <translation>gut</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2037"/>
+        <location filename="src/editor/edit.ui" line="1792"/>
         <source>mittelmäßig</source>
         <translation>mittelmäßig</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2046"/>
+        <location filename="src/editor/edit.ui" line="1801"/>
         <source>schlecht</source>
         <translation>schlecht</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2055"/>
+        <location filename="src/editor/edit.ui" line="1810"/>
         <source>sehr schlecht</source>
         <translation>sehr schlecht</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1870"/>
+        <location filename="src/editor/edit.ui" line="1625"/>
         <source>Sound:</source>
         <translation>Ton:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="2092"/>
+        <location filename="src/editor/edit.ui" line="1847"/>
         <source>Rating:</source>
         <translation>Bewertung:</translation>
     </message>
@@ -2059,29 +2043,29 @@ Wollen Sie diesen Track wirklich speichern?</translation>
         <translation>Größe:</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1814"/>
+        <location filename="src/editor/edit.ui" line="1569"/>
         <source>complete</source>
         <translation>vollständig</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1830"/>
+        <location filename="src/editor/edit.ui" line="1585"/>
         <source>real title</source>
         <translation>echter Titel</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1840"/>
+        <location filename="src/editor/edit.ui" line="1595"/>
         <source>voiceover or jingle in song</source>
         <oldsource>reingeredet oder Jingle im Song</oldsource>
         <translation>reingeredet oder Jingle im Song</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1896"/>
-        <location filename="src/editor/edit.ui" line="2010"/>
+        <location filename="src/editor/edit.ui" line="1651"/>
+        <location filename="src/editor/edit.ui" line="1765"/>
         <source>unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.ui" line="1923"/>
+        <location filename="src/editor/edit.ui" line="1678"/>
         <source>Dolby Stereo</source>
         <translation>Dolby Stereo</translation>
     </message>
@@ -6397,86 +6381,94 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
         <translation>WMCoverWidget</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.ui" line="96"/>
+        <location filename="widgets/wmcoverwidget.ui" line="102"/>
         <source>copy to clipboard</source>
         <translation>In die Zwischenablage kopieren</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.ui" line="124"/>
+        <location filename="widgets/wmcoverwidget.ui" line="130"/>
         <source>insert from clipboard</source>
         <translation>Aus der Zwischenablage einfügen</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.ui" line="152"/>
+        <location filename="widgets/wmcoverwidget.ui" line="158"/>
         <source>delete</source>
         <translation>Cover löschen</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.ui" line="183"/>
+        <location filename="widgets/wmcoverwidget.ui" line="189"/>
         <source>load from file</source>
         <translation>Cover aus Datei laden</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.ui" line="214"/>
+        <location filename="widgets/wmcoverwidget.ui" line="220"/>
         <source>save to file</source>
         <translation>In Datei speichern</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="55"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="72"/>
         <source>cover.jpg</source>
         <translation>cover.jpg</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="106"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="123"/>
         <source>WinMusik: delete MP3-Cover</source>
         <translation>WinMusik: MP3-Cover löschen</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="107"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="124"/>
         <source>Do you want to remove the cover from the audio file?</source>
         <translation>Wollen Sie das Cover aus der Audiodatei löschen?</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="133"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="149"/>
         <source>Select cover image</source>
         <translation>Cover-Bild auswählen</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="135"/>
-        <location filename="widgets/wmcoverwidget.cpp" line="165"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="151"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="181"/>
         <source>Images (*.png *.bmp *.jpg)</source>
         <translation>Bilddateien (*.png *.bmp *.jpg)</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="144"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="160"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="247"/>
         <source>Error: could not load Cover</source>
         <translation>Fehler: Konnte Cover nicht laden</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="145"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="161"/>
         <source>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</source>
         <translation>Die angegebene Datei konnte nicht geladen werden.
 Bitte prüfen Sie, ob die Datei vorhanden und lesbar ist und ein Bildformat enthält, das von WinMusik unterstützt wird (.png, .jpg, .bmp)</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="163"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="179"/>
         <source>Save cover to file</source>
         <translation>Cover in Datei speichern</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="178"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="194"/>
         <source>Error: could not save Cover</source>
         <translation>Fehler: Konnte Cover nicht speichern</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="179"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="195"/>
         <source>The cover of this track could not be saved.
 Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</source>
         <translation>Das Cover dieses Titels konnte nicht gespeichert werden.
 Bitte prüfen Sie, ob das Zielverzeichnis vorhanden und schreibbar ist.
 Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und .bmp</translation>
+    </message>
+    <message>
+        <location filename="widgets/wmcoverwidget.cpp" line="248"/>
+        <source>An error occured, when loading the file.
+
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
