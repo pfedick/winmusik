@@ -176,6 +176,7 @@ private:
 
     bool handleCoverDragEnterEvent(QDragEnterEvent *event);
     bool handleCoverDropEvent(QDropEvent *event);
+    bool loadImageFromUri(const QString &uri);
 
     void SetupTrackList();
 

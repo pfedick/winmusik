@@ -1059,6 +1059,12 @@ bool Edit::handleCoverDragEnterEvent(QDragEnterEvent *event)
     const QMimeData *mimedata=event->mimeData();
     if (mimedata->hasText()) {
         ppl7::String text=mimedata->text();
+        if(text.left(7)=="http://" or text.left(8)=="https://") {
+            if (text.has(".png") or text.has(".jpg") or text.has(".jpeg")) {
+                event->accept();
+                return true;
+            }
+        }
         try {
             ppl7::AssocArray data;
             ppl7::Json::loads(data, text);
@@ -1077,6 +1083,25 @@ bool Edit::handleCoverDragEnterEvent(QDragEnterEvent *event)
     return false;
 }
 
+bool Edit::loadImageFromUri(const QString &uri)
+{
+    ppl7::String tmp=uri;
+    tmp.printnl();
+    ppl7::Curl curl;
+    curl.setURL(uri);
+    curl.get();
+    ppl7::ByteArrayPtr baptr=curl.getResultBuffer();
+    QPixmap img;
+    if (img.loadFromData((const uchar*)baptr.ptr(), (int)baptr.size())) {
+        Cover=img;
+        UpdateCover();
+        activateWindow();
+        FixFocus();
+        return true;
+    }
+    return false;
+}
+
 bool Edit::handleCoverDropEvent(QDropEvent *event)
 {
     const QMimeData *mimedata=event->mimeData();
@@ -1087,21 +1112,20 @@ bool Edit::handleCoverDropEvent(QDropEvent *event)
             ppl7::AssocArray data;
             ppl7::Json::loads(data, text);
             if (data.exists("containerInfo/image")) {
-                const ppl7::String &uri=data.getString("containerInfo/image");
-                ppl7::Curl curl;
-                curl.setURL(uri);
-                curl.get();
-                ppl7::ByteArrayPtr baptr=curl.getResultBuffer();
-                QPixmap img;
-                if (img.loadFromData((const uchar*)baptr.ptr(), (int)baptr.size())) {
-                    Cover=img;
-                    UpdateCover();
-                    activateWindow();
-                    FixFocus();
+                if (loadImageFromUri(data.getString("containerInfo/image"))) {
+                    QApplication::restoreOverrideCursor();
+                    event->accept();
+                    return true;
                 }
-                QApplication::restoreOverrideCursor();
-                event->accept();
-                return true;
+            }
+        } catch (...) {}
+        try {
+            if (text.has("http://") or text.has("https://")) {
+                if (loadImageFromUri(text)) {
+                    QApplication::restoreOverrideCursor();
+                    event->accept();
+                    return true;
+                }
             }
         } catch (...) {}
         QApplication::restoreOverrideCursor();
