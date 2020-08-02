@@ -235,7 +235,8 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent *event)
 void WMCoverWidget::loadImageFromUri(const QString &uri)
 {
     ppl7::String tmp=uri;
-    previousCover= ui->cover->pixmap(Qt::ReturnByValue);
+    const QPixmap *tmppix=ui->cover->pixmap();
+    previousCover=*tmppix;
     QPixmap pix(":/cover/resources/cover_loading.png");
     ui->cover->setPixmap(pix.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
     QApplication::processEvents();
@@ -243,33 +244,7 @@ void WMCoverWidget::loadImageFromUri(const QString &uri)
 
     QNetworkRequest request(uri);
     m_WebCtrl.get(request);
-/*
 
-    //tmp.printnl();
-    ppl7::Curl curl;
-    try {
-        curl.setURL(uri);
-        curl.get();
-    } catch (const ppl7::Exception &exp) {
-        QString error=exp.toString();
-        QMessageBox::critical(this,tr("Error: could not load Cover"),
-                tr("An error occured, when loading the file.\n\n")+error
-                );
-        ui->cover->setPixmap(previous);
-        return false;
-    }
-    ppl7::ByteArrayPtr baptr=curl.getResultBuffer();
-    QPixmap img;
-    if (img.loadFromData((const uchar*)baptr.ptr(), (int)baptr.size())) {
-        Cover=img;
-        ui->cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-        emit imageChanged(Cover);
-        activateWindow();
-        return true;
-    }
-    ui->cover->setPixmap(previous);
-    return false;
-    */
 }
 
 bool WMCoverWidget::handleCoverDropEvent(QDropEvent *event)
