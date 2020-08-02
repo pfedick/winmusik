@@ -6419,56 +6419,56 @@ Are you sure, you want to delete them?</translation>
         <translation>save to file</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="72"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="75"/>
         <source>cover.jpg</source>
         <translation>cover.jpg</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="123"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="126"/>
         <source>WinMusik: delete MP3-Cover</source>
         <translation>WinMusik: delete MP3-Cover</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="124"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="127"/>
         <source>Do you want to remove the cover from the audio file?</source>
         <translation>Do you want to remove the cover from the audio file?</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="149"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="152"/>
         <source>Select cover image</source>
         <translation>Select cover image</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="151"/>
-        <location filename="widgets/wmcoverwidget.cpp" line="181"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="154"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="184"/>
         <source>Images (*.png *.bmp *.jpg)</source>
         <translation>Images (*.png *.bmp *.jpg)</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="160"/>
-        <location filename="widgets/wmcoverwidget.cpp" line="247"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="163"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="306"/>
         <source>Error: could not load Cover</source>
         <translation>Error: could not load Cover</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="161"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="164"/>
         <source>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</source>
         <translation>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="179"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="182"/>
         <source>Save cover to file</source>
         <translation>Save cover to file</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="194"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="197"/>
         <source>Error: could not save Cover</source>
         <translation>Error: could not save Cover</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="195"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="198"/>
         <source>The cover of this track could not be saved.
 Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</source>
@@ -6477,7 +6477,7 @@ Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="248"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="307"/>
         <source>An error occured, when loading the file.
 
 </source>

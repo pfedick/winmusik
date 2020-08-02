@@ -15,6 +15,8 @@
 #include <QMimeData>
 #include <QPixmap>
 
+
+
 #include "winmusik3.h"
 
 
@@ -26,7 +28,8 @@ WMCoverWidget::WMCoverWidget(QWidget *parent) :
     QPixmap pix(":/cover/resources/cover_placeholder.png");
     ui->cover->setPixmap(pix.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
     ui->cover->installEventFilter(this);
-
+    connect(&m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
+        SLOT (fileDownloaded(QNetworkReply*)));
 }
 
 WMCoverWidget::~WMCoverWidget()
@@ -229,14 +232,19 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent *event)
     return false;
 }
 
-bool WMCoverWidget::loadImageFromUri(const QString &uri)
+void WMCoverWidget::loadImageFromUri(const QString &uri)
 {
     ppl7::String tmp=uri;
-    QPixmap previous= ui->cover->pixmap(Qt::ReturnByValue);
+    previousCover= ui->cover->pixmap(Qt::ReturnByValue);
     QPixmap pix(":/cover/resources/cover_loading.png");
     ui->cover->setPixmap(pix.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
     QApplication::processEvents();
     QApplication::processEvents();
+
+    QNetworkRequest request(uri);
+    m_WebCtrl.get(request);
+/*
+
     //tmp.printnl();
     ppl7::Curl curl;
     try {
@@ -261,6 +269,7 @@ bool WMCoverWidget::loadImageFromUri(const QString &uri)
     }
     ui->cover->setPixmap(previous);
     return false;
+    */
 }
 
 bool WMCoverWidget::handleCoverDropEvent(QDropEvent *event)
@@ -268,30 +277,47 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent *event)
     const QMimeData *mimedata=event->mimeData();
     if (mimedata->hasText()) {
         ppl7::String text=mimedata->text();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         try {
             ppl7::AssocArray data;
             ppl7::Json::loads(data, text);
             if (data.exists("containerInfo/image")) {
-                if (loadImageFromUri(data.getString("containerInfo/image"))) {
-                    QApplication::restoreOverrideCursor();
-                    event->accept();
-                    return true;
-                }
+                loadImageFromUri(data.getString("containerInfo/image"));
+                event->accept();
+                return true;
             }
         } catch (...) {}
         try {
             if (text.has("http://") or text.has("https://")) {
-                if (loadImageFromUri(text)) {
-                    QApplication::restoreOverrideCursor();
-                    event->accept();
-                    return true;
-                }
+                loadImageFromUri(text);
+                event->accept();
+                return true;
             }
         } catch (...) {}
-        QApplication::restoreOverrideCursor();
     }
     return false;
 }
 
+void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
+{
+    //printf("download done\n");
+    //fflush(stdout);
+    if (pReply->error()!=QNetworkReply::NoError) {
+        ui->cover->setPixmap(previousCover);
+        QMessageBox::critical(this,tr("Error: could not load Cover"),
+                tr("An error occured, when loading the file.\n\n")
+                );
+        return;
+    }
 
+    m_DownloadedData = pReply->readAll();
+    pReply->deleteLater();
+    QPixmap img;
+    if (img.loadFromData(m_DownloadedData)) {
+        Cover=img;
+        ui->cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+        emit imageChanged(Cover);
+        activateWindow();
+        return;
+    }
+    ui->cover->setPixmap(previousCover);
+}

@@ -5,6 +5,10 @@
 #include <QEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QByteArray>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 namespace Ui {
 class WMCoverWidget;
@@ -25,13 +29,18 @@ public:
 private:
     Ui::WMCoverWidget *ui;
     QPixmap			Cover;
+    QPixmap         previousCover;
     QString         LastFilename;
+    QNetworkAccessManager m_WebCtrl;
+    QByteArray m_DownloadedData;
 
     bool eventFilter(QObject *target, QEvent *event);
     bool handleCoverDragEnterEvent(QDragEnterEvent *event);
     bool handleCoverDropEvent(QDropEvent *event);
-    bool loadImageFromUri(const QString &uri);
+    void loadImageFromUri(const QString &uri);
 
+private slots:
+    void fileDownloaded(QNetworkReply* pReply);
 
 public slots:
     void on_cover_clicked();
