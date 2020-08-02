@@ -27,6 +27,7 @@ QT += core \
     gui \
     xml \
     widgets \
+    network \
     printsupport
     
 CONFIG += debug_and_release
