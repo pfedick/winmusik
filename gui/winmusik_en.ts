@@ -5949,12 +5949,12 @@ p, li { white-space: pre-wrap; }
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="558"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="560"/>
         <source>delete tracks</source>
         <translation>delete tracks</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="559"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="561"/>
         <source>You have selected more than one track.
 Are you sure, you want to delete them?</source>
         <translation>You have selected more than one track.

@@ -530,7 +530,9 @@ void SearchlistDialog::addTrack(const SearchlistItem &track)
 	renderTrack(item);
 	dupeCheckOnTrack(item);
 	dupeCheckThread->wait();
-	ui.trackList->addTopLevelItem(item);
+    ui.trackList->addTopLevelItem(item);
+    ui.trackList->scrollToItem(item);
+    ui.trackList->setCurrentItem(item);
 	save();
 	updateStatusBar();
 }
