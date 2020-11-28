@@ -2,6 +2,10 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.x.x
+	- Added Bitrate-row in search result
+	
+	
 Version 3.6.0, Releasedate: 02.08.2020 (Tag: REL_3_6_0)
     - Merged sourcecode from pplib 6 into WinMusik
     - added configure script
