@@ -124,20 +124,25 @@ void Search::show()
 void Search::Resize()
 {
 	int w=trackList->width();
-	trackList->setColumnWidth(0,50);
+    trackList->setColumnWidth(SEARCH_TRACKLIST_POS_ROW,40);
 	if (resultmode==0) {
-        w=w-230-40-10-42-42-32-42;
-		trackList->setColumnWidth(1,w*35/100);
-		trackList->setColumnWidth(2,w*30/100);
-		trackList->setColumnWidth(3,w*25/100);
-		trackList->setColumnWidth(4,w*10/100);
-		trackList->setColumnWidth(5,50);
+        trackList->setColumnWidth(SEARCH_TRACKLIST_GENRE_ROW,50);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_BPM_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_KEY_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_ENERGYLEVEL_ROW,30);
         trackList->setColumnWidth(SEARCH_TRACKLIST_YEAR_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_RATING_ROW,40);
+        trackList->setColumnWidth(SEARCH_TRACKLIST_BITRATE_ROW,40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_SOURCE_ROW,120);
+
+        w=w-40-50-40-40-30-40-40-40-120;
+
+        trackList->setColumnWidth(SEARCH_TRACKLIST_ARTIST_ROW,w*35/100);
+        trackList->setColumnWidth(SEARCH_TRACKLIST_TITLE_ROW,w*30/100);
+        trackList->setColumnWidth(SEARCH_TRACKLIST_VERSION_ROW,w*25/100);
+        trackList->setColumnWidth(SEARCH_TRACKLIST_LENGTH_ROW,w*10/100);
+
+
 	} else {
 		//printf ("resultmpode=%i\n",resultmode);
 		trackList->setColumnWidth(1,w-100);
@@ -231,18 +236,19 @@ void Search::SetupTrackList()
 void Search::DefaultTracklistHeader()
 {
 	resultmode=0;
-    trackList->headerItem()->setText(0, tr("Pos","trackList"));
-    trackList->headerItem()->setText(1, tr("Artist","trackList"));
-    trackList->headerItem()->setText(2, tr("Title","trackList"));
-    trackList->headerItem()->setText(3, tr("Version","trackList"));
-    trackList->headerItem()->setText(4, tr("Genre","trackList"));
-    trackList->headerItem()->setText(5, tr("Length","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_POS_ROW, tr("Pos","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_ARTIST_ROW, tr("Artist","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_TITLE_ROW, tr("Title","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_VERSION_ROW, tr("Version","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_GENRE_ROW, tr("Genre","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_LENGTH_ROW, tr("Length","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_BPM_ROW, tr("BPM","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_KEY_ROW, tr("Key","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_ENERGYLEVEL_ROW, tr("Energy","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_YEAR_ROW, tr("Year","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_SOURCE_ROW, tr("Medium","trackList"));
     trackList->headerItem()->setText(SEARCH_TRACKLIST_RATING_ROW, tr("Rating","trackList"));
+    trackList->headerItem()->setText(SEARCH_TRACKLIST_BITRATE_ROW, tr("KBit","trackList"));
 
 }
 
@@ -513,25 +519,25 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 
 
 	Tmp.Setf("%5u",item->Track);
-	item->setText(0,Tmp);
+    item->setText(SEARCH_TRACKLIST_POS_ROW,Tmp);
 
 	if (ti->CoverPreview.Size()) {
 		icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(),ti->CoverPreview.GetSize());
-		item->setIcon(1,icon.scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+        item->setIcon(SEARCH_TRACKLIST_ARTIST_ROW,icon.scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
 	} else {
-		item->setIcon(1,QIcon(":/icons/resources/cover16.png"));
+        item->setIcon(SEARCH_TRACKLIST_ARTIST_ROW,QIcon(":/icons/resources/cover16.png"));
 	}
 	Tmp=ti->Artist;
-	item->setText(1,Tmp);
+    item->setText(SEARCH_TRACKLIST_ARTIST_ROW,Tmp);
 	Tmp=ti->Title;
-	item->setText(2,Tmp);
-	item->setForeground(3,Brush);
+    item->setText(SEARCH_TRACKLIST_TITLE_ROW,Tmp);
+    item->setForeground(SEARCH_TRACKLIST_VERSION_ROW,Brush);
 	Tmp=wm->GetVersionText(ti->VersionId);
-	item->setText(3,Tmp);
+    item->setText(SEARCH_TRACKLIST_VERSION_ROW,Tmp);
 	Tmp=wm->GetGenreText(ti->GenreId);
-	item->setText(4,Tmp);
+    item->setText(SEARCH_TRACKLIST_GENRE_ROW,Tmp);
 	Tmp.Setf("%4i:%02i",(int)(ti->Length/60),ti->Length%60);
-	item->setText(5,Tmp);
+    item->setText(SEARCH_TRACKLIST_LENGTH_ROW,Tmp);
 
 	// BPM, Key und EnergyLevel
 	Tmp.Setf("%d",(int)ti->BPM);
@@ -553,6 +559,10 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",ti->DeviceType);
 	Icon.addFile(Tmp);
 	item->setIcon(SEARCH_TRACKLIST_SOURCE_ROW,Icon);
+
+    // Bitrate
+    Tmp.Setf("%d",ti->Bitrate);
+    item->setText(SEARCH_TRACKLIST_BITRATE_ROW,Tmp);
 
 	// Bewertung
 	switch (ti->Rating) {
