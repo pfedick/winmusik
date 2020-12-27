@@ -509,6 +509,7 @@ void CWmClient::MainMenueClosed()
 
 void CWmClient::OpenEditor(int devicetype,int deviceId, int page, int track)
 {
+    if (!devicetype) return;
 	Edit *edit=new Edit((Menue*)MainMenue,this,devicetype);
 	edit->setWindowFlags(Qt::Window);
 	edit->show();

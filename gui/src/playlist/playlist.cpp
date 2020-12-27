@@ -334,7 +334,14 @@ bool Playlist::consumeEvent(QObject *target, QEvent *event)
 				return true;
 			} else if (e->key()==Qt::Key_E) {
 				if(!currentTreeItem) return false;
-				editTrack(currentTreeItem);
+                if (e->modifiers()==Qt::ShiftModifier) {
+                    wm->OpenEditor(currentTreeItem->DeviceType,
+                                   currentTreeItem->DeviceId,
+                                   currentTreeItem->DevicePage,
+                                   currentTreeItem->DeviceTrack);
+                } else {
+                    editTrack(currentTreeItem);
+                }
 				return true;
             } else if (e->key()==Qt::Key_C) {
                 if(!currentTreeItem) return false;
@@ -513,6 +520,7 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->keyVerified=(ti->Flags>>4)&1;
 	item->energyLevel=ti->EnergyLevel;
     item->bpm=ti->BPM;
+    item->bitrate=ti->Bitrate;
 	item->bpmPlayed=0;
 	item->rating=ti->Rating;
 	item->trackLength=ti->Length;
@@ -548,6 +556,7 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->endPositionSec=item->trackLength;
 	item->bpm=info.Ti.BPM;
 	item->rating=info.Ti.Rating;
+    item->bitrate=info.Ti.Bitrate;
 	item->musicKey=info.Ti.Key;
 	item->energyLevel=info.Ti.EnergyLevel;
 	item->CoverPreview=info.Ti.CoverPreview;
@@ -569,6 +578,8 @@ void Playlist::Resize()
 	w-=53;
 	ui.tracks->setColumnWidth(columnSource,65);
 	w-=69;
+    ui.tracks->setColumnWidth(columnBitrate,30);
+    w-=34;
 
 
 	if (playlistView==playlistViewNormal) {
@@ -584,14 +595,14 @@ void Playlist::Resize()
 		w-=54;
 		ui.tracks->setColumnWidth(columnEnergyLevel,30);
 		w-=34;
-		ui.tracks->setColumnWidth(columnStart,60);
-		w-=64;
-		ui.tracks->setColumnWidth(columnEnd,60);
-		w-=64;
-		ui.tracks->setColumnWidth(columnCuts,60);
-		w-=64;
-		ui.tracks->setColumnWidth(columnTotalLength,60);
-		w-=64;
+        ui.tracks->setColumnWidth(columnStart,50);
+        w-=54;
+        ui.tracks->setColumnWidth(columnEnd,50);
+        w-=54;
+        ui.tracks->setColumnWidth(columnCuts,50);
+        w-=54;
+        ui.tracks->setColumnWidth(columnTotalLength,50);
+        w-=54;
 
 		ui.tracks->setColumnWidth(columnTitle,w*65/100);
 		ui.tracks->setColumnWidth(columnGenre,w*15/100);
@@ -621,13 +632,15 @@ void Playlist::recreatePlaylist()
 	columnCuts=12;
 	columnLength=13;
 	columnTotalLength=14;
-	columnSource=15;
+    columnBitrate=15;
+    columnSource=16;
 
 	if (playlistView==playlistViewNormal) {
-		ui.tracks->setColumnCount(7);
+        ui.tracks->setColumnCount(8);
 		columnLength=4;
 		columnRating=5;
-		columnSource=6;
+        columnBitrate=6;
+        columnSource=7;
 
 		item->setText(columnTrack,tr("Track"));
 		item->setText(columnCover,tr("Cover"));
@@ -635,6 +648,7 @@ void Playlist::recreatePlaylist()
 		item->setText(columnGenre,tr("Genre"));
 		item->setText(columnLength,tr("Length"));
 		item->setText(columnRating,tr("Rating"));
+        item->setText(columnBitrate,tr("Bitrate"));
 		item->setText(columnSource,tr("Source"));
 
 	} else if (playlistView==playlistViewDJ) {
@@ -654,6 +668,7 @@ void Playlist::recreatePlaylist()
 		item->setText(columnCuts,tr("Cuts"));
 		item->setText(columnLength,tr("Length"));
 		item->setText(columnTotalLength,tr("Total"));
+        item->setText(columnBitrate,tr("Bitrate"));
 		item->setText(columnSource,tr("Source"));
 	}
 	Resize();
@@ -768,10 +783,15 @@ void Playlist::renderTrack(PlaylistItem *item)
 		break;
 	}
 
+    // Bitrate
+    Tmp.Setf("%d",(int)(item->bitrate));
+    item->setText(columnBitrate,Tmp);
+
 	// Tonträger
 	if (item->titleId) {
 		const char Seite[]="?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		Tmp.Setf("%u %c-%03u", item->DeviceId,Seite[(item->DevicePage<10?item->DevicePage:0)],item->DeviceTrack);
+        Tmp.Setf("%u %c-%03u", item->DeviceId,Seite[(item->DevicePage<10?item->DevicePage:0)],
+                item->DeviceTrack);
 		item->setText(columnSource,Tmp);
 		QIcon Icon;
 		Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",item->DeviceType);
@@ -833,6 +853,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	}
 	Tmp.Setf("%02i:%02i",(int)(cuts/60),(int)cuts%60);
 	item->setText(columnCuts,Tmp);
+
 
     //QColor grey(192,192,192);
     QColor basecolor=QApplication::palette().base().color();
@@ -1154,6 +1175,14 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column)
 		currentTreeItem=static_cast<PlaylistItem*>(item);
 		on_contextEditComment_triggered();
 		return;
+    } else if (column==columnSource) {
+        currentTreeItem=static_cast<PlaylistItem*>(item);
+        //on_contextEditComment_triggered();
+        wm->OpenEditor(currentTreeItem->DeviceType,
+                       currentTreeItem->DeviceId,
+                       currentTreeItem->DevicePage,
+                       currentTreeItem->DeviceTrack);
+        return;
 	} else if (column==columnBpmPlayed) {
 		currentTreeItem=static_cast<PlaylistItem*>(item);
 		on_contextSetBPMPlayed_triggered();

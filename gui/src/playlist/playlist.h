@@ -159,6 +159,7 @@ private:
     int columnEnd;
     int columnCuts;
     int columnTotalLength;
+    int columnBitrate;
 
     QPoint startPos;	// Für Drag/Drop und multiple Markierungen
     QPoint	ratePos;	// Für Rating-Spalte

@@ -92,6 +92,13 @@ Search::Search(QWidget *parent, CWmClient *wm)
 	ui.recordDateStart->installEventFilter(this);
 	ui.recordDateEnd->installEventFilter(this);
 
+
+    ui.tabWidget->setAcceptDrops(true);
+    ui.tabWidget->installEventFilter(this);
+    ui.query->installEventFilter(this);
+    ui.queryLayout->installEventFilter(this);
+    //ui.tabWidget->setDropIndicatorShown(true);
+
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
 }
@@ -185,7 +192,27 @@ bool Search::eventFilter(QObject *target, QEvent *event)
 				|| target==ui.recordDateStart || target==ui.recordDateEnd) {
 			((QDateEdit*)target)->selectAll();
 		}
-	}
+    } else if (type==QEvent::DragEnter) {
+        if (target==ui.tabWidget
+                || target==ui.query
+                || target==ui.queryLayout) {
+            QDragEnterEvent *e=static_cast<QDragEnterEvent *>(event);
+            //printf("QEvent::DragEnter\n");
+            //fflush(stdout);
+            e->accept();
+            return true;
+        }
+    } else if (type==QEvent::Drop) {
+        if (target==ui.tabWidget
+                || target==ui.query
+                || target==ui.queryLayout) {
+            QDropEvent *e=static_cast<QDragEnterEvent *>(event);
+            //printf("QEvent::Drop\n");
+            //fflush(stdout);
+            handleDropEvent(e);
+            return true;
+        }
+    }
 	return QWidget::eventFilter(target,event);
 }
 
@@ -1453,5 +1480,36 @@ void Search::on_setRecordingDate2_clicked()
 void Search::on_useFilter_toggled(bool enabled)
 {
 	ui.filter->setVisible(enabled);
+}
+
+
+void Search::handleDropEvent(QDropEvent *event)
+{
+    event->accept();
+    const QMimeData *mime=event->mimeData();
+    if (!mime) return;
+    if (mime->hasFormat("application/winmusik+xml")) {
+        QByteArray ba=mime->data("application/winmusik+xml");
+        ppl6::CString xml;
+        xml.Set(ba.constData(), ba.size());
+        if (xml.Left(18)=="<winmusikTracklist") {
+            //handleXMLDrop(xml,insertItem);
+            //return;
+        }
+    }
+    QList<QUrl>	list=mime->urls();
+    if (list.size()==0) return;
+    QUrl url=list[0];
+    QString file=url.toLocalFile();
+    TrackInfo info;
+    if (!getTrackInfoFromFile(info,file)) {
+        return;
+    }
+
+    ui.query->setText(info.Ti.Artist+" "+info.Ti.Title);
+
+    on_quicksearchButton_clicked();
+
+
 }
 

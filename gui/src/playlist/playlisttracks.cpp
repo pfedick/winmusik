@@ -46,6 +46,7 @@ PlaylistItem::PlaylistItem()
 	bpmPlayed=0;
 	rating=0;
 	trackLength=0;
+    bitrate=0;
 	mixLength=0.0f;
 	for (int z=0;z<5;z++) {
 		cutStartPosition[z]=0.0f;
@@ -91,6 +92,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey,musicKeyTypeMusicalSharps))+"</musicKey>\n";
 	ret+=Indent+"   <energyLevel>"+ppl6::ToString("%u",energyLevel)+"</energyLevel>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
+    ret+=Indent+"   <bitrate>"+ppl6::ToString("%u",bpm)+"</bitrate>\n";
 	ret+=Indent+"   <bpmPlayed>"+ppl6::ToString("%u",bpmPlayed)+"</bpmPlayed>\n";
 	ret+=Indent+"   <rating>"+ppl6::ToString("%u",rating)+"</rating>\n";
 	ret+=Indent+"   <trackLength>"+ppl6::ToString("%u",trackLength)+"</trackLength>\n";
@@ -199,6 +201,12 @@ void PlaylistItem::importFromXML(QDomElement &e)
 	}
 	if (!bpmPlayed) bpmPlayed=bpm;
 
+    node =e.namedItem("bitrate");
+    if (node.isNull()==false && node.isElement()==true) {
+        bitrate=node.toElement().text().toUInt();
+    }
+
+
 	node =e.namedItem("rating");
 	if (node.isNull()==false && node.isElement()==true) {
         rating=static_cast<ppluint8>(node.toElement().text().toUInt());
@@ -293,6 +301,7 @@ void PlaylistItem::updateFromDatabase()
 	Album=ti->Album;
 	musicKey=ti->Key;
 	energyLevel=ti->EnergyLevel;
+    bitrate=ti->Bitrate;
 	bpm=ti->BPM;
 	if (!bpmPlayed) bpmPlayed=0;
 	rating=ti->Rating;

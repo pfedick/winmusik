@@ -90,6 +90,8 @@ private:
     bool eventFilter(QObject *target, QEvent *event);
     void closeEvent(QCloseEvent *event);
 
+    void handleDropEvent(QDropEvent *event);
+
     bool on_trackList_MousePress(QMouseEvent *event);
     bool on_trackList_MouseRelease(QMouseEvent *event);
     bool on_trackList_MouseMove(QMouseEvent *event);

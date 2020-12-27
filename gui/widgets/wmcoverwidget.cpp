@@ -203,13 +203,72 @@ void WMCoverWidget::on_coverSaveButton_clicked()
     QApplication::restoreOverrideCursor();
 }
 
+static void analyzeDragEnter(QDragEnterEvent *event)
+{
+    const QMimeData *mimedata=event->mimeData();
+    printf("Wir haben was bekommen, nur was?\n");
+    if (mimedata->hasText()) {
+        printf("\n================================\nwir haben text\n");
+        ppl7::String text=mimedata->text();
+        text.printnl();
+    }
+    if (mimedata->hasColor()) printf("wir haben color\n");
+    if (mimedata->hasHtml()) {
+        printf("\n================================\nwir haben html\n");
+        ppl7::String text=mimedata->html();
+        text.printnl();
+    }
+    if (mimedata->hasImage()) printf("wir haben image\n");
+    if (mimedata->hasUrls()) {
+        printf("\n================================\nwir haben urls\n");
+        const QList<QUrl> &urllist=mimedata->urls();
+        for (int i = 0; i < urllist.size(); ++i) {
+             ppl7::String text=urllist.at(i).url();
+             text.printnl();
+
+         }
+    }
+    /*
+    QStringList formats=mimedata->formats();
+    printf("\n================================\nformatss\n");
+    for (int i = 0; i < formats.size(); ++i) {
+        ppl7::String text=formats.at(i);
+        text.printnl();
+        QByteArray ba=mimedata->data(formats.at(i));
+        ppl7::HexDump(ba.constData(), ba.size());
+
+    }
+wir haben text
+https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&showHawkfireUpsell=false&id=2609137383&libraryId=2609137383&asin=B08L99DB8D
+
+================================
+wir haben html
+<html>
+<body>
+<!--StartFragment--><a data-v-3c011e4b="" href="https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&amp;showHawkfireUpsell=false&amp;id=2609137383&amp;libraryId=2609137383&amp;asin=B08L99DB8D" class="entityLink link">Crash (Extended Mix) </a><!--EndFragment-->
+</body>
+</html>
+
+================================
+wir haben urls
+https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&showHawkfireUpsell=false&id=2609137383&libraryId=2609137383&asin=B08L99DB8D
+
+
+
+
+    */
+
+    fflush(stdout);
+}
+
 bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent *event)
 {
+    //analyzeDragEnter(event);
     const QMimeData *mimedata=event->mimeData();
     if (mimedata->hasText()) {
         ppl7::String text=mimedata->text();
         if(text.left(7)=="http://" or text.left(8)=="https://") {
-            if (text.has(".png") or text.has(".jpg") or text.has(".jpeg")) {
+            if (text.has(".png") or text.has(".jpg") or text.has(".jpeg") or text.has("amazon")) {
                 event->accept();
                 return true;
             }
@@ -243,15 +302,32 @@ void WMCoverWidget::loadImageFromUri(const QString &uri)
     QApplication::processEvents();
 
     QNetworkRequest request(uri);
+    //request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     m_WebCtrl.get(request);
 
 }
+
+/*
+ * Amazon Music:
+ * Song: https://www.amazon.de/morpho/webapp/#/album/detail/2910154465?context=prime&showHawkfireUpsell=false&id=2910154465&libraryId=2910154465&asin=B08L8677MH
+ *       https://www.amazon.de/morpho/webapp/#/album/detail/2910154465?context=prime&showHawkfireUpsell=false&id=2910154465&libraryId=2910154465&asin=B08L8677MH
+ * Web: URL=https://m.media-amazon.com/images/I/51r2s5SOUUL._AA256_.jpg
+ *
+ * ASIN: https://www.amazon.de/dp/B08L853GL3
+ *  => Bild: https://m.media-amazon.com/images/I/91emrYbBsML._SS500_.jpg
+ *
+ * <img alt="If I Spoke Your Language (Extended Mix)" src="https://m.media-amazon.com/images/I/91emrYbBsML._SS500_.jpg">
+ * kommt in der Konstellation scheinbar nur einmal vor, pattern: <img alt=".*" src="(https://m.media-amazon.com/images.*\.jpg)">
+ */
+
 
 bool WMCoverWidget::handleCoverDropEvent(QDropEvent *event)
 {
     const QMimeData *mimedata=event->mimeData();
     if (mimedata->hasText()) {
         ppl7::String text=mimedata->text();
+        //printf("URL=%s\n",(const char*)text);
+
         try {
             ppl7::AssocArray data;
             ppl7::Json::loads(data, text);
@@ -262,7 +338,18 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent *event)
             }
         } catch (...) {}
         try {
-            if (text.has("http://") or text.has("https://")) {
+            ppl7::Array matches;
+            if (ppl7::PregMatch("/^(https://www\\.amazon\\..*?)/.*&asin=(.*)$/", text, matches)) {
+                ppl7::String amazon=matches[1]+"/dp/"+matches[2];
+                loadImageFromUri(amazon);
+                /*
+                printf ("match: %s\n", (const char*)matches[2]);
+                printf("URL: %s\n",(const char*)amazon);
+                fflush(stdout);
+                */
+                event->accept();
+                return true;
+            } else if (text.has("http://") or text.has("https://")) {
                 loadImageFromUri(text);
                 event->accept();
                 return true;
@@ -283,9 +370,25 @@ void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
                 );
         return;
     }
-
+    ppl7::String url=pReply->request().url().url();
     m_DownloadedData = pReply->readAll();
     pReply->deleteLater();
+    if (ppl7::PregMatch("/^https://www.amazon.*?/dp/.*$/",url)) {
+        ppl7::String page(m_DownloadedData.constData(), m_DownloadedData.size());
+        ppl7::Array matches;
+        if (ppl7::PregMatch("/<img alt=\".*\" src=\"(https://m\\.media-amazon\\.com/images.*\\.jpg)\">/",page, matches)) {
+            matches[1].printnl();
+            QString qurl=matches[1];
+            QNetworkRequest request2(qurl);
+            m_WebCtrl.get(request2);
+            return;
+        }
+        page.printnl();
+        ui->cover->setPixmap(previousCover);
+        //fflush(stdout);
+        return;
+    }
+
     QPixmap img;
     if (img.loadFromData(m_DownloadedData)) {
         Cover=img;
@@ -293,6 +396,8 @@ void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
         emit imageChanged(Cover);
         activateWindow();
         return;
+    } else {
+
     }
     ui->cover->setPixmap(previousCover);
 }
