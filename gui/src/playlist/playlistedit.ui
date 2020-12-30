@@ -300,10 +300,10 @@
           <item>
            <widget class="QSpinBox" name="musicKeyModificationSpinBox">
             <property name="minimum">
-             <number>-2</number>
+             <number>-4</number>
             </property>
             <property name="maximum">
-             <number>2</number>
+             <number>4</number>
             </property>
            </widget>
           </item>
@@ -1432,19 +1432,42 @@
   <tabstop>bpmPlayed</tabstop>
   <tabstop>rating</tabstop>
   <tabstop>energyLevel</tabstop>
+  <tabstop>musicKey</tabstop>
+  <tabstop>keyVerified</tabstop>
+  <tabstop>musicKeyModificationSpinBox</tabstop>
+  <tabstop>musicKeyPlayed</tabstop>
   <tabstop>remarks</tabstop>
   <tabstop>trackStart</tabstop>
+  <tabstop>trackStartFromBeginning</tabstop>
+  <tabstop>cueTrackStart</tabstop>
   <tabstop>trackEnd</tabstop>
+  <tabstop>trackEndUntilEnd</tabstop>
+  <tabstop>cueTrackEnd</tabstop>
   <tabstop>cutStart0</tabstop>
+  <tabstop>cueCutStart_0</tabstop>
   <tabstop>cutEnd0</tabstop>
+  <tabstop>cueCutEnd_0</tabstop>
+  <tabstop>clearCut_0</tabstop>
   <tabstop>cutStart1</tabstop>
+  <tabstop>cueCutStart_1</tabstop>
   <tabstop>cutEnd1</tabstop>
+  <tabstop>cueCutEnd_1</tabstop>
+  <tabstop>clearCut_1</tabstop>
   <tabstop>cutStart2</tabstop>
+  <tabstop>cueCutStart_2</tabstop>
   <tabstop>cutEnd2</tabstop>
+  <tabstop>cueCutEnd_2</tabstop>
+  <tabstop>clearCut_2</tabstop>
   <tabstop>cutStart3</tabstop>
+  <tabstop>cueCutStart_3</tabstop>
   <tabstop>cutEnd3</tabstop>
+  <tabstop>cueCutEnd_3</tabstop>
+  <tabstop>clearCut_3</tabstop>
   <tabstop>cutStart4</tabstop>
+  <tabstop>cueCutStart_4</tabstop>
   <tabstop>cutEnd4</tabstop>
+  <tabstop>cueCutEnd_4</tabstop>
+  <tabstop>clearCut_4</tabstop>
   <tabstop>traktorCues</tabstop>
   <tabstop>traktorUseInOutButton</tabstop>
   <tabstop>coverCopyButton</tabstop>

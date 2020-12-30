@@ -53,6 +53,7 @@ PlaylistItem::PlaylistItem()
 		cutEndPosition[z]=0.0f;
 	}
 	keyVerified=false;
+    keyModification=0;
 	DeviceId=0;
 	DeviceTrack=0;
 	DeviceType=0;
@@ -90,6 +91,7 @@ ppl6::CString PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent+"   <musicKey verified=\"";
 	if (keyVerified) ret+="true"; else ret+="false";
 	ret+="\">"+ppl6::EscapeHTMLTags(DataTitle::keyName(musicKey,musicKeyTypeMusicalSharps))+"</musicKey>\n";
+    ret+=Indent+"   <keyModification>"+ppl6::ToString("%d",keyModification)+"</keyModification>\n";
 	ret+=Indent+"   <energyLevel>"+ppl6::ToString("%u",energyLevel)+"</energyLevel>\n";
 	ret+=Indent+"   <bpm>"+ppl6::ToString("%u",bpm)+"</bpm>\n";
     ret+=Indent+"   <bitrate>"+ppl6::ToString("%u",bpm)+"</bitrate>\n";
@@ -186,7 +188,12 @@ void PlaylistItem::importFromXML(QDomElement &e)
 		Tmp=node.toElement().attribute("verified","false");
 		keyVerified=Tmp.ToBool();
 	}
-	node =e.namedItem("energyLevel");
+    node =e.namedItem("keyModification");
+    if (node.isNull()==false && node.isElement()==true) {
+        keyModification=static_cast<pplint8>(node.toElement().text().toInt());
+    }
+
+    node =e.namedItem("energyLevel");
 	if (node.isNull()==false && node.isElement()==true) {
         energyLevel=static_cast<ppluint8>(node.toElement().text().toUInt());
 	}

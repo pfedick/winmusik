@@ -58,12 +58,14 @@ class PlaylistItem : public QTreeWidgetItem
         float			mixLength;
         ppluint8		energyLevel;
 		bool			keyVerified;
+        pplint8         keyModification;
         ppluint16       bitrate;
 
 		ppluint32		DeviceId;
 		ppluint16		DeviceTrack;
 		ppluint8		DeviceType;
 		ppluint8		DevicePage;
+
 
 
 

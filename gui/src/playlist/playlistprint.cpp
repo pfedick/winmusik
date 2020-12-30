@@ -235,12 +235,30 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 	lastbpm=bpm;
 	MusicKey key((int)item->musicKey);
 	ppl6::CArray res;
-	if (item->Remarks.PregMatch("key\\s*[+]([1234])",res)) {
-		Font.setBold(true);
-		painter.setFont(Font);
+    if (item->keyModification>0) {
+        Font.setBold(true);
+        painter.setFont(Font);
+        highlightRect(COL_KEY);
+        key=key.addSemitone(item->keyModification);
+        printRect(COL_KEY,ppl7::ToString("%s ▲+%d",(const char*)key.name(),
+                                         item->keyModification));
+        Font.setBold(false);
+        painter.setFont(Font);
+    } else if (item->keyModification<0) {
+        Font.setBold(true);
+        painter.setFont(Font);
+        highlightRect(COL_KEY);
+        key=key.addSemitone(item->keyModification);
+        printRect(COL_KEY,ppl7::ToString("%s ▼%d",(const char*)key.name(),
+                                         item->keyModification));
+        Font.setBold(false);
+        painter.setFont(Font);
+    } else if (item->Remarks.PregMatch("key\\s*[+]([1234])",res)) {
+        Font.setBold(true);
+        painter.setFont(Font);
 		highlightRect(COL_KEY);
 		key=key.addSemitone(atoi(res[1]));
-		printRect(COL_KEY,ppl7::ToString("%s ⇧+%s",(const char*)key.name(),
+        printRect(COL_KEY,ppl7::ToString("%s ▲+%s",(const char*)key.name(),
 				res[1]));
 		Font.setBold(false);
 		painter.setFont(Font);
@@ -249,7 +267,7 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 		painter.setFont(Font);
 		highlightRect(COL_KEY);
 		key=key.addSemitone(-atoi(res[1]));
-		printRect(COL_KEY,ppl7::ToString("%s ⇩-%s",(const char*)key.name(),
+        printRect(COL_KEY,ppl7::ToString("%s ▼-%s",(const char*)key.name(),
 						res[1]));
 		Font.setBold(false);
 		painter.setFont(Font);

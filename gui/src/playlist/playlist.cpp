@@ -591,8 +591,8 @@ void Playlist::Resize()
 		w-=39;
 		ui.tracks->setColumnWidth(columnBpmPlayed,45);
 		w-=49;
-		ui.tracks->setColumnWidth(columnMusicKey,50);
-		w-=54;
+        ui.tracks->setColumnWidth(columnMusicKey,55);
+        w-=59;
 		ui.tracks->setColumnWidth(columnEnergyLevel,30);
 		w-=34;
         ui.tracks->setColumnWidth(columnStart,50);
@@ -824,7 +824,14 @@ void Playlist::renderTrackViewDJ(PlaylistItem *item)
 	item->setText(columnBpm,Tmp);
 	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
 	item->setText(columnBpmPlayed,Tmp);
-	item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,musicKeyDisplay));
+    if (item->keyModification!=0) {
+        Tmp=MusicKey(item->musicKey).addSemitone(item->keyModification).name();
+        if (item->keyModification>0) Tmp.Concatf(" ▲ +%d",item->keyModification);
+        else Tmp.Concatf(" ▼ %d",item->keyModification);
+        item->setText(columnMusicKey,Tmp);
+    } else {
+        item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,musicKeyDisplay));
+    }
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
         //item->setTextColor(columnMusicKey,QColor(0,0,0));

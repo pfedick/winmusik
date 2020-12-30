@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include "traktor.h"
 #include "winmusik3.h"
+#include "musickey.h"
 
 PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
     : QDialog(parent)
@@ -59,6 +60,7 @@ PlaylistEdit::PlaylistEdit(QWidget *parent, CWmClient *wm)
 	installFilter(ui.bpm,0);
 	installFilter(ui.bpmPlayed,0);
 	installFilter(ui.musicKey,0);
+    installFilter(ui.musicKeyModificationSpinBox,0);
 	installFilter(ui.keyVerified,0);
 	installFilter(ui.rating,0);
 	installFilter(ui.energyLevel,0);
@@ -145,6 +147,9 @@ void PlaylistEdit::filloutFields(PlaylistItem *item)
 	ui.musicKey->setText(DataTitle::keyName(item->musicKey,wm->conf.musicKeyDisplay));
 	ui.keyVerified->setChecked(item->keyVerified);
 	ui.energyLevel->setValue(item->energyLevel);
+    ui.musicKeyModificationSpinBox->setValue(item->keyModification);
+    on_musicKeyModificationSpinBox_valueChanged(item->keyModification);
+
 
 	ui.rating->setCurrentIndex(item->rating);
 
@@ -305,6 +310,7 @@ void PlaylistEdit::storeFileds(PlaylistItem *item)
 	item->cutEndPosition[3]=getSecondsFromLine(ui.cutEnd3);
 	item->cutEndPosition[4]=getSecondsFromLine(ui.cutEnd4);
 	item->CoverPreview=CoverPreview;
+    item->keyModification=ui.musicKeyModificationSpinBox->value();
 	item->updateMixLength();
 }
 
@@ -514,5 +520,9 @@ void PlaylistEdit::on_trackEndUntilEnd_clicked()
 	ui.trackEnd->setText(ui.trackLength->text());
 }
 
-
+void PlaylistEdit::on_musicKeyModificationSpinBox_valueChanged(int value)
+{
+    MusicKey key(ui.musicKey->text().trimmed());
+    ui.musicKeyPlayed->setText(key.addSemitone(value).name(wm->conf.musicKeyDisplay));
+}
 

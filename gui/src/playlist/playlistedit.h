@@ -89,6 +89,8 @@ public slots:
 	void on_bpm_editingFinished() { updateTotalTime(); }
 	void on_bpmPlayed_editingFinished() { updateTotalTime(); }
 
+    void on_musicKeyModificationSpinBox_valueChanged(int value);
+
 	void on_coverCopyButton_clicked();
 	void on_coverInsertButton_clicked();
 	void on_coverLoadButton_clicked();
