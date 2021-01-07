@@ -116,15 +116,15 @@ PlayListPrintDJ::PlayListPrintDJ()
 	Brush.setStyle(Qt::NoBrush);
 
 	dimension[COL_TRACK].set(0,7);
-	dimension[COL_TITLE].set(7,88);
-	dimension[COL_COMMENT].set(95,32);
-	dimension[COL_BPM].set(127,10);
-	dimension[COL_KEY].set(137,13);
-	dimension[COL_START].set(150,10);
-	dimension[COL_END].set(160,10);
-	dimension[COL_CUTS].set(170,10);
-	dimension[COL_LENGTH].set(180,10);
-	dimension[COL_TOTAL].set(190,12);
+    dimension[COL_TITLE].set(7,85);
+    dimension[COL_COMMENT].set(92,32);
+    dimension[COL_BPM].set(124,10);
+    dimension[COL_KEY].set(134,13);
+    dimension[COL_START].set(147,10);
+    dimension[COL_END].set(157,10);
+    dimension[COL_CUTS].set(167,10);
+    dimension[COL_LENGTH].set(177,10);
+    dimension[COL_TOTAL].set(187,15);
 
 }
 
@@ -223,7 +223,7 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 	if (trackno>1 && lastbpm!=bpm) {
 		Font.setBold(true);
 		painter.setFont(Font);
-		Tmp.setf("%d %s",bpm,(bpm>lastbpm?"⇧":"⇩"));
+		Tmp.setf("%d %s",bpm,(bpm>lastbpm?"▲":"▼"));
 		highlightRect(COL_BPM);
 		printRect(COL_BPM,Tmp);
 		Font.setBold(false);
@@ -283,7 +283,7 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 	printRect(COL_CUTS,formatTime(cutLength));
 	printRect(COL_LENGTH,formatTime(item->mixLength));
 	totalLength+=item->mixLength;
-	printRect(COL_TOTAL,formatTime(totalLength));
+    printRect(COL_TOTAL,getReadableTimeFromSeconds(totalLength));
 
 	painter.restore();
 	trackno++;
@@ -315,7 +315,7 @@ void PlayListPrintDJ::print(const PlaylistTracks *tracks, QPrinter &Printer)
             headerPrinted=false;
             printFooter(Printer);
             Printer.newPage();
-            x=10;
+            x=1;
             y=10;
             page++;
         }
