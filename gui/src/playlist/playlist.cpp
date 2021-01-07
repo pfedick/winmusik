@@ -706,8 +706,7 @@ void Playlist::updateLengthStatus()
 		trackLength+=item->trackLength;
 		mixLength+=item->mixLength;
 		if (playlistView==playlistViewDJ) {
-			Tmp.Setf("%02i:%02i",(int)(mixLength/60),(int)mixLength%60);
-			item->setText(columnTotalLength,Tmp);
+            item->setText(columnTotalLength,getReadableTimeFromSeconds(mixLength));
 		}
 		if (item->isSelected()) {
 			selectedTracks++;

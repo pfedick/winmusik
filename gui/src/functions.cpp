@@ -457,14 +457,7 @@ void loadCoverToClipboard(const ppl6::CString &Filename)
 
 void setReadableLength(QLabel *label, int length)
 {
-	int hh=0;
-	int mm=(int)(length/60);
-	int ss=length%60;
-	if (mm>59) {
-		hh=(int)(mm/60);
-		mm=mm%60;
-	}
-	label->setText(ppl6::ToString("%0d:%02d:%02d",hh,mm,ss));
+    label->setText(getReadableTimeFromSeconds(length));
 }
 
 
@@ -478,6 +471,17 @@ void SetWindowGeometry(QWidget *widget, const ppl6::CString &name)
 void SaveWindowGeometry(QWidget *widget, const ppl6::CString &name)
 {
 	wm_main->SaveGeometry(name,widget->saveGeometry());
+}
+
+ppl6::CString getReadableTimeFromSeconds(int seconds)
+{
+    ppl6::CString Tmp;
+    int hours=(int)(seconds/3600);
+    int rest=seconds-(hours*3600);
+    int minutes=(int)(rest/60);
+    rest-=minutes*60;
+    Tmp.Setf("%02d:%02d:%02d",hours, minutes,rest);
+    return Tmp;
 }
 
 
