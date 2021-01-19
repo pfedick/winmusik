@@ -447,6 +447,7 @@ void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertIte
 		QList<QUrl>	list=mime->urls();
 		handleURLDrop(list,insertItem);
 	}
+    updateMixBpmUpDownIndicator();
 	updateLengthStatus();
 	renumberTracks();
 	ui.tracks->setSortingEnabled(true);
@@ -677,12 +678,15 @@ void Playlist::recreatePlaylist()
 
 void Playlist::updatePlaylist()
 {
+    PlaylistItem *previous=NULL;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		renderTrack(item);
+        renderTrack(item,previous);
 		item->setText(0,ppl6::ToString("%5d",i+1));
+        previous=item;
 	}
 	updateLengthStatus();
+    updateMixBpmUpDownIndicator();
 }
 
 void Playlist::renumberTracks()
@@ -723,7 +727,7 @@ void Playlist::updateLengthStatus()
 	statusbar->setSelectedTracks(selectedTracks);
 }
 
-void Playlist::renderTrack(PlaylistItem *item)
+void Playlist::renderTrack(PlaylistItem *item, PlaylistItem *previous)
 {
 	QColor color(0,0,0);
 	QBrush b=item->background(0);
@@ -804,7 +808,7 @@ void Playlist::renderTrack(PlaylistItem *item)
 	if (playlistView==playlistViewNormal) {
 		renderTrackViewPlaylist(item);
 	} else if (playlistView==playlistViewDJ) {
-		renderTrackViewDJ(item);
+        renderTrackViewDJ(item, previous);
 	}
 }
 
@@ -815,13 +819,14 @@ void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
 	item->setText(columnLength,Tmp);
 }
 
-void Playlist::renderTrackViewDJ(PlaylistItem *item)
+void Playlist::renderTrackViewDJ(PlaylistItem *item, PlaylistItem *previous)
 {
 	ppl6::CString Tmp;
 	item->setText(columnComment,item->Remarks);
 	Tmp.Setf("%i",item->bpm);
 	item->setText(columnBpm,Tmp);
-	Tmp.Setf("%i",(item->bpmPlayed>0?item->bpmPlayed:item->bpm));
+    int bpmPlayed=(item->bpmPlayed>0?item->bpmPlayed:item->bpm);
+    Tmp.Setf("%i",bpmPlayed);
 	item->setText(columnBpmPlayed,Tmp);
     if (item->keyModification!=0) {
         Tmp=MusicKey(item->musicKey).addSemitone(item->keyModification).name();
@@ -935,6 +940,7 @@ void Playlist::editTrack(PlaylistItem *item)
 		setChanged(true);
 		renderTrack(item);
 		updateLengthStatus();
+        updateMixBpmUpDownIndicator();
 	}
 }
 
@@ -1491,6 +1497,7 @@ void Playlist::on_contextDeleteTrack_triggered()
 	setChanged(true);
 	renumberTracks();
 	updateLengthStatus();
+    updateMixBpmUpDownIndicator();
 }
 
 void Playlist::on_contextFindMoreVersions_triggered()
@@ -1535,6 +1542,7 @@ void Playlist::on_contextSetBPMPlayed_triggered()
 				renderTrack(item);
 			}
 			updateLengthStatus();
+            updateMixBpmUpDownIndicator();
 			setChanged(true);
 		}
 	}
@@ -1587,6 +1595,7 @@ void Playlist::on_contextReReadInAndOuts_triggered()
 			renderTrack(item);
 		}
 		updateLengthStatus();
+        updateMixBpmUpDownIndicator();
 		setChanged(true);
 	}
 }
@@ -1987,3 +1996,22 @@ void Playlist::on_ct_modificationSpinBox_valueChanged(int i)
     filterChanged();
 }
 
+
+void Playlist::updateMixBpmUpDownIndicator()
+{
+    if (playlistView!=playlistViewDJ) return;
+    PlaylistItem *previous=NULL;
+    ppl6::CString Tmp;
+    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
+        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+        int bpmPlayed=(item->bpmPlayed>0?item->bpmPlayed:item->bpm);
+        Tmp.Setf("%i",bpmPlayed);
+        if (previous) {
+            int previous_bpm=(previous->bpmPlayed>0?previous->bpmPlayed:previous->bpm);
+            if (bpmPlayed>previous_bpm) Tmp+=" ▲";
+            else if (bpmPlayed<previous_bpm) Tmp+=" ▼";
+            item->setText(columnBpmPlayed,Tmp);
+        }
+        previous=item;
+    }
+}

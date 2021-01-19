@@ -92,7 +92,7 @@ private:
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
-    void renderTrack(PlaylistItem *item);
+    void renderTrack(PlaylistItem *item, PlaylistItem *previous=NULL);
     void calcMixLength(PlaylistItem *item);
     void updateLengthStatus();
     void renumberTracks();
@@ -101,7 +101,7 @@ private:
 
 
     void renderTrackViewPlaylist(PlaylistItem *item);
-    void renderTrackViewDJ(PlaylistItem *item);
+    void renderTrackViewDJ(PlaylistItem *item, PlaylistItem *previous=NULL);
 
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);
@@ -110,6 +110,7 @@ private:
     void handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem);
     void handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem);
     void updateLastPlaylist();
+    void updateMixBpmUpDownIndicator();
 
     void closeEvent(QCloseEvent *event);
 
