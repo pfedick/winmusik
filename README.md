@@ -43,6 +43,13 @@ You have to install the following packages:
   - iconv (only if you have to import files from old WinMusik version 2.x)
   - libcdio (developer package)
 
+### Windows 10 with Msys/mingw
+
+For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
+
+    pacman -S git make mingw-w64-x86_64-gcc mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv \
+         mingw-w64-x86_64-bzip2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-mpg123 \
+         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng mingw-w64-x86_64-curl mingw-w64-x86_64-qt5
 
 Configure and compile
 ---------------------
