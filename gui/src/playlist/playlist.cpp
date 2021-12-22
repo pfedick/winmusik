@@ -53,66 +53,6 @@
 #include <stdio.h>
 #include <ppl6-sound.h>
 
-/*
-class Playlist;
-
-class PlaylistTab : public QWidget
-{
-		Q_OBJECT
-	public:
-		PlaylistTab(QWidget *parent = 0);
-		~PlaylistTab();
-		PlaylistTracks *tracks;
-
-		void setPlaylist(Playlist *p);
-	private:
-
-
-};
-
-PlaylistTab::PlaylistTab(QWidget *parent)
-	: QWidget(parent)
-{
-	QVBoxLayout *layout=new QVBoxLayout;
-	layout->setContentsMargins(2,2,2,2);
-
-	tracks=new PlaylistTracks;
-	tracks->setAcceptDrops(true);
-	tracks->sortByColumn(0,Qt::AscendingOrder);
-	tracks->setMouseTracking(false);
-	tracks->setContextMenuPolicy(Qt::CustomContextMenu);
-	tracks->setAcceptDrops(true);
-	tracks->setDropIndicatorShown(true);
-	tracks->setDragEnabled(true);
-	tracks->setDragDropOverwriteMode(false);
-	tracks->setDragDropMode(QAbstractItemView::DragOnly);
-	tracks->setDefaultDropAction(Qt::IgnoreAction);
-	tracks->setAlternatingRowColors(true);
-	tracks->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	tracks->setSelectionBehavior(QAbstractItemView::SelectRows);
-	tracks->setIconSize(QSize(64,16));
-	tracks->setRootIsDecorated(false);
-	tracks->setUniformRowHeights(true);
-	tracks->setItemsExpandable(false);
-	tracks->setSortingEnabled(true);
-	tracks->setExpandsOnDoubleClick(false);
-
-	layout->addWidget(tracks);
-	setLayout(layout);
-}
-
-PlaylistTab::~PlaylistTab()
-{
-
-}
-
-void PlaylistTab::setPlaylist(Playlist *p)
-{
-	tracks->setPlaylist(p);
-}
-
-*/
-
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)
 {
@@ -569,12 +509,12 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 void Playlist::Resize()
 {
 	int w=ui.tracks->width();
-	ui.tracks->setColumnWidth(columnTrack,40);
-	w-=44;
+	ui.tracks->setColumnWidth(columnTrack,30);
+	w-=34;
 	ui.tracks->setColumnWidth(columnCover,64);
 	w-=68;
-	ui.tracks->setColumnWidth(columnLength,60);
-	w-=64;
+	ui.tracks->setColumnWidth(columnLength,50);
+	w-=54;
 	ui.tracks->setColumnWidth(columnRating,50);
 	w-=53;
 	ui.tracks->setColumnWidth(columnSource,65);
@@ -604,6 +544,8 @@ void Playlist::Resize()
         w-=54;
         ui.tracks->setColumnWidth(columnTotalLength,50);
         w-=54;
+        ui.tracks->setColumnWidth(columnTimeCode,50);
+        w-=54;
 
 		ui.tracks->setColumnWidth(columnTitle,w*65/100);
 		ui.tracks->setColumnWidth(columnGenre,w*15/100);
@@ -620,24 +562,28 @@ void Playlist::recreatePlaylist()
 
 	columnTrack=0;
 	columnCover=1;
-	columnTitle=2;
-	columnGenre=3;
-	columnComment=4;
-	columnBpm=5;
-	columnBpmPlayed=6;
-	columnMusicKey=7;
-	columnEnergyLevel=8;
-	columnRating=9;
-	columnStart=10;
-	columnEnd=11;
-	columnCuts=12;
-	columnLength=13;
-	columnTotalLength=14;
-    columnBitrate=15;
-    columnSource=16;
+	columnTimeCode=2;
+	columnTitle=3;
+	columnGenre=4;
+	columnComment=5;
+	columnBpm=6;
+	columnBpmPlayed=7;
+	columnMusicKey=8;
+	columnEnergyLevel=9;
+	columnRating=10;
+	columnStart=11;
+	columnEnd=12;
+	columnCuts=13;
+	columnLength=14;
+	columnTotalLength=15;
+    columnBitrate=16;
+    columnSource=17;
 
 	if (playlistView==playlistViewNormal) {
         ui.tracks->setColumnCount(8);
+    	columnCover=1;
+    	columnTitle=2;
+    	columnGenre=3;
 		columnLength=4;
 		columnRating=5;
         columnBitrate=6;
@@ -653,8 +599,9 @@ void Playlist::recreatePlaylist()
 		item->setText(columnSource,tr("Source"));
 
 	} else if (playlistView==playlistViewDJ) {
-		ui.tracks->setColumnCount(16);
-		item->setText(columnTrack,tr("Track"));
+		ui.tracks->setColumnCount(17);
+		item->setText(columnTrack,tr("#"));
+		item->setText(columnTimeCode,tr("TC"));
 		item->setText(columnCover,tr("Cover"));
 		item->setText(columnTitle,tr("Artist - Title (Version)"));
 		item->setText(columnGenre,tr("Genre"));
@@ -707,6 +654,9 @@ void Playlist::updateLengthStatus()
 	int selectedTracks=0;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		if (playlistView==playlistViewDJ) {
+			item->setText(columnTimeCode,getReadableTimeFromSeconds(mixLength));
+		}
 		trackLength+=item->trackLength;
 		mixLength+=item->mixLength;
 		if (playlistView==playlistViewDJ) {
@@ -1261,7 +1211,7 @@ void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
 		a=m->addAction(QIcon(""),tr("Set BPM played","trackList Context Menue"),this,SLOT(on_contextSetBPMPlayed_triggered()));
     } else if (column==columnComment) {
         a=m->addAction(QIcon(""),tr("Edit Comment","trackList Context Menue"),this,SLOT(on_contextEditComment_triggered()));
-	} else if (column==columnLength) {
+	} else if (column==columnLength || (playlistView==playlistViewDJ && (column==columnTimeCode || column==columnStart || column==columnEnd || column==columnCuts || column==columnTotalLength))) {
 		a=m->addAction(QIcon(""),tr("Reread Traktor IN and OUTs","trackList Context Menue"),this,SLOT(on_contextReReadInAndOuts_triggered()));
 
 	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {

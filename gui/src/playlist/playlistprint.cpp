@@ -17,16 +17,15 @@
 #include <QPoint>
 
 #define COL_TRACK		0
-#define COL_TITLE		1
-#define COL_COMMENT		2
-#define COL_BPM			3
-#define COL_KEY			4
-#define COL_START		5
-#define COL_END			6
-#define COL_CUTS		7
-#define COL_LENGTH		8
-#define COL_TOTAL		9
-
+#define COL_TIMECODE	1
+#define COL_TITLE		2
+#define COL_COMMENT		3
+#define COL_BPM			4
+#define COL_KEY			5
+#define COL_START		6
+#define COL_END			7
+#define COL_CUTS		8
+#define COL_LENGTH		9
 
 class ColumnDimension
 {
@@ -116,15 +115,16 @@ PlayListPrintDJ::PlayListPrintDJ()
 	Brush.setStyle(Qt::NoBrush);
 
 	dimension[COL_TRACK].set(0,7);
-    dimension[COL_TITLE].set(7,85);
-    dimension[COL_COMMENT].set(92,32);
-    dimension[COL_BPM].set(124,10);
-    dimension[COL_KEY].set(134,13);
-    dimension[COL_START].set(147,10);
-    dimension[COL_END].set(157,10);
-    dimension[COL_CUTS].set(167,10);
-    dimension[COL_LENGTH].set(177,10);
-    dimension[COL_TOTAL].set(187,15);
+	dimension[COL_TIMECODE].set(7,15);
+    dimension[COL_TITLE].set(22,85);
+    dimension[COL_COMMENT].set(107,32);
+    dimension[COL_BPM].set(139,10);
+    dimension[COL_KEY].set(149,13);
+    dimension[COL_START].set(162,10);
+    dimension[COL_END].set(172,10);
+    dimension[COL_CUTS].set(182,10);
+    dimension[COL_LENGTH].set(192,10);
+
 
 }
 
@@ -169,6 +169,7 @@ void PlayListPrintDJ::printHeader(const PlaylistTracks *tracks)
     painter.setFont(Font);
 
     printRect(COL_TRACK,"#");
+    printRect(COL_TIMECODE,"TC");
     printRect(COL_TITLE,"Artist - Title (Version)");
     printRect(COL_COMMENT,"Comment");
     printRect(COL_BPM,"BPM");
@@ -177,7 +178,7 @@ void PlayListPrintDJ::printHeader(const PlaylistTracks *tracks)
     printRect(COL_END,"End");
     printRect(COL_CUTS,"Cuts");
     printRect(COL_LENGTH,"Length");
-    printRect(COL_TOTAL,"Total");
+
 
     painter.restore();
     y+=5;
@@ -210,6 +211,8 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 	painter.setPen(Pen);
 	painter.setBrush(Brush);
 	printRect(COL_TRACK,ppl7::ToString("%d",trackno));
+	printRect(COL_TIMECODE,getReadableTimeFromSeconds(totalLength));
+
 	Tmp=item->Artist + " - " + item->Title;
 	Tmp+=" (";
 	Tmp+=item->Version;
@@ -283,7 +286,7 @@ void PlayListPrintDJ::printLine(PlaylistItem *item)
 	printRect(COL_CUTS,formatTime(cutLength));
 	printRect(COL_LENGTH,formatTime(item->mixLength));
 	totalLength+=item->mixLength;
-    printRect(COL_TOTAL,getReadableTimeFromSeconds(totalLength));
+
 
 	painter.restore();
 	trackno++;
