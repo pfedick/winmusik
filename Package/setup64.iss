@@ -83,9 +83,9 @@ Source: "C:/msys64/mingw64/bin/libglib-2.0-0.dll"; DestDir: "{app}"; Flags: igno
 Source: "C:/msys64/mingw64/bin/libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicudt67.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuin67.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuuc67.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicudt68.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuin68.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuuc68.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libidn2-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libintl-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
