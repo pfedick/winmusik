@@ -2,9 +2,15 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.x.x
+Version 3.6.1
 	- Added Bitrate-row in search result
-	
+	- Added Bitrate-row in editor
+	- added timecode row in playlist
+	- added indicator for bpm change in playlist
+	- show bitrate of tracks in playlist and search result
+    - implemented drag'n'drop of files into search
+    - Playlist: key modification is stored as value and show in playlist
+    - runtime of playlist is show as hh:mm:ss instead of mmmm:ss for better readability
 	
 Version 3.6.0, Releasedate: 02.08.2020 (Tag: REL_3_6_0)
     - Merged sourcecode from pplib 6 into WinMusik

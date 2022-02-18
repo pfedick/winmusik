@@ -30,10 +30,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{611E500A-4D60-400C-9829-0114ADE682D5}}
 AppName=WinMusik
-AppVerName=WinMusik 3.5.1
-AppCopyright=Copyright (C) 2018 Patrick Fedick
-AppVersion=3.5.1.0
-VersionInfoVersion=3.5.1
+AppVerName=WinMusik 3.6.1
+AppCopyright=Copyright (C) 2022 Patrick Fedick
+AppVersion=3.6.1.0
+VersionInfoVersion=3.6.1
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -42,7 +42,7 @@ DefaultDirName={pf}\Patrick F.-Productions\WinMusik3
 DefaultGroupName=Patrick F.-Productions\WinMusik 3
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=WinMusik-3.5.1-Setup-64bit
+OutputBaseFilename=WinMusik-3.6.1-Setup-64bit
 SetupIconFile=gui\resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
