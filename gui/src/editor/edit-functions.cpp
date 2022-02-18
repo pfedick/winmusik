@@ -439,6 +439,10 @@ void Edit::RenderTrack(WMTreeItem *item, DataTitle *title)
     Text.Setf("%d",(int)title->ReleaseDate/10000);
     item->setText(TRACKLIST_YEAR,Text);
 
+    Text.Setf("%d",(int)title->Bitrate);
+    item->setText(TRACKLIST_BITRATE_ROW,Text);
+    item->setTextAlignment(TRACKLIST_BITRATE_ROW,Qt::AlignRight);
+
 
 	// Rating
 	switch (title->Rating) {

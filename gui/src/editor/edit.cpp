@@ -421,6 +421,7 @@ void Edit::SetupTrackList()
     trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key","trackList"));
     trackList->headerItem()->setText(TRACKLIST_ENERGYLEVEL_ROW, tr("Energy","trackList"));
     trackList->headerItem()->setText(TRACKLIST_YEAR, tr("Year","trackList"));
+    trackList->headerItem()->setText(TRACKLIST_BITRATE_ROW, tr("Bitrate","trackList"));
     trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating","trackList"));
 
     connect(trackList,SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -647,8 +648,8 @@ void Edit::resizeEvent ( QResizeEvent * event )
 {
 	int w=trackList->width();
 	int space=8;
-	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,60);
-	w-=(60+space);
+	trackList->setColumnWidth(TRACKLIST_TRACK_ROW,50);
+	w-=(50+space);
 	trackList->setColumnWidth(TRACKLIST_COVER_ROW,64);
 	w-=(60+space);
 	trackList->setColumnWidth(TRACKLIST_LENGTH_ROW,60);
@@ -661,8 +662,11 @@ void Edit::resizeEvent ( QResizeEvent * event )
 	w-=(30+space);
     trackList->setColumnWidth(TRACKLIST_YEAR,40);
     w-=(40+space);
-    trackList->setColumnWidth(TRACKLIST_RATING_ROW,85);
-	w-=(85+space);
+    trackList->setColumnWidth(TRACKLIST_BITRATE_ROW,30);
+    w-=(30+space);
+
+    trackList->setColumnWidth(TRACKLIST_RATING_ROW,55);
+	w-=(55+space);
 	trackList->setColumnWidth(TRACKLIST_NAME_ROW,w*55/100-6);
 	trackList->setColumnWidth(TRACKLIST_VERSION_ROW,w*30/100-6);
 	trackList->setColumnWidth(TRACKLIST_GENRE_ROW,w*15/100-6);
