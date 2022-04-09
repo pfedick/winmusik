@@ -490,6 +490,7 @@ class String
 		String& operator=(const wchar_t* str);
 		String& operator=(const String *str);
 		String& operator=(const String &str);
+		String& operator=(const WideString &str);
 		String& operator=(const std::string &str);
 		String& operator=(const std::wstring &str);
 		String& operator=(char c);

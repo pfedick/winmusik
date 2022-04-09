@@ -415,8 +415,12 @@
 		#endif
 	#endif
 
+	#ifndef WIN32_LEAN_AND_MEAN
 	#define WIN32_LEAN_AND_MEAN		// Keine MFCs
-	#define _WIN32_WINNT 0x0600
+	#endif
+	#ifndef _WIN32_WINNT
+	#define _WIN32_WINNT 0x0601
+	#endif
 	// Ab Visual Studio 2005 (Visual C++ 8.0) gibt es einige �nderungen
 	#if _MSC_VER >= 1400
 		#define _CRT_SECURE_NO_WARNINGS
