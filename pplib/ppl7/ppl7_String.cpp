@@ -1616,11 +1616,6 @@ String& String::operator=(const std::string &str)
 	return set(str);
 }
 
-String& String::operator=(const WideString &str)
-{
-	return set(str);
-}
-
 /*!\brief String übernehmen
  *
  * \desc
