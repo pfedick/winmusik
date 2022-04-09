@@ -55,5 +55,3 @@
 /ui_exporttracks.h
 /ui_player.h
 /setup64.iss
-lib/tests/tmp/
-/.vscode/

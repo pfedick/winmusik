@@ -1238,21 +1238,18 @@ void Search::on_ClipBoardTimer_update()
 	clip.copyFromClipboard();
 	if (clip.PlainText==LastClipboardString) return;
 	LastClipboardString=clip.PlainText;
-	if (LastClipboardString.isEmpty()) return;
-	de::pfp::winmusik::RegExpMatch match;
-	ppl7::String s;
-	if (wm->RegExpCapture.match(clip.Html,match)) {
-		s=match.Artist+" "+match.Title;
-		//printf ("RegExpMatch: %s\n",(const char*)s);
-	} else if (wm->RegExpCapture.match(clip.PlainText,match)) {
+	if (LastClipboardString.IsEmpty()) return;
+	RegExpMatch match;
+	ppl6::CString s;
+	if (wm->RegExpCapture.match(clip,match)) {
 		s=match.Artist+" "+match.Title;
 		//printf ("RegExpMatch: %s\n",(const char*)s);
 	} else {
 		s=clip.PlainText;
-		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
-		if (s.instr("\n")>=0) return;
-		s.replace("\t"," ");
-		s.pregReplace("/\\(.*?\\)/","");
+		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (s.Instr("\n")>=0) return;
+		s.Replace("\t"," ");
+		s.PregReplace("/\\(.*?\\)/","");
 		//printf ("NO RegExpMatch: %s\n",(const char*)s);
 	}
 	wm->NormalizeTerm(s);

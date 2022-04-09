@@ -33,8 +33,6 @@
 #include "winmusik3.h"
 #include "version.h"
 
-#include <ppl7-ppl6compat.h>
-
 #include "src/menue/menue.h"
 #include "src/editor/edit.h"
 #include "src/search/search.h"
@@ -175,8 +173,7 @@ int CWmClient::Start()
 		return 0;
 	}
 
-	ppl7::String regexp_conf_file=ppl7::to7(wm_main->conf.DataPath)+"/regexp.conf";
-	RegExpCapture.load(regexp_conf_file);
+	RegExpCapture.load();
 
 	//ImportDatabaseWM20();
 
@@ -1731,18 +1728,6 @@ static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, con
 	}
 }
 
-static inline void ReplaceIfExists(ppl7::WideString &s, const wchar_t *search, const ppl7::WideString &replace)
-{
-	if (s.isEmpty()) return;
-	wchar_t *buffer=(wchar_t*)s.getPtr();
-	if (!buffer) return;
-	if (wcsstr(buffer,search)) {
-		ppl7::WideString ss;
-		ss.set(search);
-		s.replace(ss,replace);
-	}
-}
-
 void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6::CWString &term)
 {
 	wchar_t *buffer;
@@ -1768,33 +1753,6 @@ void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6
 	}
 	term.Cut(target);
 }
-
-void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl7::WideString &term)
-{
-	wchar_t *buffer;
-	std::map<wchar_t,wchar_t>::const_iterator it;
-	size_t ss=term.len();
-	size_t target=0;
-	buffer=(wchar_t*)term.getPtr();
-	wchar_t c;
-	for (size_t i=0;i<ss;i++) {
-		c=buffer[i];
-		if (c<L'A' || c>L'z' || (c>L'Z' && c<L'a')) {
-			it=letters.find(c);
-			if (it!=letters.end()) {
-				if (it->second!=(wchar_t)0) {
-					buffer[target++]=it->second;
-				}
-			} else {
-				buffer[target++]=c;
-			}
-		} else {
-			buffer[target++]=c;
-		}
-	}
-	term.cut(target);
-}
-
 
 
 void CWmClient::NormalizeTerm(ppl6::CString &term)
@@ -1826,37 +1784,6 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	NormalizeLetters(letterReplacements,s);
 	term=s;
 }
-
-void CWmClient::NormalizeTerm(ppl7::String &term)
-{
-	if (term.isEmpty()) return;
-	ppl7::WideString s=term;
-	ppl7::WideString search,replace;
-	s.lowerCase();
-	replace.set(L" ");
-	ReplaceIfExists(s,L" versus ",replace);
-	ReplaceIfExists(s,L" pres. ",replace);
-	ReplaceIfExists(s,L" presents ",replace);
-	ReplaceIfExists(s,L" vs. ",replace);
-	ReplaceIfExists(s,L" vs ",replace);
-	ReplaceIfExists(s,L" ft. ",replace);
-	ReplaceIfExists(s,L" ft ",replace);
-	ReplaceIfExists(s,L" feat. ",replace);
-	ReplaceIfExists(s,L" featuring ",replace);
-	ReplaceIfExists(s,L" und ",replace);
-	ReplaceIfExists(s,L" and ",replace);
-	ReplaceIfExists(s,L" - ",replace);
-	ReplaceIfExists(s,L" x ",replace);
-	ReplaceIfExists(s,L" with ",replace);
-	ReplaceIfExists(s,L" /\\ ",replace);
-	ReplaceIfExists(s,L"DJ ",replace);
-	ReplaceIfExists(s,L" ",replace);		// U+00A0, c2 a0, NO-BREAK SPACE
-	s.trim();
-	s.replace(L"  ",L" ");
-	NormalizeLetters(letterReplacements,s);
-	term=s;
-}
-
 
 int CWmClient::GetWords(const ppl6::CString &str, ppl6::CArray &words)
 {

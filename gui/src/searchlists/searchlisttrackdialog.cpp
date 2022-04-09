@@ -32,7 +32,7 @@
 #include <QMouseEvent>
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
-#include "wm_regexpcapture.h"
+#include "regexpcapture.h"
 
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget *parent)
     : QDialog(parent)
@@ -86,17 +86,17 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 
 void SearchlistTrackDialog::setFromClipboard()
 {
-	de::pfp::winmusik::RegExpMatch match;
+	RegExpMatch match;
 	RegExpClipboard clip;
 	clip.copyFromClipboard();
-	if (wm_main->RegExpCapture.match(clip.Html,match) || wm_main->RegExpCapture.match(clip.PlainText,match)) {
+	if (wm_main->RegExpCapture.match(clip,match)) {
 		ui.artistEdit->setText(match.Artist);
 		ui.titleEdit->setText(match.Title);
 		ui.versionEdit->setText(match.Version);
 		ui.genreEdit->setText(match.Genre);
 		ui.commentEdit->setText(match.Label);
 		ui.releaseDateEdit->setText(match.ReleaseDate);
-		if (match.Length>0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i",match.Length/60,match.Length%60));
+		if (match.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",match.Length/60,match.Length%60));
 	}
 }
 

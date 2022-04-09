@@ -115,7 +115,7 @@ private:
     QWidget *searchWindow;
 
     QTimer		ClipBoardTimer;
-    ppl7::String	LastClipboardString;
+    ppl6::CString	LastClipboardString;
 
     QStatusBar	*statusbar;
     QLabel		*statusbarTrackNumber;

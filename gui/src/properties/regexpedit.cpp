@@ -57,7 +57,7 @@ void RegExpEdit::on_okButton_clicked()
 	done(1);
 }
 
-void RegExpEdit::setPattern(const de::pfp::winmusik::RegExpPattern &pat)
+void RegExpEdit::setPattern(const RegExpPattern &pat)
 {
 	ui.capture_artist->setValue(pat.artist);
 	ui.capture_title->setValue(pat.title);
@@ -75,9 +75,9 @@ void RegExpEdit::setPattern(const de::pfp::winmusik::RegExpPattern &pat)
 	ui.pattern->setText(pat.Pattern);
 }
 
-de::pfp::winmusik::RegExpPattern RegExpEdit::getPattern() const
+RegExpPattern RegExpEdit::getPattern() const
 {
-	de::pfp::winmusik::RegExpPattern pat;
+	RegExpPattern pat;
 	pat.Name=ui.name->text();
 	pat.Pattern=ui.pattern->text();
 	pat.artist=ui.capture_artist->value();
@@ -103,10 +103,10 @@ void RegExpEdit::on_pattern_textChanged()
 
 void RegExpEdit::on_teststring_textChanged()
 {
-	de::pfp::winmusik::RegExpMatch match;
-	de::pfp::winmusik::RegExpPattern pat=getPattern();
-	ppl7::String Text=ui.teststring->toPlainText();
-	if (pat.Pattern.notEmpty()==true && Text.notEmpty()==true) {
+	RegExpMatch match;
+	RegExpPattern pat=getPattern();
+	ppl6::CString Text=ui.teststring->toPlainText();
+	if (pat.Pattern.NotEmpty()==true && Text.NotEmpty()==true) {
 		try {
 			if (wm_main->RegExpCapture.testMatch(Text,match,pat)) {
 				ui.match_indicator->setStyleSheet("background: green;");
@@ -118,8 +118,8 @@ void RegExpEdit::on_teststring_textChanged()
 				ui.test_bpm->setText(match.Bpm);
 				ui.test_album->setText(match.Album);
 				ui.test_releasedate->setText(match.ReleaseDate);
-				ppl7::String Tmp;
-				Tmp.setf("%i:%02i",match.Length/60,match.Length%60);
+				ppl6::CString Tmp;
+				Tmp.Setf("%i:%02i",match.Length/60,match.Length%60);
 				ui.test_length->setText(Tmp);
 				return;
 			}

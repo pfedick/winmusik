@@ -80,7 +80,7 @@ private:
     char AllowedDevices[20];
 
     QTimer		ClipBoardTimer;
-    ppl7::String	LastClipboardString;
+    ppl6::CString	LastClipboardString;
     MusicKeyType	musicKeyDisplay;
 
     void PresentResults();

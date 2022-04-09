@@ -1417,18 +1417,18 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		ui.releaseDate->setFocus();
 		return true;
         // *************************************************************************** Ctrl & Shift & v im Feld Artist
-    } else if (key==Qt::Key_V && modifier==(int)(Qt::ShiftModifier|Qt::ControlModifier) && position==4) {
-        de::pfp::winmusik::RegExpMatch match;
+    } else if (key==Qt::Key_V && modifier==(Qt::ShiftModifier|Qt::ControlModifier) && position==4) {
+        RegExpMatch match;
         RegExpClipboard clip;
         clip.copyFromClipboard();
-        if (wm_main->RegExpCapture.match(clip.Html,match) || wm_main->RegExpCapture.match(clip.PlainText,match)) {
+        if (wm_main->RegExpCapture.match(clip,match)) {
             ui.artist->setText(match.Artist);
             ui.title->setText(match.Title);
-            if (match.Version.notEmpty()) {
+            if (match.Version.NotEmpty()) {
                 ui.versionId->setText("*");
                 ui.version->setText(match.Version);
             }
-            if (match.Genre.notEmpty()) {
+            if (match.Genre.NotEmpty()) {
                 ui.genreId->setText("*");
                 ui.genre->setText(match.Genre);
             }
@@ -2169,6 +2169,16 @@ void Edit::FixFocus()
 {
 	QWidget *widget=this->GetWidgetFromPosition(position);
 	if (widget) widget->setFocus();
+}
+
+static void setItemBackgroundColor(WMTreeItem *item, const QColor &c)
+{
+	item->setBackgroundColor(TRACKLIST_NAME_ROW,c);
+	item->setBackgroundColor(TRACKLIST_VERSION_ROW,c);
+	item->setBackgroundColor(TRACKLIST_GENRE_ROW,c);
+	item->setBackgroundColor(TRACKLIST_LENGTH_ROW,c);
+	item->setBackgroundColor(TRACKLIST_BPM_ROW,c);
+	item->setBackgroundColor(TRACKLIST_KEY_ROW,c);
 }
 
 static void setItemBackground(WMTreeItem *item, const QBrush &c)
