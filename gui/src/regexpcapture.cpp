@@ -23,16 +23,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "winmusik3.h"
-#include <QClipboard>
-void RegExpClipboard::copyFromClipboard()
-{
-	QString subtype="html";
-	Html = QApplication::clipboard()->text(subtype);
-	PlainText = QApplication::clipboard()->text();
-}
-
-
 #include "wm_regexpcapture.h"
 
 
@@ -320,6 +310,7 @@ static void fixIt(RegExpMatch &match)
 	fixArtistAndTitle("presents",match, "pres.");
 }
 
+/*
 static void fixHTML(ppl7::String &text)
 {
 	text=ppl7::UnescapeHTMLTags(text);
@@ -336,18 +327,22 @@ static void fixHTML(RegExpMatch &match)
 	fixHTML(match.Album);
 	fixHTML(match.ReleaseDate);
 }
+*/
 
 static bool matchBeatPortPro100(const ppl7::String &html, RegExpMatch &match)
 {
 	ppl7::Array matches;
-	//printf ("Try match: %s\n\n",(const char*)html);
+	printf ("Try match: %s\n\n",(const char*)html);
 	//<span class="buk-track-primary-title">Access</span>
-	if (!html.pregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/is",matches)) return false;
+	if (!html.pregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/is",matches)) {
+		printf ("No match\n");
+		return false;
+	}
 	match.Title=ppl7::UnescapeHTMLTags(matches.get(1));
-	//printf ("Title ok => %s\n", (const char*)match.Title);
+	printf ("Title ok => %s\n", (const char*)match.Title);
 	if (!html.pregMatch("/<span class=\"buk-track-remixed\".*?>(.*?)<\\/span>/is",matches)) return false;
 	match.Version=ppl7::UnescapeHTMLTags(matches.get(1));
-	//printf ("Version ok => %s\n", (const char*)match.Version);
+	printf ("Version ok => %s\n", (const char*)match.Version);
 	if (html.pregMatch("/<p class=\"buk-track-released\".*?>([0-9\\-]+)<\\/p>/is",matches)) {
 		match.ReleaseDate=ppl7::UnescapeHTMLTags(matches.get(1));
 		//printf ("Released ok => %s\n", (const char*)match.ReleaseDate);
