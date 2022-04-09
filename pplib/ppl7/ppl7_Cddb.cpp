@@ -295,7 +295,7 @@ static void storeDisc(CDDB::Disc &disc, const String &payload)
 			t.length=(disc.length*75+150-t.frame_offset)/75;
 		}
 		t.Artist=disc.Artist;
-		t.Title=a[Tmp];
+		t.Title=a[Tmp].toString();
 		Array tmatches;
 		if (t.Title.pregMatch("/^(.*?)\\s\\/\\s(.*)$/",tmatches)) {
 			t.Artist=tmatches.get(1);
@@ -305,7 +305,7 @@ static void storeDisc(CDDB::Disc &disc, const String &payload)
 		t.Title.trim();
 
 		Tmp.setf("EXTT%i",i);
-		t.Extra=a[Tmp];
+		t.Extra=a[Tmp].toString();
 		t.Extra.trim();
 		t.Extra.replace("\\n","\n");
 		disc.Tracks.push_back(t);
