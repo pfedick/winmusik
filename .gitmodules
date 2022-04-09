@@ -1,0 +1,3 @@
+[submodule "ppl7"]
+	path = ppl7
+	url = ../pplib.git
