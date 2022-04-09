@@ -6,6 +6,7 @@
  */
 
 #include <winmusik3.h>
+#include <ppl7-ppl6compat.h>
 #include "csearchlist.h"
 //
 
@@ -24,13 +25,13 @@ SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 	selected=false;
 	Length=0;
 	DateAdded.setCurrentTime();
-	RegExpMatch match;
-	if (wm_main->RegExpCapture.match(Misc,match)) {
-		Artist=match.Artist;
-		Title=match.Title;
-		Version=match.Version;
-		Genre=match.Genre;
-		Comment=match.Label;
+	de::pfp::winmusik::RegExpMatch match;
+	if (wm_main->RegExpCapture.match(ppl7::to7(Misc),match)) {
+		Artist=ppl7::to6(match.Artist);
+		Title=ppl7::to6(match.Title);
+		Version=ppl7::to6(match.Version);
+		Genre=ppl7::to6(match.Genre);
+		Comment=ppl7::to6(match.Label);
 		Length=match.Length;
 		return;
 	}

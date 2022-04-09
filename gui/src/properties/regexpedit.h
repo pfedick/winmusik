@@ -40,8 +40,8 @@ class RegExpEdit : public QDialog
 public:
     RegExpEdit(QWidget *parent = 0);
     ~RegExpEdit();
-    void setPattern(const RegExpPattern &pat);
-    RegExpPattern getPattern() const;
+    void setPattern(const de::pfp::winmusik::RegExpPattern &pat);
+    de::pfp::winmusik::RegExpPattern getPattern() const;
 
 private:
     Ui::RegExpEditClass ui;

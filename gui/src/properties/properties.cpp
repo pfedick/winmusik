@@ -29,6 +29,8 @@
 #include "properties.h"
 #include "regexpedit.h"
 #include <ppl6-sound.h>
+#include <ppl7-ppl6compat.h>
+
 
 #include <QTableWidgetItem>
 
@@ -219,12 +221,12 @@ Properties::~Properties()
 
 void Properties::UpdateRegExpPatternTable()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.regexpTable->clear();
 	for (size_t i=0;i<wm->RegExpCapture.size();i++) {
-		const RegExpPattern &p=wm->RegExpCapture.getPattern(i);
+		const de::pfp::winmusik::RegExpPattern &p=wm->RegExpCapture.getPattern(i);
 		QTreeWidgetItem *item=new QTreeWidgetItem;
-		Tmp.Setf("%i",(int)i+1);
+		Tmp.setf("%i",(int)i+1);
 		item->setText(0,Tmp);
 		item->setText(1,p.Name);
 		item->setText(2,p.Pattern);
@@ -637,16 +639,17 @@ void Properties::on_deleteDirectory_clicked()
 
 void Properties::on_regexpAdd_clicked()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	RegExpEdit reg(this);
 	int ret=reg.exec();
 	if (ret==1) {
-		RegExpPattern p=reg.getPattern();
+		de::pfp::winmusik::RegExpPattern p=reg.getPattern();
 		wm->RegExpCapture.addPattern(p);
-		wm->RegExpCapture.save();
+		ppl7::String regexp_conf_file=ppl7::to7(wm->conf.DataPath)+"/regexp.conf";
+		wm->RegExpCapture.save(regexp_conf_file);
 		size_t pos=wm->RegExpCapture.size();
 		QTreeWidgetItem *item=new QTreeWidgetItem;
-		Tmp.Setf("%i",(int)pos);
+		Tmp.setf("%i",(int)pos);
 		item->setText(0,Tmp);
 		item->setText(1,p.Name);
 		item->setText(2,p.Pattern);
@@ -663,15 +666,16 @@ void Properties::on_regexpEdit_clicked()
 	Tmp=current_regexp_item->text(0);
 	size_t pos=Tmp.ToInt();
 	if (pos<1) return;
-	const RegExpPattern &pat=wm->RegExpCapture.getPattern(pos-1);
+	const de::pfp::winmusik::RegExpPattern &pat=wm->RegExpCapture.getPattern(pos-1);
 
 	RegExpEdit reg(this);
 	reg.setPattern(pat);
 	int ret=reg.exec();
 	if (ret==1) {
-		RegExpPattern p=reg.getPattern();
+		de::pfp::winmusik::RegExpPattern p=reg.getPattern();
 		wm->RegExpCapture.setPattern(pos-1,p);
-		wm->RegExpCapture.save();
+		ppl7::String regexp_conf_file=ppl7::to7(wm->conf.DataPath)+"/regexp.conf";
+		wm->RegExpCapture.save(regexp_conf_file);
 		current_regexp_item->setText(1,p.Name);
 		current_regexp_item->setText(2,p.Pattern);
 	}
@@ -689,10 +693,11 @@ void Properties::on_regexpUp_clicked()
 	Tmp=current_regexp_item->text(0);
 	size_t pos=Tmp.ToInt();
 	if (pos<2) return;
-	RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
+	de::pfp::winmusik::RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
 	wm->RegExpCapture.deletePattern(pos-1);
 	wm->RegExpCapture.insertPattern(pos-2,p);
-	wm->RegExpCapture.save();
+	ppl7::String regexp_conf_file=ppl7::to7(wm->conf.DataPath)+"/regexp.conf";
+	wm->RegExpCapture.save(regexp_conf_file);
 	UpdateRegExpPatternTable();
 }
 
@@ -703,10 +708,11 @@ void Properties::on_regexpDown_clicked()
 	Tmp=current_regexp_item->text(0);
 	size_t pos=Tmp.ToInt();
 	if (pos>=wm->RegExpCapture.size()) return;
-	RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
+	de::pfp::winmusik::RegExpPattern p=wm->RegExpCapture.getPattern(pos-1);
 	wm->RegExpCapture.deletePattern(pos-1);
 	wm->RegExpCapture.insertPattern(pos,p);
-	wm->RegExpCapture.save();
+	ppl7::String regexp_conf_file=ppl7::to7(wm->conf.DataPath)+"/regexp.conf";
+	wm->RegExpCapture.save(regexp_conf_file);
 	UpdateRegExpPatternTable();
 }
 

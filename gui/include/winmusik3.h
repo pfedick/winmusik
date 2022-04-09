@@ -172,8 +172,9 @@ enum MusicKeyType
 
 
 
+
 #include "wmstorage.h"
-#include "regexpcapture.h"
+#include "wm_regexpcapture.h"
 #include "backgroundjobs.h"
 
 
@@ -510,6 +511,14 @@ class CWmServer : private ppl6::CTCPSocket, ppl6::CThread
 
 };
 
+class RegExpClipboard
+{
+	public:
+		void copyFromClipboard();
+		ppl7::String PlainText;
+		ppl7::String Html;
+};
+
 /*******************************************************
  * Main Client Class                                   *
  *******************************************************/
@@ -577,7 +586,7 @@ class CWmClient
 
 		CID3TagSaver			ID3TagSaver;
 		BackgroundJobs			Background;
-		RegularExpressionCapture	RegExpCapture;
+		de::pfp::winmusik::RegularExpressionCapture	RegExpCapture;
 		CHashes					Hashes;
 
 		CWmClient();
@@ -678,7 +687,9 @@ class CWmClient
 
 
 		void NormalizeTerm(ppl6::CString &term);
+		void NormalizeTerm(ppl7::String &term);
 		void NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6::CWString &term);
+		void NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl7::WideString &term);
 		int GetWords(const ppl6::CString &str, ppl6::CArray &words);
 
 };

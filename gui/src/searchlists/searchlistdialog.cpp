@@ -36,6 +36,7 @@
 #include "searchlistdialog.h"
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
+#include "ppl7-ppl6compat.h"
 
 SearchlistDialog::SearchlistDialog(QWidget *parent, CWmClient *wm, const ppl6::CString &Filename)
     : QWidget(parent)
@@ -666,30 +667,31 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 	clip.copyFromClipboard();
 	if (clip.PlainText==LastClipboardString) return;
 	LastClipboardString=clip.PlainText;
-	RegExpMatch match;
-	ppl6::CString s;
-	if (wm->RegExpCapture.match(clip,match)) {
+	de::pfp::winmusik::RegExpMatch match;
+	ppl7::String s;
+	if (wm->RegExpCapture.match(clip.Html,match) || wm->RegExpCapture.match(clip.PlainText,match)) {
 		s=match.Artist+" "+match.Title;
 	} else {
 		s=clip.PlainText;
-		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
-		if (s.Instr("\n")>=0) return;
-		s.Replace("\t"," ");
-		s.PregReplace("/\\(.*?\\)/","");
+		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (s.instr("\n")>=0) return;
+		s.replace("\t"," ");
+		s.pregReplace("/\\(.*?\\)/","");
 	}
-	s.LCase();
+	s.lowerCase();
+	ppl6::CString s6=ppl7::to6(s);
 	ppl6::CArray searchwords;
-	if (!wm->GetWords(s,searchwords)) return;
+	if (!wm->GetWords(s6,searchwords)) return;
 
 	ClipBoardTimer.stop();
 	SearchlistTreeItem *item;
 	for (int i=0;i<ui.trackList->topLevelItemCount();i++) {
 		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
 		if (item) {
-			s=item->Track.Artist+" "+item->Track.Title;
-			s.LCase();
+			s6=item->Track.Artist+" "+item->Track.Title;
+			s6.LCase();
 			ppl6::CArray words;
-			if (wm->GetWords(s,words)) {
+			if (wm->GetWords(s6,words)) {
 				if (matchWords(searchwords,words)>70) ui.trackList->setCurrentItem(item);
 			}
 		}
