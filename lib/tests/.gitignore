@@ -1,3 +1,5 @@
 /compile/
 /testsuite
 /Makefile
+tmp/
+/testsuite.exe

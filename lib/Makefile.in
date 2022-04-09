@@ -13,7 +13,8 @@ OBJS =	compile/object_title.o \
 	compile/functions.o \
 	compile/CID3TagSaver.o \
 	compile/CWMFile.o \
-	compile/traktor.o
+	compile/traktor.o \
+	compile/regexpcapture.o
 
 TARGET =	compile/libwinmusik3.a
 
@@ -71,4 +72,9 @@ compile/functions.o: src/functions.cpp include/wm_functions.h Makefile
 compile/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p compile
 	$(CXX) $(CXXFLAGS) -o compile/CID3TagSaver.o -c src/CID3TagSaver.cpp
+
+compile/regexpcapture.o: src/regexpcapture.cpp include/wm_regexpcapture.h Makefile
+	-mkdir -p compile
+	$(CXX) $(CXXFLAGS) -o compile/regexpcapture.o -c src/regexpcapture.cpp
+
 	

@@ -20,7 +20,8 @@ PROGNAME = testsuite
 
 OBJECTS = compile/main.o compile/storage.o compile/database.o \
 	compile/traktor.o compile/playlist.o compile/cwmfile.o \
-	compile/object_datatitle.o compile/id3tagsaver.o
+	compile/object_datatitle.o compile/id3tagsaver.o \
+	compile/regexpcapture.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -92,3 +93,7 @@ compile/playlist.o: src/playlist.cpp Makefile wmlib-tests.h
 compile/object_datatitle.o: src/object_datatitle.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/object_datatitle.o -c src/object_datatitle.cpp
+
+compile/regexpcapture.o: src/regexpcapture.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/regexpcapture.o -c src/regexpcapture.cpp
