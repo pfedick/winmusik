@@ -247,12 +247,12 @@ void RegularExpressionCapture::copyToMatch(const RegExpPattern &p, const ppl6::C
 static bool matchBeatPortPro100_getArtist(const ppl6::CString &html, RegExpMatch &match)
 {
 	ppl6::CArray Lines, List, matches;
-	if (!html.PregMatch("/<p class=\"buk-track-artists\">(.*?)<\\/p>/is",matches)) return false;
+	if (!html.PregMatch("/<p class=\"buk-track-artists\".*?>(.*?)<\\/p>/is",matches)) return false;
 	Lines.Explode(matches.GetString(1),"\n");
 	List.Clear();
 	for (size_t i=0;i<Lines.Size();i++) {
 		ppl6::CString Line=Lines.GetString(i);
-		if (Line.PregMatch("/<a href=\".*?\" data-artist=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+		if (Line.PregMatch("/<a href=\".*?\" data-artist=\"[0-9]+\".*?>(.*?)<\\/a>/is",matches)) {
 			List.Add(matches.GetString(1));
 		}
 	}
@@ -264,12 +264,12 @@ static bool matchBeatPortPro100_getArtist(const ppl6::CString &html, RegExpMatch
 static bool matchBeatPortPro100_getLabels(const ppl6::CString &html, RegExpMatch &match)
 {
 	ppl6::CArray Lines, List, matches;
-	if (!html.PregMatch("/<p class=\"buk-track-labels\">(.*?)<\\/p>/is",matches)) return false;
+	if (!html.PregMatch("/<p class=\"buk-track-labels\".*?>(.*?)<\\/p>/is",matches)) return false;
 	Lines.Explode(matches.GetString(1),"\n");
 	List.Clear();
 	for (size_t i=0;i<Lines.Size();i++) {
 		ppl6::CString Line=Lines.GetString(i);
-		if (Line.PregMatch("/<a href=\".*?\" data-label=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+		if (Line.PregMatch("/<a href=\".*?\" data-label=\"[0-9]+\".*?>(.*?)<\\/a>/is",matches)) {
 			List.Add(matches.GetString(1));
 		}
 	}
@@ -281,12 +281,12 @@ static bool matchBeatPortPro100_getLabels(const ppl6::CString &html, RegExpMatch
 static bool matchBeatPortPro100_getGenres(const ppl6::CString &html, RegExpMatch &match)
 {
 	ppl6::CArray Lines, List, matches;
-	if (!html.PregMatch("/<p class=\"buk-track-genre\">(.*?)<\\/p>/is",matches)) return false;
+	if (!html.PregMatch("/<p class=\"buk-track-genre\".*?>(.*?)<\\/p>/is",matches)) return false;
 	Lines.Explode(matches.GetString(1),"\n");
 	List.Clear();
 	for (size_t i=0;i<Lines.Size();i++) {
 		ppl6::CString Line=Lines.GetString(i);
-		if (Line.PregMatch("/<a href=\".*?\" data-genre=\"[0-9]+\">(.*?)<\\/a>/is",matches)) {
+		if (Line.PregMatch("/<a href=\".*?\" data-genre=\"[0-9]+\".*?>(.*?)<\\/a>/is",matches)) {
 			List.Add(matches.GetString(1));
 		}
 	}
@@ -344,14 +344,14 @@ static void fixHTML(RegExpMatch &match)
 static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
 {
 	ppl6::CArray matches;
-	//printf ("Try match: %s\n\n",(const char*)html);
+	printf ("Try match: %s\n\n",(const char*)html);
 	//<span class="buk-track-primary-title">Access</span>
-	if (!html.PregMatch("/<span class=\"buk-track-primary-title\">(.*?)<\\/span>/is",matches)) return false;
-	//printf ("ok\n");
+	if (!html.PregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/is",matches)) return false;
+	printf ("ok\n");
 	match.Title=ppl6::UnescapeHTMLTags(matches.GetString(1));
-	if (!html.PregMatch("/<span class=\"buk-track-remixed\">(.*?)<\\/span>/is",matches)) return false;
+	if (!html.PregMatch("/<span class=\"buk-track-remixed\".*?>(.*?)<\\/span>/is",matches)) return false;
 	match.Version=ppl6::UnescapeHTMLTags(matches.GetString(1));
-	if (html.PregMatch("/<p class=\"buk-track-released\">([0-9\\-]+)<\\/p>/is",matches))
+	if (html.PregMatch("/<p class=\"buk-track-released\".*?>([0-9\\-]+)<\\/p>/is",matches))
 		match.ReleaseDate=ppl6::UnescapeHTMLTags(matches.GetString(1));
 	if (!matchBeatPortPro100_getArtist(html,match)) return false;
 	matchBeatPortPro100_getLabels(html,match);
@@ -359,7 +359,6 @@ static bool matchBeatPortPro100(const ppl6::CString &html, RegExpMatch &match)
 	fixIt(match);
 	return true;
 }
-
 
 static bool matchBeatPortProReleases(const ppl6::CString &html6, RegExpMatch &match)
 {
