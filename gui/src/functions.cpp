@@ -485,10 +485,3 @@ ppl6::CString getReadableTimeFromSeconds(int seconds)
 }
 
 
-void RegExpClipboard::copyFromClipboard()
-{
-	QString subtype="html";
-	Html = QApplication::clipboard()->text(subtype);
-	PlainText = QApplication::clipboard()->text();
-}
-
