@@ -44,11 +44,11 @@ gui          := gui
 
 #.PHONY: all $(gui) $(libraries)
 
-all: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
+all: pplib/release/libpplib.a gui/Makefile release/WinMusik
 
-release: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
+release: pplib/release/libpplib.a gui/Makefile release/WinMusik
 
-debug: pplib/debug/libpplib-debug.a lib/compile/libwinmusik.a gui/Makefile debug/WinMusik
+debug: pplib/debug/libpplib-debug.a gui/Makefile debug/WinMusik
 
 
 ###########################################################################
@@ -62,7 +62,7 @@ lib/compile/libwinmusik.a: Makefile lib/Makefile pplib/release/libpplib.a
 	mkdir -p lib/compile
 	$(MAKE) --directory=lib release
 
-release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/compile/libwinmusik.a
+release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -77,7 +77,7 @@ pplib/debug/libpplib-debug.a: Makefile pplib/Makefile
 	mkdir -p pplib/debug
 	$(MAKE) --directory=pplib debug
 
-debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/compile/libwinmusik.a
+debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug
@@ -103,9 +103,9 @@ deinstall:
 	
 clean:
 	rm -rf documentation
-	rm -rf gui/release gui/debug release debug pplib/release pplib/debug lib/compile
+	rm -rf gui/release gui/debug release debug pplib/release pplib/debug
 
 gui/Makefile: gui/WinMusik.pro
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
+	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include WinMusik.pro
 
 
