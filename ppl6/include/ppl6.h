@@ -47,11 +47,11 @@
 #ifndef _PPL6_CONFIG
 	#ifdef PPL6LIB
 		#ifdef __MINGW32__
-			#include "../../ppl6/include/config.h"
+			#include "config.h"
 		#elif defined _WIN32
 			#include "ppl6-config.h"
 		#else
-			#include "../../ppl6/include/config.h"
+			#include "config.h"
 		#endif
 	#else
 		#include <ppl6-config.h>
@@ -109,9 +109,9 @@
 #endif
 
 #ifdef PPL6LIB
-	#include "../../ppl6/include/ppl6-exceptions.h"
+	#include "ppl6-exceptions.h"
 #else
-	#include "../../ppl6/include/ppl6-exceptions.h"
+	#include "ppl6-exceptions.h"
 #endif
 
 namespace ppl6 {
@@ -327,9 +327,9 @@ class MemoryHeap
 }	// EOF namespace ppl6
 // Inlcude PPL6 Algorithms
 #ifdef PPL6LIB
-#include "../../ppl6/include/ppl6-algorithms.h"
+#include "ppl6-algorithms.h"
 #else
-#include "../../ppl6/include/ppl6-algorithms.h"
+#include "ppl6-algorithms.h"
 #endif
 
 namespace ppl6 {

@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 
 /*
        The glibc version of struct tm has additional fields
@@ -61,7 +61,7 @@
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 namespace ppl6 {

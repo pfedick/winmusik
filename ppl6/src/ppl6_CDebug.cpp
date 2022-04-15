@@ -41,8 +41,8 @@
 #include <stdarg.h>
 // ERRORSFIXED=1
 
-#include "../../ppl6/include/ppl6.h"
-#include "../../ppl6/include/prolog.h"
+#include "ppl6.h"
+#include "prolog.h"
 
 
 namespace ppl6 {

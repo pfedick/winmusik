@@ -42,7 +42,7 @@
 #include <windows.h>
 #endif
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -58,7 +58,7 @@
 #endif
 
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 #ifdef HAVE_LIBCURL

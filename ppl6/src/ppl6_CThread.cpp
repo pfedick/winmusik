@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 
 #ifdef HAVE_STDARG_H
 	#include <stdarg.h>
@@ -70,10 +70,10 @@
 	#include <windows.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 //#define THREADDEBUG
 
-#include "../../ppl6/include/thread.h"
+#include "thread.h"
 
 namespace ppl6 {
 

@@ -42,7 +42,7 @@
 #include <windows.h>
 #endif
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 
 #ifdef MINGW32
 #define _GNU_SOURCE
@@ -59,7 +59,7 @@
 #endif
 
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 namespace ppl6 {

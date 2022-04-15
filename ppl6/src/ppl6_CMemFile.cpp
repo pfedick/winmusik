@@ -44,7 +44,7 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 // ERRORSFIXED=1
 
 #ifndef _WIN32
@@ -54,7 +54,7 @@
 #define WIN32_LEAN_AND_MEAN		// Keine MFCs
 #include <windows.h>
 #endif
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 #ifdef _WIN32
 //#define USEWIN32

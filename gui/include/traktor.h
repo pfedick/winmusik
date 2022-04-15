@@ -27,8 +27,8 @@
 #define TRAKTOR_H_
 #include <map>
 #include <list>
-#include "../../ppl6/include/ppl6.h"
-#include "../../ppl6/include/ppl6-sound.h"
+#include "ppl6/include/ppl6.h"
+#include "ppl6/include/ppl6-sound.h"
 
 class TraktorTagFrame
 {

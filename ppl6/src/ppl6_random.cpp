@@ -64,7 +64,7 @@
  * SUCH DAMAGE.
  */
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #if defined(LIBC_SCCS) && !defined(lint)
 static char sccsid[] = "@(#)random.c	8.2 (Berkeley) 5/19/95";
 #endif /* LIBC_SCCS and not lint */
@@ -78,7 +78,7 @@ static char sccsid[] = "@(#)random.c	8.2 (Berkeley) 5/19/95";
 #endif
 
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 /*

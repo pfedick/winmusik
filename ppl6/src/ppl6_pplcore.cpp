@@ -40,15 +40,15 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #define _IS_PPL6_CORE
 
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
-#include "../../ppl6/include/thread.h"
+#include "ppl6.h"
+#include "thread.h"
 
 #define PPL_COPYRIGHT		"(c) Copyright by Patrick F.-Productions in 2005-2013"
 

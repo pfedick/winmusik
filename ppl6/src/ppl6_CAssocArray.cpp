@@ -35,7 +35,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #ifdef HAVE_STRING_H
 	#include <string.h>
 #endif
@@ -48,8 +48,8 @@
 	#include <windows.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
-#include "../../ppl6/include/internal.h"
+#include "ppl6.h"
+#include "internal.h"
 
 namespace ppl6 {
 

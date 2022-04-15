@@ -34,6 +34,7 @@ AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([ppl6/Makefile])
+AC_CONFIG_HEADERS([ppl6/include/config.h])
 AC_CONFIG_FILES([pplib/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])

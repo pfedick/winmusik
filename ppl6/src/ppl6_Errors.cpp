@@ -38,7 +38,7 @@
 #define tr(string) translate("libppl6",__FILE__,string)
 #define tr_str_array
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,7 +53,7 @@
 #endif
 
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 const char *translate(const char *module, const char *file, const char *string)
 {

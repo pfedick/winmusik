@@ -37,7 +37,7 @@
 
 
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #ifdef HAVE_STDIO_H
 #include <stdio.h>
 #endif
@@ -51,7 +51,7 @@
 #include <stdarg.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 namespace ppl6 {

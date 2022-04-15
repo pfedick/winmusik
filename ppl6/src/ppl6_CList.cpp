@@ -39,7 +39,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN		// Keine MFCs
 #include <windows.h>
@@ -48,7 +48,7 @@
 //#define DEBUGLOG
 //#define _USE_PPL_MALLOC
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 namespace ppl6 {
 

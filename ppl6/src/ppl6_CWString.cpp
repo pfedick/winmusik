@@ -35,7 +35,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #ifdef HAVE_WIDEC_H
 #include <widec.h>
 #endif
@@ -71,7 +71,7 @@
 #include <limits.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 #ifdef HAVE_ICONV
 #include <iconv.h>
 #endif

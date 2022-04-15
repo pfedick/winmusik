@@ -40,9 +40,9 @@
 
 #ifndef _PPL6_INCLUDE
     #ifdef PPL6LIB
-        #include "../../ppl6/include/ppl6.h"
+        #include "ppl6.h"
     #else
-        #include "../../ppl6/include/ppl6.h"
+        #include "ppl6.h"
     #endif
 #endif
 

@@ -39,13 +39,13 @@
 #ifndef _PPL6_CONFIG
 	#ifdef PPL6LIB
 		#ifdef HAVE_CONFIG_H
-			#include "../../ppl6/include/config.h"
+			#include "config.h"
 		#else
 			#ifdef _WIN32
 				#include "ppl6-config.h"
 			#endif
 		#endif
-		#include "../../ppl6/include/compat.h"
+		#include "compat.h"
 	#else
 		#include <ppl6-config.h>
 	#endif

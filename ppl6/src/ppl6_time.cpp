@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 
 /*
        The glibc version of struct tm has additional fields
@@ -84,7 +84,7 @@
 #define WIN32_LEAN_AND_MEAN		// Keine MFCs
 #include <windows.h>
 #endif
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 
 

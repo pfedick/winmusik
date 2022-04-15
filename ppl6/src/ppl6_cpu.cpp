@@ -39,14 +39,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 
 #ifndef _WIN32
 #include <strings.h>
 #include <ctype.h>
 #endif
 
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 #ifdef HAVE_X86_ASSEMBLER
 extern "C" {

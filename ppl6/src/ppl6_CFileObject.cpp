@@ -41,7 +41,7 @@
 
 #include <time.h>
 
-#include "../../ppl6/include/prolog.h"
+#include "prolog.h"
 #ifdef HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -75,7 +75,7 @@
 #undef DeleteFile
 #endif
 #endif
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 namespace ppl6 {
 

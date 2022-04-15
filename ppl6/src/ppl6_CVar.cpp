@@ -41,8 +41,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#include "../../ppl6/include/ppl6.h"
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
+#include "ppl6.h"
 
 namespace ppl6 {
 
