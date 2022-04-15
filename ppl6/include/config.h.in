@@ -38,11 +38,6 @@
 #ifndef _PPL6_CONFIG
 #define _PPL6_CONFIG
 
-#undef PACKAGE_VERSION
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-
 #undef MINGW32
 
 /* Define as 1 if you have unistd.h. */
