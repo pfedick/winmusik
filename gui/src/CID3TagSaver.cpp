@@ -25,7 +25,8 @@
 
 
 #include "winmusik3.h"
-#include <ppl6-sound.h>
+
+#include "../../ppl6/include/ppl6-sound.h"
 
 /*!\class CID3TagSaver
  * \brief ID3Tags asynchron oder synchron speichern

@@ -65,8 +65,10 @@ win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
 CONFIG(debug, debug|release) {
-	LIBS += ../pplib/debug/libpplib-debug.a
+	LIBS += ../ppl6/debug/libppl6-debug.a
+	LIBS += ../pplib/debug/libpplib.a
 } else {
+	LIBS += ../ppl6/release/libppl6.a
 	LIBS += ../pplib/release/libpplib.a
 }
 LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@

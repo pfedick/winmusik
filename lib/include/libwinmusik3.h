@@ -8,11 +8,10 @@
 #ifndef LIBWINMUSIK3_H_
 #define LIBWINMUSIK3_H_
 
-#include <ppl7.h>
-#include <ppl7-config.h>
-
 #include <wm_musicalkeys.h>
 #include <wm_dataobjects.h>
+#include "../../ppl6/include/ppl7.h"
+#include "../../ppl6/include/ppl7-config.h"
 
 namespace de {
 namespace pfp {

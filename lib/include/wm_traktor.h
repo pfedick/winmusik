@@ -25,10 +25,10 @@
 
 #ifndef TRAKTOR_H_
 #define TRAKTOR_H_
-#include <ppl7.h>
-#include <ppl7-audio.h>
 #include <map>
 #include <list>
+#include "../../ppl6/include/ppl7.h"
+#include "../../ppl6/include/ppl7-audio.h"
 
 class TraktorTagFrame
 {

@@ -10,7 +10,8 @@
 
 #include <vector>
 #include <map>
-#include <ppl6.h>
+
+#include "../../ppl6/include/ppl6.h"
 
 
 class GenericListItem

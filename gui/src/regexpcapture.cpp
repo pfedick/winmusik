@@ -33,9 +33,9 @@
 #include <Python.h>
 #endif
 
-#include <ppl7.h>
-#include <ppl7-types.h>
-#include <ppl7-ppl6compat.h>
+#include "../../pplib/include/ppl7.h"
+#include "../../pplib/include/ppl7-types.h"
+#include "../../pplib/include/ppl7-ppl6compat.h"
 
 void RegExpClipboard::copyFromClipboard()
 {

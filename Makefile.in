@@ -44,25 +44,30 @@ gui          := gui
 
 #.PHONY: all $(gui) $(libraries)
 
-all: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
+all: release/WinMusik
 
-release: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
+release: release/WinMusik
 
-debug: pplib/debug/libpplib-debug.a lib/compile/libwinmusik.a gui/Makefile debug/WinMusik
+debug: debug/WinMusik
+
+ppl7: pplib/release/libpplib.a pplib/debug/libpplib-debug.a
+
+ppl6: ppl6/release/libppl6.a ppl6/debug/libppl6-debug.a
 
 
 ###########################################################################
 ### RELEASE
 ###########################################################################
 pplib/release/libpplib.a: Makefile pplib/Makefile
-	mkdir -p pplib/release
-	$(MAKE) --directory=pplib release
+	-mkdir -p pplib/release
+	$(MAKE) --directory=pplib release/libppl7-core.a release/libppl7-crypto.a release/libppl7-inet.a release/libppl7-audio.a
+	ar -r pplib/release/libpplib.a pplib/release/*.o
 
-lib/compile/libwinmusik.a: Makefile lib/Makefile pplib/release/libpplib.a
-	mkdir -p lib/compile
-	$(MAKE) --directory=lib release
+ppl6/release/libppl6.a: Makefile ppl6/Makefile
+	mkdir -p ppl6/release
+	$(MAKE) --directory=ppl6 release
 
-release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/compile/libwinmusik.a
+release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.a ppl6/release/libppl6.a
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -72,12 +77,16 @@ release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a li
 ###########################################################################
 ### DEBUG
 ###########################################################################
-
-pplib/debug/libpplib-debug.a: Makefile pplib/Makefile
-	mkdir -p pplib/debug
+pplib/debug/libpplib.a: Makefile pplib/Makefile
+	-mkdir -p pplib/debug
 	$(MAKE) --directory=pplib debug
+	ar -r pplib/debug/libpplib.a pplib/debug/*.o
 
-debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/compile/libwinmusik.a
+ppl6/debug/libppl6-debug.a: Makefile ppl6/Makefile
+	mkdir -p ppl6/debug
+	$(MAKE) --directory=ppl6 debug
+
+debug/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/debug/libpplib.a ppl6/debug/libppl6-debug.a
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug
@@ -85,7 +94,7 @@ debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/co
 	cp gui/debug/WinMusik debug/WinMusik
 
 ###########################################################################
-### DEBUG
+### MISC
 ###########################################################################
 
 install: release/WinMusik Makefile
@@ -103,7 +112,9 @@ deinstall:
 	
 clean:
 	rm -rf documentation
-	rm -rf gui/release gui/debug release debug pplib/release pplib/debug lib/compile
+	rm -rf gui/release gui/debug release debug ppl6/release pplib/debug lib/compile
+	$(MAKE) --directory=pplib clean
+	$(MAKE) --directory=ppl6 clean
 
 gui/Makefile: gui/WinMusik.pro
 	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro

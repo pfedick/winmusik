@@ -45,7 +45,7 @@
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
-#include <ppl6.h>
+#include "../../ppl6/include/ppl6.h"
 
 
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2017"

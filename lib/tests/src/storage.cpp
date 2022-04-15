@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <ppl7.h>
 #include <gtest/gtest.h>
 #include "../../include/libwinmusik3.h"
+
+#include "../../../ppl6/include/ppl7.h"
 #include "../wmlib-tests.h"
 
 namespace {

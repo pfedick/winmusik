@@ -29,8 +29,9 @@
 
 #include "winmusik3.h"
 #include "tablecontrol.h"
-#include <ppl6-sound.h>
 #include <QDialog>
+
+#include "../../../ppl6/include/ppl6-sound.h"
 #include "ui_cddbimport.h"
 
 class CDDBImport : public QDialog

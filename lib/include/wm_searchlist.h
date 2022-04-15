@@ -10,8 +10,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <ppl7.h>
 #include <vector>
+#include "../../ppl6/include/ppl7.h"
 
 
 namespace de {

@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <ppl7.h>
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
 #include "wm_cwmfile.h"
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 #include <map>
+#include "../../../ppl6/include/ppl7.h"
 
 namespace {
 

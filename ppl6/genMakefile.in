@@ -1,0 +1,202 @@
+#!/bin/sh
+#
+###############################################################################
+# This file is part of WinMusik 3 by Patrick Fedick                           #
+# Web: https://www.pfp.de/winmusik/                                           #
+###############################################################################
+#
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# All rights reserved.
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+###############################################################################
+### Global Options
+###############################################################################
+
+SED=sed
+LIBNAME="libppl6"
+DEFINES="-DPPL6LIB"
+
+
+######################################################################################################################
+# Functions
+######################################################################################################################
+
+find_c_files() {
+	# $1=Verzeichnis
+	# $2=Subject
+	# $3=FLAGS
+	# $4=PREFIX
+	# $5=Zusaetzliche Header-Dependencies
+	
+	COMPILE_RELEASE="$COMPILE_RELEASE
+### $2"
+	COMPILE_DEBUG="$COMPILE_DEBUG
+### $2"
+	d=`pwd`
+	cd $1
+	FOUND_RELEASE=""
+	FOUND_DEBUG=""
+	FOUND_COVERAGE=""
+	filelist=`ls *.cpp *.c 2>/dev/null`
+	for file in $filelist; do
+		BASENAME=`echo $file | $SED -e "s;.cpp\$;;" | $SED -e "s;.c\$;;" `
+		SOURCEN="$SOURCEN $1/$file"
+		if [ -n "$FOUND_RELEASE" ] ; then
+			FOUND_RELEASE="$FOUND_RELEASE \\
+	release/$4$BASENAME.o"
+			FOUND_DEBUG="$FOUND_DEBUG \\
+	debug/$4$BASENAME.o"
+			FOUND_COVERAGE="$FOUND_COVERAGE \\
+	coverage/$4$BASENAME.o"
+		else
+			FOUND_RELEASE="release/$4$BASENAME.o"
+			FOUND_DEBUG="debug/$4$BASENAME.o"
+			FOUND_COVERAGE="coverage/$4$BASENAME.o"
+		fi
+		
+		COMPILE_RELEASE="$COMPILE_RELEASE
+release/$4$BASENAME.o:	$1/$file Makefile $5 $ADDITIONAL_DEPENDENCY
+	\$(CXX) -Wall \$(CXXFLAGS) -o release/$4$BASENAME.o -c $1/$file \$(CFLAGS) $3
+"
+
+		COMPILE_DEBUG="$COMPILE_DEBUG
+debug/$4$BASENAME.o:	$1/$file Makefile $5 $ADDITIONAL_DEPENDENCY
+	\$(CXX) -Wall \$(CXXFLAGS) -o debug/$4$BASENAME.o -c $1/$file -ggdb -D_DEBUG \$(CFLAGS) -DDEBUG=DEBUG $3
+"
+
+	done
+	cd $d
+}
+
+
+find_c_files "src" "PPL6" "" ""
+PPL6_RELEASE="$FOUND_RELEASE"
+PPL6_DEBUG="$FOUND_DEBUG"
+
+
+######################################################################################################################
+# Makefile.in Header
+######################################################################################################################
+
+echo "###############################################################################
+###
+### PPLIB Makefile
+###
+###############################################################################
+# This file is part of WinMusik 3 by Patrick Fedick                           #
+# Web: https://www.pfp.de/winmusik/                                           #
+###############################################################################
+#
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# All rights reserved.
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+###############################################################################
+### Global Options
+###############################################################################
+incdir	= include
+
+prefix	?= @prefix@
+exec_prefix	= @exec_prefix@
+TARGETLIB	?= @libdir@
+TARGETBIN	?= @bindir@
+TARGETINCLUDE	?= @includedir@
+CC			= @CC@
+CXX			= @CXX@
+CFLAGS		=  -I\${incdir} $DEFINES @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ \
+	@ZLIB_CFLAGS@ @BZ2_CFLAGS@ @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ \
+	@LIBCDIO_CFLAGS@ @LIBCURL_CPPFLAGS@	
+	
+CPPFLAGS	= @CPPFLAGS@
+CXXFLAGS	= @CXXFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS		= @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ @BZ2_LIBS@ @PCRE_LIBS@ \
+	@ICONV_LIBS@ @LIBCURL@ @LIBCDIO_LDFLAGS@
+	
+LIBNAME		= $LIBNAME
+LIBDEBUG	= $LIBNAME-debug
+
+###########################################################################
+### Object Files RELEASE
+###########################################################################
+
+RELEASE	= $PPL6_RELEASE $PPL7_RELEASE 
+
+###########################################################################
+### Object Files DEBUG
+###########################################################################
+
+DEBUG	= $PPL6_DEBUG $PPL7_DEBUG
+
+###########################################################################
+### Targets
+###########################################################################
+
+
+release: release/\$(LIBNAME).a
+	
+debug: debug/\$(LIBDEBUG).a
+	
+all:	debug/\$(LIBDEBUG).a release/\$(LIBNAME).a
+
+debug/\$(LIBDEBUG).a: debug/make \$(DEBUG)
+	ar -r debug/\$(LIBDEBUG).a \$(DEBUG)
+	
+release/\$(LIBNAME).a: release/make \$(RELEASE)
+	ar -r release/\$(LIBNAME).a \$(RELEASE)
+	
+debug/make:
+	-mkdir -p debug
+	-touch debug/make
+
+release/make:
+	-mkdir -p release
+	-touch release/make
+
+
+clean:
+	-rm -rf release
+	-rm -rf debug
+
+	 
+###########################################################################
+### Compile Release Files
+###########################################################################
+$COMPILE_RELEASE
+
+###########################################################################
+### Compile Debug Files
+###########################################################################
+$COMPILE_DEBUG
+
+
+
+" > Makefile.in
+
+

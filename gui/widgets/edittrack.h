@@ -4,10 +4,11 @@
 #include <QWidget>
 #include "ui_edittrack.h"
 #include "winmusik3.h"
-#include <ppl6-sound.h>
 #include <QRegExpValidator>
 #include <QKeyEvent>
 #include "tablecontrol.h"
+
+#include "../../ppl6/include/ppl6-sound.h"
 #include "fkeys.h"
 #include "src/editor/oimpinfo.h"
 

@@ -1,8 +1,8 @@
 #ifndef WM_DATAOBJECTS_H
 #define WM_DATAOBJECTS_H
 
-#include <ppl7.h>
 #include <queue>
+#include "../../ppl6/include/ppl7.h"
 
 namespace de {
 namespace pfp {

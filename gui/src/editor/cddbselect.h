@@ -28,9 +28,10 @@
 #define CDDBSELECT_H_
 
 #include "winmusik3.h"
-#include <ppl6-sound.h>
 #include <QDialog>
 #include <QTreeWidgetItem>
+
+#include "../../../ppl6/include/ppl6-sound.h"
 #include "ui_cddbselect.h"
 
 class CDDBSelect : public QDialog

@@ -27,7 +27,6 @@
 #define EDIT_H
 
 #include "winmusik3.h"
-#include <ppl6-sound.h>
 #include "tablecontrol.h"
 #include <QDialog>
 #include <QRegExpValidator>
@@ -38,6 +37,7 @@
 #include "ui_edit.h"
 #include "oimpinfo.h"
 #include "colorscheme.h"
+#include "../../../ppl6/include/ppl6-sound.h"
 
 
 class Edit;

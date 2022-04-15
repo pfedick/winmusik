@@ -8,8 +8,8 @@
 #ifndef PLUGINS_H_
 #define PLUGINS_H_
 
-#include <ppl6.h>
 #include <list>
+#include "../../ppl6/include/ppl6.h"
 
 class Plugins
 {

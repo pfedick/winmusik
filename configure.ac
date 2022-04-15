@@ -3,7 +3,7 @@
 # Web: https://www.pfp.de/winmusik/                                           #
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -23,22 +23,20 @@
 
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.69)
-AC_INIT([winmusik], [3.6.0], [patrick@pfp.de], [winmusik-3.6.0.tar.bz2])
+AC_INIT([winmusik], [3.7.0], [patrick@pfp.de], [winmusik-3.7.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
-AC_CONFIG_SRCDIR([pplib/include/ppl6.h])
+AC_CONFIG_SRCDIR([ppl6/include/ppl6.h])
+AC_CONFIG_SRCDIR([ppl6/include/config.h.in])
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
-AC_CONFIG_SRCDIR([pplib/include/config.h.in])
+AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
 
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([ppl6/Makefile])
 AC_CONFIG_FILES([pplib/Makefile])
-AC_CONFIG_FILES([lib/Makefile])
-AC_CONFIG_FILES([lib/tests/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])
-AC_CONFIG_HEADERS([pplib/include/config.h])
-AC_CONFIG_HEADERS([lib/include/wm_config.h])
 AC_CONFIG_FILES([gui/WinMusik.pro])
 AC_CONFIG_FILES([Package/WinMusik.desktop])
 
@@ -46,24 +44,28 @@ AC_CONFIG_FILES([Package/WinMusik.desktop])
 ###############################################################################
 # Includes
 ###############################################################################
-sinclude(autoconf/ax_cxx_compile_stdcxx.m4)
-sinclude(autoconf/ax_check_openssl.m4)
-sinclude(autoconf/libcurl.m4)
-sinclude(autoconf/ax_path_lib_pcre.m4)
-sinclude(autoconf/ax_pthread.m4)
-sinclude(autoconf/lib-link.m4)
-sinclude(autoconf/iconv.m4)
-sinclude(autoconf/bzip2.m4)
-sinclude(autoconf/ax_check_zlib.m4)
-sinclude(autoconf/ax_lib_crypto.m4)
-sinclude(autoconf/checkfuncs.m4)
-sinclude(autoconf/ax_gcc_x86_cpuid.m4)
-sinclude(autoconf/ax_check_compile_flag.m4)
-sinclude(autoconf/ax_check_compiler_flags.m4)
-sinclude(autoconf/ax_gcc_archflag.m4)
+
+sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
+sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
+sinclude(pplib/autoconf/ax_pthread.m4)
+sinclude(pplib/autoconf/checkfuncs.m4)
+sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
+sinclude(pplib/autoconf/ax_check_compile_flag.m4)
+sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
+sinclude(pplib/autoconf/ax_gcc_archflag.m4)
+sinclude(pplib/autoconf/lib-link.m4)
+sinclude(pplib/autoconf/ax_check_openssl.m4)
+sinclude(pplib/autoconf/libcurl.m4)
+sinclude(pplib/autoconf/iconv.m4)
+sinclude(pplib/autoconf/bzip2.m4)
+sinclude(pplib/autoconf/ax_check_zlib.m4)
+sinclude(pplib/autoconf/ax_lib_crypto.m4)
+sinclude(pplib/autoconf/gtest.m4)
+
 sinclude(autoconf/libcdio.m4)
-sinclude(autoconf/gtest.m4)
 sinclude(autoconf/ax_find_qmake.m4)
+
+
 #sinclude(autoconf/ax_have_qt.m4)
 
 report_have_pthreads="no"
@@ -222,16 +224,10 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_TYPE_UID_T
 AC_TYPE_OFF_T
-dnl AC_SIZEOF_TYPE(off_t)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_STRUCT_TM
-# FPOS_T ist ein Struct?
 AX_FPOS_ISSTRUCT()
-
 AX_TM_HAS_GMTOFF()
-
 AC_PATH_XTRA
 
 
@@ -319,6 +315,12 @@ AC_CHECK_FUNCS([poll select pselect])
 AC_CHECK_FUNCS([opendir closedir readdir readdir_r stat])
 AC_CHECK_FUNCS([clock_gettime])
 AC_CHECK_FUNCS([inet_ntop inet_pton inet_aton inet_ntoa inet_ntoa_r inet_addr inet_network inet_makeaddr])
+
+AC_CHECK_LIB(pthread, pthread_set_name_np,
+	AC_DEFINE(HAVE_PTHREAD_SET_NAME_NP,1),,)
+AC_CHECK_LIB(pthread, pthread_setname_np,
+	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP,1),,)
+
 
 AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,
 [AC_TRY_COMPILE([#include <sys/types.h>
@@ -482,6 +484,64 @@ AC_SUBST(report_have_pthreads)
 AC_SUBST(report_have_curl)
 AC_SUBST(report_have_libcdio)
 
+###
+JPEG_CFLAGS=""
+MYSQL_CFLAGS=""
+POSTGRESQL_CFLAGS=""
+SQLITE3_CFLAGS=""
+LAME_CFLAGS=""
+LIBMICROHTTPD_CFLAGS=""
+LIBCDIO_CFLAGS=""
+LIBIDN_CFLAGS=""
+LIBLDNS_CFLAGS=""
+IMLIB_CFLAGS=""
+FT2_CFLAGS=""
+HAVE_X86_ASSEMBLER=""
+MPG123_CFLAGS=""
+SDL2_CFLAGS=""
+IMLIB_LIBS=""
+FT2_LIBS=""
+MYSQL_LDFLAGS=""
+POSTGRESQL_LDFLAGS=""
+SQLITE3_LDFLAGS=""
+LAME_LIBS=""
+LIBLDNS_LIBS=""
+MPG123_LIBS=""
+SDL2_LIBS=""
+LIBMICROHTTPD_LIBS=""
+LIBIDN_LIBS=""
+ASM=""
+ASMFLAGS=""
+ASMDEBUGFLAGS=""
+
+AC_SUBST(JPEG_CFLAGS)
+AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(POSTGRESQL_CFLAGS)
+AC_SUBST(SQLITE3_CFLAGS)
+AC_SUBST(LAME_CFLAGS)
+AC_SUBST(LIBMICROHTTPD_CFLAGS)
+AC_SUBST(LIBCDIO_CFLAGS)
+AC_SUBST(LIBIDN_CFLAGS)
+AC_SUBST(LIBLDNS_CFLAGS)
+AC_SUBST(IMLIB_CFLAGS)
+AC_SUBST(FT2_CFLAGS)
+AC_SUBST(HAVE_X86_ASSEMBLER)
+AC_SUBST(MPG123_CFLAGS)
+AC_SUBST(SDL2_CFLAGS)
+AC_SUBST(IMLIB_LIBS)
+AC_SUBST(FT2_LIBS)
+AC_SUBST(MYSQL_LDFLAGS)
+AC_SUBST(POSTGRESQL_LDFLAGS)
+AC_SUBST(SQLITE3_LDFLAGS)
+AC_SUBST(LAME_LIBS)
+AC_SUBST(LIBLDNS_LIBS)
+AC_SUBST(MPG123_LIBS)
+AC_SUBST(SDL2_LIBS)
+AC_SUBST(LIBMICROHTTPD_LIBS)
+AC_SUBST(LIBIDN_LIBS)
+AC_SUBST(ASM)
+AC_SUBST(ASMFLAGS)
+AC_SUBST(ASMDEBUGFLAGS)
 
 ###############################################################################
 # Output

@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <ppl7.h>
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
 #include "wm_playlist.h"
+
+#include "../../../ppl6/include/ppl7.h"
 #include "wmlib-tests.h"
 
 namespace {

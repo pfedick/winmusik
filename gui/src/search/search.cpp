@@ -33,9 +33,8 @@
 #include <QMouseEvent>
 #include "search.h"
 #include "resultfilter.h"
-#include <ppl6-sound.h>
-
 #include <vector>
+#include "../../../ppl6/include/ppl6-sound.h"
 
 Search::Search(QWidget *parent, CWmClient *wm)
     : QWidget(parent)

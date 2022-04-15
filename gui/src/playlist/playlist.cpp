@@ -51,7 +51,8 @@
 #include "musickey.h"
 #include "editstring.h"
 #include <stdio.h>
-#include <ppl6-sound.h>
+
+#include "../../../ppl6/include/ppl6-sound.h"
 
 Playlist::Playlist(QWidget *parent, CWmClient *wm)
     : QMainWindow(parent)

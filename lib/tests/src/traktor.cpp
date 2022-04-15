@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include <ppl7.h>
-#include <ppl7-audio.h>
 #include <gtest/gtest.h>
 #include "../../include/libwinmusik3.h"
 #include "../wmlib-tests.h"
 #include <map>
 
 #include "../../include/wm_traktor.h"
+#include "../../../ppl6/include/ppl7.h"
+#include "../../../ppl6/include/ppl7-audio.h"
 
 namespace {
 
