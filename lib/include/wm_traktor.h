@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: StorageTrack.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRAKTOR_H_
-#define TRAKTOR_H_
+#ifndef WM_TRAKTOR_H_
+#define WM_TRAKTOR_H_
 #include <map>
 #include <list>
-#include "../../ppl6/include/ppl7.h"
-#include "../../ppl6/include/ppl7-audio.h"
+#include "ppl7.h"
+#include "ppl7-audio.h"
 
 class TraktorTagFrame
 {
