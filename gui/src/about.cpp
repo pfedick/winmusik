@@ -46,7 +46,12 @@ About::About(QWidget *parent)
 	Tmp+=tr("This program makes use of the following Open Source Libraries:");
 	Tmp.Concat("<ul>");
 	Tmp.Concatf("<li>PPL %s, %s</li>\n",(const char*)core->GetVersion(), (const char*)core->GetCopyright());
-	Tmp.Concatf("<li>Qt %s, Copyright (C) 2012 Digia Plc",qVersion());
+	Tmp.Concatf("<li>PPL %d.%d.%d, %s</li>\n",
+			PPL7_VERSION_MAJOR,
+			PPL7_VERSION_MINOR,
+			PPL7_VERSION_BUILD,
+			PPL7_COPYRIGHT);
+	Tmp.Concatf("<li>Qt %s",qVersion());
 	AddFeature(Tmp,"zlib");
 	AddFeature(Tmp,"bzip2");
 	AddFeature(Tmp,"pcre");
@@ -59,7 +64,7 @@ About::About(QWidget *parent)
 
 	Tmp.Concat("</li>\n");
 	Tmp.Concat("</ul>\n");
-	Tmp+=tr("Some graphics and icons are made with Lightwave 3D 9.6 from NewTek and Paint Shop Pro 7.0 from Jasc Software. ");
+	Tmp+=tr("Some graphics and icons are made with Lightwave 3D from NewTek and Paint Shop Pro from Jasc Software. ");
 	Tmp+=" ";
 	Tmp+=tr("Some icons are taken from the Crystal Project from Everaldo.com.");
 
@@ -68,7 +73,7 @@ About::About(QWidget *parent)
 
 	Tmp=tr("WinMusik Version %v% build %b% vom %d%");
 	Tmp.Replace("%v%",WM_VERSION);
-	Tmp.Replace("%b%",WM_SVN_REVISION);
+	Tmp.Replace("%b%",WM_REVISION);
 	DateFormat=tr("%d.%m.%Y");
 
 	int a,year,month,day;

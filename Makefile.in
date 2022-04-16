@@ -3,7 +3,7 @@
 # Web: https://www.pfp.de/winmusik/                                           #
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 ###############################################################################
 ### Global Options
 ###############################################################################
+VERSION = "3.7.0"
 
 PREFIX		?= @prefix@
 CC		= @CC@
@@ -56,7 +57,12 @@ ppl6: ppl6/release/libppl6.a ppl6/debug/libppl6-debug.a
 
 wmlib: wmlib/release/libwinmusik3.a wmlib/debug/libwinmusik3.a
 
-
+mingw:
+	VERSION=${VERSION} ./update_version.sh
+	mingw32-make -j8 release
+	cd gui && lupdate WinMusik.pro
+	rm -rf release/deploy
+	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
 ###########################################################################
 ### RELEASE
 ###########################################################################

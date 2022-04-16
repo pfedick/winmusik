@@ -47,7 +47,7 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	Title+=" ";
 	Title+=tr("build");
 	Title+=" ";
-	Title+=WM_SVN_REVISION;
+	Title+=WM_REVISION;
 
 	this->setWindowTitle(Title);
 	QByteArray r=wm->GetGeometry("menue");

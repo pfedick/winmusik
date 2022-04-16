@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.21 $
- * $Date: 2011/10/30 20:14:30 $
- * $Id: winmusik3.h,v 1.21 2011/10/30 20:14:30 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +40,10 @@
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
 #include "ppl6.h"
+#include "ppl7.h"
 
 
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2017"
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2022"
 // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
 // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"

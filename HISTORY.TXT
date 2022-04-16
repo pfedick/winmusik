@@ -2,6 +2,9 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.7.0
+    - pplib (ppl7) is now included as git submodule
+
 Version 3.6.1
 	- Added Bitrate-row in search result
 	- Added Bitrate-row in editor
