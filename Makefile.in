@@ -23,7 +23,7 @@
 ###############################################################################
 ### Global Options
 ###############################################################################
-VERSION = "3.7.0"
+VERSION ?= "3.7.0"
 
 PREFIX		?= @prefix@
 CC		= @CC@
@@ -78,6 +78,7 @@ ppl6/release/libppl6.a: Makefile ppl6/Makefile
 	$(MAKE) --directory=ppl6 release
 
 release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.a ppl6/release/libppl6.a wmlib/release/libwinmusik3.a
+	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -98,6 +99,7 @@ ppl6/debug/libppl6-debug.a: Makefile ppl6/Makefile
 	$(MAKE) --directory=ppl6 debug
 
 debug/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/debug/libpplib.a ppl6/debug/libppl6-debug.a wmlib/debug/libwinmusik3.a
+	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug
