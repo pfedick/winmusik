@@ -25,7 +25,16 @@ all:		$(TARGET)
 release:	$(TARGET)
 
 clean:
-	rm -rf compile $(TARGET)
+	-@rm -rf compile release debug $(TARGET) > /dev/null 2>&1
+	-@$(MAKE) --directory=tests clean > /dev/null 2>&1
+	
+	
+	
+	
+distclean: clean
+	-@$(MAKE) --directory=tests distclean > /dev/null 2>&1
+	-@rm -rf Makefile tests/Makefile include/wm_config.h
+
 
 compile/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
 	-mkdir -p compile

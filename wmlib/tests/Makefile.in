@@ -54,6 +54,9 @@ clean:
 	-rm -rf compile tmp
 	-rm -rf *.core
 	-rm -rf $(PROGNAME) $(PROGNAME)_coverage
+	
+distclean: clean
+	- rm -rf Makefile
 
 compile/libgtest.a:
 	mkdir -p compile

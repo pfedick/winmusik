@@ -57,7 +57,8 @@ RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include
 INCLUDEPATH += widgets
-INCLUDEPATH += pplib/include
+INCLUDEPATH += ../pplib/include
+INCLUDEPATH += ../ppl6/include
 
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include

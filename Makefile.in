@@ -111,10 +111,23 @@ deinstall:
 	rm -rf $(PREFIX)/share/applications/WinMusik.desktop
 	
 clean:
-	rm -rf documentation
-	rm -rf gui/release gui/debug release debug ppl6/release pplib/debug lib/compile
-	$(MAKE) --directory=pplib clean
-	$(MAKE) --directory=ppl6 clean
+	@rm -rf documentation release debug
+	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
+	@rm -rf gui/release gui/debug release debug ppl6/release pplib/debug lib/compile
+	@rm -rf gui/ui_*.h
+	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
+	-@ $(MAKE) --directory=ppl6 clean > /dev/null 2>&1
+	-@ $(MAKE) --directory=wmlib clean > /dev/null 2>&1
+
+distclean: clean
+	@rm -rf gui/Makefile* gui/WinMusik.pro .qmake.stash autom4te.cache
+	@rm -rf config.log config.status
+	@rm -rf ppl6/include/config.h ppl6/include/ppl6-config.h ppl6/Makefile
+	@rm -rf Package/WinMusik.desktop
+	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
+	-@ $(MAKE) --directory=wmlib distclean > /dev/null 2>&1
+	@rm -rf Makefile
+	
 
 gui/Makefile: gui/WinMusik.pro
 	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
