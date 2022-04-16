@@ -10,8 +10,8 @@
 
 #include <wm_musicalkeys.h>
 #include <wm_dataobjects.h>
-#include "ppl7.h"
-#include "ppl7-config.h"
+#include <ppl7.h>
+#include <ppl7-config.h>
 
 namespace de {
 namespace pfp {

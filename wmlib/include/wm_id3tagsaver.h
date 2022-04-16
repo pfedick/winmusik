@@ -2,7 +2,7 @@
 #define WM_DATAOBJECTS_H
 
 #include <queue>
-#include "ppl7.h"
+#include <ppl7.h>
 
 namespace de {
 namespace pfp {

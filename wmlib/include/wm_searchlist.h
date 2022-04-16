@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
-#include "ppl7.h"
+#include <ppl7.h>
 
 
 namespace de {

@@ -1,6 +1,7 @@
 #ifndef WM_FUNCTIONS_H
 #define WM_FUNCTIONS_H
-#include "ppl7.h"
+#include <ppl7.h>
+
 namespace de {
 namespace pfp {
 namespace winmusik {
