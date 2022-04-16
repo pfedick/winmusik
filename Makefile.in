@@ -54,20 +54,24 @@ ppl7: pplib/release/libpplib.a pplib/debug/libpplib-debug.a
 
 ppl6: ppl6/release/libppl6.a ppl6/debug/libppl6-debug.a
 
+wmlib: wmlib/release/libwinmusik3.a wmlib/debug/libwinmusik3.a
+
 
 ###########################################################################
 ### RELEASE
 ###########################################################################
 pplib/release/libpplib.a: Makefile pplib/Makefile
-	-mkdir -p pplib/release
 	$(MAKE) --directory=pplib release/libppl7-core.a release/libppl7-crypto.a release/libppl7-inet.a release/libppl7-audio.a
 	ar -r pplib/release/libpplib.a pplib/release/*.o
+	
+wmlib/release/libwinmusik3.a: Makefile wmlib/Makefile
+	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
 ppl6/release/libppl6.a: Makefile ppl6/Makefile
 	mkdir -p ppl6/release
 	$(MAKE) --directory=ppl6 release
 
-release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.a ppl6/release/libppl6.a
+release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.a ppl6/release/libppl6.a wmlib/release/libwinmusik3.a
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -77,16 +81,17 @@ release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.
 ###########################################################################
 ### DEBUG
 ###########################################################################
-pplib/debug/libpplib.a: Makefile pplib/Makefile
-	-mkdir -p pplib/debug
+pplib/debug/libppl7-debug.a: Makefile pplib/Makefile
 	$(MAKE) --directory=pplib debug
-	ar -r pplib/debug/libpplib.a pplib/debug/*.o
+
+wmlib/debug/libwinmusik3.a: Makefile wmlib/Makefile
+	$(MAKE) --directory=wmlib debug/libwinmusik3.a
 
 ppl6/debug/libppl6-debug.a: Makefile ppl6/Makefile
 	mkdir -p ppl6/debug
 	$(MAKE) --directory=ppl6 debug
 
-debug/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/debug/libpplib.a ppl6/debug/libppl6-debug.a
+debug/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/debug/libpplib.a ppl6/debug/libppl6-debug.a wmlib/debug/libwinmusik3.a
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug

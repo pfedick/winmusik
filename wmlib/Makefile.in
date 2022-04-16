@@ -1,83 +1,152 @@
-CXXFLAGS =	-O3 -ggdb -Wall -fmessage-length=0 -I../pplib/include -Iinclude 
+CXXFLAGS =	@CXXFLAGS@ -Wall -fmessage-length=0 -I../pplib/include -Iinclude 
+CXXDEBUGFLAGS = @CXXFLAGS@ -ggdb -D_DEBUG -Wall -fmessage-length=0 -I../pplib/include -Iinclude
+
 CXX		= @CXX@
 LIBDEP	:= ../pplib/release/libpplib.a
 
-OBJS =	compile/object_title.o \
-	compile/CStorage.o \
-	compile/CDatabase.o \
-	compile/Playlist.o \
-	compile/Searchlist.o \
-	compile/MusicalKeys.o \
-	compile/object_title.o \
-	compile/object_storagedata.o \
-	compile/functions.o \
-	compile/CID3TagSaver.o \
-	compile/CWMFile.o \
-	compile/traktor.o
+ 
 
-TARGET =	compile/libwinmusik3.a
+OBJS_RELEASE =	release/object_title.o \
+	release/CStorage.o \
+	release/CDatabase.o \
+	release/Playlist.o \
+	release/Searchlist.o \
+	release/MusicalKeys.o \
+	release/object_title.o \
+	release/object_storagedata.o \
+	release/functions.o \
+	release/CID3TagSaver.o \
+	release/CWMFile.o \
+	release/traktor.o
+	
+OBJS_DEBUG =	debug/object_title.o \
+	debug/CStorage.o \
+	debug/CDatabase.o \
+	debug/Playlist.o \
+	debug/Searchlist.o \
+	debug/MusicalKeys.o \
+	debug/object_title.o \
+	debug/object_storagedata.o \
+	debug/functions.o \
+	debug/CID3TagSaver.o \
+	debug/CWMFile.o \
+	debug/traktor.o	
+
 
 $(TARGET):	$(OBJS) $(LIBDEP)
 			ar -r $(TARGET) $(OBJS)
 
-all:		$(TARGET)
+all:		release debug
 
-release:	$(TARGET)
+release:	release/libwinmusik.a
+
+debug:	debug/libwinmusik.a
+	
+release/libwinmusik3.a: $(OBJS_RELEASE) $(LIBDEP)
+	ar -r release/libwinmusik3.a $(OBJS_RELEASE)
+
+
+debug/libwinmusik3.a: $(OBJS_DEBUG) $(LIBDEP)
+	ar -r debug/libwinmusik3.a $(OBJS_RELEASE)
 
 clean:
 	-@rm -rf compile release debug $(TARGET) > /dev/null 2>&1
-	-@$(MAKE) --directory=tests clean > /dev/null 2>&1
-	
-	
-	
+	-@$(MAKE) --directory=tests clean > /dev/null 2>&1	
 	
 distclean: clean
 	-@$(MAKE) --directory=tests distclean > /dev/null 2>&1
 	-@rm -rf Makefile tests/Makefile include/wm_config.h
 
 
-compile/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/CStorage.o -c src/CStorage.cpp
+release/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/CStorage.o -c src/CStorage.cpp
 
-compile/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/CDatabase.o -c src/CDatabase.cpp
+release/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/CDatabase.o -c src/CDatabase.cpp
 
-compile/object_title.o: src/object_title.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/object_title.o -c src/object_title.cpp
+release/object_title.o: src/object_title.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/object_title.o -c src/object_title.cpp
 
-compile/object_storagedata.o: src/object_storagedata.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/object_storagedata.o -c src/object_storagedata.cpp
+release/object_storagedata.o: src/object_storagedata.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/object_storagedata.o -c src/object_storagedata.cpp
 
-compile/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h include/wm_cwmfile.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/CWMFile.o -c src/CWMFile.cpp
+release/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h include/wm_cwmfile.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/CWMFile.o -c src/CWMFile.cpp
 
-compile/Playlist.o: src/Playlist.cpp include/wm_playlist.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/Playlist.o -c src/Playlist.cpp
+release/Playlist.o: src/Playlist.cpp include/wm_playlist.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/Playlist.o -c src/Playlist.cpp
 
-compile/Searchlist.o: src/Searchlist.cpp include/wm_searchlist.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/Searchlist.o -c src/Searchlist.cpp
+release/Searchlist.o: src/Searchlist.cpp include/wm_searchlist.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/Searchlist.o -c src/Searchlist.cpp
 
-compile/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/MusicalKeys.o -c src/MusicalKeys.cpp
+release/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/MusicalKeys.o -c src/MusicalKeys.cpp
 
-compile/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/traktor.o -c src/traktor.cpp
+release/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/traktor.o -c src/traktor.cpp
+	
+release/functions.o: src/functions.cpp include/wm_functions.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/functions.o -c src/functions.cpp
+
+release/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/CID3TagSaver.o -c src/CID3TagSaver.cpp
+	
 	
 
-compile/functions.o: src/functions.cpp include/wm_functions.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/functions.o -c src/functions.cpp
 
-compile/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
-	-mkdir -p compile
-	$(CXX) $(CXXFLAGS) -o compile/CID3TagSaver.o -c src/CID3TagSaver.cpp
+
+debug/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/CStorage.o -c src/CStorage.cpp
+
+debug/CDatabase.o: src/CDatabase.cpp include/libwinmusik3.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/CDatabase.o -c src/CDatabase.cpp
+
+debug/object_title.o: src/object_title.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/object_title.o -c src/object_title.cpp
+
+debug/object_storagedata.o: src/object_storagedata.cpp include/libwinmusik3.h include/wm_dataobjects.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/object_storagedata.o -c src/object_storagedata.cpp
+
+debug/CWMFile.o: src/CWMFile.cpp include/libwinmusik3.h include/wm_cwmfile.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/CWMFile.o -c src/CWMFile.cpp
+
+debug/Playlist.o: src/Playlist.cpp include/wm_playlist.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/Playlist.o -c src/Playlist.cpp
+
+debug/Searchlist.o: src/Searchlist.cpp include/wm_searchlist.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/Searchlist.o -c src/Searchlist.cpp
+
+debug/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/MusicalKeys.o -c src/MusicalKeys.cpp
+
+debug/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/traktor.o -c src/traktor.cpp
+	
+debug/functions.o: src/functions.cpp include/wm_functions.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/functions.o -c src/functions.cpp
+
+debug/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/CID3TagSaver.o -c src/CID3TagSaver.cpp	
 	
