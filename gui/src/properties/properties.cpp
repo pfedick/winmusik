@@ -29,7 +29,7 @@
 #include "properties.h"
 #include "regexpedit.h"
 #include <QTableWidgetItem>
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 
 Properties::Properties(QWidget *parent, CWmClient *wm)
     : QDialog(parent)

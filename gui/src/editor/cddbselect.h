@@ -31,7 +31,7 @@
 #include <QDialog>
 #include <QTreeWidgetItem>
 
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 #include "ui_cddbselect.h"
 
 class CDDBSelect : public QDialog

@@ -9,7 +9,7 @@
 #define PLUGINS_H_
 
 #include <list>
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 class Plugins
 {

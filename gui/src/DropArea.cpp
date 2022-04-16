@@ -3,7 +3,7 @@
 #include <QStringList>
 #include <QUrl>
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 DropArea::DropArea(QWidget *parent)
      : QLabel(parent)

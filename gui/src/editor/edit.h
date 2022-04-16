@@ -37,7 +37,7 @@
 #include "ui_edit.h"
 #include "oimpinfo.h"
 #include "colorscheme.h"
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 
 
 class Edit;

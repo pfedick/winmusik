@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include "tablecontrol.h"
 
-#include "../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 #include "fkeys.h"
 #include "src/editor/oimpinfo.h"
 

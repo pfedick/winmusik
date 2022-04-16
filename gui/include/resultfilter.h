@@ -27,7 +27,7 @@
 #define RESULTFILTER_H_
 
 #include <set>
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 class ResultFilter
 {

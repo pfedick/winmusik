@@ -32,7 +32,7 @@
 #include "ui_setbpmplayed.h"
 #include "winmusik3.h"
 
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 
 
 

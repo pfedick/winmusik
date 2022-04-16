@@ -30,7 +30,7 @@
 #include <QBuffer>
 #include <QLabel>
 #include <QClipboard>
-#include "../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 
 
 static bool CopyFromFilename(TrackInfo &info, const ppl6::CString &Filename);

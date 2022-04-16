@@ -50,8 +50,8 @@
 #include "../include/asynchronousMessage.h"
 #include "version.h"
 
-#include "../../../pplib/include/ppl7.h"
-#include "../../../pplib/include/ppl7-inet.h"
+#include "ppl7.h"
+#include "ppl7-inet.h"
 
 
 void Edit::UpdateDevice()

@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include "../../include/libwinmusik3.h"
 
-#include "../../../ppl6/include/ppl7.h"
+#include "ppl7.h"
 #include "../wmlib-tests.h"
 
 namespace {

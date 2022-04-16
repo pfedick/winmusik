@@ -26,7 +26,7 @@
 
 #include "wm_id3tagsaver.h"
 
-#include "../../ppl6/include/ppl7-audio.h"
+#include "ppl7-audio.h"
 
 
 namespace de {

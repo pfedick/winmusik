@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <list>
-#include "../../ppl6/include/ppl7.h"
-#include "../../ppl6/include/ppl7-audio.h"
+#include "ppl7.h"
+#include "ppl7-audio.h"
 
 
 namespace de {

@@ -31,7 +31,7 @@
 #include "tablecontrol.h"
 #include <QDialog>
 
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 #include "ui_cddbimport.h"
 
 class CDDBImport : public QDialog

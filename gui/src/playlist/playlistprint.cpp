@@ -1,9 +1,9 @@
 
 #define WITH_QT
 #define PPL_QT_STRING_UTF8
-#include "../../../ppl6/include/ppl6.h"
-#include "../../../pplib/include/ppl7.h"
-#include "../../../pplib/include/ppl7-ppl6compat.h"
+#include "ppl6.h"
+#include "ppl7.h"
+#include "ppl7-ppl6compat.h"
 #include "winmusik3.h"
 #include "playlisttracks.h"
 #include "playlist.h"

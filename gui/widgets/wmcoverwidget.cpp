@@ -1,8 +1,8 @@
 
 #define PPL_QT_STRING_UTF8
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
-#include "../../pplib/include/ppl7.h"
-#include "../../pplib/include/ppl7-inet.h"
+#include "ppl7.h"
+#include "ppl7-inet.h"
 #include "wmcoverwidget.h"
 #include "ui_wmcoverwidget.h"
 

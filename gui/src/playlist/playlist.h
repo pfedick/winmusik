@@ -39,7 +39,7 @@
 #include "playlistexport.h"
 #include "colorscheme.h"
 
-#include "../../../ppl6/include/ppl6-sound.h"
+#include "ppl6-sound.h"
 
 class PlaylistTracks;
 

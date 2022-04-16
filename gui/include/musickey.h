@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 #include "winmusik3.h"
-#include "../../ppl6/include/ppl6.h"
+#include "ppl6.h"
 
 int getMusicKeyId(const ppl6::CString &name);
 ppl6::CString keyNameSharps(int id);
