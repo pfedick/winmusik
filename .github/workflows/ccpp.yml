@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
       - name: Install Dependencies
         run: sudo apt install -y qt5-default qt5-qmake dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
       - name: configure
