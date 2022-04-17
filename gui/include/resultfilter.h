@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.15 $
- * $Date: 2010/12/23 18:04:40 $
- * $Id: search.cpp,v 1.15 2010/12/23 18:04:40 pafe Exp $
- *
- *
- * Copyright (c) 2014 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 #ifndef RESULTFILTER_H_
 #define RESULTFILTER_H_
