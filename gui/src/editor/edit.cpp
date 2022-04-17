@@ -1417,7 +1417,7 @@ bool Edit::on_KeyPress(QObject *target, int key, int modifier)
 		ui.releaseDate->setFocus();
 		return true;
         // *************************************************************************** Ctrl & Shift & v im Feld Artist
-    } else if (key==Qt::Key_V && modifier==(Qt::ShiftModifier|Qt::ControlModifier) && position==4) {
+    } else if (key==Qt::Key_V && modifier==(int)(Qt::ShiftModifier|Qt::ControlModifier) && position==4) {
         RegExpMatch match;
         RegExpClipboard clip;
         clip.copyFromClipboard();
@@ -2169,16 +2169,6 @@ void Edit::FixFocus()
 {
 	QWidget *widget=this->GetWidgetFromPosition(position);
 	if (widget) widget->setFocus();
-}
-
-static void setItemBackgroundColor(WMTreeItem *item, const QColor &c)
-{
-	item->setBackgroundColor(TRACKLIST_NAME_ROW,c);
-	item->setBackgroundColor(TRACKLIST_VERSION_ROW,c);
-	item->setBackgroundColor(TRACKLIST_GENRE_ROW,c);
-	item->setBackgroundColor(TRACKLIST_LENGTH_ROW,c);
-	item->setBackgroundColor(TRACKLIST_BPM_ROW,c);
-	item->setBackgroundColor(TRACKLIST_KEY_ROW,c);
 }
 
 static void setItemBackground(WMTreeItem *item, const QBrush &c)
