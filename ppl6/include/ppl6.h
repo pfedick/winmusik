@@ -111,7 +111,7 @@
 #ifdef PPL6LIB
 	#include "ppl6-exceptions.h"
 #else
-	#include "ppl6-exceptions.h"
+	#include <ppl6-exceptions.h>
 #endif
 
 namespace ppl6 {
@@ -329,7 +329,7 @@ class MemoryHeap
 #ifdef PPL6LIB
 #include "ppl6-algorithms.h"
 #else
-#include "ppl6-algorithms.h"
+#include <ppl6-algorithms.h>
 #endif
 
 namespace ppl6 {
@@ -3045,6 +3045,7 @@ class CDirEntry
 {
 	public:
 		CDirEntry();
+		CDirEntry(const CDirEntry &other);
 
 		CString		Filename;
 		CString		Path;

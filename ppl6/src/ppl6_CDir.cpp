@@ -187,6 +187,24 @@ CDirEntry::CDirEntry()
 	NumLinks=0;
 }
 
+CDirEntry::CDirEntry(const CDirEntry &other)
+{
+	Filename=other.Filename;
+	Path=other.Path;
+	File=other.File;
+	Size=other.Size;
+	Attrib=other.Attrib;
+	memcpy(AttrStr,(const char*)other.AttrStr,sizeof(AttrStr));
+	ATime=other.ATime;
+	CTime=other.CTime;
+	MTime=other.MTime;
+	Uid=other.Uid;
+	Gid=other.Gid;
+	Blocks=other.Blocks;
+	BlockSize=other.BlockSize;
+	NumLinks=other.NumLinks;
+}
+
 int CDirEntry::IsDir() const
 /*!\brief Ist aktueller Eintrag ein Verzeichnis?
  *
@@ -296,7 +314,7 @@ int CDirEntry::Copy(CDirEntry *dir)
 	File=dir->File;
 	Size=dir->Size;
 	Attrib=dir->Attrib;
-	strncpy(AttrStr,(const char*)dir->AttrStr,sizeof(AttrStr));
+	memcpy(AttrStr,(const char*)dir->AttrStr,sizeof(AttrStr));
 	ATime=dir->ATime;
 	CTime=dir->CTime;
 	MTime=dir->MTime;
