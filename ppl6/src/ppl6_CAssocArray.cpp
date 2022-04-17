@@ -804,7 +804,7 @@ int CAssocArray::ExportBinary(void *buffer, int buffersize, int *realsize) const
 	if (buffersize<0) buffersize=0;
 	CArrayItem *a;
 	CIconv iconv(ICONV_UNICODE,"UTF-8");
-	if (p+7<buffersize) strncpy(ptr,"PPLASOC",7);
+	if (p+7<buffersize) memcpy(ptr,"PPLASOC",7);
 	p+=7;
 	CTreeWalker walk;
 	Tree.Reset(walk);

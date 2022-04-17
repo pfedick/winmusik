@@ -237,7 +237,7 @@ void dumphex (char *adresse,ppldd zeilen)
 
 	_adresse=(char *)adresse;
 	for (_z=0;_z<zeilen;_z++) {
-		ppl_sprintf (tmp,"%8zX:",(ppliptr)(_adresse));
+		ppl_sprintf (tmp,"%8llX:",(ppliptr)(_adresse));
 		strxchg (tmp, (char*)" ",(char*)"0");
 		ppl_printf ("%s ",tmp);
 		for (_i=0;_i<16;_i++) {
@@ -720,7 +720,7 @@ void pokes (char * adresse, const char * string)
   size_t _l;
   _a=adresse;
   _l=strlen(string);
-  strncpy (_a,string,_l);
+  memcpy (_a,string,_l);
 }
 
 void pokesz (char * adresse, const char * string)
@@ -884,7 +884,7 @@ int WritePFPHeader (char * adresse, PFPSTRUCT * pfp)
 		return 0;
 	}
 	if (pfp->header_version==2) {
-		strncpy(adresse,"PFP-File",8);
+		memcpy(adresse,"PFP-File",8);
 		pokeb(adresse+8,2);
 		pokeb(adresse+9,40);
 		strncpy(adresse+10,(char *)pfp->file_id,4);
@@ -924,10 +924,10 @@ int PresetPFPHeader (PFPSTRUCT *pfp)
 {
 	if (pfp!=NULL) {
 		memset (pfp,0,sizeof(PFPSTRUCT));
-		strncpy ((char *)pfp->header,"PFP-File",8);
+		memcpy ((char *)pfp->header,"PFP-File",8);
 		pfp->header_version=2;
 		pfp->header_length=40;
-		strncpy((char *)pfp->file_id,"    ",4);
+		memcpy((char *)pfp->file_id,"    ",4);
 		pfp->date_creation=longdatum();
 		pfp->time_creation=longzeit();
 		pfp->date_update=pfp->date_creation;
@@ -1046,7 +1046,7 @@ void HexDump(const void *address, ppldd bytes, bool skipheader)
 {
     char buff[1024], tmp[10], cleartext[20];
     if (!skipheader) {
-    	ppl_sprintf (buff,"HEXDUMP: %u Bytes starting at Address 0x%016zX (%zu):",bytes,(ppliptr)address,(ppliptr)address);
+    	ppl_sprintf (buff,"HEXDUMP: %u Bytes starting at Address 0x%016llX (%llu):",bytes,(ppliptr)address,(ppliptr)address);
     	PrintDebug("%s\n",buff);
     }
 

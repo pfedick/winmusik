@@ -35,6 +35,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
+#include "prolog.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,9 +43,7 @@
 #include <ctype.h>
 #include <wctype.h>
 #include <locale.h>
-
 #include "ppl6.h"
-#include "prolog.h"
 #ifdef HAVE_PCRE
 #define PCRE_STATIC
 #include <pcre.h>
@@ -819,13 +818,19 @@ int CString::IsNumeric() const
 {
 	int c;
 	if (!len) return 0;
+	size_t dotcount=0;
 	for (ppluint32 i=0;i<len;i++) {
 		c=buffer[i];
 		if (c<'0' || c>'9') {
 			if (c!='.' && c!=',' && c!='-') return 0;
 			if (c=='-' && i>0) return 0;
+			if (c=='.' || c==',') {
+				dotcount++;
+				if (dotcount>1) return 0;
+			}
 		}
 	}
+	if(buffer[len-1]=='.') return 0;
 	return 1;
 }
 
@@ -2132,7 +2137,7 @@ CString& CString::Repeat(const char *str, int num)
 	if (!buf) return *this;
 	char *tmp=buf;
 	for (int i=0;i<num;i++) {
-		strncpy(tmp,str,l);
+		memcpy(tmp,str,l);
 		tmp+=l;
 	}
 	tmp[0]=0;

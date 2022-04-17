@@ -263,7 +263,7 @@ CID3Frame::CID3Frame()
 CID3Frame::CID3Frame(const char *name)
 {
 	poke32(ID,0);
-	::strncpy(ID,name,4);
+	::memcpy(ID,name,4);
 	ID[4]=0;
 	Flags=0;
 	Size=0;

@@ -976,7 +976,7 @@ void CDir::Print(const CDirEntry *de)
 	if (!de) return;
 	CString s;
 	ppl_printf ("%s %3i ",(char*)de->AttrStr,de->NumLinks);
-	ppl_printf ("%10zu ",de->Size);
+	ppl_printf ("%10llu ",de->Size);
 	MkDate(s,"%d %b %Y",de->MTime);
 	ppl_printf ("%s %s\n",(const char*)s,(const char*)de->Filename);
 }
@@ -1099,22 +1099,25 @@ int CDir::Open(const CString &path, Sort s)
 		ppl6::SetErrorFromErrno("Verzeichnis: %s",(const char*)Path);
 		return 0;
 	}
-	struct dirent d;
+	//struct dirent d;
 	struct dirent *result;
 	while (1==1) {
-		if (readdir_r(dir,&d,&result)!=0) {
-			ppl6::SetErrorFromErrno("Verzeichnis: %s",(const char*)Path);
-			closedir(dir);
-			return 0;
+		result=readdir(dir);
+		if (!result) {
+			if (errno) {
+				ppl6::SetErrorFromErrno("Verzeichnis: %s",(const char*)Path);
+				closedir(dir);
+				return 0;
+			}
+			break;
 		}
-		if (result==NULL) break;
 		CDirEntry de;
 		strcpy (de.AttrStr,"----------");
 		de.Attrib=0;
 		de.ATime=de.CTime=de.MTime=0;
-		de.Filename=d.d_name;
+		de.Filename=result->d_name;
 		de.Size=0;
-		de.File.Sprintf("%s/%s",(const char*)Path,d.d_name);		// Fileinfos holen
+		de.File.Sprintf("%s/%s",(const char*)Path,result->d_name);		// Fileinfos holen
 		de.Path=Path;
 		struct stat st;
 		if (stat ((const char*)de.File,&st)==0) {
