@@ -158,7 +158,6 @@ SOURCES += src/CSearchlist.cpp \
     src/about.cpp \
     src/CTableControl.cpp \
     src/StorageShortcut.cpp \
-    src/plugins.cpp \
     src/CWmClient.cpp \
     src/backgroundjobs.cpp \
     widgets/fkeys.cpp \
@@ -211,7 +210,6 @@ HEADERS += widgets/edittrack.h \
     include/asynchronousMessage.h \
     include/wmtoolbutton.h \
     include/traktor.h \
-    include/plugins.h \
     include/editdevice.h \
     include/firststart.h \
     include/coverviewer.h \
