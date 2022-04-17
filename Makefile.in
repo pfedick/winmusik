@@ -51,7 +51,7 @@ release: release/WinMusik
 
 debug: debug/WinMusik
 
-ppl7: pplib/release/libpplib.a pplib/debug/libpplib-debug.a
+ppl7: pplib/release/libpplib.a pplib/debug/libpplib.a
 
 ppl6: ppl6/release/libppl6.a ppl6/debug/libppl6-debug.a
 
@@ -88,8 +88,10 @@ release/WinMusik: Makefile gui/Makefile gui/WinMusik.pro pplib/release/libpplib.
 ###########################################################################
 ### DEBUG
 ###########################################################################
-pplib/debug/libppl7-debug.a: Makefile pplib/Makefile
-	$(MAKE) --directory=pplib debug
+pplib/debug/libpplib.a: Makefile pplib/Makefile
+	$(MAKE) --directory=pplib debug/libppl7-core.a debug/libppl7-crypto.a debug/libppl7-inet.a debug/libppl7-audio.a
+	ar -r pplib/debug/libpplib.a pplib/debug/*.o
+
 
 wmlib/debug/libwinmusik3.a: Makefile wmlib/Makefile
 	$(MAKE) --directory=wmlib debug/libwinmusik3.a
