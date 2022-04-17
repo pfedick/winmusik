@@ -47,6 +47,7 @@ gui          := gui
 
 all: release/WinMusik
 
+.PHONY: release debug release/WinMusik debug/WinMusik
 release: release/WinMusik
 
 debug: debug/WinMusik
