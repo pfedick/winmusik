@@ -684,7 +684,11 @@ void CThread::ThreadIdle()
 #elif defined HAVE_PTHREADS
 	#ifdef SOLARIS
 	#else
+#ifdef HAVE_SCHED_YIELD
+		sched_yield();
+#elif defined HAVE_PTHREAD_YIELD
 		pthread_yield();
+#endif
 	#endif
 #endif
 }

@@ -328,6 +328,8 @@ AC_CHECK_LIB(pthread, pthread_set_name_np,
 	AC_DEFINE(HAVE_PTHREAD_SET_NAME_NP,1),,)
 AC_CHECK_LIB(pthread, pthread_setname_np,
 	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP,1),,)
+	
+AC_CHECK_FUNCS([sched_yield pthread_yield])
 
 
 AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,

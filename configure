@@ -11567,6 +11567,19 @@ if test "x$ac_cv_lib_pthread_pthread_setname_np" = xyes; then :
 fi
 
 
+for ac_func in sched_yield pthread_yield
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_cxx_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sa_len in struct sockaddr" >&5
 $as_echo_n "checking for sa_len in struct sockaddr... " >&6; }

@@ -280,6 +280,9 @@
  * pthread
  */
 #undef HAVE_PTHREADS
+#undef HAVE_PTHREAD_YIELD
+#undef HAVE_SCHED_YIELD
+
 
 /*
  * OpenSSL
