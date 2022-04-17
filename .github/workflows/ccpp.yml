@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'true'
+          #fetch-depth: 0
       - name: Install Dependencies
         run: sudo apt install -y qt5-default qt5-qmake dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
       - name: configure

@@ -93,7 +93,7 @@ private:
 
     bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
     void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
-    void renderTrack(PlaylistItem *item, PlaylistItem *previous=NULL);
+    void renderTrack(PlaylistItem *item);
     void calcMixLength(PlaylistItem *item);
     void updateLengthStatus();
     void renumberTracks();
@@ -102,7 +102,7 @@ private:
 
 
     void renderTrackViewPlaylist(PlaylistItem *item);
-    void renderTrackViewDJ(PlaylistItem *item, PlaylistItem *previous=NULL);
+    void renderTrackViewDJ(PlaylistItem *item);
 
     bool eventFilter(QObject *target, QEvent *event);
     bool consumeEvent(QObject *target, QEvent *event);

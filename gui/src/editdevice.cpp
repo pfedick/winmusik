@@ -156,7 +156,7 @@ bool EditDevice::consumeEvent(QObject *target, QEvent *event)
 	QKeyEvent *keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
-	QFocusEvent *focusEvent=NULL;
+	//QFocusEvent *focusEvent=NULL;
 
 	// Id auslesen
 	__attribute__ ((unused)) int id=target->property("id").toInt();
@@ -175,10 +175,10 @@ bool EditDevice::consumeEvent(QObject *target, QEvent *event)
 			return true;
 		}
 	} else if (type==QEvent::FocusIn) {
-		focusEvent=static_cast<QFocusEvent *>(event);
+		//focusEvent=static_cast<QFocusEvent *>(event);
 		position=id;
 	} else if (type==QEvent::FocusOut) {
-		focusEvent=static_cast<QFocusEvent *>(event);
+		//focusEvent=static_cast<QFocusEvent *>(event);
 		oldposition=id;
 	}
 	if (target==ui.labelId || target==ui.labelText) {

@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/14 13:20:11 $
- * $Id: Playlist.cpp,v 1.1 2010/11/14 13:20:11 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 #include <QClipboard>
 #include <QMenu>
@@ -626,12 +619,12 @@ void Playlist::recreatePlaylist()
 
 void Playlist::updatePlaylist()
 {
-    PlaylistItem *previous=NULL;
+    //PlaylistItem *previous=NULL;
 	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        renderTrack(item,previous);
+        renderTrack(item);
 		item->setText(0,ppl6::ToString("%5d",i+1));
-        previous=item;
+        //previous=item;
 	}
 	updateLengthStatus();
     updateMixBpmUpDownIndicator();
@@ -678,7 +671,7 @@ void Playlist::updateLengthStatus()
 	statusbar->setSelectedTracks(selectedTracks);
 }
 
-void Playlist::renderTrack(PlaylistItem *item, PlaylistItem *previous)
+void Playlist::renderTrack(PlaylistItem *item)
 {
 	QColor color(0,0,0);
 	QBrush b=item->background(0);
@@ -759,7 +752,7 @@ void Playlist::renderTrack(PlaylistItem *item, PlaylistItem *previous)
 	if (playlistView==playlistViewNormal) {
 		renderTrackViewPlaylist(item);
 	} else if (playlistView==playlistViewDJ) {
-        renderTrackViewDJ(item, previous);
+        renderTrackViewDJ(item);
 	}
 }
 
@@ -770,7 +763,7 @@ void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
 	item->setText(columnLength,Tmp);
 }
 
-void Playlist::renderTrackViewDJ(PlaylistItem *item, PlaylistItem *previous)
+void Playlist::renderTrackViewDJ(PlaylistItem *item)
 {
 	ppl6::CString Tmp;
 	item->setText(columnComment,item->Remarks);
@@ -1921,8 +1914,8 @@ void Playlist::filterChanged()
     for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
         PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
         item->setHidden(true);
-        if (item->bpm>=ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
-            if (item->bpm<=ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
+        if (item->bpm>=(ppluint32)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
+            if (item->bpm<=(ppluint32)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
 
                 MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
                 if (itemKey==key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);

@@ -268,7 +268,7 @@ int CWMFile::GetNextChunk(CWMFileChunk *chunk)
 		return 0;
 	}
 	chunk->filepos=pos;
-	strncpy(chunk->chunkname,ptr,4);
+	memcpy(chunk->chunkname,ptr,4);
 	chunk->size=ppl6::peek32(ptr+4);
 	chunk->datasize=chunk->size-17;
 	chunk->timestamp=ppl6::peek32(ptr+8);
@@ -300,7 +300,7 @@ int CWMFile::GetChunk(CWMFileChunk *chunk, ppluint32 filepos)
 	if (!IsValidChunkName(tmp)) return 0;
 	// Daten einlesen
 	chunk->filepos=filepos;
-	strncpy(chunk->chunkname,ptr,4);
+	memcpy(chunk->chunkname,ptr,4);
 	chunk->size=ppl6::peek32(ptr+4);
 	chunk->datasize=chunk->size-17;
 	chunk->timestamp=ppl6::peek32(ptr+8);
@@ -314,7 +314,7 @@ int CWMFile::GetChunk(CWMFileChunk *chunk, ppluint32 filepos)
 
 int CWMFile::IsValidChunkName(const char *name)
 {
-	if (name!=NULL &&strlen(name)==4) {
+	if (name!=NULL && strlen(name)==4) {
 		if (strcmp(name,"TITL")==0) return 1;
 		if (strcmp(name,"VERS")==0) return 1;
 		if (strcmp(name,"DEVI")==0) return 1;
@@ -357,7 +357,7 @@ int CWMFile::SaveChunk(CWMFileChunk *chunk)
 			ff.Unmap();
 			chunk->version++;
 			chunk->timestamp=ppl6::GetTime();
-			strncpy(header,chunk->chunkname,4);
+			memcpy(header,chunk->chunkname,4);
 			ppl6::poke32(header+4,oldsize);
 			ppl6::poke32(header+8,chunk->timestamp);
 			ppl6::poke32(header+12,chunk->version);
@@ -370,14 +370,14 @@ int CWMFile::SaveChunk(CWMFileChunk *chunk)
 		}
 		// Nein, wir kennzeichnen den alten Datensatz als gelöscht
 		ff.Unmap();
-		strncpy(header,"FREE",4);
+		memcpy(header,"FREE",4);
 		ff.Write(header,4,chunk->filepos);
 	}
 	chunk->filepos=eof;
 	chunk->size=chunk->datasize+17;
 	chunk->timestamp=ppl6::GetTime();
 	chunk->version=1;
-	strncpy(header,chunk->chunkname,4);
+	memcpy(header,chunk->chunkname,4);
 	ppl6::poke32(header+4,chunk->size);
 	ppl6::poke32(header+8,chunk->timestamp);
 	ppl6::poke32(header+12,chunk->version);
@@ -424,7 +424,7 @@ int CWMFile::DeleteChunk(CWMFileChunk *chunk)
 
 		//char *oldchunk=ff.MapRW(chunk->filepos,17);
 		// Wir kennzeichnen den alten Datensatz als gelöscht
-		strncpy(header,"FREE",4);
+		memcpy(header,"FREE",4);
 		ff.Write(header,4,chunk->filepos);
 		//ff.Unmap();
 	}

@@ -569,8 +569,9 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 	Tmp.Setf("%d",(int)ti->BPM);
 	item->setText(SEARCH_TRACKLIST_BPM_ROW,Tmp);
 	item->setText(SEARCH_TRACKLIST_KEY_ROW,ti->getKeyName(musicKeyDisplay));
-	if ((ti->Flags&16)) item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(0,0,0));
-	else item->setTextColor(SEARCH_TRACKLIST_KEY_ROW,QColor(192,192,192));
+
+	if ((ti->Flags&16)) item->setForeground(SEARCH_TRACKLIST_KEY_ROW,QColor(0,0,0));
+	else item->setForeground(SEARCH_TRACKLIST_KEY_ROW,QColor(192,192,192));
 	Tmp.Setf("%d",(int)ti->EnergyLevel);
 	item->setText(SEARCH_TRACKLIST_ENERGYLEVEL_ROW,Tmp);
 
@@ -618,7 +619,6 @@ void Search::renderTrack(WMTreeItem *item, DataTitle *ti)
 
 void Search::PresentResults()
 {
-
 	DataTitle *ti;
 
 	ppl6::CString Tmp;
@@ -1202,7 +1202,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent *event)
     mimeData->setUrls(list);
     drag->setMimeData(mimeData);
     // start drag
-    drag->start(Qt::CopyAction | Qt::MoveAction);
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 	startPos.setX(0);
 	startPos.setY(0);
 
