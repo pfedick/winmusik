@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/14 13:20:11 $
- * $Id: Playlist.cpp,v 1.1 2010/11/14 13:20:11 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -368,7 +362,7 @@ bool PlaylistEdit::eventFilter(QObject *target, QEvent *event)
 	return QDialog::eventFilter(target,event);
 }
 
-bool PlaylistEdit::consumeEvent(QObject *target, QEvent *event)
+bool PlaylistEdit::consumeEvent(QObject *, QEvent *event)
 {
 	int type=event->type();
 	if (type==QEvent::KeyPress) {
