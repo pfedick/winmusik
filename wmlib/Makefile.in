@@ -1,12 +1,13 @@
-CXXFLAGS =	@CXXFLAGS@ -Wall -fmessage-length=0 -I../pplib/include -Iinclude 
+CXXFLAGS =	@CXXFLAGS@ -Wall -fmessage-length=0 -I../pplib/include -Iinclude
 CXXDEBUGFLAGS = @CXXFLAGS@ -ggdb -D_DEBUG -Wall -fmessage-length=0 -I../pplib/include -Iinclude
 
 CXX		= @CXX@
 LIBDEP	:= ../pplib/release/libpplib.a
 
- 
+
 
 OBJS_RELEASE =	release/object_title.o \
+	release/config.o \
 	release/CStorage.o \
 	release/CDatabase.o \
 	release/Playlist.o \
@@ -18,8 +19,9 @@ OBJS_RELEASE =	release/object_title.o \
 	release/CID3TagSaver.o \
 	release/CWMFile.o \
 	release/traktor.o
-	
+
 OBJS_DEBUG =	debug/object_title.o \
+	debug/config.o \
 	debug/CStorage.o \
 	debug/CDatabase.o \
 	debug/Playlist.o \
@@ -30,7 +32,7 @@ OBJS_DEBUG =	debug/object_title.o \
 	debug/functions.o \
 	debug/CID3TagSaver.o \
 	debug/CWMFile.o \
-	debug/traktor.o	
+	debug/traktor.o
 
 
 $(TARGET):	$(OBJS) $(LIBDEP)
@@ -41,7 +43,7 @@ all:		release debug
 release:	release/libwinmusik.a
 
 debug:	debug/libwinmusik.a
-	
+
 release/libwinmusik3.a: $(OBJS_RELEASE) $(LIBDEP)
 	ar -r release/libwinmusik3.a $(OBJS_RELEASE)
 
@@ -51,8 +53,8 @@ debug/libwinmusik3.a: $(OBJS_DEBUG) $(LIBDEP)
 
 clean:
 	-@rm -rf compile release debug $(TARGET) > /dev/null 2>&1
-	-@$(MAKE) --directory=tests clean > /dev/null 2>&1	
-	
+	-@$(MAKE) --directory=tests clean > /dev/null 2>&1
+
 distclean: clean
 	-@$(MAKE) --directory=tests distclean > /dev/null 2>&1
 	-@rm -rf Makefile tests/Makefile include/wm_config.h
@@ -93,7 +95,7 @@ release/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
 release/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/traktor.o -c src/traktor.cpp
-	
+
 release/functions.o: src/functions.cpp include/wm_functions.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/functions.o -c src/functions.cpp
@@ -101,8 +103,11 @@ release/functions.o: src/functions.cpp include/wm_functions.h Makefile
 release/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/CID3TagSaver.o -c src/CID3TagSaver.cpp
-	
-	
+
+release/config.o: src/config.cpp include/libwinmusik3.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/config.o -c src/config.cpp
+
 
 
 
@@ -141,12 +146,15 @@ debug/MusicalKeys.o: src/MusicalKeys.cpp include/wm_musicalkeys.h Makefile
 debug/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
 	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/traktor.o -c src/traktor.cpp
-	
+
 debug/functions.o: src/functions.cpp include/wm_functions.h Makefile
 	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/functions.o -c src/functions.cpp
 
 debug/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p debug
-	$(CXX) $(CXXDEBUGFLAGS) -o debug/CID3TagSaver.o -c src/CID3TagSaver.cpp	
-	
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/CID3TagSaver.o -c src/CID3TagSaver.cpp
+
+debug/config.o: src/config.cpp include/libwinmusik3.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o debug/config.o -c src/config.cpp
