@@ -22,7 +22,20 @@
 #include <ppl7.h>
 #include <QString>
 
-PPL7EXCEPTION(InvalidConfigurationFile, Exception);
+
+ppl7::String ToString(const QString& fmt, ...);
+
+#define WMEXCEPTION(name,inherit)	class name : public inherit { public: \
+    name() noexcept {} \
+    name(const char *msg, ...) noexcept {  \
+        va_list args; va_start(args, msg); copyText(msg,args); \
+        va_end(args); } \
+    name(const ppl7::String &msg) noexcept {  \
+        copyText((const char*)msg);} \
+    virtual const char* what() const noexcept { return (STR_VALUE(name)); } \
+    };
+
+WMEXCEPTION(InvalidConfigurationFile, ppl7::Exception);
 
 
 void ShowException(const ppl7::Exception& exp, const QString& msg=QString());

@@ -508,7 +508,7 @@ void ShowException(const ppl7::Exception& exp, const QString& msg)
 		m.Concatf("%s: %s\n", (const char*)a, (const char*)sub);
 	}
 	*/
-	return QMessageBox::critical(object, tr("WinMusik"),
+	QMessageBox::critical(NULL, QObject::tr("WinMusik"),
 		m,
 		QMessageBox::Ok);
 }
