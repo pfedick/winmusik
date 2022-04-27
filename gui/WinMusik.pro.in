@@ -159,7 +159,6 @@ SOURCES += src/CSearchlist.cpp \
     src/CTableControl.cpp \
     src/StorageShortcut.cpp \
     src/CWmClient.cpp \
-    src/backgroundjobs.cpp \
     widgets/fkeys.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/edittrack.cpp \
@@ -218,7 +217,6 @@ HEADERS += widgets/edittrack.h \
     include/edittrackdialog.h \
     include/regexpcapture.h \
     include/devicelist.h \
-    include/backgroundjobs.h \
     
 
 FORMS += widgets/wmcoverwidget.ui \

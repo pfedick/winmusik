@@ -485,30 +485,32 @@ ppl6::CString getReadableTimeFromSeconds(int seconds)
 }
 
 
+ppl7::String ToString(const QString &fmt, ...)
+{
+	const char* utf8fmt=fmt.toUtf8().constData();
+	ppl7::String s;
+	va_list args;
+	va_start(args, fmt);
+	s.vasprintf(utf8fmt, args);
+	va_end(args);
+	return s;
+}
+
 void ShowException(const ppl7::Exception& exp, const QString& msg)
 {
-
-	int err=ppl6::GetErrorCode();
-	ppl6::CString descr=ppl6::GetError();
-	ppl6::CString sub=ppl6::GetExtendedError();
-
 	QString m;
 	if (!msg.isEmpty()) {
-		m="<b>" + msg.trimmed() + "</b>\n\n";
+		m="<b>" + msg.trimmed() + "</b><p>\n\n";
+	}
+	QString info=exp.what();
+	m+=QObject::tr("Exception:")+" "+info+"<br>\n";
+	const char *additional=exp.text();
+	if (additional) {
+		info=additional;
+		m+=QObject::tr("Description:")+" "+info;
 	}
 
-
-	/*
-	ppl6::CString a=tr("Errorcode");
-	m.Concatf("\n\n%s: %u\n", (const char*)a, err);
-	a=tr("Description");
-	m.Concatf("%s: %s\n", (const char*)a, (const char*)descr);
-	if (sub.Len() > 0) {
-		a=tr("Extended Description");
-		m.Concatf("%s: %s\n", (const char*)a, (const char*)sub);
-	}
-	*/
-	QMessageBox::critical(NULL, QObject::tr("WinMusik"),
+	QMessageBox::critical(NULL, QObject::tr("WinMusik Error"),
 		m,
 		QMessageBox::Ok);
 }

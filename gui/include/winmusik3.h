@@ -169,7 +169,6 @@ enum MusicKeyType
 
 #include "wmstorage.h"
 #include "regexpcapture.h"
-#include "backgroundjobs.h"
 
 
 /*******************************************************
@@ -571,7 +570,6 @@ public:
 	COimpDataStore			OimpDataStore;
 
 	CID3TagSaver			ID3TagSaver;
-	BackgroundJobs			Background;
 	RegularExpressionCapture	RegExpCapture;
 	CHashes					Hashes;
 

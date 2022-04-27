@@ -66,7 +66,6 @@ CWmClient::CWmClient()
 
 CWmClient::~CWmClient()
 {
-	Background.triggerShutdown();
 	Hashes.Clear();
 	ID3TagSaver.ThreadStop();
 	CloseDatabase();
@@ -76,12 +75,11 @@ CWmClient::~CWmClient()
 	}
 	if (MainMenue) delete (Menue*)MainMenue;
 	MainMenue=NULL;
-	Background.shutdown();
 	if (wmlog) delete wmlog;
 	wmlog=NULL;
 }
 
-int CWmClient::Init(int argc, char **argv, QApplication *app)
+void CWmClient::Init(int argc, char **argv, QApplication *app)
 {
 	this->app=app;
 	this->argc=argc;
@@ -89,10 +87,9 @@ int CWmClient::Init(int argc, char **argv, QApplication *app)
 	ppl6::CString Tmp;
 	Tmp=ppl6::getargv(argc,argv,"-c");
 	if (Tmp.NotEmpty()) {
-		if (!conf.setConfigFile(Tmp)) return 0;
+		conf.setConfigFile(Tmp);
 	}
-	if (!InitStorage()) return 0;
-	return 1;
+	InitStorage();
 }
 
 int CWmClient::RaiseError()
@@ -141,26 +138,6 @@ int CWmClient::Start()
 	InitLogging();
 
 	InitDataPath();
-
-	/*
-	ppl6::CString oldfile,newfile;
-	oldfile=conf.DataPath;
-	oldfile+="/data0001.wm3";
-	newfile=conf.DataPath;
-	newfile+="/data0001.neu";
-
-	CWMFile f1,f2;
-	if (!f1.Open(oldfile)) {
-		return 0;
-	}
-	if (!f2.Open(newfile)) {
-		return 0;
-	}
-	//f2.EnableCompression(true);
-	CWMFile::CopyDatabase(f1,f2);
-	return 0;
-	*/
-
 
 	if (!LoadDatabase()) {
 		return 0;
@@ -238,13 +215,11 @@ void CWmClient::InitDataPath()
 	Storage.Init(conf.DataPath);
 }
 
-int CWmClient::InitStorage()
+void CWmClient::InitStorage()
 /*!\brief Storage Klassen registrieren
  *
  * Diese Funktion sort dafür, dass alle bekannte Storage Klassen registriert werden. Sie wird
  * im Rahmen der Funktion CWmClient::Init aufgerufen.
- *
- * \returns Liefert gegenwärtig immer 1 zurück.
  */
 {
 	Storage.RegisterStorageType(&TitleStore);
@@ -258,7 +233,6 @@ int CWmClient::InitStorage()
 	Storage.RegisterStorageType(&TrackStore);
 	Storage.RegisterStorageType(&DeviceStore);
 	Storage.RegisterStorageType(&OimpDataStore);
-	return 1;
 }
 
 int CWmClient::SelectLanguage()

@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
         Client.Init(argc, argv, &a);
     }
     catch (const ppl7::Exception& exp) {
-        ShowException(exp, QApplication::tr("could not initialize WinMusik"));
+        ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
         return 1;
     }
     if (!Client.Start()) {

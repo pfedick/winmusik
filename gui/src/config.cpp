@@ -105,16 +105,19 @@ void Config::setConfigFile(const ppl7::String& filename)
 	if (ppl7::File::exists(filename)) {
 		ppl7::DirEntry res=ppl7::File::statFile(filename);
 		if (!res.isFile()) {
-			throw InvalidConfigurationFile(ToString(tr("alternative configurationfile (Parameter -c) is not a regular file! [%s]")), filename);
+			throw InvalidConfigurationFile(ToString(tr("alternative configuration file (Parameter -c) is not a regular file! [%s]"), (const char*) filename));
 		}
 	} else {
 		ppl7::String Path=ppl7::File::getPath(filename);
-		if (ppl7::File::exists(Path)) {
-			throw InvalidConfigurationFile(ToString(tr("Path of configuration file does not exist! [%s]")), Path);
+		if (Path.isEmpty()) {
+			throw InvalidConfigurationFile(ToString(tr("alternative configuration file (Parameter -c) not found! [%s]"), (const char*)filename));
+		}
+		if (!ppl7::File::exists(Path)) {
+			throw InvalidConfigurationFile(ToString(tr("Path of configuration file does not exist! [%s]"), (const char*)Path));
 		}
 		ppl7::DirEntry res=ppl7::File::statFile(Path);
 		if (!res.isDir()) {
-			throw InvalidConfigurationFile(ToString(tr("Path of configuration file is not a valid directory! [%s]")), Path);
+			throw InvalidConfigurationFile(ToString(tr("Path of configuration file is not a valid directory! [%s]"), (const char*)Path));
 		}
 	}
 	ConfigFile=filename;
