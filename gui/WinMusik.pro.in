@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,13 +29,13 @@ QT += core \
     widgets \
     network \
     printsupport
-    
+
 CONFIG += debug_and_release
-CONFIG(debug, debug|release) { 
+CONFIG(debug, debug|release) {
     win32:TARGET = WinMusik
     unix:TARGET = debug/WinMusik
 }
-else { 
+else {
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
@@ -142,7 +142,6 @@ SOURCES += src/CSearchlist.cpp \
     src/editor/oimpinfo.cpp \
     src/editor/edit.cpp \
     src/editor/massimport.cpp \
-    src/wm20import.cpp \
     src/StorageTitle.cpp \
     src/edittrackdialog.cpp \
     src/resultfilter.cpp \
@@ -163,7 +162,7 @@ SOURCES += src/CSearchlist.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/edittrack.cpp \
     widgets/KeyWheel.cpp \
-    
+
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
@@ -200,7 +199,6 @@ HEADERS += widgets/edittrack.h \
     include/csearchlist.h \
     include/wmstorage.h \
     include/coverprinter.h \
-    include/wm20import.h \
     include/resultfilter.h \
     include/droparea.h \
     include/tablecontrol.h \
@@ -217,7 +215,7 @@ HEADERS += widgets/edittrack.h \
     include/edittrackdialog.h \
     include/regexpcapture.h \
     include/devicelist.h \
-    
+
 
 FORMS += widgets/wmcoverwidget.ui \
     widgets/edittrack.ui \
@@ -255,4 +253,3 @@ FORMS += widgets/wmcoverwidget.ui \
     forms/devicelist.ui \
     forms/splashscreen.ui \
     forms/asynchronousMessage.ui \
-    
