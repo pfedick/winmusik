@@ -285,12 +285,12 @@ static void FilterResult(const CHashes::TitleTree& in, ppl6::CGenericList& out)
 
 void MassImport::checkDupes(TreeItem* item)
 {
-	ppl6::CString Key, Version;
+	ppl7::String Key, Version;
 	if (item->info.Ti.VersionId > 0) Version=wm->GetVersionText(item->info.Ti.VersionId);
 	else Version=item->info.Version;
-	Key.Setf("%s %s ", (const char*)item->info.Ti.Artist, (const char*)item->info.Ti.Title);
+	Key.setf("%s %s ", (const char*)item->info.Ti.Artist, (const char*)item->info.Ti.Title);
 	Key+=Version;
-	Key.LCase();
+	Key.lowerCase();
 
 	std::set<ppl7::String>::iterator it;
 	it=LocalDupeCheck.find(Key);
@@ -335,9 +335,9 @@ void MassImport::renderTrack(TreeItem* item)
 	ppl7::String Tmp;
 
 	// Cover
-	if (item->info.Ti.CoverPreview.GetSize() > 0) {
+	if (item->info.Ti.CoverPreview.size() > 0) {
 		QPixmap pix, icon;
-		pix.loadFromData((const uchar*)item->info.Ti.CoverPreview.GetPtr(), item->info.Ti.CoverPreview.GetSize());
+		pix.loadFromData((const uchar*)item->info.Ti.CoverPreview.ptr(), item->info.Ti.CoverPreview.size());
 		item->setIcon(1, pix.copy(0, 0, 64, 16));
 	} else {
 		item->setIcon(1, QIcon());
@@ -767,7 +767,7 @@ bool MassImport::importTrack(TreeItem* item)
 	Ti.Channels=item->info.Ti.Channels;
 
 	// Cover
-	if (item->info.Ti.CoverPreview.Size() > 0) {
+	if (item->info.Ti.CoverPreview.size() > 0) {
 		Ti.CoverPreview=item->info.Ti.CoverPreview;
 	}
 

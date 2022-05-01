@@ -444,7 +444,6 @@ void Search::RandomResult(const std::list<DataTitle*>& in, std::list<DataTitle*>
 
 void Search::LimitResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out)
 {
-	DataTitle* ti;
 	size_t limit=ui.limitResultSpinBox->value();
 	if (ui.randomResultCheckBox->isChecked()) {
 		// Wir wollen Zufall
@@ -460,7 +459,7 @@ void Search::LimitResult(const std::list<DataTitle*>& in, std::list<DataTitle*>&
 	} else {
 		std::list<DataTitle*>::const_iterator it;
 		size_t i;
-		for (i=0, it=in.begin();i < limit, it != in.end();i++, ++it) {
+		for (i=0, it=in.begin();(i < limit) && (it != in.end());i++, ++it) {
 			out.push_back((*it));
 		}
 	}
@@ -1172,16 +1171,16 @@ void Search::on_ClipBoardTimer_update()
 	LastClipboardString=clip.PlainText;
 	if (LastClipboardString.isEmpty()) return;
 	RegExpMatch match;
-	ppl6::CString s;
+	ppl7::String s;
 	if (wm->RegExpCapture.match(clip, match)) {
 		s=match.Artist + " " + match.Title;
 		//printf ("RegExpMatch: %s\n",(const char*)s);
 	} else {
 		s=clip.PlainText;
-		if (s.PregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
-		if (s.Instr("\n") >= 0) return;
-		s.Replace("\t", " ");
-		s.PregReplace("/\\(.*?\\)/", "");
+		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (s.instr("\n") >= 0) return;
+		s.replace("\t", " ");
+		s.pregReplace("/\\(.*?\\)/", "");
 		//printf ("NO RegExpMatch: %s\n",(const char*)s);
 	}
 	wm->NormalizeTerm(s);
@@ -1245,44 +1244,46 @@ void Search::on_hardDiskSearchButton_clicked()
 
 void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 {
-	ppl6::CDir Dir;
-	ppl6::CString File, Tmp;
-	const char* tmp;
-	if (Dir.Open(dir, ppl6::CDir::Sort_None)) {
-		const ppl6::CDirEntry* entry;
-		Dir.Reset();
-		while ((entry=Dir.GetNext())) {
-			if (entry->IsDir() == true) {
-				if (entry->Filename != "." && entry->Filename != "..")
-					RecursiveDirSearch(search, entry->File);
-			} else if (entry->IsFile()) {
-				File=entry->Filename;
-				wm->NormalizeTerm(File);
-				// Wir prüfen, ob jedes Suchwort im Filenamen auftaucht
-				search.Reset();
-				bool match=true;
-				while ((tmp=search.GetNext())) {
-					if (File.Instr(tmp) < 0) {
-						match=false;
-						break;
-					}
+	ppl7::Dir Dir;
+	ppl7::String File, Tmp;
+	//const char* tmp;
+	try {
+		Dir.open(dir, ppl7::Dir::SORT_NONE);
+	} catch (...) {
+		return;
+	}
+	ppl7::Dir::Iterator it;
+	ppl7::DirEntry entry;
+	Dir.reset(it);
+	while (Dir.getNext(entry, it)) {
+		if (entry.isDir()) {
+			if (entry.Filename != "." && entry.Filename != "..")
+				RecursiveDirSearch(search, entry.File);
+		} else if (entry.isFile()) {
+			File=entry.Filename;
+			wm->NormalizeTerm(File);
+			// Wir prüfen, ob jedes Suchwort im Filenamen auftaucht
+			bool match=true;
+			for (size_t i=0;i < search.size();i++) {
+				if (File.instr(search[i]) < 0) {
+					match=false;
+					break;
 				}
-				if (match) {
-					//printf ("Match: %s\n",entry->File.GetPtr());
-					WMTreeItem* item=new WMTreeItem;
-					item->Id=0;
-					Tmp.Setf("%5u", 0);
-					item->setText(0, Tmp);
-					item->setText(1, entry->File);
-					Tmp.Setf("%u MB", (ppluint32)(entry->Size / 1024 / 1024));
-					item->setText(2, Tmp);
-					trackList->addTopLevelItem(item);
+			}
+			if (match) {
+				//printf ("Match: %s\n",entry->File.GetPtr());
+				WMTreeItem* item=new WMTreeItem;
+				item->Id=0;
+				Tmp.setf("%5u", 0);
+				item->setText(0, Tmp);
+				item->setText(1, entry.File);
+				Tmp.setf("%u MB", (ppluint32)(entry.Size / 1024 / 1024));
+				item->setText(2, Tmp);
+				trackList->addTopLevelItem(item);
 
-				}
 			}
 		}
 	}
-
 }
 
 void Search::on_displayMusicKey_currentIndexChanged(int)

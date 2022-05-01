@@ -406,8 +406,8 @@ public:
 class CStringCounterItem : public ppl6::CTreeItem
 {
 public:
-	ppl6::CWString	Name;
-	ppluint32		Count;
+	ppl7::WideString	Name;
+	uint32_t			Count;
 	virtual int CompareNode(CTreeItem* item);
 	virtual int CompareValue(void* value);
 
@@ -415,17 +415,17 @@ public:
 
 class ResultFilter;
 
-class CHashes : public ppl6::CThread
+class CHashes : public ppl7::Thread
 {
 	Q_DECLARE_TR_FUNCTIONS(CHashes)
 
 		friend class CWmClient;
 public:
-	typedef std::set<ppluint32> TitleTree;
+	typedef std::set<uint32_t> TitleTree;
 private:
-	typedef std::map<ppl6::CString, TitleTree >	WordTree;
+	typedef std::map<ppl7::String, TitleTree >	WordTree;
 
-	ppl6::CMutex	Mutex;
+	ppl7::Mutex		Mutex;
 	CWmClient* wm;
 	WordTree		Artist;
 	WordTree		Title;
@@ -439,15 +439,15 @@ private:
 	//CWordTree		Global;
 	ppl6::CLog* log;
 
-	int AddTitleInternal(ppluint32 TitleId, const DataTitle* title=nullptr);
-	void AddWords(WordTree& Tree, ppl6::CArray& words, const DataTitle* title);
-	void FindWords(const WordTree& Tree, ppl6::CArray& words, TitleTree& Result);
-	void FindSingleWord(const WordTree& Tree, const ppl6::CString& Word, TitleTree& Result, const ResultFilter& filter);
-	void RemoveWords(WordTree& Tree, ppl6::CArray& words, const DataTitle* title);
+	int AddTitleInternal(uint32_t TitleId, const DataTitle* title=nullptr);
+	void AddWords(WordTree& Tree, const ppl7::Array& words, const DataTitle* title);
+	void FindWords(const WordTree& Tree, const ppl7::Array& words, TitleTree& Result);
+	void FindSingleWord(const WordTree& Tree, const ppl7::String& Word, TitleTree& Result, const ResultFilter& filter);
+	void RemoveWords(WordTree& Tree, const ppl7::Array& words, const DataTitle* title);
 	void Union(TitleTree& Result, const TitleTree& Tree1, const TitleTree& Tree2);
 	void Copy(TitleTree& Result, const TitleTree& src);
-	ppluint32 Add(TitleTree& Result, const TitleTree& src, const ResultFilter& filter);
-	ppluint32 Add(TitleTree& Result, const TitleTree& src);
+	uint32_t Add(TitleTree& Result, const TitleTree& src, const ResultFilter& filter);
+	uint32_t Add(TitleTree& Result, const TitleTree& src);
 public:
 	enum SearchFlags {
 		SearchArtist=1,
@@ -463,17 +463,17 @@ public:
 
 	CHashes();
 	~CHashes();
-	virtual void ThreadMain(void* param);
+	virtual void run();
 
 	void Clear();
-	int GetTags(const ppl6::CString& str, ppl6::CArray& words);
-	int AddTitle(ppluint32 TitleId, const DataTitle* title=nullptr);
-	int RemoveTitle(ppluint32 TitleId, const DataTitle* title=nullptr);
+	int GetTags(const ppl7::String& str, ppl7::Array& words);
+	int AddTitle(uint32_t TitleId, const DataTitle* title=nullptr);
+	int RemoveTitle(uint32_t TitleId, const DataTitle* title=nullptr);
 
-	int Find(const ppl6::CString& Artist, const ppl6::CString& Title, TitleTree& Result);
-	int Find(const ppl6::CString& Artist, const ppl6::CString& Title, const ppl6::CString& Version, const ppl6::CString& Genre, const ppl6::CString& Tags, const ppl6::CString& Label, TitleTree& Result);
-	int FindGlobal(const ppl6::CString& Query, TitleTree& Result, int Flags, const ResultFilter& filter);
-	int CheckDupes(const ppl6::CString& Artist, const ppl6::CString& Title, ppluint32 Version, ppluint32 Ignore=0);
+	int Find(const ppl7::String& Artist, const ppl7::String& Title, TitleTree& Result);
+	int Find(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String& Version, const ppl7::String& Genre, const ppl7::String& Tags, const ppl7::String& Label, TitleTree& Result);
+	int FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags, const ResultFilter& filter);
+	int CheckDupes(const ppl7::String& Artist, const ppl7::String& Title, uint32_t Version, uint32_t Ignore=0);
 
 };
 
@@ -616,7 +616,6 @@ public:
 	void CoverViewerClosed();
 	bool IsCoverViewerVisible() const;
 
-	ppl6::CString GetOperatingSystem();
 	ppluint32 GetHighestDeviceId(int DeviceType);
 	ppl6::CString GetDeviceName(int DeviceType);
 	ppl6::CString GetDeviceNameShort(ppluint8 DeviceType);
@@ -648,9 +647,9 @@ public:
 	void SaveGeometry(const char* name, QByteArray Geometry);
 	void ReloadTranslation();
 	QString Unknown();
-	ppl6::CString GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page);
-	ppl6::CString GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-	ppl6::CDirEntry StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+	ppl7::String GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page);
+	ppl7::String GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+	ppl7::DirEntry StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 
 	int TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
 	int RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack);

@@ -502,7 +502,7 @@ void CDDBImport::addDataFromFile(DataTitle& Ti)
 			if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
 				Ti.Length=tinfo.Ti.Length;
 			}
-			if (tinfo.Ti.CoverPreview.Size() > 0) {
+			if (tinfo.Ti.CoverPreview.size() > 0) {
 				Ti.CoverPreview=tinfo.Ti.CoverPreview;
 			}
 		}

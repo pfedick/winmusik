@@ -1119,7 +1119,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
 
 	if (item.Length > 0) ui.length->setText(ppl6::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
 
-	ppl6::CDateTime date=ppl6::CDateTime::currentTime();
+	ppl7::DateTime date=ppl7::DateTime::currentTime();
 	if (item.ReleaseDate.notEmpty()) {
 		date=item.ReleaseDate;
 	} else if (item.DateAdded.notEmpty()) {
@@ -1423,11 +1423,11 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 		if (wm_main->RegExpCapture.match(clip, match)) {
 			ui.artist->setText(match.Artist);
 			ui.title->setText(match.Title);
-			if (match.Version.NotEmpty()) {
+			if (match.Version.notEmpty()) {
 				ui.versionId->setText("*");
 				ui.version->setText(match.Version);
 			}
-			if (match.Genre.NotEmpty()) {
+			if (match.Genre.notEmpty()) {
 				ui.genreId->setText("*");
 				ui.genre->setText(match.Genre);
 			}
@@ -2096,7 +2096,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 	if (!item) return false;
 	QList<QTreeWidgetItem*> Items=trackList->selectedItems();
 	QList<QUrl> list;
-	ppl6::CString File;
+	ppl7::String File;
 	QString qFile;
 	QPixmap Icon;
 
@@ -2108,14 +2108,14 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 		item=(WMTreeItem*)Items[i];
 		if (Icon.isNull()) {
 			DataTitle* ti=wm->GetTitle(item->Id);
-			if (ti != NULL && ti->CoverPreview.Size() > 0) {
-				Icon.loadFromData((const uchar*)ti->CoverPreview.GetPtr(), ti->CoverPreview.GetSize());
+			if (ti != NULL && ti->CoverPreview.size() > 0) {
+				Icon.loadFromData((const uchar*)ti->CoverPreview.ptr(), ti->CoverPreview.size());
 			}
 		}
 		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
 		File=wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
-		if (File.NotEmpty()) {
+		if (File.notEmpty()) {
 			xml+="<File>" + ppl6::EscapeHTMLTags(File) + "</File>\n";
 
 #ifdef _WIN32
@@ -2522,8 +2522,8 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						Ti.Size=tinfo.Ti.Size;
 						modified=true;
 					}
-					if (Ti.CoverPreview.Size() == 0) {
-						Ti.CoverPreview.Copy(tinfo.Ti.CoverPreview);
+					if (Ti.CoverPreview.size() == 0) {
+						Ti.CoverPreview.copy(tinfo.Ti.CoverPreview);
 
 					}
 					if (modified) {
@@ -2591,7 +2591,7 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 				Title.CopyFrom(ti);
 				ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
 				saveCover(Path, GlobalCover);
-				Title.CoverPreview.Copy(bytes.data(), bytes.size());
+				Title.CoverPreview.copy(bytes.data(), bytes.size());
 				if (!wm->TitleStore.Put(&Title)) {
 					wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 					return;

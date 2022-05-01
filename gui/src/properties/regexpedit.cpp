@@ -100,7 +100,7 @@ void RegExpEdit::on_teststring_textChanged()
 	RegExpMatch match;
 	RegExpPattern pat=getPattern();
 	ppl7::String Text=ui.teststring->toPlainText();
-	if (pat.Pattern.NotEmpty() == true && Text.notEmpty() == true) {
+	if (pat.Pattern.notEmpty() == true && Text.notEmpty() == true) {
 		try {
 			if (wm_main->RegExpCapture.testMatch(Text, match, pat)) {
 				ui.match_indicator->setStyleSheet("background: green;");
@@ -117,8 +117,7 @@ void RegExpEdit::on_teststring_textChanged()
 				ui.test_length->setText(Tmp);
 				return;
 			}
-		}
-		catch (...) {
+		} catch (...) {
 
 		}
 	}

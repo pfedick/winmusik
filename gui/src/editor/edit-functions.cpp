@@ -389,35 +389,35 @@ void Edit::UpdateTrackListing()
 void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 {
 	//QString QTmp;
-	ppl6::CString Text, Tmp;
-	ppl6::CString Unknown=tr("unknown");
+	ppl7::String Text, Tmp;
+	ppl7::String Unknown=tr("unknown");
 	const char* unknown=(const char*)Unknown;
 	DataVersion* version;
 	DataGenre* genre;
 	QBrush Brush(Qt::SolidPattern);
 	Brush.setColor("red");
 
-	Text.Setf("%s - %s",
-		(title->Artist.NotEmpty() ? (const char*)title->Artist : unknown),
-		(title->Title.NotEmpty() ? (const char*)title->Title : unknown));
+	Text.setf("%s - %s",
+		(title->Artist.notEmpty() ? (const char*)title->Artist : unknown),
+		(title->Title.notEmpty() ? (const char*)title->Title : unknown));
 
 	item->setText(TRACKLIST_NAME_ROW, Text);
 	// Version holen
 	version=wm->GetVersion(title->VersionId);
-	if (version) Text.Set(version->Value);
-	else Text.Set(unknown);
+	if (version) Text.set(version->Value);
+	else Text.set(unknown);
 	item->setText(TRACKLIST_VERSION_ROW, Text);
 	item->setForeground(TRACKLIST_VERSION_ROW, Brush);
 	// Genre holen
 	genre=wm->GetGenre(title->GenreId);
-	if (genre) Text.Set(genre->Value);
-	else Text.Set(unknown);
+	if (genre) Text.set(genre->Value);
+	else Text.set(unknown);
 	item->setText(TRACKLIST_GENRE_ROW, Text);
-	Text.Setf("%4i:%02i", (int)(title->Length / 60), title->Length % 60);
+	Text.setf("%4i:%02i", (int)(title->Length / 60), title->Length % 60);
 	item->setText(TRACKLIST_LENGTH_ROW, Text);
 
 	// BPM, Key und EnergyLevel
-	Text.Setf("%d", (int)title->BPM);
+	Text.setf("%d", (int)title->BPM);
 	item->setText(TRACKLIST_BPM_ROW, Text);
 	item->setText(TRACKLIST_KEY_ROW, title->getKeyName(musicKeyDisplay));
 	QFont f=item->font(TRACKLIST_KEY_ROW);
@@ -428,13 +428,13 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 		f.setBold(false);
 	}
 	item->setFont(TRACKLIST_KEY_ROW, f);
-	Text.Setf("%d", (int)title->EnergyLevel);
+	Text.setf("%d", (int)title->EnergyLevel);
 	item->setText(TRACKLIST_ENERGYLEVEL_ROW, Text);
 
-	Text.Setf("%d", (int)title->ReleaseDate / 10000);
+	Text.setf("%d", (int)title->ReleaseDate / 10000);
 	item->setText(TRACKLIST_YEAR, Text);
 
-	Text.Setf("%d", (int)title->Bitrate);
+	Text.setf("%d", (int)title->Bitrate);
 	item->setText(TRACKLIST_BITRATE_ROW, Text);
 	item->setTextAlignment(TRACKLIST_BITRATE_ROW, Qt::AlignRight);
 
@@ -491,7 +491,7 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 						QBuffer buffer(&bytes);
 						buffer.open(QIODevice::WriteOnly);
 						icon.save(&buffer, "JPEG", 70);
-						ti.CoverPreview.Copy(bytes.data(), bytes.size());
+						ti.CoverPreview.copy(bytes.data(), bytes.size());
 					}
 				}
 
@@ -505,9 +505,9 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 		}
 	} else {
 		//printf("Wir haben die Größe schon\n");
-		if (title->CoverPreview.Size() > 0) {
+		if (title->CoverPreview.size() > 0) {
 			QPixmap pix, icon;
-			pix.loadFromData((const uchar*)title->CoverPreview.GetPtr(), title->CoverPreview.Size());
+			pix.loadFromData((const uchar*)title->CoverPreview.ptr(), title->CoverPreview.size());
 			icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			item->setIcon(TRACKLIST_COVER_ROW, icon.copy(0, 0, 64, 16));
 		}
@@ -645,14 +645,14 @@ void Edit::SaveEditorTrack()
 		if (ppl6::CFile::Stat(Path, de)) {
 			Ti.Size=de.Size;
 			if (Cover.isNull()) {
-				Ti.CoverPreview.Clear();
+				Ti.CoverPreview.clear();
 			} else {
 				QPixmap icon=Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				QByteArray bytes;
 				QBuffer buffer(&bytes);
 				buffer.open(QIODevice::WriteOnly);
 				icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
-				Ti.CoverPreview.Copy(bytes.data(), bytes.size());
+				Ti.CoverPreview.copy(bytes.data(), bytes.size());
 			}
 		}
 	}
@@ -726,7 +726,7 @@ void Edit::UpdateCompleters()
 	t->Reset();
 	CStringCounterItem* item, * found;
 	while ((item=(CStringCounterItem*)t->GetNext())) {
-		QTmp=(const char*)item->Name;
+		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
 		Artists.append(QTmp);
 	}
 
@@ -756,7 +756,7 @@ void Edit::UpdateCompleters()
 						} else TmpArtists.Add(item);
 					}
 					*/
-					if (title->Title.NotEmpty()) {
+					if (title->Title.notEmpty()) {
 						item=new CStringCounterItem;
 						item->Name=title->Title;
 						item->Count=1;
@@ -766,7 +766,7 @@ void Edit::UpdateCompleters()
 							delete item;
 						} else TmpTitles.Add(item);
 					}
-					if (title->Album.NotEmpty()) {
+					if (title->Album.notEmpty()) {
 						item=new CStringCounterItem;
 						item->Name=title->Album;
 						item->Count=1;
@@ -790,7 +790,7 @@ void Edit::UpdateCompleters()
 
 	TmpTitles.Reset();
 	while ((item=(CStringCounterItem*)TmpTitles.GetNext())) {
-		QTmp=(const char*)item->Name;
+		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
 		//printf ("Append Titles: %s\n",(const char*)item->Name);
 		Titles.append(QTmp);
 	}
@@ -799,7 +799,7 @@ void Edit::UpdateCompleters()
 
 	TmpAlbums.Reset();
 	while ((item=(CStringCounterItem*)TmpAlbums.GetNext())) {
-		QTmp=(const char*)item->Name;
+		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
 		//printf ("Append Titles: %s\n",(const char*)item->Name);
 		Albums.append(QTmp);
 	}
@@ -826,7 +826,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 
 	ui.remarks->setText(info.Ti.Remarks);	// Comment
 	ui.genre->setText(info.Genre);			// Genre
-	if (info.Genre.NotEmpty()) {
+	if (info.Genre.notEmpty()) {
 		DataGenre* dg=(DataGenre*)wm->GenreStore.Find(info.Genre);
 		if (dg) {
 			Tmp.Setf("%u", dg->Id);
@@ -854,7 +854,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	// Music Key
 	ui.musickey->setText(ppl7::Trim(info.Ti.getKeyName(musicKeyDisplay)));
 
-	if (info.Version.IsEmpty()) {			// Version
+	if (info.Version.isEmpty()) {			// Version
 		if (info.Ti.Length < 5 * 60) {
 			info.Version="Single";
 		} else {
@@ -862,7 +862,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 		}
 	}
 	ui.version->setText(info.Version);
-	if (info.Version.NotEmpty()) {
+	if (info.Version.notEmpty()) {
 		DataVersion* dv=(DataVersion*)wm->VersionStore.Find(info.Version);
 		if (dv) {
 			Tmp.Setf("%u", dv->Id);
@@ -872,7 +872,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 		}
 	}
 	ui.labelName->setText(info.Label);		// Label
-	if (info.Label.NotEmpty()) {
+	if (info.Label.notEmpty()) {
 		DataLabel* dl=(DataLabel*)wm->LabelStore.Find(info.Label);
 		if (dl) {
 			Tmp.Setf("%u", dl->Id);
@@ -883,8 +883,8 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	} else {
 		ui.labelId->setText("*");
 	}
-	if (info.Cover.Size()) {				// Cover
-		Cover.loadFromData((const uchar*)info.Cover.GetPtr(), info.Cover.GetSize());
+	if (info.Cover.size()) {				// Cover
+		Cover.loadFromData((const uchar*)info.Cover.ptr(), info.Cover.size());
 		ui.coverwidget->setPixmap(Cover);
 		wm->UpdateCoverViewer(Cover);
 	}
@@ -894,8 +894,8 @@ void Edit::UpdateCover()
 {
 	wm->UpdateCoverViewer(Cover);
 	if (wm_main->conf.bWriteID3Tags == true) {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-		if (Path.NotEmpty()) {
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+		if (Path.notEmpty()) {
 			saveCover(Path, Cover);
 		}
 	}

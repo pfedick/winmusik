@@ -26,42 +26,42 @@
 #include "ui_playlistedit.h"
 #include "winmusik3.h"
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 #include "playlisttracks.h"
 
 
 class PlaylistEdit : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    PlaylistEdit(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~PlaylistEdit();
-    void ReloadTranslation();
-    void filloutFields(PlaylistItem *item);
-    void storeFileds(PlaylistItem *item);
+	PlaylistEdit(QWidget* parent = 0, CWmClient* wm=NULL);
+	~PlaylistEdit();
+	void ReloadTranslation();
+	void filloutFields(PlaylistItem* item);
+	void storeFileds(PlaylistItem* item);
 
 private:
-    Ui::playlistEditClass ui;
-    CWmClient *wm;
-    float traktorIn, traktorOut;
-    ppl6::CBinary CoverPreview;
-    QPixmap			Cover;
-    ppl6::CString	Filename;
+	Ui::playlistEditClass ui;
+	CWmClient* wm;
+	float traktorIn, traktorOut;
+	ppl7::ByteArray CoverPreview;
+	QPixmap			Cover;
+	ppl7::String	Filename;
 
-    void closeEvent(QCloseEvent *event);
-    void updateTotalTime();
-    float getSecondsFromLine(QLineEdit *line);
-    void loadTraktorCues(const ppl6::CID3Tag &Tag);
-    void loadCover(const ppl6::CID3Tag &Tag);
-    void updateCover();
-    void updateCoverPreview();
+	void closeEvent(QCloseEvent* event);
+	void updateTotalTime();
+	float getSecondsFromLine(QLineEdit* line);
+	void loadTraktorCues(const ppl7::ID3Tag& Tag);
+	void loadCover(const ppl7::ID3Tag& Tag);
+	void updateCover();
+	void updateCoverPreview();
 
-    void installFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
-    void cue2CutStart(int cut);
-    void cue2CutEnd(int cut);
-    void cutDelete(int cut);
+	void installFilter(QObject* object, int id);
+	bool eventFilter(QObject* target, QEvent* event);
+	bool consumeEvent(QObject* target, QEvent* event);
+	void cue2CutStart(int cut);
+	void cue2CutEnd(int cut);
+	void cutDelete(int cut);
 
 public slots:
 	void on_okButton_clicked();
@@ -84,7 +84,7 @@ public slots:
 	void on_bpm_editingFinished() { updateTotalTime(); }
 	void on_bpmPlayed_editingFinished() { updateTotalTime(); }
 
-    void on_musicKeyModificationSpinBox_valueChanged(int value);
+	void on_musicKeyModificationSpinBox_valueChanged(int value);
 
 	void on_coverCopyButton_clicked();
 	void on_coverInsertButton_clicked();

@@ -693,9 +693,9 @@ void Playlist::renderTrack(PlaylistItem* item)
 	//if (rr.height()>ch) ch=rr.height();
 	//if (ch>64) ch=64;
 
-	if (item->CoverPreview.Size() > 0) {
+	if (item->CoverPreview.size() > 0) {
 		QPixmap pix, icon;
-		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(), item->CoverPreview.Size());
+		pix.loadFromData((const uchar*)item->CoverPreview.ptr(), item->CoverPreview.size());
 		icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 		item->setIcon(columnCover, icon.copy(0, 0, 64, ch));
 		//ui.tracks->setIconSize(QSize(64,ch));
@@ -909,7 +909,7 @@ void Playlist::saveTitle(PlaylistItem* item)
 	Ti.BPM=item->bpm;
 	Ti.EnergyLevel=item->energyLevel;
 	Ti.Rating=item->rating;
-	if (Ti.CoverPreview.Size() == 0 || item->CoverPreview.Size() > 0) Ti.CoverPreview=item->CoverPreview;
+	if (Ti.CoverPreview.size() == 0 || item->CoverPreview.size() > 0) Ti.CoverPreview=item->CoverPreview;
 
 	// Titel speichern
 	if (Ti != OldTi) {
@@ -957,11 +957,11 @@ void Playlist::on_menuNew_triggered()
 {
 	if (saveFirst() != QMessageBox::Ok) return;
 	ui.targetTrackGroupBox->setChecked(false);
-	PlaylistFileName.Clear();
+	PlaylistFileName.clear();
 	ui.tracks->setName("");
 	ui.tracks->setSubName("");
 	ui.tracks->setIssueNumber(1);
-	ui.tracks->setIssueDate(ppl6::CDateTime::currentTime());
+	ui.tracks->setIssueDate(ppl7::DateTime::currentTime());
 
 	ui.playlistName->setText("");
 	ui.playlistSubName->setText("");
@@ -1013,14 +1013,14 @@ void Playlist::on_menuOpenRecent4_triggered()
 
 void Playlist::on_menuSave_triggered()
 {
-	if (PlaylistFileName.IsEmpty()) {
+	if (PlaylistFileName.isEmpty()) {
 		on_menuSaveAs_triggered();
 		return;
 	}
 	ui.tracks->setName(ui.playlistName->text());
 	ui.tracks->setSubName(ui.playlistSubName->text());
 	ui.tracks->setIssueNumber(ui.issueNumber->value());
-	ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString(Qt::ISODate)));
+	ui.tracks->setIssueDate(ppl7::DateTime(ui.issueDate->date().toString(Qt::ISODate)));
 
 	if (!ui.tracks->save(PlaylistFileName)) return;
 	wm->conf.LastPlaylistPath=ppl7::File::getPath(PlaylistFileName);
@@ -1402,7 +1402,7 @@ void Playlist::on_contextPasteCover_triggered()
 	QPixmap Cover=clipboard->pixmap();
 
 	// Cover im File speichern
-	if (currentTreeItem->File.NotEmpty()) saveCover(currentTreeItem->File, Cover);
+	if (currentTreeItem->File.notEmpty()) saveCover(currentTreeItem->File, Cover);
 	DataTitle Ti=*t;
 	getIconFromCover(Ti.CoverPreview, Cover);
 	currentTreeItem->CoverPreview=Ti.CoverPreview;
@@ -1887,9 +1887,9 @@ void Playlist::handleFilterDropEvent(QDropEvent* event)
 	MusicKey modified_key=key.addSemitone(ui.ct_modificationSpinBox->value());
 	ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
 
-	if (info.Cover.Size() > 0) {
+	if (info.Cover.size() > 0) {
 		QPixmap pix, icon;
-		pix.loadFromData(static_cast<const uchar*>(info.Cover.GetPtr()), static_cast<uint>(info.Cover.Size()));
+		pix.loadFromData(static_cast<const uchar*>(info.Cover.ptr()), static_cast<uint>(info.Cover.size()));
 		//icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 		ui.ct_cover->setPixmap(pix);
 	}

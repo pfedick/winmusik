@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.4 $
- * $Date: 2010/11/13 21:38:58 $
- * $Id: StorageTitle.cpp,v 1.4 2010/11/13 21:38:58 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +18,7 @@
  */
 
 
+
 #include "winmusik3.h"
 
 
@@ -35,11 +30,11 @@ TrackInfo::TrackInfo()
 void TrackInfo::clear()
 {
 	Ti.Clear();
-	Version.Clear();
-	Genre.Clear();
-	Label.Clear();
-	RecordingSource.Clear();
-	RecordingDevice.Clear();
+	Version.clear();
+	Genre.clear();
+	Label.clear();
+	RecordingSource.clear();
+	RecordingDevice.clear();
 }
 
 /*!\class DataTitle
@@ -406,11 +401,11 @@ void DataTitle::Clear()
  * werden, wodurch eine Kopie angefertigt wird.
  */
 {
-	Artist.Clear();
-	Title.Clear();
-	Remarks.Clear();
-	Album.Clear();
-	Tags.Clear();
+	Artist.clear();
+	Title.clear();
+	Remarks.clear();
+	Album.clear();
+	Tags.clear();
 	TitleId=0;
 	DeviceId=0;
 	Length=0;
@@ -431,7 +426,7 @@ void DataTitle::Clear()
 	Rating=0;
 	Flags=0;
 	ImportData=0;
-	CoverPreview.Clear();
+	CoverPreview.clear();
 	CStorageItem::Clear();
 	formatversion=5;
 	Key=0;
@@ -503,7 +498,7 @@ void DataTitle::SetTitle(const char* title)
  * \param[in] title Pointer auf einen String mit dem Titel.
  */
 {
-	Title.Set(title);
+	Title.set(title);
 }
 
 void DataTitle::SetArtist(const char* artist)
@@ -514,7 +509,7 @@ void DataTitle::SetArtist(const char* artist)
  * \param[in] artist Pointer auf einen String mit dem Namen des Interpreten.
  */
 {
-	Artist.Set(artist);
+	Artist.set(artist);
 }
 
 void DataTitle::SetRemarks(const char* remarks)
@@ -526,7 +521,7 @@ void DataTitle::SetRemarks(const char* remarks)
   */
 
 {
-	Remarks.Set(remarks);
+	Remarks.set(remarks);
 }
 
 void DataTitle::SetTags(const char* tags)
@@ -538,7 +533,7 @@ void DataTitle::SetTags(const char* tags)
   */
 
 {
-	Tags.Set(tags);
+	Tags.set(tags);
 }
 
 
@@ -551,7 +546,7 @@ void DataTitle::SetAlbum(const char* album)
  * \param[in] album Pointer auf einen String mit dem Namen des Albums.
  */
 {
-	Album.Set(album);
+	Album.set(album);
 }
 
 void DataTitle::SetKey(const ppl7::String& key)
@@ -568,7 +563,7 @@ void DataTitle::SetTitle(const ppl7::String& title)
  * \param[in] title Pointer auf einen String mit dem Titel.
  */
 {
-	Title.Set((const char*)title);
+	Title.set(title);
 }
 
 void DataTitle::SetArtist(const ppl7::String& artist)
@@ -579,7 +574,7 @@ void DataTitle::SetArtist(const ppl7::String& artist)
  * \param[in] artist Pointer auf einen String mit dem Namen des Interpreten.
  */
 {
-	Artist.Set((const char*)artist);
+	Artist.set(artist);
 }
 
 void DataTitle::SetRemarks(const ppl7::String& remarks)
@@ -590,7 +585,7 @@ void DataTitle::SetRemarks(const ppl7::String& remarks)
  * \param[in] remarks Pointer auf einen String mit der Bemerkung.
  */
 {
-	Remarks.Set((const char*)remarks);
+	Remarks.set(remarks);
 }
 
 void DataTitle::SetTags(const ppl7::String& tags)
@@ -601,7 +596,7 @@ void DataTitle::SetTags(const ppl7::String& tags)
  * \param[in] tags Pointer auf einen String mit den Suchtags
  */
 {
-	Tags.Set((const char*)tags);
+	Tags.set(tags);
 }
 
 void DataTitle::SetAlbum(const ppl7::String& album)
@@ -612,7 +607,7 @@ void DataTitle::SetAlbum(const ppl7::String& album)
  * \param[in] album String mit dem Namen des Albums
  */
 {
-	Album.Set((const char*)album);
+	Album.set(album);
 }
 
 
@@ -761,12 +756,12 @@ ppl6::CBinary* DataTitle::Export()
 	int lenTags=0;
 	formatversion=5;
 
-	lenArtist=static_cast<int>(Artist.Size());
-	lenTitle=static_cast<int>(Title.Size());
-	lenRemarks=static_cast<int>(Remarks.Size());
-	lenTags=static_cast<int>(Tags.Size());
-	lenAlbum=static_cast<int>(Album.Size());
-	size=size + lenArtist + lenTitle + lenRemarks + lenAlbum + lenTags + static_cast<int>(CoverPreview.Size());
+	lenArtist=static_cast<int>(Artist.size());
+	lenTitle=static_cast<int>(Title.size());
+	lenRemarks=static_cast<int>(Remarks.size());
+	lenTags=static_cast<int>(Tags.size());
+	lenAlbum=static_cast<int>(Album.size());
+	size=size + lenArtist + lenTitle + lenRemarks + lenAlbum + lenTags + static_cast<int>(CoverPreview.size());
 	//size=size+lenArtist+lenTitle+lenRemarks+lenAlbum;
 	char* a=static_cast<char*>(malloc(static_cast<size_t>(size)));
 	if (!a) {
@@ -813,9 +808,9 @@ ppl6::CBinary* DataTitle::Export()
 	if (lenTags) strncpy(a + p + 2, (const char*)Tags, lenTags);
 	p+=lenTags + 2;
 
-	ppl6::Poke16(a + p, CoverPreview.Size());
-	if (CoverPreview.Size()) memcpy(a + p + 2, CoverPreview.GetPtr(), CoverPreview.Size());
-	p+=CoverPreview.Size() + 2;
+	ppl6::Poke16(a + p, CoverPreview.size());
+	if (CoverPreview.size()) memcpy(a + p + 2, CoverPreview.ptr(), CoverPreview.size());
+	p+=CoverPreview.size() + 2;
 
 
 	/*
@@ -927,25 +922,25 @@ int DataTitle::Import(ppl6::CBinary* bin, int version)
 		p=58;
 	}
 	len=ppl6::Peek16(a + p);
-	if (len) Artist.Set(a + p + 2, len);
+	if (len) Artist.set(a + p + 2, len);
 	p+=len + 2;
 	len=ppl6::Peek16(a + p);
-	if (len) Title.Set(a + p + 2, len);
+	if (len) Title.set(a + p + 2, len);
 	p+=len + 2;
 	len=ppl6::Peek16(a + p);
-	if (len) Remarks.Set(a + p + 2, len);
+	if (len) Remarks.set(a + p + 2, len);
 	p+=len + 2;
 	len=ppl6::Peek16(a + p);
-	if (len) Album.Set(a + p + 2, len);
+	if (len) Album.set(a + p + 2, len);
 	p+=len + 2;
 	if (version >= 3) {
 		len=ppl6::Peek16(a + p);
-		if (len) Tags.Set(a + p + 2, len);
+		if (len) Tags.set(a + p + 2, len);
 		p+=len + 2;
 	}
 	if (version >= 2) {
 		len=ppl6::Peek16(a + p);
-		if (len) CoverPreview.Copy(a + p + 2, len);
+		if (len) CoverPreview.copy(a + p + 2, len);
 	}
 	return 1;
 }
@@ -971,7 +966,7 @@ int DataTitle::Import(ppl6::CBinary* bin, int version)
 int CStringCounterItem::CompareNode(CTreeItem* item)
 {
 	CStringCounterItem* s=(CStringCounterItem*)item;
-	int ret=s->Name.StrCmp(Name);
+	int ret=s->Name.strcmp(Name);
 	//printf ("Item:   %s\nString 2: %s\nResult: %i\n",(char*)s->Name,(char*)Name,ret);
 	if (ret < 0) return -1;
 	if (ret > 0) return 1;
@@ -1059,7 +1054,7 @@ int CTitleStore::Save(DataTitle* t)
 		delete bin;
 	}
 	CStringCounterItem* found, * item;
-	if (t->Artist.NotEmpty()) {
+	if (t->Artist.notEmpty()) {
 		item=new CStringCounterItem;
 		item->Name=t->Artist;
 		item->Count=1;

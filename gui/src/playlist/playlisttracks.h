@@ -45,7 +45,7 @@ public:
 	ppl7::String	Album;
 	ppl7::String	File;
 	ppl7::String	Remarks;
-	ppl6::CBinary	CoverPreview;
+	ppl7::ByteArray	CoverPreview;
 	ppluint8		musicKey;
 	ppluint32		bpm;
 	ppluint32		bpmPlayed;
