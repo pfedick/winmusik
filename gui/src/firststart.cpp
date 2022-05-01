@@ -29,8 +29,8 @@
 #include "../include/firststart.h"
 
 
-FirstStart::FirstStart(QWidget *parent, CWmClient *wm)
-    : QDialog(parent)
+FirstStart::FirstStart(QWidget* parent, CWmClient* wm)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	page=0;
@@ -38,7 +38,7 @@ FirstStart::FirstStart(QWidget *parent, CWmClient *wm)
 	ui.buttonAbbrechen->setEnabled(true);
 	ui.buttonWeiter->setEnabled(true);
 	ui.buttonZurueck->setEnabled(false);
-	for (int i=0;i<10;i++) pageplan[i]=-1;
+	for (int i=0;i < 10;i++) pageplan[i]=-1;
 	pageplan[0]=0;
 	pageplan[1]=1;
 	pageplan[2]=2;
@@ -52,15 +52,13 @@ FirstStart::FirstStart(QWidget *parent, CWmClient *wm)
 	}
 
 	// Charset-Auswahl
-	ppl6::CArray charsets;
-	ppl6::CIconv::Enumerate(charsets);
+	std::list<ppl7::String> charsets;
+	ppl7::Iconv::enumerateCharsets(charsets);
 
 	QStringList qlist;
-	charsets.Reset();
-	const char *name;
-	while ((name=charsets.GetNext())) {
-		qlist.append(name);
-
+	std::list<ppl7::String>::const_iterator it;
+	for (it=charsets.begin();it != charsets.end();++it) {
+		qlist.append((*it));
 	}
 	qlist.sort();
 	ui.charset->addItems(qlist);
@@ -76,7 +74,7 @@ FirstStart::~FirstStart()
 
 void FirstStart::on_buttonWeiter_clicked()
 {
-	if (pageplan[page]==1) {
+	if (pageplan[page] == 1) {
 		// Es muss geprüft werden, ob der User einen gültigen Pfad einer früheren Installation angegeben hat
 		ppl6::CString Path=ui.recoverpath->text();
 		if (Path.Len()) {
@@ -84,13 +82,10 @@ void FirstStart::on_buttonWeiter_clicked()
 				pageplan[2]=7;
 				maxpageplan=2;
 				wm->conf.DataPath=Path;
-				if (!wm->conf.Save()) {
-					ppl6::CString ee;
-					ee=ppl6::Error();
-					QString e=tr("Configuration could not be saved!\n");
-					QString e2=ee;
-					e+=e2;
-					QMessageBox::critical(this, tr("WinMusik - Error!"),e);
+				try {
+					wm->conf.save();
+				} catch (const ppl7::Exception& exp) {
+					ShowException(exp, tr("Configuration could not be saved!"));
 					return;
 				}
 			} else {
@@ -101,7 +96,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			maxpageplan=2;
 		}
 
-	} else if (pageplan[page]==2) {
+	} else if (pageplan[page] == 2) {
 		ppl6::CString Path=ui.localdatapath->text();
 		Path.RTrim("/");
 		if (!Path.Len()) {			// Pfad darf nicht leer sein
@@ -118,11 +113,11 @@ void FirstStart::on_buttonWeiter_clicked()
 		if (!ppl6::IsDir((const char*)Path)) {		// Pfad existiert nicht, sollen wir ihn anlegen?
 			int ret=QMessageBox::question(this, tr("WinMusik"),
 				tr("The specified directory does not exist. Should WinMusik create it?"),
-				QMessageBox::Yes | QMessageBox::No| QMessageBox::Abort);
-			if (ret==QMessageBox::Yes) {
-				if (!ppl6::MkDir(Path,1)) {
+				QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
+			if (ret == QMessageBox::Yes) {
+				if (!ppl6::MkDir(Path, 1)) {
 					QMessageBox::critical(this, tr("WinMusik - Error!"),
-							tr("Could not create the requested directory. Please check, if the name of the directory is correct and that you have the rights to create it"));
+						tr("Could not create the requested directory. Please check, if the name of the directory is correct and that you have the rights to create it"));
 					return;
 				}
 
@@ -135,9 +130,9 @@ void FirstStart::on_buttonWeiter_clicked()
 			if (wm->isValidDataPath(Path)) {
 				//QMessageBox::information(NULL, "Debug","frühere Installation gefunden");
 				int ret=QMessageBox::critical(this, tr("WinMusik - Error!"),
-						tr("The selected path already contains a WinMusik 3 database. Do you want to use it?"),
-						QMessageBox::Yes | QMessageBox::No| QMessageBox::Abort);
-				if (ret==QMessageBox::Yes) {
+					tr("The selected path already contains a WinMusik 3 database. Do you want to use it?"),
+					QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
+				if (ret == QMessageBox::Yes) {
 					// TODO: Der Datenpfad muss gespeichert werden
 					pageplan[3]=7;
 					maxpageplan=3;
@@ -147,7 +142,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			}
 			//QMessageBox::information(NULL, "Debug","keine frühere Installation");
 		}
-	} else 	if (pageplan[page]==3) {
+	} else 	if (pageplan[page] == 3) {
 		pageplan[4]=4;
 		maxpageplan=4;
 		// Daten von WinMusik 2.x importieren?
@@ -158,81 +153,74 @@ void FirstStart::on_buttonWeiter_clicked()
 			pageplan[5]=6;
 			maxpageplan=5;
 		}
-	} else 	if (pageplan[page]==4) {
+	} else 	if (pageplan[page] == 4) {
 		wm->conf.DataPath=ui.localdatapath->text();
 		//QMessageBox::information(this, tr("WinMusik Locale"),conf->Locale);
-		if (!wm->conf.Save()) {
-			ppl6::CString ee;
-			ee=ppl6::Error();
-			QString e=tr("Configuration could not be saved!\n");
-			QString e2=ee;
-			e+=e2;
-			QMessageBox::critical(this, tr("WinMusik - Error!"),e);
-			return;
-		} else {
-			wm->InitDataPath();
-			wm->CreateInitialDatabase();
-			done(1);
+		try {
+			wm->conf.save();
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Configuration could not be saved!"));
 			return;
 		}
-	} else 	if (pageplan[page]==5) {
+		wm->InitDataPath();
+		wm->CreateInitialDatabase();
+		done(1);
+		return;
+
+	} else 	if (pageplan[page] == 5) {
 		wm->conf.DataPath=ui.localdatapath->text();
-		if (!wm->conf.Save()) {
-			ppl6::CString ee;
-			ee=ppl6::Error();
-			QString e=tr("Configuration could not be saved!\n");
-			QString e2=ee;
-			e+=e2;
-			QMessageBox::critical(this, tr("WinMusik - Error!"),e);
+		try {
+			wm->conf.save();
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Configuration could not be saved!"));
 			return;
-		} else {
-			wm->InitDataPath();
 		}
+		wm->InitDataPath();
 	}
 
 	page++;
-	if (page>maxpageplan) {
+	if (page > maxpageplan) {
 		done(1);
 		return;
 	}
 	ui.stackedWidget->setCurrentIndex(pageplan[page]);
 	ui.buttonZurueck->setEnabled(true);
-	if (pageplan[page]==2) {
-		ppl6::CString Path=ui.localdatapath->text();
-		Path.RTrim("/");
-		if (!Path.Len()) {			// Pfad darf nicht leer sein
+	if (pageplan[page] == 2) {
+		ppl7::String Path=ui.localdatapath->text();
+		Path.trimRight("/");
+		if (!Path.len()) {			// Pfad darf nicht leer sein
 			ui.buttonWeiter->setEnabled(false);
 			return;
 		} else {
 			ui.buttonWeiter->setEnabled(true);
 		}
 
-	} else if (pageplan[page]==4) {
+	} else if (pageplan[page] == 4) {
 		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page]==6) {
+	} else if (pageplan[page] == 6) {
 		DoImport();
-	} else if (pageplan[page]==7) {
+	} else if (pageplan[page] == 7) {
 		ui.buttonZurueck->setVisible(false);
 		ui.buttonAbbrechen->setVisible(false);
 		ui.buttonWeiter->setEnabled(true);
 		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page]==8) {
+	} else if (pageplan[page] == 8) {
 		ui.buttonWeiter->setText(tr("finish"));
 		ui.buttonWeiter->setEnabled(true);
-	} else if (pageplan[page]==9) {
+	} else if (pageplan[page] == 9) {
 		done(1);
 	}
 }
 
 void FirstStart::on_buttonZurueck_clicked()
 {
-	if (pageplan[page]==3) {
+	if (pageplan[page] == 3) {
 		ui.buttonWeiter->setText(tr("next"));
 	}
 
-	if (pageplan[page]==2) ui.buttonWeiter->setEnabled(true);
-	if (page>0)	page--;
-	if (page<=0) {
+	if (pageplan[page] == 2) ui.buttonWeiter->setEnabled(true);
+	if (page > 0)	page--;
+	if (page <= 0) {
 		page=0;
 		ui.buttonZurueck->setEnabled(false);
 	}
@@ -243,19 +231,19 @@ void FirstStart::on_buttonZurueck_clicked()
 void FirstStart::on_buttonAbbrechen_clicked()
 {
 	int ret = QMessageBox::question(this, tr("WinMusik 3"),
-	                                tr("Do you really want to cancel the installation?"),
-	                                QMessageBox::Yes | QMessageBox::No,
-	                                QMessageBox::No);
+		tr("Do you really want to cancel the installation?"),
+		QMessageBox::Yes | QMessageBox::No,
+		QMessageBox::No);
 	ppl6::SetError(0);
-	if (ret==QMessageBox::Yes) done(0);
+	if (ret == QMessageBox::Yes) done(0);
 }
 
 void FirstStart::on_selectrecoverpath_clicked()
 {
 	QString dir = QFileDialog::getExistingDirectory(this, tr("Please select the directory of a former WinMusik installation"),
-			ui.recoverpath->text(),
-			QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if(dir.length()) {
+		ui.recoverpath->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (dir.length()) {
 		ui.recoverpath->setText(dir);
 	}
 }
@@ -263,9 +251,9 @@ void FirstStart::on_selectrecoverpath_clicked()
 void FirstStart::on_selectimportpath_clicked()
 {
 	QString dir = QFileDialog::getExistingDirectory(this, tr("Please select the directory of the WinMusik 2 database"),
-			ui.importpath->text(),
-			QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if(dir.length()) {
+		ui.importpath->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (dir.length()) {
 		ui.importpath->setText(dir);
 	}
 }
@@ -275,9 +263,9 @@ void FirstStart::on_selectimportpath_clicked()
 void FirstStart::on_selectdatapath_clicked()
 {
 	QString dir = QFileDialog::getExistingDirectory(this, tr("Please select the directory in which WinMusik should save it's database"),
-			ui.localdatapath->text(),
-			QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if(dir.length()) {
+		ui.localdatapath->text(),
+		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	if (dir.length()) {
 		ui.localdatapath->setText(dir);
 	}
 }
@@ -299,9 +287,9 @@ void FirstStart::on_localdatapath_textChanged()
 
 
 
-int FirstStart::UseExistingInstallation(ppl6::CString *Path)
+int FirstStart::UseExistingInstallation(ppl6::CString* Path)
 {
-	char *p=(char*)Path->GetPtr();
+	char* p=(char*)Path->GetPtr();
 	// Der Pfad muss existieren
 	if (!ppl6::IsDir(p)) {
 		//StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton )
@@ -325,7 +313,7 @@ void FirstStart::DoImport()
 	ui.progressBar->setMaximum(100);
 	ui.progressBar->setValue(0);
 
-	FirstStartImportProgress *p=new FirstStartImportProgress();
+	FirstStartImportProgress* p=new FirstStartImportProgress();
 	p->widget=this;
 	UpdateProgress(p);
 
@@ -337,8 +325,8 @@ void FirstStart::DoImport()
 	wm2path.Trim();
 
 	wm->Storage.DeleteDatabase();
-	if (!Import.Load(wm2path,&wm->Storage,p)) {
-		wm->RaiseError(this,tr("Import failed"));
+	if (!Import.Load(wm2path, &wm->Storage, p)) {
+		wm->RaiseError(this, tr("Import failed"));
 		ui.buttonWeiter->setEnabled(false);
 		ui.buttonZurueck->setEnabled(true);
 		ui.buttonAbbrechen->setEnabled(true);
@@ -355,7 +343,7 @@ void FirstStart::DoImport()
 	delete p;
 }
 
-void FirstStart::UpdateProgress(FirstStartImportProgress *p)
+void FirstStart::UpdateProgress(FirstStartImportProgress* p)
 {
 	ui.import_titeldatei->setVisible(p->import_titeldatei);
 	ui.import_traegertitel->setVisible(p->import_traegertitel);
@@ -385,6 +373,3 @@ void FirstStartImportProgress::Update()
 {
 	widget->UpdateProgress(this);
 }
-
-
-

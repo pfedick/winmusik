@@ -29,8 +29,8 @@
 
 class SearchlistTreeItem : public QTreeWidgetItem
 {
-	public:
-		ppl6::CString	Filename;
+public:
+    ppl7::String	Filename;
 };
 
 
@@ -39,7 +39,7 @@ class Searchlists : public QWidget
     Q_OBJECT
 
 public:
-    Searchlists(QWidget *parent = 0, CWmClient *wm=NULL);
+    Searchlists(QWidget* parent = 0, CWmClient* wm=NULL);
     ~Searchlists();
     void ReloadTranslation();
     void Update();
@@ -47,17 +47,17 @@ public:
 
 private:
     Ui::SearchlistsClass ui;
-    CWmClient *wm;
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void closeEvent(QCloseEvent *event);
+    CWmClient* wm;
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
+    void closeEvent(QCloseEvent* event);
     void Resize();
 
 
 public slots:
-	void on_newSearchlistButton_clicked();
-	void on_deleteSearchlistButton_clicked();
-	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+    void on_newSearchlistButton_clicked();
+    void on_deleteSearchlistButton_clicked();
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 
 };

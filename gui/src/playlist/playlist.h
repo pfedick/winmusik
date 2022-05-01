@@ -33,7 +33,7 @@
 #include "playlistexport.h"
 #include "colorscheme.h"
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
 class PlaylistTracks;
 
@@ -41,34 +41,34 @@ class Playlist : public QMainWindow
 {
     Q_OBJECT
 
-    friend class PlaylistTracks;
+        friend class PlaylistTracks;
 
 public:
-    Playlist(QWidget *parent = nullptr, CWmClient *wm=nullptr);
+    Playlist(QWidget* parent = nullptr, CWmClient* wm=nullptr);
     ~Playlist();
     void ReloadTranslation();
 
 private:
     Ui::playlistClass ui;
-    CWmClient *wm;
-    PlaylistItem *currentTreeItem;
-    QMenu	*menuRecentPlaylists;
+    CWmClient* wm;
+    PlaylistItem* currentTreeItem;
+    QMenu* menuRecentPlaylists;
 
     // StatusBar
-    PlaylistStatusBar *statusbar;
+    PlaylistStatusBar* statusbar;
 
 
-    QWidget *searchWindow;
-    QWidget *saveWidget, *saveAsWidget;
+    QWidget* searchWindow;
+    QWidget* saveWidget, * saveAsWidget;
 
-    ppl6::CString	PlaylistFileName;
-    ppl6::CString   LastPrintFileName;
+    ppl7::String	PlaylistFileName;
+    ppl7::String   LastPrintFileName;
     bool changed;
     MusicKeyType	musicKeyDisplay;
     ColorScheme     colorscheme;
 
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
     void Resize();
     void setChanged(bool flag);
 
@@ -78,64 +78,64 @@ private:
     void createMenue();
     void createToolbar();
     void createStatusBar();
-    void createSetMusicKeyContextMenu(QMenu *m);
-    void createSetEnergyLevelContextMenu(QMenu *m);
+    void createSetMusicKeyContextMenu(QMenu* m);
+    void createSetEnergyLevelContextMenu(QMenu* m);
 
     QMessageBox::StandardButton saveFirst();
 
-    void loadPlaylist(ppl6::CString &Filename);
+    void loadPlaylist(ppl7::String& Filename);
 
-    bool loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId);
-    void loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file);
-    void renderTrack(PlaylistItem *item);
-    void calcMixLength(PlaylistItem *item);
+    bool loadTrackFromDatabase(PlaylistItem* item, ppluint32 titleId);
+    void loadTrackFromFile(PlaylistItem* item, const ppl7::String& file);
+    void renderTrack(PlaylistItem* item);
+    void calcMixLength(PlaylistItem* item);
     void updateLengthStatus();
     void renumberTracks();
-    void saveTitle(PlaylistItem *item);
+    void saveTitle(PlaylistItem* item);
     void rateCurrentTrack(int value);
 
 
-    void renderTrackViewPlaylist(PlaylistItem *item);
-    void renderTrackViewDJ(PlaylistItem *item);
+    void renderTrackViewPlaylist(PlaylistItem* item);
+    void renderTrackViewDJ(PlaylistItem* item);
 
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
-    void handleDropEvent(QDropEvent *event);
-    void handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertItem);
-    void handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem);
-    void handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
+    void handleDropEvent(QDropEvent* event);
+    void handleDropEvent(const QMimeData* mime, QTreeWidgetItem* insertItem);
+    void handleXMLDrop(const ppl7::String& xml, QTreeWidgetItem* insertItem);
+    void handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertItem);
     void updateLastPlaylist();
     void updateMixBpmUpDownIndicator();
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent* event);
 
-    void highlightHarmonicKeys(PlaylistItem *track);
+    void highlightHarmonicKeys(PlaylistItem* track);
     void unHighlightHarmonicKeys();
 
-    bool on_tracks_MouseButtonPress(QMouseEvent * event);
-    bool on_tracks_MouseButtonRelease(QMouseEvent * event);
+    bool on_tracks_MouseButtonPress(QMouseEvent* event);
+    bool on_tracks_MouseButtonRelease(QMouseEvent* event);
 
     // Export Playlist
-    void exportFile(PlaylistExport &dialog, int track, const ppl6::CString &SourceFile);
+    void exportFile(PlaylistExport& dialog, int track, const ppl7::String& SourceFile);
     void exportM3U();
     void exportPLS();
     void exportXSPF();
     void exportTXT();
-    ppl6::CString getExportFilename(int track, const ppl6::CString &SourceFile);
+    ppl7::String getExportFilename(int track, const ppl7::String& SourceFile);
 
     // Aktionen
-    void editTrack(PlaylistItem *item);
-    void copyTracks(const QList<QTreeWidgetItem *> items);
+    void editTrack(PlaylistItem* item);
+    void copyTracks(const QList<QTreeWidgetItem*> items);
 
     // Filter
     bool isFilterEnabled() const;
-    void handleFilterDropEvent(QDropEvent *event);
+    void handleFilterDropEvent(QDropEvent* event);
     void filterChanged();
 
 
     enum playlistViewType {
-    	playlistViewNormal=0,
-    	playlistViewDJ=1
+        playlistViewNormal=0,
+        playlistViewDJ=1
     };
     playlistViewType playlistView;
 
@@ -165,59 +165,59 @@ private:
 
 public slots:
 
-	void on_menuNew_triggered();
-	void on_menuOpen_triggered();
-	void on_menuSave_triggered();
-	void on_menuSaveAs_triggered();
+    void on_menuNew_triggered();
+    void on_menuOpen_triggered();
+    void on_menuSave_triggered();
+    void on_menuSaveAs_triggered();
 
     void on_menuExport_triggered();
     void on_printPlaylist_triggered();
 
-	void on_menuOpenRecent0_triggered();
-	void on_menuOpenRecent1_triggered();
-	void on_menuOpenRecent2_triggered();
-	void on_menuOpenRecent3_triggered();
-	void on_menuOpenRecent4_triggered();
+    void on_menuOpenRecent0_triggered();
+    void on_menuOpenRecent1_triggered();
+    void on_menuOpenRecent2_triggered();
+    void on_menuOpenRecent3_triggered();
+    void on_menuOpenRecent4_triggered();
 
-	void on_viewPlaylist_triggered();
-	void on_viewDJ_triggered();
+    void on_viewPlaylist_triggered();
+    void on_viewDJ_triggered();
     void on_viewFilter_triggered();
 
-	void on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column);
-	void on_tracks_itemClicked (QTreeWidgetItem * item, int column);
-	void on_tracks_customContextMenuRequested ( const QPoint & pos );
-	void on_tracks_itemSelectionChanged ();
-	void on_shufflePlaylist_triggered();
+    void on_tracks_itemDoubleClicked(QTreeWidgetItem* item, int column);
+    void on_tracks_itemClicked(QTreeWidgetItem* item, int column);
+    void on_tracks_customContextMenuRequested(const QPoint& pos);
+    void on_tracks_itemSelectionChanged();
+    void on_shufflePlaylist_triggered();
 
 
-	void on_playlistName_textChanged ( const QString & text );
-	void on_playlistSubName_textChanged ( const QString & text );
-	void on_issueNumber_valueChanged ( int value );
-	void on_issueDate_dateChanged(const QDate &date);
+    void on_playlistName_textChanged(const QString& text);
+    void on_playlistSubName_textChanged(const QString& text);
+    void on_issueNumber_valueChanged(int value);
+    void on_issueDate_dateChanged(const QDate& date);
 
-	void on_contextEditTrack_triggered();
-	void on_contextCopyTrack_triggered();
-	void on_contextPasteTrack_triggered();
-	void on_contextDeleteTrack_triggered();
-	void on_contextFindMoreVersions_triggered();
-	void on_contextFindMoreArtist_triggered();
-	void on_contextFindMoreTitle_triggered();
-	void on_contextPlayTrack_triggered();
-	void on_contextSetBPMPlayed_triggered();
+    void on_contextEditTrack_triggered();
+    void on_contextCopyTrack_triggered();
+    void on_contextPasteTrack_triggered();
+    void on_contextDeleteTrack_triggered();
+    void on_contextFindMoreVersions_triggered();
+    void on_contextFindMoreArtist_triggered();
+    void on_contextFindMoreTitle_triggered();
+    void on_contextPlayTrack_triggered();
+    void on_contextSetBPMPlayed_triggered();
     void on_contextEditComment_triggered();
-	void on_contextReReadInAndOuts_triggered();
+    void on_contextReReadInAndOuts_triggered();
 
 
-	void on_contextRate0_clicked();
-	void on_contextRate1_clicked();
-	void on_contextRate2_clicked();
-	void on_contextRate3_clicked();
-	void on_contextRate4_clicked();
-	void on_contextRate5_clicked();
-	void on_contextRate6_clicked();
+    void on_contextRate0_clicked();
+    void on_contextRate1_clicked();
+    void on_contextRate2_clicked();
+    void on_contextRate3_clicked();
+    void on_contextRate4_clicked();
+    void on_contextRate5_clicked();
+    void on_contextRate6_clicked();
 
-	void on_contextMusicKeyVerified_triggered();
-	void on_contextSetMusicKey(int k);
+    void on_contextMusicKeyVerified_triggered();
+    void on_contextSetMusicKey(int k);
     void on_contextMusicKey0_triggered() { on_contextSetMusicKey(0); }
     void on_contextMusicKey1_triggered() { on_contextSetMusicKey(1); }
     void on_contextMusicKey2_triggered() { on_contextSetMusicKey(2); }
@@ -244,24 +244,24 @@ public slots:
     void on_contextMusicKey23_triggered() { on_contextSetMusicKey(23); }
     void on_contextMusicKey24_triggered() { on_contextSetMusicKey(24); }
     void on_contextMusicKey25_triggered() { on_contextSetMusicKey(25); }
-	void on_statusbar_musicKeySelectionChanged(int newValue);
+    void on_statusbar_musicKeySelectionChanged(int newValue);
 
-	void on_contextPasteCover_triggered();
+    void on_contextPasteCover_triggered();
 
-	void on_contextSetEnergyLevel(int v);
-    void on_contextEnergyLevel0_triggered() {on_contextSetEnergyLevel(0); }
-    void on_contextEnergyLevel1_triggered() {on_contextSetEnergyLevel(1); }
-    void on_contextEnergyLevel2_triggered() {on_contextSetEnergyLevel(2); }
-    void on_contextEnergyLevel3_triggered() {on_contextSetEnergyLevel(3); }
-    void on_contextEnergyLevel4_triggered() {on_contextSetEnergyLevel(4); }
-    void on_contextEnergyLevel5_triggered() {on_contextSetEnergyLevel(5); }
-    void on_contextEnergyLevel6_triggered() {on_contextSetEnergyLevel(6); }
-    void on_contextEnergyLevel7_triggered() {on_contextSetEnergyLevel(7); }
-    void on_contextEnergyLevel8_triggered() {on_contextSetEnergyLevel(8); }
-    void on_contextEnergyLevel9_triggered() {on_contextSetEnergyLevel(9); }
-    void on_contextEnergyLevel10_triggered() {on_contextSetEnergyLevel(10); }
+    void on_contextSetEnergyLevel(int v);
+    void on_contextEnergyLevel0_triggered() { on_contextSetEnergyLevel(0); }
+    void on_contextEnergyLevel1_triggered() { on_contextSetEnergyLevel(1); }
+    void on_contextEnergyLevel2_triggered() { on_contextSetEnergyLevel(2); }
+    void on_contextEnergyLevel3_triggered() { on_contextSetEnergyLevel(3); }
+    void on_contextEnergyLevel4_triggered() { on_contextSetEnergyLevel(4); }
+    void on_contextEnergyLevel5_triggered() { on_contextSetEnergyLevel(5); }
+    void on_contextEnergyLevel6_triggered() { on_contextSetEnergyLevel(6); }
+    void on_contextEnergyLevel7_triggered() { on_contextSetEnergyLevel(7); }
+    void on_contextEnergyLevel8_triggered() { on_contextSetEnergyLevel(8); }
+    void on_contextEnergyLevel9_triggered() { on_contextSetEnergyLevel(9); }
+    void on_contextEnergyLevel10_triggered() { on_contextSetEnergyLevel(10); }
 
-	void on_searchTriggered();
+    void on_searchTriggered();
 
     // Filter
     void on_ct_modificationSpinBox_valueChanged(int i);

@@ -30,70 +30,70 @@
 
 class MassImport : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MassImport(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~MassImport();
-    void ReloadTranslation();
-    int load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint16 StartTrack);
+	MassImport(QWidget* parent = 0, CWmClient* wm=NULL);
+	~MassImport();
+	void ReloadTranslation();
+	int load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint16 StartTrack);
 
-    class TreeItem : public QTreeWidgetItem
-    {
-    	public:
-    		TrackInfo		info;
-    		ppl6::CString	Filename;
-    		int				dupePresumption;
-    		bool			import;
-    };
+	class TreeItem : public QTreeWidgetItem
+	{
+	public:
+		TrackInfo		info;
+		ppl7::String	Filename;
+		int				dupePresumption;
+		bool			import;
+	};
 
 
-    void setSearchWindow(QWidget *widget);
-    QWidget *getSearchWindow() const;
+	void setSearchWindow(QWidget* widget);
+	QWidget* getSearchWindow() const;
 
 
 private:
-    Ui::massimportClass ui;
-    CWmClient *wm;
+	Ui::massimportClass ui;
+	CWmClient* wm;
 	ppluint8 DeviceType;
 	ppluint32 DeviceId;
 	ppluint8 Page;
 	ppluint16 StartTrack;
-	std::set<ppl6::CString> LocalDupeCheck;
-	QWidget *searchWindow;
-	TreeItem	*currentTrackListItem;
+	std::set<ppl7::String> LocalDupeCheck;
+	QWidget* searchWindow;
+	TreeItem* currentTrackListItem;
 	int			position, oldposition;
 
-	CTrackList	*TrackList;
+	CTrackList* TrackList;
 
-    CTableControl TCVersion;
-    CTableControl TCGenre;
-    CTableControl TCLabel;
-    CTableControl TCRecordSource;
-    CTableControl TCRecordDevice;
+	CTableControl TCVersion;
+	CTableControl TCGenre;
+	CTableControl TCLabel;
+	CTableControl TCRecordSource;
+	CTableControl TCRecordDevice;
 
 
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void Resize();
+	void resizeEvent(QResizeEvent* event);
+	void showEvent(QShowEvent* event);
+	void Resize();
 
-    void addTrack(const ppl6::CString Filename);
+	void addTrack(const ppl7::String Filename);
 
-    void renderTrack(TreeItem *item);
+	void renderTrack(TreeItem* item);
 
-    bool importTrack(TreeItem *item);
-    void checkDupes(TreeItem *item);
+	bool importTrack(TreeItem* item);
+	void checkDupes(TreeItem* item);
 
 protected:
-    void InstallFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
+	void InstallFilter(QObject* object, int id);
+	bool eventFilter(QObject* target, QEvent* event);
+	bool consumeEvent(QObject* target, QEvent* event);
 
 
 public slots:
-	void on_treeWidget_customContextMenuRequested ( const QPoint & pos );
-	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
-	void on_treeWidget_itemClicked ( QTreeWidgetItem * item, int column );
+	void on_treeWidget_customContextMenuRequested(const QPoint& pos);
+	void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
+	void on_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
 
 	void on_contextFindMoreVersions_triggered();
 	void on_contextPlayTrack_triggered();

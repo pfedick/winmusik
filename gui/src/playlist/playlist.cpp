@@ -46,48 +46,48 @@
 #include "editstring.h"
 #include <stdio.h>
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
-Playlist::Playlist(QWidget *parent, CWmClient *wm)
-    : QMainWindow(parent)
+Playlist::Playlist(QWidget* parent, CWmClient* wm)
+	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-    ui.filterFrame->setVisible(false);
-    this->setStatusBar(nullptr);
+	ui.filterFrame->setVisible(false);
+	this->setStatusBar(nullptr);
 	this->wm=wm;
 	harmonicsHighlighted=false;
-    currentTreeItem=nullptr;
-    searchWindow=nullptr;
-    saveWidget=saveAsWidget=nullptr;
-	setAttribute(Qt::WA_DeleteOnClose,true);
+	currentTreeItem=nullptr;
+	searchWindow=nullptr;
+	saveWidget=saveAsWidget=nullptr;
+	setAttribute(Qt::WA_DeleteOnClose, true);
 	ui.tracks->setPlaylist(this);
 	ui.tracks->setAcceptDrops(true);
 
-    ui.filterFrame->setAcceptDrops(true);
-    ui.currentTrackGroupBox->setAcceptDrops(true);
-    ui.ct_cover->setAcceptDrops(true);
-    ui.filterFrame->installEventFilter(this);
-    ui.currentTrackGroupBox->installEventFilter(this);
-    ui.ct_cover->installEventFilter(this);
+	ui.filterFrame->setAcceptDrops(true);
+	ui.currentTrackGroupBox->setAcceptDrops(true);
+	ui.ct_cover->setAcceptDrops(true);
+	ui.filterFrame->installEventFilter(this);
+	ui.currentTrackGroupBox->installEventFilter(this);
+	ui.ct_cover->installEventFilter(this);
 
 	this->setWindowTitle(tr("WinMusik Playlist"));
 
 	ui.tracks->installEventFilter(this);
 	ui.playlistName->installEventFilter(this);
-    ui.issueDate->setDate(QDate::currentDate());
+	ui.issueDate->setDate(QDate::currentDate());
 
 	createMenue();
 	createToolbar();
 	createStatusBar();
 
-    playlistView=static_cast<playlistViewType>(wm->conf.playlistView);
-    musicKeyDisplay=wm->conf.musicKeyDisplay;
+	playlistView=static_cast<playlistViewType>(wm->conf.playlistView);
+	musicKeyDisplay=wm->conf.musicKeyDisplay;
 
 	recreatePlaylist();
 	changed=true;
 	setChanged(false);
 
-	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
+	ui.tracks->sortByColumn(0, Qt::AscendingOrder);
 
 	restoreGeometry(wm->GetGeometry("playlist"));
 	ui.tracks->setFocus();
@@ -106,51 +106,51 @@ Playlist::~Playlist()
 
 void Playlist::createMenue()
 {
-	QMenu	*menu;
+	QMenu* menu;
 	menu=menuBar()->addMenu(tr("&File"));
 
-	menu->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
-	menu->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
-	menu->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
-	menu->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filenew.png"), tr("&new Playlist"), this, SLOT(on_menuNew_triggered()));
+	menu->addAction(QIcon(":/icons/resources/fileopen.png"), tr("&load Playlist"), this, SLOT(on_menuOpen_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filesave.png"), tr("&save Playlist"), this, SLOT(on_menuSave_triggered()));
+	menu->addAction(QIcon(":/icons/resources/filesaveas.png"), tr("save Playlist &as"), this, SLOT(on_menuSaveAs_triggered()));
 	menu->addSeparator();
-    menu->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
-    menu->addAction(QIcon(":/icons/resources/printer16.png"),tr("&Print"),this,SLOT(on_printPlaylist_triggered()));
-    menu->addSeparator();
+	menu->addAction(QIcon(":/icons/resources/export.png"), tr("e&xport Playlist"), this, SLOT(on_menuExport_triggered()));
+	menu->addAction(QIcon(":/icons/resources/printer16.png"), tr("&Print"), this, SLOT(on_printPlaylist_triggered()));
+	menu->addSeparator();
 
-	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"),tr("&recent Playlists"));
+	menuRecentPlaylists=menu->addMenu(QIcon(":/icons/resources/fileopen.png"), tr("&recent Playlists"));
 	updateRecentPlaylistsMenu();
 
 	menu=menuBar()->addMenu(tr("&View"));
-	menu->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("&Playlist"),this,SLOT(on_viewPlaylist_triggered()));
-	menu->addAction(QIcon(":/icons/resources/view_dj.png"),tr("&DJ"),this,SLOT(on_viewDJ_triggered()));
-    menu->addAction(QIcon(":/icons/resources/view_filter.png"),tr("&Filter"),this,SLOT(on_viewFilter_triggered()));
+	menu->addAction(QIcon(":/icons/resources/view_playlist.png"), tr("&Playlist"), this, SLOT(on_viewPlaylist_triggered()));
+	menu->addAction(QIcon(":/icons/resources/view_dj.png"), tr("&DJ"), this, SLOT(on_viewDJ_triggered()));
+	menu->addAction(QIcon(":/icons/resources/view_filter.png"), tr("&Filter"), this, SLOT(on_viewFilter_triggered()));
 
 }
 
 void Playlist::createToolbar()
 {
-	QToolBar *tb=new QToolBar();
-	QAction *action;
+	QToolBar* tb=new QToolBar();
+	QAction* action;
 	tb->setFloatable(false);
 	tb->setMovable(false);
 
-	tb->addAction(QIcon(":/icons/resources/filenew.png"),tr("&new Playlist"),this,SLOT(on_menuNew_triggered()));
-	tb->addAction(QIcon(":/icons/resources/fileopen.png"),tr("&load Playlist"),this,SLOT(on_menuOpen_triggered()));
-	action=tb->addAction(QIcon(":/icons/resources/filesave.png"),tr("&save Playlist"),this,SLOT(on_menuSave_triggered()));
+	tb->addAction(QIcon(":/icons/resources/filenew.png"), tr("&new Playlist"), this, SLOT(on_menuNew_triggered()));
+	tb->addAction(QIcon(":/icons/resources/fileopen.png"), tr("&load Playlist"), this, SLOT(on_menuOpen_triggered()));
+	action=tb->addAction(QIcon(":/icons/resources/filesave.png"), tr("&save Playlist"), this, SLOT(on_menuSave_triggered()));
 	saveWidget=tb->widgetForAction(action);
-	action=tb->addAction(QIcon(":/icons/resources/filesaveas.png"),tr("save Playlist &as"),this,SLOT(on_menuSaveAs_triggered()));
+	action=tb->addAction(QIcon(":/icons/resources/filesaveas.png"), tr("save Playlist &as"), this, SLOT(on_menuSaveAs_triggered()));
 	saveAsWidget=tb->widgetForAction(action);
 	tb->addSeparator();
-    tb->addAction(QIcon(":/icons/resources/export.png"),tr("e&xport Playlist"),this,SLOT(on_menuExport_triggered()));
-    tb->addAction(QIcon(":/icons/resources/printer16.png"),tr("&Print"),this,SLOT(on_printPlaylist_triggered()));
-    tb->addAction(QIcon(":/icons/resources/randomize.png"),tr("shuffle Playlist"),this,SLOT(on_shufflePlaylist_triggered()));
-    tb->addSeparator();
-	tb->addAction(QIcon(":/icons/resources/view_playlist.png"),tr("view &Playlist"),this,SLOT(on_viewPlaylist_triggered()));
-	tb->addAction(QIcon(":/icons/resources/view_dj.png"),tr("view &DJ"),this,SLOT(on_viewDJ_triggered()));
-    tb->addAction(QIcon(":/icons/resources/view_filter.png"),tr("view &Filter"),this,SLOT(on_viewFilter_triggered()));
+	tb->addAction(QIcon(":/icons/resources/export.png"), tr("e&xport Playlist"), this, SLOT(on_menuExport_triggered()));
+	tb->addAction(QIcon(":/icons/resources/printer16.png"), tr("&Print"), this, SLOT(on_printPlaylist_triggered()));
+	tb->addAction(QIcon(":/icons/resources/randomize.png"), tr("shuffle Playlist"), this, SLOT(on_shufflePlaylist_triggered()));
+	tb->addSeparator();
+	tb->addAction(QIcon(":/icons/resources/view_playlist.png"), tr("view &Playlist"), this, SLOT(on_viewPlaylist_triggered()));
+	tb->addAction(QIcon(":/icons/resources/view_dj.png"), tr("view &DJ"), this, SLOT(on_viewDJ_triggered()));
+	tb->addAction(QIcon(":/icons/resources/view_filter.png"), tr("view &Filter"), this, SLOT(on_viewFilter_triggered()));
 
-    this->addToolBar(tb);
+	this->addToolBar(tb);
 
 }
 
@@ -161,28 +161,28 @@ void Playlist::createStatusBar()
 	ui.centralwidget->layout()->addWidget(statusbar);
 	//this->layout()->addWidget(statusbar);
 	//this->statusBar()->addWidget(statusbar);
-	connect(statusbar,SIGNAL(musicKeySelectionChanged(int)),
-				this, SLOT(on_statusbar_musicKeySelectionChanged(int)));
+	connect(statusbar, SIGNAL(musicKeySelectionChanged(int)),
+		this, SLOT(on_statusbar_musicKeySelectionChanged(int)));
 
-	connect(statusbar,SIGNAL(searchTriggered()),
-				this, SLOT(on_searchTriggered()));
+	connect(statusbar, SIGNAL(searchTriggered()),
+		this, SLOT(on_searchTriggered()));
 
 }
 
 void Playlist::updateRecentPlaylistsMenu()
 {
 	menuRecentPlaylists->clear();
-	if (wm->conf.LastPlaylists[0].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[0],this,SLOT(on_menuOpenRecent0_triggered()));
-	if (wm->conf.LastPlaylists[1].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[1],this,SLOT(on_menuOpenRecent1_triggered()));
-	if (wm->conf.LastPlaylists[2].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[2],this,SLOT(on_menuOpenRecent2_triggered()));
-	if (wm->conf.LastPlaylists[3].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[3],this,SLOT(on_menuOpenRecent3_triggered()));
-	if (wm->conf.LastPlaylists[4].NotEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"),wm->conf.LastPlaylists[4],this,SLOT(on_menuOpenRecent4_triggered()));
+	if (wm->conf.LastPlaylists[0].notEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"), wm->conf.LastPlaylists[0], this, SLOT(on_menuOpenRecent0_triggered()));
+	if (wm->conf.LastPlaylists[1].notEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"), wm->conf.LastPlaylists[1], this, SLOT(on_menuOpenRecent1_triggered()));
+	if (wm->conf.LastPlaylists[2].notEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"), wm->conf.LastPlaylists[2], this, SLOT(on_menuOpenRecent2_triggered()));
+	if (wm->conf.LastPlaylists[3].notEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"), wm->conf.LastPlaylists[3], this, SLOT(on_menuOpenRecent3_triggered()));
+	if (wm->conf.LastPlaylists[4].notEmpty()) menuRecentPlaylists->addAction(QIcon(":/icons/resources/fileopen.png"), wm->conf.LastPlaylists[4], this, SLOT(on_menuOpenRecent4_triggered()));
 
 }
 
 void Playlist::setChanged(bool flag)
 {
-	if (changed!=flag) {
+	if (changed != flag) {
 		changed=flag;
 		if (saveWidget) saveWidget->setEnabled(changed);
 		//if (saveAsWidget) saveAsWidget->setEnabled(changed);
@@ -191,14 +191,14 @@ void Playlist::setChanged(bool flag)
 
 }
 
-void Playlist::closeEvent(QCloseEvent *event)
+void Playlist::closeEvent(QCloseEvent* event)
 {
-	if (saveFirst()!=QMessageBox::Ok) {
+	if (saveFirst() != QMessageBox::Ok) {
 		event->ignore();
 		return;
 	}
 	if (wm) {
-		wm->SaveGeometry("playlist",saveGeometry());
+		wm->SaveGeometry("playlist", saveGeometry());
 	}
 	QMainWindow::closeEvent(event);
 }
@@ -207,115 +207,115 @@ QMessageBox::StandardButton Playlist::saveFirst()
 {
 	if (!changed) return QMessageBox::Ok;
 
-	QMessageBox::StandardButton ret=QMessageBox::question(this,tr("Save playlist"),
-			tr("This playlist was modified since the last save.\nDo you want to save your changes?"),
-			QMessageBox::No|QMessageBox::Yes|QMessageBox::Abort, QMessageBox::Abort);
-	if (ret==QMessageBox::Abort) return QMessageBox::Abort;
-	if (ret==QMessageBox::No) return QMessageBox::Ok;
+	QMessageBox::StandardButton ret=QMessageBox::question(this, tr("Save playlist"),
+		tr("This playlist was modified since the last save.\nDo you want to save your changes?"),
+		QMessageBox::No | QMessageBox::Yes | QMessageBox::Abort, QMessageBox::Abort);
+	if (ret == QMessageBox::Abort) return QMessageBox::Abort;
+	if (ret == QMessageBox::No) return QMessageBox::Ok;
 
-	if (PlaylistFileName.IsEmpty()) {
-		ppl6::CString Filename=PlaylistFileName;
-		if (Filename.IsEmpty()) Filename=wm->conf.LastPlaylistPath+"/playlist.wmp";
-		ppl6::CString Tmp=QFileDialog::getSaveFileName (this, tr("Save WinMusik Playlist"), Filename,
-				tr("Playlists (*.wmp)"));
-		if (Tmp.IsEmpty()) return QMessageBox::Abort;
+	if (PlaylistFileName.isEmpty()) {
+		ppl7::String Filename=PlaylistFileName;
+		if (Filename.isEmpty()) Filename=wm->conf.LastPlaylistPath + "/playlist.wmp";
+		ppl7::String Tmp=QFileDialog::getSaveFileName(this, tr("Save WinMusik Playlist"), Filename,
+			tr("Playlists (*.wmp)"));
+		if (Tmp.isEmpty()) return QMessageBox::Abort;
 		PlaylistFileName=Tmp;
 	}
 
-    ui.tracks->setName(ui.playlistName->text());
-    ui.tracks->setSubName(ui.playlistSubName->text());
-    ui.tracks->setIssueNumber(ui.issueNumber->value());
-    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString()));
+	ui.tracks->setName(ui.playlistName->text());
+	ui.tracks->setSubName(ui.playlistSubName->text());
+	ui.tracks->setIssueNumber(ui.issueNumber->value());
+	ui.tracks->setIssueDate(ppl7::DateTime(ui.issueDate->date().toString()));
 
 	if (!ui.tracks->save(PlaylistFileName)) return QMessageBox::Abort;
-	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
+	wm->conf.LastPlaylistPath=ppl7::File::getPath(PlaylistFileName);
 	updateLastPlaylist();
 	updateRecentPlaylistsMenu();
-	wm->conf.Save();
+	wm->conf.trySave();
 	setChanged(false);
-	ppl6::CString Title=tr("WinMusik Playlist");
-	Title+=" - "+PlaylistFileName;
+	ppl7::String Title=tr("WinMusik Playlist");
+	Title+=" - " + PlaylistFileName;
 	this->setWindowTitle(Title);
 	return QMessageBox::Ok;
 }
 
-bool Playlist::eventFilter(QObject *target, QEvent *event)
+bool Playlist::eventFilter(QObject* target, QEvent* event)
 {
-	if (consumeEvent(target,event)) return true;
-	return QMainWindow::eventFilter(target,event);
+	if (consumeEvent(target, event)) return true;
+	return QMainWindow::eventFilter(target, event);
 }
 
-bool Playlist::consumeEvent(QObject *target, QEvent *event)
+bool Playlist::consumeEvent(QObject* target, QEvent* event)
 {
 	int type=event->type();
 	//printf ("Event: %i\n",type);
-	if (type==QEvent::KeyPress) {
-		QKeyEvent *e=static_cast<QKeyEvent *>(event);
-		if (target==ui.tracks) {
-            currentTreeItem=static_cast<PlaylistItem*>(ui.tracks->currentItem());
+	if (type == QEvent::KeyPress) {
+		QKeyEvent* e=static_cast<QKeyEvent*>(event);
+		if (target == ui.tracks) {
+			currentTreeItem=static_cast<PlaylistItem*>(ui.tracks->currentItem());
 			//printf ("Key: %i\n",e->key());
-			if (e->key()==Qt::Key_Delete) {
-				QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-				if (selected.count()>1) {
-					if (QMessageBox::question (this, tr("Delete Tracks"),
-							tr("Do you want to delete all selected tracks from this playlist?"),
-							QMessageBox::No|QMessageBox::Yes,
-							QMessageBox::No) != QMessageBox::Yes) return false;
+			if (e->key() == Qt::Key_Delete) {
+				QList<QTreeWidgetItem*>selected=ui.tracks->selectedItems();
+				if (selected.count() > 1) {
+					if (QMessageBox::question(this, tr("Delete Tracks"),
+						tr("Do you want to delete all selected tracks from this playlist?"),
+						QMessageBox::No | QMessageBox::Yes,
+						QMessageBox::No) != QMessageBox::Yes) return false;
 				}
 				ui.tracks->deleteSelectedItems();
 				setChanged(true);
 				updateLengthStatus();
 				renumberTracks();
 				return true;
-			} else if (e->key()==Qt::Key_E) {
-				if(!currentTreeItem) return false;
-                if (e->modifiers()==Qt::ShiftModifier) {
-                    wm->OpenEditor(currentTreeItem->DeviceType,
-                                   currentTreeItem->DeviceId,
-                                   currentTreeItem->DevicePage,
-                                   currentTreeItem->DeviceTrack);
-                } else {
-                    editTrack(currentTreeItem);
-                }
+			} else if (e->key() == Qt::Key_E) {
+				if (!currentTreeItem) return false;
+				if (e->modifiers() == Qt::ShiftModifier) {
+					wm->OpenEditor(currentTreeItem->DeviceType,
+						currentTreeItem->DeviceId,
+						currentTreeItem->DevicePage,
+						currentTreeItem->DeviceTrack);
+				} else {
+					editTrack(currentTreeItem);
+				}
 				return true;
-            } else if (e->key()==Qt::Key_C) {
-                if(!currentTreeItem) return false;
-                on_contextEditComment_triggered();
-                return true;
-			} else if (e->key()==Qt::Key_P) {
-				if(!currentTreeItem) return false;
+			} else if (e->key() == Qt::Key_C) {
+				if (!currentTreeItem) return false;
+				on_contextEditComment_triggered();
+				return true;
+			} else if (e->key() == Qt::Key_P) {
+				if (!currentTreeItem) return false;
 				wm->PlayFile((currentTreeItem)->File);
 				return true;
-			} else if (e->key()==Qt::Key_F && e->modifiers()==Qt::ControlModifier) {
+			} else if (e->key() == Qt::Key_F && e->modifiers() == Qt::ControlModifier) {
 				statusbar->setFocusOnSearch();
 				return true;
 			}
 			return false;
-		} else if (target==ui.playlistName && e->key()==Qt::Key_F && e->modifiers()==Qt::ControlModifier) {
+		} else if (target == ui.playlistName && e->key() == Qt::Key_F && e->modifiers() == Qt::ControlModifier) {
 			statusbar->setFocusOnSearch();
 			return true;
 		}
-    } else if (type==QEvent::DragEnter) {
-        if (target==ui.ct_cover
-                || target==ui.currentTrackGroupBox
-                || target==ui.filterFrame) {
-            QDragEnterEvent *e=static_cast<QDragEnterEvent *>(event);
-            e->accept();
-            return true;
-        }
-    } else if (type==QEvent::Drop) {
-        if (target==ui.ct_cover
-                || target==ui.currentTrackGroupBox
-                || target==ui.filterFrame) {
-            QDropEvent *e=static_cast<QDragEnterEvent *>(event);
-            handleFilterDropEvent(e);
-            return true;
-        }
-    }
+	} else if (type == QEvent::DragEnter) {
+		if (target == ui.ct_cover
+			|| target == ui.currentTrackGroupBox
+			|| target == ui.filterFrame) {
+			QDragEnterEvent* e=static_cast<QDragEnterEvent*>(event);
+			e->accept();
+			return true;
+		}
+	} else if (type == QEvent::Drop) {
+		if (target == ui.ct_cover
+			|| target == ui.currentTrackGroupBox
+			|| target == ui.filterFrame) {
+			QDropEvent* e=static_cast<QDragEnterEvent*>(event);
+			handleFilterDropEvent(e);
+			return true;
+		}
+	}
 	return false;
 }
 
-bool Playlist::on_tracks_MouseButtonPress(QMouseEvent * event)
+bool Playlist::on_tracks_MouseButtonPress(QMouseEvent* event)
 {
 	//printf ("on_tracks_MouseButtonPress\n");
 	if (event->buttons() == Qt::LeftButton) startPos=event->pos();
@@ -323,7 +323,7 @@ bool Playlist::on_tracks_MouseButtonPress(QMouseEvent * event)
 	return false;
 }
 
-bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent *)
+bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent*)
 {
 	//printf ("on_tracks_MouseButtonRelease\n");
 	startPos.setX(0);
@@ -331,28 +331,28 @@ bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent *)
 	return false;
 }
 
-void Playlist::on_tracks_itemSelectionChanged ()
+void Playlist::on_tracks_itemSelectionChanged()
 {
 	updateLengthStatus();
 }
 
-void Playlist::handleDropEvent(QDropEvent *event)
+void Playlist::handleDropEvent(QDropEvent* event)
 {
-    if (isFilterEnabled()) {
-        event->ignore();
-        return;
-    }
-    //printf("Playlist::handleDropEvent\n");
+	if (isFilterEnabled()) {
+		event->ignore();
+		return;
+	}
+	//printf("Playlist::handleDropEvent\n");
 	event->accept();
 	ui.tracks->unselectItems();
 	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
-	const QMimeData *mime=event->mimeData();
+	const QMimeData* mime=event->mimeData();
 	if (!mime) return;
 	// QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 	//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-	QPoint p=(static_cast<QDragMoveEvent *>(event))->pos();
-	QTreeWidgetItem *insertItem=ui.tracks->itemAt(p);
-	handleDropEvent(mime,insertItem);
+	QPoint p=(static_cast<QDragMoveEvent*>(event))->pos();
+	QTreeWidgetItem* insertItem=ui.tracks->itemAt(p);
+	handleDropEvent(mime, insertItem);
 	/*
 	if (event->source()==this) ui.tracks->deleteItems(selected);
 	updateLengthStatus();
@@ -360,52 +360,52 @@ void Playlist::handleDropEvent(QDropEvent *event)
 	*/
 }
 
-void Playlist::handleDropEvent(const QMimeData *mime, QTreeWidgetItem *insertItem)
+void Playlist::handleDropEvent(const QMimeData* mime, QTreeWidgetItem* insertItem)
 {
-    if (isFilterEnabled()) return;
+	if (isFilterEnabled()) return;
 	//ui.tracks->unselectItems();
 	QApplication::processEvents();
 
 	ui.tracks->setSortingEnabled(false);
 	if (mime->hasFormat("application/winmusik+xml")) {
 		QByteArray ba=mime->data("application/winmusik+xml");
-		ppl6::CString xml;
-		xml.Set(ba.constData(), ba.size());
-		if (xml.Left(18)=="<winmusikTracklist") {
+		ppl7::String xml;
+		xml.set(ba.constData(), ba.size());
+		if (xml.left(18) == "<winmusikTracklist") {
 			//printf ("XML-Drop\n");
-			handleXMLDrop(xml,insertItem);
+			handleXMLDrop(xml, insertItem);
 		} else {
 			QList<QUrl>	list=mime->urls();
-			handleURLDrop(list,insertItem);
+			handleURLDrop(list, insertItem);
 		}
 	} else {
 		QList<QUrl>	list=mime->urls();
-		handleURLDrop(list,insertItem);
+		handleURLDrop(list, insertItem);
 	}
-    updateMixBpmUpDownIndicator();
+	updateMixBpmUpDownIndicator();
 	updateLengthStatus();
 	renumberTracks();
 	ui.tracks->setSortingEnabled(true);
 }
 
-void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertItem)
+void Playlist::handleXMLDrop(const ppl7::String& xml, QTreeWidgetItem* insertItem)
 {
-//	printf ("Playlist::handleXMLDrop\n");
-	//xml.Print(true);
-    if (isFilterEnabled()) return;
+	//	printf ("Playlist::handleXMLDrop\n");
+		//xml.Print(true);
+	if (isFilterEnabled()) return;
 	QDomDocument doc("winmusikTracklist");
 	if (doc.setContent(xml)) {
 		QDomElement root=doc.documentElement();
-		if (root.tagName()=="winmusikTracklist") {
+		if (root.tagName() == "winmusikTracklist") {
 			QDomNode tracks=root.namedItem("tracks");
-			if (tracks.isNull()==false) {
+			if (tracks.isNull() == false) {
 				QDomElement e=tracks.firstChildElement("item");
 				while (!e.isNull()) {
-					PlaylistItem *item=new PlaylistItem;
+					PlaylistItem* item=new PlaylistItem;
 					item->importFromXML(e);
 					item->updateFromDatabase();
 					renderTrack(item);
-					if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
+					if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem), item);
 					else ui.tracks->addTopLevelItem(item);
 					setChanged(true);
 					//item->setSelected(true);
@@ -416,29 +416,29 @@ void Playlist::handleXMLDrop(const ppl6::CString &xml, QTreeWidgetItem *insertIt
 	}
 }
 
-void Playlist::handleURLDrop(const QList<QUrl> &list, QTreeWidgetItem *insertItem)
+void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertItem)
 {
 	//printf ("Playlist::handleURLDrop\n");
-    if (isFilterEnabled()) return;
-	for (int i=0;i<list.size();i++) {
+	if (isFilterEnabled()) return;
+	for (int i=0;i < list.size();i++) {
 		QUrl url=list[i];
 		QString file=url.toLocalFile();
-		PlaylistItem *item=new PlaylistItem;
+		PlaylistItem* item=new PlaylistItem;
 		item->File=file;
 		ppluint32 titleId=findTitleIdByFilename(file);
-		if (titleId) loadTrackFromDatabase(item,titleId);
-		else loadTrackFromFile(item,file);
+		if (titleId) loadTrackFromDatabase(item, titleId);
+		else loadTrackFromFile(item, file);
 		renderTrack(item);
 		setChanged(true);
-		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem),item);
+		if (insertItem) ui.tracks->insertTopLevelItem(ui.tracks->indexOfTopLevelItem(insertItem), item);
 		else ui.tracks->addTopLevelItem(item);
 		//item->setSelected(true);
 	}
 }
 
-bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
+bool Playlist::loadTrackFromDatabase(PlaylistItem* item, ppluint32 titleId)
 {
-	DataTitle *ti=wm->GetTitle(titleId);
+	DataTitle* ti=wm->GetTitle(titleId);
 	if (!ti) return false;
 	item->DeviceId=ti->DeviceId;
 	item->DeviceTrack=ti->Track;
@@ -453,33 +453,33 @@ bool Playlist::loadTrackFromDatabase(PlaylistItem *item, ppluint32 titleId)
 	item->Label=wm->GetLabelText(ti->LabelId);
 	item->Album=ti->Album;
 	item->musicKey=ti->Key;
-	item->keyVerified=(ti->Flags>>4)&1;
+	item->keyVerified=(ti->Flags >> 4) & 1;
 	item->energyLevel=ti->EnergyLevel;
-    item->bpm=ti->BPM;
-    item->bitrate=ti->Bitrate;
+	item->bpm=ti->BPM;
+	item->bitrate=ti->Bitrate;
 	item->bpmPlayed=0;
 	item->rating=ti->Rating;
 	item->trackLength=ti->Length;
 	item->mixLength=ti->Length;
 	item->startPositionSec=0;
 	item->endPositionSec=ti->Length;
-	for (int z=0;z<5;z++) {
+	for (int z=0;z < 5;z++) {
 		item->cutStartPosition[z]=0;
 		item->cutEndPosition[z]=0;
 	}
 	item->CoverPreview=ti->CoverPreview;
-	item->File=wm->GetAudioFilename(ti->DeviceType,ti->DeviceId,ti->Page,ti->Track);
+	item->File=wm->GetAudioFilename(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track);
 	item->useTraktorCues(item->File);
 	return true;
 }
 
 
-void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
+void Playlist::loadTrackFromFile(PlaylistItem* item, const ppl7::String& file)
 {
 	item->File=file;
 	TrackInfo info;
 
-	if (!getTrackInfoFromFile(info,file)) return;
+	if (!getTrackInfoFromFile(info, file)) return;
 	//printf ("Playlist::loadTrackFromFile: %s\n",(const char*)file);
 	item->Artist=info.Ti.Artist;
 	item->Title=info.Ti.Title;
@@ -492,7 +492,7 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 	item->endPositionSec=item->trackLength;
 	item->bpm=info.Ti.BPM;
 	item->rating=info.Ti.Rating;
-    item->bitrate=info.Ti.Bitrate;
+	item->bitrate=info.Ti.Bitrate;
 	item->musicKey=info.Ti.Key;
 	item->energyLevel=info.Ti.EnergyLevel;
 	item->CoverPreview=info.Ti.CoverPreview;
@@ -504,47 +504,47 @@ void Playlist::loadTrackFromFile(PlaylistItem *item, const ppl6::CString &file)
 void Playlist::Resize()
 {
 	int w=ui.tracks->width();
-	ui.tracks->setColumnWidth(columnTrack,30);
+	ui.tracks->setColumnWidth(columnTrack, 30);
 	w-=34;
-	ui.tracks->setColumnWidth(columnCover,64);
+	ui.tracks->setColumnWidth(columnCover, 64);
 	w-=68;
-	ui.tracks->setColumnWidth(columnLength,50);
+	ui.tracks->setColumnWidth(columnLength, 50);
 	w-=54;
-	ui.tracks->setColumnWidth(columnRating,50);
+	ui.tracks->setColumnWidth(columnRating, 50);
 	w-=53;
-	ui.tracks->setColumnWidth(columnSource,65);
+	ui.tracks->setColumnWidth(columnSource, 65);
 	w-=69;
-    ui.tracks->setColumnWidth(columnBitrate,30);
-    w-=34;
+	ui.tracks->setColumnWidth(columnBitrate, 30);
+	w-=34;
 
 
-	if (playlistView==playlistViewNormal) {
-		ui.tracks->setColumnWidth(columnTitle,w*80/100);
-		ui.tracks->setColumnWidth(columnGenre,w*15/100);
+	if (playlistView == playlistViewNormal) {
+		ui.tracks->setColumnWidth(columnTitle, w * 80 / 100);
+		ui.tracks->setColumnWidth(columnGenre, w * 15 / 100);
 
-	} else if (playlistView==playlistViewDJ) {
-		ui.tracks->setColumnWidth(columnBpm,35);
+	} else if (playlistView == playlistViewDJ) {
+		ui.tracks->setColumnWidth(columnBpm, 35);
 		w-=39;
-		ui.tracks->setColumnWidth(columnBpmPlayed,45);
+		ui.tracks->setColumnWidth(columnBpmPlayed, 45);
 		w-=49;
-        ui.tracks->setColumnWidth(columnMusicKey,55);
-        w-=59;
-		ui.tracks->setColumnWidth(columnEnergyLevel,30);
+		ui.tracks->setColumnWidth(columnMusicKey, 55);
+		w-=59;
+		ui.tracks->setColumnWidth(columnEnergyLevel, 30);
 		w-=34;
-        ui.tracks->setColumnWidth(columnStart,50);
-        w-=54;
-        ui.tracks->setColumnWidth(columnEnd,50);
-        w-=54;
-        ui.tracks->setColumnWidth(columnCuts,50);
-        w-=54;
-        ui.tracks->setColumnWidth(columnTotalLength,50);
-        w-=54;
-        ui.tracks->setColumnWidth(columnTimeCode,50);
-        w-=54;
+		ui.tracks->setColumnWidth(columnStart, 50);
+		w-=54;
+		ui.tracks->setColumnWidth(columnEnd, 50);
+		w-=54;
+		ui.tracks->setColumnWidth(columnCuts, 50);
+		w-=54;
+		ui.tracks->setColumnWidth(columnTotalLength, 50);
+		w-=54;
+		ui.tracks->setColumnWidth(columnTimeCode, 50);
+		w-=54;
 
-		ui.tracks->setColumnWidth(columnTitle,w*65/100);
-		ui.tracks->setColumnWidth(columnGenre,w*15/100);
-		ui.tracks->setColumnWidth(columnComment,w*20/100);
+		ui.tracks->setColumnWidth(columnTitle, w * 65 / 100);
+		ui.tracks->setColumnWidth(columnGenre, w * 15 / 100);
+		ui.tracks->setColumnWidth(columnComment, w * 20 / 100);
 	}
 
 
@@ -553,7 +553,7 @@ void Playlist::Resize()
 
 void Playlist::recreatePlaylist()
 {
-	QTreeWidgetItem *item=ui.tracks->headerItem();
+	QTreeWidgetItem* item=ui.tracks->headerItem();
 
 	columnTrack=0;
 	columnCover=1;
@@ -571,48 +571,48 @@ void Playlist::recreatePlaylist()
 	columnCuts=13;
 	columnLength=14;
 	columnTotalLength=15;
-    columnBitrate=16;
-    columnSource=17;
+	columnBitrate=16;
+	columnSource=17;
 
-	if (playlistView==playlistViewNormal) {
-        ui.tracks->setColumnCount(8);
-    	columnCover=1;
-    	columnTitle=2;
-    	columnGenre=3;
+	if (playlistView == playlistViewNormal) {
+		ui.tracks->setColumnCount(8);
+		columnCover=1;
+		columnTitle=2;
+		columnGenre=3;
 		columnLength=4;
 		columnRating=5;
-        columnBitrate=6;
-        columnSource=7;
+		columnBitrate=6;
+		columnSource=7;
 
-		item->setText(columnTrack,tr("Track"));
-		item->setText(columnCover,tr("Cover"));
-		item->setText(columnTitle,tr("Artist - Title (Version)"));
-		item->setText(columnGenre,tr("Genre"));
-		item->setText(columnLength,tr("Length"));
-		item->setText(columnRating,tr("Rating"));
-        item->setText(columnBitrate,tr("Bitrate"));
-		item->setText(columnSource,tr("Source"));
+		item->setText(columnTrack, tr("Track"));
+		item->setText(columnCover, tr("Cover"));
+		item->setText(columnTitle, tr("Artist - Title (Version)"));
+		item->setText(columnGenre, tr("Genre"));
+		item->setText(columnLength, tr("Length"));
+		item->setText(columnRating, tr("Rating"));
+		item->setText(columnBitrate, tr("Bitrate"));
+		item->setText(columnSource, tr("Source"));
 
-	} else if (playlistView==playlistViewDJ) {
+	} else if (playlistView == playlistViewDJ) {
 		ui.tracks->setColumnCount(17);
-		item->setText(columnTrack,tr("#"));
-		item->setText(columnTimeCode,tr("TC"));
-		item->setText(columnCover,tr("Cover"));
-		item->setText(columnTitle,tr("Artist - Title (Version)"));
-		item->setText(columnGenre,tr("Genre"));
-		item->setText(columnComment,tr("Comment"));
-		item->setText(columnBpm,tr("Bpm"));
-		item->setText(columnBpmPlayed,tr("MixBpm"));
-		item->setText(columnMusicKey,tr("Key"));
-		item->setText(columnEnergyLevel,tr("Energy"));
-		item->setText(columnRating,tr("Rating"));
-		item->setText(columnStart,tr("Start"));
-		item->setText(columnEnd,tr("End"));
-		item->setText(columnCuts,tr("Cuts"));
-		item->setText(columnLength,tr("Length"));
-		item->setText(columnTotalLength,tr("Total"));
-        item->setText(columnBitrate,tr("Bitrate"));
-		item->setText(columnSource,tr("Source"));
+		item->setText(columnTrack, tr("#"));
+		item->setText(columnTimeCode, tr("TC"));
+		item->setText(columnCover, tr("Cover"));
+		item->setText(columnTitle, tr("Artist - Title (Version)"));
+		item->setText(columnGenre, tr("Genre"));
+		item->setText(columnComment, tr("Comment"));
+		item->setText(columnBpm, tr("Bpm"));
+		item->setText(columnBpmPlayed, tr("MixBpm"));
+		item->setText(columnMusicKey, tr("Key"));
+		item->setText(columnEnergyLevel, tr("Energy"));
+		item->setText(columnRating, tr("Rating"));
+		item->setText(columnStart, tr("Start"));
+		item->setText(columnEnd, tr("End"));
+		item->setText(columnCuts, tr("Cuts"));
+		item->setText(columnLength, tr("Length"));
+		item->setText(columnTotalLength, tr("Total"));
+		item->setText(columnBitrate, tr("Bitrate"));
+		item->setText(columnSource, tr("Source"));
 	}
 	Resize();
 	updatePlaylist();
@@ -620,42 +620,42 @@ void Playlist::recreatePlaylist()
 
 void Playlist::updatePlaylist()
 {
-    //PlaylistItem *previous=NULL;
-	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        renderTrack(item);
-		item->setText(0,ppl6::ToString("%5d",i+1));
-        //previous=item;
+	//PlaylistItem *previous=NULL;
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		renderTrack(item);
+		item->setText(0, ppl7::ToString("%5d", i + 1));
+		//previous=item;
 	}
 	updateLengthStatus();
-    updateMixBpmUpDownIndicator();
+	updateMixBpmUpDownIndicator();
 }
 
 void Playlist::renumberTracks()
 {
-	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		item->setText(0,ppl6::ToString("%5d",i+1));
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		item->setText(0, ppl7::ToString("%5d", i + 1));
 	}
 }
 
 void Playlist::updateLengthStatus()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	int trackLength=0.0f;
 	float mixLength=0.0f;
 	int selectedLength=0.0f;
 	float selectedMixLength=0.0f;
 	int selectedTracks=0;
-	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		if (playlistView==playlistViewDJ) {
-			item->setText(columnTimeCode,getReadableTimeFromSeconds(mixLength));
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		if (playlistView == playlistViewDJ) {
+			item->setText(columnTimeCode, getReadableTimeFromSeconds(mixLength));
 		}
 		trackLength+=item->trackLength;
 		mixLength+=item->mixLength;
-		if (playlistView==playlistViewDJ) {
-            item->setText(columnTotalLength,getReadableTimeFromSeconds(mixLength));
+		if (playlistView == playlistViewDJ) {
+			item->setText(columnTotalLength, getReadableTimeFromSeconds(mixLength));
 		}
 		if (item->isSelected()) {
 			selectedTracks++;
@@ -672,172 +672,172 @@ void Playlist::updateLengthStatus()
 	statusbar->setSelectedTracks(selectedTracks);
 }
 
-void Playlist::renderTrack(PlaylistItem *item)
+void Playlist::renderTrack(PlaylistItem* item)
 {
-	QColor color(0,0,0);
+	QColor color(0, 0, 0);
 	QBrush b=item->background(0);
-    item->setBackground(columnMusicKey,b);
-	for (int i=1;i<item->columnCount();i++) {
-		item->setText(i,"");
-		item->setIcon(i,QIcon());
-        //item->setTextColor(i,color);
+	item->setBackground(columnMusicKey, b);
+	for (int i=1;i < item->columnCount();i++) {
+		item->setText(i, "");
+		item->setIcon(i, QIcon());
+		//item->setTextColor(i,color);
 	}
 	QFont f=item->font(columnMusicKey);
 	f.setBold(false);
-	item->setFont(columnMusicKey,f);
+	item->setFont(columnMusicKey, f);
 
 
-    //QRect rr=ui.tracks->visualItemRect(item);
+	//QRect rr=ui.tracks->visualItemRect(item);
 
-    int ch=16;
-    //if (rr.height()>ch) ch=rr.height();
-    //if (ch>64) ch=64;
+	int ch=16;
+	//if (rr.height()>ch) ch=rr.height();
+	//if (ch>64) ch=64;
 
-	if (item->CoverPreview.Size()>0) {
+	if (item->CoverPreview.Size() > 0) {
 		QPixmap pix, icon;
-		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(),item->CoverPreview.Size());
-		icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        item->setIcon(columnCover,icon.copy(0,0,64,ch));
-        //ui.tracks->setIconSize(QSize(64,ch));
+		pix.loadFromData((const uchar*)item->CoverPreview.GetPtr(), item->CoverPreview.Size());
+		icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		item->setIcon(columnCover, icon.copy(0, 0, 64, ch));
+		//ui.tracks->setIconSize(QSize(64,ch));
 
 	}
-	ppl6::CString Tmp;
-	Tmp=item->Artist+" - "+item->Title + " ("+item->Version+")";
-	item->setText(columnTitle,Tmp);
-	item->setText(columnGenre,item->Genre);
+	ppl7::String Tmp;
+	Tmp=item->Artist + " - " + item->Title + " (" + item->Version + ")";
+	item->setText(columnTitle, Tmp);
+	item->setText(columnGenre, item->Genre);
 
 	// Rating
 	switch (item->rating) {
-		case 0: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-0.png"));
-		item->setText(columnRating,"0");
+	case 0: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-0.png"));
+		item->setText(columnRating, "0");
 		break;
-		case 1: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-1.png"));
-		item->setText(columnRating,"1");
+	case 1: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-1.png"));
+		item->setText(columnRating, "1");
 		break;
-		case 2: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-2.png"));
-		item->setText(columnRating,"2");
+	case 2: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-2.png"));
+		item->setText(columnRating, "2");
 		break;
-		case 3: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-3.png"));
-		item->setText(columnRating,"3");
+	case 3: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-3.png"));
+		item->setText(columnRating, "3");
 		break;
-		case 4: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-4.png"));
-		item->setText(columnRating,"4");
+	case 4: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-4.png"));
+		item->setText(columnRating, "4");
 		break;
-		case 5: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-5.png"));
-		item->setText(columnRating,"5");
+	case 5: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-5.png"));
+		item->setText(columnRating, "5");
 		break;
-		case 6: item->setIcon(columnRating,QIcon(":/bewertung/resources/rating-6.png"));
-		item->setText(columnRating,"6");
+	case 6: item->setIcon(columnRating, QIcon(":/bewertung/resources/rating-6.png"));
+		item->setText(columnRating, "6");
 		break;
 	}
 
-    // Bitrate
-    Tmp.Setf("%d",(int)(item->bitrate));
-    item->setText(columnBitrate,Tmp);
+	// Bitrate
+	Tmp.setf("%d", (int)(item->bitrate));
+	item->setText(columnBitrate, Tmp);
 
 	// Tonträger
 	if (item->titleId) {
 		const char Seite[]="?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Tmp.Setf("%u %c-%03u", item->DeviceId,Seite[(item->DevicePage<10?item->DevicePage:0)],
-                item->DeviceTrack);
-		item->setText(columnSource,Tmp);
+		Tmp.setf("%u %c-%03u", item->DeviceId, Seite[(item->DevicePage < 10 ? item->DevicePage : 0)],
+			item->DeviceTrack);
+		item->setText(columnSource, Tmp);
 		QIcon Icon;
-		Tmp.Setf(":/devices16/resources/tr16x16-%04i.png",item->DeviceType);
+		Tmp.setf(":/devices16/resources/tr16x16-%04i.png", item->DeviceType);
 		Icon.addFile(Tmp);
-		item->setIcon(columnSource,Icon);
+		item->setIcon(columnSource, Icon);
 	} else {
-		item->setText(columnSource,item->File);
+		item->setText(columnSource, item->File);
 	}
 
 
-	if (playlistView==playlistViewNormal) {
+	if (playlistView == playlistViewNormal) {
 		renderTrackViewPlaylist(item);
-	} else if (playlistView==playlistViewDJ) {
-        renderTrackViewDJ(item);
+	} else if (playlistView == playlistViewDJ) {
+		renderTrackViewDJ(item);
 	}
 }
 
-void Playlist::renderTrackViewPlaylist(PlaylistItem *item)
+void Playlist::renderTrackViewPlaylist(PlaylistItem* item)
 {
-	ppl6::CString Tmp;
-	Tmp.Setf("%02i:%02i",(int)(item->trackLength/60),(int)item->trackLength%60);
-	item->setText(columnLength,Tmp);
+	ppl7::String Tmp;
+	Tmp.setf("%02i:%02i", (int)(item->trackLength / 60), (int)item->trackLength % 60);
+	item->setText(columnLength, Tmp);
 }
 
-void Playlist::renderTrackViewDJ(PlaylistItem *item)
+void Playlist::renderTrackViewDJ(PlaylistItem* item)
 {
-	ppl6::CString Tmp;
-	item->setText(columnComment,item->Remarks);
-	Tmp.Setf("%i",item->bpm);
-	item->setText(columnBpm,Tmp);
-    int bpmPlayed=(item->bpmPlayed>0?item->bpmPlayed:item->bpm);
-    Tmp.Setf("%i",bpmPlayed);
-	item->setText(columnBpmPlayed,Tmp);
-    if (item->keyModification!=0) {
-        Tmp=MusicKey(item->musicKey).addSemitone(item->keyModification).name();
-        if (item->keyModification>0) Tmp.Concatf(" ▲ +%d",item->keyModification);
-        else Tmp.Concatf(" ▼ %d",item->keyModification);
-        item->setText(columnMusicKey,Tmp);
-    } else {
-        item->setText(columnMusicKey,DataTitle::keyName(item->musicKey,musicKeyDisplay));
-    }
+	ppl7::String Tmp;
+	item->setText(columnComment, item->Remarks);
+	Tmp.setf("%i", item->bpm);
+	item->setText(columnBpm, Tmp);
+	int bpmPlayed=(item->bpmPlayed > 0 ? item->bpmPlayed : item->bpm);
+	Tmp.setf("%i", bpmPlayed);
+	item->setText(columnBpmPlayed, Tmp);
+	if (item->keyModification != 0) {
+		Tmp=MusicKey(item->musicKey).addSemitone(item->keyModification).name();
+		if (item->keyModification > 0) Tmp.appendf(" ▲ +%d", item->keyModification);
+		else Tmp.appendf(" ▼ %d", item->keyModification);
+		item->setText(columnMusicKey, Tmp);
+	} else {
+		item->setText(columnMusicKey, DataTitle::keyName(item->musicKey, musicKeyDisplay));
+	}
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
-        //item->setTextColor(columnMusicKey,QColor(0,0,0));
+		//item->setTextColor(columnMusicKey,QColor(0,0,0));
 		f.setBold(true);
-        f.setWeight(QFont::Black);
+		f.setWeight(QFont::Black);
 	} else {
-        //item->setTextColor(columnMusicKey,QColor(192,192,192));
+		//item->setTextColor(columnMusicKey,QColor(192,192,192));
 		f.setBold(false);
-        f.setWeight(QFont::ExtraLight);
+		f.setWeight(QFont::ExtraLight);
 	}
-	item->setFont(columnMusicKey,f);
+	item->setFont(columnMusicKey, f);
 
-	Tmp.Setf("%i",item->energyLevel);
-	item->setText(columnEnergyLevel,Tmp);
+	Tmp.setf("%i", item->energyLevel);
+	item->setText(columnEnergyLevel, Tmp);
 
-	Tmp.Setf("%02i:%02i",(int)(item->startPositionSec/60),(int)item->startPositionSec%60);
-	item->setText(columnStart,Tmp);
-	Tmp.Setf("%02i:%02i",(int)(item->endPositionSec/60),(int)item->endPositionSec%60);
-	item->setText(columnEnd,Tmp);
-	Tmp.Setf("%02i:%02i",(int)(item->mixLength/60),(int)item->mixLength%60);
-	item->setText(columnLength,Tmp);
+	Tmp.setf("%02i:%02i", (int)(item->startPositionSec / 60), (int)item->startPositionSec % 60);
+	item->setText(columnStart, Tmp);
+	Tmp.setf("%02i:%02i", (int)(item->endPositionSec / 60), (int)item->endPositionSec % 60);
+	item->setText(columnEnd, Tmp);
+	Tmp.setf("%02i:%02i", (int)(item->mixLength / 60), (int)item->mixLength % 60);
+	item->setText(columnLength, Tmp);
 
 	int cuts=0;
-	for (int i=0;i<5;i++) {
-		cuts+=(item->cutEndPosition[i]-item->cutStartPosition[i]);
+	for (int i=0;i < 5;i++) {
+		cuts+=(item->cutEndPosition[i] - item->cutStartPosition[i]);
 	}
-	Tmp.Setf("%02i:%02i",(int)(cuts/60),(int)cuts%60);
-	item->setText(columnCuts,Tmp);
+	Tmp.setf("%02i:%02i", (int)(cuts / 60), (int)cuts % 60);
+	item->setText(columnCuts, Tmp);
 
 
-    //QColor grey(192,192,192);
-    QColor basecolor=QApplication::palette().base().color();
-    QBrush grey=item->foreground(columnStart);
-    if (basecolor.lightness()<127) {
-        grey.setColor(QColor(128,128,128));
-    } else {
-        grey.setColor(QColor(192,192,192));
-    }
+	//QColor grey(192,192,192);
+	QColor basecolor=QApplication::palette().base().color();
+	QBrush grey=item->foreground(columnStart);
+	if (basecolor.lightness() < 127) {
+		grey.setColor(QColor(128, 128, 128));
+	} else {
+		grey.setColor(QColor(192, 192, 192));
+	}
 
-    if (item->startPositionSec==0) item->setForeground(columnStart,grey);
-    if (item->endPositionSec==item->trackLength) item->setForeground(columnEnd,grey);
-    if (cuts==0) item->setForeground(columnCuts,grey);
+	if (item->startPositionSec == 0) item->setForeground(columnStart, grey);
+	if (item->endPositionSec == item->trackLength) item->setForeground(columnEnd, grey);
+	if (cuts == 0) item->setForeground(columnCuts, grey);
 
 
 }
 
-void Playlist::calcMixLength(PlaylistItem *item)
+void Playlist::calcMixLength(PlaylistItem* item)
 {
 	item->updateMixLength();
 }
 
-void Playlist::showEvent(QShowEvent * event)
+void Playlist::showEvent(QShowEvent* event)
 {
 	Resize();
 	QWidget::showEvent(event);
 }
-void Playlist::resizeEvent(QResizeEvent * event)
+void Playlist::resizeEvent(QResizeEvent* event)
 {
 	Resize();
 	QWidget::resizeEvent(event);
@@ -850,9 +850,9 @@ void Playlist::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void Playlist::loadPlaylist(ppl6::CString &Filename)
+void Playlist::loadPlaylist(ppl7::String& Filename)
 {
-    ui.targetTrackGroupBox->setChecked(false);
+	ui.targetTrackGroupBox->setChecked(false);
 	ui.tracks->setSortingEnabled(false);
 	if (ui.tracks->load(Filename)) {
 		PlaylistFileName=Filename;
@@ -861,38 +861,38 @@ void Playlist::loadPlaylist(ppl6::CString &Filename)
 		ui.playlistName->setText(ui.tracks->getName());
 		ui.playlistSubName->setText(ui.tracks->getSubName());
 		ui.issueNumber->setValue(ui.tracks->getIssueNumber());
-		ppl6::CDateTime d=ui.tracks->getIssueDate();
-		ui.issueDate->setDate(QDate(d.year(),d.month(),d.day()));
+		ppl7::DateTime d=ui.tracks->getIssueDate();
+		ui.issueDate->setDate(QDate(d.year(), d.month(), d.day()));
 		updatePlaylist();
 		setChanged(false);
-		ppl6::CString Title=tr("WinMusik Playlist");
-		Title+=" - "+Filename;
+		ppl7::String Title=tr("WinMusik Playlist");
+		Title+=" - " + Filename;
 		this->setWindowTitle(Title);
 	}
 	ui.tracks->setSortingEnabled(true);
-	ui.tracks->sortByColumn(0,Qt::AscendingOrder);
+	ui.tracks->sortByColumn(0, Qt::AscendingOrder);
 
 }
 
 
-void Playlist::editTrack(PlaylistItem *item)
+void Playlist::editTrack(PlaylistItem* item)
 {
-	PlaylistEdit edit(this,wm);
+	PlaylistEdit edit(this, wm);
 	edit.filloutFields(item);
-	if (edit.exec()==1) {
+	if (edit.exec() == 1) {
 		edit.storeFileds(item);
 		saveTitle(item);
 		setChanged(true);
 		renderTrack(item);
 		updateLengthStatus();
-        updateMixBpmUpDownIndicator();
+		updateMixBpmUpDownIndicator();
 	}
 }
 
-void Playlist::saveTitle(PlaylistItem *item)
+void Playlist::saveTitle(PlaylistItem* item)
 {
-	if (item->titleId==0) return;
-	DataTitle *ti=wm_main->GetTitle(item->titleId);
+	if (item->titleId == 0) return;
+	DataTitle* ti=wm_main->GetTitle(item->titleId);
 	if (!ti) return;
 
 	DataTitle Ti, OldTi;
@@ -909,32 +909,32 @@ void Playlist::saveTitle(PlaylistItem *item)
 	Ti.BPM=item->bpm;
 	Ti.EnergyLevel=item->energyLevel;
 	Ti.Rating=item->rating;
-	if (Ti.CoverPreview.Size()==0 || item->CoverPreview.Size()>0) Ti.CoverPreview=item->CoverPreview;
+	if (Ti.CoverPreview.Size() == 0 || item->CoverPreview.Size() > 0) Ti.CoverPreview=item->CoverPreview;
 
 	// Titel speichern
-	if (Ti!=OldTi) {
+	if (Ti != OldTi) {
 		//printf ("Changed detected, saving...\n");
-		if (Ti.TitleId>0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
+		if (Ti.TitleId > 0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
 		if (!wm_main->TitleStore.Put(&Ti)) {
-			wm->RaiseError(this,tr("Could not save Title in TitleStore"));
-			if (Ti.TitleId>0) wm_main->Hashes.AddTitle(Ti.TitleId);
+			wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+			if (Ti.TitleId > 0) wm_main->Hashes.AddTitle(Ti.TitleId);
 		}
 	}
 
-	if (!wm->SaveID3Tags(ti->DeviceType,ti->DeviceId, ti->Page, ti->Track,Ti)) {
-		wm->RaiseError(this,tr("Could not save ID3 Tags"));
+	if (!wm->SaveID3Tags(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track, Ti)) {
+		wm->RaiseError(this, tr("Could not save ID3 Tags"));
 	}
 }
 
-void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
+void Playlist::copyTracks(const QList<QTreeWidgetItem*> items)
 {
 	QList<QUrl> list;
-	ppl6::CString File;
-	ppl6::CString xml;
+	ppl7::String File;
+	ppl7::String xml;
 	xml="<winmusikTracklist>\n";
 	xml+="<tracks>\n";
-	for (int i=0;i<items.size();i++) {
-		PlaylistItem *item=(PlaylistItem *)items[i];
+	for (int i=0;i < items.size();i++) {
+		PlaylistItem* item=(PlaylistItem*)items[i];
 		xml+=item->exportAsXML(0);
 
 #ifdef _WIN32
@@ -946,8 +946,8 @@ void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";
-	QClipboard *clipboard = QApplication::clipboard();
-	QMimeData *mimeData = new QMimeData;
+	QClipboard* clipboard = QApplication::clipboard();
+	QMimeData* mimeData = new QMimeData;
 	mimeData->setText(xml);
 	mimeData->setUrls(list);
 	clipboard->setMimeData(mimeData);
@@ -955,18 +955,18 @@ void Playlist::copyTracks(const QList<QTreeWidgetItem *> items)
 
 void Playlist::on_menuNew_triggered()
 {
-	if (saveFirst()!=QMessageBox::Ok) return;
-    ui.targetTrackGroupBox->setChecked(false);
+	if (saveFirst() != QMessageBox::Ok) return;
+	ui.targetTrackGroupBox->setChecked(false);
 	PlaylistFileName.Clear();
 	ui.tracks->setName("");
-    ui.tracks->setSubName("");
-    ui.tracks->setIssueNumber(1);
-    ui.tracks->setIssueDate(ppl6::CDateTime::currentTime());
+	ui.tracks->setSubName("");
+	ui.tracks->setIssueNumber(1);
+	ui.tracks->setIssueDate(ppl6::CDateTime::currentTime());
 
 	ui.playlistName->setText("");
-    ui.playlistSubName->setText("");
-    ui.issueNumber->setValue(1);
-    ui.issueDate->setDate(QDate::currentDate());
+	ui.playlistSubName->setText("");
+	ui.issueNumber->setValue(1);
+	ui.issueDate->setDate(QDate::currentDate());
 	ui.tracks->clear();
 	updatePlaylist();
 	setChanged(false);
@@ -975,13 +975,13 @@ void Playlist::on_menuNew_triggered()
 
 void Playlist::on_menuOpen_triggered()
 {
-	if (saveFirst()!=QMessageBox::Ok) return;
+	if (saveFirst() != QMessageBox::Ok) return;
 
-	ppl6::CString Tmp=QFileDialog::getOpenFileName (this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
-				tr("Playlists (*.wmp)"));
-	if (Tmp.IsEmpty()) return;
-	wm->conf.LastPlaylistPath=ppl6::GetPath(Tmp);
-	wm->conf.Save();
+	ppl7::String Tmp=QFileDialog::getOpenFileName(this, tr("Load Playlist"), wm->conf.LastPlaylistPath,
+		tr("Playlists (*.wmp)"));
+	if (Tmp.isEmpty()) return;
+	wm->conf.LastPlaylistPath=ppl7::File::getPath(Tmp);
+	wm->conf.trySave();
 	loadPlaylist(Tmp);
 }
 
@@ -1018,82 +1018,86 @@ void Playlist::on_menuSave_triggered()
 		return;
 	}
 	ui.tracks->setName(ui.playlistName->text());
-    ui.tracks->setSubName(ui.playlistSubName->text());
-    ui.tracks->setIssueNumber(ui.issueNumber->value());
-    ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString(Qt::ISODate)));
+	ui.tracks->setSubName(ui.playlistSubName->text());
+	ui.tracks->setIssueNumber(ui.issueNumber->value());
+	ui.tracks->setIssueDate(ppl6::CDateTime(ui.issueDate->date().toString(Qt::ISODate)));
 
 	if (!ui.tracks->save(PlaylistFileName)) return;
-	wm->conf.LastPlaylistPath=ppl6::GetPath(PlaylistFileName);
+	wm->conf.LastPlaylistPath=ppl7::File::getPath(PlaylistFileName);
 	updateLastPlaylist();
 	updateRecentPlaylistsMenu();
-	wm->conf.Save();
+	wm->conf.trySave();
 	setChanged(false);
-	ppl6::CString Title=tr("WinMusik Playlist");
-	Title+=" - "+PlaylistFileName;
+	ppl7::String Title=tr("WinMusik Playlist");
+	Title+=" - " + PlaylistFileName;
 	this->setWindowTitle(Title);
 }
 
 void Playlist::on_menuSaveAs_triggered()
 {
-	ppl6::CString Filename=PlaylistFileName;
-	if (Filename.IsEmpty()) Filename=wm->conf.LastPlaylistPath+"/playlist.wmp";
+	ppl7::String Filename=PlaylistFileName;
+	if (Filename.isEmpty()) Filename=wm->conf.LastPlaylistPath + "/playlist.wmp";
 
-	ppl6::CString Tmp=QFileDialog::getSaveFileName (this, tr("Save WinMusik Playlist"), Filename,
-			tr("Playlists (*.wmp)"));
-	if (Tmp.IsEmpty()) return;
+	ppl7::String Tmp=QFileDialog::getSaveFileName(this, tr("Save WinMusik Playlist"), Filename,
+		tr("Playlists (*.wmp)"));
+	if (Tmp.isEmpty()) return;
 	PlaylistFileName=Tmp;
 	on_menuSave_triggered();
 }
 
-static void clearDir(const QString &dirName)
+static void clearDir(const QString& dirName)
 {
-    QDir dir(dirName);
-    if (dir.exists(dirName)) {
-        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
-            if (info.isDir()) {
-                clearDir(info.absoluteFilePath());
-            }
-            else {
-                QFile::remove(info.absoluteFilePath());
-            }
-        }
-    }
+	QDir dir(dirName);
+	if (dir.exists(dirName)) {
+		Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+			if (info.isDir()) {
+				clearDir(info.absoluteFilePath());
+			} else {
+				QFile::remove(info.absoluteFilePath());
+			}
+		}
+	}
 }
 
 void Playlist::on_menuExport_triggered()
 {
-    PlaylistExport exportdialog(this,wm);
-    if (exportdialog.exec()==1) {
-        exportdialog.show();
-        exportdialog.start(ui.tracks->topLevelItemCount());
-        QCoreApplication::processEvents();
-        clearDir(wm->conf.playlist_export.TargetPath);
-        ppl6::MkDir(wm->conf.playlist_export.TargetPath);
-        //QDir newdir;
-        //newdir.mkpath(wm->conf.playlist_export.TargetPath);
-        for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-            exportdialog.setTotalProgress(i);
-            PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-            if (wm->conf.playlist_export.option_copy_files) {
-                exportFile(exportdialog, i+1, item->File);
-            }
-            QCoreApplication::processEvents();
-        }
-        if (wm->conf.playlist_export.export_m3u) exportM3U();
-        if (wm->conf.playlist_export.export_pls) exportPLS();
-        if (wm->conf.playlist_export.export_xspf) exportXSPF();
-        if (wm->conf.playlist_export.export_txt) exportTXT();
-    }
+	PlaylistExport exportdialog(this, wm);
+	if (exportdialog.exec() == 1) {
+		exportdialog.show();
+		exportdialog.start(ui.tracks->topLevelItemCount());
+		QCoreApplication::processEvents();
+		clearDir(wm->conf.playlist_export.TargetPath);
+		try {
+			ppl7::Dir::mkDir(wm->conf.playlist_export.TargetPath);
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not create target directory!"));
+			return;
+		}
+		//QDir newdir;
+		//newdir.mkpath(wm->conf.playlist_export.TargetPath);
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			exportdialog.setTotalProgress(i);
+			PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+			if (wm->conf.playlist_export.option_copy_files) {
+				exportFile(exportdialog, i + 1, item->File);
+			}
+			QCoreApplication::processEvents();
+		}
+		if (wm->conf.playlist_export.export_m3u) exportM3U();
+		if (wm->conf.playlist_export.export_pls) exportPLS();
+		if (wm->conf.playlist_export.export_xspf) exportXSPF();
+		if (wm->conf.playlist_export.export_txt) exportTXT();
+	}
 }
 
 void Playlist::updateLastPlaylist()
 {
-	ppl6::CString Tmp[WM_NUM_LASTPLAYLISTS];
-	for (int i=0;i<WM_NUM_LASTPLAYLISTS;i++) Tmp[i]=wm->conf.LastPlaylists[i];
+	ppl7::String Tmp[WM_NUM_LASTPLAYLISTS];
+	for (int i=0;i < WM_NUM_LASTPLAYLISTS;i++) Tmp[i]=wm->conf.LastPlaylists[i];
 	wm->conf.LastPlaylists[0]=PlaylistFileName;
 	int c=1;
-	for (int i=0;i<WM_NUM_LASTPLAYLISTS && c<WM_NUM_LASTPLAYLISTS;i++) {
-		if(Tmp[i]!=PlaylistFileName) {
+	for (int i=0;i < WM_NUM_LASTPLAYLISTS && c < WM_NUM_LASTPLAYLISTS;i++) {
+		if (Tmp[i] != PlaylistFileName) {
 			wm->conf.LastPlaylists[c]=Tmp[i];
 			c++;
 		}
@@ -1102,45 +1106,45 @@ void Playlist::updateLastPlaylist()
 
 void Playlist::on_viewPlaylist_triggered()
 {
-	if (playlistView!=playlistViewNormal) {
+	if (playlistView != playlistViewNormal) {
 		playlistView=playlistViewNormal;
 		statusbar->setMusicKeySelectionEnabled(false);
 		recreatePlaylist();
 		wm->conf.playlistView=playlistView;
-		wm->conf.Save();
+		wm->conf.trySave();
 	}
 }
 
 void Playlist::on_viewDJ_triggered()
 {
-	if (playlistView!=playlistViewDJ) {
+	if (playlistView != playlistViewDJ) {
 		playlistView=playlistViewDJ;
 		statusbar->setMusicKeySelectionEnabled(true);
 		recreatePlaylist();
 		wm->conf.playlistView=playlistView;
-		wm->conf.Save();
+		wm->conf.trySave();
 	}
 }
 
-void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column)
+void Playlist::on_tracks_itemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
-	if (key&Qt::MetaModifier || key&Qt::ControlModifier) {
+	Qt::KeyboardModifiers key=QApplication::keyboardModifiers();
+	if (key & Qt::MetaModifier || key & Qt::ControlModifier) {
 		editTrack((PlaylistItem*)item);
 		return;
-	} else if (column==columnComment) {
+	} else if (column == columnComment) {
 		currentTreeItem=static_cast<PlaylistItem*>(item);
 		on_contextEditComment_triggered();
 		return;
-    } else if (column==columnSource) {
-        currentTreeItem=static_cast<PlaylistItem*>(item);
-        //on_contextEditComment_triggered();
-        wm->OpenEditor(currentTreeItem->DeviceType,
-                       currentTreeItem->DeviceId,
-                       currentTreeItem->DevicePage,
-                       currentTreeItem->DeviceTrack);
-        return;
-	} else if (column==columnBpmPlayed) {
+	} else if (column == columnSource) {
+		currentTreeItem=static_cast<PlaylistItem*>(item);
+		//on_contextEditComment_triggered();
+		wm->OpenEditor(currentTreeItem->DeviceType,
+			currentTreeItem->DeviceId,
+			currentTreeItem->DevicePage,
+			currentTreeItem->DeviceTrack);
+		return;
+	} else if (column == columnBpmPlayed) {
 		currentTreeItem=static_cast<PlaylistItem*>(item);
 		on_contextSetBPMPlayed_triggered();
 		return;
@@ -1149,126 +1153,126 @@ void Playlist::on_tracks_itemDoubleClicked (QTreeWidgetItem * item, int column)
 	return;
 }
 
-void Playlist::on_tracks_itemClicked (QTreeWidgetItem * item, int column)
+void Playlist::on_tracks_itemClicked(QTreeWidgetItem* item, int column)
 {
-	Qt::KeyboardModifiers key=QApplication::keyboardModifiers ();
+	Qt::KeyboardModifiers key=QApplication::keyboardModifiers();
 
-	PlaylistItem *t=(PlaylistItem*)item;
-	if (column==columnMusicKey && playlistView==playlistViewDJ) {
+	PlaylistItem* t=(PlaylistItem*)item;
+	if (column == columnMusicKey && playlistView == playlistViewDJ) {
 		highlightHarmonicKeys(t);
 	} else {
 		if (harmonicsHighlighted) unHighlightHarmonicKeys();
-		QClipboard *clipboard = QApplication::clipboard();
-		ppl6::CString Text;
-		if (key&(Qt::AltModifier|Qt::MetaModifier)) {
-			Text.Setf("%s %s",(const char*)t->Artist,(const char*)t->Title);
+		QClipboard* clipboard = QApplication::clipboard();
+		ppl7::String Text;
+		if (key & (Qt::AltModifier | Qt::MetaModifier)) {
+			Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
 		} else {
-			Text.Setf("%s - %s (%s, %0i:%02i min, %s)",(const char*)t->Artist,(const char*)t->Title,
-					(const char*)t->Version, t->trackLength/60,t->trackLength%60, (const char*)t->Genre);
-			Text.Concatf(" [%s %u %c-%i]",(const char*)wm->GetDeviceNameShort(t->DeviceType),
-					t->DeviceId,(t->DevicePage+'A'-1),t->DeviceTrack);
+			Text.setf("%s - %s (%s, %0i:%02i min, %s)", (const char*)t->Artist, (const char*)t->Title,
+				(const char*)t->Version, t->trackLength / 60, t->trackLength % 60, (const char*)t->Genre);
+			Text.appendf(" [%s %u %c-%i]", (const char*)wm->GetDeviceNameShort(t->DeviceType),
+				t->DeviceId, (t->DevicePage + 'A' - 1), t->DeviceTrack);
 		}
-		clipboard->setText(Text,QClipboard::Clipboard);
-		clipboard->setText(Text,QClipboard::Selection);
+		clipboard->setText(Text, QClipboard::Clipboard);
+		clipboard->setText(Text, QClipboard::Selection);
 	}
 }
 
-void Playlist::on_tracks_customContextMenuRequested ( const QPoint & pos )
+void Playlist::on_tracks_customContextMenuRequested(const QPoint& pos)
 {
 	QPoint p=ui.tracks->mapToGlobal(pos);
 	currentTreeItem=(PlaylistItem*)ui.tracks->itemAt(pos);
 	if (!currentTreeItem) return;
 	int column=ui.tracks->currentColumn();
 
-    //DataTitle *t=NULL;
-    //t=wm->GetTitle(currentTreeItem->titleId);
+	//DataTitle *t=NULL;
+	//t=wm->GetTitle(currentTreeItem->titleId);
 
-	QMenu *m=new QMenu(this);
-	QAction *a=NULL;
+	QMenu* m=new QMenu(this);
+	QAction* a=NULL;
 
-	if (column==columnRating) {
-		a=m->addAction (QIcon(":/bewertung/resources/rating-0.png"),"0",this,SLOT(on_contextRate0_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-1.png"),"1",this,SLOT(on_contextRate1_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-2.png"),"2",this,SLOT(on_contextRate2_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-3.png"),"3",this,SLOT(on_contextRate3_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-4.png"),"4",this,SLOT(on_contextRate4_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-5.png"),"5",this,SLOT(on_contextRate5_clicked()));
-		m->addAction (QIcon(":/bewertung/resources/rating-6.png"),"6",this,SLOT(on_contextRate6_clicked()));
-	} else if (column==columnMusicKey) {
-		if (currentTreeItem->keyVerified==false) a=m->addAction (QIcon(":/icons/resources/musicKeyOk.png"),tr("Music Key is verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
-		else a=m->addAction (QIcon(":/icons/resources/musicKeyNotOk.png"),tr("Music Key is not verified","trackList Context Menue"),this,SLOT(on_contextMusicKeyVerified_triggered()));
-		QMenu *mk=m->addMenu ( QIcon(":/icons/resources/musicKey.png"),tr("Set Music-Key","trackList Context Menue") );
+	if (column == columnRating) {
+		a=m->addAction(QIcon(":/bewertung/resources/rating-0.png"), "0", this, SLOT(on_contextRate0_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-1.png"), "1", this, SLOT(on_contextRate1_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-2.png"), "2", this, SLOT(on_contextRate2_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-3.png"), "3", this, SLOT(on_contextRate3_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-4.png"), "4", this, SLOT(on_contextRate4_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-5.png"), "5", this, SLOT(on_contextRate5_clicked()));
+		m->addAction(QIcon(":/bewertung/resources/rating-6.png"), "6", this, SLOT(on_contextRate6_clicked()));
+	} else if (column == columnMusicKey) {
+		if (currentTreeItem->keyVerified == false) a=m->addAction(QIcon(":/icons/resources/musicKeyOk.png"), tr("Music Key is verified", "trackList Context Menue"), this, SLOT(on_contextMusicKeyVerified_triggered()));
+		else a=m->addAction(QIcon(":/icons/resources/musicKeyNotOk.png"), tr("Music Key is not verified", "trackList Context Menue"), this, SLOT(on_contextMusicKeyVerified_triggered()));
+		QMenu* mk=m->addMenu(QIcon(":/icons/resources/musicKey.png"), tr("Set Music-Key", "trackList Context Menue"));
 		createSetMusicKeyContextMenu(mk);
-	} else if (column==columnEnergyLevel) {
+	} else if (column == columnEnergyLevel) {
 		a=m->addAction(tr("Energy Level"));
 		createSetEnergyLevelContextMenu(m);
-	} else if (column==columnBpmPlayed) {
-		a=m->addAction(QIcon(""),tr("Set BPM played","trackList Context Menue"),this,SLOT(on_contextSetBPMPlayed_triggered()));
-    } else if (column==columnComment) {
-        a=m->addAction(QIcon(""),tr("Edit Comment","trackList Context Menue"),this,SLOT(on_contextEditComment_triggered()));
-	} else if (column==columnLength || (playlistView==playlistViewDJ && (column==columnTimeCode || column==columnStart || column==columnEnd || column==columnCuts || column==columnTotalLength))) {
-		a=m->addAction(QIcon(""),tr("Reread Traktor IN and OUTs","trackList Context Menue"),this,SLOT(on_contextReReadInAndOuts_triggered()));
+	} else if (column == columnBpmPlayed) {
+		a=m->addAction(QIcon(""), tr("Set BPM played", "trackList Context Menue"), this, SLOT(on_contextSetBPMPlayed_triggered()));
+	} else if (column == columnComment) {
+		a=m->addAction(QIcon(""), tr("Edit Comment", "trackList Context Menue"), this, SLOT(on_contextEditComment_triggered()));
+	} else if (column == columnLength || (playlistView == playlistViewDJ && (column == columnTimeCode || column == columnStart || column == columnEnd || column == columnCuts || column == columnTotalLength))) {
+		a=m->addAction(QIcon(""), tr("Reread Traktor IN and OUTs", "trackList Context Menue"), this, SLOT(on_contextReReadInAndOuts_triggered()));
 
-	} else if (column==columnCover && QApplication::clipboard()!=NULL && QApplication::clipboard()->pixmap().isNull()==false) {
-		a=m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Paste Cover","trackList Context Menue"),this,SLOT(on_contextPasteCover_triggered()));
+	} else if (column == columnCover && QApplication::clipboard() != NULL && QApplication::clipboard()->pixmap().isNull() == false) {
+		a=m->addAction(QIcon(":/icons/resources/copytrack.png"), tr("Paste Cover", "trackList Context Menue"), this, SLOT(on_contextPasteCover_triggered()));
 	} else {
-		a=m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit Track","trackList Context Menue"),this,SLOT(on_contextEditTrack_triggered()));
-		m->addAction (QIcon(":/icons/resources/copytrack.png"),tr("Copy","trackList Context Menue"),this,SLOT(on_contextCopyTrack_triggered()));
-		m->addAction (QIcon(":/icons/resources/insert-track.png"),tr("Paste","trackList Context Menue"),this,SLOT(on_contextPasteTrack_triggered()));
-		m->addAction (QIcon(":/icons/resources/delete-track.png"),tr("Delete","trackList Context Menue"),this,SLOT(on_contextDeleteTrack_triggered()));
+		a=m->addAction(QIcon(":/icons/resources/edit.png"), tr("Edit Track", "trackList Context Menue"), this, SLOT(on_contextEditTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/copytrack.png"), tr("Copy", "trackList Context Menue"), this, SLOT(on_contextCopyTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/insert-track.png"), tr("Paste", "trackList Context Menue"), this, SLOT(on_contextPasteTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/delete-track.png"), tr("Delete", "trackList Context Menue"), this, SLOT(on_contextDeleteTrack_triggered()));
 		m->addSeparator();
-		m->addAction (QIcon(":/icons/resources/findmore.png"),tr("Find other versions","trackList Context Menue"),this,SLOT(on_contextFindMoreVersions_triggered()));
-		m->addAction (QIcon(":/icons/resources/findmore-artist.png"),tr("Find more of artist","trackList Context Menue"),this,SLOT(on_contextFindMoreArtist_triggered()));
-		m->addAction (QIcon(":/icons/resources/findmore-title.png"),tr("Find other artists of this title","trackList Context Menue"),this,SLOT(on_contextFindMoreTitle_triggered()));
+		m->addAction(QIcon(":/icons/resources/findmore.png"), tr("Find other versions", "trackList Context Menue"), this, SLOT(on_contextFindMoreVersions_triggered()));
+		m->addAction(QIcon(":/icons/resources/findmore-artist.png"), tr("Find more of artist", "trackList Context Menue"), this, SLOT(on_contextFindMoreArtist_triggered()));
+		m->addAction(QIcon(":/icons/resources/findmore-title.png"), tr("Find other artists of this title", "trackList Context Menue"), this, SLOT(on_contextFindMoreTitle_triggered()));
 		m->addSeparator();
-		m->addAction (QIcon(":/icons/resources/play.png"),tr("Play Track","trackList Context Menue"),this,SLOT(on_contextPlayTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/play.png"), tr("Play Track", "trackList Context Menue"), this, SLOT(on_contextPlayTrack_triggered()));
 	}
-	m->popup(p,a);
+	m->popup(p, a);
 }
 
-void Playlist::createSetMusicKeyContextMenu(QMenu *m)
+void Playlist::createSetMusicKeyContextMenu(QMenu* m)
 {
-	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(DataTitle::keyName(22,musicKeyDisplay),this,SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(DataTitle::keyName(12,musicKeyDisplay),this,SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(DataTitle::keyName(5,musicKeyDisplay),this,SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(DataTitle::keyName(15,musicKeyDisplay),this,SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(DataTitle::keyName(2,musicKeyDisplay),this,SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(DataTitle::keyName(19,musicKeyDisplay),this,SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(DataTitle::keyName(16,musicKeyDisplay),this,SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(DataTitle::keyName(6,musicKeyDisplay),this,SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(DataTitle::keyName(23,musicKeyDisplay),this,SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(DataTitle::keyName(9,musicKeyDisplay),this,SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(DataTitle::keyName(20,musicKeyDisplay),this,SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(DataTitle::keyName(10,musicKeyDisplay),this,SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(DataTitle::keyName(3,musicKeyDisplay),this,SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(DataTitle::keyName(13,musicKeyDisplay),this,SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(DataTitle::keyName(24,musicKeyDisplay),this,SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(DataTitle::keyName(17,musicKeyDisplay),this,SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(DataTitle::keyName(14,musicKeyDisplay),this,SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(DataTitle::keyName(4,musicKeyDisplay),this,SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(DataTitle::keyName(21,musicKeyDisplay),this,SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(DataTitle::keyName(7,musicKeyDisplay),this,SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(DataTitle::keyName(18,musicKeyDisplay),this,SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(DataTitle::keyName(8,musicKeyDisplay),this,SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(DataTitle::keyName(1,musicKeyDisplay),this,SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(DataTitle::keyName(11,musicKeyDisplay),this,SLOT(on_contextMusicKey11_triggered()));
-	m->addAction(DataTitle::keyName(25,musicKeyDisplay),this,SLOT(on_contextMusicKey25_triggered()));
+	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextMusicKey0_triggered()));
+	m->addAction(DataTitle::keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(DataTitle::keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(DataTitle::keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(DataTitle::keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(DataTitle::keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(DataTitle::keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(DataTitle::keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(DataTitle::keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(DataTitle::keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(DataTitle::keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(DataTitle::keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(DataTitle::keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(DataTitle::keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(DataTitle::keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(DataTitle::keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(DataTitle::keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(DataTitle::keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(DataTitle::keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(DataTitle::keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(DataTitle::keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(DataTitle::keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(DataTitle::keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(DataTitle::keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(DataTitle::keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(DataTitle::keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
 }
 
-void Playlist::createSetEnergyLevelContextMenu(QMenu *m)
+void Playlist::createSetEnergyLevelContextMenu(QMenu* m)
 {
-	m->addAction(tr("unknown","trackList Context Menue"),this,SLOT(on_contextEnergyLevel0_triggered()));
-	m->addAction(tr("1","trackList Context Menue"),this,SLOT(on_contextEnergyLevel1_triggered()));
-	m->addAction(tr("2","trackList Context Menue"),this,SLOT(on_contextEnergyLevel2_triggered()));
-	m->addAction(tr("3","trackList Context Menue"),this,SLOT(on_contextEnergyLevel3_triggered()));
-	m->addAction(tr("4","trackList Context Menue"),this,SLOT(on_contextEnergyLevel4_triggered()));
-	m->addAction(tr("5","trackList Context Menue"),this,SLOT(on_contextEnergyLevel5_triggered()));
-	m->addAction(tr("6","trackList Context Menue"),this,SLOT(on_contextEnergyLevel6_triggered()));
-	m->addAction(tr("7","trackList Context Menue"),this,SLOT(on_contextEnergyLevel7_triggered()));
-	m->addAction(tr("8","trackList Context Menue"),this,SLOT(on_contextEnergyLevel8_triggered()));
-	m->addAction(tr("9","trackList Context Menue"),this,SLOT(on_contextEnergyLevel9_triggered()));
-	m->addAction(tr("10","trackList Context Menue"),this,SLOT(on_contextEnergyLevel10_triggered()));
+	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel0_triggered()));
+	m->addAction(tr("1", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel1_triggered()));
+	m->addAction(tr("2", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel2_triggered()));
+	m->addAction(tr("3", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel3_triggered()));
+	m->addAction(tr("4", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel4_triggered()));
+	m->addAction(tr("5", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel5_triggered()));
+	m->addAction(tr("6", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel6_triggered()));
+	m->addAction(tr("7", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel7_triggered()));
+	m->addAction(tr("8", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel8_triggered()));
+	m->addAction(tr("9", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel9_triggered()));
+	m->addAction(tr("10", "trackList Context Menue"), this, SLOT(on_contextEnergyLevel10_triggered()));
 }
 
 void Playlist::on_contextMusicKeyVerified_triggered()
@@ -1276,14 +1280,14 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 	if (!currentTreeItem) return;
 	setChanged(true);
 	currentTreeItem->keyVerified=!currentTreeItem->keyVerified;
-	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (t) {
 		DataTitle tUpdate=*t;
-		if (tUpdate.Flags&16) tUpdate.Flags-=16;
+		if (tUpdate.Flags & 16) tUpdate.Flags-=16;
 		else tUpdate.Flags|=16;
-		currentTreeItem->keyVerified=(tUpdate.Flags&16)>>4;
+		currentTreeItem->keyVerified=(tUpdate.Flags & 16) >> 4;
 		if (!wm->TitleStore.Put(&tUpdate)) {
-			wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+			wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 			return;
 		}
 	}
@@ -1298,18 +1302,18 @@ void Playlist::on_contextSetMusicKey(int k)
 	currentTreeItem->musicKey=k;
 	renderTrack(currentTreeItem);
 
-	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.Key=k;
 
 	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 		return;
 	}
-	if (!wm->SaveID3Tags(t->DeviceType,t->DeviceId, t->Page, t->Track,tUpdate)) {
-		wm->RaiseError(this,tr("Could not save ID3 Tags"));
+	if (!wm->SaveID3Tags(t->DeviceType, t->DeviceId, t->Page, t->Track, tUpdate)) {
+		wm->RaiseError(this, tr("Could not save ID3 Tags"));
 	}
 }
 
@@ -1320,13 +1324,13 @@ void Playlist::on_contextSetEnergyLevel(int v)
 	currentTreeItem->energyLevel=v;
 	renderTrack(currentTreeItem);
 
-	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.EnergyLevel=v;
 	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 		return;
 	}
 }
@@ -1338,14 +1342,14 @@ void Playlist::rateCurrentTrack(int value)
 	currentTreeItem->rating=value;
 	renderTrack(currentTreeItem);
 
-	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
-	if (value==t->Rating) return;
+	if (value == t->Rating) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.Rating=value;
 	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 		return;
 	}
 }
@@ -1388,10 +1392,10 @@ void Playlist::on_contextRate6_clicked()
 void Playlist::on_contextPasteCover_triggered()
 {
 	if (!currentTreeItem) return;
-	DataTitle *t=wm->GetTitle(currentTreeItem->titleId);
+	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
-	QClipboard *clipboard = QApplication::clipboard();
+	QClipboard* clipboard = QApplication::clipboard();
 	if (!clipboard) return;
 	if (clipboard->pixmap().isNull()) return;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -1400,14 +1404,14 @@ void Playlist::on_contextPasteCover_triggered()
 	// Cover im File speichern
 	if (currentTreeItem->File.NotEmpty()) saveCover(currentTreeItem->File, Cover);
 	DataTitle Ti=*t;
-	getIconFromCover(Ti.CoverPreview,Cover);
+	getIconFromCover(Ti.CoverPreview, Cover);
 	currentTreeItem->CoverPreview=Ti.CoverPreview;
 	QApplication::restoreOverrideCursor();
 
 	// Titel speichern
 	if (!wm_main->TitleStore.Put(&Ti)) {
 		QApplication::restoreOverrideCursor();
-		wm->RaiseError(this,tr("Could not save Title in TitleStore"));
+		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
 	} else {
 		this->renderTrack(currentTreeItem);
 		QApplication::restoreOverrideCursor();
@@ -1417,14 +1421,14 @@ void Playlist::on_contextPasteCover_triggered()
 
 void Playlist::on_contextEditTrack_triggered()
 {
-	if(!currentTreeItem) return;
+	if (!currentTreeItem) return;
 	editTrack(currentTreeItem);
 }
 
 void Playlist::on_contextCopyTrack_triggered()
 {
-	if(!currentTreeItem) return;
-	QList<QTreeWidgetItem *> items;
+	if (!currentTreeItem) return;
+	QList<QTreeWidgetItem*> items;
 	items.push_back(currentTreeItem);
 	copyTracks(items);
 }
@@ -1436,58 +1440,58 @@ void Playlist::on_contextPasteTrack_triggered()
 
 void Playlist::on_contextDeleteTrack_triggered()
 {
-	if(!currentTreeItem) return;
-	PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(currentTreeItem));
+	if (!currentTreeItem) return;
+	PlaylistItem* item=(PlaylistItem*)ui.tracks->takeTopLevelItem(ui.tracks->indexOfTopLevelItem(currentTreeItem));
 	if (item) delete item;
 	setChanged(true);
 	renumberTracks();
 	updateLengthStatus();
-    updateMixBpmUpDownIndicator();
+	updateMixBpmUpDownIndicator();
 }
 
 void Playlist::on_contextFindMoreVersions_triggered()
 {
-	if(!currentTreeItem) return;
-	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTreeItem->Artist,currentTreeItem->Title);
+	if (!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow, currentTreeItem->Artist, currentTreeItem->Title);
 }
 
 void Playlist::on_contextFindMoreArtist_triggered()
 {
-	if(!currentTreeItem) return;
-	searchWindow=wm->OpenOrReuseSearch(searchWindow,currentTreeItem->Artist);
+	if (!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow, currentTreeItem->Artist);
 }
 
 void Playlist::on_contextFindMoreTitle_triggered()
 {
-	if(!currentTreeItem) return;
-	searchWindow=wm->OpenOrReuseSearch(searchWindow,NULL,currentTreeItem->Title);
+	if (!currentTreeItem) return;
+	searchWindow=wm->OpenOrReuseSearch(searchWindow, NULL, currentTreeItem->Title);
 }
 
 void Playlist::on_contextPlayTrack_triggered()
 {
-	if(!currentTreeItem) return;
+	if (!currentTreeItem) return;
 	wm->PlayFile(((PlaylistItem*)currentTreeItem)->File);
 }
 
 void Playlist::on_contextSetBPMPlayed_triggered()
 {
-	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	if (selected.count()>0) {
+	QList<QTreeWidgetItem*>selected=ui.tracks->selectedItems();
+	if (selected.count() > 0) {
 		SetBPMPlayed dialog;
 		int bpm=((PlaylistItem*)selected[0])->bpmPlayed;
 		if (!bpm) bpm=((PlaylistItem*)selected[0])->bpm;
 		dialog.setValue(bpm);
-		if (dialog.exec()==1) {
-			QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
+		if (dialog.exec() == 1) {
+			QList<QTreeWidgetItem*>selected=ui.tracks->selectedItems();
 			bpm=dialog.getValue();
-			for (int i=0;i<selected.count();i++) {
-				PlaylistItem *item=(PlaylistItem*)selected[i];
+			for (int i=0;i < selected.count();i++) {
+				PlaylistItem* item=(PlaylistItem*)selected[i];
 				item->bpmPlayed=bpm;
 				calcMixLength(item);
 				renderTrack(item);
 			}
 			updateLengthStatus();
-            updateMixBpmUpDownIndicator();
+			updateMixBpmUpDownIndicator();
 			setChanged(true);
 		}
 	}
@@ -1495,52 +1499,52 @@ void Playlist::on_contextSetBPMPlayed_triggered()
 
 void Playlist::on_contextEditComment_triggered()
 {
-    if (!currentTreeItem) return;
-    EditString dialog;
-    dialog.setTitle("Comment: "+currentTreeItem->Artist+": "+currentTreeItem->Title);
-    dialog.setString(currentTreeItem->text(columnComment));
-    if (dialog.exec()==1) {
-        currentTreeItem->setText(columnComment,dialog.getString());
-        currentTreeItem->Remarks=dialog.getString();
-        setChanged(true);
-    }
+	if (!currentTreeItem) return;
+	EditString dialog;
+	dialog.setTitle("Comment: " + currentTreeItem->Artist + ": " + currentTreeItem->Title);
+	dialog.setString(currentTreeItem->text(columnComment));
+	if (dialog.exec() == 1) {
+		currentTreeItem->setText(columnComment, dialog.getString());
+		currentTreeItem->Remarks=dialog.getString();
+		setChanged(true);
+	}
 }
 
 
-static void updateInAndOut(PlaylistItem *item)
+static void updateInAndOut(PlaylistItem* item)
 {
 	std::list <TraktorTagCue> cuelist;
 	std::list <TraktorTagCue>::const_iterator it;
 	if (!getTraktorCuesFromFile(cuelist, item->File)) return;
-	if (cuelist.size()==0) return;
+	if (cuelist.size() == 0) return;
 	float traktorIn=-1;
 	float traktorOut=-1;
-	for (it=cuelist.begin();it!=cuelist.end();it++) {
-		float sec=(float)(it->start/1000.0);
-		if (it->type==TraktorTagCue::IN) traktorIn=sec;
-		if (it->type==TraktorTagCue::OUT) traktorOut=sec;
+	for (it=cuelist.begin();it != cuelist.end();it++) {
+		float sec=(float)(it->start / 1000.0);
+		if (it->type == TraktorTagCue::IN) traktorIn=sec;
+		if (it->type == TraktorTagCue::OUT) traktorOut=sec;
 	}
 	item->startPositionSec=0;
 	item->endPositionSec=item->trackLength;
 
-	if (traktorIn>=0.0f) item->startPositionSec=traktorIn;
-	if (traktorOut>=0.0f) item->endPositionSec=traktorOut;
+	if (traktorIn >= 0.0f) item->startPositionSec=traktorIn;
+	if (traktorOut >= 0.0f) item->endPositionSec=traktorOut;
 }
 
 
 void Playlist::on_contextReReadInAndOuts_triggered()
 {
-	QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-	if (selected.count()>0) {
-		QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
-		for (int i=0;i<selected.count();i++) {
-			PlaylistItem *item=(PlaylistItem*)selected[i];
+	QList<QTreeWidgetItem*>selected=ui.tracks->selectedItems();
+	if (selected.count() > 0) {
+		QList<QTreeWidgetItem*>selected=ui.tracks->selectedItems();
+		for (int i=0;i < selected.count();i++) {
+			PlaylistItem* item=(PlaylistItem*)selected[i];
 			updateInAndOut(item);
 			calcMixLength(item);
 			renderTrack(item);
 		}
 		updateLengthStatus();
-        updateMixBpmUpDownIndicator();
+		updateMixBpmUpDownIndicator();
 		setChanged(true);
 	}
 }
@@ -1553,46 +1557,46 @@ void Playlist::on_statusbar_musicKeySelectionChanged(int newValue)
 	updatePlaylist();
 }
 
-void Playlist::highlightHarmonicKeys(PlaylistItem *track)
+void Playlist::highlightHarmonicKeys(PlaylistItem* track)
 {
 	if (!track) {
 		return;
 	}
-    std::map<int,HarmonicType> harmonics;
-    std::map<int,HarmonicType>::const_iterator it;
-	getHarmonicKeys(harmonics,track->musicKey);
-    QBrush background;
-    background.setStyle(Qt::NoBrush);
+	std::map<int, HarmonicType> harmonics;
+	std::map<int, HarmonicType>::const_iterator it;
+	getHarmonicKeys(harmonics, track->musicKey);
+	QBrush background;
+	background.setStyle(Qt::NoBrush);
 	int count=ui.tracks->topLevelItemCount();
-    if (count==0) return;
-    PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(0);
-	for (int i=0;i<count;i++) {
-        item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+	if (count == 0) return;
+	PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(0);
+	for (int i=0;i < count;i++) {
+		item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		if (item) {
-            item->setBackground(columnMusicKey,background);
-			if (item->musicKey!=0 && track->musicKey!=0) {
-                if (item->musicKey==track->musicKey) item->setBackground(columnMusicKey,colorscheme.sameKey);
-                else {
-                    it=harmonics.find(item->musicKey);
-                    if (it!=harmonics.end()) {
-                        switch(it->second) {
-                        case harmonicSemitoneUp:
-                        case harmonicTwoSemitoneUp:
-                            item->setBackground(columnMusicKey,colorscheme.boostKey);
-                            //setItemBackground(item,boostkey);
-                            break;
-                        case harmonicAvbBoost:
-                            item->setBackground(columnMusicKey,colorscheme.boostKey);
-                            //setItemBackground(item,boostkey2);
-                            break;
-                        default:
-                            item->setBackground(columnMusicKey,colorscheme.relatedKey);
-                            //setItemBackground(item,relatedkey);
-                            break;
-                        }
+			item->setBackground(columnMusicKey, background);
+			if (item->musicKey != 0 && track->musicKey != 0) {
+				if (item->musicKey == track->musicKey) item->setBackground(columnMusicKey, colorscheme.sameKey);
+				else {
+					it=harmonics.find(item->musicKey);
+					if (it != harmonics.end()) {
+						switch (it->second) {
+						case harmonicSemitoneUp:
+						case harmonicTwoSemitoneUp:
+							item->setBackground(columnMusicKey, colorscheme.boostKey);
+							//setItemBackground(item,boostkey);
+							break;
+						case harmonicAvbBoost:
+							item->setBackground(columnMusicKey, colorscheme.boostKey);
+							//setItemBackground(item,boostkey2);
+							break;
+						default:
+							item->setBackground(columnMusicKey, colorscheme.relatedKey);
+							//setItemBackground(item,relatedkey);
+							break;
+						}
 
-                    }
-                }
+					}
+				}
 			}
 		}
 	}
@@ -1601,13 +1605,13 @@ void Playlist::highlightHarmonicKeys(PlaylistItem *track)
 
 void Playlist::unHighlightHarmonicKeys()
 {
-    QBrush background;
-    background.setStyle(Qt::NoBrush);
+	QBrush background;
+	background.setStyle(Qt::NoBrush);
 	int count=ui.tracks->topLevelItemCount();
-	for (int i=0;i<count;i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+	for (int i=0;i < count;i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
 		if (item) {
-            item->setBackground(columnMusicKey,background);
+			item->setBackground(columnMusicKey, background);
 		}
 	}
 	harmonicsHighlighted=false;
@@ -1616,23 +1620,23 @@ void Playlist::unHighlightHarmonicKeys()
 void Playlist::on_searchTriggered()
 {
 	ui.tracks->unselectItems();
-	ppl6::CString Search=statusbar->searchText();
-	ppl6::CString TrackWords;
-	Search.Trim();
-	Search.LCase();
+	ppl7::String Search=statusbar->searchText();
+	ppl7::String TrackWords;
+	Search.trim();
+	Search.lowerCase();
 	//printf ("Search triggered: %s\n",(const char*)Search);
-	if (Search.IsEmpty()) return;
-	ppl6::CArray Words(Search," ");
+	if (Search.isEmpty()) return;
+	ppl7::Array Words(Search, " ");
 	int count=0;
-	for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		TrackWords=item->Artist+" "+item->Title+" "+item->Version;
-		TrackWords.LCase();
-		int found=0;
-		for (int w=0;w<Words.Num();w++) {
-			if (TrackWords.Instr(Words[w])>=0) found++;
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		TrackWords=item->Artist + " " + item->Title + " " + item->Version;
+		TrackWords.lowerCase();
+		size_t found=0;
+		for (size_t w=0;w < Words.size();w++) {
+			if (TrackWords.instr(Words[w]) >= 0) found++;
 		}
-		if (found==Words.Num()) {
+		if (found == Words.size()) {
 			if (!count) ui.tracks->setCurrentItem(item);
 			item->setSelected(true);
 			count++;
@@ -1643,47 +1647,47 @@ void Playlist::on_searchTriggered()
 
 }
 
-void Playlist::on_playlistName_textChanged ( const QString & )
+void Playlist::on_playlistName_textChanged(const QString&)
 {
 	setChanged(true);
 }
 
-void Playlist::on_playlistSubName_textChanged ( const QString & )
+void Playlist::on_playlistSubName_textChanged(const QString&)
 {
 	setChanged(true);
 }
 
-void Playlist::on_issueNumber_valueChanged ( int  )
+void Playlist::on_issueNumber_valueChanged(int)
 {
 	setChanged(true);
 }
 
-void Playlist::on_issueDate_dateChanged(const QDate &)
+void Playlist::on_issueDate_dateChanged(const QDate&)
 {
 	setChanged(true);
 }
 
 void Playlist::on_shufflePlaylist_triggered()
 {
-	int ret=QMessageBox::question(this,tr("shuffle playlist"),
-			tr("Do you really want to shuffle the tracks of your playlist?"),
-			QMessageBox::Yes|QMessageBox::Cancel,QMessageBox::Cancel);
-	if (ret!=QMessageBox::Yes) return;
+	int ret=QMessageBox::question(this, tr("shuffle playlist"),
+		tr("Do you really want to shuffle the tracks of your playlist?"),
+		QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+	if (ret != QMessageBox::Yes) return;
 
 	ui.tracks->setSortingEnabled(false);
 	currentTreeItem=NULL;
-	std::vector<PlaylistItem *> tmpPlaylist;
-	tmpPlaylist.reserve(ui.tracks->topLevelItemCount()+1);
-	while(ui.tracks->topLevelItemCount()>0) {
-		PlaylistItem *item=(PlaylistItem*)ui.tracks->takeTopLevelItem(0);
+	std::vector<PlaylistItem*> tmpPlaylist;
+	tmpPlaylist.reserve(ui.tracks->topLevelItemCount() + 1);
+	while (ui.tracks->topLevelItemCount() > 0) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->takeTopLevelItem(0);
 		tmpPlaylist.push_back(item);
 	}
 	ui.tracks->clear();
-	while (tmpPlaylist.size()>0) {
-		int index=ppl6::rand(0,tmpPlaylist.size()-1);
-		PlaylistItem *item=tmpPlaylist[index];
+	while (tmpPlaylist.size() > 0) {
+		int index=ppl7::rand(0, tmpPlaylist.size() - 1);
+		PlaylistItem* item=tmpPlaylist[index];
 		ui.tracks->addTopLevelItem(item);
-		tmpPlaylist.erase(tmpPlaylist.begin()+index);
+		tmpPlaylist.erase(tmpPlaylist.begin() + index);
 	}
 	updatePlaylist();
 	ui.tracks->setSortingEnabled(true);
@@ -1691,272 +1695,276 @@ void Playlist::on_shufflePlaylist_triggered()
 	fflush(stdout);
 }
 
-ppl6::CString Playlist::getExportFilename(int track, const ppl6::CString &SourceFile)
+ppl7::String Playlist::getExportFilename(int track, const ppl7::String& SourceFile)
 {
-    if (!wm->conf.playlist_export.option_copy_files) {
-        return SourceFile;
-    }
-    ppl6::CString Tmp;
-    if (wm->conf.playlist_export.option_prepend_tracknumber) {
-        Tmp.Concatf("%03d-", track);
-    }
-    ppl6::CString Filename=ppl6::GetFilename(SourceFile);
-    if (Filename.PregMatch("/^[0-9]{3}-/")) {
-        Filename=Filename.Mid(4);
-    }
-    Tmp+=Filename;
-    return Tmp;
+	if (!wm->conf.playlist_export.option_copy_files) {
+		return SourceFile;
+	}
+	ppl7::String Tmp;
+	if (wm->conf.playlist_export.option_prepend_tracknumber) {
+		Tmp.appendf("%03d-", track);
+	}
+	ppl7::String Filename=ppl7::File::getFilename(SourceFile);
+	if (Filename.pregMatch("/^[0-9]{3}-/")) {
+		Filename=Filename.mid(4);
+	}
+	Tmp+=Filename;
+	return Tmp;
 }
 
 
-void Playlist::exportFile(PlaylistExport &dialog, int track, const ppl6::CString &SourceFile)
+void Playlist::exportFile(PlaylistExport& dialog, int track, const ppl7::String& SourceFile)
 {
-    ppl6::CString Tmp=getExportFilename(track, SourceFile);
-    dialog.setCurrentFile(Tmp,0);
-    ppl6::CString TargetFile=wm->conf.playlist_export.TargetPath+"/"+Tmp;
-    ppl6::CFile::CopyFile(SourceFile, TargetFile);
+	ppl7::String Tmp=getExportFilename(track, SourceFile);
+	dialog.setCurrentFile(Tmp, 0);
+	ppl7::String TargetFile=wm->conf.playlist_export.TargetPath + "/" + Tmp;
+	try {
+		ppl7::File::copy(SourceFile, TargetFile);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not copy file"));
+	}
 }
 
 void Playlist::exportM3U()
 {
-    ppl6::CFile m3u;
-    ppl6::CString Tmp;
-    if (!m3u.Openf("%s/000index.m3u","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
-    m3u.Puts("#EXTM3U\n");
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        Tmp=item->Artist + " - " + item->Title;
-        Tmp+=" (";
-        Tmp+=item->Version;
-        Tmp+=")";
-        m3u.Putsf("#EXTINF:%u,%s\n",item->trackLength,(const char*)Tmp);
-        m3u.Putsf("%s\n",(const char*)getExportFilename(i+1,item->File));
-    }
-    m3u.Close();
+	ppl6::CFile m3u;
+	ppl7::String Tmp;
+	if (!m3u.Openf("%s/000index.m3u", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
+	m3u.Puts("#EXTM3U\n");
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		Tmp=item->Artist + " - " + item->Title;
+		Tmp+=" (";
+		Tmp+=item->Version;
+		Tmp+=")";
+		m3u.Putsf("#EXTINF:%u,%s\n", item->trackLength, (const char*)Tmp);
+		m3u.Putsf("%s\n", (const char*)getExportFilename(i + 1, item->File));
+	}
+	m3u.Close();
 }
 
 void Playlist::exportPLS()
 {
-    ppl6::CFile pls;
-    ppl6::CString Tmp;
-    if (!pls.Openf("%s/000index.pls","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
-    pls.Puts("[playlist]\n");
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        Tmp=item->Artist + " - " + item->Title;
-        Tmp+=" (";
-        Tmp+=item->Version;
-        Tmp+=")";
+	ppl6::CFile pls;
+	ppl7::String Tmp;
+	if (!pls.Openf("%s/000index.pls", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
+	pls.Puts("[playlist]\n");
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		Tmp=item->Artist + " - " + item->Title;
+		Tmp+=" (";
+		Tmp+=item->Version;
+		Tmp+=")";
 
-        pls.Putsf("File%i=%s\n",i+1,(const char*)getExportFilename(i+1,item->File));
-        pls.Putsf("Title%i=%s\n",i+1,(const char*)Tmp);
-        pls.Putsf("Length%i=%u\n",i+1,item->trackLength);
-    }
-    pls.Putsf("NumberOfEntries=%i\nVersion=2\n",ui.tracks->topLevelItemCount());
-    pls.Close();
+		pls.Putsf("File%i=%s\n", i + 1, (const char*)getExportFilename(i + 1, item->File));
+		pls.Putsf("Title%i=%s\n", i + 1, (const char*)Tmp);
+		pls.Putsf("Length%i=%u\n", i + 1, item->trackLength);
+	}
+	pls.Putsf("NumberOfEntries=%i\nVersion=2\n", ui.tracks->topLevelItemCount());
+	pls.Close();
 }
 
 void Playlist::exportXSPF()
 {
-    ppl6::CFile xspf;
-    ppl6::CString Tmp;
-    if (!xspf.Openf("%s/000index.xspf","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
-    xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
-    Tmp=tr("Playlist created by WinMusik");
-    Tmp.Trim();
-    Tmp.Concatf(" %s",WM_VERSION);
-    xspf.Putsf("<creator>%s</creator>\n",(const char*)Tmp);
-    xspf.Puts("<trackList>\n");
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        ppl6::CString Filename=wm->conf.playlist_export.TargetPath+"/"+getExportFilename(i+1,item->File);
-        xspf.Putsf("  <track>\n");
-        xspf.Putsf("     <trackNum>%u</trackNum>\n",i+1);
-        xspf.Putsf("     <location>file://%s</location>\n",(const char*)ppl6::EscapeHTMLTags(Filename));
-        xspf.Putsf("     <creator>%s</creator>\n",(const char*)ppl6::EscapeHTMLTags(item->Artist));
-        xspf.Putsf("     <title>%s - %s (%s)</title>\n",
-                                (const char*)ppl6::EscapeHTMLTags(item->Artist),
-                                (const char*)ppl6::EscapeHTMLTags(item->Title),
-                                (const char*)ppl6::EscapeHTMLTags(item->Version));
-        xspf.Putsf("     <duration>%u</duration>\n",item->trackLength*1000);  // Bringt VLC zum Absturz
-        xspf.Putsf("  </track>\n");
-    }
-    xspf.Putsf("</trackList>\n</playlist>\n");
-    xspf.Close();
+	ppl6::CFile xspf;
+	ppl7::String Tmp;
+	if (!xspf.Openf("%s/000index.xspf", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
+	xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
+	Tmp=tr("Playlist created by WinMusik");
+	Tmp.trim();
+	Tmp.appendf(" %s", WM_VERSION);
+	xspf.Putsf("<creator>%s</creator>\n", (const char*)Tmp);
+	xspf.Puts("<trackList>\n");
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		ppl7::String Filename=wm->conf.playlist_export.TargetPath + "/" + getExportFilename(i + 1, item->File);
+		xspf.Putsf("  <track>\n");
+		xspf.Putsf("     <trackNum>%u</trackNum>\n", i + 1);
+		xspf.Putsf("     <location>file://%s</location>\n", (const char*)ppl7::EscapeHTMLTags(Filename));
+		xspf.Putsf("     <creator>%s</creator>\n", (const char*)ppl7::EscapeHTMLTags(item->Artist));
+		xspf.Putsf("     <title>%s - %s (%s)</title>\n",
+			(const char*)ppl7::EscapeHTMLTags(item->Artist),
+			(const char*)ppl7::EscapeHTMLTags(item->Title),
+			(const char*)ppl7::EscapeHTMLTags(item->Version));
+		xspf.Putsf("     <duration>%u</duration>\n", item->trackLength * 1000);  // Bringt VLC zum Absturz
+		xspf.Putsf("  </track>\n");
+	}
+	xspf.Putsf("</trackList>\n</playlist>\n");
+	xspf.Close();
 }
 
 void Playlist::exportTXT()
 {
-    ppl6::CFile txt;
-    ppl6::CString Tmp;
-    ppl6::CString Minuten=tr("min","Minutes in Tracklisting of Playlist");
-    if (!txt.Openf("%s/000index.txt","wb",(const char*)wm->conf.playlist_export.TargetPath)) return;
-    Tmp=ui.tracks->getName();
-    if (Tmp.IsEmpty()) {
-        Tmp=tr("Playlist");
-    }
-    txt.Puts(Tmp);
-    txt.Puts("\r\n");
+	ppl6::CFile txt;
+	ppl7::String Tmp;
+	ppl7::String Minuten=tr("min", "Minutes in Tracklisting of Playlist");
+	if (!txt.Openf("%s/000index.txt", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
+	Tmp=ui.tracks->getName();
+	if (Tmp.isEmpty()) {
+		Tmp=tr("Playlist");
+	}
+	txt.Puts(Tmp);
+	txt.Puts("\r\n");
 
-    Tmp=ui.tracks->getSubName();
-    if (Tmp.NotEmpty()) {
-        txt.Puts(Tmp);
-        txt.Puts("\r\n");
-    }
-    txt.Puts("\r\n");
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
-        Tmp=item->Artist + " - " + item->Title;
-        Tmp+=" (";
-        Tmp+=item->Version;
-        Tmp+=")";
-        ppl6::CString TmpTxt=Tmp;
-        TmpTxt.Chop(1);
-        txt.Putsf("%3u. %s, %0i:%02i %s)\r\n",i+1,static_cast<const char*>(TmpTxt),
-                  static_cast<int>(item->trackLength/60),item->trackLength%60,
-                  static_cast<const char*>(Minuten));
+	Tmp=ui.tracks->getSubName();
+	if (Tmp.notEmpty()) {
+		txt.Puts(Tmp);
+		txt.Puts("\r\n");
+	}
+	txt.Puts("\r\n");
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+		Tmp=item->Artist + " - " + item->Title;
+		Tmp+=" (";
+		Tmp+=item->Version;
+		Tmp+=")";
+		ppl7::String TmpTxt=Tmp;
+		TmpTxt.chop(1);
+		txt.Putsf("%3u. %s, %0i:%02i %s)\r\n", i + 1, static_cast<const char*>(TmpTxt),
+			static_cast<int>(item->trackLength / 60), item->trackLength % 60,
+			static_cast<const char*>(Minuten));
 
-    }
-    txt.Puts("\r\n");
+	}
+	txt.Puts("\r\n");
 
 }
 
 void Playlist::on_viewFilter_triggered()
 {
-    if (ui.filterFrame->isVisible()) ui.filterFrame->setVisible(false);
-    else ui.filterFrame->setVisible(true);
-    filterChanged();
+	if (ui.filterFrame->isVisible()) ui.filterFrame->setVisible(false);
+	else ui.filterFrame->setVisible(true);
+	filterChanged();
 }
 
 bool Playlist::isFilterEnabled() const
 {
-    if (ui.filterFrame->isVisible()) {
-        if (ui.targetTrackGroupBox->isChecked()) {
-            return true;
-        }
-    }
-    return false;
+	if (ui.filterFrame->isVisible()) {
+		if (ui.targetTrackGroupBox->isChecked()) {
+			return true;
+		}
+	}
+	return false;
 }
 
-void Playlist::handleFilterDropEvent(QDropEvent *event)
+void Playlist::handleFilterDropEvent(QDropEvent* event)
 {
-    event->accept();
-    const QMimeData *mime=event->mimeData();
-    if (!mime) return;
-    if (mime->hasFormat("application/winmusik+xml")) {
-        QByteArray ba=mime->data("application/winmusik+xml");
-        ppl6::CString xml;
-        xml.Set(ba.constData(), ba.size());
-        if (xml.Left(18)=="<winmusikTracklist") {
-            //handleXMLDrop(xml,insertItem);
-            //return;
-        }
-    }
-    QList<QUrl>	list=mime->urls();
-    if (list.size()==0) return;
-    QUrl url=list[0];
-    QString file=url.toLocalFile();
+	event->accept();
+	const QMimeData* mime=event->mimeData();
+	if (!mime) return;
+	if (mime->hasFormat("application/winmusik+xml")) {
+		QByteArray ba=mime->data("application/winmusik+xml");
+		ppl7::String xml;
+		xml.set(ba.constData(), ba.size());
+		if (xml.left(18) == "<winmusikTracklist") {
+			//handleXMLDrop(xml,insertItem);
+			//return;
+		}
+	}
+	QList<QUrl>	list=mime->urls();
+	if (list.size() == 0) return;
+	QUrl url=list[0];
+	QString file=url.toLocalFile();
 
 
-    TrackInfo info;
-    if (!getTrackInfoFromFile(info,file)) {
-        return;
-    }
+	TrackInfo info;
+	if (!getTrackInfoFromFile(info, file)) {
+		return;
+	}
 
 
-    ui.ct_artist->setText(info.Ti.Artist);
-    ui.ct_title->setText(info.Ti.Title);
-    ui.ct_version->setText(info.Version);
-    ui.ct_bpm->setText(ppl6::ToString("%d",info.Ti.BPM));
-    ui.ct_energy->setText(ppl6::ToString("%d",info.Ti.EnergyLevel));
-    ppl6::CString Tmp;
-    Tmp.Setf("%02i:%02i",static_cast<int>(info.Ti.Length/60),static_cast<int>(info.Ti.Length%60));
-    ui.ct_length->setText(Tmp);
+	ui.ct_artist->setText(info.Ti.Artist);
+	ui.ct_title->setText(info.Ti.Title);
+	ui.ct_version->setText(info.Version);
+	ui.ct_bpm->setText(ppl7::ToString("%d", info.Ti.BPM));
+	ui.ct_energy->setText(ppl7::ToString("%d", info.Ti.EnergyLevel));
+	ppl7::String Tmp;
+	Tmp.setf("%02i:%02i", static_cast<int>(info.Ti.Length / 60), static_cast<int>(info.Ti.Length % 60));
+	ui.ct_length->setText(Tmp);
 
-    MusicKey key(info.Ti.Key);
-    ui.ct_key->setText(key.name(musicKeyDisplay));
-    MusicKey modified_key=key.addSemitone(ui.ct_modificationSpinBox->value());
-    ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
+	MusicKey key(info.Ti.Key);
+	ui.ct_key->setText(key.name(musicKeyDisplay));
+	MusicKey modified_key=key.addSemitone(ui.ct_modificationSpinBox->value());
+	ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
 
-    if (info.Cover.Size()>0) {
-        QPixmap pix, icon;
-        pix.loadFromData(static_cast<const uchar*>(info.Cover.GetPtr()),static_cast<uint>(info.Cover.Size()));
-        //icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        ui.ct_cover->setPixmap(pix);
-    }
+	if (info.Cover.Size() > 0) {
+		QPixmap pix, icon;
+		pix.loadFromData(static_cast<const uchar*>(info.Cover.GetPtr()), static_cast<uint>(info.Cover.Size()));
+		//icon=pix.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+		ui.ct_cover->setPixmap(pix);
+	}
 
-    if (ui.tt_bpmStartSpinBox->value()==0 && info.Ti.BPM>5) ui.tt_bpmStartSpinBox->setValue(static_cast<int>(info.Ti.BPM)-5);
-    if (ui.tt_bpmEndSpinBox->value()==0 && info.Ti.BPM>0) ui.tt_bpmEndSpinBox->setValue(static_cast<int>(info.Ti.BPM)+5);
+	if (ui.tt_bpmStartSpinBox->value() == 0 && info.Ti.BPM > 5) ui.tt_bpmStartSpinBox->setValue(static_cast<int>(info.Ti.BPM) - 5);
+	if (ui.tt_bpmEndSpinBox->value() == 0 && info.Ti.BPM > 0) ui.tt_bpmEndSpinBox->setValue(static_cast<int>(info.Ti.BPM) + 5);
 
-    filterChanged();
+	filterChanged();
 }
 
 void Playlist::filterChanged()
 {
-    MusicKey key(ui.ct_modifiedKey->text());
-    ui.tt_sameKey->setText(key.name(musicKeyDisplay));
-    ui.tt_nextKey->setText(key.nextKey().name(musicKeyDisplay));
-    ui.tt_previousKey->setText(key.previousKey().name(musicKeyDisplay));
-    ui.tt_minorMajorSwitch->setText(key.minorMajorSwitch().name(musicKeyDisplay));
-    ui.tt_minorMajorJump3->setText(key.minorMajorJump3().name(musicKeyDisplay));
-    ui.tt_minorMajorJump1->setText(key.minorMajorJump1().name(musicKeyDisplay));
-    ui.tt_boostSemitone1->setText(key.plus1Semitone().name(musicKeyDisplay));
-    ui.tt_boostSemitone2->setText(key.plus2Semitone().name(musicKeyDisplay));
-    ui.tt_relatedKey->setText(key.avbBoost().name(musicKeyDisplay));
+	MusicKey key(ui.ct_modifiedKey->text());
+	ui.tt_sameKey->setText(key.name(musicKeyDisplay));
+	ui.tt_nextKey->setText(key.nextKey().name(musicKeyDisplay));
+	ui.tt_previousKey->setText(key.previousKey().name(musicKeyDisplay));
+	ui.tt_minorMajorSwitch->setText(key.minorMajorSwitch().name(musicKeyDisplay));
+	ui.tt_minorMajorJump3->setText(key.minorMajorJump3().name(musicKeyDisplay));
+	ui.tt_minorMajorJump1->setText(key.minorMajorJump1().name(musicKeyDisplay));
+	ui.tt_boostSemitone1->setText(key.plus1Semitone().name(musicKeyDisplay));
+	ui.tt_boostSemitone2->setText(key.plus2Semitone().name(musicKeyDisplay));
+	ui.tt_relatedKey->setText(key.avbBoost().name(musicKeyDisplay));
 
-    if (!isFilterEnabled()) {
-        for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-            PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
-            item->setHidden(false);
-        }
-        return;
-    }
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
-        item->setHidden(true);
-        if (item->bpm>=(ppluint32)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
-            if (item->bpm<=(ppluint32)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked()==false) {
+	if (!isFilterEnabled()) {
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+			item->setHidden(false);
+		}
+		return;
+	}
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+		item->setHidden(true);
+		if (item->bpm >= (ppluint32)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
+			if (item->bpm <= (ppluint32)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
 
-                MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
-                if (itemKey==key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.nextKey() && ui.tt_nextKeyCheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.previousKey() && ui.tt_previousKeyCheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.minorMajorSwitch() && ui.tt_minorMajorSwitchCheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.minorMajorJump3() && ui.tt_minorMajorJump3CheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.minorMajorJump1() && ui.tt_minorMajorJump1CheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.plus1Semitone() && ui.tt_boostSemitone1CheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.plus2Semitone() && ui.tt_boostSemitone2CheckBox->isChecked()) item->setHidden(false);
-                else if (itemKey==key.avbBoost() && ui.tt_relatedKeyCheckBox->isChecked()) item->setHidden(false);
-            }
-        }
-    }
+				MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
+				if (itemKey == key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.nextKey() && ui.tt_nextKeyCheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.previousKey() && ui.tt_previousKeyCheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.minorMajorSwitch() && ui.tt_minorMajorSwitchCheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.minorMajorJump3() && ui.tt_minorMajorJump3CheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.minorMajorJump1() && ui.tt_minorMajorJump1CheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.plus1Semitone() && ui.tt_boostSemitone1CheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.plus2Semitone() && ui.tt_boostSemitone2CheckBox->isChecked()) item->setHidden(false);
+				else if (itemKey == key.avbBoost() && ui.tt_relatedKeyCheckBox->isChecked()) item->setHidden(false);
+			}
+		}
+	}
 }
 
 void Playlist::on_ct_modificationSpinBox_valueChanged(int i)
 {
-    MusicKey key(ui.ct_key->text());
-    MusicKey modified_key=key.addSemitone(i);
-    ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
-    filterChanged();
+	MusicKey key(ui.ct_key->text());
+	MusicKey modified_key=key.addSemitone(i);
+	ui.ct_modifiedKey->setText(modified_key.name(musicKeyDisplay));
+	filterChanged();
 }
 
 
 void Playlist::updateMixBpmUpDownIndicator()
 {
-    if (playlistView!=playlistViewDJ) return;
-    PlaylistItem *previous=NULL;
-    ppl6::CString Tmp;
-    for (int i=0;i<ui.tracks->topLevelItemCount();i++) {
-        PlaylistItem *item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-        int bpmPlayed=(item->bpmPlayed>0?item->bpmPlayed:item->bpm);
-        Tmp.Setf("%i",bpmPlayed);
-        if (previous) {
-            int previous_bpm=(previous->bpmPlayed>0?previous->bpmPlayed:previous->bpm);
-            if (bpmPlayed>previous_bpm) Tmp+=" ▲";
-            else if (bpmPlayed<previous_bpm) Tmp+=" ▼";
-            item->setText(columnBpmPlayed,Tmp);
-        }
-        previous=item;
-    }
+	if (playlistView != playlistViewDJ) return;
+	PlaylistItem* previous=NULL;
+	ppl7::String Tmp;
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+		int bpmPlayed=(item->bpmPlayed > 0 ? item->bpmPlayed : item->bpm);
+		Tmp.setf("%i", bpmPlayed);
+		if (previous) {
+			int previous_bpm=(previous->bpmPlayed > 0 ? previous->bpmPlayed : previous->bpm);
+			if (bpmPlayed > previous_bpm) Tmp+=" ▲";
+			else if (bpmPlayed < previous_bpm) Tmp+=" ▼";
+			item->setText(columnBpmPlayed, Tmp);
+		}
+		previous=item;
+	}
 }

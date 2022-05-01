@@ -24,8 +24,8 @@
 #include "regexpedit.h"
 #include <QClipboard>
 
-RegExpEdit::RegExpEdit(QWidget *parent)
-    : QDialog(parent)
+RegExpEdit::RegExpEdit(QWidget* parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 }
@@ -51,7 +51,7 @@ void RegExpEdit::on_okButton_clicked()
 	done(1);
 }
 
-void RegExpEdit::setPattern(const RegExpPattern &pat)
+void RegExpEdit::setPattern(const RegExpPattern& pat)
 {
 	ui.capture_artist->setValue(pat.artist);
 	ui.capture_title->setValue(pat.title);
@@ -99,10 +99,10 @@ void RegExpEdit::on_teststring_textChanged()
 {
 	RegExpMatch match;
 	RegExpPattern pat=getPattern();
-	ppl6::CString Text=ui.teststring->toPlainText();
-	if (pat.Pattern.NotEmpty()==true && Text.NotEmpty()==true) {
+	ppl7::String Text=ui.teststring->toPlainText();
+	if (pat.Pattern.NotEmpty() == true && Text.notEmpty() == true) {
 		try {
-			if (wm_main->RegExpCapture.testMatch(Text,match,pat)) {
+			if (wm_main->RegExpCapture.testMatch(Text, match, pat)) {
 				ui.match_indicator->setStyleSheet("background: green;");
 				ui.test_artist->setText(match.Artist);
 				ui.test_title->setText(match.Title);
@@ -112,12 +112,13 @@ void RegExpEdit::on_teststring_textChanged()
 				ui.test_bpm->setText(match.Bpm);
 				ui.test_album->setText(match.Album);
 				ui.test_releasedate->setText(match.ReleaseDate);
-				ppl6::CString Tmp;
-				Tmp.Setf("%i:%02i",match.Length/60,match.Length%60);
+				ppl7::String Tmp;
+				Tmp.setf("%i:%02i", match.Length / 60, match.Length % 60);
 				ui.test_length->setText(Tmp);
 				return;
 			}
-		} catch (...) {
+		}
+		catch (...) {
 
 		}
 	}

@@ -26,7 +26,7 @@
 #include "tablecontrol.h"
 #include <QDialog>
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 #include "ui_cddbimport.h"
 
 class CDDBImport : public QDialog
@@ -34,44 +34,44 @@ class CDDBImport : public QDialog
     Q_OBJECT
 
 public:
-    CDDBImport(QWidget *parent = 0, CWmClient *wm = NULL);
+    CDDBImport(QWidget* parent = 0, CWmClient* wm = NULL);
     ~CDDBImport();
 
-    void setDisc(ppl6::CDDB::Disc &disc);
+    void setDisc(ppl7::CDDB::Disc& disc);
 
     bool checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
-    void startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
+    void startImport(ppl7::CDDB::Disc& disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
 
 private:
     Ui::CDDBImport ui;
-    CWmClient *wm;
+    CWmClient* wm;
     int position, oldposition;
     CTableControl TCGenre;
     CTableControl TCLabel;
     CTableControl TCRecordSource;
     CTableControl TCRecordDevice;
 
-    void InstallFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
-    void resizeEvent ( QResizeEvent * event );
-    ppl6::CString getVersionFromTitle(ppl6::CString &Title, int length);
+    void InstallFilter(QObject* object, int id);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
+    void resizeEvent(QResizeEvent* event);
+    ppl7::String getVersionFromTitle(ppl7::String& Title, int length);
 
     // Globale Events
-    bool on_KeyPress(QObject *target, int key,int modifier);
+    bool on_KeyPress(QObject* target, int key, int modifier);
     void MoveToNextWidget();
-    QWidget *GetWidgetFromPosition(int position);
+    QWidget* GetWidgetFromPosition(int position);
     void FixFocus();
 
-    void updateTracklist(ppl6::CDDB::Disc &disc);
-    void getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track);
-    void addDataFromFile(DataTitle &Ti);
-    int saveTitle(CTrackList *tracklist, DataTitle &Ti);
+    void updateTracklist(ppl7::CDDB::Disc& disc);
+    void getTitle(DataTitle& Ti, const ppl7::CDDB::Track& track);
+    void addDataFromFile(DataTitle& Ti);
+    int saveTitle(CTrackList* tracklist, DataTitle& Ti);
 
 public slots:
 
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 

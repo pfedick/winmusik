@@ -27,8 +27,8 @@
 #include "../include/editdevice.h"
 #include "src/editor/tablesearch.h"
 
-EditDevice::EditDevice(QWidget *parent, CWmClient *wm, int typ, ppluint32 DeviceId)
-    : QDialog(parent)
+EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, ppluint32 DeviceId)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
@@ -36,7 +36,7 @@ EditDevice::EditDevice(QWidget *parent, CWmClient *wm, int typ, ppluint32 Device
 	DeviceType=typ;
 	this->DeviceId=DeviceId;
 	QDate Date;
-	ppl6::CString Tmp, Subject;
+	ppl7::String Tmp, Subject;
 
 	if (Device.DeviceId) {
 		Tmp=tr("Edit Device:");
@@ -47,8 +47,8 @@ EditDevice::EditDevice(QWidget *parent, CWmClient *wm, int typ, ppluint32 Device
 	Tmp+=wm->GetDeviceName(DeviceType);
 	Subject=wm->GetDeviceName(DeviceType);
 	if (Device.DeviceId) {
-		Tmp.Concatf(" %u",DeviceId);
-		Subject.Concatf(" %u",DeviceId);
+		Tmp.appendf(" %u", DeviceId);
+		Subject.appendf(" %u", DeviceId);
 	}
 	setWindowTitle(Tmp);
 	ui.Subject->setText(Subject);
@@ -61,38 +61,38 @@ EditDevice::EditDevice(QWidget *parent, CWmClient *wm, int typ, ppluint32 Device
 
 
 	// Eventfilter installieren
-	InstallFilter(ui.title,1);
-	InstallFilter(ui.subTitle,2);
-	InstallFilter(ui.pages,3);
-	InstallFilter(ui.labelId,4);
-	InstallFilter(ui.labelText,5);
-	InstallFilter(ui.purchaseId,6);
-	InstallFilter(ui.purchaseText,7);
-	InstallFilter(ui.purchasePrice,8);
-	InstallFilter(ui.purchaseDate,9);
+	InstallFilter(ui.title, 1);
+	InstallFilter(ui.subTitle, 2);
+	InstallFilter(ui.pages, 3);
+	InstallFilter(ui.labelId, 4);
+	InstallFilter(ui.labelText, 5);
+	InstallFilter(ui.purchaseId, 6);
+	InstallFilter(ui.purchaseText, 7);
+	InstallFilter(ui.purchasePrice, 8);
+	InstallFilter(ui.purchaseDate, 9);
 	position=oldposition=0;
 
 	Label.Title=tr("Producer / Label");
-	Label.Init(this,wm,ui.labelId,ui.labelText,&wm->LabelStore);
+	Label.Init(this, wm, ui.labelId, ui.labelText, &wm->LabelStore);
 	Label.SetNextWidget(ui.purchaseId);
 
 	PurchaseSource.Title=tr("Purchase store");
-	PurchaseSource.Init(this,wm,ui.purchaseId,ui.purchaseText,&wm->PurchaseSourceStore);
+	PurchaseSource.Init(this, wm, ui.purchaseId, ui.purchaseText, &wm->PurchaseSourceStore);
 	PurchaseSource.SetNextWidget(ui.purchasePrice);
 
 
 	// Device laden
-	if (wm->DeviceStore.GetCopy(DeviceType,DeviceId,&Device)) {
+	if (wm->DeviceStore.GetCopy(DeviceType, DeviceId, &Device)) {
 		if (Device.Title) ui.title->setText(Device.Title);
 		if (Device.SubTitle) ui.subTitle->setText(Device.SubTitle);
 		ui.pages->setValue(Device.Pages);
 		Label.SetId(Device.LabelId);
 		PurchaseSource.SetId(Device.PurchaseId);
-		Tmp.Setf("%0.2f",Device.PurchasePrice);
+		Tmp.setf("%0.2f", Device.PurchasePrice);
 		ui.purchasePrice->setText(Tmp);
 		// Aufnahmedatum
-		Tmp.Setf("%u",Device.PurchaseDate);
-		Date=QDate::fromString(Tmp,"yyyyMMdd");
+		Tmp.setf("%u", Device.PurchaseDate);
+		Date=QDate::fromString(Tmp, "yyyyMMdd");
 		ui.purchaseDate->setDate(Date);
 		// Länge
 		Tmp=Int2Time(Device.Length);
@@ -112,14 +112,14 @@ EditDevice::~EditDevice()
 	if (parent) parent->setFocus();
 }
 
-void EditDevice::InstallFilter(QObject *object, int id)
+void EditDevice::InstallFilter(QObject* object, int id)
 {
 	object->installEventFilter(this);
-	object->setProperty("id",id);
+	object->setProperty("id", id);
 }
 
 
-bool EditDevice::eventFilter(QObject *target, QEvent *event)
+bool EditDevice::eventFilter(QObject* target, QEvent* event)
 /*!\brief Event Handler
  *
  * Dies ist eine überladene Funktion, die von Qt immer dann aufgerufen wird, wenn bei einem Widget, bei dem ein
@@ -133,11 +133,11 @@ bool EditDevice::eventFilter(QObject *target, QEvent *event)
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
 {
-	if (consumeEvent(target,event)) return true;
-	return QWidget::eventFilter(target,event);
+	if (consumeEvent(target, event)) return true;
+	return QWidget::eventFilter(target, event);
 }
 
-bool EditDevice::consumeEvent(QObject *target, QEvent *event)
+bool EditDevice::consumeEvent(QObject* target, QEvent* event)
 /*!\brief Event verarbeiten
  *
  * Diese Funktion wird von Edit::eventFilter aufgerufen, wenn Qt einen Event für ein Widget registriert hat,
@@ -153,55 +153,55 @@ bool EditDevice::consumeEvent(QObject *target, QEvent *event)
  * \returns Gibt \b true zurück, wenn der Event verarbeit wurde, sonst \b false
  */
 {
-	QKeyEvent *keyEvent=NULL;
+	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
 	//QFocusEvent *focusEvent=NULL;
 
 	// Id auslesen
-	__attribute__ ((unused)) int id=target->property("id").toInt();
+	__attribute__((unused)) int id=target->property("id").toInt();
 	int type=event->type();
-	if (type==QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent *>(event);
+	if (type == QEvent::KeyPress) {
+		keyEvent= static_cast<QKeyEvent*>(event);
 		key=keyEvent->key();
 		modifier=keyEvent->modifiers();
-		if (modifier==Qt::NoModifier && (key==Qt::Key_Return || key==Qt::Key_Enter)) {
-			if (target!=ui.okButton && target!=ui.cancelButton) {
+		if (modifier == Qt::NoModifier && (key == Qt::Key_Return || key == Qt::Key_Enter)) {
+			if (target != ui.okButton && target != ui.cancelButton) {
 				nextWidget(target);
 				return false;
 			}
-		} else if (modifier==Qt::NoModifier && key==Qt::Key_F12) {
+		} else if (modifier == Qt::NoModifier && key == Qt::Key_F12) {
 			if (Save()) done(DeviceId);
 			return true;
 		}
-	} else if (type==QEvent::FocusIn) {
+	} else if (type == QEvent::FocusIn) {
 		//focusEvent=static_cast<QFocusEvent *>(event);
 		position=id;
-	} else if (type==QEvent::FocusOut) {
+	} else if (type == QEvent::FocusOut) {
 		//focusEvent=static_cast<QFocusEvent *>(event);
 		oldposition=id;
 	}
-	if (target==ui.labelId || target==ui.labelText) {
-		return Label.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.purchaseId || target==ui.purchaseText) {
-		return PurchaseSource.ConsumeEvent(target,event,oldposition,position);
+	if (target == ui.labelId || target == ui.labelText) {
+		return Label.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.purchaseId || target == ui.purchaseText) {
+		return PurchaseSource.ConsumeEvent(target, event, oldposition, position);
 	}
 
 	return false;
 }
 
-bool EditDevice::nextWidget(QObject *object)
+bool EditDevice::nextWidget(QObject* object)
 {
-	if (object==ui.title) ui.subTitle->setFocus();
-	else if (object==ui.subTitle) ui.pages->setFocus();
-	else if (object==ui.pages) ui.length->setFocus();
-	else if (object==ui.length) ui.labelId->setFocus();
-	else if (object==ui.labelId) ui.labelText->setFocus();
-	else if (object==ui.labelText) ui.purchaseId->setFocus();
-	else if (object==ui.purchaseId) ui.purchaseText->setFocus();
-	else if (object==ui.purchaseText) ui.purchasePrice->setFocus();
-	else if (object==ui.purchasePrice) ui.purchaseDate->setFocus();
-	else if (object==ui.purchaseDate) ui.okButton->setFocus();
+	if (object == ui.title) ui.subTitle->setFocus();
+	else if (object == ui.subTitle) ui.pages->setFocus();
+	else if (object == ui.pages) ui.length->setFocus();
+	else if (object == ui.length) ui.labelId->setFocus();
+	else if (object == ui.labelId) ui.labelText->setFocus();
+	else if (object == ui.labelText) ui.purchaseId->setFocus();
+	else if (object == ui.purchaseId) ui.purchaseText->setFocus();
+	else if (object == ui.purchaseText) ui.purchasePrice->setFocus();
+	else if (object == ui.purchasePrice) ui.purchaseDate->setFocus();
+	else if (object == ui.purchaseDate) ui.okButton->setFocus();
 	return false;
 }
 
@@ -235,10 +235,10 @@ bool EditDevice::Save()
 
 	if (wm->DeviceStore.Put(&Device)) {
 		DeviceId=Device.DeviceId;
-		for (int i=1;i<=Device.Pages;i++) {
-			ppl6::CString Path=wm->GetAudioPath(DeviceType,DeviceId,i);
+		for (int i=1;i <= Device.Pages;i++) {
+			ppl6::CString Path=wm->GetAudioPath(DeviceType, DeviceId, i);
 			if (Path.NotEmpty()) {
-				ppl6::MkDir(Path,1);
+				ppl6::MkDir(Path, 1);
 			}
 		}
 		return true;
@@ -255,4 +255,3 @@ void EditDevice::on_cancelButton_clicked()
 {
 	done(0);
 }
-

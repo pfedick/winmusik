@@ -29,12 +29,12 @@
 
 
 
-CDDBSelect::CDDBSelect(QWidget *parent, CWmClient *wm)
-: QDialog(parent)
+CDDBSelect::CDDBSelect(QWidget* parent, CWmClient* wm)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
-	InstallFilter(ui.tracklist,1);
+	InstallFilter(ui.tracklist, 1);
 	ui.tracklist->setFocus();
 	selectedItem=NULL;
 }
@@ -44,36 +44,36 @@ CDDBSelect::~CDDBSelect()
 
 }
 
-void CDDBSelect::InstallFilter(QObject *object, int id)
+void CDDBSelect::InstallFilter(QObject* object, int id)
 {
 	object->installEventFilter(this);
-	object->setProperty("id",id);
+	object->setProperty("id", id);
 }
 
-void CDDBSelect::setMatches(const ppl6::CDDB::Matches &matches)
+void CDDBSelect::setMatches(const ppl7::CDDB::Matches& matches)
 {
 	ppl6::CString Tmp;
 	ui.tracklist->clear();
 	ui.tracklist->setWordWrap(false);
 	ui.tracklist->setSortingEnabled(false);
-	ppl6::CDDB::Matches::const_iterator it;
-	for (it=matches.begin();it!=matches.end();++it) {
-		CddbItem *item=new CddbItem;
+	ppl7::CDDB::Matches::const_iterator it;
+	for (it=matches.begin();it != matches.end();++it) {
+		CddbItem* item=new CddbItem;
 		item->disc=(*it);
 		ppl6::CString Artist=(*it).Artist;
 		ppl6::CString Title=(*it).Title;
-		item->setText(0,Artist + "- "+Title);
+		item->setText(0, Artist + "- " + Title);
 
-		Tmp.Setf("%i",(*it).year);
-		item->setText(1,Tmp);
+		Tmp.Setf("%i", (*it).year);
+		item->setText(1, Tmp);
 
-		Tmp.Setf("%i",(int)(*it).Tracks.size());
-		item->setText(2,Tmp);
+		Tmp.Setf("%i", (int)(*it).Tracks.size());
+		item->setText(2, Tmp);
 
-		Tmp.Setf("%i:%02i",(*it).length/60, (*it).length%60);
-		item->setText(3,Tmp);
+		Tmp.Setf("%i:%02i", (*it).length / 60, (*it).length % 60);
+		item->setText(3, Tmp);
 
-		item->setText(4,(*it).genre);
+		item->setText(4, (*it).genre);
 
 		ui.tracklist->addTopLevelItem(item);
 	}
@@ -82,7 +82,7 @@ void CDDBSelect::setMatches(const ppl6::CDDB::Matches &matches)
 
 
 
-bool CDDBSelect::eventFilter(QObject *target, QEvent *event)
+bool CDDBSelect::eventFilter(QObject* target, QEvent* event)
 /*!\brief Event Handler
  *
  * Dies ist eine überladene Funktion, die von Qt immer dann aufgerufen wird, wenn bei einem Widget, bei dem ein
@@ -96,11 +96,11 @@ bool CDDBSelect::eventFilter(QObject *target, QEvent *event)
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
 {
-	if (consumeEvent(target,event)) return true;
-	return QWidget::eventFilter(target,event);
+	if (consumeEvent(target, event)) return true;
+	return QWidget::eventFilter(target, event);
 }
 
-bool CDDBSelect::consumeEvent(QObject *target, QEvent *event)
+bool CDDBSelect::consumeEvent(QObject* target, QEvent* event)
 /*!\brief Event verarbeiten
  *
  * Diese Funktion wird von Edit::eventFilter aufgerufen, wenn Qt einen Event für ein Widget registriert hat,
@@ -116,22 +116,21 @@ bool CDDBSelect::consumeEvent(QObject *target, QEvent *event)
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
 {
-	ppl6::CString Tmp;
-	QKeyEvent *keyEvent=NULL;
+	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
 
 	int type=event->type();
-	if (type==QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent *>(event);
+	if (type == QEvent::KeyPress) {
+		keyEvent= static_cast<QKeyEvent*>(event);
 		key=keyEvent->key();
 		modifier=keyEvent->modifiers();
-		if (on_KeyPress(target,key,modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
+		if (on_KeyPress(target, key, modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
 	}
 	return false;
 }
 
-bool CDDBSelect::on_KeyPress(QObject *, int key, int modifier)
+bool CDDBSelect::on_KeyPress(QObject*, int key, int modifier)
 /*!\brief Globale KeyPress Events behandeln
  *
  * Diese Funktion behandelt globale KeyPress Events, als Beispielsweise das Drücken der ESC-Taste,
@@ -146,22 +145,22 @@ bool CDDBSelect::on_KeyPress(QObject *, int key, int modifier)
  */
 {
 	// ******************************************************************************* ESC
-	if (key==Qt::Key_Escape) {
+	if (key == Qt::Key_Escape) {
 		on_cancelButton_clicked();
 		return true;
 		// *************************************************************************** Return/Enter
-	} else if (key==Qt::Key_Return || key==Qt::Key_Enter) {
-		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(),0);
+	} else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
+		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
 		return true;
 		// *************************************************************************** F12
-	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier) {
-		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(),0);
+	} else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
+		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
 		return true;
 	}
 	return false;
 }
 
-void CDDBSelect::resizeEvent ( QResizeEvent * event )
+void CDDBSelect::resizeEvent(QResizeEvent* event)
 /*!\brief Größenänderung des Fensters
  *
  * Diese Funktion wird durch Qt aufgerufen, wenn sich die Größe
@@ -170,22 +169,22 @@ void CDDBSelect::resizeEvent ( QResizeEvent * event )
  */
 {
 	int w=ui.tracklist->width();
-	ui.tracklist->setColumnWidth(1,60);
+	ui.tracklist->setColumnWidth(1, 60);
 	w-=64;
-	ui.tracklist->setColumnWidth(2,40);
+	ui.tracklist->setColumnWidth(2, 40);
 	w-=44;
-	ui.tracklist->setColumnWidth(3,60);
+	ui.tracklist->setColumnWidth(3, 60);
 	w-=64;
-	ui.tracklist->setColumnWidth(4,100);
+	ui.tracklist->setColumnWidth(4, 100);
 	w-=104;
-	ui.tracklist->setColumnWidth(0,w);
+	ui.tracklist->setColumnWidth(0, w);
 
 	QWidget::resizeEvent(event);
 }
 
-void CDDBSelect::on_tracklist_itemDoubleClicked (QTreeWidgetItem * item, int)
+void CDDBSelect::on_tracklist_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	if (item==NULL) return;
+	if (item == NULL) return;
 	selectedItem=(CddbItem*)item;
 	done(1);
 }
@@ -195,8 +194,8 @@ void CDDBSelect::on_cancelButton_clicked()
 	done(0);
 }
 
-ppl6::CDDB::Disc CDDBSelect::getSelected()
+ppl7::CDDB::Disc CDDBSelect::getSelected()
 {
 	if (selectedItem) return selectedItem->disc;
-	return ppl6::CDDB::Disc();
+	return ppl7::CDDB::Disc();
 }

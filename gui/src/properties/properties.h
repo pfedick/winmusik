@@ -46,7 +46,7 @@ private:
     int CheckValues();
     int Save();
 
-    ppl6::CString GetLocale();
+    ppl7::String GetLocale();
 
 
     void SelectLanguage();

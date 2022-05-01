@@ -36,6 +36,7 @@
 #include <QPixmap>
 #include <map>
 #include <set>
+#include <list>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
@@ -174,22 +175,22 @@ enum MusicKeyType
 /*******************************************************
  * Global Functions                                    *
  *******************************************************/
-ppluint32 Time2Int(ppl6::CString& Time);
-ppl6::CString Int2Time(ppluint32 Time);
-ppl6::CString Long2Date(ppl6::CString& Format, ppluint32 Date);
+uint32_t Time2Int(const ppl7::String& Time);
+ppl7::String Int2Time(uint32_t Time);
+ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date);
 
 void getHarmonicKeys(std::set<int>& harmonics, int key);
-bool saveCover(const ppl6::CString& filename, const QPixmap& Cover);
-void getIconFromCover(ppl6::CBinary& bin, const QPixmap& Cover);
-void NormalizeImportString(ppl6::CString& Buffer);
+void saveCover(const ppl7::String& filename, const QPixmap& Cover);
+void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover);
+void NormalizeImportString(ppl7::String& Buffer);
 void setReadableLength(QLabel* label, int length);
-void loadCoverToClipboard(const ppl6::CString& Filename);
+void loadCoverToClipboard(const ppl7::String& Filename);
 
 
 void SetWindowGeometry(QWidget* widget, const ppl6::CString& name);
 void SaveWindowGeometry(QWidget* widget, const ppl6::CString& name);
 
-ppl6::CString getReadableTimeFromSeconds(int seconds);
+ppl7::String getReadableTimeFromSeconds(int seconds);
 
 
 /*******************************************************
@@ -253,20 +254,20 @@ class TrackInfo
 {
 public:
 	DataTitle		Ti;
-	ppl6::CString	Version;
-	ppl6::CString	Genre;
-	ppl6::CString	Label;
-	ppl6::CString	RecordingSource;
-	ppl6::CString	RecordingDevice;
-	ppl6::CBinary	Cover;
+	ppl7::String	Version;
+	ppl7::String	Genre;
+	ppl7::String	Label;
+	ppl7::String	RecordingSource;
+	ppl7::String	RecordingDevice;
+	ppl7::ByteArray	Cover;
 
 	TrackInfo();
 	void clear();
 
 };
 
-bool getTrackInfoFromFile(TrackInfo& info, const ppl6::CString& Filename, int preferedId3Version=2);
-ppluint32 findTitleIdByFilename(const ppl6::CString& Filename);
+bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version=2);
+ppluint32 findTitleIdByFilename(const ppl7::String& Filename);
 
 
 
@@ -284,32 +285,33 @@ private:
 
 public:
 	Config();
-	int Load();
-	int Save();
+	void load();
+	void save();
+	void trySave();
 	void setConfigFile(const ppl7::String& filename);
 
-	ppl6::CString	LastCoverPath;
-	ppl6::CString	DataPath;
-	ppl6::CString	TmpPath;
-	//ppl6::CString	MP3Path;
-	ppl6::CString	MP3Player;
-	ppl6::CString	AIFFPlayer;
-	ppl6::CString	Locale;
-	ppl6::CString	UserName;
-	ppl6::CString	UserCompany;
-	ppl6::CString	Serial;
-	ppl6::CString	Currency;
-	ppl6::CString	PrinterName;
-	ppl6::CString	PrinterFont;
-	ppl6::CString	Logfile;
-	ppl6::CString	DefaultPrintPath;
-	ppl6::CString	CoverPath;
-	ppl6::CString	LastPlaylistPath;
-	ppl6::CString	LastPlaylists[WM_NUM_LASTPLAYLISTS];
+	ppl7::String	LastCoverPath;
+	ppl7::String	DataPath;
+	ppl7::String	TmpPath;
+	//ppl7::String	MP3Path;
+	ppl7::String	MP3Player;
+	ppl7::String	AIFFPlayer;
+	ppl7::String	Locale;
+	ppl7::String	UserName;
+	ppl7::String	UserCompany;
+	ppl7::String	Serial;
+	ppl7::String	Currency;
+	ppl7::String	PrinterName;
+	ppl7::String	PrinterFont;
+	ppl7::String	Logfile;
+	ppl7::String	DefaultPrintPath;
+	ppl7::String	CoverPath;
+	ppl7::String	LastPlaylistPath;
+	ppl7::String	LastPlaylists[WM_NUM_LASTPLAYLISTS];
 
-	ppl6::CString	DevicePath[MAX_DEVICE_TYPES];	// Muss erweitert werden, wenn neue Device-Typen hinzukommen!
+	ppl7::String	DevicePath[MAX_DEVICE_TYPES];	// Muss erweitert werden, wenn neue Device-Typen hinzukommen!
 
-	ppl6::CArray	DirectorySearch;
+	std::list<ppl7::String>	DirectorySearch;
 	int				LogfileSize;
 	int				LogfileGenerations;
 	int				Debuglevel;
@@ -340,13 +342,13 @@ public:
 	// Server
 	bool			bserverEnabled;
 	bool			bserverEnableSSL;
-	ppl6::CString	serverHost;
+	ppl7::String	serverHost;
 	int				serverPort;
-	ppl6::CString	serverSSLKeyfile;
-	ppl6::CString	serverSSLPassword;
+	ppl7::String	serverSSLKeyfile;
+	ppl7::String	serverSSLPassword;
 
-	ppl6::CString	customMusicKey[26];
-	ppl6::CString	customMusicKeyName;
+	ppl7::String	customMusicKey[26];
+	ppl7::String	customMusicKeyName;
 	MusicKeyType	musicKeyDisplay;
 	MusicKeyType	musicKeyTag;
 	int				playlistView;
@@ -354,24 +356,22 @@ public:
 	class CDDB {
 	public:
 		CDDB();
-		ppl6::CString	cddevice;
-		ppl6::CString	server;
+		ppl7::String	cddevice;
+		ppl7::String	server;
+		ppl7::String	proxy_server;
+		ppl7::String	username;
+		ppl7::String	hostname;
+		ppl7::String	querypath;
+		int				proxy_port;
 		int				port;
 		bool			useProxy;
-		ppl6::CString	proxy_server;
-		int				proxy_port;
-		ppl6::CString	username;
-		ppl6::CString	hostname;
-		ppl6::CString	querypath;
-
-
 	};
 	CDDB			cddb;
 
 	class PlaylistExport {
 	public:
 		PlaylistExport();
-		ppl6::CString	TargetPath;
+		ppl7::String	TargetPath;
 		bool option_copy_files;
 		bool option_prepend_tracknumber;
 		bool export_m3u;
@@ -534,8 +534,8 @@ private:
 	void initLetterReplacements();
 	void initFilenameLetterReplacements();
 	void addLetterReplacement(wchar_t letter, wchar_t replacement);
-	void addLetterReplacement(const ppl6::CWString& letters, wchar_t replacement);
-	void addFilenameLetterReplacement(const ppl6::CWString& letters, wchar_t replacement);
+	void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
+	void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
 	void* MainMenue;
 	ppl6::CGenericList EditorWindows;
 	ppl6::CGenericList SearchWindows;
@@ -586,7 +586,7 @@ public:
 	void InitLogging();
 	void UpdateMenue();
 
-	int isValidDataPath(ppl6::CString& Path);
+	bool isValidDataPath(const ppl7::String& Path);
 
 	int CloseDatabase();
 	int LoadDatabase();
@@ -662,7 +662,7 @@ public:
 	int WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list, DataDevice* device=nullptr);
 	int UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list);
 
-	int PlayFile(const ppl6::CString& Filename);
+	int PlayFile(const ppl7::String& Filename);
 
 	// Printing
 	int PrintCoverDialog(QWidget* parent, int DeviceType, ppluint32 DeviceId);
@@ -670,9 +670,9 @@ public:
 	int PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, ppluint32 end);
 
 
-	void NormalizeTerm(ppl6::CString& term);
-	void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl6::CWString& term);
-	int GetWords(const ppl6::CString& str, ppl6::CArray& words);
+	void NormalizeTerm(ppl7::String& term);
+	void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term);
+	int GetWords(const ppl7::String& str, ppl7::Array& words);
 
 };
 

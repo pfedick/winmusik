@@ -24,104 +24,84 @@
 
 #include <vector>
 #include <list>
-#ifdef HAVE_PYTHON
-#include <Python.h>
-#endif
 class RegExpPattern
 {
-	public:
-		RegExpPattern();
+public:
+	RegExpPattern();
 
-		void copyFrom(const RegExpPattern &other);
+	void copyFrom(const RegExpPattern& other);
 
-		ppl6::CString Name;
-		ppl6::CString Pattern;
-		int artist;
-		int title;
-		int version;
-		int genre;
-		int label;
-		int bpm;
-		int album;
-		int hours;
-		int minutes;
-		int seconds;
-		int releasedate;
-		bool isHTML;
+	ppl7::String Name;
+	ppl7::String Pattern;
+	int artist;
+	int title;
+	int version;
+	int genre;
+	int label;
+	int bpm;
+	int album;
+	int hours;
+	int minutes;
+	int seconds;
+	int releasedate;
+	bool isHTML;
 };
 
 class RegExpMatch
 {
-	public:
-		RegExpMatch() {
-			Length=0;
-		}
-		ppl6::CString	Artist;
-		ppl6::CString	Title;
-		ppl6::CString	Version;
-		ppl6::CString	Genre;
-		ppl6::CString	Label;
-		ppl6::CString	Bpm;
-		ppl6::CString	Album;
-		ppl6::CString	ReleaseDate;
-		int				Length;		// in Sekunden
+public:
+	RegExpMatch() {
+		Length=0;
+	}
+	ppl7::String	Artist;
+	ppl7::String	Title;
+	ppl7::String	Version;
+	ppl7::String	Genre;
+	ppl7::String	Label;
+	ppl7::String	Bpm;
+	ppl7::String	Album;
+	ppl7::String	ReleaseDate;
+	int				Length;		// in Sekunden
 
 };
 
 class RegExpClipboard
 {
-	public:
-		void copyFromClipboard();
-		ppl6::CString PlainText;
-		ppl6::CString Html;
+public:
+	void copyFromClipboard();
+	ppl7::String PlainText;
+	ppl7::String Html;
 };
 
-#ifdef HAVE_PYTHON
-class PythonModule
-{
-	public:
-		PythonModule(const ppl6::CString &name, PyObject *pModule) {
-			this->name=name;
-			this->pModule=pModule;
-		}
-		ppl6::CString	name;
-		PyObject 		*pModule;
-};
-
-#endif
 
 class RegularExpressionCapture
 {
-	private:
-		std::vector<RegExpPattern> patterns;
+private:
+	std::vector<RegExpPattern> patterns;
 #ifdef HAVE_PYTHON
-		std::list<PythonModule> python_modules;
+	std::list<PythonModule> python_modules;
 #endif
-		void copyToMatch(const RegExpPattern &p, const ppl6::CArray &res, RegExpMatch &match) const;
-		void addDefaultPatterns();
-		void loadScripts();
-#ifdef HAVE_PYTHON
-		bool matchAgainstScripts(const RegExpClipboard &data, RegExpMatch &match) const;
-		bool matchScript(const PythonModule &module, const RegExpClipboard &data, RegExpMatch &match) const;
-#endif
+	void copyToMatch(const RegExpPattern& p, const ppl7::Array& res, RegExpMatch& match) const;
+	void addDefaultPatterns();
+	void loadScripts();
 
-	public:
-		RegularExpressionCapture();
-		~RegularExpressionCapture();
+public:
+	RegularExpressionCapture();
+	~RegularExpressionCapture();
 
-		void load();
-		void save();
-		void addPattern(const RegExpPattern &pattern);
-		void insertPattern(size_t pos, const RegExpPattern &pattern);
-		void setPattern(size_t pos, const RegExpPattern &pattern);
-		void deletePattern(size_t pos);
-		const RegExpPattern &getPattern(size_t pos) const;
-		size_t size() const;
+	void load();
+	void save();
+	void addPattern(const RegExpPattern& pattern);
+	void insertPattern(size_t pos, const RegExpPattern& pattern);
+	void setPattern(size_t pos, const RegExpPattern& pattern);
+	void deletePattern(size_t pos);
+	const RegExpPattern& getPattern(size_t pos) const;
+	size_t size() const;
 
-		bool match(const ppl6::CString &data, RegExpMatch &match) const;
-		bool match(const RegExpClipboard &data, RegExpMatch &match) const;
-		bool testMatch(const ppl6::CString &data, RegExpMatch &match, const RegExpPattern &pattern) const;
-		bool buildinMatch(const ppl6::CString &data, RegExpMatch &match) const;
+	bool match(const ppl7::String& data, RegExpMatch& match) const;
+	bool match(const RegExpClipboard& data, RegExpMatch& match) const;
+	bool testMatch(const ppl7::String& data, RegExpMatch& match, const RegExpPattern& pattern) const;
+	bool buildinMatch(const ppl7::String& data, RegExpMatch& match) const;
 
 
 

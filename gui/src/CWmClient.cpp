@@ -363,17 +363,16 @@ int CWmClient::FirstStartDialog()
 }
 
 
-int CWmClient::isValidDataPath(ppl6::CString &Path)
+bool CWmClient::isValidDataPath(const ppl7::String &Path)
 {
 	// Der Pfad muss existieren
-	if (!ppl6::IsDir(Path)) return 0;
-	ppl6::CString s;
-	s.Setf("%s/winmusik.dat",(const char*)Path);
-	if (!ppl6::FileExists(s)) return 0;
+	if (!ppl7::Dir::exists(Path)) return false;
+	ppl7::String s=Path+"/winmusik.dat";
+	if (!ppl7::File::exists(s)) return false;
 	// TODO: Es muss geprüft werden, ob es sich um eine gültige WinMusik-Daten-Datei handelt
 	CWMFile ff;
-	if (!ff.Open(s)) return 0;
-	return 1;
+	if (!ff.Open(s)) return false;
+	return true;
 
 }
 
@@ -1604,63 +1603,43 @@ static void SubstituteLetter(ppl6::CWString &Text, const ppl6::CWString &Letters
 
 void CWmClient::initLetterReplacements()
 {
-	addLetterReplacement(ppl6::CWString(L"&+()_,!?/"),L' ');
-	addLetterReplacement(ppl6::CWString(L".:''`"),0);
-	addLetterReplacement(ppl6::CWString(L"°"),L'o');
-	addLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
-	addLetterReplacement(ppl6::CWString(L"þ"),L'b');
-	addLetterReplacement(ppl6::CWString(L"çćĉċč"),L'c');
-	addLetterReplacement(ppl6::CWString(L"ďđ"),L'd');
-	addLetterReplacement(ppl6::CWString(L"èéêëēĕėęě"),L'e');
-	addLetterReplacement(ppl6::CWString(L"ĝğġģ"),L'g');
-	addLetterReplacement(ppl6::CWString(L"ĥħ"),L'h');
-	addLetterReplacement(ppl6::CWString(L"ìíîïĩīĭįı"),L'i');
-	addLetterReplacement(ppl6::CWString(L"ĵ"),L'j');
-	addLetterReplacement(ppl6::CWString(L"ķĸ"),L'k');
-	addLetterReplacement(ppl6::CWString(L"ĺļľŀł"),L'l');
-	addLetterReplacement(ppl6::CWString(L"ñńņňŉŋ"),L'n');
-	addLetterReplacement(ppl6::CWString(L"òóôõöøōŏőœ"),L'o');
-	addLetterReplacement(ppl6::CWString(L"ŕŗř"),L'r');
-	addLetterReplacement(ppl6::CWString(L"śŝşš"),L's');
-	addLetterReplacement(ppl6::CWString(L"ţťŧ"),L't');
-	addLetterReplacement(ppl6::CWString(L"ùúûüũūŭůűų"),L'u');
-	addLetterReplacement(ppl6::CWString(L"ŵ"),L'w');
-	addLetterReplacement(ppl6::CWString(L"ýÿŷ"),L'y');
-	addLetterReplacement(ppl6::CWString(L"źżž"),L'z');
-	addLetterReplacement(ppl6::CWString(L"–"),L' ');
+	addLetterReplacement(ppl7::WideString(L"&+()_,!?/"),L' ');
+	addLetterReplacement(ppl7::WideString(L".:''`"),0);
+	addLetterReplacement(ppl7::WideString(L"°"),L'o');
+	addLetterReplacement(ppl7::WideString(L"àáâãäåāăąæ"),L'a');
+	addLetterReplacement(ppl7::WideString(L"þ"),L'b');
+	addLetterReplacement(ppl7::WideString(L"çćĉċč"),L'c');
+	addLetterReplacement(ppl7::WideString(L"ďđ"),L'd');
+	addLetterReplacement(ppl7::WideString(L"èéêëēĕėęě"),L'e');
+	addLetterReplacement(ppl7::WideString(L"ĝğġģ"),L'g');
+	addLetterReplacement(ppl7::WideString(L"ĥħ"),L'h');
+	addLetterReplacement(ppl7::WideString(L"ìíîïĩīĭįı"),L'i');
+	addLetterReplacement(ppl7::WideString(L"ĵ"),L'j');
+	addLetterReplacement(ppl7::WideString(L"ķĸ"),L'k');
+	addLetterReplacement(ppl7::WideString(L"ĺļľŀł"),L'l');
+	addLetterReplacement(ppl7::WideString(L"ñńņňŉŋ"),L'n');
+	addLetterReplacement(ppl7::WideString(L"òóôõöøōŏőœ"),L'o');
+	addLetterReplacement(ppl7::WideString(L"ŕŗř"),L'r');
+	addLetterReplacement(ppl7::WideString(L"śŝşš"),L's');
+	addLetterReplacement(ppl7::WideString(L"ţťŧ"),L't');
+	addLetterReplacement(ppl7::WideString(L"ùúûüũūŭůűų"),L'u');
+	addLetterReplacement(ppl7::WideString(L"ŵ"),L'w');
+	addLetterReplacement(ppl7::WideString(L"ýÿŷ"),L'y');
+	addLetterReplacement(ppl7::WideString(L"źżž"),L'z');
+	addLetterReplacement(ppl7::WideString(L"–"),L' ');
 }
 
 void CWmClient::initFilenameLetterReplacements()
 {
-	addFilenameLetterReplacement(ppl6::CWString(L"&"),L'+');
-	addFilenameLetterReplacement(ppl6::CWString(L"\"´`"),L'\'');
-	addFilenameLetterReplacement(ppl6::CWString(L"{"),L'(');
-	addFilenameLetterReplacement(ppl6::CWString(L"}"),L')');
-	addFilenameLetterReplacement(ppl6::CWString(L"|%#;:<>*?\\/"),L' ');
-	addFilenameLetterReplacement(ppl6::CWString(L"$"),L'S');
-	addFilenameLetterReplacement(ppl6::CWString(L"°"),L'o');
-	addFilenameLetterReplacement(ppl6::CWString(L"þ"),L'b');
-	/*
-	addFilenameLetterReplacement(ppl6::CWString(L"àáâãäåāăąæ"),L'a');
-	addFilenameLetterReplacement(ppl6::CWString(L"çćĉċč"),L'c');
-	addFilenameLetterReplacement(ppl6::CWString(L"ďđ"),L'd');
-	addFilenameLetterReplacement(ppl6::CWString(L"èéêëēĕėęě"),L'e');
-	addFilenameLetterReplacement(ppl6::CWString(L"ĝğġģ"),L'g');
-	addFilenameLetterReplacement(ppl6::CWString(L"ĥħ"),L'h');
-	addFilenameLetterReplacement(ppl6::CWString(L"ìíîïĩīĭįı"),L'i');
-	addFilenameLetterReplacement(ppl6::CWString(L"ĵ"),L'j');
-	addFilenameLetterReplacement(ppl6::CWString(L"ķĸ"),L'k');
-	addFilenameLetterReplacement(ppl6::CWString(L"ĺļľŀł"),L'l');
-	addFilenameLetterReplacement(ppl6::CWString(L"ñńņňŉŋ"),L'n');
-	addFilenameLetterReplacement(ppl6::CWString(L"òóôõöøōŏőœ"),L'o');
-	addFilenameLetterReplacement(ppl6::CWString(L"ŕŗř"),L'r');
-	addFilenameLetterReplacement(ppl6::CWString(L"śŝşš"),L's');
-	addFilenameLetterReplacement(ppl6::CWString(L"ţťŧ"),L't');
-	addFilenameLetterReplacement(ppl6::CWString(L"ùúûüũūŭůűų"),L'u');
-	addFilenameLetterReplacement(ppl6::CWString(L"ŵ"),L'w');
-	addFilenameLetterReplacement(ppl6::CWString(L"ýÿŷ"),L'y');
-	addFilenameLetterReplacement(ppl6::CWString(L"źżž"),L'z');
-	*/
+	addFilenameLetterReplacement(ppl7::WideString(L"&"),L'+');
+	addFilenameLetterReplacement(ppl7::WideString(L"\"´`"),L'\'');
+	addFilenameLetterReplacement(ppl7::WideString(L"{"),L'(');
+	addFilenameLetterReplacement(ppl7::WideString(L"}"),L')');
+	addFilenameLetterReplacement(ppl7::WideString(L"|%#;:<>*?\\/"),L' ');
+	addFilenameLetterReplacement(ppl7::WideString(L"$"),L'S');
+	addFilenameLetterReplacement(ppl7::WideString(L"°"),L'o');
+	addFilenameLetterReplacement(ppl7::WideString(L"þ"),L'b');
+
 }
 
 void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
@@ -1668,22 +1647,22 @@ void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
 	letterReplacements[letter]=replacement;
 }
 
-void CWmClient::addLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
+void CWmClient::addLetterReplacement(const ppl7::WideString &letters, wchar_t replacement)
 {
-	for (size_t i=0;i<letters.Len();i++) {
+	for (size_t i=0;i<letters.size();i++) {
 		addLetterReplacement(letters[i],replacement);
 	}
 }
 
-void CWmClient::addFilenameLetterReplacement(const ppl6::CWString &letters, wchar_t replacement)
+void CWmClient::addFilenameLetterReplacement(const ppl7::WideString &letters, wchar_t replacement)
 {
 	//printf ("Adding Letters: %ls (%i letters)",(const wchar_t*)letters,letters.Len());
-	for (size_t i=0;i<letters.Len();i++) {
+	for (size_t i=0;i<letters.size();i++) {
 		filenameLetterReplacements[letters[i]]=replacement;
 	}
 }
 
-static inline void ReplaceIfExists(ppl6::CWString &s, const wchar_t *search, const ppl6::CWString &replace)
+static void ReplaceIfExists(ppl7::WideString &s, const wchar_t *search, const ppl7::WideString &replace)
 {
 	if (s.IsEmpty()) return;
 	wchar_t *buffer=(wchar_t*)s.GetBuffer();
@@ -1722,13 +1701,13 @@ void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t> &letters, ppl6
 }
 
 
-void CWmClient::NormalizeTerm(ppl6::CString &term)
+void CWmClient::NormalizeTerm(ppl7::String &term)
 {
-	if (term.IsEmpty()) return;
-	ppl6::CWString s=term;
-	ppl6::CWString search,replace;
-	s.LCase();
-	replace.Set(L" ");
+	if (term.isEmpty()) return;
+	ppl7::WideString s=term;
+	ppl7::WideString search,replace;
+	s.lowerCase();
+	replace.set(L" ");
 	ReplaceIfExists(s,L" versus ",replace);
 	ReplaceIfExists(s,L" pres. ",replace);
 	ReplaceIfExists(s,L" presents ",replace);
@@ -1746,8 +1725,8 @@ void CWmClient::NormalizeTerm(ppl6::CString &term)
 	ReplaceIfExists(s,L" /\\ ",replace);
 	ReplaceIfExists(s,L"DJ ",replace);
 	ReplaceIfExists(s,L" ",replace);		// U+00A0, c2 a0, NO-BREAK SPACE
-	s.Trim();
-	s.Replace("  "," ");
+	s.trim();
+	s.replace("  "," ");
 	NormalizeLetters(letterReplacements,s);
 	term=s;
 }

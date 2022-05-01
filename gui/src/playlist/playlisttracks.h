@@ -25,109 +25,108 @@
 #include <QDomElement>
 #include "winmusik3.h"
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
 class Playlist;
 
 class PlaylistItem : public QTreeWidgetItem
 {
-	public:
-		ppluint32	titleId;
-        float		startPositionSec;
-        float		endPositionSec;
-        float		cutStartPosition[5];
-        float		cutEndPosition[5];
-		ppl6::CString	Artist;
-		ppl6::CString	Title;
-		ppl6::CString	Version;
-		ppl6::CString	Genre;
-		ppl6::CString	Label;
-		ppl6::CString	Album;
-		ppl6::CString	File;
-		ppl6::CString	Remarks;
-		ppl6::CBinary	CoverPreview;
-        ppluint8		musicKey;
-        ppluint32		bpm;
-        ppluint32		bpmPlayed;
-        ppluint8		rating;
-        ppluint32		trackLength;
-        float			mixLength;
-        ppluint8		energyLevel;
-		bool			keyVerified;
-        pplint8         keyModification;
-        ppluint16       bitrate;
+public:
+	ppluint32	titleId;
+	float		startPositionSec;
+	float		endPositionSec;
+	float		cutStartPosition[5];
+	float		cutEndPosition[5];
+	ppl7::String	Artist;
+	ppl7::String	Title;
+	ppl7::String	Version;
+	ppl7::String	Genre;
+	ppl7::String	Label;
+	ppl7::String	Album;
+	ppl7::String	File;
+	ppl7::String	Remarks;
+	ppl6::CBinary	CoverPreview;
+	ppluint8		musicKey;
+	ppluint32		bpm;
+	ppluint32		bpmPlayed;
+	ppluint8		rating;
+	ppluint32		trackLength;
+	float			mixLength;
+	ppluint8		energyLevel;
+	bool			keyVerified;
+	pplint8         keyModification;
+	ppluint16       bitrate;
 
-		ppluint32		DeviceId;
-		ppluint16		DeviceTrack;
-		ppluint8		DeviceType;
-		ppluint8		DevicePage;
-
-
+	ppluint32		DeviceId;
+	ppluint16		DeviceTrack;
+	ppluint8		DeviceType;
+	ppluint8		DevicePage;
 
 
-		PlaylistItem();
-		ppl6::CString exportAsXML(int indention=3) const;
-		ppl6::CString getExistingFilename() const;
-		void importFromXML(QDomElement &e);
-		void loadCoverPreview();
-		void updateFromDatabase();
-		void updateMixLength();
-		void useTraktorCues(const ppl6::CString &file);
-		void useTraktorCues(const ppl6::CID3Tag &Tag);
+
+
+	PlaylistItem();
+	ppl7::String exportAsXML(int indention=3) const;
+	ppl7::String getExistingFilename() const;
+	void importFromXML(QDomElement& e);
+	void loadCoverPreview();
+	void updateFromDatabase();
+	void updateMixLength();
+	void useTraktorCues(const ppl7::String& file);
+	void useTraktorCues(const ppl7::ID3Tag& Tag);
 };
 
 
 class PlaylistTracks : public QTreeWidget
 {
-		Q_OBJECT
-	private:
-		void mouseMoveEvent ( QMouseEvent * event );
-		void mousePressEvent ( QMouseEvent * event );
-		void mouseReleaseEvent ( QMouseEvent * event );
-		QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
-		void dragEnterEvent ( QDragEnterEvent * event);
-		void dragMoveEvent(QDragMoveEvent *e);
-		bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
-		void dropEvent ( QDropEvent * event );
+	Q_OBJECT
+private:
+	void mouseMoveEvent(QMouseEvent* event);
+	void mousePressEvent(QMouseEvent* event);
+	void mouseReleaseEvent(QMouseEvent* event);
+	QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+	void dragEnterEvent(QDragEnterEvent* event);
+	void dragMoveEvent(QDragMoveEvent* e);
+	bool dropMimeData(QTreeWidgetItem* parent, int index, const QMimeData* data, Qt::DropAction action);
+	void dropEvent(QDropEvent* event);
 
-		bool saveWMP(const ppl6::CString &Filename);
-		bool loadWMP(const ppl6::CString &Filename);
-		void loadWMPItem(QDomElement &e);
+	bool saveWMP(const ppl7::String& Filename);
+	bool loadWMP(const ppl7::String& Filename);
+	void loadWMPItem(QDomElement& e);
 
-		void deleteSourceItems(QDropEvent * event);
+	void deleteSourceItems(QDropEvent* event);
 
-		Playlist *playlist;
-		PlaylistItem *lastmoveitem;
+	Playlist* playlist;
+	PlaylistItem* lastmoveitem;
 
-		ppl6::CString Name;
-        ppl6::CString SubName;
-        int IssueNumber;
-        ppl6::CDateTime IssueDate;
+	ppl7::String Name;
+	ppl7::String SubName;
+	int IssueNumber;
+	ppl7::DateTime IssueDate;
 
-	public:
-        PlaylistTracks(QWidget * parent = nullptr);
-		~PlaylistTracks();
-		void setPlaylist(Playlist *p);
+public:
+	PlaylistTracks(QWidget* parent = nullptr);
+	~PlaylistTracks();
+	void setPlaylist(Playlist* p);
 
-		void unselectItems();
-		void deleteSelectedItems();
-		void deleteItems(QList<QTreeWidgetItem *>items);
-		void selectItems(QList<QTreeWidgetItem *>items);
+	void unselectItems();
+	void deleteSelectedItems();
+	void deleteItems(QList<QTreeWidgetItem*>items);
+	void selectItems(QList<QTreeWidgetItem*>items);
 
-		bool save(const ppl6::CString &Filename);
-		bool load(const ppl6::CString &Filename);
-		void setName(const ppl6::CString &Name);
-		ppl6::CString getName() const;
-        void setSubName(const ppl6::CString &Name);
-        ppl6::CString getSubName() const;
-        void setIssueNumber(int number);
-        int getIssueNumber() const;
-        void setIssueDate(const ppl6::CDateTime &Date);
-        ppl6::CDateTime getIssueDate() const;
+	bool save(const ppl7::String& Filename);
+	bool load(const ppl7::String& Filename);
+	void setName(const ppl7::String& Name);
+	ppl7::String getName() const;
+	void setSubName(const ppl7::String& Name);
+	ppl7::String getSubName() const;
+	void setIssueNumber(int number);
+	int getIssueNumber() const;
+	void setIssueDate(const ppl7::DateTime& Date);
+	ppl7::DateTime getIssueDate() const;
 
 
 };
 
 
 #endif /* PLAYLISTTRACKS_H_ */
-

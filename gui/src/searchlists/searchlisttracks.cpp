@@ -33,7 +33,7 @@ SearchlistTracks::~SearchlistTracks()
 
 }
 
-SearchlistTracks::SearchlistTracks(QWidget * parent)
+SearchlistTracks::SearchlistTracks(QWidget* parent)
 	:QTreeWidget(parent)
 {
 	lastmoveitem=NULL;
@@ -63,29 +63,29 @@ void SearchlistTracks::mouseReleaseEvent ( QMouseEvent * event )
 */
 
 
-QMimeData *SearchlistTracks::mimeData(const QList<QTreeWidgetItem *> items) const
+QMimeData* SearchlistTracks::mimeData(const QList<QTreeWidgetItem*> items) const
 {
 	//printf("SearchlistTracks::mimeData\n");
 	QList<QUrl> list;
-	ppl6::CString xml;
+	ppl7::String xml;
 	xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	xml+="<winmusikSearchlist version=\"1\">\n";
 	xml+="<tracks>\n";
-	for (int i=0;i<items.size();i++) {
+	for (int i=0;i < items.size();i++) {
 		xml+=((SearchlistDialog::SearchlistTreeItem*)items[i])->Track.exportXML();
 	}
 	xml+="</tracks>\n";
 	xml+="</winmusikSearchlist>\n";
-	QMimeData *mimeData = new QMimeData;
+	QMimeData* mimeData = new QMimeData;
 	mimeData->setText(xml);
 	//xml.Print(true);
 	//mimeData->setImageData(Icon);
 	return mimeData;
 }
 
-void SearchlistTracks::dragEnterEvent (QDragEnterEvent * event)
+void SearchlistTracks::dragEnterEvent(QDragEnterEvent* event)
 {
-	if (event->source()==this) {
+	if (event->source() == this) {
 		event->ignore();
 		return;
 	}
@@ -93,7 +93,7 @@ void SearchlistTracks::dragEnterEvent (QDragEnterEvent * event)
 	event->accept();
 }
 
-void SearchlistTracks::dragMoveEvent(QDragMoveEvent *e)
+void SearchlistTracks::dragMoveEvent(QDragMoveEvent* e)
 {
 	//printf("SearchlistTracks::dragMoveEvent\n");
 	e->accept();
@@ -108,10 +108,10 @@ bool SearchlistTracks::dropMimeData(QTreeWidgetItem *parent, int index, const QM
 }
 */
 
-void SearchlistTracks::dropEvent ( QDropEvent * event )
+void SearchlistTracks::dropEvent(QDropEvent* event)
 {
 	//printf ("SearchlistTracks::dropEvent, action: %i\n",event->dropAction());
-	const QMimeData *data=event->mimeData();
+	const QMimeData* data=event->mimeData();
 	if (!data->hasText()) {
 		event->ignore();
 		return;
@@ -119,36 +119,35 @@ void SearchlistTracks::dropEvent ( QDropEvent * event )
 	QDomDocument doc("winmusikSearchlist");
 	doc.setContent(data->text());
 	QDomElement root=doc.documentElement();
-	if (root.tagName()!="winmusikSearchlist" || root.attribute("version")!="1") {
+	if (root.tagName() != "winmusikSearchlist" || root.attribute("version") != "1") {
 		event->ignore();
 		return;
 
 	}
 	event->accept();
-	ppl6::CArray rows;
-	rows.Explode(data->text(),"<searchlistitem>");
-	for (int i=1;i<rows.Num();i++) {
-		SearchlistItem *item=new SearchlistItem();
-		item->importXML(rows.GetString(i));
+	ppl7::Array rows;
+	rows.explode(data->text(), "<searchlistitem>");
+	for (size_t i=1;i < rows.size();i++) {
+		SearchlistItem* item=new SearchlistItem();
+		item->importXML(rows.get(i));
 		emit itemDropped(item);
 	}
 	emit changed();
-	if (event->dropAction()==Qt::MoveAction && event->source()!=NULL) {
+	if (event->dropAction() == Qt::MoveAction && event->source() != NULL) {
 		((SearchlistTracks*)event->source())->deleteSelectedTracks();
 	}
 }
 
 void SearchlistTracks::deleteSelectedTracks()
 {
-	QList<QTreeWidgetItem *> list=selectedItems();
-	for (int i=0;i<list.size();i++) {
-		SearchlistDialog::SearchlistTreeItem *item=(SearchlistDialog::SearchlistTreeItem*)list[i];
-		int index=indexOfTopLevelItem (item);
-		if (index>=0) {
-			item=(SearchlistDialog::SearchlistTreeItem*) takeTopLevelItem(index);
+	QList<QTreeWidgetItem*> list=selectedItems();
+	for (int i=0;i < list.size();i++) {
+		SearchlistDialog::SearchlistTreeItem* item=(SearchlistDialog::SearchlistTreeItem*)list[i];
+		int index=indexOfTopLevelItem(item);
+		if (index >= 0) {
+			item=(SearchlistDialog::SearchlistTreeItem*)takeTopLevelItem(index);
 			if (item) delete item;
 		}
 	}
 	emit changed();
 }
-
