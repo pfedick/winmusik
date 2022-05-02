@@ -132,7 +132,7 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem &item)
 	ppl7::ID3Tag Tag;
 	Tag.setPaddingSize(PaddingSize);
 	Tag.setMaxPaddingSpace(PaddingSize);
-	if (item.Tags.exists("renamefile")==true and item.Tags.getString("renamefile")!=item.Filename) {
+	if (item.Tags.exists("renamefile")==true && item.Tags.getString("renamefile")!=item.Filename) {
 		ppl7::File::rename(item.Filename, item.Tags.getString("renamefile"));
 		item.Filename=item.Tags.getString("renamefile");
 		item.Tags.remove("renamefile");
