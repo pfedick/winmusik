@@ -24,14 +24,18 @@
 #include <ppl7.h>
 #include <ppl7-audio.h>
 
+namespace de {
+namespace pfp {
+namespace winmusik {
+
 class TraktorTagFrame
 {
-	public:
-		ppl7::String	name;
-		size_t			size;
-		size_t			numChilds;
-		const char		*data;
-		std::map<ppl7::String,TraktorTagFrame> childs;
+public:
+	ppl7::String	name;
+	size_t			size;
+	size_t			numChilds;
+	const char* data;
+	std::map<ppl7::String, TraktorTagFrame> childs;
 };
 
 /*
@@ -54,35 +58,40 @@ class TraktorTagFrame
 
 class TraktorTagCue
 {
-	public:
-		enum TraktorTagType {
-			CUE,
-			IN,
-			OUT,
-			LOAD,
-			GRID,
-			LOOP
-		};
-		int				version;
-		ppl7::String	name;
-		int				displ_order;
-		TraktorTagType	type;
-		double			start;
-		double			len;
-		int				repeats;
-		int				hotcue;
+public:
+	enum TraktorTagType {
+		CUE,
+		IN,
+		OUT,
+		LOAD,
+		GRID,
+		LOOP
+	};
+	int				version;
+	ppl7::String	name;
+	int				displ_order;
+	TraktorTagType	type;
+	double			start;
+	double			len;
+	int				repeats;
+	int				hotcue;
 
-		TraktorTagCue();
-		void print() const;
-		ppl7::String typeName() const;
+	TraktorTagCue();
+	void print() const;
+	ppl7::String typeName() const;
 };
 
 
-void getTraktorFrames(std::map<ppl7::String,TraktorTagFrame> &frames, const char *adr, size_t size);
-void getTraktorFrames(std::map<ppl7::String,TraktorTagFrame> &frames, const ppl7::ID3Tag &Tag);
+void getTraktorFrames(std::map<ppl7::String, TraktorTagFrame>& frames, const char* adr, size_t size);
+void getTraktorFrames(std::map<ppl7::String, TraktorTagFrame>& frames, const ppl7::ID3Tag& Tag);
 
-void getTraktorCues(std::list <TraktorTagCue> &cuelist, const TraktorTagFrame &cuep);
-void getTraktorCues(std::list <TraktorTagCue> &cuelist, const ppl7::ID3Tag &Tag);
-void getTraktorCuesFromFile(std::list <TraktorTagCue> &cuelist, const ppl7::String &Filename);
+void getTraktorCues(std::list <TraktorTagCue>& cuelist, const TraktorTagFrame& cuep);
+void getTraktorCues(std::list <TraktorTagCue>& cuelist, const ppl7::ID3Tag& Tag);
+void getTraktorCuesFromFile(std::list <TraktorTagCue>& cuelist, const ppl7::String& Filename);
+
+
+}
+}
+}	// EOF Namespace de.pfp.winmusik
 
 #endif /* TRAKTOR_H_ */
