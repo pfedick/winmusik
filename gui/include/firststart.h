@@ -22,32 +22,22 @@
 #define FIRSTSTART_H
 
 #include "winmusik3.h"
-#include "wm20import.h"
 
 #include <QDialog>
 #include "ui_firststart.h"
 
 class FirstStart;
 
-class FirstStartImportProgress: public ImportProgress
-{
-	public:
-		FirstStart *widget;
-		virtual void Update();
-};
-
 class FirstStart : public QDialog
 {
     Q_OBJECT
 
 public:
-    FirstStart(QWidget *parent = 0, CWmClient *wm=NULL);
+    FirstStart(QWidget* parent = 0, CWmClient* wm=NULL);
     ~FirstStart();
 
-    int UseExistingInstallation(ppl6::CString *Path);
+    int UseExistingInstallation(ppl6::CString* Path);
     //int ValidInstallation(ppl6::CString *Path);
-
-    void UpdateProgress(FirstStartImportProgress *p);
 
 private:
     Ui::FirstStartClass ui;
@@ -55,9 +45,7 @@ private:
     int page;
     int maxpageplan;
 
-    CWmClient *wm;
-
-    void DoImport();
+    CWmClient* wm;
 
 private slots:
     void on_buttonWeiter_clicked();

@@ -21,7 +21,7 @@
 #include "ui_playlistexport.h"
 #include <QFileDialog>
 
-PlaylistExport::PlaylistExport(QWidget *parent, CWmClient *wm) :
+PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm) :
     QDialog(parent),
     ui(new Ui::PlaylistExport)
 {
@@ -53,7 +53,7 @@ void PlaylistExport::on_okButton_clicked()
     wm->conf.playlist_export.export_pls=ui->export_pls->isChecked();
     wm->conf.playlist_export.export_xspf=ui->export_xspf->isChecked();
     wm->conf.playlist_export.export_txt=ui->export_txt->isChecked();
-    wm->conf.Save();
+    wm->conf.trySave();
     done(1);
 }
 
@@ -87,7 +87,7 @@ bool PlaylistExport::abortClicked() const
     return abort_state;
 }
 
-void PlaylistExport::setCurrentFile(const ppl6::CString &filename, size_t size)
+void PlaylistExport::setCurrentFile(const ppl6::CString& filename, size_t size)
 {
     ui->progress_file->setMaximum((int)size);
     ui->current_file->setText(filename);
@@ -102,4 +102,3 @@ void PlaylistExport::setFileProgress(size_t bytes)
 {
     ui->progress_file->setValue((int)bytes);
 }
-

@@ -67,7 +67,7 @@ CWmClient::CWmClient()
 CWmClient::~CWmClient()
 {
 	Hashes.Clear();
-	ID3TagSaver.ThreadStop();
+	ID3TagSaver.threadStop();
 	CloseDatabase();
 	if (CoverViewerWindow) {
 		delete (CoverViewer*)CoverViewerWindow;
@@ -84,9 +84,9 @@ void CWmClient::Init(int argc, char** argv, QApplication* app)
 	this->app=app;
 	this->argc=argc;
 	this->argv=argv;
-	ppl6::CString Tmp;
-	Tmp=ppl6::getargv(argc, argv, "-c");
-	if (Tmp.NotEmpty()) {
+	ppl7::String Tmp;
+	Tmp=ppl7::GetArgv(argc, argv, "-c");
+	if (Tmp.notEmpty()) {
 		conf.setConfigFile(Tmp);
 	}
 	InitStorage();
@@ -101,18 +101,18 @@ int CWmClient::RaiseError()
 int CWmClient::RaiseError(QWidget* object, QString msg)
 {
 	int err=ppl6::GetErrorCode();
-	ppl6::CString descr=ppl6::GetError();
-	ppl6::CString sub=ppl6::GetExtendedError();
+	ppl7::String descr=ppl6::GetError();
+	ppl7::String sub=ppl6::GetExtendedError();
 
-	ppl6::CString m=msg;
-	m.Trim();
-	ppl6::CString a=tr("Errorcode");
-	m.Concatf("\n\n%s: %u\n", (const char*)a, err);
+	ppl7::String m=msg;
+	m.trim();
+	ppl7::String a=tr("Errorcode");
+	m.appendf("\n\n%s: %u\n", (const char*)a, err);
 	a=tr("Description");
-	m.Concatf("%s: %s\n", (const char*)a, (const char*)descr);
-	if (sub.Len() > 0) {
+	m.appendf("%s: %s\n", (const char*)a, (const char*)descr);
+	if (sub.size() > 0) {
 		a=tr("Extended Description");
-		m.Concatf("%s: %s\n", (const char*)a, (const char*)sub);
+		m.appendf("%s: %s\n", (const char*)a, (const char*)sub);
 	}
 	return QMessageBox::critical(object, tr("WinMusik"),
 		m,
@@ -121,15 +121,19 @@ int CWmClient::RaiseError(QWidget* object, QString msg)
 
 int CWmClient::Start()
 {
-	ppl6::CString filename;
-	ppl6::CString path=app->applicationDirPath();
+	ppl7::String filename;
+	ppl7::String path=app->applicationDirPath();
 
-	if (!conf.Load()) {
+	try {
+		conf.load();
+	} catch (...) {
 		if (!FirstStartDialog()) {
-			ppl6::SetError(0);
 			return 0;
 		}
-		if (!conf.Load()) {
+		try {
+			conf.load();
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("could not load configuration file"));
 			return 0;
 		}
 	}
@@ -144,23 +148,21 @@ int CWmClient::Start()
 
 	RegExpCapture.load();
 
-	//ImportDatabaseWM20();
-
-	Mutex.Lock();
+	Mutex.lock();
 	if (MainMenue) delete (Menue*)MainMenue;
 	MainMenue=NULL;
 	Menue* w=new Menue(NULL, this);
 	//w->setWindowFlags(Qt::Window|Qt::CustomizeWindowHint|Qt::WindowTitleHint|Qt::WindowSystemMenuHint);
 	w->show();
 	MainMenue=w;
-	Mutex.Unlock();
-	Hashes.ThreadStart();
+	Mutex.unlock();
+	Hashes.threadStart();
 	return 1;
 }
 
 void CWmClient::InitLogging()
 {
-	Mutex.Lock();
+	Mutex.lock();
 	if (conf.bEnableDebug) {
 		if (!wmlog) {
 			wmlog=new ppl6::CLog;
@@ -181,7 +183,7 @@ void CWmClient::InitLogging()
 		if (wmlog) wmlog->Terminate();
 	}
 
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
@@ -193,7 +195,7 @@ void CWmClient::UpdateMenue()
 
 QByteArray CWmClient::GetGeometry(const char* name)
 {
-	ppl6::CString File=WM_APPNAME;
+	ppl7::String File=WM_APPNAME;
 	File+="-Geometry";
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION, File);
 	settings.beginGroup("geometry");
@@ -202,7 +204,7 @@ QByteArray CWmClient::GetGeometry(const char* name)
 
 void CWmClient::SaveGeometry(const char* name, QByteArray Geometry)
 {
-	ppl6::CString File=WM_APPNAME;
+	ppl7::String File=WM_APPNAME;
 	File+="-Geometry";
 	QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION, File);
 	settings.beginGroup("geometry");
@@ -237,8 +239,8 @@ void CWmClient::InitStorage()
 int CWmClient::SelectLanguage()
 {
 	conf.Locale=QLocale::system().name();
-	conf.Locale.Cut("_");
-	conf.Locale.LCase();
+	conf.Locale.cut("_");
+	conf.Locale.lowerCase();
 	LangSelect w;
 	w.Select(conf.Locale);
 	w.show();
@@ -250,8 +252,8 @@ int CWmClient::SelectLanguage()
 
 int CWmClient::LoadTranslation()
 {
-	ppl6::CString filename;
-	//ppl6::CString path=app->applicationDirPath();
+	ppl7::String filename;
+	//ppl7::String path=app->applicationDirPath();
 	//printf ("conf.Locale=%s\n",(const char*)conf.Locale);
 	if (conf.Locale == "de") {
 		setlocale(LC_CTYPE, "de_DE.UTF-8");
@@ -274,7 +276,7 @@ int CWmClient::LoadTranslation()
 void CWmClient::ReloadTranslation()
 {
 	LoadTranslation();
-	Mutex.Lock();
+	Mutex.lock();
 	// Alle Fenster aktualisieren
 	if (MainMenue) ((Menue*)MainMenue)->ReloadTranslation();
 
@@ -327,7 +329,7 @@ void CWmClient::ReloadTranslation()
 		}
 	}
 
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
@@ -346,14 +348,10 @@ int CWmClient::FirstStartDialog()
 	if (!ret) return 0;
 
 	// If the user has not aborted, we try to load the configuration again
-	if (!conf.Load()) {
-		// If this fails something is terribly wrong
-		ppl6::CString ee;
-		ee=ppl6::Error();
-		QString e=tr("Could not load the WinMusik configuration!");
-		QString e2=ee;
-		e+=e2;
-		QMessageBox::critical(NULL, tr("WinMusik - Error"), e);
+	try {
+		conf.load();
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not load the WinMusik configuration!"));
 		return 0;
 	}
 	// Everything is fine
@@ -387,87 +385,87 @@ int CWmClient::CloseDatabase()
  */
 {
 	Hashes.Clear();
-	Mutex.Lock();
+	Mutex.lock();
 	Edit* edit;
 	while ((edit=(Edit*)EditorWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete edit;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	Search* search;
 	while ((search=(Search*)SearchWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete search;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	CoverPrinter* cover;
 	while ((cover=(CoverPrinter*)CoverPrinterWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete cover;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	Playlist* playlist;
 	while ((playlist=(Playlist*)PlaylistWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete playlist;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	/*
 	PlaylistEditor *playlisteditor;
 	while ((playlisteditor=(PlaylistEditor *)PlaylistEditWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete playlisteditor;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	*/
 	DeviceList* devicelist;
 	while ((devicelist=(DeviceList*)DeviceListWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete devicelist;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 	Searchlists* searchlists;
 	while ((searchlists=(Searchlists*)SearchlistOverviewWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete searchlists;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 
 	SearchlistDialog* searchlistdialog;
 	while ((searchlistdialog=(SearchlistDialog*)SearchlistWindows.GetFirst())) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete searchlistdialog;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 
 	if (CoverViewerWindow) {
-		Mutex.Unlock();
+		Mutex.unlock();
 		delete (CoverViewer*)CoverViewerWindow;
 		CoverViewerWindow=NULL;
-		Mutex.Lock();
+		Mutex.lock();
 	}
 
-	Mutex.Unlock();
+	Mutex.unlock();
 	return 1;
 }
 
 void CWmClient::UpdateSearchlistOverviews()
 {
-	Mutex.Lock();
+	Mutex.lock();
 	Searchlists* list;
 	SearchlistOverviewWindows.Reset();
 	while ((list=(Searchlists*)SearchlistOverviewWindows.GetNext())) {
 		list->Update();
 	}
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::MainMenueClosed()
 {
 	CloseDatabase();
-	Mutex.Lock();
+	Mutex.lock();
 	MainMenue=NULL;
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::OpenEditor(int devicetype, int deviceId, int page, int track)
@@ -476,9 +474,9 @@ void CWmClient::OpenEditor(int devicetype, int deviceId, int page, int track)
 	Edit* edit=new Edit((Menue*)MainMenue, this, devicetype);
 	edit->setWindowFlags(Qt::Window);
 	edit->show();
-	Mutex.Lock();
+	Mutex.lock();
 	EditorWindows.Add(edit);
-	Mutex.Unlock();
+	Mutex.unlock();
 	if (deviceId > 0) edit->OpenTrack((unsigned int)deviceId, (unsigned char)page, (unsigned short)track);
 }
 
@@ -486,16 +484,16 @@ void CWmClient::OpenCoverPrinter()
 {
 	CoverPrinter* w=new CoverPrinter((Menue*)MainMenue, this);
 	w->show();
-	Mutex.Lock();
+	Mutex.lock();
 	CoverPrinterWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::CoverPrinterClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	CoverPrinterWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::OpenPlaylistDialog()
@@ -504,16 +502,16 @@ void CWmClient::OpenPlaylistDialog()
 	Playlist* w=new Playlist((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.Lock();
+	Mutex.lock();
 	PlaylistWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::PlaylistClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	PlaylistWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
@@ -523,35 +521,35 @@ void CWmClient::OpenSearchlistOverview()
 	Searchlists* w=new Searchlists((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.Lock();
+	Mutex.lock();
 	SearchlistOverviewWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::SearchlistOverviewClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	SearchlistOverviewWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
-void CWmClient::OpenSearchlistDialog(const ppl6::CString Filename)
+void CWmClient::OpenSearchlistDialog(const ppl7::String Filename)
 {
 	//printf ("Open Playlists\n");
 	SearchlistDialog* w=new SearchlistDialog((Menue*)MainMenue, this, Filename);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.Lock();
+	Mutex.lock();
 	SearchlistWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::SearchlistDialogClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	SearchlistWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
@@ -560,9 +558,9 @@ QWidget* CWmClient::OpenSearch(const char* artist, const char* title)
 	Search* w=new Search((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.Lock();
+	Mutex.lock();
 	SearchWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 	if (artist != NULL || title != NULL) w->FastSearch(artist, title);
 	return w;
 }
@@ -572,61 +570,61 @@ QWidget* CWmClient::OpenOrReuseSearch(QWidget* q, const char* artist, const char
 	// Wir schauen, ob es q in der Liste gibt
 	Search* w;
 	if (q) {
-		Mutex.Lock();
+		Mutex.lock();
 		if (SearchWindows.HasObject(q)) {
-			Mutex.Unlock();
+			Mutex.unlock();
 			w=(Search*)q;
 			w->setFocus();
 			if (artist != NULL || title != NULL) w->FastSearch(artist, title);
 			return w;
 		}
-		Mutex.Unlock();
+		Mutex.unlock();
 	}
 	w=new Search((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
 	SearchWindows.Add(w);
-	Mutex.Unlock();
+	Mutex.unlock();
 	if (artist != NULL || title != NULL) w->FastSearch(artist, title);
 	return w;
 }
 
 void CWmClient::EditorClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	EditorWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::CoverViewerClosed()
 {
-	Mutex.Lock();
+	Mutex.lock();
 	CoverViewerWindow=NULL;
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::OpenCoverViewer(const QPixmap& pix)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	if (CoverViewerWindow == NULL) {
 		CoverViewerWindow=new CoverViewer(NULL, this);
 		if (!CoverViewerWindow) {
-			Mutex.Unlock();
+			Mutex.unlock();
 			return;
 		}
 		((CoverViewer*)CoverViewerWindow)->show();
 	}
 	((CoverViewer*)CoverViewerWindow)->setCover(pix);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::UpdateCoverViewer(const QPixmap& pix)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	if (CoverViewerWindow != NULL) {
 		((CoverViewer*)CoverViewerWindow)->setCover(pix);
 	}
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 bool CWmClient::IsCoverViewerVisible() const
@@ -638,9 +636,9 @@ bool CWmClient::IsCoverViewerVisible() const
 
 void CWmClient::SearchClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	SearchWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 int CWmClient::LoadDatabase()
@@ -669,16 +667,16 @@ void CWmClient::OpenDeviceList(int devicetype)
 	DeviceList* edit=new DeviceList((Menue*)MainMenue, this, devicetype);
 	edit->setWindowFlags(Qt::Window);
 	edit->show();
-	Mutex.Lock();
+	Mutex.lock();
 	DeviceListWindows.Add(edit);
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CWmClient::DeviceListClosed(void* object)
 {
-	Mutex.Lock();
+	Mutex.lock();
 	DeviceListWindows.Delete(object);
-	Mutex.Unlock();
+	Mutex.unlock();
 
 }
 
@@ -696,9 +694,9 @@ ppluint32 CWmClient::GetHighestDeviceId(int DeviceType)
 	return DeviceStore.GetHighestDevice(DeviceType);
 }
 
-ppl6::CString CWmClient::GetDeviceName(int DeviceType)
+ppl7::String CWmClient::GetDeviceName(int DeviceType)
 {
-	ppl6::CString s;
+	ppl7::String s;
 	switch (DeviceType) {
 	case 1: s=tr("Music Cassette");
 		break;
@@ -776,9 +774,9 @@ QIcon CWmClient::GetDeviceIcon(int DeviceType)
 	return pix;
 }
 
-ppl6::CString CWmClient::GetDeviceNameShort(ppluint8 DeviceType)
+ppl7::String CWmClient::GetDeviceNameShort(ppluint8 DeviceType)
 {
-	ppl6::CString s;
+	ppl7::String s;
 	switch (DeviceType) {
 	case 1: s=tr("CAS");
 		break;
@@ -878,27 +876,27 @@ const char* CWmClient::GetLabelText(ppluint32 Id)
 	return Str_Unknown;
 }
 
-ppl6::CString CWmClient::getXmlTitle(ppluint32 TitleId)
+ppl7::String CWmClient::getXmlTitle(ppluint32 TitleId)
 {
-	ppl6::CString r;
+	ppl7::String r;
 	DataTitle* ti=TitleStore.Get(TitleId);
 	if (!ti) return r;
-	r.Setf("<titleId>%u</titleId>\n", TitleId);
-	r.Concatf("<deviceType>%i</deviceType>\n", ti->DeviceType);
-	r.Concatf("<deviceId>%i</deviceId>\n", ti->DeviceId);
-	r.Concatf("<devicePage>%i</devicePage>\n", ti->Page);
-	r.Concatf("<trackNum>%i</trackNum>\n", ti->Track);
-	r+="<Artist>" + ppl6::EscapeHTMLTags(ti->Artist) + "</Artist>\n";
-	r+="<Title>" + ppl6::EscapeHTMLTags(ti->Title) + "</Title>\n";
-	r+="<Version>" + ppl6::EscapeHTMLTags(GetVersionText(ti->VersionId)) + "</Version>\n";
-	r+="<Genre>" + ppl6::EscapeHTMLTags(GetGenreText(ti->GenreId)) + "</Genre>\n";
-	r+="<Label>" + ppl6::EscapeHTMLTags(GetLabelText(ti->LabelId)) + "</Label>\n";
-	r+="<Album>" + ppl6::EscapeHTMLTags(ti->Album) + "</Album>\n";
-	r.Concatf("<bpm>%i</bpm>\n", (int)ti->BPM);
-	r.Concatf("<bitrate>%i</bitrate>\n", (int)ti->Bitrate);
-	r.Concatf("<rating>%i</rating>\n", (int)ti->Rating);
-	r.Concatf("<trackLength>%i</trackLength>\n", (int)ti->Length);
-	r.Concatf("<energyLevel>%i</energyLevel>\n", (int)ti->EnergyLevel);
+	r.setf("<titleId>%u</titleId>\n", TitleId);
+	r.appendf("<deviceType>%i</deviceType>\n", ti->DeviceType);
+	r.appendf("<deviceId>%i</deviceId>\n", ti->DeviceId);
+	r.appendf("<devicePage>%i</devicePage>\n", ti->Page);
+	r.appendf("<trackNum>%i</trackNum>\n", ti->Track);
+	r+="<Artist>" + ppl7::EscapeHTMLTags(ti->Artist) + "</Artist>\n";
+	r+="<Title>" + ppl7::EscapeHTMLTags(ti->Title) + "</Title>\n";
+	r+="<Version>" + ppl7::EscapeHTMLTags(GetVersionText(ti->VersionId)) + "</Version>\n";
+	r+="<Genre>" + ppl7::EscapeHTMLTags(GetGenreText(ti->GenreId)) + "</Genre>\n";
+	r+="<Label>" + ppl7::EscapeHTMLTags(GetLabelText(ti->LabelId)) + "</Label>\n";
+	r+="<Album>" + ppl7::EscapeHTMLTags(ti->Album) + "</Album>\n";
+	r.appendf("<bpm>%i</bpm>\n", (int)ti->BPM);
+	r.appendf("<bitrate>%i</bitrate>\n", (int)ti->Bitrate);
+	r.appendf("<rating>%i</rating>\n", (int)ti->Rating);
+	r.appendf("<trackLength>%i</trackLength>\n", (int)ti->Length);
+	r.appendf("<energyLevel>%i</energyLevel>\n", (int)ti->EnergyLevel);
 	r+="<musicKey verified=\"";
 	if (ti->Flags & 16) r+="true"; else r+="false";
 	r+="\">" + ti->getKeyName(musicKeyTypeMusicalSharps) + "</musicKey>\n";
@@ -937,32 +935,32 @@ QString CWmClient::Unknown()
 }
 
 
-ppl6::CString CWmClient::GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page)
+ppl7::String CWmClient::GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page)
 {
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-	ppl6::CString Path;
-	if (DevicePath.IsEmpty()) return Path;
+	ppl7::String DevicePath=conf.DevicePath[DeviceType];
+	ppl7::String Path;
+	if (DevicePath.isEmpty()) return Path;
 	Path=DevicePath;
-	Path.RTrim("/");
-	Path.RTrim("\\");
-	Path.Concatf("/%02u/%03u/", (ppluint32)(DeviceId / 100), DeviceId);
+	Path.trimRight("/");
+	Path.trimRight("\\");
+	Path.appendf("/%02u/%03u/", (ppluint32)(DeviceId / 100), DeviceId);
 
 	DataDevice data;
 	if (LoadDevice(DeviceType, DeviceId, &data)) {
 		if (data.Pages > 1) {
-			Path.Concatf("%01u/", Page);
+			Path.appendf("%01u/", Page);
 		}
 	}
 	return Path;
 }
 
-ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl7::String CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Search for audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-	ppl6::CString Pattern;
-	ppl6::CString Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.IsEmpty()) return Path;
-	Pattern.Setf("%03u-*.(mp3|aiff)", Track);
+	ppl7::String Pattern;
+	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Path.isEmpty()) return Path;
+	Pattern.setf("%03u-*.(mp3|aiff)", Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry* de;
 	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
@@ -973,13 +971,13 @@ ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceI
 		}
 
 	}
-	Pattern.Setf("/^%03u\\.(mp3|aiff)$/i8", Track);
+	Pattern.setf("/^%03u\\.(mp3|aiff)$/i8", Track);
 	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return Path;
 	}
-	Pattern.Setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
+	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
 	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
@@ -989,21 +987,21 @@ ppl6::CString CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceI
 
 
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Nicht gefunden");
-	Path.Clear();
+	Path.clear();
 	return Path;
 }
 
-ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl7::DirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Search for audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-	ppl6::CDirEntry ret;
-	ppl6::CString Pattern;
-	ppl6::CString Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.IsEmpty()) return ret;
-	Pattern.Setf("%03u-*.(mp3|aiff)", Track);
-	ppl6::CDir Dir;
+	ppl7::DirEntry ret;
+	ppl7::String Pattern;
+	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Path.isEmpty()) return ret;
+	Pattern.setf("%03u-*.(mp3|aiff)", Track);
+	ppl7::Dir Dir;
 	const ppl6::CDirEntry* de;
-	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
+	if (Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE)) {
 		if ((de=Dir.GetFirstPattern(Pattern, true))) {
 			Path=de->File;
 			ret=*de;
@@ -1012,14 +1010,14 @@ ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId
 		}
 
 	}
-	Pattern.Setf("%03u.(mp3|aiff)", Track);
+	Pattern.setf("%03u.(mp3|aiff)", Track);
 	if ((de=Dir.GetFirstPattern(Pattern, true))) {
 		Path=de->File;
 		ret=*de;
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return ret;
 	}
-	Pattern.Setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
+	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
 	if ((de=Dir.GetFirstRegExp(Pattern))) {
 		Path=de->File;
 		ret=*de;
@@ -1031,13 +1029,13 @@ ppl6::CDirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId
 	return ret;
 }
 
-ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
+ppl7::String CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Find next audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-	ppl6::CString Filename;
-	ppl6::CString Pattern;
-	ppl6::CString Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.IsEmpty()) return Path;
+	ppl7::String Filename;
+	ppl7::String Pattern;
+	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Path.isEmpty()) return Path;
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry* entry;
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Öffne Verzeichnis: %s", (const char*)Path);
@@ -1046,15 +1044,15 @@ ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, 
 		while ((entry=Dir.GetNext())) {
 			Filename=entry->Filename;
 			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
-			if (!Filename.PregMatch("/^[0-9]{3}\\-.*/")) {
+			if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
 				// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
 				if (entry->Size > 256) {
-					if (Filename.PregMatch("/^.*\\.mp3$/i") == true
-						|| Filename.PregMatch("/^.*\\.aiff$/i") == true) {
+					if (Filename.pregMatch("/^.*\\.mp3$/i") == true
+						|| Filename.pregMatch("/^.*\\.aiff$/i") == true) {
 						// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
 						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Datei passt auf Pattern: %s", (const char*)Filename);
-						ppl6::CString newFilename;
-						newFilename.Setf("%s/%03u-%s", (const char*)entry->Path, Track, (const char*)Filename);
+						ppl7::String newFilename;
+						newFilename.setf("%s/%03u-%s", (const char*)entry->Path, Track, (const char*)Filename);
 						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s", (const char*)entry->File, (const char*)newFilename);
 						// Wir versuchen sie umzubenennen
 						if (ppl6::CFile::RenameFile(entry->File, newFilename)) {
@@ -1071,167 +1069,160 @@ ppl6::CString CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, 
 	}
 	// Nichts passendes gefunden, wir geben einen leeren String zurück
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Nichts passendes gefunden");
-	Path.Clear();
+	Path.clear();
 	return Path;
 }
 
-ppl6::CString CWmClient::NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl6::CString& Suffix)
+ppl7::String CWmClient::NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl7::String& Suffix)
 {
 	// TODO: Übergabeparameter für Audio-Format oder Suffix
-	ppl6::CString Filename=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Filename.IsEmpty()) return Filename;
-	ppl6::CString Tmp;
-	Tmp.Setf("%03u-", Track);
-	if (Ti.Artist.NotEmpty()) Tmp+=Ti.Artist;
+	ppl7::String Filename=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Filename.isEmpty()) return Filename;
+	ppl7::String Tmp;
+	Tmp.setf("%03u-", Track);
+	if (Ti.Artist.notEmpty()) Tmp+=Ti.Artist;
 	else Tmp+="unknown";
 	Tmp+=" - ";
-	if (Ti.Title.NotEmpty()) Tmp+=Ti.Title;
+	if (Ti.Title.notEmpty()) Tmp+=Ti.Title;
 	else Tmp+="unknown";
 	// Version holen
-	ppl6::CString Version=GetVersionText(Ti.VersionId);
+	ppl7::String Version=GetVersionText(Ti.VersionId);
 	if (Version != "Single") {
 		Tmp+=" (" + Version + ")";
 	}
 	Tmp+=".";
 	Tmp+=Suffix;
 	// Problematische Zeichen rausfiltern
-	Tmp.Replace("ß", "ss");
-	Tmp.Trim();
+	Tmp.replace("ß", "ss");
+	Tmp.trim();
 	// Wir müssen mit Unicode arbeiten
-	ppl6::CWString w=Tmp;
+	ppl7::WideString w=Tmp;
 	NormalizeLetters(filenameLetterReplacements, w);
-	if (w.Len() > (size_t)conf.MaxFilenameLength) {
-		w.Cut(conf.MaxFilenameLength - Suffix.Len() - 1);
+	if (w.size() > (size_t)conf.MaxFilenameLength) {
+		w.cut(conf.MaxFilenameLength - Suffix.size() - 1);
 		w+=".";
-		w+=Suffix;
+		w+=ppl7::WideString(Suffix);
 	}
 	Tmp=w;
 	Filename+=Tmp;
 	return Filename;
 }
 
-int CWmClient::SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl6::CString& Filename)
+int CWmClient::SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl7::String& Filename)
 {
 	if (conf.bWriteID3Tags == false) return 0;
-	ppl6::CString InternalFilename;
-	ppl6::CString Tmp;
-	if (Filename.NotEmpty()) InternalFilename=Filename;
+	ppl7::String InternalFilename;
+	ppl7::String Tmp;
+	if (Filename.notEmpty()) InternalFilename=Filename;
 	else InternalFilename=GetAudioFilename(DeviceType, DeviceId, Page, Track);
-	if (InternalFilename.IsEmpty()) {
+	if (InternalFilename.isEmpty()) {
 		Tmp=tr("Track: %i");
 		ppl6::SetError(20022, Tmp, Track);
 		return 0;
 	}
 
-	ppl6::CAssocArray Job;
+	ppl7::AssocArray Job;
 
 	if (conf.bNormalizeFilename) {
 		// Unter Windows würde ein rename an dieser Stelle fehlschlagen, wenn die Datei
 		// bereits geöffnet ist (z.B. im MP3-Player). Daher geben wir die Aufgabe an den
 		// TagSaver
-		if (InternalFilename.PregMatch("/.*\\.(.*?)$/")) {
-			Tmp=NormalizeFilename(DeviceType, DeviceId, Page, Track, Ti, InternalFilename.GetMatch(1));
-			Job.Set("renamefile", Tmp);
+		ppl7::Array matches;
+		if (InternalFilename.pregMatch("/.*\\.(.*?)$/", matches)) {
+			Tmp=NormalizeFilename(DeviceType, DeviceId, Page, Track, Ti, matches.get(1));
+			Job.set("renamefile", Tmp);
 		}
 	}
 
 	ID3TagSaver.SetPaddingSize(conf.ID3v2Padding);
 	ID3TagSaver.SetRetryIntervall(conf.TagSaverRetryIntervall);
 
-	ppl6::CString comment, version;
+	ppl7::String comment, version;
 	version=GetVersionText(Ti.VersionId);
 
-	Job.Set("artist", (const char*)Ti.Artist);
-	if (ppl6::LCase(version) != "single")	Job.Setf("title", "%s (%s)", (const char*)Ti.Title, (const char*)version);
-	else Job.Setf("title", "%s", (const char*)Ti.Title);
-	Job.Set("album", (const char*)Ti.Album);
+	Job.set("artist", (const char*)Ti.Artist);
+	if (ppl7::LowerCase(version) != "single")	Job.setf("title", "%s (%s)", (const char*)Ti.Title, (const char*)version);
+	else Job.setf("title", "%s", (const char*)Ti.Title);
+	Job.set("album", (const char*)Ti.Album);
 	comment=Ti.Remarks;
 	//if (comment.Len()>0) comment+=" - ";
 	//comment+=version;
-	Job.Set("comment", comment);
+	Job.set("comment", comment);
 	int r=Ti.Rating;
 	if (Ti.Rating > 1) r=Ti.Rating - 1;
-	Job.Setf("rating", "%d", r * 255 / 5);
-	Job.Set("version", version);
-	Job.Setf("track", "%u", Track);
-	if (Ti.EnergyLevel > 0) Job.Setf("EnergyLevel", "%d", Ti.EnergyLevel);
-	if (Ti.BPM > 0) Job.Setf("bpm", "%u", Ti.BPM);
-	else Job.Setf("bpm", "");
-	if (conf.musicKeyTag != musicKeyTypeNone) Job.Set("key", Ti.getKeyName(conf.musicKeyTag));
-	Job.Set("genre", GetGenreText(Ti.GenreId));
-	Job.Set("publisher", GetLabelText(Ti.LabelId));
-	Tmp.Setf("%u", Ti.ReleaseDate);
-	Tmp.Cut(4);
-	Job.Set("year", Tmp);
-	ID3TagSaver.Add(InternalFilename, &Job, conf.bRemoveOriginalId3Tags);
+	Job.setf("rating", "%d", r * 255 / 5);
+	Job.set("version", version);
+	Job.setf("track", "%u", Track);
+	if (Ti.EnergyLevel > 0) Job.setf("EnergyLevel", "%d", Ti.EnergyLevel);
+	if (Ti.BPM > 0) Job.setf("bpm", "%u", Ti.BPM);
+	else Job.setf("bpm", "");
+	if (conf.musicKeyTag != musicKeyTypeNone) Job.set("key", Ti.getKeyName(conf.musicKeyTag));
+	Job.set("genre", GetGenreText(Ti.GenreId));
+	Job.set("publisher", GetLabelText(Ti.LabelId));
+	Tmp.setf("%u", Ti.ReleaseDate);
+	Tmp.cut(4);
+	Job.set("year", Tmp);
+	ID3TagSaver.Add(InternalFilename, Job, conf.bRemoveOriginalId3Tags);
 	return 1;
 }
 
-int CWmClient::SaveOriginalAudioInfo(ppl6::CString& File, DataOimp& oimp)
+int CWmClient::SaveOriginalAudioInfo(ppl7::String& File, DataOimp& oimp)
 {
 	ppl6::CFile ff;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	if (!ff.Open(File, "rb")) return 0;
 	if (ff.Size() < 256) {
 		ppl6::SetError(20017, "%s", (const char*)File);
 		return 0;
 	}
 	// Alte Daten löschen
-	oimp.Filename=ppl6::GetFilename(File);
-	oimp.ID3v1.Clear();
-	oimp.ID3v2.Clear();
+	oimp.Filename=ppl7::File::getFilename(File);
+	oimp.ID3v1.clear();
+	oimp.ID3v2.clear();
 	// ID3v1-Tag einlesen falls vorhanden
 	const char* buffer=ff.Map(ff.Lof() - 128, 128);
 	if (buffer[0] == 'T' && buffer[1] == 'A' && buffer[2] == 'G') {
 		ID3TAG* tag=(ID3TAG*)buffer;
-		Tmp.Strncpy(tag->Artist, 30);
-		Tmp.Trim();
-		oimp.ID3v1.Set("artist", Tmp);
-		Tmp.Strncpy(tag->SongName, 30);
-		Tmp.Trim();
-		oimp.ID3v1.Set("title", Tmp);
+		Tmp.set(tag->Artist, 30);
+		Tmp.trim();
+		oimp.ID3v1.set("artist", Tmp);
+		Tmp.set(tag->SongName, 30);
+		Tmp.trim();
+		oimp.ID3v1.set("title", Tmp);
 
-		Tmp.Strncpy(tag->Album, 30);
-		Tmp.Trim();
-		oimp.ID3v1.Set("album", Tmp);
+		Tmp.set(tag->Album, 30);
+		Tmp.trim();
+		oimp.ID3v1.set("album", Tmp);
 
-		Tmp.Strncpy(tag->Year, 4);
-		Tmp.Trim();
-		oimp.ID3v1.Set("year", Tmp);
+		Tmp.set(tag->Year, 4);
+		Tmp.trim();
+		oimp.ID3v1.set("year", Tmp);
 
-		Tmp.Strncpy(tag->Comment, 29);
-		Tmp.Trim();
-		oimp.ID3v1.Set("comment", Tmp);
+		Tmp.set(tag->Comment, 29);
+		Tmp.trim();
+		oimp.ID3v1.set("comment", Tmp);
 
-		Tmp=ppl6::GetID3GenreName(tag->Genre);
-		oimp.ID3v1.Set("genre", Tmp);
-
+		Tmp=ppl7::GetID3GenreName(tag->Genre);
+		oimp.ID3v1.set("genre", Tmp);
 	}
-	ppl6::CID3Tag Tag;
-	if (Tag.Load(&File)) {
-		oimp.ID3v2.Set("artist", Tag.GetArtist());
-		oimp.ID3v2.Set("title", Tag.GetTitle());
-		oimp.ID3v2.Set("album", Tag.GetAlbum());
-		oimp.ID3v2.Set("year", Tag.GetYear());
-		oimp.ID3v2.Set("comment", Tag.GetComment());
-		oimp.ID3v2.Set("genre", Tag.GetGenre());
-		oimp.ID3v2.Set("remixer", Tag.GetRemixer());
-	}
-	/*
-	printf ("Folgende Daten werden gespeichert:\n");
-	printf ("Filename: %s\n",(char*)oimp.Filename);
-	printf ("ID3v1-Tag:\n");
-	oimp.ID3v1.List("ID3v1");
-	printf ("ID3v2-Tag:\n");
-	oimp.ID3v2.List("ID3v2");
-	*/
+	ppl7::ID3Tag Tag;
+	try {
+		Tag.load(File);
+		oimp.ID3v2.set("artist", Tag.getArtist());
+		oimp.ID3v2.set("title", Tag.getTitle());
+		oimp.ID3v2.set("album", Tag.getAlbum());
+		oimp.ID3v2.set("year", Tag.getYear());
+		oimp.ID3v2.set("comment", Tag.getComment());
+		oimp.ID3v2.set("genre", Tag.getGenre());
+		oimp.ID3v2.set("remixer", Tag.getRemixer());
+	} catch (...) {}
 	return OimpDataStore.Put(&oimp);
 }
 
 
 int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list, DataDevice* device)
 {
-	ppl6::CString Filename, Tmp, Minuten, FilePath;
+	ppl7::String Filename, Tmp, Minuten, FilePath;
 	DataTrack* track;
 	DataTitle* Ti;
 	if (!DeviceId) {
@@ -1242,8 +1233,8 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 		ppl6::SetError(20041);
 		return 0;
 	}
-	ppl6::CString Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.IsEmpty()) {
+	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Path.isEmpty()) {
 		ppl6::SetError(20042);
 		return 0;
 	}
@@ -1266,11 +1257,11 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 	pls.Puts("[playlist]\n");
 
 	Tmp=tr("Tracklisting MP3-Medium", "Subject of Playlist");
-	Tmp.Concatf(" %u\r\n", DeviceId);
+	Tmp.appendf(" %u\r\n", DeviceId);
 	txt.Puts(Tmp);
 	if (device != NULL && device->Title != NULL) {
 		Tmp=device->Title;
-		Tmp.Trim();
+		Tmp.trim();
 		txt.Puts(Tmp);
 		txt.Puts("\r\n");
 	}
@@ -1279,8 +1270,8 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 	xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 	xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
 	Tmp=tr("Playlist created by WinMusik");
-	Tmp.Trim();
-	Tmp.Concatf(" %s", WM_VERSION);
+	Tmp.trim();
+	Tmp.appendf(" %s", WM_VERSION);
 	xspf.Putsf("<creator>%s</creator>\n", (const char*)Tmp);
 	xspf.Puts("<trackList>\n");
 	int count=0;
@@ -1292,10 +1283,10 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 			Ti=GetTitle(track->TitleId);
 			if (Ti) {
 				count++;
-				if (Ti->Artist.NotEmpty()) Tmp=Ti->Artist;
+				if (Ti->Artist.notEmpty()) Tmp=Ti->Artist;
 				else Tmp="unknown";
 				Tmp+=" - ";
-				if (Ti->Title.NotEmpty()) Tmp+=Ti->Title;
+				if (Ti->Title.notEmpty()) Tmp+=Ti->Title;
 				else Tmp+="unknown";
 				Tmp+=" (";
 				// Version holen
@@ -1303,7 +1294,7 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 				Tmp+=")";
 
 				FilePath=GetAudioFilename(DeviceType, DeviceId, Page, i);
-				Filename=ppl6::GetFilename(FilePath);
+				Filename=ppl7::File::getFilename(FilePath);
 				m3u.Putsf("#EXTINF:%u,%s\n", Ti->Length, (const char*)Tmp);
 				m3u.Putsf("%s\n", (const char*)Filename);
 
@@ -1313,20 +1304,20 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 
 				xspf.Putsf("  <track>\n");
 				xspf.Putsf("     <trackNum>%u</trackNum>\n", i);
-				ppl6::CString TmpTxt=Tmp;
-				TmpTxt.Chop(1);
+				ppl7::String TmpTxt=Tmp;
+				TmpTxt.chop(1);
 				txt.Putsf("%3u. %s, %0i:%02i %s)\r\n", i, (const char*)TmpTxt, (int)(Ti->Length / 60), Ti->Length % 60, (const char*)Minuten);
 
 				//Tmp=ppl6::UrlEncode(FilePath);
 				//Tmp.Replace("+","%20");
 				xspf.Putsf("     <location>file://%s</location>\n", (const char*)ppl6::EscapeHTMLTags(FilePath));
-				if (Ti->Artist.NotEmpty()) xspf.Putsf("     <creator>%s</creator>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Artist));
-				if (Ti->Title.NotEmpty()) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
+				if (Ti->Artist.notEmpty()) xspf.Putsf("     <creator>%s</creator>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Artist));
+				if (Ti->Title.notEmpty()) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
 					(const char*)ppl6::EscapeHTMLTags(Ti->Artist),
 					(const char*)ppl6::EscapeHTMLTags(Ti->Title),
 					(const char*)ppl6::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
 				//xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
-				if (Ti->Album.NotEmpty()) xspf.Putsf("     <album>%s</album>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Album));
+				if (Ti->Album.notEmpty()) xspf.Putsf("     <album>%s</album>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Album));
 				xspf.Putsf("     <duration>%u</duration>\n", Ti->Length * 1000);  // Bringt VLC zum Absturz
 				xspf.Putsf("  </track>\n");
 
@@ -1344,7 +1335,7 @@ int CWmClient::WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 
 int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list)
 {
-	ppl6::CString Path, Filename, Tmp, Minuten;
+	ppl7::String Path, Filename, Tmp, Minuten;
 	DataTrack* track;
 	DataTitle* Ti;
 	if (!DeviceId) {
@@ -1355,8 +1346,8 @@ int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 		ppl6::SetError(20041);
 		return 0;
 	}
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-	if (DevicePath.IsEmpty()) {
+	ppl7::String DevicePath=conf.DevicePath[DeviceType];
+	if (DevicePath.isEmpty()) {
 		ppl6::SetError(20042);
 		return 0;
 	}
@@ -1375,38 +1366,38 @@ int CWmClient::UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 P
 }
 
 
-int CWmClient::PlayFile(const ppl6::CString& Filename)
+int CWmClient::PlayFile(const ppl7::String& Filename)
 {
-	ppl6::CString Player=conf.MP3Player;
-	ppl6::CArray matches;
-	if (Filename.PregMatch("/\\.aif[f]{0,2}$/i", matches)) Player=conf.AIFFPlayer;
-	if (Player.IsEmpty()) Player=conf.MP3Player;
+	ppl7::String Player=conf.MP3Player;
+	ppl7::Array matches;
+	if (Filename.pregMatch("/\\.aif[f]{0,2}$/i", matches)) Player=conf.AIFFPlayer;
+	if (Player.isEmpty()) Player=conf.MP3Player;
 
 #ifdef _WIN32
-	ppl6::CWString f=Filename;
+	ppl7::WideString f=Filename;
 	// Windows mag keine Vorwärts-Slashes
-	f.Replace("/", "\\");
+	f.replace("/", "\\");
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %s", (const char*)f);
-	if (Player.IsEmpty()) {
+	if (Player.isEmpty()) {
 		ShellExecuteW(NULL, L"open", (const wchar_t*)f,
 			L"", L"", SW_SHOWNORMAL);
 	} else {
 		f="\"" + f;
 		f+="\"";
-		ppl6::CWString prog=Player;
+		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-	}
+}
 #else
-	if (Player.IsEmpty()) {
+	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),
 			tr("There is no Audio player specified.\nPlease go to preferences and open the MP3 page. You can specify your favorite player there."),
 			QMessageBox::Ok, QMessageBox::Ok);
 		return 0;
 	}
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %s", (const char*)Filename);
-	ppl6::CString cmd;
-	cmd.Setf("%s \"%s\" > /dev/null 2>&1 &", (const char*)Player, (const char*)Filename);
+	ppl7::String cmd;
+	cmd.setf("%s \"%s\" > /dev/null 2>&1 &", (const char*)Player, (const char*)Filename);
 	system((const char*)cmd);
 #endif
 	return 1;
@@ -1415,12 +1406,12 @@ int CWmClient::PlayFile(const ppl6::CString& Filename)
 int CWmClient::TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 1, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Delete track: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-	ppl6::CString Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.IsEmpty()) {
+	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
+	if (Path.isEmpty()) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 6, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
 		return 0;
 	}
-	Path.Concatf("/Trash");
+	Path.append("/Trash");
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path for deleted files: %s", (const char*)Path);
 	if (!ppl6::CFile::Exists(Path)) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path does not exists and will be created");
@@ -1438,11 +1429,11 @@ int CWmClient::TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path is not a directory: %s", (const char*)Path);
 		return 0;
 	}
-	ppl6::CString old=GetAudioFilename(DeviceType, DeviceId, Page, Track);
-	if (old.IsEmpty()) return 1;
-	ppl6::CString file=Path;
-	file.Concatf("/%03u-%02u-", DeviceId, Page);
-	file+=ppl6::GetFilename(old);
+	ppl7::String old=GetAudioFilename(DeviceType, DeviceId, Page, Track);
+	if (old.isEmpty()) return 1;
+	ppl7::String file=Path;
+	file.appendf("/%03u-%02u-", DeviceId, Page);
+	file+=ppl7::File::getFilename(old);
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s", (const char*)old, (const char*)file);
 	if (!ppl6::CFile::RenameFile(old, file)) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
@@ -1457,22 +1448,22 @@ int CWmClient::TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 
 int CWmClient::RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Datei umbenennen: DeviceId=%u, Page=%u, OldTrack=%u, NewTrack=%u", DeviceId, Page, OldTrack, NewTrack);
-	ppl6::CString DevicePath=conf.DevicePath[DeviceType];
-	if (DevicePath.IsEmpty()) {
+	ppl7::String DevicePath=conf.DevicePath[DeviceType];
+	if (DevicePath.isEmpty()) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
 		return 0;
 	}
-	ppl6::CString Old=GetAudioFilename(DeviceType, DeviceId, Page, OldTrack);
-	if (Old.IsEmpty()) {
+	ppl7::String Old=GetAudioFilename(DeviceType, DeviceId, Page, OldTrack);
+	if (Old.isEmpty()) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Alter Track %u ist nicht vorhanden", OldTrack);
 		return 1;
 	}
 
-	ppl6::CString Path=ppl6::GetPath(Old);
-	ppl6::CString Filename=ppl6::GetFilename(Old);
-	Filename=Filename.Mid(4);
-	ppl6::CString NewFile;
-	NewFile.Setf("%s/%03u-%s", (const char*)Path, NewTrack, (const char*)Filename);
+	ppl7::String Path=ppl7::File::getPath(Old);
+	ppl7::String Filename=ppl7::File::getFilename(Old);
+	Filename=Filename.mid(4);
+	ppl7::String NewFile;
+	NewFile.setf("%s/%03u-%s", (const char*)Path, NewTrack, (const char*)Filename);
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s", (const char*)Old, (const char*)NewFile);
 	if (!ppl6::CFile::RenameFile(Old, NewFile)) {
 		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
@@ -1546,23 +1537,23 @@ void CWmClient::addFilenameLetterReplacement(const ppl7::WideString& letters, wc
 
 static void ReplaceIfExists(ppl7::WideString& s, const wchar_t* search, const ppl7::WideString& replace)
 {
-	if (s.IsEmpty()) return;
-	wchar_t* buffer=(wchar_t*)s.GetBuffer();
+	if (s.isEmpty()) return;
+	const wchar_t* buffer=(wchar_t*)s.getPtr();
 	if (!buffer) return;
 	if (wcsstr(buffer, search)) {
-		ppl6::CWString ss;
-		ss.Set(search);
-		s.Replace(ss, replace);
+		ppl7::WideString ss;
+		ss.set(search);
+		s.replace(ss, replace);
 	}
 }
 
-void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl6::CWString& term)
+void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term)
 {
 	wchar_t* buffer;
 	std::map<wchar_t, wchar_t>::const_iterator it;
-	size_t ss=term.Len();
+	size_t ss=term.size();
 	size_t target=0;
-	buffer=(wchar_t*)term.GetBuffer();
+	buffer=(wchar_t*)term.getPtr();
 	wchar_t c;
 	for (size_t i=0;i < ss;i++) {
 		c=buffer[i];
@@ -1579,7 +1570,7 @@ void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl6
 			buffer[target++]=c;
 		}
 	}
-	term.Cut(target);
+	term.cut(target);
 }
 
 void CWmClient::NormalizeTerm(ppl7::String& term)
@@ -1607,19 +1598,19 @@ void CWmClient::NormalizeTerm(ppl7::String& term)
 	ReplaceIfExists(s, L"DJ ", replace);
 	ReplaceIfExists(s, L" ", replace);		// U+00A0, c2 a0, NO-BREAK SPACE
 	s.trim();
-	s.replace("  ", " ");
+	s.replace(L"  ", L" ");
 	NormalizeLetters(letterReplacements, s);
 	term=s;
 }
 
-int CWmClient::GetWords(const ppl6::CString& str, ppl6::CArray& words)
+int CWmClient::GetWords(const ppl7::String& str, ppl7::Array& words)
 {
-	words.Clear();
-	ppl6::CString s=str;
-	s.Trim();
-	if (s.IsEmpty()) return 0;
+	words.clear();
+	ppl7::String s=str;
+	s.trim();
+	if (s.isEmpty()) return 0;
 	// Bestimmte Zeichen filtern wir raus
 	NormalizeTerm(s);
-	words.Explode(s, " ", 0, true);
+	words.explode(s, " ", 0, true);
 	return 1;
 }

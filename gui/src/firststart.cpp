@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.3 $
- * $Date: 2010/10/17 11:54:49 $
- * $Id: firststart.cpp,v 1.3 2010/10/17 11:54:49 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +20,7 @@
 
 #include "winmusik3.h"
 
-#include "../include/firststart.h"
+#include "firststart.h"
 
 
 FirstStart::FirstStart(QWidget* parent, CWmClient* wm)
@@ -106,7 +100,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			ui.buttonWeiter->setEnabled(true);
 		}
 		// Den Pageplan schonmal erweitern
-		pageplan[3]=3;
+		pageplan[3]=5;
 		maxpageplan=3;
 
 		on_localdatapath_textChanged();
@@ -142,17 +136,6 @@ void FirstStart::on_buttonWeiter_clicked()
 			}
 			//QMessageBox::information(NULL, "Debug","keine frühere Installation");
 		}
-	} else 	if (pageplan[page] == 3) {
-		pageplan[4]=4;
-		maxpageplan=4;
-		// Daten von WinMusik 2.x importieren?
-		ppl6::CString Path=ui.importpath->text();
-		if (Path.Len()) {
-			// TODO: Prüfen, ob es sich um ein gültiges WM2-Datenverzeichnis handelt
-			pageplan[4]=5;
-			pageplan[5]=6;
-			maxpageplan=5;
-		}
 	} else 	if (pageplan[page] == 4) {
 		wm->conf.DataPath=ui.localdatapath->text();
 		//QMessageBox::information(this, tr("WinMusik Locale"),conf->Locale);
@@ -167,15 +150,6 @@ void FirstStart::on_buttonWeiter_clicked()
 		done(1);
 		return;
 
-	} else 	if (pageplan[page] == 5) {
-		wm->conf.DataPath=ui.localdatapath->text();
-		try {
-			wm->conf.save();
-		} catch (const ppl7::Exception& exp) {
-			ShowException(exp, tr("Configuration could not be saved!"));
-			return;
-		}
-		wm->InitDataPath();
 	}
 
 	page++;
@@ -197,16 +171,11 @@ void FirstStart::on_buttonWeiter_clicked()
 
 	} else if (pageplan[page] == 4) {
 		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page] == 6) {
-		DoImport();
 	} else if (pageplan[page] == 7) {
 		ui.buttonZurueck->setVisible(false);
 		ui.buttonAbbrechen->setVisible(false);
 		ui.buttonWeiter->setEnabled(true);
 		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page] == 8) {
-		ui.buttonWeiter->setText(tr("finish"));
-		ui.buttonWeiter->setEnabled(true);
 	} else if (pageplan[page] == 9) {
 		done(1);
 	}
@@ -303,73 +272,4 @@ int FirstStart::UseExistingInstallation(ppl6::CString* Path)
 		return 0;
 	}
 	return 1;
-}
-
-void FirstStart::DoImport()
-{
-	ui.buttonWeiter->setEnabled(false);
-	ui.buttonZurueck->setEnabled(false);
-	ui.buttonAbbrechen->setEnabled(false);
-	ui.progressBar->setMaximum(100);
-	ui.progressBar->setValue(0);
-
-	FirstStartImportProgress* p=new FirstStartImportProgress();
-	p->widget=this;
-	UpdateProgress(p);
-
-	wm20::Cwm20Import Import;
-	ppl6::CString wm2path, charset;
-	charset=ui.charset->currentText();
-	Import.SetCharset(charset);
-	wm2path=ui.importpath->text();
-	wm2path.Trim();
-
-	wm->Storage.DeleteDatabase();
-	if (!Import.Load(wm2path, &wm->Storage, p)) {
-		wm->RaiseError(this, tr("Import failed"));
-		ui.buttonWeiter->setEnabled(false);
-		ui.buttonZurueck->setEnabled(true);
-		ui.buttonAbbrechen->setEnabled(true);
-		delete p;
-		return;
-	}
-	ui.buttonWeiter->setEnabled(true);
-	ui.buttonWeiter->setText(tr("finish"));
-	pageplan[0]=8;
-	pageplan[1]=9;
-	maxpageplan=1;
-	page=0;
-	ui.stackedWidget->setCurrentIndex(pageplan[page]);
-	delete p;
-}
-
-void FirstStart::UpdateProgress(FirstStartImportProgress* p)
-{
-	ui.import_titeldatei->setVisible(p->import_titeldatei);
-	ui.import_traegertitel->setVisible(p->import_traegertitel);
-	ui.import_versionen->setVisible(p->import_versionen);
-	ui.import_musikarten->setVisible(p->import_musikarten);
-	ui.import_quellen->setVisible(p->import_quellen);
-	ui.import_kaufquellen->setVisible(p->import_kaufquellen);
-	ui.import_label->setVisible(p->import_label);
-	ui.import_geraete->setVisible(p->import_geraete);
-	ui.import_kassetten->setVisible(p->import_kassetten);
-	ui.import_cds->setVisible(p->import_cds);
-	ui.import_platten->setVisible(p->import_platten);
-	ui.import_mp3->setVisible(p->import_mp3);
-	ui.import_daten->setVisible(p->import_daten);
-	ui.import_video->setVisible(p->import_video);
-	ui.import_band->setVisible(p->import_band);
-	ui.import_sonstige->setVisible(p->import_sonstige);
-	ui.progressBar->setValue(p->progress);
-	ui.currentProgress->setValue(p->current);
-	//update();
-	qApp->processEvents();
-
-}
-
-
-void FirstStartImportProgress::Update()
-{
-	widget->UpdateProgress(this);
 }

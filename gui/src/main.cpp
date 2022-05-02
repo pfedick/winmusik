@@ -117,15 +117,11 @@ int main(int argc, char* argv[])
     CWmClient Client;
     try {
         Client.Init(argc, argv, &a);
-    }
-    catch (const ppl7::Exception& exp) {
+    } catch (const ppl7::Exception& exp) {
         ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
         return 1;
     }
     if (!Client.Start()) {
-        if (ppl6::GetErrorCode() > 0) {
-            Client.RaiseError();
-        }
         return 1;
     }
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));

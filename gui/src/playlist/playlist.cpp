@@ -38,7 +38,7 @@
 #include "playlisttracks.h"
 #include "playlist.h"
 #include "playlistedit.h"
-#include "traktor.h"
+#include "wm_traktor.h"
 #include "setbpmplayed.h"
 #include "playlistexport.h"
 #include "version.h"
@@ -47,6 +47,8 @@
 #include <stdio.h>
 
 #include "ppl7-audio.h"
+
+using namespace de::pfp::winmusik;
 
 Playlist::Playlist(QWidget* parent, CWmClient* wm)
 	: QMainWindow(parent)
@@ -1515,7 +1517,12 @@ static void updateInAndOut(PlaylistItem* item)
 {
 	std::list <TraktorTagCue> cuelist;
 	std::list <TraktorTagCue>::const_iterator it;
-	if (!getTraktorCuesFromFile(cuelist, item->File)) return;
+	try {
+		getTraktorCuesFromFile(cuelist, item->File);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, QObject::tr("Could not load ID3-Tags from File"));
+		return;
+	}
 	if (cuelist.size() == 0) return;
 	float traktorIn=-1;
 	float traktorOut=-1;

@@ -39,12 +39,12 @@ class CStorageItem
 {
 	friend class CStorage;
 private:
-	ppluint32 filepos;
-	ppluint8  fileid;
-	ppluint32 lastchange;
-	ppluint32 version;
+	u_int32_t filepos;
+	u_int8_t  fileid;
+	u_int32_t lastchange;
+	u_int32_t version;
 protected:
-	ppluint8  formatversion;
+	u_int8_t  formatversion;
 
 public:
 	CStorageItem();
@@ -55,9 +55,9 @@ public:
 	void CopyStorageFrom(const CStorageItem& other);
 	void CopyStorageFrom(const CStorageItem* item);
 	void CopyStorageFrom(CWMFileChunk* chunk);
-	ppluint32 GetVersion();
-	ppluint32 GetLastChange();
-	ppluint8 GetFormatVersion();
+	u_int32_t GetVersion();
+	u_int32_t GetLastChange();
+	u_int8_t GetFormatVersion();
 	void PrintStorageData();
 };
 
@@ -130,12 +130,12 @@ class CTitleStore : public CStorageType
 private:
 	ppl6::CMutex Mutex;
 	TITLE* TitleIndex;
-	ppluint32 max;
-	ppluint32 highestId;
-	ppluint32 highestOimp;
+	u_int32_t max;
+	u_int32_t highestId;
+	u_int32_t highestOimp;
 
 
-	int Increase(ppluint32 maxid);
+	int Increase(u_int32_t maxid);
 	int Save(DataTitle* t);
 
 public:
@@ -148,12 +148,12 @@ public:
 
 	int Put(DataTitle* title);
 	int Delete(DataTitle* entry);
-	DataTitle* Get(ppluint32 id);
-	int GetCopy(ppluint32 id, DataTitle* t);
+	DataTitle* Get(u_int32_t id);
+	int GetCopy(u_int32_t id, DataTitle* t);
 	virtual int LoadChunk(CWMFileChunk* chunk);
-	ppluint32 MaxId();
+	u_int32_t MaxId();
 
-	ppluint32 GetHighestImportDataId();
+	u_int32_t GetHighestImportDataId();
 };
 
 
@@ -167,29 +167,29 @@ public:
 	ppl7::String	Album;
 	ppl7::String	Tags;
 	ppl7::ByteArray	CoverPreview;
-	ppluint32		TitleId;
-	ppluint32		DeviceId;
-	ppluint32		Length;
-	ppluint32		VersionId;
-	ppluint32		LabelId;
-	ppluint32		BPM;
-	ppluint32		RecordDate;
-	ppluint32		ReleaseDate;
-	ppluint32		ImportData;
-	ppluint32		Size;
-	ppluint16		RecordSourceId;
-	ppluint16		Track;
-	ppluint16		Bitrate;
-	ppluint16		GenreId;
-	ppluint16		RecordDeviceId;
-	ppluint8		DeviceType;
-	ppluint8		Page;
-	ppluint8		Channels;
-	ppluint8		Quality;
-	ppluint8		Rating;
-	ppluint8		Flags;
-	ppluint8		Key;
-	ppluint8		EnergyLevel;
+	u_int32_t		TitleId;
+	u_int32_t		DeviceId;
+	u_int32_t		Length;
+	u_int32_t		VersionId;
+	u_int32_t		LabelId;
+	u_int32_t		BPM;
+	u_int32_t		RecordDate;
+	u_int32_t		ReleaseDate;
+	u_int32_t		ImportData;
+	u_int32_t		Size;
+	u_int16_t		RecordSourceId;
+	u_int16_t		Track;
+	u_int16_t		Bitrate;
+	u_int16_t		GenreId;
+	u_int16_t		RecordDeviceId;
+	u_int8_t		DeviceType;
+	u_int8_t		Page;
+	u_int8_t		Channels;
+	u_int8_t		Quality;
+	u_int8_t		Rating;
+	u_int8_t		Flags;
+	u_int8_t		Key;
+	u_int8_t		EnergyLevel;
 	//void *operator new (size_t size);
 	//void operator delete (void *ptr, size_t size);
 
@@ -221,8 +221,8 @@ public:
 	bool operator==(const DataTitle& other) const;
 	bool operator!=(const DataTitle& other) const;
 
-	static ppl7::String keyName(ppluint8 id, MusicKeyType type);
-	static ppluint8 keyId(const ppl7::String& name);
+	static ppl7::String keyName(u_int8_t id, MusicKeyType type);
+	static u_int8_t keyId(const ppl7::String& name);
 };
 
 
@@ -232,8 +232,8 @@ public:
 
 
 typedef struct {
-	ppluint32		DeviceId;
-	ppluint8		DeviceType;
+	u_int32_t		DeviceId;
+	u_int8_t		DeviceType;
 } DATADEVICE;
 
 class DataDevice : public CStorageItem, public ppl6::CTreeItem
@@ -241,19 +241,19 @@ class DataDevice : public CStorageItem, public ppl6::CTreeItem
 private:
 public:
 	char* Title, * SubTitle;
-	ppluint32		DeviceId;
-	ppluint32		Length;
-	ppluint32		Recorded;
-	ppluint32		LabelId;
-	ppluint32		PurchaseDate;
-	ppluint32		DateCreated;
-	ppluint32		FirstDate;
-	ppluint32		LastDate;
-	ppluint32		NumTracks;
+	u_int32_t		DeviceId;
+	u_int32_t		Length;
+	u_int32_t		Recorded;
+	u_int32_t		LabelId;
+	u_int32_t		PurchaseDate;
+	u_int32_t		DateCreated;
+	u_int32_t		FirstDate;
+	u_int32_t		LastDate;
+	u_int32_t		NumTracks;
 	float			PurchasePrice;
-	ppluint16		PurchaseId;
-	ppluint8		DeviceType;
-	ppluint8		Pages;
+	u_int16_t		PurchaseId;
+	u_int8_t		DeviceType;
+	u_int8_t		Pages;
 
 	DataDevice();
 	virtual ~DataDevice();
@@ -277,7 +277,7 @@ private:
 	ppl6::CMutex Mutex;
 	ppl6::CTree Tree;
 	int Save(DataDevice* t);
-	ppluint32 highest[MAX_DEVICE_TYPES + 1];
+	u_int32_t highest[MAX_DEVICE_TYPES + 1];
 
 public:
 	CDeviceStore();
@@ -285,12 +285,12 @@ public:
 	virtual void Clear();
 	virtual const char* GetChunkName();
 	int Put(DataDevice* entry);
-	int Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId);
-	DataDevice* Get(ppluint8 DeviceType, ppluint32 DeviceId);
-	int GetCopy(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice* t);
+	int Renumber(u_int8_t DeviceType, u_int32_t oldId, u_int32_t newId);
+	DataDevice* Get(u_int8_t DeviceType, u_int32_t DeviceId);
+	int GetCopy(u_int8_t DeviceType, u_int32_t DeviceId, DataDevice* t);
 	virtual int LoadChunk(CWMFileChunk* chunk);
-	ppluint32 GetHighestDevice(int DeviceType);
-	int Update(ppluint8 DeviceType, ppluint32 DeviceId);
+	u_int32_t GetHighestDevice(int DeviceType);
+	int Update(u_int8_t DeviceType, u_int32_t DeviceId);
 };
 
 /*******************************************************
@@ -303,11 +303,11 @@ class DataTrack : public CStorageItem, public ppl6::CTreeItem
 private:
 	//ppluint64	Key;
 public:
-	ppluint32	DeviceId;
-	ppluint32	TitleId;
-	ppluint16	Track;
-	ppluint8	Device;
-	ppluint8	Page;
+	u_int32_t	DeviceId;
+	u_int32_t	TitleId;
+	u_int16_t	Track;
+	u_int8_t	Device;
+	u_int8_t	Page;
 
 	DataTrack();
 	virtual ~DataTrack();
@@ -316,7 +316,7 @@ public:
 
 	void Clear();
 	int CopyFrom(DataTrack* t);
-	int SetValue(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track, ppluint32 TitleId);
+	int SetValue(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track, u_int32_t TitleId);
 	ppl6::CBinary* Export();
 	int Import(ppl6::CBinary* bin, int version);
 };
@@ -325,9 +325,9 @@ public:
 class DataTrackHint : public ppl6::CTreeItem
 {
 public:
-	ppluint32	DeviceId;
-	ppluint8	Device;
-	ppluint8	Page;
+	u_int32_t	DeviceId;
+	u_int8_t	Device;
+	u_int8_t	Page;
 	int			min, max;
 
 	DataTrackHint();
@@ -344,7 +344,7 @@ private:
 	ppl6::CTree TrackHints;
 	int Save(DataTrack* t);
 	int UpdateHints(DataTrack* track);
-	DataTrackHint* GetHints(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page);
+	DataTrackHint* GetHints(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page);
 
 public:
 	CTrackStore();
@@ -353,9 +353,9 @@ public:
 	virtual const char* GetChunkName();
 	int Put(DataTrack* entry);
 	int Delete(DataTrack* entry);
-	DataTrack* Get(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track);
-	int GetCopy(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track, DataTrack* t);
-	CTrackList* GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page);
+	DataTrack* Get(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track);
+	int GetCopy(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track, DataTrack* t);
+	CTrackList* GetTracklist(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page);
 	virtual int LoadChunk(CWMFileChunk* chunk);
 
 };
@@ -423,8 +423,8 @@ public:
 class CSimpleTable : public CStorageItem, public ppl6::CTreeItem
 {
 public:
-	ppluint32		Id;
-	ppluint32		References;
+	u_int32_t		Id;
+	u_int32_t		References;
 	char* Value;
 	CSimpleTable();
 	CSimpleTable(const CSimpleTable& other);
@@ -455,19 +455,19 @@ typedef struct {
 class CTableStore : public CStorageType
 {
 public:
-	typedef std::set<ppluint32> IndexTree;
+	typedef std::set<u_int32_t> IndexTree;
 private:
 	ppl6::CMutex Mutex;
 	ppl6::CTree Tree;
 	TABLE* TableIndex;
-	ppluint32 max;
-	ppluint32 highestId;
-	int Increase(ppluint32 maxid);
+	u_int32_t max;
+	u_int32_t highestId;
+	int Increase(u_int32_t maxid);
 	int Save(CSimpleTable* t);
-	typedef std::map<ppl6::CString, IndexTree >	WordTree;
+	typedef std::map<ppl7::String, IndexTree >	WordTree;
 
-	void removeFromWordTree(ppluint32 id);
-	void addToWordTree(ppluint32 id);
+	void removeFromWordTree(u_int32_t id);
+	void addToWordTree(u_int32_t id);
 	void makeUnion(IndexTree& Result, const IndexTree& Tree1, const IndexTree& Tree2);
 	void copy(IndexTree& Result, const IndexTree& src);
 
@@ -480,14 +480,14 @@ public:
 	virtual const char* GetChunkName();
 	virtual int LoadChunk(CWMFileChunk* chunk);
 	int Put(CSimpleTable* entry);
-	CSimpleTable* Get(ppluint32 id);
+	CSimpleTable* Get(u_int32_t id);
 	CSimpleTable* Find(const char* value);
 	int GetId(const char* value);
 	int FindOrAdd(const char* value);
 	int FindAll(ppl6::CWString& value, ppl6::CTree& Result);
-	int GetCopy(ppluint32 id, CSimpleTable* t);
+	int GetCopy(u_int32_t id, CSimpleTable* t);
 
-	ppluint32 findWords(IndexTree& tree, const ppl6::CString& words);
+	u_int32_t findWords(IndexTree& tree, const ppl7::String& words);
 };
 
 class CVersionStore : public CTableStore
@@ -533,10 +533,10 @@ public:
 class DataOimp : public CStorageItem
 {
 public:
-	ppluint32			Id;
-	ppl6::CString		Filename;
-	ppl6::CAssocArray	ID3v1;
-	ppl6::CAssocArray	ID3v2;
+	u_int32_t			Id;
+	ppl7::String		Filename;
+	ppl7::AssocArray	ID3v1;
+	ppl7::AssocArray	ID3v2;
 
 
 	DataOimp();
@@ -559,9 +559,9 @@ class COimpDataStore : public CStorageType
 private:
 	ppl6::CMutex Mutex;
 	OIMPDATA* TableIndex;
-	ppluint32 max;
-	ppluint32 highestId;
-	int Increase(ppluint32 maxid);
+	u_int32_t max;
+	u_int32_t highestId;
+	int Increase(u_int32_t maxid);
 	int Save(DataOimp* t);
 
 public:
@@ -572,9 +572,9 @@ public:
 	virtual int LoadChunk(CWMFileChunk* chunk);
 	int Put(DataOimp* entry);
 
-	int GetCopy(ppluint32 id, DataOimp* t);
+	int GetCopy(u_int32_t id, DataOimp* t);
 
-	void SetHighestImportDataId(ppluint32 id);
+	void SetHighestImportDataId(u_int32_t id);
 
 	void List();
 };

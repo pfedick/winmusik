@@ -31,9 +31,11 @@
 #include "playlisttracks.h"
 #include "playlistedit.h"
 #include <stdio.h>
-#include "traktor.h"
+#include "wm_traktor.h"
 #include "winmusik3.h"
 #include "musickey.h"
+
+using namespace de::pfp::winmusik;
 
 PlaylistEdit::PlaylistEdit(QWidget* parent, CWmClient* wm)
 	: QDialog(parent)
@@ -168,29 +170,18 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 	Filename=item->File;
 
 	ppl7::ID3Tag Tag;
-	//Tag.setLogfile(wmlog);
-
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "Try to load ID3-Tags: %s", (const char*)item->File);
-	if (!Tag.Load(item->File)) {
-		if (wmlog) {
-			wmlog->LogError("WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__);
-			wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "Load ID3-Tag failed: %s", (const char*)ppl6::Error2String());
-		}
+	try {
+		Tag.load(item->File);
+	} catch (...) {
 		ppl7::String Tmp=wm->GetAudioFilename(item->DeviceType, item->DeviceId, item->DevicePage, item->DeviceTrack);
-
 		if (Tmp.notEmpty() == true && Tmp != item->File) {
 			item->File=Tmp;
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "File seems to be renamed, try to load again: %s", (const char*)item->File);
-			if (!Tag.Load(item->File)) {
-				if (wmlog) {
-					wmlog->LogError("WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__);
-					wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "Load ID3-Tag failed: %s", (const char*)ppl6::Error2String());
-				}
-			}
+			try {
+				Tag.load(item->File);
+			} catch (...) {}
 		}
 	}
 	if (Tag.frameCount() > 0) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "ID3-Tag with %zd frames loaded", Tag.FrameCount());
 		loadCover(Tag);
 		loadTraktorCues(Tag);
 		ppl7::String Tmp;
@@ -381,8 +372,8 @@ bool PlaylistEdit::consumeEvent(QObject*, QEvent* event)
 
 void PlaylistEdit::on_coverLoadButton_clicked()
 {
-	ppl6::CString Dir=wm->conf.LastCoverPath + "/";
-	if (Dir.IsEmpty()) {
+	ppl7::String Dir=wm->conf.LastCoverPath + "/";
+	if (Dir.isEmpty()) {
 		Dir=QDir::homePath();
 	}
 	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
@@ -392,7 +383,7 @@ void PlaylistEdit::on_coverLoadButton_clicked()
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
-	wm->conf.Save();
+	wm->conf.trySave();
 	if (!Cover.load(newfile)) {
 		QApplication::restoreOverrideCursor();
 		QMessageBox::critical(this, tr("Error: could not load Cover"),
@@ -410,7 +401,7 @@ void PlaylistEdit::on_coverLoadButton_clicked()
 void PlaylistEdit::on_coverSaveButton_clicked()
 {
 	if (Cover.isNull()) return;
-	ppl6::CString Dir=wm->conf.LastCoverPath + "/";
+	ppl7::String Dir=wm->conf.LastCoverPath + "/";
 
 	QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"),
 		Dir,
@@ -418,7 +409,7 @@ void PlaylistEdit::on_coverSaveButton_clicked()
 	if (newfile.isNull()) return;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
-	wm->conf.Save();
+	wm->conf.trySave();
 	if (!Cover.save(newfile)) {
 		/*
 		 * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton ) [static]

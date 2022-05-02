@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: StorageOriginalImportData.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,14 +73,14 @@ void DataOimp::Clear()
  */
 {
 	Id=0;
-	Filename.Clear();
-	ID3v1.Clear();
-	ID3v2.Clear();
+	Filename.clear();
+	ID3v1.clear();
+	ID3v2.clear();
 	CStorageItem::Clear();
 	formatversion=1;
 }
 
-int DataOimp::CopyFrom(const DataOimp *t)
+int DataOimp::CopyFrom(const DataOimp* t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataOimp Datensatzes in diesen hineinkopiert.
@@ -98,7 +92,7 @@ int DataOimp::CopyFrom(const DataOimp *t)
  */
 {
 	if (!t) {
-		ppl6::SetError(194,"int DataOimp::CopyFrom(==> DataOimp *t <==)");
+		ppl6::SetError(194, "int DataOimp::CopyFrom(==> DataOimp *t <==)");
 		return 0;
 	}
 	Clear();
@@ -110,7 +104,7 @@ int DataOimp::CopyFrom(const DataOimp *t)
 	return 1;
 }
 
-ppl6::CBinary *DataOimp::Export()
+ppl6::CBinary* DataOimp::Export()
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -124,59 +118,48 @@ ppl6::CBinary *DataOimp::Export()
  */
 {
 	// Zunächst den benötigten Speicher berechnen
-	int size=10+Filename.Len();
-	ppl6::CBinary *v1=ID3v1.ExportBinary();
-	if (v1) size+=v1->Len();
-	ppl6::CBinary *v2=ID3v2.ExportBinary();
-	if (v2) size+=v2->Len();
-	char *a=(char*)malloc(size);
+	int size=10 + Filename.size();
+	ppl7::ByteArray v1, v2;
+	if (ID3v1.size()) ID3v1.exportBinary(v1);
+	size+=v1.size();
+	if (ID3v2.size()) ID3v2.exportBinary(v2);
+	size+=v2.size();
+	char* a=(char*)malloc(size);
 	if (!a) {
-		delete v1;
-		delete v2;
 		ppl6::SetError(2);
 		return NULL;
 	}
 	int p=4;
-	ppl6::Poke32(a,Id);
-	ppl6::Poke16(a+p,Filename.Len());
+	ppl7::Poke32(a, Id);
+	ppl7::Poke16(a + p, Filename.size());
 	p+=2;
-	memcpy(a+p,Filename.GetPtr(),Filename.Len());
-	p+=Filename.Len();
-	if (v1!=NULL && v1->Len()>0) {
-		ppl6::Poke16(a+p,v1->Len());
-		memcpy(a+p+2,v1->GetPtr(),v1->Size());
-		p+=v1->Size();
+	memcpy(a + p, Filename.c_str(), Filename.size());
+	p+=Filename.size();
+	if (v1.size() > 0) {
+		ppl7::Poke16(a + p, v1.size());
+		memcpy(a + p + 2, v1.ptr(), v1.size());
+		p+=v1.size();
 	} else {
-		ppl6::Poke16(a+p,0);
+		ppl7::Poke16(a + p, 0);
 	}
 	p+=2;
-	if (v2!=NULL && v2->Len()>0) {
-		ppl6::Poke16(a+p,v2->Len());
-		memcpy(a+p+2,v2->GetPtr(),v2->Size());
-		p+=v2->Size();
+	if (v2.size() > 0) {
+		ppl7::Poke16(a + p, v2.size());
+		memcpy(a + p + 2, v2.ptr(), v2.size());
+		p+=v2.size();
 	} else {
-		ppl6::Poke16(a+p,0);
+		ppl7::Poke16(a + p, 0);
 	}
 	p+=2;
 
-	/*
-	ppl6::CCompression Comp;
-	if (!Comp.CompressZlib(a,size)) {
-		free(a);
-		return NULL;
-	}
-	ppl6::CBinary *bin=Comp.GetCompressedData();
-	*/
-	ppl6::CBinary *bin=new ppl6::CBinary;
+	ppl6::CBinary* bin=new ppl6::CBinary;
 	if (!bin) return NULL;
-	bin->Set(a,size);
+	bin->Set(a, size);
 	bin->ManageMemory();
-	delete v1;
-	delete v2;
 	return bin;
 }
 
-int DataOimp::Import(ppl6::CBinary *bin, int version)
+int DataOimp::Import(ppl6::CBinary* bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -188,17 +171,17 @@ int DataOimp::Import(ppl6::CBinary *bin, int version)
  */
 {
 	if (!bin) {
-		ppl6::SetError(194,"int DataOimp::Import(==> ppl6::CBinary *bin <==, int version)");
+		ppl6::SetError(194, "int DataOimp::Import(==> ppl6::CBinary *bin <==, int version)");
 		return 0;
 	}
-	if (version<1 || version>1) {
-		ppl6::SetError(20023,"%i",version);
+	if (version < 1 || version>1) {
+		ppl6::SetError(20023, "%i", version);
 		return 0;
 	}
 	int size=bin->Size();
-	const char *a=(char*)bin->GetPtr();
+	const char* a=(char*)bin->GetPtr();
 	// Die Größe muss mindestens 9 Byte betragen
-	if (size<4 || a==NULL) {
+	if (size < 4 || a == NULL) {
 		ppl6::SetError(20024);
 		return 0;
 	}
@@ -207,32 +190,23 @@ int DataOimp::Import(ppl6::CBinary *bin, int version)
 	Id=ppl6::Peek32(a);
 	int len;
 	// Dateiname
-	len=ppl6::Peek16(a+p);
-	if (len) Filename.Strncpy(a+p+2,len);
-	p=p+2+len;
-	len=ppl6::Peek16(a+p);
+	len=ppl6::Peek16(a + p);
+	if (len) Filename.set(a + p + 2, len);
+	p=p + 2 + len;
+	len=ppl6::Peek16(a + p);
 	if (len) {
-		ID3v1.ImportBinary((char*)a+p+2,len);
+		ID3v1.importBinary((char*)a + p + 2, len);
 		p+=len;
 	}
 	p+=2;
-	len=ppl6::Peek16(a+p);
+	len=ppl6::Peek16(a + p);
 	if (len) {
-		ID3v2.ImportBinary((char*)a+p+2,len);
+		ID3v2.importBinary((char*)a + p + 2, len);
 	}
-	/*
-	printf ("Folgende Daten wurden eingelesen:\n");
-	printf ("Filename: %s\n",(char*)Filename);
-	printf ("ID3v1-Tag:\n");
-	ID3v1.List("ID3v1");
-	printf ("ID3v2-Tag:\n");
-	ID3v2.List("ID3v2");
-	*/
-
 	return 1;
 }
 
-int DataOimp::ImportId(ppl6::CBinary *bin, int version)
+int DataOimp::ImportId(ppl6::CBinary* bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion wird nur die Id des Datensatzes aus den binäre gespeicherte Daten in die
@@ -245,17 +219,17 @@ int DataOimp::ImportId(ppl6::CBinary *bin, int version)
  */
 {
 	if (!bin) {
-		ppl6::SetError(194,"int DataOimp::Import(==> ppl6::CBinary *bin <==, int version)");
+		ppl6::SetError(194, "int DataOimp::Import(==> ppl6::CBinary *bin <==, int version)");
 		return 0;
 	}
-	if (version<1 || version>1) {
-		ppl6::SetError(20023,"%i",version);
+	if (version < 1 || version>1) {
+		ppl6::SetError(20023, "%i", version);
 		return 0;
 	}
 	int size=bin->Size();
-	char *a=(char*)bin->GetPtr();
+	char* a=(char*)bin->GetPtr();
 	// Die Größe muss mindestens 9 Byte betragen
-	if (size<4 || a==NULL) {
+	if (size < 4 || a == NULL) {
 		ppl6::SetError(20024);
 		return 0;
 	}
@@ -333,8 +307,8 @@ void COimpDataStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	for (ppluint32 i=0;i<max;i++) {
-		if (TableIndex[i].t!=NULL) delete TableIndex[i].t;
+	for (ppluint32 i=0;i < max;i++) {
+		if (TableIndex[i].t != NULL) delete TableIndex[i].t;
 	}
 	free(TableIndex);
 	TableIndex=NULL;
@@ -342,7 +316,7 @@ void COimpDataStore::Clear()
 	highestId=0;
 }
 
-const char *COimpDataStore::GetChunkName()
+const char* COimpDataStore::GetChunkName()
 /*!\brief Chunkname dieses Datentypes auslesen
  *
  * Diese Funktion liefert einen Pointer auf den Chunknamen dieses Datentypes zurück.
@@ -366,25 +340,25 @@ int COimpDataStore::Increase(ppluint32 maxid)
  * auftreten, wenn kein Speicher mehr zur Verfügung steht.
  */
 {
-	ppluint32 h=maxid+100;
-	void *t=calloc(sizeof(OIMPDATA),h);
+	ppluint32 h=maxid + 100;
+	void* t=calloc(sizeof(OIMPDATA), h);
 	if (!t) {
-		ppl6::SetError(2,"int COimpDataStore::Increase(ppluint32 maxid)");
+		ppl6::SetError(2, "int COimpDataStore::Increase(ppluint32 maxid)");
 		return 0;
 	}
-	memcpy(t,TableIndex,max*sizeof(OIMPDATA));
+	memcpy(t, TableIndex, max * sizeof(OIMPDATA));
 	free(TableIndex);
 	TableIndex=(OIMPDATA*)t;
 	max=h;
 	return 1;
 }
 
-int COimpDataStore::LoadChunk(CWMFileChunk *chunk)
+int COimpDataStore::LoadChunk(CWMFileChunk* chunk)
 {
 	DataOimp data;
 	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(),chunk->GetChunkDataSize())) return 0;
-	if (!data.ImportId(&bin,chunk->GetFormatVersion())) return 0;
+	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
+	if (!data.ImportId(&bin, chunk->GetFormatVersion())) return 0;
 	data.CopyStorageFrom(chunk);
 	/*
 	printf ("Oimp %i importiert\n",data.Id);
@@ -395,13 +369,13 @@ int COimpDataStore::LoadChunk(CWMFileChunk *chunk)
 
 void COimpDataStore::SetHighestImportDataId(ppluint32 id)
 {
-	if (id>highestId) {
+	if (id > highestId) {
 		if (Increase(id)) highestId=id;
 	}
 	//printf ("COimpDataStore: hoechste Id: %u\n",highestId);
 }
 
-int COimpDataStore::Save(DataOimp *t)
+int COimpDataStore::Save(DataOimp* t)
 /*!\brief Datensatz auf Festplatte schreiben
  *
  * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
@@ -417,13 +391,13 @@ int COimpDataStore::Save(DataOimp *t)
 		return 0;
 	}
 	if (!t) {
-		ppl6::SetError(194,"int COimpDataStore::Save(==> DataOimp *t <==)");
+		ppl6::SetError(194, "int COimpDataStore::Save(==> DataOimp *t <==)");
 		return 0;
 	}
 	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary *bin=t->Export();
+	ppl6::CBinary* bin=t->Export();
 	if (!bin) return 0;
-	if (!Storage->Save(this,t,bin)) {
+	if (!Storage->Save(this, t, bin)) {
 		ppl6::PushError();
 		delete bin;
 		ppl6::PopError();
@@ -433,7 +407,7 @@ int COimpDataStore::Save(DataOimp *t)
 	return 1;
 }
 
-int COimpDataStore::Put(DataOimp *entry)
+int COimpDataStore::Put(DataOimp* entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -448,26 +422,26 @@ int COimpDataStore::Put(DataOimp *entry)
  */
 {
 	if (!entry) {
-		ppl6::SetError(194,"int COimpDataStore::Put(==> DataOimp *entry <==)");
+		ppl6::SetError(194, "int COimpDataStore::Put(==> DataOimp *entry <==)");
 		return 0;
 	}
 	if (!Storage) {
-		ppl6::SetError(20014,"COimpDataStore");
+		ppl6::SetError(20014, "COimpDataStore");
 		return 0;
 	}
 	ppluint32 save_highestId=highestId;
 	ppluint32 id=0;
 	Mutex.Lock();
-	if (entry->Id==0) {
+	if (entry->Id == 0) {
 		// Wir haben einen neuen Eintrag und vergeben eine Id
 		highestId++;
 		id=highestId;
 	} else {
 		id=entry->Id;
-		if (id>highestId) highestId=id;
+		if (id > highestId) highestId=id;
 	}
 
-	if (id>=max) {
+	if (id >= max) {
 		if (!Increase(id)) {
 			highestId=save_highestId;
 			Mutex.Unlock();
@@ -533,7 +507,7 @@ int COimpDataStore::Put(DataOimp *entry)
 	return 1;
 }
 
-int COimpDataStore::GetCopy(ppluint32 id, DataOimp *t)
+int COimpDataStore::GetCopy(ppluint32 id, DataOimp* t)
 /*!\brief Kopie eines Datensatzes erstellen
  *
  * Mit dieser Funktion wird ein vorhandener Datensatz ausgelesen. Im Unterschied zu den anderen
@@ -549,15 +523,15 @@ int COimpDataStore::GetCopy(ppluint32 id, DataOimp *t)
  * zurück, sonst 0.
  */
 {
-	if (id>highestId) {
-		ppl6::SetError(20015,"%u",id);
+	if (id > highestId) {
+		ppl6::SetError(20015, "%u", id);
 		return 0;
 	}
-	if (TableIndex==NULL || TableIndex[id].t==NULL) {
-		ppl6::SetError(20015,"%u",id);
+	if (TableIndex == NULL || TableIndex[id].t == NULL) {
+		ppl6::SetError(20015, "%u", id);
 		return 0;
 	}
-	DataOimp *entry=TableIndex[id].t;
+	DataOimp* entry=TableIndex[id].t;
 	t->CopyFrom(entry);
 	return Storage->LoadOimpRecord(t);
 }
@@ -565,17 +539,17 @@ int COimpDataStore::GetCopy(ppluint32 id, DataOimp *t)
 
 void COimpDataStore::List()
 {
-	DataOimp *t;
-	printf ("Oimpdata-List START\n");
+	DataOimp* t;
+	printf("Oimpdata-List START\n");
 	if (TableIndex) {
-		for (ppluint32 i=0;i<=highestId;i++) {
+		for (ppluint32 i=0;i <= highestId;i++) {
 			t=TableIndex[i].t;
 			if (t) {
-				printf ("Datensatz %i: ",t->Id);
+				printf("Datensatz %i: ", t->Id);
 				t->PrintStorageData();
 			}
 		}
 	}
-	printf ("Oimpdata-List END\n");
+	printf("Oimpdata-List END\n");
 
 }

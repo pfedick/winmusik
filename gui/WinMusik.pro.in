@@ -118,7 +118,6 @@ SOURCES += src/CSearchlist.cpp \
     src/config.cpp \
     src/functions.cpp \
     src/regexpcapture.cpp \
-    src/traktor.cpp \
     src/coverprinter.cpp \
     src/splashscreen.cpp \
     src/colorscheme.cpp \
@@ -206,7 +205,6 @@ HEADERS += widgets/edittrack.h \
     include/printdevicedialog.h \
     include/asynchronousMessage.h \
     include/wmtoolbutton.h \
-    include/traktor.h \
     include/editdevice.h \
     include/firststart.h \
     include/coverviewer.h \

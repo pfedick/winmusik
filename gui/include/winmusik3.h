@@ -37,6 +37,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <queue>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
@@ -61,8 +62,8 @@ typedef struct tagWindowListItem {
 class WMTreeItem : public QTreeWidgetItem
 {
 public:
-	ppluint32	Id;
-	ppluint32	Track;
+	u_int32_t	Id;
+	u_int32_t	Track;
 };
 
 extern ppl6::CLog* wmlog;
@@ -104,27 +105,27 @@ class CWMFileChunk
 	friend class CStorage;
 private:
 	char		chunkname[5];
-	ppluint32	filepos;
-	ppluint32	size;
-	ppluint32	timestamp;
-	ppluint32	version;
-	ppluint32	datasize;
-	ppluint8	formatversion;
+	u_int32_t	filepos;
+	u_int32_t	size;
+	u_int32_t	timestamp;
+	u_int32_t	version;
+	u_int32_t	datasize;
+	u_int8_t	formatversion;
 	const char* data;
 
 public:
 	CWMFileChunk();
 	~CWMFileChunk();
 	void		Clear();
-	ppluint32	GetChunkDataSize();
+	u_int32_t	GetChunkDataSize();
 	const char* GetChunkData();
 	const char* GetChunkName();
-	int			SetChunkData(const char* chunkname, const char* data, ppluint32 size, ppluint32 oldfilepos=0, ppluint32 version=0, ppluint8 formatversion=1);
-	void		SetFormatVersion(ppluint8 v);
-	ppluint32	GetFilepos();
-	ppluint32	GetTimestamp();
-	ppluint32	GetVersion();
-	ppluint8	GetFormatVersion();
+	int			SetChunkData(const char* chunkname, const char* data, u_int32_t size, u_int32_t oldfilepos=0, u_int32_t version=0, u_int8_t formatversion=1);
+	void		SetFormatVersion(u_int8_t v);
+	u_int32_t	GetFilepos();
+	u_int32_t	GetTimestamp();
+	u_int32_t	GetVersion();
+	u_int8_t	GetFormatVersion();
 	void		HexDump(ppl6::CLog* log=nullptr);
 	// int			SetChunkData(const char *chunkname, ppl6::CBinary *bin, CStorageItem *item);
 };
@@ -133,9 +134,9 @@ class CWMFile
 {
 private:
 	ppl6::CFile ff;
-	ppluint8	version, subversion;
-	ppluint32	timestamp, lastchange;
-	ppluint32	pos, first, eof;
+	u_int8_t	version, subversion;
+	u_int32_t	timestamp, lastchange;
+	u_int32_t	pos, first, eof;
 	bool		enableCompression;
 
 public:
@@ -146,14 +147,14 @@ public:
 	void Close();
 	void Reset();
 	int GetNextChunk(CWMFileChunk* chunk);
-	int GetChunk(CWMFileChunk* chunk, ppluint32 filepos);
+	int GetChunk(CWMFileChunk* chunk, u_int32_t filepos);
 	int SaveChunk(CWMFileChunk* chunk);
 	int DeleteChunk(CWMFileChunk* chunk);
 	void ListChunks();
 	void EnableCompression(bool flag);
 	int IsValidChunkName(const char* name);
-	ppluint32 GetFileSize();
-	ppluint32 GetFilePosition();
+	u_int32_t GetFileSize();
+	u_int32_t GetFilePosition();
 	static int CopyDatabase(CWMFile& oldfile, CWMFile& newfile, CCallback* callback=nullptr);
 };
 
@@ -222,9 +223,9 @@ private:
 	int min, max;
 	CTrackStore* storage;
 	int Add(int track, DataTrack* entry);
-	ppluint32	DeviceId;
-	ppluint8	DeviceType;
-	ppluint8	Page;
+	u_int32_t	DeviceId;
+	u_int8_t	DeviceType;
+	u_int8_t	Page;
 
 public:
 	CTrackList();
@@ -267,7 +268,7 @@ public:
 };
 
 bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version=2);
-ppluint32 findTitleIdByFilename(const ppl7::String& Filename);
+u_int32_t findTitleIdByFilename(const ppl7::String& Filename);
 
 
 
@@ -383,11 +384,18 @@ public:
 
 };
 
-class CID3TagSaver : public ppl6::CThread
+class CID3TagSaver : public ppl7::Thread
 {
 private:
-	ppl6::CMutex Mutex;
-	ppl6::CAssocArray Todo;
+	class QueueItem
+	{
+	public:
+		ppl7::String filename;
+		ppl7::AssocArray Tags;
+		bool cleartag;
+	};
+	ppl7::Mutex Mutex;
+	std::queue<QueueItem> Queue;
 	int PaddingSize;
 	int RetryIntervall;
 
@@ -398,9 +406,9 @@ public:
 	void SetPaddingSize(int bytes);
 	void SetRetryIntervall(int seconds);
 
-	virtual void ThreadMain(void* param);
-	void Add(const char* filename, ppl6::CAssocArray* Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
-	int UpdateNow(const char* filename, ppl6::CAssocArray* Tags, bool cleartag=false);
+	virtual void run();
+	void Add(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
+	int UpdateNow(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
 };
 
 class CStringCounterItem : public ppl6::CTreeItem
@@ -435,7 +443,7 @@ private:
 	WordTree		Remarks;
 	WordTree		Album;
 	WordTree		Label;
-	std::map<ppluint8, TitleTree>		MusicKeys;
+	std::map<u_int8_t, TitleTree>		MusicKeys;
 	//CWordTree		Global;
 	ppl6::CLog* log;
 
@@ -512,8 +520,8 @@ class CWmClient
 	Q_DECLARE_TR_FUNCTIONS(CWmClient)
 
 private:
-	ppl6::CMutex Mutex;
-	ppl6::CString Str_Unknown;
+	ppl7::Mutex Mutex;
+	ppl7::String Str_Unknown;
 	QApplication* app;
 	int argc;
 	char** argv;
@@ -599,7 +607,7 @@ public:
 	void OpenCoverPrinter();
 	void OpenPlaylistDialog();
 	void OpenSearchlistOverview();
-	void OpenSearchlistDialog(const ppl6::CString Filename);
+	void OpenSearchlistDialog(const ppl7::String Filename);
 
 	QWidget* OpenSearch(const char* artist=nullptr, const char* title=nullptr);
 	QWidget* OpenOrReuseSearch(QWidget* q, const char* artist=nullptr, const char* title=nullptr);
@@ -616,57 +624,57 @@ public:
 	void CoverViewerClosed();
 	bool IsCoverViewerVisible() const;
 
-	ppluint32 GetHighestDeviceId(int DeviceType);
-	ppl6::CString GetDeviceName(int DeviceType);
-	ppl6::CString GetDeviceNameShort(ppluint8 DeviceType);
+	u_int32_t GetHighestDeviceId(int DeviceType);
+	ppl7::String GetDeviceName(int DeviceType);
+	ppl7::String GetDeviceNameShort(u_int8_t DeviceType);
 	QPixmap GetDevicePixmap(int DeviceType);
 	QIcon GetDeviceIcon(int DeviceType);
 	QDate GetLatestPurchaseDate();
 	void SetLatestPurchaseDate(QDate Date);
-	int LoadDevice(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice* data);
-	void UpdateDevice(ppluint8 DeviceType, ppluint32 DeviceId);
-	CTrackList* GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page);
-	DataTrack* GetTrack(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track);
-	DataTitle* GetTitle(ppluint32 TitleId);
-	DataVersion* GetVersion(ppluint32 Id);
-	DataGenre* GetGenre(ppluint32 Id);
-	DataLabel* GetLabel(ppluint32 Id);
-	DataRecordSource* GetRecordSource(ppluint32 Id);
-	DataRecordDevice* GetRecordDevice(ppluint32 Id);
+	int LoadDevice(u_int8_t DeviceType, u_int32_t DeviceId, DataDevice* data);
+	void UpdateDevice(u_int8_t DeviceType, u_int32_t DeviceId);
+	CTrackList* GetTracklist(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page);
+	DataTrack* GetTrack(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track);
+	DataTitle* GetTitle(u_int32_t TitleId);
+	DataVersion* GetVersion(u_int32_t Id);
+	DataGenre* GetGenre(u_int32_t Id);
+	DataLabel* GetLabel(u_int32_t Id);
+	DataRecordSource* GetRecordSource(u_int32_t Id);
+	DataRecordDevice* GetRecordDevice(u_int32_t Id);
 
-	const char* GetVersionText(ppluint32 Id);
-	const char* GetGenreText(ppluint32 Id);
-	const char* GetLabelText(ppluint32 Id);
-	const char* GetRecordSourceText(ppluint32 Id);
-	const char* GetRecordDeviceText(ppluint32 Id);
+	const char* GetVersionText(u_int32_t Id);
+	const char* GetGenreText(u_int32_t Id);
+	const char* GetLabelText(u_int32_t Id);
+	const char* GetRecordSourceText(u_int32_t Id);
+	const char* GetRecordDeviceText(u_int32_t Id);
 
-	ppl6::CString getXmlTitle(ppluint32 TitleId);
+	ppl7::String getXmlTitle(u_int32_t TitleId);
 
 
 	QByteArray GetGeometry(const char* name);
 	void SaveGeometry(const char* name, QByteArray Geometry);
 	void ReloadTranslation();
 	QString Unknown();
-	ppl7::String GetAudioPath(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page);
-	ppl7::String GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-	ppl7::DirEntry StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
+	ppl7::String GetAudioPath(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page);
+	ppl7::String GetAudioFilename(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
+	ppl7::DirEntry StatAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
 
-	int TrashAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-	int RenameAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 OldTrack, ppluint32 NewTrack);
-	ppl6::CString NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track);
-	int SaveID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl6::CString& Filename="");
-	ppl6::CString NormalizeFilename(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track, DataTitle& Ti, const ppl6::CString& Suffix);
+	int TrashAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
+	int RenameAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t OldTrack, u_int32_t NewTrack);
+	ppl7::String NextAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
+	int SaveID3Tags(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track, DataTitle& Ti, const ppl7::String& Filename="");
+	ppl7::String NormalizeFilename(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track, DataTitle& Ti, const ppl7::String& Suffix);
 
-	int SaveOriginalAudioInfo(ppl6::CString& File, DataOimp& oimp);
-	int WritePlaylist(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list, DataDevice* device=nullptr);
-	int UpdateID3Tags(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, CTrackList* list);
+	int SaveOriginalAudioInfo(ppl7::String& File, DataOimp& oimp);
+	int WritePlaylist(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, CTrackList* list, DataDevice* device=nullptr);
+	int UpdateID3Tags(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, CTrackList* list);
 
 	int PlayFile(const ppl7::String& Filename);
 
 	// Printing
-	int PrintCoverDialog(QWidget* parent, int DeviceType, ppluint32 DeviceId);
-	int PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, ppluint32 end);
-	int PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, ppluint32 end);
+	int PrintCoverDialog(QWidget* parent, int DeviceType, u_int32_t DeviceId);
+	int PrintMP3Cover(QWidget* parent, int DeviceType, u_int32_t start, u_int32_t end);
+	int PrintTracklist(QWidget* parent, int DeviceType, u_int32_t start, u_int32_t end);
 
 
 	void NormalizeTerm(ppl7::String& term);
