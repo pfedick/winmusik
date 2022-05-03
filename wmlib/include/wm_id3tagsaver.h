@@ -1,7 +1,7 @@
 #ifndef WM_DATAOBJECTS_H
 #define WM_DATAOBJECTS_H
 
-#include <queue>
+#include <list>
 #include <ppl7.h>
 
 namespace de {
@@ -10,34 +10,33 @@ namespace winmusik {
 
 class CID3TagSaver : public ppl7::Thread
 {
-	private:
-		class WorkItem
-		{
-		public:
-			ppl7::String Filename;
-			ppl7::AssocArray Tags;
-			ppl7::ppl_time_t retry;
-			bool cleartag;
-			bool writev1;
-			bool writev2;
-			WorkItem();
-			WorkItem(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
-		};
-		ppl7::Mutex Mutex;
-		std::queue<WorkItem> Queue;
-		int PaddingSize;
-		int RetryIntervall;
-		void UpdateNow(CID3TagSaver::WorkItem &item);
-
+private:
+	class WorkItem
+	{
 	public:
-		CID3TagSaver();
-		~CID3TagSaver();
+		ppl7::String Filename;
+		ppl7::AssocArray Tags;
+		ppl7::ppl_time_t retry;
+		int retry_counter;
+		bool cleartag;
+		WorkItem();
+		WorkItem(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
+	};
+	ppl7::Mutex Mutex;
+	std::list<WorkItem> Queue;
+	int PaddingSize;
+	int RetryIntervall;
+	void UpdateNow(CID3TagSaver::WorkItem& item);
+	void IterateQueue();
 
-		void SetPaddingSize(int bytes);
-		void SetRetryIntervall(int seconds);
-		virtual void run();
-		void Add(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag=false, bool writev1=true, bool writev2=true);
-		//int UpdateNow(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag=false);
+public:
+	CID3TagSaver();
+	~CID3TagSaver();
+
+	void SetPaddingSize(int bytes);
+	void SetRetryIntervall(int seconds);
+	virtual void run();
+	void Add(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
 
 };
 

@@ -37,19 +37,16 @@ namespace winmusik {
 CID3TagSaver::WorkItem::WorkItem()
 {
 	retry=0;
+	retry_counter=0;
 	cleartag=false;
-	writev1=true;
-	writev2=true;
 }
 
-CID3TagSaver::WorkItem::WorkItem(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag, bool writev1, bool writev2)
+CID3TagSaver::WorkItem::WorkItem(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag)
 {
 	this->Filename=filename;
 	this->Tags=Tags;
 	retry=0;
 	this->cleartag=cleartag;
-	this->writev1=writev1;
-	this->writev2=writev2;
 }
 
 /*!\class CID3TagSaver
@@ -83,7 +80,7 @@ CID3TagSaver::~CID3TagSaver()
 	threadStop();
 }
 
-void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tags, bool cleartag, bool writev1, bool writev2)
+void CID3TagSaver::Add(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag)
 /*!\brief Auftrag in die Queue stellen
  *
  * Mit dieser Funktion wird ein neuer Update-Auftrag in die Queue gestellt.
@@ -107,9 +104,9 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
  *
  */
 {
-	CID3TagSaver::WorkItem item(filename,Tags,cleartag,writev1,writev2);
+	CID3TagSaver::WorkItem item(filename, Tags, cleartag);
 	Mutex.lock();
-	Queue.push(item);
+	Queue.push_back(item);
 	Mutex.unlock();
 	if (!this->threadIsRunning()) {
 		this->threadStart();
@@ -117,7 +114,7 @@ void CID3TagSaver::Add(const ppl7::String &filename, const ppl7::AssocArray &Tag
 }
 
 
-void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem &item)
+void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem& item)
 /*!\brief Auftrag ausführen
  *
  * Mit dieser Funktion wird ein ID3-Tag sofort in die angegebene Datei geschrieben, ohne
@@ -132,78 +129,81 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem &item)
 	ppl7::ID3Tag Tag;
 	Tag.setPaddingSize(PaddingSize);
 	Tag.setMaxPaddingSpace(PaddingSize);
-	if (item.Tags.exists("renamefile")==true && item.Tags.getString("renamefile")!=item.Filename) {
+	if (item.Tags.exists("renamefile") == true && item.Tags.getString("renamefile") != item.Filename) {
 		ppl7::File::rename(item.Filename, item.Tags.getString("renamefile"));
 		item.Filename=item.Tags.getString("renamefile");
 		item.Tags.remove("renamefile");
 	}
-	Tag.load(item.Filename);
+	try {
+		//could fail, if file does not exist or contains usupported ID3Tags
+		Tag.load(item.Filename);
+	} catch (...) {}
 	bool changes=false;
 	if (item.cleartag) {
 		// Cover retten, falls vorhanden
 		ppl7::ByteArray Cover;
-		Tag.getPicture(3,Cover);
+		Tag.getPicture(3, Cover);
 		Tag.clearTags();
-		if (Cover.size()>0) Tag.setPicture(3,Cover,"image/jpeg");
+		if (Cover.size() > 0) Tag.setPicture(3, Cover, "image/jpeg");
 		changes=true;
 	}
 	ppl7::String empty;
-	if (item.Tags.getString("artist",empty)!=Tag.getArtist()) {
-		Tag.setArtist(item.Tags.getString("artist",empty));
+	if (item.Tags.getString("artist", empty) != Tag.getArtist()) {
+		Tag.setArtist(item.Tags.getString("artist", empty));
 		changes=true;
 	}
-	if (Tag.getTitle()!=item.Tags.getString("title",empty)) {
-		Tag.setTitle(item.Tags.getString("title",empty));
+	if (Tag.getTitle() != item.Tags.getString("title", empty)) {
+		Tag.setTitle(item.Tags.getString("title", empty));
 		changes=true;
 	}
-	if (Tag.getRemixer()!=item.Tags.getString("version",empty)) {
-		Tag.setRemixer(item.Tags.getString("version",empty));
+	if (Tag.getRemixer() != item.Tags.getString("version", empty)) {
+		Tag.setRemixer(item.Tags.getString("version", empty));
 		changes=true;
 	}
-	if (Tag.getYear()!=item.Tags.getString("year",empty)) {
-		Tag.setYear(item.Tags.getString("year",empty));
+	if (Tag.getYear() != item.Tags.getString("year", empty)) {
+		Tag.setYear(item.Tags.getString("year", empty));
 		changes=true;
 	}
-	if (Tag.getTrack()!=item.Tags.getString("track",empty)) {
-		Tag.setTrack(item.Tags.getString("track",empty));
+	if (Tag.getTrack() != item.Tags.getString("track", empty)) {
+		Tag.setTrack(item.Tags.getString("track", empty));
 		changes=true;
 	}
-	if (Tag.getGenre()!=item.Tags.getString("genre",empty)) {
-		Tag.setGenre(item.Tags.getString("genre",empty));
+	if (Tag.getGenre() != item.Tags.getString("genre", empty)) {
+		Tag.setGenre(item.Tags.getString("genre", empty));
 		changes=true;
 	}
-	if (Tag.getComment()!=item.Tags.getString("comment",empty)) {
-		Tag.setComment(item.Tags.getString("comment",empty));
+	if (Tag.getComment() != item.Tags.getString("comment", empty)) {
+		Tag.setComment(item.Tags.getString("comment", empty));
 		changes=true;
 	}
-	if (Tag.getAlbum()!=item.Tags.getString("album",empty)) {
-		Tag.setAlbum(item.Tags.getString("album",empty));
+	if (Tag.getAlbum() != item.Tags.getString("album", empty)) {
+		Tag.setAlbum(item.Tags.getString("album", empty));
 		changes=true;
 	}
-	if (Tag.getLabel()!=item.Tags.getString("publisher",empty)) {
-		Tag.setLabel(item.Tags.getString("publisher",empty));
+	if (Tag.getLabel() != item.Tags.getString("publisher", empty)) {
+		Tag.setLabel(item.Tags.getString("publisher", empty));
 		changes=true;
 	}
-	if (Tag.getBPM()!=item.Tags.getString("bpm",empty)) {
-		Tag.setBPM(item.Tags.getString("bpm",empty));
+	if (Tag.getBPM() != item.Tags.getString("bpm", empty)) {
+		Tag.setBPM(item.Tags.getString("bpm", empty));
 		changes=true;
 	}
-	if (Tag.getEnergyLevel()!=item.Tags.getString("EnergyLevel",empty)) {
-		Tag.setEnergyLevel(item.Tags.getString("EnergyLevel",empty));
+	if (Tag.getEnergyLevel() != item.Tags.getString("EnergyLevel", empty)) {
+		Tag.setEnergyLevel(item.Tags.getString("EnergyLevel", empty));
 		changes=true;
 	}
-	if (Tag.getKey()!=item.Tags.getString("key",empty)) {
-		Tag.setKey(item.Tags.getString("key",empty));
+	if (Tag.getKey() != item.Tags.getString("key", empty)) {
+		Tag.setKey(item.Tags.getString("key", empty));
 		changes=true;
 	}
 	empty.set("0");
-	if (Tag.getPopularimeter()!=item.Tags.getString("rating",empty).toInt()) {
+	if (Tag.getPopularimeter() != item.Tags.getString("rating", empty).toInt()) {
 		Tag.removePopularimeter();
-		Tag.setPopularimeter("winmusik@pfp.de", item.Tags.getString("rating",empty).toInt());
+		Tag.setPopularimeter("winmusik@pfp.de", item.Tags.getString("rating", empty).toInt());
 		changes=true;
 	}
 
-	if (changes==false) return;
+	if (changes == false) return;
 	Tag.save();
 }
 
@@ -217,42 +217,53 @@ void CID3TagSaver::SetPaddingSize(int bytes)
 void CID3TagSaver::SetRetryIntervall(int seconds)
 {
 	Mutex.lock();
-	if (seconds<2) seconds=2;
+	if (seconds < 2) seconds=2;
 	RetryIntervall=seconds;
 	Mutex.unlock();
+}
+
+void CID3TagSaver::IterateQueue()
+{
+	std::list<WorkItem>::iterator it;
+	ppl7::ppl_time_t now=ppl7::GetTime();
+	for (it=Queue.begin();it != Queue.end();++it) {
+		if ((*it).retry == 0 || (*it).retry < now) {
+			WorkItem item=(*it);
+			Queue.erase(it);
+			Mutex.unlock();
+			try {
+				UpdateNow(item);
+				return;
+			} catch (...) {
+				if (item.retry_counter < 5) {
+					item.retry=ppl7::GetTime() + 5;
+					item.retry_counter++;
+					Mutex.lock();
+					Queue.push_back(item);
+					Mutex.unlock();
+					return;
+				}
+			}
+		}
+	}
+	Mutex.unlock();
+	ppl7::MSleep(200);	// We couldn't do anything in this run, let's wait a bit
 }
 
 
 void CID3TagSaver::run()
 {
 	int idlecount=0;
-	while (this->threadShouldStop()) {
+	while (!this->threadShouldStop()) {
 		Mutex.lock();
 		if (Queue.empty()) {
 			Mutex.unlock();
 			idlecount++;
-			if (idlecount>20) break;	// Thread wird beendet, da nichts zu tun ist
-			ppl7::MSleep(500);
+			if (idlecount > 20) break;	// terminate thread, because we have nothing to do
+			ppl7::MSleep(200); // Queue is empty, let's wait a bit
 		} else {
 			idlecount=0;
-			WorkItem item=Queue.front();
-			Queue.pop();
-			ppl7::ppl_time_t now=ppl7::GetTime();
-			if (item.retry!=0 && item.retry<now) {
-				Queue.push(item);
-				Mutex.unlock();
-			} else {
-				Mutex.unlock();
-				try {
-					UpdateNow(item);
-				} catch (...) {
-					// back into queue
-					item.retry=ppl7::GetTime()+10;
-					Mutex.lock();
-					Queue.push(item);
-					Mutex.unlock();
-				}
-			}
+			IterateQueue();
 		}
 	}
 }
