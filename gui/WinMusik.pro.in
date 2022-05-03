@@ -3,7 +3,7 @@
 # Web: https://www.pfp.de/winmusik/                                           #
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -112,7 +112,6 @@ SOURCES += src/CSearchlist.cpp \
     src/properties/regexpedit.cpp \
     src/properties/properties.cpp \
     src/printdevicedialog.cpp \
-    src/CID3TagSaver.cpp \
     src/StorageTrack.cpp \
     src/StorageDevice.cpp \
     src/config.cpp \

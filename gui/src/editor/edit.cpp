@@ -1788,12 +1788,12 @@ bool Edit::on_f5_CheckDupes(QObject* target)
 // EVENT: F6 - MP3 ID3-Tag einlesen
 bool Edit::on_f6_Pressed(QObject*, int modifier)
 {
-	ppl6::CString Tmp;
-	ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-	if (Path.IsEmpty()) {
+	ppl7::String Tmp;
+	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+	if (Path.isEmpty()) {
 		// Vielleicht gibt es noch einen Titel ohne Index
 		Path=wm->NextAudioFile(DeviceType, DeviceId, Page, TrackNum);
-		if (Path.IsEmpty()) {
+		if (Path.isEmpty()) {
 			QMessageBox::information(this, tr("WinMusik: Notice"),
 				tr("There are no further titles without an index in the directory of this device"));
 			return true;
@@ -1801,19 +1801,24 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 	}
 
 	// Den Dateinamen nehmen wir in die Zwischenablage
-	ppl6::CString Songname=ppl6::GetFilename(Path);
+	ppl7::String Songname=ppl7::File::getFilename(Path);
 	ui.filename->setText(Songname);
-	ppl6::CDirEntry de;
-	if (ppl6::CFile::Stat(Path, de)) {
-		Tmp.Setf("%0.1f", (double)de.Size / 1048576.0);
+	try {
+		ppl7::DirEntry de;
+		ppl7::File::statFile(Path, de);
+		Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 		ui.filesize->setText(Tmp);
+	} catch (...) {
+		ui.filesize->setText("");
 	}
 
-	Songname.PregReplace("/\\.mp3$/i", "");
-	Songname.PregReplace("/\\.aiff$/i", "");
-	Songname.PregReplace("/^[0-9]+-/", "");
-	Songname.Replace("_", " ");
-	Songname.Replace("\t", " ");
+	Songname.pregReplace("/\\.mp3$/i", "");
+	Songname.pregReplace("/\\.aiff$/i", "");
+	Songname.pregReplace("/\\.aif$/i", "");
+	Songname.pregReplace("/\\.wav$/i", "");
+	Songname.pregReplace("/^[0-9]+-/", "");
+	Songname.replace("_", " ");
+	Songname.replace("\t", " ");
 	QClipboard* clipboard = QApplication::clipboard();
 	clipboard->setText(Songname);
 	if (modifier == Qt::NoModifier) {
@@ -2100,7 +2105,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 	QString qFile;
 	QPixmap Icon;
 
-	ppl6::CString xml;
+	ppl7::String xml;
 	xml="<winmusikTracklist>\n";
 	xml+="<tracks>\n";
 
@@ -2134,7 +2139,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 	QMimeData* mimeData = new QMimeData;
 	if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
 	drag->setPixmap(Icon);
-	QByteArray ba((const char*)xml, xml.Size());
+	QByteArray ba((const char*)xml, xml.size());
 	mimeData->setData("application/winmusik+xml", ba);
 	mimeData->setUrls(list);
 	drag->setMimeData(mimeData);

@@ -20,8 +20,8 @@
 
 #include "oimpinfo.h"
 
-OimpInfo::OimpInfo(QWidget *parent, DataOimp *oimp)
-    : QWidget(parent)
+OimpInfo::OimpInfo(QWidget* parent, DataOimp* oimp)
+	: QWidget(parent)
 {
 	ui.setupUi(this);
 	ui.tabWidget->setCurrentIndex(1);
@@ -34,38 +34,38 @@ OimpInfo::~OimpInfo()
 
 }
 
-void OimpInfo::CopyData(DataOimp *oimp)
+void OimpInfo::CopyData(DataOimp* oimp)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 
 	ui.filename->setText(oimp->Filename);
 
-	Tmp=oimp->ID3v2.Get("artist");
+	Tmp=oimp->ID3v2.getString("artist");
 	ui.v2Artist->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("title");
+	Tmp=oimp->ID3v2.getString("title");
 	ui.v2Title->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("album");
+	Tmp=oimp->ID3v2.getString("album");
 	ui.v2Album->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("year");
+	Tmp=oimp->ID3v2.getString("year");
 	ui.v2Year->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("comment");
+	Tmp=oimp->ID3v2.getString("comment");
 	ui.v2Comment->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("genre");
+	Tmp=oimp->ID3v2.getString("genre");
 	ui.v2Genre->setText(Tmp);
-	Tmp=oimp->ID3v2.Get("remixer");
+	Tmp=oimp->ID3v2.getString("remixer");
 	ui.v2Remixer->setText(Tmp);
 
-	Tmp=oimp->ID3v1.Get("artist");
+	Tmp=oimp->ID3v1.getString("artist");
 	ui.v1Artist->setText(Tmp);
-	Tmp=oimp->ID3v1.Get("title");
+	Tmp=oimp->ID3v1.getString("title");
 	ui.v1Title->setText(Tmp);
-	Tmp=oimp->ID3v1.Get("album");
+	Tmp=oimp->ID3v1.getString("album");
 	ui.v1Album->setText(Tmp);
-	Tmp=oimp->ID3v1.Get("year");
+	Tmp=oimp->ID3v1.getString("year");
 	ui.v1Year->setText(Tmp);
-	Tmp=oimp->ID3v1.Get("comment");
+	Tmp=oimp->ID3v1.getString("comment");
 	ui.v1Comment->setText(Tmp);
-	Tmp=oimp->ID3v1.Get("genre");
+	Tmp=oimp->ID3v1.getString("genre");
 	ui.v1Genre->setText(Tmp);
 
 }

@@ -991,44 +991,6 @@ ppl7::String CWmClient::GetAudioFilename(ppluint8 DeviceType, ppluint32 DeviceId
 	return Path;
 }
 
-ppl7::DirEntry CWmClient::StatAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
-{
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Search for audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-	ppl7::DirEntry ret;
-	ppl7::String Pattern;
-	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
-	if (Path.isEmpty()) return ret;
-	Pattern.setf("%03u-*.(mp3|aiff)", Track);
-	ppl7::Dir Dir;
-	const ppl6::CDirEntry* de;
-	if (Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE)) {
-		if ((de=Dir.GetFirstPattern(Pattern, true))) {
-			Path=de->File;
-			ret=*de;
-			if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
-			return ret;
-		}
-
-	}
-	Pattern.setf("%03u.(mp3|aiff)", Track);
-	if ((de=Dir.GetFirstPattern(Pattern, true))) {
-		Path=de->File;
-		ret=*de;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
-		return ret;
-	}
-	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
-	if ((de=Dir.GetFirstRegExp(Pattern))) {
-		Path=de->File;
-		ret=*de;
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
-		return ret;
-	}
-
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "StatAudioFile", __FILE__, __LINE__, "Nicht gefunden");
-	return ret;
-}
-
 ppl7::String CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint32 Track)
 {
 	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Find next audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
@@ -1047,19 +1009,18 @@ ppl7::String CWmClient::NextAudioFile(ppluint8 DeviceType, ppluint32 DeviceId, p
 			if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
 				// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
 				if (entry->Size > 256) {
-					if (Filename.pregMatch("/^.*\\.mp3$/i") == true
-						|| Filename.pregMatch("/^.*\\.aiff$/i") == true) {
+					if (Filename.pregMatch("/^.*\\.(mp3|aiff|aif|wav)$/i") == true) {
 						// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
 						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Datei passt auf Pattern: %s", (const char*)Filename);
 						ppl7::String newFilename;
 						newFilename.setf("%s/%03u-%s", (const char*)entry->Path, Track, (const char*)Filename);
 						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s", (const char*)entry->File, (const char*)newFilename);
 						// Wir versuchen sie umzubenennen
-						if (ppl6::CFile::RenameFile(entry->File, newFilename)) {
-							if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 3, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Erfolgreich. Datei: %s", (const char*)newFilename);
+						try {
+							ppl7::File::rename(entry->File, newFilename);
 							return newFilename;
-						}
-						if (wmlog) wmlog->LogError();
+						} catch (...) {}
+						//if (wmlog) wmlog->LogError();
 						if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Error, versuche nächste Datei");
 						// Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
 					}
@@ -1387,7 +1348,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-}
+	}
 #else
 	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),

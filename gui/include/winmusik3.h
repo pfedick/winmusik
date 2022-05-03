@@ -45,6 +45,8 @@
 #include "ppl7.h"
 #include "exceptions.h"
 
+#include "wm_id3tagsaver.h"
+
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2022"
  // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
  // Verzeichnisses verwendet:
@@ -384,33 +386,6 @@ public:
 
 };
 
-class CID3TagSaver : public ppl7::Thread
-{
-private:
-	class QueueItem
-	{
-	public:
-		ppl7::String filename;
-		ppl7::AssocArray Tags;
-		bool cleartag;
-	};
-	ppl7::Mutex Mutex;
-	std::queue<QueueItem> Queue;
-	int PaddingSize;
-	int RetryIntervall;
-
-public:
-	CID3TagSaver();
-	~CID3TagSaver();
-
-	void SetPaddingSize(int bytes);
-	void SetRetryIntervall(int seconds);
-
-	virtual void run();
-	void Add(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
-	int UpdateNow(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag=false);
-};
-
 class CStringCounterItem : public ppl6::CTreeItem
 {
 public:
@@ -577,7 +552,7 @@ public:
 	CDeviceStore			DeviceStore;
 	COimpDataStore			OimpDataStore;
 
-	CID3TagSaver			ID3TagSaver;
+	de::pfp::winmusik::CID3TagSaver		ID3TagSaver;
 	RegularExpressionCapture	RegExpCapture;
 	CHashes					Hashes;
 
@@ -657,7 +632,6 @@ public:
 	QString Unknown();
 	ppl7::String GetAudioPath(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page);
 	ppl7::String GetAudioFilename(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
-	ppl7::DirEntry StatAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
 
 	int TrashAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t Track);
 	int RenameAudioFile(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int32_t OldTrack, u_int32_t NewTrack);
