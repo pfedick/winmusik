@@ -19,7 +19,6 @@
 
 
 #include "winmusik3.h"
-
 #include "firststart.h"
 
 
@@ -45,18 +44,6 @@ FirstStart::FirstStart(QWidget* parent, CWmClient* wm)
 		}
 	}
 
-	// Charset-Auswahl
-	std::list<ppl7::String> charsets;
-	ppl7::Iconv::enumerateCharsets(charsets);
-
-	QStringList qlist;
-	std::list<ppl7::String>::const_iterator it;
-	for (it=charsets.begin();it != charsets.end();++it) {
-		qlist.append((*it));
-	}
-	qlist.sort();
-	ui.charset->addItems(qlist);
-	ui.charset->setCurrentIndex(ui.charset->findText("ISO-8859-15"));
 }
 
 FirstStart::~FirstStart()
@@ -100,7 +87,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			ui.buttonWeiter->setEnabled(true);
 		}
 		// Den Pageplan schonmal erweitern
-		pageplan[3]=5;
+		pageplan[3]=4;
 		maxpageplan=3;
 
 		on_localdatapath_textChanged();
@@ -128,7 +115,7 @@ void FirstStart::on_buttonWeiter_clicked()
 					QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
 				if (ret == QMessageBox::Yes) {
 					// TODO: Der Datenpfad muss gespeichert werden
-					pageplan[3]=7;
+					pageplan[3]=4;
 					maxpageplan=3;
 				} else {
 					return;
@@ -136,7 +123,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			}
 			//QMessageBox::information(NULL, "Debug","keine frühere Installation");
 		}
-	} else 	if (pageplan[page] == 4) {
+	} else 	if (pageplan[page] == 3) {
 		wm->conf.DataPath=ui.localdatapath->text();
 		//QMessageBox::information(this, tr("WinMusik Locale"),conf->Locale);
 		try {
@@ -169,24 +156,18 @@ void FirstStart::on_buttonWeiter_clicked()
 			ui.buttonWeiter->setEnabled(true);
 		}
 
-	} else if (pageplan[page] == 4) {
+	} else if (pageplan[page] == 3 || pageplan[page] == 4) {
 		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page] == 7) {
-		ui.buttonZurueck->setVisible(false);
-		ui.buttonAbbrechen->setVisible(false);
-		ui.buttonWeiter->setEnabled(true);
-		ui.buttonWeiter->setText(tr("finish"));
-	} else if (pageplan[page] == 9) {
+	} else if (pageplan[page] >= 5) {
 		done(1);
+	} else {
+		ui.buttonWeiter->setText(tr("next"));
 	}
 }
 
 void FirstStart::on_buttonZurueck_clicked()
 {
-	if (pageplan[page] == 3) {
-		ui.buttonWeiter->setText(tr("next"));
-	}
-
+	ui.buttonWeiter->setText(tr("next"));
 	if (pageplan[page] == 2) ui.buttonWeiter->setEnabled(true);
 	if (page > 0)	page--;
 	if (page <= 0) {
@@ -200,7 +181,7 @@ void FirstStart::on_buttonZurueck_clicked()
 void FirstStart::on_buttonAbbrechen_clicked()
 {
 	int ret = QMessageBox::question(this, tr("WinMusik 3"),
-		tr("Do you really want to cancel the installation?"),
+		tr("Do you really want to cancel the configuration?"),
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No);
 	ppl6::SetError(0);
@@ -216,18 +197,6 @@ void FirstStart::on_selectrecoverpath_clicked()
 		ui.recoverpath->setText(dir);
 	}
 }
-
-void FirstStart::on_selectimportpath_clicked()
-{
-	QString dir = QFileDialog::getExistingDirectory(this, tr("Please select the directory of the WinMusik 2 database"),
-		ui.importpath->text(),
-		QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-	if (dir.length()) {
-		ui.importpath->setText(dir);
-	}
-}
-
-
 
 void FirstStart::on_selectdatapath_clicked()
 {
@@ -246,9 +215,8 @@ void FirstStart::on_localdatapath_textChanged()
 	//ui.localdatapath->setText(Path);
 	if (Path.Len()) {
 		ui.buttonWeiter->setEnabled(true);
-		pageplan[3]=3;
-		pageplan[4]=4;
-		maxpageplan=4;
+		pageplan[3]=4;
+		maxpageplan=3;
 	} else {
 		ui.buttonWeiter->setEnabled(false);
 	}

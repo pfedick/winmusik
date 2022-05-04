@@ -44,7 +44,7 @@ Config::Config()
 	bCheckForUpdatesOnStartup=true;
 	bAutomaticArtistSuggestion=true;
 	bAutomaticTitleSuggestion=true;
-	bCacheDirectorySearch=true;
+	bCacheDirectorySearch=false;
 	bAutomaticEditSearch=true;
 	ReadId3Tag=2;
 	bWriteID3Tags=true;
@@ -59,29 +59,36 @@ Config::Config()
 	TagSaverRetryIntervall=60;
 	for (int i=0;i < MAX_DEVICE_TYPES;i++) {
 		SearchDevice[i]=false;
-		VisibleDevice[i]=true;
+		VisibleDevice[i]=false;
 	}
+	SearchDevice[1]=true;
+	VisibleDevice[1]=true;
+	SearchDevice[2]=true;
+	VisibleDevice[2]=true;
+	SearchDevice[7]=true;
+	VisibleDevice[7]=true;
+
 	SearchFast=true;
 	bEnableDebug=false;
 	bserverEnabled=false;
 	bserverEnableSSL=false;
 	serverPort=8030;
 	musicKeyDisplay=musicKeyTypeOpenKey;
-	musicKeyTag=musicKeyTypeOpenKey;
+	musicKeyTag=musicKeyTypeMusicalSharps;
 	customMusicKeyName=tr("custom format");
 	for (int i=0;i < 26;i++) customMusicKey[i]=DataTitle::keyName(i, musicKeyTypeMusicalSharps);
 	playlistView=0;
 
-	JpegQualityCover=80;
-	JpegQualityPreview=80;
-	MaxFilenameLength=64;
+	JpegQualityCover=95;
+	JpegQualityPreview=90;
+	MaxFilenameLength=255;
 
 }
 
 Config::CDDB::CDDB()
 {
 	port=80;
-	server="freedb.freedb.org";
+	server="freedb.org";
 	proxy_port=8080;
 	username="anonymous";
 	hostname="localhost";

@@ -53,7 +53,6 @@ private slots:
     void on_buttonAbbrechen_clicked();
     void on_selectrecoverpath_clicked();
     void on_selectdatapath_clicked();
-    void on_selectimportpath_clicked();
     void on_localdatapath_textChanged();
 
 };

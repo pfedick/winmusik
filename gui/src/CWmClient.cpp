@@ -29,7 +29,7 @@
 #include "src/menue/menue.h"
 #include "src/editor/edit.h"
 #include "src/search/search.h"
-#include "firststart.h"
+#include "src/firststart/firststart.h"
 #include "langselect.h"
 #include "splashscreen.h"
 #include "coverprinter.h"
@@ -347,9 +347,9 @@ int CWmClient::FirstStartDialog()
 	int ret=s.exec();
 	if (!ret) return 0;
 
-	// If the user has not aborted, we try to load the configuration again
+	// If the user has not aborted, we try to save the configuration
 	try {
-		conf.load();
+		conf.save();
 	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not load the WinMusik configuration!"));
 		return 0;
@@ -1348,7 +1348,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-	}
+}
 #else
 	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),

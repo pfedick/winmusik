@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,13 +29,13 @@ QT += core \
     widgets \
     network \
     printsupport
-    
+
 CONFIG += debug_and_release
-CONFIG(debug, debug|release) { 
+CONFIG(debug, debug|release) {
     win32:TARGET = WinMusik
     unix:TARGET = debug/WinMusik
 }
-else { 
+else {
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
@@ -86,10 +86,10 @@ CODECFORTR = UTF-8
 TRANSLATIONS = winmusik_de.ts \
     winmusik_en.ts
 
-DISTFILES += \
-    WinMusik.includes \
-    setup.iss \
-    setup64.iss \
-    HISTORY.TXT \
-    build_mingw64.sh
-
+#For what is this?
+#DISTFILES += \
+#    WinMusik.includes \
+#    setup.iss \
+#    setup64.iss \
+#    HISTORY.TXT \
+#    build_mingw64.sh

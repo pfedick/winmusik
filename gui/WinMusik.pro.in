@@ -3,9 +3,9 @@
 # Web: https://www.pfp.de/winmusik/                                           #
 ###############################################################################
 #
-# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-#
+# 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,13 +29,13 @@ QT += core \
     widgets \
     network \
     printsupport
-
+    
 CONFIG += debug_and_release
-CONFIG(debug, debug|release) {
+CONFIG(debug, debug|release) { 
     win32:TARGET = WinMusik
     unix:TARGET = debug/WinMusik
 }
-else {
+else { 
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
@@ -95,7 +95,6 @@ DISTFILES += \
 
 
 SOURCES += src/CSearchlist.cpp \
-    src/firststart.cpp \
     src/main.cpp \
     src/errors.cpp \
     src/Print.cpp \
@@ -140,6 +139,7 @@ SOURCES += src/CSearchlist.cpp \
     src/editor/oimpinfo.cpp \
     src/editor/edit.cpp \
     src/editor/massimport.cpp \
+    src/firststart/firststart.cpp \
     src/StorageTitle.cpp \
     src/edittrackdialog.cpp \
     src/resultfilter.cpp \
@@ -160,7 +160,7 @@ SOURCES += src/CSearchlist.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/edittrack.cpp \
     widgets/KeyWheel.cpp \
-
+    
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
@@ -183,6 +183,7 @@ HEADERS += widgets/edittrack.h \
     src/editor/edit.h \
     src/editor/massimport.h \
     src/editor/cddbselect.h \
+    src/firststart/firststart.h \
     src/playlist/playlistStatusBar.h \
     src/playlist/editstring.h \
     src/playlist/playlistedit.h \
@@ -205,14 +206,14 @@ HEADERS += widgets/edittrack.h \
     include/asynchronousMessage.h \
     include/wmtoolbutton.h \
     include/editdevice.h \
-    include/firststart.h \
+    include/exceptions.h \
     include/coverviewer.h \
     include/splashscreen.h \
     include/musickey.h \
     include/edittrackdialog.h \
     include/regexpcapture.h \
     include/devicelist.h \
-
+    
 
 FORMS += widgets/wmcoverwidget.ui \
     widgets/edittrack.ui \
@@ -233,13 +234,13 @@ FORMS += widgets/wmcoverwidget.ui \
     src/editor/oimpinfo.ui \
     src/editor/edit.ui \
     src/editor/tablesearch.ui \
+    src/firststart/firststart.ui \
     src/exporttracks/exporttracks.ui \
     src/playlist/editstring.ui \
     src/playlist/playlistexport.ui \
     src/playlist/playlistedit.ui \
     src/playlist/setbpmplayed.ui \
     src/playlist/playlist.ui \
-    forms/firststart.ui \
     forms/editdevice.ui \
     forms/edittrackdialog.ui \
     forms/about.ui \
@@ -250,3 +251,4 @@ FORMS += widgets/wmcoverwidget.ui \
     forms/devicelist.ui \
     forms/splashscreen.ui \
     forms/asynchronousMessage.ui \
+    
