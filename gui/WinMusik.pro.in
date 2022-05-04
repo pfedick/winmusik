@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,13 +29,13 @@ QT += core \
     widgets \
     network \
     printsupport
-    
+
 CONFIG += debug_and_release
-CONFIG(debug, debug|release) { 
+CONFIG(debug, debug|release) {
     win32:TARGET = WinMusik
     unix:TARGET = debug/WinMusik
 }
-else { 
+else {
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
@@ -86,13 +86,13 @@ CODECFORTR = UTF-8
 TRANSLATIONS = winmusik_de.ts \
     winmusik_en.ts
 
-DISTFILES += \
-    WinMusik.includes \
-    setup.iss \
-    setup64.iss \
-    HISTORY.TXT \
-    build_mingw64.sh
-
+#For what is this?
+#DISTFILES += \
+#    WinMusik.includes \
+#    setup.iss \
+#    setup64.iss \
+#    HISTORY.TXT \
+#    build_mingw64.sh
 
 SOURCES += src/CSearchlist.cpp \
     src/main.cpp \
@@ -123,7 +123,6 @@ SOURCES += src/CSearchlist.cpp \
     src/asynchronousMessage.cpp \
     src/CStorage.cpp \
     src/wmtoolbutton.cpp \
-    src/langselect.cpp \
     src/CHashes.cpp \
     src/coverviewer.cpp \
     src/CTrackList.cpp \
@@ -140,6 +139,7 @@ SOURCES += src/CSearchlist.cpp \
     src/editor/edit.cpp \
     src/editor/massimport.cpp \
     src/firststart/firststart.cpp \
+    src/firststart/langselect.cpp \
     src/StorageTitle.cpp \
     src/edittrackdialog.cpp \
     src/resultfilter.cpp \
@@ -183,6 +183,7 @@ HEADERS += widgets/edittrack.h \
     src/editor/edit.h \
     src/editor/massimport.h \
     src/editor/cddbselect.h \
+    src/firststart/langselect.h \
     src/firststart/firststart.h \
     src/playlist/playlistStatusBar.h \
     src/playlist/editstring.h \
@@ -193,7 +194,6 @@ HEADERS += widgets/edittrack.h \
     src/playlist/setbpmplayed.h \
     include/colorscheme.h \
     include/winmusik3.h \
-    include/langselect.h \
     include/version.h \
     include/csearchlist.h \
     include/wmstorage.h \
@@ -235,6 +235,7 @@ FORMS += widgets/wmcoverwidget.ui \
     src/editor/edit.ui \
     src/editor/tablesearch.ui \
     src/firststart/firststart.ui \
+    src/firststart/langselect.ui \
     src/exporttracks/exporttracks.ui \
     src/playlist/editstring.ui \
     src/playlist/playlistexport.ui \
@@ -246,7 +247,6 @@ FORMS += widgets/wmcoverwidget.ui \
     forms/about.ui \
     forms/coverprinter.ui \
     forms/coverviewer.ui \
-    forms/langselect.ui \
     forms/printdevicedialog.ui \
     forms/devicelist.ui \
     forms/splashscreen.ui \

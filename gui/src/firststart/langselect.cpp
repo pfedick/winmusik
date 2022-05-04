@@ -24,10 +24,10 @@
  */
 
 
-#include "../include/langselect.h"
+#include "src/firststart/langselect.h"
 
-LangSelect::LangSelect(QWidget *parent)
-    : QDialog(parent)
+LangSelect::LangSelect(QWidget* parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 }
@@ -39,7 +39,7 @@ LangSelect::~LangSelect()
 
 void LangSelect::Select(QString lang)
 {
-	if (lang=="de") {
+	if (lang == "de") {
 		ui.lang_de->setChecked(true);
 		ui.label->setText("Bitte wählen Sie Ihre gewünschte Sprache aus:");
 	} else {

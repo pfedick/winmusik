@@ -30,7 +30,7 @@
 #include "src/editor/edit.h"
 #include "src/search/search.h"
 #include "src/firststart/firststart.h"
-#include "langselect.h"
+#include "src/firststart/langselect.h"
 #include "splashscreen.h"
 #include "coverprinter.h"
 #include "src/playlist/playlist.h"
