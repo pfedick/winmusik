@@ -126,7 +126,6 @@ SOURCES += src/CSearchlist.cpp \
     src/CHashes.cpp \
     src/coverviewer.cpp \
     src/CTrackList.cpp \
-    src/DropArea.cpp \
     src/InitialDatabase.cpp \
     src/CWmFile.cpp \
     src/editor/shortcutdialog.cpp \
@@ -160,7 +159,7 @@ SOURCES += src/CSearchlist.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/edittrack.cpp \
     widgets/KeyWheel.cpp \
-    
+
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
@@ -199,7 +198,6 @@ HEADERS += widgets/edittrack.h \
     include/wmstorage.h \
     include/coverprinter.h \
     include/resultfilter.h \
-    include/droparea.h \
     include/tablecontrol.h \
     include/about.h \
     include/printdevicedialog.h \
@@ -213,7 +211,7 @@ HEADERS += widgets/edittrack.h \
     include/edittrackdialog.h \
     include/regexpcapture.h \
     include/devicelist.h \
-    
+
 
 FORMS += widgets/wmcoverwidget.ui \
     widgets/edittrack.ui \
@@ -251,4 +249,3 @@ FORMS += widgets/wmcoverwidget.ui \
     forms/devicelist.ui \
     forms/splashscreen.ui \
     forms/asynchronousMessage.ui \
-    
