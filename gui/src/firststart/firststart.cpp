@@ -78,9 +78,9 @@ void FirstStart::on_buttonWeiter_clicked()
 		}
 
 	} else if (pageplan[page] == 2) {
-		ppl6::CString Path=ui.localdatapath->text();
-		Path.RTrim("/");
-		if (!Path.Len()) {			// Pfad darf nicht leer sein
+		ppl7::String Path=ui.localdatapath->text();
+		Path.trimRight("/");
+		if (!Path.size()) {			// Pfad darf nicht leer sein
 			ui.buttonWeiter->setEnabled(false);
 			return;
 		} else {
@@ -91,20 +91,22 @@ void FirstStart::on_buttonWeiter_clicked()
 		maxpageplan=3;
 
 		on_localdatapath_textChanged();
-		if (!ppl6::IsDir((const char*)Path)) {		// Pfad existiert nicht, sollen wir ihn anlegen?
+		if (!ppl7::File::isDir((const char*)Path)) {		// Pfad existiert nicht, sollen wir ihn anlegen?
 			int ret=QMessageBox::question(this, tr("WinMusik"),
 				tr("The specified directory does not exist. Should WinMusik create it?"),
 				QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
 			if (ret == QMessageBox::Yes) {
-				if (!ppl6::MkDir(Path, 1)) {
-					QMessageBox::critical(this, tr("WinMusik - Error!"),
-						tr("Could not create the requested directory. Please check, if the name of the directory is correct and that you have the rights to create it"));
+				try {
+					ppl7::Dir::mkDir(Path, true);
+				} catch (const ppl7::Exception& exp) {
+					ShowException(exp,
+						tr("Could not create the requested directory. "
+							"Please check, if the name of the directory is "
+							"correct and that you have the rights to create it"));
 					return;
 				}
-
-			} else {
-				return;
 			}
+
 		} else {
 			// Pfad darf keine frühere Installation enthalten
 			//QMessageBox::information(NULL, "Debug","Prüfe, ob Pfad frühere Installation enthält");
@@ -115,6 +117,7 @@ void FirstStart::on_buttonWeiter_clicked()
 					QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
 				if (ret == QMessageBox::Yes) {
 					// TODO: Der Datenpfad muss gespeichert werden
+					wm->conf.DataPath=Path;
 					pageplan[3]=4;
 					maxpageplan=3;
 				} else {
@@ -123,7 +126,7 @@ void FirstStart::on_buttonWeiter_clicked()
 			}
 			//QMessageBox::information(NULL, "Debug","keine frühere Installation");
 		}
-	} else 	if (pageplan[page] == 3) {
+	} else if (pageplan[page] == 3) {
 		wm->conf.DataPath=ui.localdatapath->text();
 		//QMessageBox::information(this, tr("WinMusik Locale"),conf->Locale);
 		try {
@@ -136,11 +139,23 @@ void FirstStart::on_buttonWeiter_clicked()
 		wm->CreateInitialDatabase();
 		done(1);
 		return;
+	} else 	if (pageplan[page] == 4) {
+		try {
+			wm->conf.save();
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Configuration could not be saved!"));
+			return;
+		}
+		wm->InitDataPath();
+		done(1);
+		return;
 
 	}
 
 	page++;
 	if (page > maxpageplan) {
+		printf("Sollten wir hier landen?\n");
+		wm->InitDataPath();
 		done(1);
 		return;
 	}
