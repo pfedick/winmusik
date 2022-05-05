@@ -21,7 +21,7 @@
 
 #include "winmusik3.h"
 
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
 static const char* versions[] ={
 		"Single",
@@ -62,9 +62,7 @@ int CWmClient::CreateInitialDatabase()
  *
  */
 {
-	printf("CWmClient::CreateInitialDatabase\n");
 	if (!Storage.DeleteDatabase()) return 0;
-	printf("debug 1\n");
 
 	// First, we create some common used versions
 	DataVersion v;
@@ -76,15 +74,17 @@ int CWmClient::CreateInitialDatabase()
 	}
 
 	// Now the default genres defined by http://www.id3.org/
-	const char* genre;
+	ppl7::String genre;
 	DataGenre g;
-	for (int i=0;;i++) {
-		genre=ppl6::GetID3GenreName(i);
-		if (!genre) break;
-		g.Clear();
-		if (!g.SetValue(genre)) return 0;
-		if (!GenreStore.Put(&g)) return 0;
-	}
+	try {
+		for (int i=0;;i++) {
+			genre=ppl7::GetID3GenreName(i);
+			if (genre.isEmpty()) break;
+			g.Clear();
+			if (!g.SetValue(genre)) return 0;
+			if (!GenreStore.Put(&g)) return 0;
+		}
+	} catch (const ppl7::InvalidGenreException&) {}
 
 	// A few artist shortcuts
 	DataShortcut s;
@@ -94,8 +94,5 @@ int CWmClient::CreateInitialDatabase()
 		if (!s.SetValue(shortcuts[i].shortcut, shortcuts[i].artist)) return 0;
 		if (!ShortcutStore.Put(&s)) return 0;
 	}
-
-	printf("debug 2\n");
-
 	return 1;
 }

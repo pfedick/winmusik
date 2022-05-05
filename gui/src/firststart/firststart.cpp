@@ -51,24 +51,33 @@ FirstStart::~FirstStart()
 
 }
 
-
+bool FirstStart::UseExistingInstallation(const ppl7::String& Path)
+{
+	// Der Pfad muss existieren
+	if (!ppl7::File::isDir(Path)) {
+		//StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton )
+		QMessageBox::critical(this, tr("WinMusik"),
+			tr("The selected path is invalid or does not exist"));
+		return false;
+	}
+	if (!wm->isValidDataPath(Path)) {
+		QMessageBox::critical(this, tr("WinMusik"),
+			tr("The selected path does not contain any valid WinMusik database"));
+		return false;
+	}
+	return true;
+}
 
 void FirstStart::on_buttonWeiter_clicked()
 {
 	if (pageplan[page] == 1) {
 		// Es muss geprüft werden, ob der User einen gültigen Pfad einer früheren Installation angegeben hat
-		ppl6::CString Path=ui.recoverpath->text();
-		if (Path.Len()) {
-			if (UseExistingInstallation(&Path)) {
-				pageplan[2]=7;
+		ppl7::String Path=ui.recoverpath->text();
+		if (Path.size()) {
+			if (UseExistingInstallation(Path)) {
+				pageplan[2]=4;
 				maxpageplan=2;
 				wm->conf.DataPath=Path;
-				try {
-					wm->conf.save();
-				} catch (const ppl7::Exception& exp) {
-					ShowException(exp, tr("Configuration could not be saved!"));
-					return;
-				}
 			} else {
 				return;
 			}
@@ -199,7 +208,6 @@ void FirstStart::on_buttonAbbrechen_clicked()
 		tr("Do you really want to cancel the configuration?"),
 		QMessageBox::Yes | QMessageBox::No,
 		QMessageBox::No);
-	ppl6::SetError(0);
 	if (ret == QMessageBox::Yes) done(0);
 }
 
@@ -225,34 +233,14 @@ void FirstStart::on_selectdatapath_clicked()
 
 void FirstStart::on_localdatapath_textChanged()
 {
-	ppl6::CString Path=ui.localdatapath->text();
-	Path.RTrim("/");
+	ppl7::String Path=ui.localdatapath->text();
+	Path.trimRight("/");
 	//ui.localdatapath->setText(Path);
-	if (Path.Len()) {
+	if (Path.size()) {
 		ui.buttonWeiter->setEnabled(true);
-		pageplan[3]=4;
+		pageplan[3]=3;
 		maxpageplan=3;
 	} else {
 		ui.buttonWeiter->setEnabled(false);
 	}
-}
-
-
-
-int FirstStart::UseExistingInstallation(ppl6::CString* Path)
-{
-	char* p=(char*)Path->GetPtr();
-	// Der Pfad muss existieren
-	if (!ppl6::IsDir(p)) {
-		//StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton )
-		QMessageBox::critical(this, tr("WinMusik"),
-			tr("The selected path is invalid or does not exist"));
-		return 0;
-	}
-	if (!wm->isValidDataPath(*Path)) {
-		QMessageBox::critical(this, tr("WinMusik"),
-			tr("The selected path does not contain any valid WinMusik database"));
-		return 0;
-	}
-	return 1;
 }

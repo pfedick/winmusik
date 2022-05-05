@@ -36,8 +36,7 @@ public:
     FirstStart(QWidget* parent = 0, CWmClient* wm=NULL);
     ~FirstStart();
 
-    int UseExistingInstallation(ppl6::CString* Path);
-    //int ValidInstallation(ppl6::CString *Path);
+    bool UseExistingInstallation(const ppl7::String& Path);
 
 private:
     Ui::FirstStartClass ui;

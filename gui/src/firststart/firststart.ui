@@ -576,7 +576,7 @@ If this should be a new installation, simply click on &quot;next&quot;.</string>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="../../resources.qrc"/>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
