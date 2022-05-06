@@ -178,7 +178,6 @@ void Search::resizeEvent(QResizeEvent* event)
 
 void Search::closeEvent(QCloseEvent* event)
 {
-	ppl6::CString Name;
 	SaveWindowGeometry(this, "search");
 	QWidget::closeEvent(event);
 }
@@ -1121,7 +1120,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
 			if (File.notEmpty()) {
 				xml+="<File>" + ppl7::EscapeHTMLTags(File) + "</File>";
 #ifdef _WIN32
-				if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 10, "Search", "on_trackList_MouseMove", __FILE__, __LINE__, "Add File to Drag: %s", (const char*)File);
+				//if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 10, "Search", "on_trackList_MouseMove", __FILE__, __LINE__, "Add File to Drag: %s", (const char*)File);
 				list.append(QUrl::fromLocalFile(File));
 #else
 				list.append(QUrl::fromLocalFile(File));
@@ -1313,7 +1312,6 @@ void Search::on_displayMusicKey_currentIndexChanged(int)
 
 void Search::on_keywheel_clicked(int)
 {
-	ppl6::CString Query=ui.query->text().trimmed();
 	on_quicksearchButton_clicked();
 }
 
@@ -1430,9 +1428,9 @@ void Search::handleDropEvent(QDropEvent* event)
 	if (!mime) return;
 	if (mime->hasFormat("application/winmusik+xml")) {
 		QByteArray ba=mime->data("application/winmusik+xml");
-		ppl6::CString xml;
-		xml.Set(ba.constData(), ba.size());
-		if (xml.Left(18) == "<winmusikTracklist") {
+		ppl7::String xml;
+		xml.set(ba.constData(), ba.size());
+		if (xml.left(18) == "<winmusikTracklist") {
 			//handleXMLDrop(xml,insertItem);
 			//return;
 		}
