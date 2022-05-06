@@ -34,6 +34,7 @@
 #include <QApplication>
 #include <QDate>
 #include <QPixmap>
+#include <QEvent>
 #include <map>
 #include <set>
 #include <list>
@@ -487,6 +488,13 @@ public:
 
 };
 
+enum class WinMusikEvent
+{
+	retranslateUi=(QEvent::Type)(QEvent::User + 1)
+};
+
+
+
 /*******************************************************
  * Main Client Class                                   *
  *******************************************************/
@@ -520,13 +528,14 @@ private:
 	void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
 	void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
 	void* MainMenue;
-	ppl6::CGenericList EditorWindows;
-	ppl6::CGenericList SearchWindows;
+	//ppl6::CGenericList EditorWindows;
+	//ppl6::CGenericList SearchWindows;
 	ppl6::CGenericList CoverPrinterWindows;
 	ppl6::CGenericList PlaylistWindows;
 	ppl6::CGenericList SearchlistOverviewWindows;
 	ppl6::CGenericList SearchlistWindows;
 	ppl6::CGenericList DeviceListWindows;
+	std::set<QWidget*> WindowsList;
 	void* CoverViewerWindow;
 
 	QDate					LatestPurchaseDate;
@@ -577,6 +586,11 @@ public:
 	int CreateInitialDatabase();
 
 	void MainMenueClosed();
+
+	void RegisterWindow(QWidget* widget);
+	void UnRegisterWindow(QWidget* widget);
+
+
 	void OpenEditor(int devicetype, int deviceId=0, int page=0, int track=0);
 	void OpenDeviceList(int devicetype);
 	void OpenCoverPrinter();
@@ -584,10 +598,12 @@ public:
 	void OpenSearchlistOverview();
 	void OpenSearchlistDialog(const ppl7::String Filename);
 
+
+
 	QWidget* OpenSearch(const char* artist=nullptr, const char* title=nullptr);
 	QWidget* OpenOrReuseSearch(QWidget* q, const char* artist=nullptr, const char* title=nullptr);
-	void EditorClosed(void* object);
-	void SearchClosed(void* object);
+	//void EditorClosed(void* object);
+	//void SearchClosed(void* object);
 	void SearchlistOverviewClosed(void* object);
 	void UpdateSearchlistOverviews();
 	void SearchlistDialogClosed(void* object);

@@ -57,11 +57,13 @@ public:
 	//void StartSearch(const char *artist, const char *title);
 	void FastSearch(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String& Version=ppl7::String(), const ppl7::String& Genre=ppl7::String(), const ppl7::String& Tags=ppl7::String(), const ppl7::String& Label=ppl7::String());
 	void FastSearch(const ppl7::String& Words);
-	void ReloadTranslation();
 
 	void DoSearch();
 	void Resize();
 	void show();
+
+protected:
+	void customEvent(QEvent* event);
 
 private:
 	Ui::searchClass ui;

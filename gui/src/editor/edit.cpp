@@ -176,6 +176,7 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	ui.setupUi(this);
 	asyncTrackUpdate.edit=this;
 	this->wm=wm;
+	wm->RegisterWindow(this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
 	DeviceType=typ;
 	DeviceId=0;
@@ -326,14 +327,40 @@ Edit::~Edit()
 {
 	if (DupeTimer) delete DupeTimer;
 	if (oimpInfo) delete oimpInfo;
-	if (wm) wm->EditorClosed(this);
 	if (TrackList) delete TrackList;
 	if (titleCompleter) delete titleCompleter;
 	if (artistCompleter) delete artistCompleter;
 	if (albumCompleter) delete albumCompleter;
 	//if (searchWindow) delete searchWindow;
+	wm->UnRegisterWindow(this);
 }
 
+void Edit::setTracklistCaptions()
+{
+	trackList->headerItem()->setText(TRACKLIST_TRACK_ROW, tr("Track", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_COVER_ROW, tr("Cover", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_NAME_ROW, tr("Artist - Title", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_VERSION_ROW, tr("Version", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_GENRE_ROW, tr("Genre", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_LENGTH_ROW, tr("Length", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_BPM_ROW, tr("BPM", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_ENERGYLEVEL_ROW, tr("Energy", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_YEAR, tr("Year", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_BITRATE_ROW, tr("Bitrate", "trackList"));
+	trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating", "trackList"));
+
+}
+
+void Edit::customEvent(QEvent* event)
+{
+	if (event->type() == (QEvent::Type)WinMusikEvent::retranslateUi) {
+		ui.retranslateUi(this);
+		setTracklistCaptions();
+		UpdateFkeys();
+		event->accept();
+	}
+}
 
 void Edit::show()
 {
@@ -411,19 +438,7 @@ void Edit::SetupTrackList()
 	trackList->setSortingEnabled(false);
 	trackList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-	trackList->headerItem()->setText(TRACKLIST_TRACK_ROW, tr("Track", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_COVER_ROW, tr("Cover", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_NAME_ROW, tr("Artist - Title", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_VERSION_ROW, tr("Version", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_GENRE_ROW, tr("Genre", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_LENGTH_ROW, tr("Length", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_BPM_ROW, tr("BPM", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_ENERGYLEVEL_ROW, tr("Energy", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_YEAR, tr("Year", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_BITRATE_ROW, tr("Bitrate", "trackList"));
-	trackList->headerItem()->setText(TRACKLIST_RATING_ROW, tr("Rating", "trackList"));
-
+	setTracklistCaptions();
 	connect(trackList, SIGNAL(customContextMenuRequested(const QPoint&)),
 		this, SLOT(on_trackList_customContextMenuRequested(const QPoint&)));
 	connect(trackList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
@@ -452,10 +467,6 @@ void Edit::SetupTrackList()
 
 }
 
-void Edit::ReloadTranslation()
-{
-	ui.retranslateUi(this);
-}
 
 void Edit::InstallFilter(QObject* object, int id)
 {

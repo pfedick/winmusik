@@ -29,20 +29,20 @@
 #include "search.h"
 #include "resultfilter.h"
 #include <vector>
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
 Search::Search(QWidget* parent, CWmClient* wm)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	wm->RegisterWindow(this);
 	resultmode=0;
 	ClipBoardTimer.setParent(this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
 	SetupTrackList();
 	ui.tabWidget->setCurrentIndex(0);
 	ui.query->setFocus(Qt::ActiveWindowFocusReason);
-	ui.query->setFocus();
 	ui.searchButton->setDefault(true);
 	ui.searchButton->setAutoDefault(true);
 	currentTrackListItem=NULL;
@@ -95,6 +95,10 @@ Search::Search(QWidget* parent, CWmClient* wm)
 
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
+	QWidget::show();
+	QCoreApplication::processEvents();
+	this->setFocus();
+	ui.query->setFocus();
 }
 
 Search::~Search()
@@ -111,7 +115,15 @@ Search::~Search()
 		wm->conf.SearchDevice[8]=ui.traeger_8->isChecked();
 		wm->conf.SearchDevice[9]=ui.traeger_9->isChecked();
 		wm->conf.trySave();
-		wm->SearchClosed(this);
+		wm->UnRegisterWindow(this);
+	}
+}
+
+void Search::customEvent(QEvent* event)
+{
+	if (event->type() == (QEvent::Type)WinMusikEvent::retranslateUi) {
+		ui.retranslateUi(this);
+		event->accept();
 	}
 }
 
@@ -274,10 +286,6 @@ void Search::DefaultTracklistHeader()
 }
 
 
-void Search::ReloadTranslation()
-{
-	ui.retranslateUi(this);
-}
 
 /*
 void Search::StartSearch(const char *artist, const char *title)
@@ -651,6 +659,7 @@ void Search::on_quicksearchButton_clicked()
 	ppl7::String Tmp;
 	ppl7::String Query=ui.query->text();
 	ui.progressBar->setValue(0);
+
 	CHashes::TitleTree res;
 	int flags=0;
 	if (ui.searchArtist->isChecked()) flags|=CHashes::SearchArtist;

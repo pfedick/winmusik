@@ -28,10 +28,10 @@
 #include "wmtoolbutton.h"
 
 
-Menue::Menue(QWidget *parent, CWmClient *client)
-    : QWidget(parent)
+Menue::Menue(QWidget* parent, CWmClient* client)
+	: QWidget(parent)
 {
-	setAttribute(Qt::WA_DeleteOnClose,true);
+	setAttribute(Qt::WA_DeleteOnClose, true);
 	ui.setupUi(this);
 	wm=client;
 	searchWindow=NULL;
@@ -78,13 +78,13 @@ void Menue::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void Menue::closeEvent(QCloseEvent *event)
+void Menue::closeEvent(QCloseEvent* event)
 {
 	if (wm) {
-		wm->SaveGeometry("menue",this->saveGeometry());
+		wm->SaveGeometry("menue", this->saveGeometry());
 		wm->MainMenueClosed();
 	}
-    QWidget::closeEvent(event);
+	QWidget::closeEvent(event);
 }
 
 void Menue::OpenEditDialog(int traeger)
@@ -114,7 +114,7 @@ void Menue::OpenSearchDialog()
 
 void Menue::OpenPropertiesDialog()
 {
-	Properties *w=new Properties(NULL, wm);
+	Properties* w=new Properties(NULL, wm);
 	//w->setWindowFlags(Qt::Dialog|Qt::CustomizeWindowHint|Qt::WindowTitleHint|Qt::WindowSystemMenuHint);
 	w->exec();
 
@@ -153,10 +153,10 @@ void Menue::OpenSearchlistDialog()
 
 void Menue::on_searchEdit_returnPressed()
 {
-	ppl6::CString words=ui.searchEdit->text();
-	words.Trim();
+	ppl7::String words=ui.searchEdit->text();
+	words.trim();
 	searchWindow=wm->OpenOrReuseSearch(searchWindow);
-	Search *win=(Search*)searchWindow;
+	Search* win=(Search*)searchWindow;
 	win->FastSearch(words);
 	ui.searchEdit->setFocus();
 }

@@ -277,19 +277,29 @@ void CWmClient::ReloadTranslation()
 {
 	LoadTranslation();
 	Mutex.lock();
+	std::set<QWidget*>::iterator it;
+	for (it=WindowsList.begin();it != WindowsList.end();it++) {
+		QEvent* event=new QEvent((QEvent::Type)WinMusikEvent::retranslateUi);
+		QCoreApplication::postEvent((*it), event);
+	}
+
+
 	// Alle Fenster aktualisieren
 	if (MainMenue) ((Menue*)MainMenue)->ReloadTranslation();
 
+	/*
 	Edit* edit;
 	EditorWindows.Reset();
 	while ((edit=(Edit*)EditorWindows.GetNext())) {
 		edit->ReloadTranslation();
 	}
+
 	Search* search;
 	SearchWindows.Reset();
 	while ((search=(Search*)SearchWindows.GetNext())) {
 		search->ReloadTranslation();
 	}
+	*/
 	CoverPrinter* cover;
 	CoverPrinterWindows.Reset();
 	while ((cover=(CoverPrinter*)CoverPrinterWindows.GetFirst())) {
@@ -386,6 +396,12 @@ int CWmClient::CloseDatabase()
 {
 	Hashes.Clear();
 	Mutex.lock();
+	std::set<QWidget*>::iterator it;
+	for (it=WindowsList.begin(); it != WindowsList.end(); ++it) {
+		(*it)->close();
+	}
+
+	/*
 	Edit* edit;
 	while ((edit=(Edit*)EditorWindows.GetFirst())) {
 		Mutex.unlock();
@@ -398,6 +414,7 @@ int CWmClient::CloseDatabase()
 		delete search;
 		Mutex.lock();
 	}
+	*/
 	CoverPrinter* cover;
 	while ((cover=(CoverPrinter*)CoverPrinterWindows.GetFirst())) {
 		Mutex.unlock();
@@ -474,9 +491,6 @@ void CWmClient::OpenEditor(int devicetype, int deviceId, int page, int track)
 	Edit* edit=new Edit((Menue*)MainMenue, this, devicetype);
 	edit->setWindowFlags(Qt::Window);
 	edit->show();
-	Mutex.lock();
-	EditorWindows.Add(edit);
-	Mutex.unlock();
 	if (deviceId > 0) edit->OpenTrack((unsigned int)deviceId, (unsigned char)page, (unsigned short)track);
 }
 
@@ -558,9 +572,8 @@ QWidget* CWmClient::OpenSearch(const char* artist, const char* title)
 	Search* w=new Search((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.lock();
-	SearchWindows.Add(w);
-	Mutex.unlock();
+	//w->setFocus();
+
 	if (artist != NULL || title != NULL) w->FastSearch(artist, title);
 	return w;
 }
@@ -571,7 +584,8 @@ QWidget* CWmClient::OpenOrReuseSearch(QWidget* q, const char* artist, const char
 	Search* w;
 	if (q) {
 		Mutex.lock();
-		if (SearchWindows.HasObject(q)) {
+		std::set<QWidget*>::iterator it=WindowsList.find(q);
+		if (it != WindowsList.end()) {
 			Mutex.unlock();
 			w=(Search*)q;
 			w->setFocus();
@@ -583,17 +597,9 @@ QWidget* CWmClient::OpenOrReuseSearch(QWidget* q, const char* artist, const char
 	w=new Search((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	SearchWindows.Add(w);
-	Mutex.unlock();
+	//w->setFocus();
 	if (artist != NULL || title != NULL) w->FastSearch(artist, title);
 	return w;
-}
-
-void CWmClient::EditorClosed(void* object)
-{
-	Mutex.lock();
-	EditorWindows.Delete(object);
-	Mutex.unlock();
 }
 
 void CWmClient::CoverViewerClosed()
@@ -633,13 +639,6 @@ bool CWmClient::IsCoverViewerVisible() const
 	return false;
 }
 
-
-void CWmClient::SearchClosed(void* object)
-{
-	Mutex.lock();
-	SearchWindows.Delete(object);
-	Mutex.unlock();
-}
 
 int CWmClient::LoadDatabase()
 {
@@ -1574,4 +1573,19 @@ int CWmClient::GetWords(const ppl7::String& str, ppl7::Array& words)
 	NormalizeTerm(s);
 	words.explode(s, " ", 0, true);
 	return 1;
+}
+
+void CWmClient::RegisterWindow(QWidget* widget)
+{
+	Mutex.lock();
+	WindowsList.insert(widget);
+	Mutex.unlock();
+}
+
+void CWmClient::UnRegisterWindow(QWidget* widget)
+{
+	Mutex.lock();
+	WindowsList.erase(widget);
+	Mutex.unlock();
+
 }
