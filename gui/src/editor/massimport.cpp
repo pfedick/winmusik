@@ -26,7 +26,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "massimport.h"
-#include "../include/edittrackdialog.h"
+#include "edittrackdialog.h"
 
 MassImport::MassImport(QWidget* parent, CWmClient* wm)
 	: QDialog(parent)

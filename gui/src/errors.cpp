@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: errors.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +21,7 @@
 #include <QObject>
 #include "winmusik3.h"
 
-static const char * errors[] = {
+static const char* errors[] ={
 	"No Error",															// 20000
 	"Keine Konfigurationsdatei gefunden. Erster Start?",				// 20001
 	"Keine WinMusik3-Datei",											// 20002		(20000)
@@ -79,16 +73,16 @@ static const char * errors[] = {
 };
 
 
-static const pplchar *geterror(pplint32 code)
+static const pplchar* geterror(pplint32 code)
 {
-	pplint32 max=sizeof(errors) / sizeof(char *)-2;
-	if (code<20000 || code >20999) return "unknown";
+	pplint32 max=sizeof(errors) / sizeof(char*) - 2;
+	if (code < 20000 || code >20999) return "unknown";
 	code-=20000;
-	if (code<=max) return ((pplchar*)errors[code]);
+	if (code <= max) return ((pplchar*)errors[code]);
 	return "unknown";
 }
 
 void CWmClient::InitErrors()
 {
-	ppl6::AttachErrorHandler(geterror,20000, 20999);
+	ppl6::AttachErrorHandler(geterror, 20000, 20999);
 }

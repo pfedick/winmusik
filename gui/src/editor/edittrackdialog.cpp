@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/14 13:20:11 $
- * $Id: playlists.cpp,v 1.1 2010/11/14 13:20:11 pafe Exp $
- *
- *
- * Copyright (c) 2012 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,17 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QClipboard>
 #include <QMenu>
 #include <QList>
 #include <QUrl>
 #include <QMimeData>
 #include <QMouseEvent>
-#include "../include/edittrackdialog.h"
+#include "edittrackdialog.h"
 
-EditTrackDialog::EditTrackDialog(QWidget *parent, CWmClient *wm)
-    : QDialog(parent)
+EditTrackDialog::EditTrackDialog(QWidget* parent, CWmClient* wm)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
@@ -50,12 +43,12 @@ EditTrackDialog::~EditTrackDialog()
 	//printf ("EditTrackDialog::~EditTrackDialog\n");
 }
 
-void EditTrackDialog::setSearchWindow(QWidget *widget)
+void EditTrackDialog::setSearchWindow(QWidget* widget)
 {
 	searchWindow=widget;
 }
 
-QWidget *EditTrackDialog::getSearchWindow() const
+QWidget* EditTrackDialog::getSearchWindow() const
 {
 	return searchWindow;
 }
@@ -65,13 +58,13 @@ void EditTrackDialog::Resize()
 {
 }
 
-void EditTrackDialog::showEvent(QShowEvent * event)
+void EditTrackDialog::showEvent(QShowEvent* event)
 {
 	Resize();
 	QDialog::showEvent(event);
 }
 
-void EditTrackDialog::resizeEvent(QResizeEvent * event)
+void EditTrackDialog::resizeEvent(QResizeEvent* event)
 {
 	Resize();
 	QDialog::resizeEvent(event);
@@ -84,17 +77,17 @@ void EditTrackDialog::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void EditTrackDialog::setFilename(const ppl6::CString &Filename)
+void EditTrackDialog::setFilename(const ppl6::CString& Filename)
 {
 	ui.editor->setFilename(Filename);
 }
 
-void EditTrackDialog::setData(const TrackInfo &data)
+void EditTrackDialog::setData(const TrackInfo& data)
 {
 	ui.editor->setData(data);
 }
 
-const TrackInfo & EditTrackDialog::getData()
+const TrackInfo& EditTrackDialog::getData()
 {
 	return ui.editor->getData();
 }
@@ -108,4 +101,3 @@ void EditTrackDialog::on_editor_save()
 {
 	done(1);
 }
-

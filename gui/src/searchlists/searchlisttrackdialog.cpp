@@ -28,8 +28,8 @@
 #include "csearchlist.h"
 #include "regexpcapture.h"
 
-SearchlistTrackDialog::SearchlistTrackDialog(QWidget *parent)
-    : QDialog(parent)
+SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->show();
@@ -40,9 +40,9 @@ SearchlistTrackDialog::~SearchlistTrackDialog()
 {
 }
 
-void SearchlistTrackDialog::closeEvent(QCloseEvent *event)
+void SearchlistTrackDialog::closeEvent(QCloseEvent* event)
 {
-	wm_main->SaveGeometry("SearchlistTrackDialog",this->saveGeometry());
+	wm_main->SaveGeometry("SearchlistTrackDialog", this->saveGeometry());
 	QDialog::closeEvent(event);
 }
 
@@ -53,19 +53,19 @@ void SearchlistTrackDialog::Resize()
 
 }
 
-void SearchlistTrackDialog::showEvent(QShowEvent * event)
+void SearchlistTrackDialog::showEvent(QShowEvent* event)
 {
 	Resize();
 	QWidget::showEvent(event);
 }
-void SearchlistTrackDialog::resizeEvent(QResizeEvent * event)
+void SearchlistTrackDialog::resizeEvent(QResizeEvent* event)
 {
 	Resize();
 	QWidget::resizeEvent(event);
 }
 
 
-void SearchlistTrackDialog::set(const SearchlistItem &track)
+void SearchlistTrackDialog::set(const SearchlistItem& track)
 {
 	Track=track;
 	ui.artistEdit->setText(track.Artist);
@@ -74,7 +74,7 @@ void SearchlistTrackDialog::set(const SearchlistItem &track)
 	ui.genreEdit->setText(track.Genre);
 	ui.commentEdit->setText(track.Comment);
 	ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
-	if (track.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",track.Length/60,track.Length%60));
+	if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
 	ui.rating->setCurrentIndex(track.Rating);
 }
 
@@ -83,14 +83,14 @@ void SearchlistTrackDialog::setFromClipboard()
 	RegExpMatch match;
 	RegExpClipboard clip;
 	clip.copyFromClipboard();
-	if (wm_main->RegExpCapture.match(clip,match)) {
+	if (wm_main->RegExpCapture.match(clip, match)) {
 		ui.artistEdit->setText(match.Artist);
 		ui.titleEdit->setText(match.Title);
 		ui.versionEdit->setText(match.Version);
 		ui.genreEdit->setText(match.Genre);
 		ui.commentEdit->setText(match.Label);
 		ui.releaseDateEdit->setText(match.ReleaseDate);
-		if (match.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",match.Length/60,match.Length%60));
+		if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
 	}
 }
 
@@ -98,20 +98,21 @@ SearchlistItem SearchlistTrackDialog::get() const
 {
 	SearchlistItem track;
 	track=Track;	// Bisherige Daten übernehmen, insbesondere Datum der Anlage
-	track.Artist=ppl6::Trim(ppl6::CString(ui.artistEdit->text()));
-	track.Title=ppl6::Trim(ppl6::CString(ui.titleEdit->text()));
-	track.Version=ppl6::Trim(ppl6::CString(ui.versionEdit->text()));
-	track.Genre=ppl6::Trim(ppl6::CString(ui.genreEdit->text()));
-	track.Comment=ppl6::Trim(ppl6::CString(ui.commentEdit->text()));
+	track.Artist=ppl7::Trim(ppl7::String(ui.artistEdit->text()));
+	track.Title=ppl7::Trim(ppl7::String(ui.titleEdit->text()));
+	track.Version=ppl7::Trim(ppl7::String(ui.versionEdit->text()));
+	track.Genre=ppl7::Trim(ppl7::String(ui.genreEdit->text()));
+	track.Comment=ppl7::Trim(ppl7::String(ui.commentEdit->text()));
 	try {
-		track.ReleaseDate.set(ppl6::Trim(ppl6::CString(ui.releaseDateEdit->text())));
+		track.ReleaseDate.set(ppl7::Trim(ppl7::String(ui.releaseDateEdit->text())));
 	} catch (...) {
 		track.ReleaseDate.clear();
 	}
 	track.Rating=ui.rating->currentIndex();
-	ppl6::CString Tmp=ppl6::Trim(ppl6::CString(ui.lengthEdit->text()));
-	if (Tmp.PregMatch("/^([0-9]+):([0-9]{2})$/")) {
-		track.Length=ppl6::atoi(Tmp.GetMatch(1))*60+ppl6::atoi(Tmp.GetMatch(2));
+	ppl7::String Tmp=ppl7::Trim(ppl7::String(ui.lengthEdit->text()));
+	ppl7::Array matches;
+	if (Tmp.pregMatch("/^([0-9]+):([0-9]{2})$/", matches)) {
+		track.Length=matches.get(1).toInt() * 60 + matches.get(2).toInt();
 	} else {
 		track.Length=0;
 	}
@@ -127,4 +128,3 @@ void SearchlistTrackDialog::on_cancelButton_clicked()
 {
 	done(0);
 }
-

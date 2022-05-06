@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: StorageTrack.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,7 +131,7 @@ void DataTrack::Clear()
 	formatversion=1;
 }
 
-int DataTrack::CompareNode(CTreeItem *item)
+int DataTrack::CompareNode(CTreeItem* item)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -152,7 +146,7 @@ int DataTrack::CompareNode(CTreeItem *item)
  * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
  */
 {
-	DataTrack *v=(DataTrack *)item;
+	DataTrack* v=(DataTrack*)item;
 	// Device vergleichen
 	if (v->Device > Device) return 1;
 	else if (v->Device < Device) return -1;
@@ -169,7 +163,7 @@ int DataTrack::CompareNode(CTreeItem *item)
 	return 0;
 }
 
-int DataTrack::CompareValue(void *value)
+int DataTrack::CompareValue(void* value)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -185,7 +179,7 @@ int DataTrack::CompareValue(void *value)
  * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
  */
 {
-	DataTrack *v=(DataTrack*)value;
+	DataTrack* v=(DataTrack*)value;
 	// Device vergleichen
 	if (v->Device > Device) return 1;
 	else if (v->Device < Device) return -1;
@@ -201,7 +195,7 @@ int DataTrack::CompareValue(void *value)
 	return 0;
 }
 
-int DataTrack::CopyFrom(DataTrack *t)
+int DataTrack::CopyFrom(DataTrack* t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataTrack Datensatzes in diesen hineinkopiert.
@@ -216,7 +210,7 @@ int DataTrack::CopyFrom(DataTrack *t)
  */
 {
 	if (!t) {
-		ppl6::SetError(194,"int DataTrack::CopyFrom(==> DataTrack *t <==)");
+		ppl6::SetError(194, "int DataTrack::CopyFrom(==> DataTrack *t <==)");
 		return 0;
 	}
 	Clear();
@@ -254,7 +248,7 @@ int DataTrack::SetValue(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, pplu
 	return 1;
 }
 
-ppl6::CBinary *DataTrack::Export()
+ppl6::CBinary* DataTrack::Export()
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -270,29 +264,29 @@ ppl6::CBinary *DataTrack::Export()
  */
 {
 	// 12 Byte allokieren
-	char *a=(char*)malloc(12);
+	char* a=(char*)malloc(12);
 	if (!a) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	ppl6::Poke8(a,Device);
-	ppl6::Poke32(a+1,DeviceId);
-	ppl6::Poke8(a+5,Page);
-	ppl6::Poke16(a+6,Track);
-	ppl6::Poke32(a+8,TitleId);
-	ppl6::CBinary *bin=new ppl6::CBinary;
+	ppl6::Poke8(a, Device);
+	ppl6::Poke32(a + 1, DeviceId);
+	ppl6::Poke8(a + 5, Page);
+	ppl6::Poke16(a + 6, Track);
+	ppl6::Poke32(a + 8, TitleId);
+	ppl6::CBinary* bin=new ppl6::CBinary;
 	if (!bin) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	bin->Set(a,12);
+	bin->Set(a, 12);
 	// CBinary ist verantwortlich den Speicher wieder freizugeben
 	bin->ManageMemory();
 	return bin;
 }
 
 
-int DataTrack::Import(ppl6::CBinary *bin, int version)
+int DataTrack::Import(ppl6::CBinary* bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -304,26 +298,26 @@ int DataTrack::Import(ppl6::CBinary *bin, int version)
  */
 {
 	if (!bin) {
-		ppl6::SetError(194,"int DataTrack::Import(==> ppl6::CBinary *bin <==)");
+		ppl6::SetError(194, "int DataTrack::Import(==> ppl6::CBinary *bin <==)");
 		return 0;
 	}
-	if (version<1 || version>1) {
-		ppl6::SetError(20023,"%i",version);
+	if (version < 1 || version>1) {
+		ppl6::SetError(20023, "%i", version);
 		return 0;
 	}
 	int size=bin->Size();
-	const char *a=(char*)bin->GetPtr();
+	const char* a=(char*)bin->GetPtr();
 	// Die Größe muss genau 12 4 Byte betragen
-	if (size!=12 || a==NULL) {
+	if (size != 12 || a == NULL) {
 		ppl6::SetError(20017);
 		return 0;
 	}
 	Clear();
 	Device=ppl6::Peek8(a);
-	DeviceId=ppl6::Peek32(a+1);
-	Page=ppl6::Peek8(a+5);
-	Track=ppl6::Peek16(a+6);
-	TitleId=ppl6::Peek32(a+8);
+	DeviceId=ppl6::Peek32(a + 1);
+	Page=ppl6::Peek8(a + 5);
+	Track=ppl6::Peek16(a + 6);
+	TitleId=ppl6::Peek32(a + 8);
 	return 1;
 }
 
@@ -405,7 +399,7 @@ DataTrackHint::~DataTrackHint()
 
 }
 
-int DataTrackHint::CompareNode(CTreeItem *item)
+int DataTrackHint::CompareNode(CTreeItem* item)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -420,7 +414,7 @@ int DataTrackHint::CompareNode(CTreeItem *item)
  * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
  */
 {
-	DataTrackHint *v=(DataTrackHint *)item;
+	DataTrackHint* v=(DataTrackHint*)item;
 	// Device vergleichen
 	if (v->Device > Device) return 1;
 	else if (v->Device < Device) return -1;
@@ -433,7 +427,7 @@ int DataTrackHint::CompareNode(CTreeItem *item)
 	return 0;
 }
 
-int DataTrackHint::CompareValue(void *value)
+int DataTrackHint::CompareValue(void* value)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -449,7 +443,7 @@ int DataTrackHint::CompareValue(void *value)
  * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
  */
 {
-	DataTrackHint *v=(DataTrackHint*)value;
+	DataTrackHint* v=(DataTrackHint*)value;
 	// Device vergleichen
 	if (v->Device > Device) return 1;
 	else if (v->Device < Device) return -1;
@@ -521,7 +515,7 @@ void CTrackStore::Clear()
 	Mutex.Unlock();
 }
 
-const char *CTrackStore::GetChunkName()
+const char* CTrackStore::GetChunkName()
 /*!\brief Chunkname dieses Datentypes auslesen
  *
  * Diese Funktion liefert einen Pointer auf den Chunknamen dieses Datentypes zurück.
@@ -532,7 +526,7 @@ const char *CTrackStore::GetChunkName()
 	return "TRAK";
 }
 
-int CTrackStore::Save(DataTrack *t)
+int CTrackStore::Save(DataTrack* t)
 /*!\brief Datensatz auf Festplatte schreiben
  *
  * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
@@ -548,13 +542,13 @@ int CTrackStore::Save(DataTrack *t)
 		return 0;
 	}
 	if (!t) {
-		ppl6::SetError(194,"int CTrackStore::Save(==> DataTrack *t <==)");
+		ppl6::SetError(194, "int CTrackStore::Save(==> DataTrack *t <==)");
 		return 0;
 	}
 	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary *bin=t->Export();
+	ppl6::CBinary* bin=t->Export();
 	if (!bin) return 0;
-	if (!Storage->Save(this,t,bin)) {
+	if (!Storage->Save(this, t, bin)) {
 		ppl6::PushError();
 		delete bin;
 		ppl6::PopError();
@@ -564,29 +558,29 @@ int CTrackStore::Save(DataTrack *t)
 	return 1;
 }
 
-int CTrackStore::Delete(DataTrack *entry)
+int CTrackStore::Delete(DataTrack* entry)
 {
 	if (!entry) {
-		ppl6::SetError(194,"int CTrackStore::Put(==> DataTrack *entry <==)");
+		ppl6::SetError(194, "int CTrackStore::Put(==> DataTrack *entry <==)");
 		return 0;
 	}
 	if (!Storage) {
-		ppl6::SetError(20014,"CTrackStore");
+		ppl6::SetError(20014, "CTrackStore");
 		return 0;
 	}
 	Mutex.Lock();
 	// Gibt's den Track überhaupt?
-	DataTrack *t;
-	t=(DataTrack *)Tree.Find((void *)entry);
+	DataTrack* t;
+	t=(DataTrack*)Tree.Find((void*)entry);
 	if (t) {	// Jepp
-		Storage->Delete(this,t);
+		Storage->Delete(this, t);
 		Tree.Delete(t);
 		delete t;
 	}
 	return 1;
 }
 
-int CTrackStore::Put(DataTrack *entry)
+int CTrackStore::Put(DataTrack* entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -602,17 +596,17 @@ int CTrackStore::Put(DataTrack *entry)
  */
 {
 	if (!entry) {
-		ppl6::SetError(194,"int CTrackStore::Put(==> DataTrack *entry <==)");
+		ppl6::SetError(194, "int CTrackStore::Put(==> DataTrack *entry <==)");
 		return 0;
 	}
 	if (!Storage) {
-		ppl6::SetError(20014,"CTrackStore");
+		ppl6::SetError(20014, "CTrackStore");
 		return 0;
 	}
 	Mutex.Lock();
 	// Gibt's den Track schon?
-	DataTrack *t;
-	t=(DataTrack *)Tree.Find((void *)entry);
+	DataTrack* t;
+	t=(DataTrack*)Tree.Find((void*)entry);
 	if (t) {	// Jepp, gibt's schon. Wir machen ein Update
 		t->DeviceId=entry->DeviceId;
 		t->TitleId=entry->TitleId;
@@ -659,7 +653,7 @@ int CTrackStore::Put(DataTrack *entry)
 	return 1;
 }
 
-DataTrack *CTrackStore::Get(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track)
+DataTrack* CTrackStore::Get(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track)
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann ein bestimmer Track ausgelesen werden
@@ -674,15 +668,15 @@ DataTrack *CTrackStore::Get(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, 
  */
 {
 	DataTrack search;
-	search.SetValue(Device,DeviceId,Page,Track,0);
-	DataTrack *t;
+	search.SetValue(Device, DeviceId, Page, Track, 0);
+	DataTrack* t;
 	Mutex.Lock();
-	t=(DataTrack *)Tree.Find(&search);
+	t=(DataTrack*)Tree.Find(&search);
 	Mutex.Unlock();
 	return t;
 }
 
-int CTrackStore::GetCopy(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track, DataTrack *t)
+int CTrackStore::GetCopy(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppluint16 Track, DataTrack* t)
 /*!\brief Kopie eines Datensatzes erstellen
  *
  * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
@@ -698,17 +692,17 @@ int CTrackStore::GetCopy(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page, ppl
  */
 {
 	DataTrack search;
-	search.SetValue(Device,DeviceId,Page,Track,0);
-	DataTrack *res;
+	search.SetValue(Device, DeviceId, Page, Track, 0);
+	DataTrack* res;
 	Mutex.Lock();
-	res=(DataTrack *)Tree.Find(&search);
+	res=(DataTrack*)Tree.Find(&search);
 	if (res) t->CopyFrom(res);
 	Mutex.Unlock();
 	if (res) return 1;
 	return 0;
 }
 
-DataTrackHint *CTrackStore::GetHints(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page)
+DataTrackHint* CTrackStore::GetHints(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page)
 /*!\brief Hint-Eintrag für den gewünschten Datenträger suchen
  *
  * Diese interne Funktion sucht den gewünschten Hint-Eintrag heraus, sofern vorhanden.
@@ -731,7 +725,7 @@ DataTrackHint *CTrackStore::GetHints(ppluint8 Device, ppluint32 DeviceId, ppluin
 	return (DataTrackHint*)TrackHints.Find(&search);
 }
 
-int CTrackStore::UpdateHints(DataTrack *t)
+int CTrackStore::UpdateHints(DataTrack* t)
 /*!\brief TrackHints aktualisieren
  *
  * Mit dieser internen Funktion wird die Hint-Tabelle für den minimal- und maximal-Wert
@@ -742,7 +736,7 @@ int CTrackStore::UpdateHints(DataTrack *t)
  * Speicher aufgebraucht ist.
  */
 {
-	DataTrackHint *s;
+	DataTrackHint* s;
 	s=GetHints(t->Device, t->DeviceId, t->Page);
 	if (!s) {
 		s=new DataTrackHint;
@@ -758,12 +752,12 @@ int CTrackStore::UpdateHints(DataTrack *t)
 			return 0;
 		}
 	}
-	if (t->Track<s->min || s->min==0) s->min=t->Track;
-	if (t->Track>s->max) s->max=t->Track;
+	if (t->Track < s->min || s->min == 0) s->min=t->Track;
+	if (t->Track > s->max) s->max=t->Track;
 	return 1;
 }
 
-CTrackList *CTrackStore::GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page)
+CTrackList* CTrackStore::GetTracklist(ppluint8 Device, ppluint32 DeviceId, ppluint8 Page)
 /*!\brief Trackliste für einen bestimmten Datenträger erstellen
  *
  * Diese Funktion erstellt eine Trackliste für den gewünschten Datenträger. Dabei werden
@@ -778,25 +772,25 @@ CTrackList *CTrackStore::GetTracklist(ppluint8 Device, ppluint32 DeviceId, pplui
  * \todo Prüfen, ob durch die blosse Referenzierung der Tracks Probleme in der Threadsicherheit entstehen.
  */
 {
-	CTrackList *list=new CTrackList;
+	CTrackList* list=new CTrackList;
 	list->storage=this;
 	list->DeviceType=Device;
 	list->Page=Page;
 	list->DeviceId=DeviceId;
-	DataTrack *res, search;
-	DataTrackHint *hint;
-	search.SetValue(Device,DeviceId,Page,0,0);
+	DataTrack* res, search;
+	DataTrackHint* hint;
+	search.SetValue(Device, DeviceId, Page, 0, 0);
 	Mutex.Lock();
 	// Hints laden
 	hint=GetHints(Device, DeviceId, Page);
 	if (hint) {
 		// Wir haben Hints gefunden und hangeln uns nun von min zu max
-		for (int i=hint->min;i<=hint->max;i++) {
+		for (int i=hint->min;i <= hint->max;i++) {
 			search.Track=i;
-			res=(DataTrack *)Tree.Find(&search);
+			res=(DataTrack*)Tree.Find(&search);
 			if (res) {
 				// Track gefunden, wir können ihn in die TrackListe hängen
-				list->Add(i,res);
+				list->Add(i, res);
 			}
 		}
 	}
@@ -805,15 +799,12 @@ CTrackList *CTrackStore::GetTracklist(ppluint8 Device, ppluint32 DeviceId, pplui
 }
 
 
-int CTrackStore::LoadChunk(CWMFileChunk *chunk)
+int CTrackStore::LoadChunk(CWMFileChunk* chunk)
 {
 	DataTrack data;
 	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(),chunk->GetChunkDataSize())) return 0;
-	if (!data.Import(&bin,chunk->GetFormatVersion())) return 0;
+	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
+	if (!data.Import(&bin, chunk->GetFormatVersion())) return 0;
 	data.CopyStorageFrom(chunk);
 	return Put(&data);
 }
-
-
-

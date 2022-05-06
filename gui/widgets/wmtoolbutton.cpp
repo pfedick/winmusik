@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/18 21:47:44 $
- * $Id: asynchronousMessage.cpp,v 1.1 2010/11/18 21:47:44 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,38 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <QClipboard>
-#include <QMenu>
-#include <QList>
-#include <QUrl>
-#include <QMimeData>
+#include "wmtoolbutton.h"
 #include <QMouseEvent>
-#include "../include/asynchronousMessage.h"
+#include <QInputEvent>
 
-asynchronousMessage::asynchronousMessage(QWidget *parent)
-    : QWidget(parent)
+
+WMToolButton::WMToolButton(QWidget* parent)
+	: QToolButton(parent)
 {
-	ui.setupUi(this);
+	//printf ("WMToolButton\n");
 }
 
-asynchronousMessage::~asynchronousMessage()
+WMToolButton::~WMToolButton()
 {
-}
 
-
-void asynchronousMessage::ReloadTranslation()
-{
-	ui.retranslateUi(this);
-}
-
-void asynchronousMessage::setMessagePixmap(const QPixmap &pixmap)
-{
-	ui.messageIcon->setPixmap(pixmap);
 }
 
 
-void asynchronousMessage::setMessageText(const QString &text)
+void WMToolButton::mousePressEvent(QMouseEvent* event)
 {
-	ui.message->setText(text);
+	//printf ("Klick\n");
+	if (event->type() == QEvent::MouseButtonPress && event->modifiers() == Qt::ControlModifier) {
+		controlClicked();
+		return;
+	}
+
+
+	QToolButton::mousePressEvent(event);
 }

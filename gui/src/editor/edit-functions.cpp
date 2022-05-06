@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "winmusik3.h"
 #include "edit.h"
 #include "editdevice.h"
@@ -42,7 +41,7 @@
 #include <QProgressDialog>
 #include <QMimeData>
 #include <QStringList>
-#include "../include/asynchronousMessage.h"
+#include "src/asynchronousMessage/asynchronousMessage.h"
 #include "version.h"
 
 #include "ppl7.h"

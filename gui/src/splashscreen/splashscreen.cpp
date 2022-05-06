@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: splashscreen.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,29 +18,29 @@
  */
 
 
-#include "../include/splashscreen.h"
+#include "splashscreen.h"
 #include "version.h"
 
-SplashScreen::SplashScreen(QWidget *parent)
-    : QDialog(parent)
+SplashScreen::SplashScreen(QWidget* parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
-	ppl6::CString Tmp,DateFormat,Date;
+	ppl6::CString Tmp, DateFormat, Date;
 
 	Tmp=tr("WinMusik Version %v% vom %d%");
-	Tmp.Replace("%v%",WM_VERSION);
+	Tmp.Replace("%v%", WM_VERSION);
 	DateFormat=tr("%d.%m.%Y");
 
-	int a,year,month,day;
+	int a, year, month, day;
 	a=WM_RELEASEDATE;
-	year=a/10000;
-	a=a-year*10000;
-	month=a/100;
-	day=a-month*100;
-	ppluint64 t=ppl6::MkTime(year,month,day);
-	ppl6::MkDate(Date,DateFormat,t);
+	year=a / 10000;
+	a=a - year * 10000;
+	month=a / 100;
+	day=a - month * 100;
+	ppluint64 t=ppl6::MkTime(year, month, day);
+	ppl6::MkDate(Date, DateFormat, t);
 
-	Tmp.Replace("%d%",(const char*)Date);
+	Tmp.Replace("%d%", (const char*)Date);
 
 	Tmp.Concat(", ");
 	Tmp+=WM_COPYRIGHT;

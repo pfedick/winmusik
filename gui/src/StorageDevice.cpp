@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: StorageDevice.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -210,7 +204,7 @@ void DataDevice::Clear()
 	formatversion=1;
 }
 
-int DataDevice::CompareNode(CTreeItem *item)
+int DataDevice::CompareNode(CTreeItem* item)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -225,7 +219,7 @@ int DataDevice::CompareNode(CTreeItem *item)
  * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
  */
 {
-	DataDevice *v=(DataDevice *)item;
+	DataDevice* v=(DataDevice*)item;
 	// DeviceType vergleichen
 	if (v->DeviceType > DeviceType) return 1;
 	else if (v->DeviceType < DeviceType) return -1;
@@ -235,7 +229,7 @@ int DataDevice::CompareNode(CTreeItem *item)
 	return 0;
 }
 
-int DataDevice::CompareValue(void *value)
+int DataDevice::CompareValue(void* value)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -251,7 +245,7 @@ int DataDevice::CompareValue(void *value)
  * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
  */
 {
-	DATADEVICE *v=(DATADEVICE*)value;
+	DATADEVICE* v=(DATADEVICE*)value;
 	// Device vergleichen
 	if (v->DeviceType > DeviceType) return 1;
 	else if (v->DeviceType < DeviceType) return -1;
@@ -261,7 +255,7 @@ int DataDevice::CompareValue(void *value)
 	return 0;
 }
 
-int DataDevice::CopyFrom(DataDevice *t)
+int DataDevice::CopyFrom(DataDevice* t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataDevice Datensatzes in diesen hineinkopiert.
@@ -276,7 +270,7 @@ int DataDevice::CopyFrom(DataDevice *t)
  */
 {
 	if (!t) {
-		ppl6::SetError(194,"int DataDevice::CopyFrom(==> DataDevice *t <==)");
+		ppl6::SetError(194, "int DataDevice::CopyFrom(==> DataDevice *t <==)");
 		return 0;
 	}
 	Clear();
@@ -300,7 +294,7 @@ int DataDevice::CopyFrom(DataDevice *t)
 }
 
 
-int DataDevice::SetTitle(const char *title)
+int DataDevice::SetTitle(const char* title)
 /*!\brief Haupttitel setzen
  *
  * Mit dieser Funktion wird der Titel des Tonträgers gesetzt.
@@ -310,7 +304,7 @@ int DataDevice::SetTitle(const char *title)
  */
 {
 	if (!title) {
-		ppl6::SetError(194,"int DataDevice::SetTitle(==> const char *title <==)");
+		ppl6::SetError(194, "int DataDevice::SetTitle(==> const char *title <==)");
 		return 0;
 	}
 	if (Title) free(Title);
@@ -322,7 +316,7 @@ int DataDevice::SetTitle(const char *title)
 	return 1;
 }
 
-int DataDevice::SetSubTitle(const char *subtitle)
+int DataDevice::SetSubTitle(const char* subtitle)
 /*!\brief Untertitel setzen
  *
  * Mit dieser Funktion wird der Untertitel des Tonträgers gesetzt.
@@ -332,7 +326,7 @@ int DataDevice::SetSubTitle(const char *subtitle)
  */
 {
 	if (!subtitle) {
-		ppl6::SetError(194,"int DataDevice::SetSubTitle(==> const char *subtitle <==)");
+		ppl6::SetError(194, "int DataDevice::SetSubTitle(==> const char *subtitle <==)");
 		return 0;
 	}
 	if (SubTitle) free(SubTitle);
@@ -357,7 +351,7 @@ ppl6::CString DataDevice::GetSubTitle() const
 }
 
 
-ppl6::CBinary *DataDevice::Export()
+ppl6::CBinary* DataDevice::Export()
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -376,43 +370,43 @@ ppl6::CBinary *DataDevice::Export()
 	int lenSubTitle=0;
 	if (Title) lenTitle=strlen(Title);
 	if (SubTitle) lenSubTitle=strlen(SubTitle);
-	size=size+lenTitle+lenSubTitle;
+	size=size + lenTitle + lenSubTitle;
 	// Speicher allokieren
-	char *a=(char*)malloc(size);
+	char* a=(char*)malloc(size);
 	if (!a) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	ppl6::Poke8(a,DeviceType);
-	ppl6::Poke32(a+1,DeviceId);
-	ppl6::Poke8(a+5,Pages);
-	ppl6::Poke32(a+6,Length);
-	ppl6::Poke32(a+10,Recorded);
-	ppl6::Poke16(a+14,PurchaseId);
-	ppl6::Poke32(a+16,LabelId);
-	ppl6::Poke32(a+20,PurchaseDate);
-	ppl6::PokeFloat(a+24,PurchasePrice);
-	ppl6::Poke32(a+28,DateCreated);
-	ppl6::Poke32(a+32,FirstDate);
-	ppl6::Poke32(a+36,LastDate);
-	ppl6::Poke32(a+40,NumTracks);
-	ppl6::Poke16(a+44,lenTitle);
-	if (lenTitle) strncpy(a+46,Title,lenTitle);
-	ppl6::Poke16(a+46+lenTitle,lenSubTitle);
-	if (lenSubTitle) strncpy(a+48+lenTitle,SubTitle,lenSubTitle);
+	ppl6::Poke8(a, DeviceType);
+	ppl6::Poke32(a + 1, DeviceId);
+	ppl6::Poke8(a + 5, Pages);
+	ppl6::Poke32(a + 6, Length);
+	ppl6::Poke32(a + 10, Recorded);
+	ppl6::Poke16(a + 14, PurchaseId);
+	ppl6::Poke32(a + 16, LabelId);
+	ppl6::Poke32(a + 20, PurchaseDate);
+	ppl6::PokeFloat(a + 24, PurchasePrice);
+	ppl6::Poke32(a + 28, DateCreated);
+	ppl6::Poke32(a + 32, FirstDate);
+	ppl6::Poke32(a + 36, LastDate);
+	ppl6::Poke32(a + 40, NumTracks);
+	ppl6::Poke16(a + 44, lenTitle);
+	if (lenTitle) strncpy(a + 46, Title, lenTitle);
+	ppl6::Poke16(a + 46 + lenTitle, lenSubTitle);
+	if (lenSubTitle) strncpy(a + 48 + lenTitle, SubTitle, lenSubTitle);
 
-	ppl6::CBinary *bin=new ppl6::CBinary;
+	ppl6::CBinary* bin=new ppl6::CBinary;
 	if (!bin) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	bin->Set(a,size);
+	bin->Set(a, size);
 	// CBinary ist verantwortlich den Speicher wieder freizugeben
 	bin->ManageMemory();
 	return bin;
 }
 
-int DataDevice::Import(ppl6::CBinary *bin, int version)
+int DataDevice::Import(ppl6::CBinary* bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -424,38 +418,38 @@ int DataDevice::Import(ppl6::CBinary *bin, int version)
  */
 {
 	if (!bin) {
-		ppl6::SetError(194,"int DataDevice::Import(==> ppl6::CBinary *bin <==)");
+		ppl6::SetError(194, "int DataDevice::Import(==> ppl6::CBinary *bin <==)");
 		return 0;
 	}
-	if (version<1 || version>1) {
-		ppl6::SetError(20023,"%i",version);
+	if (version < 1 || version>1) {
+		ppl6::SetError(20023, "%i", version);
 		return 0;
 	}
 	int size=bin->Size();
-	const char *a=(char*)bin->GetPtr();
+	const char* a=(char*)bin->GetPtr();
 	// Die Größe muss mindestens 48 Byte betragen
-	if (size<48 || a==NULL) {
+	if (size < 48 || a == NULL) {
 		ppl6::SetError(20020);
 		return 0;
 	}
 	Clear();
 	DeviceType=ppl6::Peek8(a);
-	DeviceId=ppl6::Peek32(a+1);
-	Pages=ppl6::Peek8(a+5);
-	Length=ppl6::Peek32(a+6);
-	Recorded=ppl6::Peek32(a+10);
-	PurchaseId=ppl6::Peek16(a+14);
-	LabelId=ppl6::Peek32(a+16);
-	PurchaseDate=ppl6::Peek32(a+20);
-	PurchasePrice=ppl6::PeekFloat(a+24);
-	DateCreated=ppl6::Peek32(a+28);
-	FirstDate=ppl6::Peek32(a+32);
-	LastDate=ppl6::Peek32(a+36);
-	NumTracks=ppl6::Peek32(a+40);
-	int lenTitle=ppl6::Peek16(a+44);
-	int lenSubTitle=ppl6::Peek16(a+46+lenTitle);
-	if (lenTitle) Title=ppl6::strndup(a+46,lenTitle);
-	if (lenSubTitle) SubTitle=ppl6::strndup(a+48+lenTitle,lenSubTitle);
+	DeviceId=ppl6::Peek32(a + 1);
+	Pages=ppl6::Peek8(a + 5);
+	Length=ppl6::Peek32(a + 6);
+	Recorded=ppl6::Peek32(a + 10);
+	PurchaseId=ppl6::Peek16(a + 14);
+	LabelId=ppl6::Peek32(a + 16);
+	PurchaseDate=ppl6::Peek32(a + 20);
+	PurchasePrice=ppl6::PeekFloat(a + 24);
+	DateCreated=ppl6::Peek32(a + 28);
+	FirstDate=ppl6::Peek32(a + 32);
+	LastDate=ppl6::Peek32(a + 36);
+	NumTracks=ppl6::Peek32(a + 40);
+	int lenTitle=ppl6::Peek16(a + 44);
+	int lenSubTitle=ppl6::Peek16(a + 46 + lenTitle);
+	if (lenTitle) Title=ppl6::strndup(a + 46, lenTitle);
+	if (lenSubTitle) SubTitle=ppl6::strndup(a + 48 + lenTitle, lenSubTitle);
 	return 1;
 }
 
@@ -487,7 +481,7 @@ CDeviceStore::CDeviceStore()
  * Konstruktor der Klasse. Initialisiert die internen Variablen.
  */
 {
-	for (int i=0;i<=MAX_DEVICE_TYPES;i++) highest[i]=0;
+	for (int i=0;i <= MAX_DEVICE_TYPES;i++) highest[i]=0;
 }
 
 CDeviceStore::~CDeviceStore()
@@ -515,7 +509,7 @@ void CDeviceStore::Clear()
 	Mutex.Unlock();
 }
 
-const char *CDeviceStore::GetChunkName()
+const char* CDeviceStore::GetChunkName()
 /*!\brief Chunkname dieses Datentypes auslesen
  *
  * Diese Funktion liefert einen Pointer auf den Chunknamen dieses Datentypes zurück.
@@ -526,7 +520,7 @@ const char *CDeviceStore::GetChunkName()
 	return "DEVI";
 }
 
-int CDeviceStore::Save(DataDevice *t)
+int CDeviceStore::Save(DataDevice* t)
 /*!\brief Datensatz auf Festplatte schreiben
  *
  * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
@@ -542,13 +536,13 @@ int CDeviceStore::Save(DataDevice *t)
 		return 0;
 	}
 	if (!t) {
-		ppl6::SetError(194,"int CDeviceStore::Save(==> DataDevice *t <==)");
+		ppl6::SetError(194, "int CDeviceStore::Save(==> DataDevice *t <==)");
 		return 0;
 	}
 	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary *bin=t->Export();
+	ppl6::CBinary* bin=t->Export();
 	if (!bin) return 0;
-	if (!Storage->Save(this,t,bin)) {
+	if (!Storage->Save(this, t, bin)) {
 		ppl6::PushError();
 		delete bin;
 		ppl6::PopError();
@@ -567,9 +561,9 @@ int CDeviceStore::Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId
 	// Neue ID darf nicht existieren
 	dd.DeviceId=newId;
 	dd.DeviceType=DeviceType;
-	DataDevice *t=(DataDevice *)Tree.Find((void *)&dd);
+	DataDevice* t=(DataDevice*)Tree.Find((void*)&dd);
 	if (t) {
-		printf ("ERROR: Neue DeviceId bereits vorhanden!\n");
+		printf("ERROR: Neue DeviceId bereits vorhanden!\n");
 		Mutex.Unlock();
 		return 0;
 	}
@@ -577,9 +571,9 @@ int CDeviceStore::Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId
 	// Alte ID muss vorhanden sein
 	dd.DeviceId=oldId;
 	dd.DeviceType=DeviceType;
-	t=(DataDevice *)Tree.Find((void *)&dd);
+	t=(DataDevice*)Tree.Find((void*)&dd);
 	if (!t) {
-		printf ("ERROR: Alte DeviceId nicht gefunden!\n");
+		printf("ERROR: Alte DeviceId nicht gefunden!\n");
 		Mutex.Unlock();
 		return 0;
 	}
@@ -590,20 +584,20 @@ int CDeviceStore::Renumber(ppluint8 DeviceType, ppluint32 oldId, ppluint32 newId
 	// Datensatz mit neuer ID speichern
 	t->DeviceId=newId;
 	if (!Save(t)) {
-		printf ("ERROR: Speichern fehlgeschlagen!\n");
+		printf("ERROR: Speichern fehlgeschlagen!\n");
 		t->DeviceId=oldId;
 		Tree.Add(t);
 		Mutex.Unlock();
 		return 0;
 	}
-	if (t->DeviceId>highest[t->DeviceType]) highest[t->DeviceType]=t->DeviceId;
+	if (t->DeviceId > highest[t->DeviceType]) highest[t->DeviceType]=t->DeviceId;
 	// Datensatz mit neuer ID in den Suchbaum aufnehmen
 	Tree.Add(t);
 	Mutex.Unlock();
 	return 1;
 }
 
-int CDeviceStore::Put(DataDevice *entry)
+int CDeviceStore::Put(DataDevice* entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -619,20 +613,20 @@ int CDeviceStore::Put(DataDevice *entry)
  */
 {
 	if (!entry) {
-		ppl6::SetError(194,"int CDeviceStore::Put(==> DataDevice *entry <==)");
+		ppl6::SetError(194, "int CDeviceStore::Put(==> DataDevice *entry <==)");
 		return 0;
 	}
 	if (!Storage) {
-		ppl6::SetError(20014,"CDeviceStore");
+		ppl6::SetError(20014, "CDeviceStore");
 		return 0;
 	}
 	Mutex.Lock();
 	// Gibt's den Tonträger schon?
-	DataDevice *t;
+	DataDevice* t;
 	DATADEVICE dd;
 	dd.DeviceId=entry->DeviceId;
 	dd.DeviceType=entry->DeviceType;
-	t=(DataDevice *)Tree.Find((void *)&dd);
+	t=(DataDevice*)Tree.Find((void*)&dd);
 	if (t) {	// Jepp, gibt's schon. Wir machen ein Update
 		// CopyFrom führt ein Clear aus, daher müssen wir die Storage Daten retten
 		CStorageItem ssave;
@@ -650,7 +644,7 @@ int CDeviceStore::Put(DataDevice *entry)
 		}
 		// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
 		entry->CopyStorageFrom(t);
-		if (entry->DeviceId>highest[entry->DeviceType]) highest[entry->DeviceType]=entry->DeviceId;
+		if (entry->DeviceId > highest[entry->DeviceType]) highest[entry->DeviceType]=entry->DeviceId;
 		Mutex.Unlock();
 		return 1;
 	}
@@ -668,8 +662,8 @@ int CDeviceStore::Put(DataDevice *entry)
 		ppl6::PopError();
 		return 0;
 	}
-	if (t->DeviceId==0) {
-		t->DeviceId=GetHighestDevice(t->DeviceType)+1;
+	if (t->DeviceId == 0) {
+		t->DeviceId=GetHighestDevice(t->DeviceType) + 1;
 	}
 	if (!Save(t)) {
 		ppl6::PushError();
@@ -680,13 +674,13 @@ int CDeviceStore::Put(DataDevice *entry)
 	}
 	// Den internen Datensatz in den Tree hängen
 	Tree.Add(t);
-	if (t->DeviceId>highest[t->DeviceType]) highest[t->DeviceType]=t->DeviceId;
+	if (t->DeviceId > highest[t->DeviceType]) highest[t->DeviceType]=t->DeviceId;
 	entry->CopyFrom(t);
 	Mutex.Unlock();
 	return 1;
 }
 
-DataDevice *CDeviceStore::Get(ppluint8 DeviceType, ppluint32 DeviceId)
+DataDevice* CDeviceStore::Get(ppluint8 DeviceType, ppluint32 DeviceId)
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann ein bestimmer Tonträger ausgelesen werden
@@ -701,14 +695,14 @@ DataDevice *CDeviceStore::Get(ppluint8 DeviceType, ppluint32 DeviceId)
 	DATADEVICE dd;
 	dd.DeviceType=DeviceType;
 	dd.DeviceId=DeviceId;
-	DataDevice *t;
+	DataDevice* t;
 	Mutex.Lock();
-	t=(DataDevice *)Tree.Find((void*)&dd);
+	t=(DataDevice*)Tree.Find((void*)&dd);
 	Mutex.Unlock();
 	return t;
 }
 
-int CDeviceStore::GetCopy(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice *t)
+int CDeviceStore::GetCopy(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice* t)
 /*!\brief Kopie eines Datensatzes erstellen
  *
  * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
@@ -724,21 +718,21 @@ int CDeviceStore::GetCopy(ppluint8 DeviceType, ppluint32 DeviceId, DataDevice *t
 	DATADEVICE dd;
 	dd.DeviceType=DeviceType;
 	dd.DeviceId=DeviceId;
-	DataDevice *found;
+	DataDevice* found;
 	Mutex.Lock();
-	found=(DataDevice *)Tree.Find((void*)&dd);
+	found=(DataDevice*)Tree.Find((void*)&dd);
 	if (found) t->CopyFrom(found);
 	Mutex.Unlock();
 	if (found) return 1;
 	return 0;
 }
 
-int CDeviceStore::LoadChunk(CWMFileChunk *chunk)
+int CDeviceStore::LoadChunk(CWMFileChunk* chunk)
 {
 	DataDevice data;
 	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(),chunk->GetChunkDataSize())) return 0;
-	if (!data.Import(&bin,chunk->GetFormatVersion())) return 0;
+	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
+	if (!data.Import(&bin, chunk->GetFormatVersion())) return 0;
 	data.CopyStorageFrom(chunk);
 	return Put(&data);
 }
@@ -748,12 +742,12 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 	DATADEVICE dd;
 	dd.DeviceType=DeviceType;
 	dd.DeviceId=DeviceId;
-	DataDevice *t;
-	CTrackList *tracks;
-	DataTrack *dt;
-	DataTitle *ti;
+	DataDevice* t;
+	CTrackList* tracks;
+	DataTrack* dt;
+	DataTitle* ti;
 	Mutex.Lock();
-	t=(DataDevice *)Tree.Find((void*)&dd);
+	t=(DataDevice*)Tree.Find((void*)&dd);
 	if (t) {
 		DataDevice previous;
 		previous.NumTracks=t->NumTracks;
@@ -766,8 +760,8 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 		t->FirstDate=0;
 		t->LastDate=0;
 
-		for (ppluint8 page=1;page<=t->Pages;page++) {
-			tracks=wm_main->GetTracklist(DeviceType,DeviceId,page);
+		for (ppluint8 page=1;page <= t->Pages;page++) {
+			tracks=wm_main->GetTracklist(DeviceType, DeviceId, page);
 			if (tracks) {
 				tracks->Reset();
 				while ((dt=tracks->GetNext())) {
@@ -775,9 +769,9 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 					if (ti) {
 						t->NumTracks++;
 						t->Recorded+=ti->Length;
-						if (ti->RecordDate>0) {
-							if (ti->RecordDate>t->LastDate) t->LastDate=ti->RecordDate;
-							if (ti->RecordDate<t->FirstDate || t->FirstDate==0) t->FirstDate=ti->RecordDate;
+						if (ti->RecordDate > 0) {
+							if (ti->RecordDate > t->LastDate) t->LastDate=ti->RecordDate;
+							if (ti->RecordDate < t->FirstDate || t->FirstDate == 0) t->FirstDate=ti->RecordDate;
 						}
 					}
 				}
@@ -785,11 +779,11 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 			}
 		}
 		// Save only, if something changed
-		if (previous.NumTracks!=t->NumTracks ||
-				previous.Recorded!=t->Recorded ||
-				previous.FirstDate!=t->FirstDate ||
-				previous.LastDate!=t->LastDate
-				) Save(t);
+		if (previous.NumTracks != t->NumTracks ||
+			previous.Recorded != t->Recorded ||
+			previous.FirstDate != t->FirstDate ||
+			previous.LastDate != t->LastDate
+			) Save(t);
 	}
 	Mutex.Unlock();
 	return 1;

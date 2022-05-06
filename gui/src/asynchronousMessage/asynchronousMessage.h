@@ -18,28 +18,35 @@
  */
 
 
-#ifndef ABOUT_H
-#define ABOUT_H
 
+#ifndef ASYNCHRONOUSMESSAGE_H
+#define ASYNCHRONOUSMESSAGE_H
+
+#include <QWidget>
+#include <QTimer>
+#include "ui_asynchronousMessage.h"
 #include "winmusik3.h"
-#include <QDialog>
-#include "ui_about.h"
 
-class About : public QDialog
+class asynchronousMessage : public QWidget
 {
     Q_OBJECT
 
 public:
-    About(QWidget *parent = 0);
-    ~About();
+    asynchronousMessage(QWidget* parent = 0);
+    ~asynchronousMessage();
+    void ReloadTranslation();
+
+    void setMessagePixmap(const QPixmap& pixmap);
+    void setMessageText(const QString& text);
 
 private:
-    Ui::AboutClass ui;
+    Ui::asynchronousMessageClass ui;
 
-    void AddFeature(ppl6::CString &out, const char *feature);
 
-private slots:
-    void on_okButton_clicked() {done(0);};
+public slots:
+
+
 };
 
-#endif // ABOUT_H
+
+#endif // ASYNCHRONOUSMESSAGE_H

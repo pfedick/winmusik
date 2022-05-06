@@ -31,13 +31,13 @@
 #include "src/search/search.h"
 #include "src/firststart/firststart.h"
 #include "src/firststart/langselect.h"
-#include "splashscreen.h"
-#include "coverprinter.h"
+#include "src/splashscreen/splashscreen.h"
+#include "src/coverprinter/coverprinter.h"
 #include "src/playlist/playlist.h"
-#include "devicelist.h"
+#include "src/devicelist/devicelist.h"
 #include "src/searchlists/searchlists.h"
 #include "src/searchlists/searchlistdialog.h"
-#include "coverviewer.h"
+#include "src/coverviewer/coverviewer.h"
 #include <QMessageBox>
 #include <QLocale>
 #include <QDesktopWidget>

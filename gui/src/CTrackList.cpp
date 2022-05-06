@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.3 $
- * $Date: 2010/09/30 19:07:09 $
- * $Id: CTrackList.cpp,v 1.3 2010/09/30 19:07:09 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +36,7 @@
  */
 
 
-int CTrackListItem::CompareNode(CTreeItem *item)
+int CTrackListItem::CompareNode(CTreeItem* item)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -57,14 +51,14 @@ int CTrackListItem::CompareNode(CTreeItem *item)
  * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
  */
 {
-	CTrackListItem *v=(CTrackListItem *)item;
+	CTrackListItem* v=(CTrackListItem*)item;
 	// Device vergleichen
 	if (v->id > id) return 1;
 	else if (v->id < id) return -1;
 	return 0;
 }
 
-int CTrackListItem::CompareValue(void *value)
+int CTrackListItem::CompareValue(void* value)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -80,7 +74,7 @@ int CTrackListItem::CompareValue(void *value)
  * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
  */
 {
-	int *v=(int*)value;
+	int* v=(int*)value;
 	// Device vergleichen
 	if (*v > id) return 1;
 	else if (*v < id) return -1;
@@ -136,7 +130,7 @@ CTrackList::CTrackList()
 	Page=0;
 }
 
-CTrackList::CTrackList(const CTrackList &other)
+CTrackList::CTrackList(const CTrackList& other)
 /*!\brief Copy Konstruktor der Klasse
  */
 {
@@ -149,7 +143,7 @@ CTrackList::CTrackList(const CTrackList &other)
 	copy(other);
 }
 
-CTrackList::CTrackList(const CTrackList *other)
+CTrackList::CTrackList(const CTrackList* other)
 /*!\brief Copy Konstruktor der Klasse
  */
 {
@@ -162,7 +156,7 @@ CTrackList::CTrackList(const CTrackList *other)
 	if (other) copy(*other);
 }
 
-void CTrackList::copy(const CTrackList &other)
+void CTrackList::copy(const CTrackList& other)
 {
 	Mutex.Lock();
 	min=other.min;
@@ -174,8 +168,8 @@ void CTrackList::copy(const CTrackList &other)
 	Tracks.Clear(true);
 	ppl6::CTreeWalker walk;
 	other.Tracks.Reset(walk);
-	CTrackListItem *t;
-	while ((t=(CTrackListItem *)other.Tracks.GetNext(walk))) {
+	CTrackListItem* t;
+	while ((t=(CTrackListItem*)other.Tracks.GetNext(walk))) {
 		Tracks.Add(t);
 	}
 
@@ -206,7 +200,7 @@ void CTrackList::Clear()
 	Mutex.Unlock();
 }
 
-int CTrackList::Add(int track, DataTrack *entry)
+int CTrackList::Add(int track, DataTrack* entry)
 /*!\brief Track hinzufügen
  *
  * Diese Funktion wird intern von CTrackStore::GetTracklist aufgerufen, um initial Tracks in die
@@ -218,14 +212,14 @@ int CTrackList::Add(int track, DataTrack *entry)
  */
 {
 	if (!entry) {
-		ppl6::SetError(194,"int CTrackList::Add(int track, ==> DataTrack *entry <==)");
+		ppl6::SetError(194, "int CTrackList::Add(int track, ==> DataTrack *entry <==)");
 		return 0;
 	}
-	if (track<1 || track >65535) {
+	if (track < 1 || track >65535) {
 		ppl6::SetError(20017);
 		return 0;
 	}
-	CTrackListItem *item=new CTrackListItem;
+	CTrackListItem* item=new CTrackListItem;
 	if (!item) {
 		ppl6::SetError(2);
 		return 0;
@@ -240,8 +234,8 @@ int CTrackList::Add(int track, DataTrack *entry)
 		ppl6::PopError();
 		return 0;
 	}
-	if (min==0 || track<min) min=track;
-	if (track>max) max=track;
+	if (min == 0 || track < min) min=track;
+	if (track > max) max=track;
 	Mutex.Unlock();
 	return 1;
 
@@ -274,7 +268,7 @@ int CTrackList::GetMax()
 	return max;
 }
 
-DataTrack *CTrackList::Get(int track)
+DataTrack* CTrackList::Get(int track)
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann ein bestimmer Track ausgelesen werden
@@ -285,7 +279,7 @@ DataTrack *CTrackList::Get(int track)
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	if (track<1 || track>65535) {
+	if (track < 1 || track>65535) {
 		ppl6::SetError(20017);
 		return NULL;
 	}
@@ -295,18 +289,18 @@ DataTrack *CTrackList::Get(int track)
 		ppl6::SetError(20018);
 		return NULL;
 	}
-	CTrackListItem *t=(CTrackListItem*)Tracks.Find(&track);
+	CTrackListItem* t=(CTrackListItem*)Tracks.Find(&track);
 	Mutex.Unlock();
 	if (!t) {
 		ppl6::SetError(20018);
 		return NULL;
 	}
-	if (t->track->TitleId>0) return t->track;
+	if (t->track->TitleId > 0) return t->track;
 	ppl6::SetError(20018);
 	return NULL;
 }
 
-int CTrackList::GetCopy (int track, DataTrack *t)
+int CTrackList::GetCopy(int track, DataTrack* t)
 /*!\brief Kopie eines Datensatzes erstellen
  *
  * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
@@ -319,16 +313,16 @@ int CTrackList::GetCopy (int track, DataTrack *t)
  */
 {
 	if (!t) {
-		ppl6::SetError(194,"int CTrackList::GetCopy (int track,==> DataTrack *t <==)");
+		ppl6::SetError(194, "int CTrackList::GetCopy (int track,==> DataTrack *t <==)");
 		return 0;
 	}
-	DataTrack *res=Get(track);
+	DataTrack* res=Get(track);
 	if (!res) return 0;
 	t->CopyFrom(res);
 	return 1;
 }
 
-int CTrackList::Put(DataTrack *entry)
+int CTrackList::Put(DataTrack* entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -349,13 +343,13 @@ int CTrackList::Put(DataTrack *entry)
 		return 0;
 	}
 	if (!storage->Put(entry)) return 0;
-	DataTrack *n=storage->Get(entry->Device, entry->DeviceId, entry->Page, entry->Track);
+	DataTrack* n=storage->Get(entry->Device, entry->DeviceId, entry->Page, entry->Track);
 	int track=entry->Track;
 	Mutex.Lock();
-	CTrackListItem *t=(CTrackListItem*)Tracks.Find(&track);
+	CTrackListItem* t=(CTrackListItem*)Tracks.Find(&track);
 	Mutex.Unlock();
 	if (t) t->track=n;
-	else return Add(track,n);
+	else return Add(track, n);
 	return 1;
 }
 
@@ -372,13 +366,13 @@ int CTrackList::Delete(int track)
  */
 
 {
-	if (track<1 || track>65535) {
+	if (track < 1 || track>65535) {
 		ppl6::SetError(20017);
 		return 0;
 	}
 	Mutex.Lock();
 	ppluint32 tmp;
-	CTrackListItem *t=(CTrackListItem*)Tracks.Find(&track);
+	CTrackListItem* t=(CTrackListItem*)Tracks.Find(&track);
 	if (t) {
 		tmp=t->track->TitleId;
 		t->track->TitleId=0;
@@ -389,9 +383,9 @@ int CTrackList::Delete(int track)
 		}
 		// Titel laden
 		if (wm_main) {
-			DataTitle *ti=wm_main->GetTitle(tmp);
+			DataTitle* ti=wm_main->GetTitle(tmp);
 			if (ti) {
-				if (ti->DeviceType==DeviceType && ti->DeviceId==DeviceId && ti->Page==Page) {
+				if (ti->DeviceType == DeviceType && ti->DeviceId == DeviceId && ti->Page == Page) {
 					// Titel muss gelöscht werden
 					wm_main->Hashes.RemoveTitle(ti->TitleId);
 					wm_main->TitleStore.Delete(ti);
@@ -405,15 +399,15 @@ int CTrackList::Delete(int track)
 		int oldmax=max;
 		max=0;
 		min=oldmax;
-		for (int i=0;i<=oldmax;i++) {
-			CTrackListItem *t=(CTrackListItem*)Tracks.Find(&i);
+		for (int i=0;i <= oldmax;i++) {
+			CTrackListItem* t=(CTrackListItem*)Tracks.Find(&i);
 			if (t) {
-				if (i>max) max=i;
-				if (i<min) min=i;
+				if (i > max) max=i;
+				if (i < min) min=i;
 			}
 		}
-		if (wm_main!=NULL) {
-			wm_main->TrashAudioFile(DeviceType,DeviceId,Page,track);
+		if (wm_main != NULL) {
+			wm_main->TrashAudioFile(DeviceType, DeviceId, Page, track);
 		}
 
 	}
@@ -421,7 +415,7 @@ int CTrackList::Delete(int track)
 	return 1;
 }
 
-int CTrackList::DeleteShift(int track, CTitleStore *tistore)
+int CTrackList::DeleteShift(int track, CTitleStore* tistore)
 /*!\brief Track löschen, nachfolgende nach vorne schieben
  *
  * Mit dieser Funktion wird ein bestimmter Track in der Liste gelöscht und die nachfolgenden
@@ -438,16 +432,16 @@ int CTrackList::DeleteShift(int track, CTitleStore *tistore)
 	if (!Delete(track)) return 0;
 	// Wir brauchen Track nicht weiter zu prüfen, da Delete dies schon getan hat
 	Mutex.Lock();
-	CTrackListItem *t;
-	DataTitle *Ti;
-	for (int i=track+1;i<=max;i++) {
+	CTrackListItem* t;
+	DataTitle* Ti;
+	for (int i=track + 1;i <= max;i++) {
 		t=(CTrackListItem*)Tracks.Find(&i);
 		if (t) {
 			// Erst nehmen wir den Track aus dem Tree
 			Tracks.Delete(t);
 			// Track-Nummer verkleinern
-			t->track->Track=i-1;
-			t->id=i-1;
+			t->track->Track=i - 1;
+			t->id=i - 1;
 			// Track speichern
 			storage->Put(t->track);
 			// Wieder in den Tree einfügen
@@ -455,34 +449,34 @@ int CTrackList::DeleteShift(int track, CTitleStore *tistore)
 			// Titel korrigieren
 			if (tistore) {
 				Ti=tistore->Get(t->track->TitleId);
-				if (Ti!=NULL && Ti->DeviceId==t->track->DeviceId
-						&& Ti->DeviceType==t->track->Device
-						&& Ti->Page==t->track->Page) {
+				if (Ti != NULL && Ti->DeviceId == t->track->DeviceId
+					&& Ti->DeviceType == t->track->Device
+					&& Ti->Page == t->track->Page) {
 					Ti->Track=t->track->Track;
 					tistore->Put(Ti);
 				}
 			}
-			if (wm_main!=NULL) {
+			if (wm_main != NULL) {
 				// File umbenennen
-				wm_main->RenameAudioFile(DeviceType,DeviceId,Page,i,i-1);
+				wm_main->RenameAudioFile(DeviceType, DeviceId, Page, i, i - 1);
 			}
 		}
 	}
 	int oldmax=max;
 	max=0;
 	min=oldmax;
-	for (int i=0;i<=oldmax;i++) {
-		CTrackListItem *t=(CTrackListItem*)Tracks.Find(&i);
+	for (int i=0;i <= oldmax;i++) {
+		CTrackListItem* t=(CTrackListItem*)Tracks.Find(&i);
 		if (t) {
-			if (i>max) max=i;
-			if (i<min) min=i;
+			if (i > max) max=i;
+			if (i < min) min=i;
 		}
 	}
 	Mutex.Unlock();
 	return 1;
 }
 
-int CTrackList::InsertShift(int track, CTitleStore *tistore)
+int CTrackList::InsertShift(int track, CTitleStore* tistore)
 /*!\brief Tracks nach hinten verschieben
  *
  * Mit dieser Funktion wird an der angegebenen Track-Positionen eine Lück eingefügt und alle
@@ -495,7 +489,7 @@ int CTrackList::InsertShift(int track, CTitleStore *tistore)
  * \returns Bei Erfolg gibt die Funktion 1 zurück, sonst 0.
  */
 {
-	if (track<1 || track>65535) {
+	if (track < 1 || track>65535) {
 		ppl6::SetError(20017);
 		return 0;
 	}
@@ -505,16 +499,16 @@ int CTrackList::InsertShift(int track, CTitleStore *tistore)
 		Mutex.Unlock();
 		return 0;
 	}
-	CTrackListItem *t;
-	DataTitle *Ti;
-	for (int i=max;i>=track;i--) {				// Von hinten nach vorne
+	CTrackListItem* t;
+	DataTitle* Ti;
+	for (int i=max;i >= track;i--) {				// Von hinten nach vorne
 		t=(CTrackListItem*)Tracks.Find(&i);
 		if (t) {
 			// Erst nehmen wir den Track aus dem Tree
 			Tracks.Delete(t);
 			// Track-Nummer vergrößern
-			t->track->Track=i+1;
-			t->id=i+1;
+			t->track->Track=i + 1;
+			t->id=i + 1;
 			// Track speichern
 			storage->Put(t->track);
 			// Wieder in den Tree einfügen
@@ -522,16 +516,16 @@ int CTrackList::InsertShift(int track, CTitleStore *tistore)
 			// Titel korrigieren
 			if (tistore) {
 				Ti=tistore->Get(t->track->TitleId);
-				if (Ti!=NULL && Ti->DeviceId==t->track->DeviceId
-						&& Ti->DeviceType==t->track->Device
-						&& Ti->Page==t->track->Page) {
+				if (Ti != NULL && Ti->DeviceId == t->track->DeviceId
+					&& Ti->DeviceType == t->track->Device
+					&& Ti->Page == t->track->Page) {
 					Ti->Track=t->track->Track;
 					tistore->Put(Ti);
 				}
 			}
-			if (wm_main!=NULL) {
+			if (wm_main != NULL) {
 				// File umbenennen
-				wm_main->RenameAudioFile(DeviceType,DeviceId,Page,i,i+1);
+				wm_main->RenameAudioFile(DeviceType, DeviceId, Page, i, i + 1);
 			}
 		}
 	}
@@ -546,17 +540,16 @@ void CTrackList::Reset()
 	Tracks.Reset();
 }
 
-DataTrack *CTrackList::GetFirst()
+DataTrack* CTrackList::GetFirst()
 {
-	CTrackListItem *t=(CTrackListItem*)Tracks.GetFirst();
+	CTrackListItem* t=(CTrackListItem*)Tracks.GetFirst();
 	if (t) return t->track;
 	return NULL;
 }
 
-DataTrack *CTrackList::GetNext()
+DataTrack* CTrackList::GetNext()
 {
-	CTrackListItem *t=(CTrackListItem*)Tracks.GetNext();
+	CTrackListItem* t=(CTrackListItem*)Tracks.GetNext();
 	if (t) return t->track;
 	return NULL;
 }
-

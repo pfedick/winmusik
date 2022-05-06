@@ -1,11 +1,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
 # Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -96,7 +97,7 @@ AC_LANG(C++)
 AC_EXEEXT
 
 
-AX_CXX_COMPILE_STDCXX(11) 
+AX_CXX_COMPILE_STDCXX(11)
 
 AX_CHECK_COMPILE_FLAG([-no-pie],
     LDFLAGS="-no-pie $LDFLAGS"
@@ -106,14 +107,14 @@ AX_CHECK_COMPILE_FLAG([-no-pie],
 AC_SUBST(NOPIE)
 
 
-  
+
 case "$host_os" in
 	freebsd* )
 		CFLAGS="-I/usr/local/include $CFLAGS"
 		LDFLAGS="-L/usr/local/lib $LDFLAGS"
   		;;
 esac
- 
+
 case "$host_os" in
 	*mingw32*|msys )
 		report_have_pthreads="yes, Windows Threads"
@@ -123,7 +124,7 @@ case "$host_os" in
   		;;
 	*)
 		AX_PTHREAD([report_have_pthreads="yes, pthreads"]
-			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])			
+			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])
 		)
 		;;
 esac
@@ -214,7 +215,7 @@ AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
 
 # AX_HAVE_QT scheint unter FreeBSD nicht kompatibel zu sein. Der produzierte Code
-# läuft zwar unter FreeBSD, aber nicht unter Linux oder MinGW 
+# läuft zwar unter FreeBSD, aber nicht unter Linux oder MinGW
 dnl AX_HAVE_QT
 
 PKG_PROG_PKG_CONFIG()
@@ -328,7 +329,7 @@ AC_CHECK_LIB(pthread, pthread_set_name_np,
 	AC_DEFINE(HAVE_PTHREAD_SET_NAME_NP,1),,)
 AC_CHECK_LIB(pthread, pthread_setname_np,
 	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP,1),,)
-	
+
 AC_CHECK_FUNCS([sched_yield pthread_yield])
 
 
@@ -342,7 +343,7 @@ fi
 
 
 AM_ICONV
-if test "$am_cv_func_iconv_works" = "yes" 
+if test "$am_cv_func_iconv_works" = "yes"
 then
 	report_have_iconv="yes"
 	ICONV_CFLAGS=$INCICONV
@@ -372,31 +373,31 @@ AX_PATH_LIB_PCRE(
             report_have_pcre="yes"
             ,
             )
-       
+
 AX_CHECK_OPENSSL(
 	AC_DEFINE(HAVE_OPENSSL, 1, [ Define if you have openssl. ])
 	report_have_openssl="yes"
-	
+
 	am_save_CPPFLAGS="$CPPFLAGS"
 	am_save_CFLAGS="$CFLAGS"
 	am_save_LIBS="$LIBS"
 	am_save_LDFLAGS="$LDFLAGS"
-	
+
 	LIBS="$LIBS $OPENSSL_LIBS"
 	CFLAGS="$CFLAGS $OPENSSL_INCLUDES"
-	
+
 	AC_CHECK_FUNCS([TLS_method TLS_server_method TLS_client_method])
 	AC_CHECK_FUNCS([EVP_aes_128_ecb EVP_aes_192_ecb EVP_aes_256_ecb EVP_aria_128_ecb EVP_aria_192_ecb EVP_aria_256_ecb])
 	AC_CHECK_FUNCS([EVP_bf_ecb EVP_camellia_128_ecb EVP_camellia_192_ecb EVP_camellia_256_ecb EVP_cast5_ecb])
 	AC_CHECK_FUNCS([EVP_des_ecb EVP_des_ede3_ecb EVP_idea_ecb EVP_rc2_ecb EVP_rc5_32_12_16_ecb])
 	AC_CHECK_FUNCS([SSLv23_method SSLv23_server_method SSLv23_client_method])
-	
-	
+
+
 	CPPFLAGS="$am_save_CPPFLAGS"
 	CFLAGS="$am_save_CFLAGS"
 	LIBS="$am_save_LIBS"
-	LDFLAGS="$am_save_LDFLAGS"	
-	
+	LDFLAGS="$am_save_LDFLAGS"
+
 	, :)
 
 report_have_curl="no"
@@ -406,7 +407,7 @@ LIBCURL_CHECK_CONFIG([yes],[7.30.0],
 	AC_SUBST(LIBCURL)
 	AC_SUBST(LIBCURL_CPPFLAGS)
 	report_have_curl="yes",:)
-	
+
 report_have_libcdio="no"
 AX_CHECK_LIBCDIO(
         report_have_libcdio="yes",
@@ -430,7 +431,7 @@ fi
 SRCDIR=`pwd`
 AC_SUBST(SRCDIR)
 
- 
+
 # If we support __thread, that can speed up tcmalloc a bit.
 # Note, however, that our code tickles a bug in gcc < 4.1.2
 # involving TLS and -fPIC (which our libraries will use) on x86:
@@ -446,7 +447,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([#if defined(__GNUC__) && (defined(__i386__) || 
 
 # We also need to check if the kernel supports __thread, which requires uname()
 AC_CHECK_DECLS(uname,,, [#include <sys/utsname.h>])
- 
+
 
 
 
@@ -482,7 +483,7 @@ case "${host_cpu}-${host_os}" in
         ;;
 esac;
 
-         
+
 
 
 AC_SUBST(report_have_zlib)
@@ -569,13 +570,13 @@ AC_MSG_RESULT([
 ******************************************************************************
 ** Configuration summary for $PACKAGE_NAME Version $PACKAGE_VERSION
 ** Target: $target_os        CPU: $target_cpu
-** 
+**
 ** Byteorder: $report_byteorder
 **   Size of char         $ac_cv_sizeof_char     Size of float        $ac_cv_sizeof_float
 **   Size of short        $ac_cv_sizeof_short     Size of double       $ac_cv_sizeof_double
 **   Size of int          $ac_cv_sizeof_int     Size of void*        $ac_cv_sizeof_voidp
 **   Size of long         $ac_cv_sizeof_long     Size of wchar_t      $ac_cv_sizeof_wchar_t
-**   Size of long long    $ac_cv_sizeof_long_long     
+**   Size of long long    $ac_cv_sizeof_long_long
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
 **
@@ -627,4 +628,3 @@ then
 else
 	AC_MSG_RESULT([])
 fi
-

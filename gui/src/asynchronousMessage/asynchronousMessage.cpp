@@ -18,35 +18,37 @@
  */
 
 
+#include <QClipboard>
+#include <QMenu>
+#include <QList>
+#include <QUrl>
+#include <QMimeData>
+#include <QMouseEvent>
+#include "asynchronousMessage.h"
 
-#ifndef ASYNCHRONOUSMESSAGE_H
-#define ASYNCHRONOUSMESSAGE_H
-
-#include <QWidget>
-#include <QTimer>
-#include "ui_asynchronousMessage.h"
-#include "winmusik3.h"
-
-class asynchronousMessage : public QWidget
+asynchronousMessage::asynchronousMessage(QWidget* parent)
+	: QWidget(parent)
 {
-    Q_OBJECT
+	ui.setupUi(this);
+}
 
-public:
-    asynchronousMessage(QWidget *parent = 0);
-    ~asynchronousMessage();
-    void ReloadTranslation();
-
-    void setMessagePixmap(const QPixmap &pixmap);
-    void setMessageText(const QString &text);
-
-private:
-    Ui::asynchronousMessageClass ui;
+asynchronousMessage::~asynchronousMessage()
+{
+}
 
 
-public slots:
+void asynchronousMessage::ReloadTranslation()
+{
+	ui.retranslateUi(this);
+}
+
+void asynchronousMessage::setMessagePixmap(const QPixmap& pixmap)
+{
+	ui.messageIcon->setPixmap(pixmap);
+}
 
 
-};
-
-
-#endif // ASYNCHRONOUSMESSAGE_H
+void asynchronousMessage::setMessageText(const QString& text)
+{
+	ui.message->setText(text);
+}

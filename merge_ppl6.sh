@@ -2,11 +2,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -32,7 +33,7 @@ if [ ! -d $PPL6_DIR ] ; then
 fi
 
 
-rm -rf pplib/ppl6/* pplib/ppl7/* pplib/include/* 
+rm -rf pplib/ppl6/* pplib/ppl7/* pplib/include/*
 mkdir -p ppl6/src ppl6/include
 
 #######################################################################
@@ -47,8 +48,8 @@ for source_file in $sources
 do
 	target=`basename $source_file`
 	cp $source_file $WORK/ppl6/include/$target
-done	
-	
+done
+
 
 sources=`find src/sound/AudioInfo.cpp src/sound/CID3Tag.cpp src/sound/mp3.cpp \
 	src/sound/AudioCD.cpp src/sound/Cddb.cpp \
@@ -78,8 +79,3 @@ cp LICENSE.TXT $WORK/ppl6
 cd $WORK/pplib
 rm -rf debug release
 ./genMakefile.in
-
-
-
-
-

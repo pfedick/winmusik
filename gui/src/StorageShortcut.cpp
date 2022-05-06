@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: StorageShortcut.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +57,7 @@ DataShortcut::DataShortcut()
 	formatversion=1;
 }
 
-DataShortcut::DataShortcut(const DataShortcut &other)
+DataShortcut::DataShortcut(const DataShortcut& other)
 {
 	shortcut=NULL;
 	artist=NULL;
@@ -71,7 +65,7 @@ DataShortcut::DataShortcut(const DataShortcut &other)
 	CopyFrom(&other);
 }
 
-DataShortcut & DataShortcut::operator = (const DataShortcut &other)
+DataShortcut& DataShortcut::operator = (const DataShortcut& other)
 {
 	CopyFrom(&other);
 	return *this;
@@ -103,7 +97,7 @@ void DataShortcut::Clear()
 	formatversion=1;
 }
 
-int DataShortcut::CompareNode(CTreeItem *item)
+int DataShortcut::CompareNode(CTreeItem* item)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -118,14 +112,14 @@ int DataShortcut::CompareNode(CTreeItem *item)
  * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
  */
 {
-	DataShortcut *n=(DataShortcut *)item;
-	int ret=strcmp(n->shortcut,shortcut);
-	if (ret<0) return -1;
-	if (ret>0) return 1;
+	DataShortcut* n=(DataShortcut*)item;
+	int ret=strcmp(n->shortcut, shortcut);
+	if (ret < 0) return -1;
+	if (ret > 0) return 1;
 	return 0;
 }
 
-int DataShortcut::CompareValue(void *value)
+int DataShortcut::CompareValue(void* value)
 /*!\brief Elemente vergleichen
  *
  * \desc
@@ -141,14 +135,14 @@ int DataShortcut::CompareValue(void *value)
  * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
  */
 {
-	const char *v=(const char *)value;
-	int ret=strcmp(v,shortcut);
-	if (ret<0) return -1;
-	if (ret>0) return 1;
+	const char* v=(const char*)value;
+	int ret=strcmp(v, shortcut);
+	if (ret < 0) return -1;
+	if (ret > 0) return 1;
 	return 0;
 }
 
-int DataShortcut::CopyFrom(const DataShortcut *t)
+int DataShortcut::CopyFrom(const DataShortcut* t)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataShortcut Datensatzes in diesen hineinkopiert.
@@ -163,7 +157,7 @@ int DataShortcut::CopyFrom(const DataShortcut *t)
  */
 {
 	if (!t) {
-		ppl6::SetError(194,"int DataShortcut::CopyFrom(==> DataShortcut *t <==)");
+		ppl6::SetError(194, "int DataShortcut::CopyFrom(==> DataShortcut *t <==)");
 		return 0;
 	}
 	Clear();
@@ -185,12 +179,12 @@ int DataShortcut::CopyFrom(const DataShortcut *t)
 	return 1;
 }
 
-int DataShortcut::CopyFrom(const DataShortcut &t)
+int DataShortcut::CopyFrom(const DataShortcut& t)
 {
 	return CopyFrom(&t);
 }
 
-int DataShortcut::SetValue(const char *shortcut, const char *artist)
+int DataShortcut::SetValue(const char* shortcut, const char* artist)
 /*!\brief Wert setzen
  *
  * Mit dieser Funktion wird der Wert der Klasse verändert.
@@ -227,7 +221,7 @@ int DataShortcut::SetValue(const char *shortcut, const char *artist)
 	return 1;
 }
 
-const char *DataShortcut::GetShortcut()
+const char* DataShortcut::GetShortcut()
 /*!\brief Abkürzung auslesen
  *
  * Mit dieser Funktion wird der String der Abkürzung ausgelesen.
@@ -238,7 +232,7 @@ const char *DataShortcut::GetShortcut()
 	return shortcut;
 }
 
-const char *DataShortcut::GetArtist()
+const char* DataShortcut::GetArtist()
 /*!\brief Interpreten auslesen
  *
  * Mit dieser Funktion wird der String des Interpreten ausgelesen.
@@ -249,7 +243,7 @@ const char *DataShortcut::GetArtist()
 	return artist;
 }
 
-ppl6::CBinary *DataShortcut::Export()
+ppl6::CBinary* DataShortcut::Export()
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -269,28 +263,28 @@ ppl6::CBinary *DataShortcut::Export()
 
 	if (shortcut) lenShortcut=strlen(shortcut);
 	if (artist) lenArtist=strlen(artist);
-	size=size+lenShortcut+lenArtist;
-	char *a=(char*)malloc(size);
+	size=size + lenShortcut + lenArtist;
+	char* a=(char*)malloc(size);
 	if (!a) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	ppl6::Poke16(a,lenShortcut);
-	if (shortcut) strncpy(a+2,shortcut,lenShortcut);
-	ppl6::Poke16(a+2+lenShortcut,lenArtist);
-	if (artist) strncpy(a+4+lenShortcut,artist,lenArtist);
-	ppl6::CBinary *bin=new ppl6::CBinary;
+	ppl6::Poke16(a, lenShortcut);
+	if (shortcut) strncpy(a + 2, shortcut, lenShortcut);
+	ppl6::Poke16(a + 2 + lenShortcut, lenArtist);
+	if (artist) strncpy(a + 4 + lenShortcut, artist, lenArtist);
+	ppl6::CBinary* bin=new ppl6::CBinary;
 	if (!bin) {
 		ppl6::SetError(2);
 		return NULL;
 	}
-	bin->Set(a,size);
+	bin->Set(a, size);
 	// CBinary ist verantwortlich den Speicher wieder freizugeben
 	bin->ManageMemory();
 	return bin;
 }
 
-int DataShortcut::Import(ppl6::CBinary *bin, int version)
+int DataShortcut::Import(ppl6::CBinary* bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -302,25 +296,25 @@ int DataShortcut::Import(ppl6::CBinary *bin, int version)
  */
 {
 	if (!bin) {
-		ppl6::SetError(194,"int DataShortcut::Import(==> ppl6::CBinary *bin <==)");
+		ppl6::SetError(194, "int DataShortcut::Import(==> ppl6::CBinary *bin <==)");
 		return 0;
 	}
-	if (version<1 || version>1) {
-		ppl6::SetError(20023,"%i",version);
+	if (version < 1 || version>1) {
+		ppl6::SetError(20023, "%i", version);
 		return 0;
 	}
 	int size=bin->Size();
-	const char *a=(const char*)bin->GetPtr();
+	const char* a=(const char*)bin->GetPtr();
 	// Die Größe muss mindestens 4 Byte betragen
-	if (size<4 || a==NULL) {
+	if (size < 4 || a == NULL) {
 		ppl6::SetError(20026);
 		return 0;
 	}
 	Clear();
 	int lenShortcut=ppl6::Peek16(a);
-	int lenArtist=ppl6::Peek16(a+2+lenShortcut);
-	if (lenShortcut) shortcut=ppl6::strndup(a+2,lenShortcut);
-	if (lenArtist) artist=ppl6::strndup(a+4+lenShortcut,lenArtist);
+	int lenArtist=ppl6::Peek16(a + 2 + lenShortcut);
+	if (lenShortcut) shortcut=ppl6::strndup(a + 2, lenShortcut);
+	if (lenArtist) artist=ppl6::strndup(a + 4 + lenShortcut, lenArtist);
 	return 1;
 }
 
@@ -378,7 +372,7 @@ void CShortcutStore::Clear()
 	Mutex.Unlock();
 }
 
-const char *CShortcutStore::GetChunkName()
+const char* CShortcutStore::GetChunkName()
 /*!\brief Chunkname dieses Datentypes auslesen
  *
  * Diese Funktion liefert einen Pointer auf den Chunknamen dieses Datentypes zurück.
@@ -389,7 +383,7 @@ const char *CShortcutStore::GetChunkName()
 	return "SHRT";
 }
 
-int CShortcutStore::Save(DataShortcut *t)
+int CShortcutStore::Save(DataShortcut* t)
 /*!\brief Datensatz auf Festplatte schreiben
  *
  * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
@@ -405,13 +399,13 @@ int CShortcutStore::Save(DataShortcut *t)
 		return 0;
 	}
 	if (!t) {
-		ppl6::SetError(194,"int CShortcutStore::Save(==> DataShortcut *t <==)");
+		ppl6::SetError(194, "int CShortcutStore::Save(==> DataShortcut *t <==)");
 		return 0;
 	}
 	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary *bin=t->Export();
+	ppl6::CBinary* bin=t->Export();
 	if (!bin) return 0;
-	if (!Storage->Save(this,t,bin)) {
+	if (!Storage->Save(this, t, bin)) {
 		ppl6::PushError();
 		delete bin;
 		ppl6::PopError();
@@ -421,7 +415,7 @@ int CShortcutStore::Save(DataShortcut *t)
 	return 1;
 }
 
-int CShortcutStore::Put(DataShortcut *entry)
+int CShortcutStore::Put(DataShortcut* entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -437,14 +431,14 @@ int CShortcutStore::Put(DataShortcut *entry)
  */
 {
 	if (!entry) {
-		ppl6::SetError(194,"int CShortcutStore::Put(==> DataShortcut *entry <==)");
+		ppl6::SetError(194, "int CShortcutStore::Put(==> DataShortcut *entry <==)");
 		return 0;
 	}
 	if (!Storage) {
-		ppl6::SetError(20014,"CShortcutStore");
+		ppl6::SetError(20014, "CShortcutStore");
 		return 0;
 	}
-	const char *shortcut=entry->GetShortcut();
+	const char* shortcut=entry->GetShortcut();
 	if (!shortcut) {
 		ppl6::SetError(20038);
 		return 0;
@@ -452,8 +446,8 @@ int CShortcutStore::Put(DataShortcut *entry)
 	Mutex.Lock();
 	// Gibt's die Abkürzung schon?
 
-	DataShortcut *t;
-	t=(DataShortcut *)Tree.Find((void *)shortcut);
+	DataShortcut* t;
+	t=(DataShortcut*)Tree.Find((void*)shortcut);
 	if (t) {	// Jepp, gibt's schon. Wir machen ein Update
 		if (t->artist) free(t->artist);
 		if (entry->artist) t->artist=strdup(entry->artist);
@@ -495,7 +489,7 @@ int CShortcutStore::Put(DataShortcut *entry)
 	return 1;
 }
 
-DataShortcut *CShortcutStore::Get(const char *shortcut)
+DataShortcut* CShortcutStore::Get(const char* shortcut)
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann nach einer Abkürzung gesucht werden.
@@ -509,15 +503,15 @@ DataShortcut *CShortcutStore::Get(const char *shortcut)
 	// Make search string to lowercase
 	ppl6::CWString s=shortcut;
 	s.LCase();
-	const char *search=s.GetPtr();
-	DataShortcut *t;
+	const char* search=s.GetPtr();
+	DataShortcut* t;
 	Mutex.Lock();
-	t=(DataShortcut *)Tree.Find((void *)search);
+	t=(DataShortcut*)Tree.Find((void*)search);
 	Mutex.Unlock();
 	return t;
 }
 
-int CShortcutStore::GetCopy(const char *shortcut, DataShortcut *t)
+int CShortcutStore::GetCopy(const char* shortcut, DataShortcut* t)
 /*!\brief Kopie eines Datensatzes erstellen
  *
  * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
@@ -532,11 +526,11 @@ int CShortcutStore::GetCopy(const char *shortcut, DataShortcut *t)
 	// Make search string to lowercase
 	ppl6::CWString s=shortcut;
 	s.LCase();
-	const char *search=s.GetPtr();
+	const char* search=s.GetPtr();
 
-	DataShortcut *res;
+	DataShortcut* res;
 	Mutex.Lock();
-	res=(DataShortcut *)Tree.Find((void *)search);
+	res=(DataShortcut*)Tree.Find((void*)search);
 	if (res) {
 		t->CopyFrom(res);
 	}
@@ -546,12 +540,12 @@ int CShortcutStore::GetCopy(const char *shortcut, DataShortcut *t)
 }
 
 
-int CShortcutStore::LoadChunk(CWMFileChunk *chunk)
+int CShortcutStore::LoadChunk(CWMFileChunk* chunk)
 {
 	DataShortcut data;
 	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(),chunk->GetChunkDataSize())) return 0;
-	if (!data.Import(&bin,chunk->GetFormatVersion())) return 0;
+	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
+	if (!data.Import(&bin, chunk->GetFormatVersion())) return 0;
 	data.CopyStorageFrom(chunk);
 	return Put(&data);
 }
@@ -559,11 +553,11 @@ int CShortcutStore::LoadChunk(CWMFileChunk *chunk)
 
 void CShortcutStore::List()
 {
-	DataShortcut *res;
+	DataShortcut* res;
 	Mutex.Lock();
 	Tree.Reset();
 	while ((res=(DataShortcut*)Tree.GetNext())) {
-		printf ("Shortcut: >>%s<< => >>%s<<\n",res->shortcut,res->artist);
+		printf("Shortcut: >>%s<< => >>%s<<\n", res->shortcut, res->artist);
 	}
 	Mutex.Unlock();
 }
@@ -574,30 +568,30 @@ void CShortcutStore::Reset()
 	Tree.Reset();
 }
 
-DataShortcut *CShortcutStore::GetFirst()
+DataShortcut* CShortcutStore::GetFirst()
 {
 	return (DataShortcut*)Tree.GetFirst();
 }
 
-DataShortcut *CShortcutStore::GetNext()
+DataShortcut* CShortcutStore::GetNext()
 {
 	return (DataShortcut*)Tree.GetNext();
 }
 
-int CShortcutStore::Delete(const char *shortcut)
+int CShortcutStore::Delete(const char* shortcut)
 {
-	DataShortcut *sc;
+	DataShortcut* sc;
 	if (!Storage) {
 		return 0;
 	}
 	Mutex.Lock();
 	// Gibt's die Abkürzung?
-	sc=(DataShortcut *)Tree.Find((void *)shortcut);
+	sc=(DataShortcut*)Tree.Find((void*)shortcut);
 	if (!sc) {
 		Mutex.Unlock();
 		return 0;
 	}
-	if (!Storage->Delete(this,sc)) {
+	if (!Storage->Delete(this, sc)) {
 		Mutex.Unlock();
 		return 0;
 	}

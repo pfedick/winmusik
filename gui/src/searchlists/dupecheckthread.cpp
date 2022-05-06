@@ -22,23 +22,23 @@
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
-DupeCheckThread::DupeCheckThread(QObject * parent)
+DupeCheckThread::DupeCheckThread(QObject* parent)
 	:QThread(parent)
 {
 	stop=false;
 	trackList=0;
 }
 
-void DupeCheckThread::setTracklist(QTreeWidget *trackList)
+void DupeCheckThread::setTracklist(QTreeWidget* trackList)
 {
 	this->trackList=trackList;
 }
 
 void DupeCheckThread::run()
 {
-	for (int i=0;i<trackList->topLevelItemCount();i++) {
+	for (int i=0;i < trackList->topLevelItemCount();i++) {
 		if (stop) return;
-		QTreeWidgetItem *item=trackList->topLevelItem(i);
+		QTreeWidgetItem* item=trackList->topLevelItem(i);
 		emit updateItem(item, dupeCheckOnTrack(item));
 	}
 }
@@ -56,23 +56,22 @@ void DupeCheckThread::startThread()
 	start();
 }
 
-int DupeCheckThread::dupeCheckOnTrack(QTreeWidgetItem *tw_item)
+int DupeCheckThread::dupeCheckOnTrack(QTreeWidgetItem* tw_item)
 {
-	SearchlistDialog::SearchlistTreeItem *item=(SearchlistDialog::SearchlistTreeItem *)tw_item;
-	ppl6::CString Tmp;
+	SearchlistDialog::SearchlistTreeItem* item=(SearchlistDialog::SearchlistTreeItem*)tw_item;
 	// Titel in Datenbank suchen
 	CHashes::TitleTree Result;
 	int dupePresumption=0;
-	wm_main->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","","",Result);
-	if (Result.size()>1) {
+	wm_main->Hashes.Find(item->Track.Artist, item->Track.Title, item->Track.Version, "", "", "", Result);
+	if (Result.size() > 1) {
 		dupePresumption=100;
-	} else if (Result.size()>0) {
+	} else if (Result.size() > 0) {
 		dupePresumption=90;
 	} else {
-		wm_main->Hashes.Find(item->Track.Artist,item->Track.Title,Result);
-		if (Result.size()>3) {
+		wm_main->Hashes.Find(item->Track.Artist, item->Track.Title, Result);
+		if (Result.size() > 3) {
 			dupePresumption=70;
-		} else if (Result.size()>0) {
+		} else if (Result.size() > 0) {
 			dupePresumption=40;
 		}
 	}
