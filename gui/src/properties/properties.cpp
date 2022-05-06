@@ -211,12 +211,12 @@ Properties::~Properties()
 
 void Properties::UpdateRegExpPatternTable()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.regexpTable->clear();
 	for (size_t i=0;i < wm->RegExpCapture.size();i++) {
 		const RegExpPattern& p=wm->RegExpCapture.getPattern(i);
 		QTreeWidgetItem* item=new QTreeWidgetItem;
-		Tmp.Setf("%i", (int)i + 1);
+		Tmp.setf("%i", (int)i + 1);
 		item->setText(0, Tmp);
 		item->setText(1, p.Name);
 		item->setText(2, p.Pattern);
@@ -510,9 +510,9 @@ void Properties::on_devicePathButton_clicked(int device, QLineEdit* line)
 	if (p.length() == 0) {
 		p=QDir::homePath();
 	}
-	ppl6::CString q=tr("Select directory with your files for device type: %s");
-	ppl6::CString Tmp;
-	Tmp.Setf((const char*)q, (const char*)wm->GetDeviceName(device));
+	ppl7::String q=tr("Select directory with your files for device type: %s");
+	ppl7::String Tmp;
+	Tmp.setf((const char*)q, (const char*)wm->GetDeviceName(device));
 
 
 	QString dir = QFileDialog::getExistingDirectory(this, Tmp,
@@ -630,7 +630,7 @@ void Properties::on_deleteDirectory_clicked()
 
 void Properties::on_regexpAdd_clicked()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	RegExpEdit reg(this);
 	int ret=reg.exec();
 	if (ret == 1) {
@@ -639,7 +639,7 @@ void Properties::on_regexpAdd_clicked()
 		wm->RegExpCapture.save();
 		size_t pos=wm->RegExpCapture.size();
 		QTreeWidgetItem* item=new QTreeWidgetItem;
-		Tmp.Setf("%i", (int)pos);
+		Tmp.setf("%i", (int)pos);
 		item->setText(0, Tmp);
 		item->setText(1, p.Name);
 		item->setText(2, p.Pattern);
@@ -652,9 +652,9 @@ void Properties::on_regexpAdd_clicked()
 void Properties::on_regexpEdit_clicked()
 {
 	if (!current_regexp_item) return;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	Tmp=current_regexp_item->text(0);
-	size_t pos=Tmp.ToInt();
+	size_t pos=Tmp.toInt();
 	if (pos < 1) return;
 	const RegExpPattern& pat=wm->RegExpCapture.getPattern(pos - 1);
 
@@ -678,9 +678,9 @@ void Properties::on_regexpDelete_clicked()
 void Properties::on_regexpUp_clicked()
 {
 	if (!current_regexp_item) return;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	Tmp=current_regexp_item->text(0);
-	size_t pos=Tmp.ToInt();
+	size_t pos=Tmp.toInt();
 	if (pos < 2) return;
 	RegExpPattern p=wm->RegExpCapture.getPattern(pos - 1);
 	wm->RegExpCapture.deletePattern(pos - 1);
@@ -692,9 +692,9 @@ void Properties::on_regexpUp_clicked()
 void Properties::on_regexpDown_clicked()
 {
 	if (!current_regexp_item) return;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	Tmp=current_regexp_item->text(0);
-	size_t pos=Tmp.ToInt();
+	size_t pos=Tmp.toInt();
 	if (pos >= wm->RegExpCapture.size()) return;
 	RegExpPattern p=wm->RegExpCapture.getPattern(pos - 1);
 	wm->RegExpCapture.deletePattern(pos - 1);
@@ -723,16 +723,16 @@ void Properties::on_regexpTable_itemDoubleClicked(QTreeWidgetItem* item, int)
 void Properties::on_JpegQualityPreview_valueChanged(int value)
 {
 	Change();
-	ppl6::CString Tmp;
-	Tmp.Setf("%d", value);
+	ppl7::String Tmp;
+	Tmp.setf("%d", value);
 	ui.JpegQualityPreviewValue->setText(Tmp);
 }
 
 void Properties::on_JpegQualityCover_valueChanged(int value)
 {
 	Change();
-	ppl6::CString Tmp;
-	Tmp.Setf("%d", value);
+	ppl7::String Tmp;
+	Tmp.setf("%d", value);
 	ui.JpegQualityCoverValue->setText(Tmp);
 
 }
