@@ -123,6 +123,7 @@ void Search::customEvent(QEvent* event)
 {
 	if (event->type() == (QEvent::Type)WinMusikEvent::retranslateUi) {
 		ui.retranslateUi(this);
+		DefaultTracklistHeader();
 		event->accept();
 	}
 }
@@ -268,7 +269,6 @@ void Search::SetupTrackList()
 
 void Search::DefaultTracklistHeader()
 {
-	resultmode=0;
 	trackList->headerItem()->setText(SEARCH_TRACKLIST_POS_ROW, tr("Pos", "trackList"));
 	trackList->headerItem()->setText(SEARCH_TRACKLIST_ARTIST_ROW, tr("Artist", "trackList"));
 	trackList->headerItem()->setText(SEARCH_TRACKLIST_TITLE_ROW, tr("Title", "trackList"));
@@ -575,6 +575,7 @@ void Search::PresentResults()
 	Tmp.setf("%zu", Results.size());
 	ui.numTracks->setText(Tmp);
 	ui.totalLength->setText("");
+	resultmode=0;
 	DefaultTracklistHeader();
 	Resize();
 	trackList->update();
