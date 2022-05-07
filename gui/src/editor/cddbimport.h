@@ -39,8 +39,8 @@ public:
 
     void setDisc(ppl7::CDDB::Disc& disc);
 
-    bool checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
-    void startImport(ppl7::CDDB::Disc& disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
+    bool checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page);
+    void startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page);
 
 private:
     Ui::CDDBImport ui;

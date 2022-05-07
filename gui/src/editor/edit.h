@@ -32,7 +32,7 @@
 #include "ui_edit.h"
 #include "oimpinfo.h"
 #include "colorscheme.h"
-#include "ppl6-sound.h"
+#include "ppl7-audio.h"
 
 
 class Edit;
@@ -81,17 +81,6 @@ private:
 
 class Edit;
 
-class AsynchronousTrackUpdate : public ppl6::CThread
-{
-public:
-    AsynchronousTrackUpdate();
-    ~AsynchronousTrackUpdate();
-    Edit* edit;
-
-    void ThreadMain(void* data);
-
-};
-
 class Edit : public QWidget
 {
     friend class CTitleList;
@@ -105,10 +94,10 @@ public:
     void UpdateDevice();
     void UpdateTrackListing();
     void RenderTrack(WMTreeItem* item, DataTitle* title);
-    ppluint32 EditDeviceDialog(ppluint32 id);
+    uint32_t EditDeviceDialog(uint32_t id);
     void ClearEditFields();
     void FillEditFields();
-    void OpenTrack(ppluint32 deviceId, ppluint8 page=0, ppluint16 track=0);
+    void OpenTrack(uint32_t deviceId, uint8_t page=0, uint16_t track=0);
     void ReloadTracks();
     void hideEditor();
     void showEditor();
@@ -122,15 +111,13 @@ protected:
     void customEvent(QEvent* event);
 
 private:
-    AsynchronousTrackUpdate	asyncTrackUpdate;
-
     CWmClient* wm;
-    ppluint8 DeviceType;
+    uint8_t DeviceType;
     int position, oldposition;;
-    ppluint32 DeviceId;
-    ppluint8 Page;
-    //ppluint32 TitleId;
-    ppluint16 TrackNum;
+    uint32_t DeviceId;
+    uint8_t Page;
+    //uint32_t TitleId;
+    uint16_t TrackNum;
     Ui::EditClass ui;
 
     DataDevice	datadevice;

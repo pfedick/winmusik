@@ -545,3 +545,16 @@ void ShowException(const ppl7::Exception& exp, const QString& msg)
 		m,
 		QMessageBox::Ok);
 }
+
+void ShowError(const QString& msg)
+{
+	QString m;
+	if (!msg.isEmpty()) {
+		m="<b>" + msg.trimmed() + "</b>\n";
+	} else {
+		m="<b>" + QObject::tr("an error occured") + "</b>\n";
+	}
+	QMessageBox::critical(NULL, QObject::tr("WinMusik Error"),
+		m,
+		QMessageBox::Ok);
+}

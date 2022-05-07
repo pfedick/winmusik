@@ -116,7 +116,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("deviceType");
 	if (node.isNull() == false && node.isElement() == true) {
-		DeviceType=static_cast<ppluint8>(node.toElement().text().toUInt());
+		DeviceType=static_cast<u_int8_t>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceId");
 	if (node.isNull() == false && node.isElement() == true) {
@@ -124,7 +124,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 	}
 	node =e.namedItem("devicePage");
 	if (node.isNull() == false && node.isElement() == true) {
-		DevicePage=static_cast<ppluint8>(node.toElement().text().toUInt());
+		DevicePage=static_cast<u_int8_t>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceTrack");
 	if (node.isNull() == false && node.isElement() == true) {
@@ -190,7 +190,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("energyLevel");
 	if (node.isNull() == false && node.isElement() == true) {
-		energyLevel=static_cast<ppluint8>(node.toElement().text().toUInt());
+		energyLevel=static_cast<u_int8_t>(node.toElement().text().toUInt());
 	}
 
 	node =e.namedItem("bpm");
@@ -211,7 +211,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("rating");
 	if (node.isNull() == false && node.isElement() == true) {
-		rating=static_cast<ppluint8>(node.toElement().text().toUInt());
+		rating=static_cast<u_int8_t>(node.toElement().text().toUInt());
 	}
 
 	mixLength=endPositionSec - startPositionSec;
@@ -577,7 +577,7 @@ ppl7::DateTime PlaylistTracks::getIssueDate() const
 
 bool PlaylistTracks::save(const ppl7::String& Filename)
 {
-	ppl7::String ext=ppl6::UCase(ppl6::FileSuffix(Filename));
+	ppl7::String ext=ppl7::UpperCase(ppl7::File::getSuffix(Filename));
 	if (ext == "WMP") return saveWMP(Filename);
 	return false;
 
@@ -585,7 +585,7 @@ bool PlaylistTracks::save(const ppl7::String& Filename)
 
 bool PlaylistTracks::load(const ppl7::String& Filename)
 {
-	ppl7::String ext=ppl6::UCase(ppl6::FileSuffix(Filename));
+	ppl7::String ext=ppl7::UpperCase(ppl7::File::getSuffix(Filename));
 	if (ext == "WMP") return loadWMP(Filename);
 	ppl7::String m=tr("Unknown playlist format:");
 	m+="\n\n" + Filename;
@@ -596,39 +596,42 @@ bool PlaylistTracks::load(const ppl7::String& Filename)
 
 bool PlaylistTracks::saveWMP(const ppl7::String& Filename)
 {
-	ppl6::CFile ff;
-	if (!ff.Open(Filename, "wb")) {
-		CWmClient::RaiseError(nullptr, tr("Could not open File"));
-		return false;
+	ppl7::File ff;
+	try {
+		ff.open(Filename, ppl7::File::WRITE);
+
+		ppl7::String xml;
+		xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+		xml+="<WinMusikPlaylist version=\"1\">\n";
+		xml+="   <name>" + ppl7::EscapeHTMLTags(Name) + "</name>\n";
+		xml+="   <subname>" + ppl7::EscapeHTMLTags(SubName) + "</subname>\n";
+		xml+="   <issue>" + ppl7::ToString("%d", IssueNumber) + "</issue>\n";
+		xml+="   <date>" + IssueDate.getDate() + "</date>\n";
+		int count=topLevelItemCount();
+		xml+="   <totalTracks>" + ppl7::ToString("%u", count) + "</totalTracks>\n";
+		u_int64_t totalTrackLength=0;
+		double totalMixLength=0;
+		for (int i=0;i < count;i++) {
+			PlaylistItem* item=static_cast<PlaylistItem*>(this->topLevelItem(i));
+			totalTrackLength+=item->trackLength;
+			totalMixLength+=item->mixLength;
+		}
+		xml+="   <totalTrackLength>" + ppl7::ToString("%llu", totalTrackLength) + "</totalTrackLength>\n";
+		xml+="   <totalMixLength>" + ppl7::ToString("%0.3f", totalMixLength) + "</totalMixLength>\n";
+		xml+="   <tracks>\n";
+		for (int i=0;i < count;i++) {
+			PlaylistItem* item=static_cast<PlaylistItem*>(this->topLevelItem(i));
+			xml+=item->exportAsXML(6);
+		}
+		xml+="   </tracks>\n";
+		xml+="</WinMusikPlaylist>\n";
+		ff.write(xml);
+		ff.close();
+		return true;
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, QObject::tr("could not save playlist"));
 	}
-	ppl7::String xml;
-	xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	xml+="<WinMusikPlaylist version=\"1\">\n";
-	xml+="   <name>" + ppl6::EscapeHTMLTags(Name) + "</name>\n";
-	xml+="   <subname>" + ppl6::EscapeHTMLTags(SubName) + "</subname>\n";
-	xml+="   <issue>" + ppl6::ToString("%d", IssueNumber) + "</issue>\n";
-	xml+="   <date>" + IssueDate.getDate() + "</date>\n";
-	int count=topLevelItemCount();
-	xml+="   <totalTracks>" + ppl6::ToString("%u", count) + "</totalTracks>\n";
-	ppluint64 totalTrackLength=0;
-	double totalMixLength=0;
-	for (int i=0;i < count;i++) {
-		PlaylistItem* item=static_cast<PlaylistItem*>(this->topLevelItem(i));
-		totalTrackLength+=item->trackLength;
-		totalMixLength+=item->mixLength;
-	}
-	xml+="   <totalTrackLength>" + ppl6::ToString("%llu", totalTrackLength) + "</totalTrackLength>\n";
-	xml+="   <totalMixLength>" + ppl6::ToString("%0.3f", totalMixLength) + "</totalMixLength>\n";
-	xml+="   <tracks>\n";
-	for (int i=0;i < count;i++) {
-		PlaylistItem* item=static_cast<PlaylistItem*>(this->topLevelItem(i));
-		xml+=item->exportAsXML(6);
-	}
-	xml+="   </tracks>\n";
-	xml+="</WinMusikPlaylist>\n";
-	ff.Write(xml);
-	ff.Close();
-	return true;
+	return false;
 }
 
 bool PlaylistTracks::loadWMP(const ppl7::String& Filename)

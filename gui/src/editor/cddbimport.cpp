@@ -126,14 +126,14 @@ void CDDBImport::setDisc(ppl7::CDDB::Disc& disc)
 
 void CDDBImport::updateTracklist(ppl7::CDDB::Disc& disc)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.tracklist->clear();
 	ui.tracklist->setWordWrap(false);
 	ui.tracklist->setSortingEnabled(false);
 	ppl7::CDDB::Disc::TrackList::const_iterator it;
 	for (it=disc.Tracks.begin();it != disc.Tracks.end();++it) {
 		QTreeWidgetItem* item=new QTreeWidgetItem;
-		Tmp.Setf("%i", (*it).number);
+		Tmp.setf("%i", (*it).number);
 		item->setText(0, Tmp);
 		ppl7::String Artist=ppl7::Trim((*it).Artist);
 		ppl7::String Title=ppl7::Trim((*it).Title);
@@ -141,7 +141,7 @@ void CDDBImport::updateTracklist(ppl7::CDDB::Disc& disc)
 
 		item->setText(1, Artist + "- " + Title);
 		item->setText(2, Version);
-		Tmp.Setf("%i:%02i", (*it).length / 60, (*it).length % 60);
+		Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
 		item->setText(3, Tmp);
 
 		ui.tracklist->addTopLevelItem(item);
@@ -183,7 +183,6 @@ bool CDDBImport::consumeEvent(QObject* target, QEvent* event)
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
 {
-	ppl6::CString Tmp;
 	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
@@ -345,7 +344,7 @@ void CDDBImport::on_cancelButton_clicked()
 	done(0);
 }
 
-bool CDDBImport::checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page)
+bool CDDBImport::checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
 	CTrackList* tracklist=wm->GetTracklist(devicetype, deviceid, page);
 	if (tracklist->Num() == 0) return true;
@@ -360,9 +359,9 @@ bool CDDBImport::checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 devicei
 	return true;
 }
 
-void CDDBImport::startImport(ppl7::CDDB::Disc& disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page)
+void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	CTrackList* tracklist=wm->GetTracklist(devicetype, deviceid, page);
 	DataDevice datadevice;
 	if (!wm->DeviceStore.GetCopy(devicetype, deviceid, &datadevice)) {
@@ -483,8 +482,8 @@ void CDDBImport::getTitle(DataTitle& Ti, const ppl7::CDDB::Track& track)
 
 void CDDBImport::addDataFromFile(DataTitle& Ti)
 {
-	ppl6::CString Path=wm->GetAudioFilename(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track);
-	if (Path.NotEmpty() == true) {
+	ppl7::String Path=wm->GetAudioFilename(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track);
+	if (Path.notEmpty() == true) {
 		TrackInfo tinfo;
 		if (getTrackInfoFromFile(tinfo, Path)) {
 			if (tinfo.Ti.Key != Ti.Key) {

@@ -85,7 +85,7 @@ private:
 
     void loadPlaylist(ppl7::String& Filename);
 
-    bool loadTrackFromDatabase(PlaylistItem* item, ppluint32 titleId);
+    bool loadTrackFromDatabase(PlaylistItem* item, u_int32_t titleId);
     void loadTrackFromFile(PlaylistItem* item, const ppl7::String& file);
     void renderTrack(PlaylistItem* item);
     void calcMixLength(PlaylistItem* item);

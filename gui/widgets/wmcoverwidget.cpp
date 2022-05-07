@@ -313,8 +313,7 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
 void WMCoverWidget::loadImageFromUri(const QString& uri)
 {
     ppl7::String tmp=uri;
-    const QPixmap* tmppix=ui->cover->pixmap();
-    previousCover=*tmppix;
+    previousCover=ui->cover->pixmap(Qt::ReturnByValue);
     QPixmap pix(":/cover/resources/cover_loading.png");
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     QApplication::processEvents();

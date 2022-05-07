@@ -52,7 +52,7 @@ void CDDBSelect::InstallFilter(QObject* object, int id)
 
 void CDDBSelect::setMatches(const ppl7::CDDB::Matches& matches)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.tracklist->clear();
 	ui.tracklist->setWordWrap(false);
 	ui.tracklist->setSortingEnabled(false);
@@ -60,17 +60,17 @@ void CDDBSelect::setMatches(const ppl7::CDDB::Matches& matches)
 	for (it=matches.begin();it != matches.end();++it) {
 		CddbItem* item=new CddbItem;
 		item->disc=(*it);
-		ppl6::CString Artist=(*it).Artist;
-		ppl6::CString Title=(*it).Title;
+		ppl7::String Artist=(*it).Artist;
+		ppl7::String Title=(*it).Title;
 		item->setText(0, Artist + "- " + Title);
 
-		Tmp.Setf("%i", (*it).year);
+		Tmp.setf("%i", (*it).year);
 		item->setText(1, Tmp);
 
-		Tmp.Setf("%i", (int)(*it).Tracks.size());
+		Tmp.setf("%i", (int)(*it).Tracks.size());
 		item->setText(2, Tmp);
 
-		Tmp.Setf("%i:%02i", (*it).length / 60, (*it).length % 60);
+		Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
 		item->setText(3, Tmp);
 
 		item->setText(4, (*it).genre);

@@ -26,7 +26,6 @@
 #include "ui_setbpmplayed.h"
 #include "winmusik3.h"
 
-#include "ppl6-sound.h"
 
 
 
@@ -34,7 +33,7 @@ class SetBPMPlayed : public QDialog
 {
     Q_OBJECT
 public:
-    SetBPMPlayed(QWidget *parent = 0);
+    SetBPMPlayed(QWidget* parent = 0);
     ~SetBPMPlayed();
     void setValue(int bpm);
     int getValue() const;
@@ -42,8 +41,8 @@ private:
     Ui::setBPMPlayedClass ui;
 
 public slots:
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 

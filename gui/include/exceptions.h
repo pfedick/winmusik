@@ -39,6 +39,7 @@ WMEXCEPTION(InvalidConfigurationFile, ppl7::Exception);
 
 
 void ShowException(const ppl7::Exception& exp, const QString& msg=QString());
+void ShowError(const QString& msg=QString());
 
 
 #endif  // EOF EXCEPTIONS_H_

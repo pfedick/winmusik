@@ -31,13 +31,13 @@ class EditDevice : public QDialog
     Q_OBJECT
 
 public:
-    EditDevice(QWidget *parent = 0, CWmClient *wm=NULL, int typ=0, ppluint32 DeviceId=0);
+    EditDevice(QWidget* parent = 0, CWmClient* wm=NULL, int typ=0, u_int32_t DeviceId=0);
     ~EditDevice();
 
 private:
     Ui::EditDeviceClass ui;
-    CWmClient *wm;
-    QWidget *parent;
+    CWmClient* wm;
+    QWidget* parent;
     int DeviceType;
     int DeviceId;
     DataDevice	Device;
@@ -49,20 +49,20 @@ private:
 
 
 
-    void InstallFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
+    void InstallFilter(QObject* object, int id);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
 
     bool Save();
 
     // Events
-    bool nextWidget(QObject *object);
+    bool nextWidget(QObject* object);
 
 
 private slots:
 
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 
 };
 

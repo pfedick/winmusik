@@ -427,7 +427,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 		QString file=url.toLocalFile();
 		PlaylistItem* item=new PlaylistItem;
 		item->File=file;
-		ppluint32 titleId=findTitleIdByFilename(file);
+		u_int32_t titleId=findTitleIdByFilename(file);
 		if (titleId) loadTrackFromDatabase(item, titleId);
 		else loadTrackFromFile(item, file);
 		renderTrack(item);
@@ -438,7 +438,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 	}
 }
 
-bool Playlist::loadTrackFromDatabase(PlaylistItem* item, ppluint32 titleId)
+bool Playlist::loadTrackFromDatabase(PlaylistItem* item, u_int32_t titleId)
 {
 	DataTitle* ti=wm->GetTitle(titleId);
 	if (!ti) return false;
@@ -1734,107 +1734,123 @@ void Playlist::exportFile(PlaylistExport& dialog, int track, const ppl7::String&
 
 void Playlist::exportM3U()
 {
-	ppl6::CFile m3u;
+	ppl7::File m3u;
 	ppl7::String Tmp;
-	if (!m3u.Openf("%s/000index.m3u", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
-	m3u.Puts("#EXTM3U\n");
-	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		Tmp=item->Artist + " - " + item->Title;
-		Tmp+=" (";
-		Tmp+=item->Version;
-		Tmp+=")";
-		m3u.Putsf("#EXTINF:%u,%s\n", item->trackLength, (const char*)Tmp);
-		m3u.Putsf("%s\n", (const char*)getExportFilename(i + 1, item->File));
+	try {
+		m3u.open(ppl7::ToString("%s/000index.m3u", (const char*)wm->conf.playlist_export.TargetPath), ppl7::File::WRITE);
+		m3u.puts("#EXTM3U\n");
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+			Tmp=item->Artist + " - " + item->Title;
+			Tmp+=" (";
+			Tmp+=item->Version;
+			Tmp+=")";
+			m3u.putsf("#EXTINF:%u,%s\n", item->trackLength, (const char*)Tmp);
+			m3u.putsf("%s\n", (const char*)getExportFilename(i + 1, item->File));
+		}
+		m3u.close();
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save playlist"));
 	}
-	m3u.Close();
 }
 
 void Playlist::exportPLS()
 {
-	ppl6::CFile pls;
+	ppl7::File pls;
 	ppl7::String Tmp;
-	if (!pls.Openf("%s/000index.pls", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
-	pls.Puts("[playlist]\n");
-	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		Tmp=item->Artist + " - " + item->Title;
-		Tmp+=" (";
-		Tmp+=item->Version;
-		Tmp+=")";
+	try {
+		pls.open(ppl7::ToString("%s/000index.pls", (const char*)wm->conf.playlist_export.TargetPath), ppl7::File::WRITE);
+		pls.puts("[playlist]\n");
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+			Tmp=item->Artist + " - " + item->Title;
+			Tmp+=" (";
+			Tmp+=item->Version;
+			Tmp+=")";
 
-		pls.Putsf("File%i=%s\n", i + 1, (const char*)getExportFilename(i + 1, item->File));
-		pls.Putsf("Title%i=%s\n", i + 1, (const char*)Tmp);
-		pls.Putsf("Length%i=%u\n", i + 1, item->trackLength);
+			pls.putsf("File%i=%s\n", i + 1, (const char*)getExportFilename(i + 1, item->File));
+			pls.putsf("Title%i=%s\n", i + 1, (const char*)Tmp);
+			pls.putsf("Length%i=%u\n", i + 1, item->trackLength);
+		}
+		pls.putsf("NumberOfEntries=%i\nVersion=2\n", ui.tracks->topLevelItemCount());
+		pls.close();
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save playlist"));
 	}
-	pls.Putsf("NumberOfEntries=%i\nVersion=2\n", ui.tracks->topLevelItemCount());
-	pls.Close();
 }
 
 void Playlist::exportXSPF()
 {
-	ppl6::CFile xspf;
+	ppl7::File xspf;
 	ppl7::String Tmp;
-	if (!xspf.Openf("%s/000index.xspf", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
-	xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
-	Tmp=tr("Playlist created by WinMusik");
-	Tmp.trim();
-	Tmp.appendf(" %s", WM_VERSION);
-	xspf.Putsf("<creator>%s</creator>\n", (const char*)Tmp);
-	xspf.Puts("<trackList>\n");
-	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
-		ppl7::String Filename=wm->conf.playlist_export.TargetPath + "/" + getExportFilename(i + 1, item->File);
-		xspf.Putsf("  <track>\n");
-		xspf.Putsf("     <trackNum>%u</trackNum>\n", i + 1);
-		xspf.Putsf("     <location>file://%s</location>\n", (const char*)ppl7::EscapeHTMLTags(Filename));
-		xspf.Putsf("     <creator>%s</creator>\n", (const char*)ppl7::EscapeHTMLTags(item->Artist));
-		xspf.Putsf("     <title>%s - %s (%s)</title>\n",
-			(const char*)ppl7::EscapeHTMLTags(item->Artist),
-			(const char*)ppl7::EscapeHTMLTags(item->Title),
-			(const char*)ppl7::EscapeHTMLTags(item->Version));
-		xspf.Putsf("     <duration>%u</duration>\n", item->trackLength * 1000);  // Bringt VLC zum Absturz
-		xspf.Putsf("  </track>\n");
+	try {
+		xspf.open(ppl7::ToString("%s/000index.xspf", (const char*)wm->conf.playlist_export.TargetPath), ppl7::File::WRITE);
+		xspf.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		xspf.puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
+		Tmp=tr("Playlist created by WinMusik");
+		Tmp.trim();
+		Tmp.appendf(" %s", WM_VERSION);
+		xspf.putsf("<creator>%s</creator>\n", (const char*)Tmp);
+		xspf.puts("<trackList>\n");
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			PlaylistItem* item=(PlaylistItem*)ui.tracks->topLevelItem(i);
+			ppl7::String Filename=wm->conf.playlist_export.TargetPath + "/" + getExportFilename(i + 1, item->File);
+			xspf.putsf("  <track>\n");
+			xspf.putsf("     <trackNum>%u</trackNum>\n", i + 1);
+			xspf.putsf("     <location>file://%s</location>\n", (const char*)ppl7::EscapeHTMLTags(Filename));
+			xspf.putsf("     <creator>%s</creator>\n", (const char*)ppl7::EscapeHTMLTags(item->Artist));
+			xspf.putsf("     <title>%s - %s (%s)</title>\n",
+				(const char*)ppl7::EscapeHTMLTags(item->Artist),
+				(const char*)ppl7::EscapeHTMLTags(item->Title),
+				(const char*)ppl7::EscapeHTMLTags(item->Version));
+			xspf.putsf("     <duration>%u</duration>\n", item->trackLength * 1000);  // Bringt VLC zum Absturz
+			xspf.putsf("  </track>\n");
+		}
+		xspf.putsf("</trackList>\n</playlist>\n");
+		xspf.close();
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save playlist"));
 	}
-	xspf.Putsf("</trackList>\n</playlist>\n");
-	xspf.Close();
 }
 
 void Playlist::exportTXT()
 {
-	ppl6::CFile txt;
+	ppl7::File txt;
 	ppl7::String Tmp;
 	ppl7::String Minuten=tr("min", "Minutes in Tracklisting of Playlist");
-	if (!txt.Openf("%s/000index.txt", "wb", (const char*)wm->conf.playlist_export.TargetPath)) return;
-	Tmp=ui.tracks->getName();
-	if (Tmp.isEmpty()) {
-		Tmp=tr("Playlist");
-	}
-	txt.Puts(Tmp);
-	txt.Puts("\r\n");
+	try {
+		txt.open(ppl7::ToString("%s/000index.txt", (const char*)wm->conf.playlist_export.TargetPath), ppl7::File::WRITE);
+		Tmp=ui.tracks->getName();
+		if (Tmp.isEmpty()) {
+			Tmp=tr("Playlist");
+		}
+		txt.puts(Tmp);
+		txt.puts("\r\n");
 
-	Tmp=ui.tracks->getSubName();
-	if (Tmp.notEmpty()) {
-		txt.Puts(Tmp);
-		txt.Puts("\r\n");
-	}
-	txt.Puts("\r\n");
-	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
-		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
-		Tmp=item->Artist + " - " + item->Title;
-		Tmp+=" (";
-		Tmp+=item->Version;
-		Tmp+=")";
-		ppl7::String TmpTxt=Tmp;
-		TmpTxt.chop(1);
-		txt.Putsf("%3u. %s, %0i:%02i %s)\r\n", i + 1, static_cast<const char*>(TmpTxt),
-			static_cast<int>(item->trackLength / 60), item->trackLength % 60,
-			static_cast<const char*>(Minuten));
+		Tmp=ui.tracks->getSubName();
+		if (Tmp.notEmpty()) {
+			txt.puts(Tmp);
+			txt.puts("\r\n");
+		}
+		txt.puts("\r\n");
+		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+			PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+			Tmp=item->Artist + " - " + item->Title;
+			Tmp+=" (";
+			Tmp+=item->Version;
+			Tmp+=")";
+			ppl7::String TmpTxt=Tmp;
+			TmpTxt.chop(1);
+			txt.putsf("%3u. %s, %0i:%02i %s)\r\n", i + 1, static_cast<const char*>(TmpTxt),
+				static_cast<int>(item->trackLength / 60), item->trackLength % 60,
+				static_cast<const char*>(Minuten));
 
+		}
+		txt.puts("\r\n");
+		txt.close();
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save playlist"));
 	}
-	txt.Puts("\r\n");
-
 }
 
 void Playlist::on_viewFilter_triggered()
@@ -1930,8 +1946,8 @@ void Playlist::filterChanged()
 	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
 		item->setHidden(true);
-		if (item->bpm >= (ppluint32)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
-			if (item->bpm <= (ppluint32)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
+		if (item->bpm >= (u_int32_t)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
+			if (item->bpm <= (u_int32_t)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
 
 				MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
 				if (itemKey == key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);

@@ -77,7 +77,7 @@ void EditTrackDialog::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void EditTrackDialog::setFilename(const ppl6::CString& Filename)
+void EditTrackDialog::setFilename(const ppl7::String& Filename)
 {
 	ui.editor->setFilename(Filename);
 }

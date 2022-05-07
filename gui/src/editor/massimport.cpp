@@ -216,23 +216,23 @@ int MassImport::load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppl
 	Path.trimRight("\\");
 	Path.appendf("/%02u/%03u/", (ppluint32)(DeviceId / 100), DeviceId);
 	Pattern.setf("*.mp3");
-	ppl6::CDir Dir;
-	const ppl6::CDirEntry* entry;
+	ppl7::Dir Dir;
+	ppl7::DirEntry entry;
 	int count=0;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	qApp->processEvents();
 	ui.treeWidget->setSortingEnabled(false);
 
-	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 5, "CWMClient", "NextMP3File", __FILE__, __LINE__, "%i Dateien vorhanden, suche nach Pattern...", Dir.Num());
-		while ((entry=Dir.GetNextPattern(Pattern, true))) {
-			Filename=entry->Filename;
+	if (Dir.tryOpen(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE)) {
+		ppl7::Dir::Iterator it;
+		while ((Dir.getNextPattern(entry, it, Pattern, true))) {
+			Filename=entry.Filename;
 			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
 			if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
 				// Muss aber mit .mp3 enden
 				if (Filename.pregMatch("/^.*\\.mp3$/i")) {
 					//printf ("%s\n",(const char*)Filename);
-					addTrack(entry->File);
+					addTrack(entry.File);
 					count++;
 				}
 			}
@@ -274,12 +274,12 @@ void MassImport::addTrack(const ppl7::String Filename)
 }
 
 
-static void FilterResult(const CHashes::TitleTree& in, ppl6::CGenericList& out)
+static void FilterResult(const CHashes::TitleTree& in, std::list<DataTitle*>& out)
 {
 	CHashes::TitleTree::const_iterator it;
 	for (it=in.begin();it != in.end();it++) {
 		DataTitle* ti=wm_main->GetTitle(*it);
-		if (ti->DeviceType == 7) out.Add(ti);
+		if (ti->DeviceType == 7) out.push_back(ti);
 	}
 }
 
@@ -301,23 +301,23 @@ void MassImport::checkDupes(TreeItem* item)
 	} else {
 		LocalDupeCheck.insert(Key);
 		CHashes::TitleTree Result;
-		ppl6::CGenericList list;
+		std::list<DataTitle*>list;
 		wm->Hashes.Find(item->info.Ti.Artist, item->info.Ti.Title, Version, "", "", "", Result);
 		FilterResult(Result, list);
-		if (list.Num() > 1) {
+		if (list.size() > 1) {
 			item->dupePresumption=100;
 			item->import=false;
 		} else if (Result.size() > 0) {
 			item->dupePresumption=90;
 			item->import=false;
 		} else {
-			ppl6::CGenericList list2;
+			std::list<DataTitle*> list2;
 			wm->Hashes.Find(item->info.Ti.Artist, item->info.Ti.Title, Result);
 			FilterResult(Result, list2);
-			if (list2.Num() > 3) {
+			if (list2.size() > 3) {
 				item->dupePresumption=70;
 				item->import=true;
-			} else if (list2.Num() > 0) {
+			} else if (list2.size() > 0) {
 				item->dupePresumption=40;
 				item->import=true;
 			}
@@ -444,14 +444,16 @@ void MassImport::on_contextDeleteTrack_triggered()
 		== QMessageBox::No) return;
 	int	index=ui.treeWidget->indexOfTopLevelItem(currentTrackListItem);
 	if (index >= 0) ui.treeWidget->takeTopLevelItem(index);
-	ppl6::CFile::DeleteFile(currentTrackListItem->Filename);
+	try {
+		ppl7::File::remove(currentTrackListItem->Filename);
+	} catch (...) {}
 	delete currentTrackListItem;
 	currentTrackListItem=NULL;
 }
 
 void MassImport::on_versionApplyButton_clicked()
 {
-	ppl6::CString Value=ui.version->text();
+	ppl7::String Value=ui.version->text();
 	int id=wm->VersionStore.GetId(Value);
 	QList<QTreeWidgetItem*> list;
 	TreeItem* item;
@@ -469,7 +471,7 @@ void MassImport::on_versionApplyButton_clicked()
 
 void MassImport::on_genreApplyButton_clicked()
 {
-	ppl6::CString Value=ui.genre->text();
+	ppl7::String Value=ui.genre->text();
 	int id=wm->GenreStore.GetId(Value);
 	QList<QTreeWidgetItem*> list;
 	TreeItem* item;
@@ -486,7 +488,7 @@ void MassImport::on_genreApplyButton_clicked()
 
 void MassImport::on_labelApplyButton_clicked()
 {
-	ppl6::CString Value=ui.labelName->text();
+	ppl7::String Value=ui.labelName->text();
 	int id=wm->LabelStore.GetId(Value);
 	QList<QTreeWidgetItem*> list;
 	TreeItem* item;
@@ -503,7 +505,7 @@ void MassImport::on_labelApplyButton_clicked()
 
 void MassImport::on_recordingSourceApplyButton_clicked()
 {
-	ppl6::CString Value=ui.recordSource->text();
+	ppl7::String Value=ui.recordSource->text();
 	int id=wm->RecordSourceStore.GetId(Value);
 
 	QList<QTreeWidgetItem*> list;
@@ -521,7 +523,7 @@ void MassImport::on_recordingSourceApplyButton_clicked()
 
 void MassImport::on_recordDeviceApplyButton_clicked()
 {
-	ppl6::CString Value=ui.recordDevice->text();
+	ppl7::String Value=ui.recordDevice->text();
 	int id=wm->RecordDeviceStore.GetId(Value);
 
 	QList<QTreeWidgetItem*> list;
@@ -581,17 +583,17 @@ void MassImport::on_remarksApplyButton_clicked()
 
 void MassImport::on_dateApplyButton_clicked()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	// Erscheinungsjahr
 	QDate Date=ui.releaseDate->date();
 	Tmp=Date.toString("yyyyMMdd");
-	ppluint32 ReleaseDate=Tmp.ToInt();
+	ppluint32 ReleaseDate=Tmp.toInt();
 
 	// Aufnahmedatum
 	Date=ui.recordDate->date();
 	Tmp=Date.toString("yyyyMMdd");
 	//printf ("Date: %s\n",(const char*)Tmp);
-	ppluint32 RecordDate=Tmp.ToInt();
+	ppluint32 RecordDate=Tmp.toInt();
 
 
 	QList<QTreeWidgetItem*> list;
@@ -651,7 +653,9 @@ void MassImport::on_deleteSelectedTracksButton_clicked()
 		if (item) {
 			int	index=ui.treeWidget->indexOfTopLevelItem(item);
 			if (index >= 0) ui.treeWidget->takeTopLevelItem(index);
-			ppl6::CFile::DeleteFile(item->Filename);
+			try {
+				ppl7::File::remove(item->Filename);
+			} catch (...) {}
 			delete item;
 		}
 	}

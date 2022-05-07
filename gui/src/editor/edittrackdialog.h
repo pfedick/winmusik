@@ -33,25 +33,25 @@ class EditTrackDialog : public QDialog
     Q_OBJECT
 
 public:
-    EditTrackDialog(QWidget *parent = 0, CWmClient *wm=NULL);
+    EditTrackDialog(QWidget* parent = 0, CWmClient* wm=NULL);
     ~EditTrackDialog();
     void ReloadTranslation();
 
-    void setSearchWindow(QWidget *widget);
-    QWidget *getSearchWindow() const;
+    void setSearchWindow(QWidget* widget);
+    QWidget* getSearchWindow() const;
 
-    void setFilename(const ppl6::CString &Filename);
-    void setData(const TrackInfo &data);
-    const TrackInfo &getData();
+    void setFilename(const ppl7::String& Filename);
+    void setData(const TrackInfo& data);
+    const TrackInfo& getData();
 
 private:
     Ui::edittrackdialogClass ui;
-    CWmClient *wm;
-	QWidget *searchWindow;
-	int			position, oldposition;
+    CWmClient* wm;
+    QWidget* searchWindow;
+    int			position, oldposition;
 
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
     void Resize();
 
 
@@ -59,8 +59,8 @@ protected:
 
 
 public slots:
-	void on_editor_escPressed();
-	void on_editor_save();
+    void on_editor_escPressed();
+    void on_editor_save();
 
 
 };

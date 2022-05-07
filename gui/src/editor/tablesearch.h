@@ -27,24 +27,24 @@
 
 class TableSearch : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 protected:
-	bool eventFilter(QObject *target, QEvent *event);
+	bool eventFilter(QObject* target, QEvent* event);
 public:
-	TableSearch(QWidget *parent = 0, CWmClient *client=NULL);
-	void setSearchParams(const ppl6::CString &term, CTableStore *store, QString &Title);
+	TableSearch(QWidget* parent = 0, CWmClient* client=NULL);
+	void setSearchParams(const ppl7::String& term, CTableStore* store, QString& Title);
 	void Search();
-    ~TableSearch();
+	~TableSearch();
 
 private:
-	CWmClient *wm;
-	CTableStore *store;
-    Ui::TablePopup ui;
+	CWmClient* wm;
+	CTableStore* store;
+	Ui::TablePopup ui;
 
 private slots:
-    void on_searchButton_clicked();
-    void on_list_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+	void on_searchButton_clicked();
+	void on_list_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 };
 

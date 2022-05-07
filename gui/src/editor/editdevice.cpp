@@ -21,7 +21,7 @@
 #include "editdevice.h"
 #include "src/editor/tablesearch.h"
 
-EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, ppluint32 DeviceId)
+EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, u_int32_t DeviceId)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -201,12 +201,12 @@ bool EditDevice::nextWidget(QObject* object)
 
 bool EditDevice::Save()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	Tmp=ui.title->text();
-	Tmp.Trim();
+	Tmp.trim();
 	Device.SetTitle(Tmp);
 	Tmp=ui.subTitle->text();
-	Tmp.Trim();
+	Tmp.trim();
 	Device.SetSubTitle(Tmp);
 	Device.LabelId=ui.labelId->text().toInt();
 	Device.PurchaseId=ui.purchaseId->text().toInt();
@@ -215,12 +215,12 @@ bool EditDevice::Save()
 
 	QDate Date=ui.purchaseDate->date();
 	Tmp=Date.toString("yyyyMMdd");
-	Device.PurchaseDate=Tmp.ToInt();
+	Device.PurchaseDate=Tmp.toInt();
 
 	if (!Device.DateCreated) {
 		Date=QDate::currentDate();
 		Tmp=Date.toString("yyyyMMdd");
-		Device.DateCreated=Tmp.ToInt();
+		Device.DateCreated=Tmp.toInt();
 	}
 	Device.DeviceId=DeviceId;
 	Device.DeviceType=DeviceType;
@@ -230,9 +230,11 @@ bool EditDevice::Save()
 	if (wm->DeviceStore.Put(&Device)) {
 		DeviceId=Device.DeviceId;
 		for (int i=1;i <= Device.Pages;i++) {
-			ppl6::CString Path=wm->GetAudioPath(DeviceType, DeviceId, i);
-			if (Path.NotEmpty()) {
-				ppl6::MkDir(Path, 1);
+			ppl7::String Path=wm->GetAudioPath(DeviceType, DeviceId, i);
+			if (Path.notEmpty()) {
+				try {
+					ppl7::Dir::mkDir(Path, true);
+				} catch (...) {}
 			}
 		}
 		return true;

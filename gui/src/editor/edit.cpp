@@ -46,20 +46,6 @@
 
 
 
-AsynchronousTrackUpdate::AsynchronousTrackUpdate()
-{
-	edit=NULL;
-}
-
-AsynchronousTrackUpdate::~AsynchronousTrackUpdate()
-{
-
-}
-
-void AsynchronousTrackUpdate::ThreadMain(void*)
-{
-
-}
 
 CTitleList::CTitleList(QWidget* parent)
 	: QTreeWidget(parent)
@@ -168,7 +154,6 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	 */
 {
 	ui.setupUi(this);
-	asyncTrackUpdate.edit=this;
 	this->wm=wm;
 	wm->RegisterWindow(this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
@@ -302,18 +287,13 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	ui.displayMusicKey->setItemText(2, wm->conf.customMusicKeyName);
 
 
-	ppluint32 highest=wm->GetHighestDeviceId(typ);
+	uint32_t highest=wm->GetHighestDeviceId(typ);
 	if (highest) {
-		ppl6::CString Tmp;
-		Tmp.Setf("%u", highest);
+		ppl7::String Tmp;
+		Tmp.setf("%u", highest);
 		ui.index->setText(Tmp);
 	}
 	ui.index->setFocus();
-	/*
-	ppl6::CString Name;
-	Name.Setf("edit_type_%i",typ);
-	this->restoreGeometry(wm->GetGeometry(Name));
-	*/
 	hideEditor();
 }
 
@@ -358,13 +338,13 @@ void Edit::customEvent(QEvent* event)
 
 void Edit::show()
 {
-	ppl6::CString Name;
-	Name.Setf("edit_type_%i", DeviceType);
+	ppl7::String Name;
+	Name.setf("edit_type_%i", DeviceType);
 	SetWindowGeometry(this, Name);
 	QWidget::show();
 }
 
-void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
+void Edit::OpenTrack(uint32_t deviceId, uint8_t page, uint16_t track)
 {
 	if (TrackList) delete TrackList;
 	TrackList=NULL;
@@ -378,9 +358,9 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 	ClearEditFields();
 	DeviceId=deviceId;
 	Page=page;
-	ui.index->setText(ppl6::ToString("%i", deviceId));
+	ui.index->setText(ppl7::ToString("%i", deviceId));
 	if (!Page) Page=1;
-	ui.page->setText(ppl6::ToString("%i", Page));
+	ui.page->setText(ppl7::ToString("%i", Page));
 	wm->UpdateDevice(DeviceType, DeviceId);
 	if (wm->LoadDevice(DeviceType, DeviceId, &datadevice)) {
 		UpdateDevice();
@@ -393,7 +373,7 @@ void Edit::OpenTrack(ppluint32 deviceId, ppluint8 page, ppluint16 track)
 		ui.track->setFocus();
 		if (track > 0 || TrackList->Num() == 0) {
 			showEditor();
-			ui.track->setText(ppl6::ToString("%i", track));
+			ui.track->setText(ppl7::ToString("%i", track));
 			ui.artist->setFocus();
 		}
 
@@ -502,7 +482,6 @@ bool Edit::consumeEvent(QObject* target, QEvent* event)
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
 {
-	ppl6::CString Tmp;
 	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
@@ -615,13 +594,13 @@ void Edit::CheckDupes()
 	DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	DupeCheck=true;
 	TCVersion.Finish();
-	ppl6::CString Tmp, Artist, Title;
+	ppl7::String Tmp, Artist, Title;
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	Title=ui.title->text();
-	Title.Trim();
-	ppluint32 Version=ui.versionId->text().toInt();
+	Title.trim();
+	uint32_t Version=ui.versionId->text().toInt();
 	if (wm->Hashes.CheckDupes(Artist, Title, Version, Ti.TitleId)) {
 		if (!DupeTimer) {
 			DupeTimer=new QTimer(this);
@@ -679,8 +658,8 @@ void Edit::resizeEvent(QResizeEvent* event)
 
 void Edit::closeEvent(QCloseEvent* event)
 {
-	ppl6::CString Name;
-	Name.Setf("edit_type_%i", DeviceType);
+	ppl7::String Name;
+	Name.setf("edit_type_%i", DeviceType);
 	if (wm) {
 		wm->SaveGeometry(Name, this->saveGeometry());
 	}
@@ -758,7 +737,7 @@ void Edit::UpdateFkeys()
 			ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-2009.png", tr("save all ID3"));
 			ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-3006.png", tr("mass import"));
 		}
-		if (ppl6::AudioCD::isSupported() == true && ppl6::CDDB::isSupported() == true) {
+		if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
 			ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-4005.png", tr("cddb import"));
 		}
 		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-2003.png", tr("renumber"));
@@ -986,15 +965,16 @@ void Edit::handleDropEvent(QDropEvent* event)
 #else
 	QString file=url.encodedPath();
 #endif
-	ppl6::CString f=file;
-	ppl6::CString path=wm->conf.DevicePath[DeviceType];
-	int p=f.Instr(path);
+	ppl7::String f=file;
+	ppl7::String path=wm->conf.DevicePath[DeviceType];
+	int p=f.instr(path);
 	if (p < 0) return;
-	f=f.Mid(p);
-	f.Replace(path, "");
-	if (f.PregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/")) {
-		int myDeviceId=ppl6::atoi(f.GetMatch(1));
-		int myTrack=ppl6::atoi(f.GetMatch(2));
+	f=f.mid(p);
+	f.replace(path, "");
+	ppl7::Array matches;
+	if (f.pregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/", matches)) {
+		int myDeviceId=matches[1].toInt();
+		int myTrack=matches[2].toInt();
 		OpenTrack(myDeviceId, 0, myTrack);
 		QApplication::processEvents();
 		ui.artist->setFocus();
@@ -1012,7 +992,7 @@ void Edit::handleDropEvent(QDropEvent* event)
 
 void Edit::handleFileDropEvent(QDropEvent* event)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	event->accept();
 	const QMimeData* mime=event->mimeData();
 	if (!mime) return;
@@ -1021,20 +1001,20 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	QUrl url=list.first();
 
 	QString file=url.toLocalFile();
-	ppl6::CString f=file;
-	ppl6::CDirEntry de;
-	if (!ppl6::CFile::Stat(f, de)) return;
+	ppl7::String f=file;
+	ppl7::DirEntry de;
+	if (!ppl7::File::stat(f, de)) return;
 
 	int tn=ui.track->text().toInt();
 	if (tn < 1) return;
-	ppl6::CString ExistingFile=wm->GetAudioFilename(DeviceType, DeviceId, Page, tn);
-	if (ExistingFile.NotEmpty()) {
+	ppl7::String ExistingFile=wm->GetAudioFilename(DeviceType, DeviceId, Page, tn);
+	if (ExistingFile.notEmpty()) {
 		if (QMessageBox::question(this, tr("WinMusik: overwrite existing file"),
 			tr("Do you want to overwrite the exiting file?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
 			== QMessageBox::No) return;
 	}
-	ppl6::CString path=wm->GetAudioPath(DeviceType, DeviceId, Page);
-	if (path.IsEmpty()) {
+	ppl7::String path=wm->GetAudioPath(DeviceType, DeviceId, Page);
+	if (path.isEmpty()) {
 		QMessageBox::information(this, tr("WinMusik: copy file"),
 			tr("File copy is not supported on this device.\nYou have to configure a path for this device in the settings."));
 		return;
@@ -1042,13 +1022,13 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	if (!QDir(path).exists()) {
 		QDir().mkpath(path);
 	}
-	path.Concatf("/%03d-", ui.track->text().toInt());
-	f=ppl6::GetFilename(f);
-	if (f.PregMatch("/^[0-9]{3}-/")) {
-		f=f.Mid(4);
+	path.appendf("/%03d-", ui.track->text().toInt());
+	f=ppl7::File::getFilename(f);
+	if (f.pregMatch("/^[0-9]{3}-/")) {
+		f=f.mid(4);
 	}
-	path+=ppl6::GetFilename(f);
-	if (ExistingFile.NotEmpty()) {
+	path+=ppl7::File::getFilename(f);
+	if (ExistingFile.notEmpty()) {
 		QFile::remove(ExistingFile);
 	}
 	QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1067,14 +1047,14 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	ui.filename->setStyleSheet("");
 
 
-	Tmp.Setf("%0.1f", (double)de.Size / 1048576.0);
+	Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 	ui.filesize->setText(Tmp);
-	ppl6::CID3Tag Tag;
-	if (Tag.Load(path)) {
+	ppl7::ID3Tag Tag;
+	if (Tag.loaded(path)) {
 		// Cover?
-		ppl6::CBinary cover;
-		if (Tag.GetPicture(3, cover)) {
-			Cover.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+		ppl7::ByteArray cover;
+		if (Tag.getPicture(3, cover)) {
+			Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
 			ui.coverwidget->setPixmap(Cover);
 			wm->UpdateCoverViewer(Cover);
 		}
@@ -1103,14 +1083,14 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
 	if (root.tagName() != "winmusikSearchlist" || root.attribute("version") != "1") {
 		return false;
 	}
-	ppl6::CArray rows;
-	rows.Explode(mime->text(), "<searchlistitem>");
+	ppl7::Array rows;
+	rows.explode(mime->text(), "<searchlistitem>");
 	//printf ("we have winmusikSearchlist, %d rows\n",(int)rows.Size() );
 	//ba = mime->text().toUtf8();
 	//printf ("%s\n",ba.data());
-	if (rows.Size() < 2) return false;
+	if (rows.size() < 2) return false;
 	SearchlistItem item;
-	item.importXML(rows.GetString(1));
+	item.importXML(rows.get(1));
 	ui.artist->setText(item.Artist);
 	ui.title->setText(item.Title);
 	ui.versionId->setText("*");
@@ -1122,7 +1102,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
 	ui.releaseDate->setDate(QDate::currentDate());
 	ui.recordDate->setDate(QDate::currentDate());
 
-	if (item.Length > 0) ui.length->setText(ppl6::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
+	if (item.Length > 0) ui.length->setText(ppl7::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
 
 	ppl7::DateTime date=ppl7::DateTime::currentTime();
 	if (item.ReleaseDate.notEmpty()) {
@@ -1146,50 +1126,54 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
 }
 
 
-static void addFileIfSuitable(const ppl6::CString& filename, std::list<ppl6::CString>& fileList)
+static void addFileIfSuitable(const ppl7::String& filename, std::list<ppl7::String>& fileList)
 {
-	ppl6::CString lowerFile=filename;
-	lowerFile.LCase();
-	if (lowerFile.Right(4) == ".mp3")
+	ppl7::String lowerFile=filename;
+	lowerFile.lowerCase();
+	if (lowerFile.right(4) == ".mp3")
 		fileList.push_back(filename);
-	else if (lowerFile.Right(4) == ".aif")
+	else if (lowerFile.right(4) == ".aif")
 		fileList.push_back(filename);
-	else if (lowerFile.Right(5) == ".aiff")
+	else if (lowerFile.right(5) == ".aiff")
+		fileList.push_back(filename);
+	else if (lowerFile.right(5) == ".wav")
 		fileList.push_back(filename);
 
 }
 
-static void traverseDirectoryForFiles(const ppl6::CString& path, std::list<ppl6::CString>& fileList)
+static void traverseDirectoryForFiles(const ppl7::String& path, std::list<ppl7::String>& fileList)
 {
-	ppl6::CDir dir;
-	if (dir.Open(path, ppl6::CDir::Sort_Filename)) {
-		dir.Reset();
-		const ppl6::CDirEntry* entry;
-		while ((entry=dir.GetNext())) {
+	ppl7::Dir dir;
+	if (dir.tryOpen(path, ppl7::Dir::SORT_FILENAME)) {
+		ppl7::DirEntry entry;
+		ppl7::Dir::Iterator it;
+		dir.reset(it);
+		while ((dir.getNext(entry, it))) {
 			//printf ("DIREntgry: >>%s<<\n",(const char*)entry->Filename);
-			if (entry->Filename == "." || entry->Filename == "..") continue;
-			if (entry->IsDir()) {
-				traverseDirectoryForFiles(entry->File, fileList);
-			} else if (entry->IsFile()) {
-				addFileIfSuitable(entry->File, fileList);
+			if (entry.Filename == "." || entry.Filename == "..") continue;
+			if (entry.isDir()) {
+				traverseDirectoryForFiles(entry.File, fileList);
+			} else if (entry.isFile()) {
+				addFileIfSuitable(entry.File, fileList);
 			}
 		}
 	}
 }
 
-static int getHighestIdOfDirectory(const ppl6::CString& path)
+static int getHighestIdOfDirectory(const ppl7::String& path)
 {
 	int max=0;
-	ppl6::CDir dir;
-	if (dir.Open(path, ppl6::CDir::Sort_Filename)) {
-		ppl6::CArray matches;
-		dir.Reset();
-		const ppl6::CDirEntry* entry;
-		while ((entry=dir.GetNext())) {
-			if (entry->Filename.PregMatch("/^([0-9]{3}_.*$", matches)) {
-				int v=matches.GetString(1).ToInt();
+	ppl7::Dir dir;
+	if (dir.tryOpen(path, ppl7::Dir::SORT_FILENAME)) {
+		ppl7::Array matches;
+		ppl7::Dir::Iterator it;
+		dir.reset(it);
+		ppl7::DirEntry entry;
+		while ((dir.getNext(entry, it))) {
+			if (entry.Filename.pregMatch("/^([0-9]{3}_.*$", matches)) {
+				int v=matches.get(1).toInt();
 				if (v > max) max=v;
-				printf("match: %d\n", v);
+				//printf("match: %d\n", v);
 			}
 		}
 	}
@@ -1199,28 +1183,28 @@ static int getHighestIdOfDirectory(const ppl6::CString& path)
 void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 {
 	if (position < 3) return;
-	std::list<ppl6::CString> fileList, filteredFileList;
+	std::list<ppl7::String> fileList, filteredFileList;
 	foreach(QUrl url, urlList) {
-		ppl6::CString filename=url.toLocalFile();
-		ppl6::CDirEntry file;
-		if (ppl6::CFile::Stat(filename, file)) {
-			if (file.IsDir()) {
+		ppl7::String filename=url.toLocalFile();
+		ppl7::DirEntry file;
+		if (ppl7::File::stat(filename, file)) {
+			if (file.isDir()) {
 				traverseDirectoryForFiles(filename, fileList);
-			} else if (file.IsFile()) {
+			} else if (file.isFile()) {
 				addFileIfSuitable(filename, fileList);
 			}
 		}
 	}
 
-	std::list<ppl6::CString>::const_iterator it;
-	ppl6::CString TargetPath=wm->conf.DevicePath[DeviceType];
-	if (TargetPath.IsEmpty()) return;
-	TargetPath.RTrim("/");
-	TargetPath.RTrim("\\");
-	TargetPath.Concatf("/%02u/%03u/", (ppluint32)(DeviceId / 100), DeviceId);
+	std::list<ppl7::String>::const_iterator it;
+	ppl7::String TargetPath=wm->conf.DevicePath[DeviceType];
+	if (TargetPath.isEmpty()) return;
+	TargetPath.trimRight("/");
+	TargetPath.trimRight("\\");
+	TargetPath.appendf("/%02u/%03u/", (uint32_t)(DeviceId / 100), DeviceId);
 
 	for (it=fileList.begin();it != fileList.end();++it) {
-		if ((*it).Left(TargetPath.Size()) != TargetPath) filteredFileList.push_back((*it));
+		if ((*it).left(TargetPath.size()) != TargetPath) filteredFileList.push_back((*it));
 	}
 	if (filteredFileList.size() == 0) return;
 
@@ -1238,21 +1222,22 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 	QCoreApplication::processEvents();
 	int i=0;
 
-	ppl6::CString NewFile;
+	ppl7::String NewFile;
 	for (it=filteredFileList.begin();it != filteredFileList.end();++it) {
 		progress.setValue(i);
 		QCoreApplication::processEvents();
 		if (progress.wasCanceled())	break;
 		i++;
-		//printf ("Import: %s\n",(const char*)ppl6::GetFilename((*it)));
-		progress.setLabelText(ppl6::GetFilename((*it)));
+		progress.setLabelText(ppl7::File::getFilename((*it)));
 		highestId++;
-		NewFile=TargetPath + ppl6::ToString("%03d_", highestId) + ppl6::GetFilename((*it));
+		NewFile=TargetPath + ppl7::ToString("%03d_", highestId) + ppl7::File::getFilename((*it));
 		//printf (" ==> %s\n",(const char*)NewFile);
-		if (dropAction == Qt::MoveAction)
-			ppl6::CFile::MoveFile((*it), NewFile);
-		else
-			ppl6::CFile::CopyFile((*it), NewFile);
+		try {
+			if (dropAction == Qt::MoveAction)
+				ppl7::File::move((*it), NewFile);
+			else
+				ppl7::File::copy((*it), NewFile);
+		} catch (...) {}
 	}
 	QApplication::restoreOverrideCursor();
 	progress.close();
@@ -1261,12 +1246,14 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 		on_f6_MassImport();
 		return;
 	}
-	ppl6::CString Tmp, FinalFile;
+	ppl7::String Tmp, FinalFile;
 
 	TrackNum=TrackList->GetMax() + 1;
-	FinalFile.Setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)ppl6::GetFilename(NewFile));
-	ppl6::CFile::RenameFile(NewFile, FinalFile);
-	Tmp.Setf("%u", TrackNum);
+	FinalFile.setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)ppl7::File::getFilename(NewFile));
+	try {
+		ppl7::File::rename(NewFile, FinalFile);
+	} catch (...) {}
+	Tmp.setf("%u", TrackNum);
 	ui.track->setFocus();
 	ui.track->setText(Tmp);
 	EditTrack();
@@ -1318,7 +1305,7 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 		return true;
 		// *************************************************************************** F2
 	} else if (key == Qt::Key_F2 && modifier == Qt::NoModifier && position > 1) {
-		ppluint32 ret=EditDeviceDialog(DeviceId);
+		uint32_t ret=EditDeviceDialog(DeviceId);
 		((QWidget*)target)->setFocus();
 		if (ret == DeviceId) UpdateDevice();
 		return true;
@@ -1328,8 +1315,8 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 		return true;
 	} else if (key == Qt::Key_F3 && modifier == Qt::NoModifier && position > 3 && ui.fkeys->isEnabled(3) == true) {
 		QLineEdit* LineEdit=(QLineEdit*)target;
-		ppl6::CWString Tmp=LineEdit->text().toLower();
-		Tmp.UCWords();
+		ppl7::WideString Tmp=LineEdit->text().toLower();
+		Tmp.upperCaseWords();
 		LineEdit->setText(Tmp);
 		return true;
 		// *************************************************************************** F4 im Index
@@ -1436,11 +1423,6 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 				ui.genreId->setText("*");
 				ui.genre->setText(match.Genre);
 			}
-			/*
-			ui.commentEdit->setText(match.Label);
-			ui.releaseDateEdit->setText(match.ReleaseDate);
-			if (match.Length>0) ui.lengthEdit->setText(ppl6::ToString("%i:%02i",match.Length/60,match.Length%60));
-			*/
 		}
 		return true;
 	}
@@ -1451,7 +1433,6 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 bool Edit::on_index_FocusIn()
 {
 	ui.coverwidget->setEnabled(false);
-	asyncTrackUpdate.ThreadStop();
 	if (TrackList) delete TrackList;
 	TrackList=NULL;
 	Page=0;
@@ -1468,10 +1449,10 @@ bool Edit::on_index_FocusIn()
 bool Edit::on_index_KeyPress(__attribute__((unused)) QKeyEvent* event, int key, int modifier)
 {
 	if (key == Qt::Key_F2 && modifier == Qt::NoModifier) {
-		ppluint32 ret=EditDeviceDialog(0);
+		uint32_t ret=EditDeviceDialog(0);
 		if (ret) {
-			ppl6::CString Tmp;
-			Tmp.Setf("%u", ret);
+			ppl7::String Tmp;
+			Tmp.setf("%u", ret);
 			ui.index->setText(Tmp);
 			ui.page->setFocus();
 			return false;
@@ -1488,18 +1469,17 @@ bool Edit::on_page_FocusIn()
 {
 	// Wenn wir von Index kommen, laden wir den Tonträger
 	ui.coverwidget->setEnabled(false);
-	asyncTrackUpdate.ThreadStop();
 	Page=0;
 	TrackNum=0;
 	if (TrackList) delete TrackList;
 	ClearEditFields();
 	TrackList=NULL;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	if (oldposition < 2) {
 		DeviceId=ui.index->text().toInt();
 		if (ui.index->text() == "?") {
 			DeviceId=wm->DeviceStore.GetHighestDevice(DeviceType);
-			Tmp.Setf("%u", DeviceId);
+			Tmp.setf("%u", DeviceId);
 			ui.index->setText(Tmp);
 		}
 		if (ui.index->text() == "*") {
@@ -1508,7 +1488,7 @@ bool Edit::on_page_FocusIn()
 				ui.index->setFocus();
 				return true;
 			}
-			Tmp.Setf("%u", DeviceId);
+			Tmp.setf("%u", DeviceId);
 			ui.index->setText(Tmp);
 		}
 		if (DeviceId == 0) {
@@ -1555,7 +1535,7 @@ bool Edit::on_track_FocusIn()
 
 	TrackNum=0;
 	if (!Page) {
-		Page=(ppluint8)ui.page->text().toInt();
+		Page=(uint8_t)ui.page->text().toInt();
 		if (Page<1 || Page>datadevice.Pages) {
 			ui.page->setFocus();
 			return true;
@@ -1572,8 +1552,8 @@ bool Edit::on_track_FocusIn()
 		//asyncTrackUpdate.ThreadStop();
 		//asyncTrackUpdate.ThreadStart();
 
-		ppl6::CString a;
-		a.Setf("%u", TrackList->GetMax() + 1);
+		ppl7::String a;
+		a.setf("%u", TrackList->GetMax() + 1);
 		ui.track->setText(a);
 	}
 	UpdateFkeys();
@@ -1599,8 +1579,8 @@ void Edit::ReloadTracks()
 		return;
 	}
 	UpdateTrackListing();
-	ppl6::CString a;
-	a.Setf("%u", TrackList->GetMax() + 1);
+	ppl7::String a;
+	a.setf("%u", TrackList->GetMax() + 1);
 	ui.track->setText(a);
 	UpdateFkeys();
 	UpdateCompleters();
@@ -1621,7 +1601,6 @@ bool Edit::on_artist_FocusIn()
 	showEditorWithoutFocusChange();
 	ui.coverwidget->setEnabled(true);
 	ui.artist->setFocus();
-	ppl6::CString Tmp;
 	if (!TrackNum) {
 		if (!EditTrack()) {
 			ui.track->setFocus();
@@ -1708,9 +1687,9 @@ bool Edit::on_album_FocusOut()
 
 bool Edit::on_length_FocusOut()
 {
-	ppl6::CString Tmp;
-	ppluint32 l=Time2Int(Tmp=ui.length->text());
-	if (l > 0) Tmp.Setf("%0i:%02i", (int)(l / 60), l % 60); else Tmp.Clear();
+	ppl7::String Tmp;
+	uint32_t l=Time2Int(Tmp=ui.length->text());
+	if (l > 0) Tmp.setf("%0i:%02i", (int)(l / 60), l % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 	return false;
 }
@@ -1728,13 +1707,13 @@ bool Edit::on_FocusIn(QLineEdit* widget)
 
 bool Edit::on_f4_Pressed(int position)
 {
-	ppl6::CString Artist, Title;
+	ppl7::String Artist, Title;
 
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	Title=ui.title->text();
-	Title.Trim();
+	Title.trim();
 	if (position == 4) {
 		searchWindow=wm->OpenOrReuseSearch(searchWindow, Artist);
 		this->setFocus();
@@ -1751,9 +1730,9 @@ bool Edit::on_f4_Pressed(int position)
 
 bool Edit::on_f5_ShortCut(int modifier)
 {
-	ppl6::CString Artist;
+	ppl7::String Artist;
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 
 	if (modifier == Qt::NoModifier) {
 		DataShortcut sc;
@@ -1774,13 +1753,13 @@ bool Edit::on_f5_ShortCut(int modifier)
 
 bool Edit::on_f5_CheckDupes(QObject* target)
 {
-	ppl6::CString Artist, Title;
+	ppl7::String Artist, Title;
 
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	Title=ui.title->text();
-	Title.Trim();
+	Title.trim();
 	searchWindow=wm->OpenOrReuseSearch(searchWindow, Artist, Title);
 	qApp->processEvents();
 	qApp->processEvents();
@@ -1808,15 +1787,13 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 	// Den Dateinamen nehmen wir in die Zwischenablage
 	ppl7::String Songname=ppl7::File::getFilename(Path);
 	ui.filename->setText(Songname);
-	try {
-		ppl7::DirEntry de;
-		ppl7::File::statFile(Path, de);
+	ppl7::DirEntry de;
+	if (ppl7::File::stat(Path, de)) {
 		Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 		ui.filesize->setText(Tmp);
-	} catch (...) {
+	} else {
 		ui.filesize->setText("");
 	}
-
 	Songname.pregReplace("/\\.mp3$/i", "");
 	Songname.pregReplace("/\\.aiff$/i", "");
 	Songname.pregReplace("/\\.aif$/i", "");
@@ -1962,14 +1939,14 @@ void Edit::on_f2_clicked()
 {
 	QWidget* target=GetWidgetFromPosition(position);
 	if (position > 1 && target != NULL) {
-		ppluint32 ret=EditDeviceDialog(DeviceId);
+		uint32_t ret=EditDeviceDialog(DeviceId);
 		((QWidget*)target)->setFocus();
 		if (ret == DeviceId) UpdateDevice();
 	} else if (position == 1) {
-		ppluint32 ret=EditDeviceDialog(0);
+		uint32_t ret=EditDeviceDialog(0);
 		if (ret) {
-			ppl6::CString Tmp;
-			Tmp.Setf("%u", ret);
+			ppl7::String Tmp;
+			Tmp.setf("%u", ret);
 			ui.index->setText(Tmp);
 			ui.page->setFocus();
 			return;
@@ -1987,8 +1964,8 @@ void Edit::on_f3_clicked()
 		QWidget* target=GetWidgetFromPosition(position);
 		if (!target) return;
 		QLineEdit* LineEdit=(QLineEdit*)target;
-		ppl6::CWString Tmp=LineEdit->text().toLower();
-		Tmp.UCWords();
+		ppl7::WideString Tmp=LineEdit->text().toLower();
+		Tmp.upperCaseWords();
 		LineEdit->setText(Tmp);
 	}
 }
@@ -2055,26 +2032,6 @@ bool Edit::on_trackList_MousePress(QMouseEvent* event)
 	if (event->buttons() == Qt::LeftButton) startPos=event->pos();
 	ratePos=event->pos();
 	return false;
-	/*
-	QTreeWidget::mousePressEvent(event);
-	QClipboard *clipboard = QApplication::clipboard();
-	QList<QTreeWidgetItem*> Items=selectedItems();
-	CTreeItem *item;
-	TITEL *t;
-	ppl6::CString Text, File;
-	for (int i=0;i<Items.size();i++) {
-		item=(CTreeItem *)Items[i];
-		t=wm->GetTitel(item->TitelId);
-		if (t!=NULL) {
-			File.Setf("%s - %s (%s, %0.2f min, %s) [%s %u %s-%i]\n",t->Interpret, t->Titel,
-					wm->GetVersion(t->Version), t->Laenge,wm->GetGenre(t->Genre),
-					wm->GetTraegerShort(t->Traeger), t->TraegerIndex, wm->GetSeite(t->Seite), t->Track);
-			Text+=File;
-		}
-	}
-	clipboard->setText(Text,QClipboard::Clipboard);
-	clipboard->setText(Text,QClipboard::Selection);
-	*/
 }
 
 bool Edit::on_trackList_MouseRelease(QMouseEvent*)
@@ -2126,7 +2083,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 		xml+=wm->getXmlTitle(item->Id);
 		File=wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
 		if (File.notEmpty()) {
-			xml+="<File>" + ppl6::EscapeHTMLTags(File) + "</File>\n";
+			xml+="<File>" + ppl7::EscapeHTMLTags(File) + "</File>\n";
 
 #ifdef _WIN32
 			list.append(QUrl::fromLocalFile(File));
@@ -2139,7 +2096,6 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 	xml+="</tracks>\n";
 	xml+="</winmusikTracklist>\n";
 
-	//xml+="</winmusikTracklist>\n";
 	QDrag* drag = new QDrag(this);
 	QMimeData* mimeData = new QMimeData;
 	if (Icon.isNull()) Icon.load(":/devices48/resources/tr48x48-0007.png");
@@ -2196,13 +2152,13 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 	DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
 		QClipboard* clipboard = QApplication::clipboard();
-		ppl6::CString Text;
+		ppl7::String Text;
 		if (key & (Qt::AltModifier | Qt::MetaModifier)) {
-			Text.Setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
+			Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
 		} else {
-			Text.Setf("%s - %s (%s, %0i:%02i min, %s)", (const char*)t->Artist, (const char*)t->Title,
+			Text.setf("%s - %s (%s, %0i:%02i min, %s)", (const char*)t->Artist, (const char*)t->Title,
 				wm->GetVersionText(t->VersionId), t->Length / 60, t->Length % 60, wm->GetGenreText(t->GenreId));
-			Text.Concatf(" [%s %u %c-%i]", (const char*)wm->GetDeviceNameShort(t->DeviceType),
+			Text.appendf(" [%s %u %c-%i]", (const char*)wm->GetDeviceNameShort(t->DeviceType),
 				t->DeviceId, (t->Page + 'A' - 1), t->Track);
 		}
 		clipboard->setText(Text, QClipboard::Clipboard);
@@ -2220,11 +2176,11 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 					return;
 				}
 				if (wm_main->conf.bWriteID3Tags == true) {
-					ppl6::CString Path=wm->GetAudioFilename(tUpdate.DeviceType,
+					ppl7::String Path=wm->GetAudioFilename(tUpdate.DeviceType,
 						tUpdate.DeviceId,
 						tUpdate.Page,
 						tUpdate.Track);
-					if (Path.NotEmpty()) {
+					if (Path.notEmpty()) {
 						if (!wm->SaveID3Tags(tUpdate.DeviceType,
 							tUpdate.DeviceId,
 							tUpdate.Page,
@@ -2260,13 +2216,13 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 			}
 			//printf ("Rating: %i, %i\n",ratePos.x(),x);
 		} else if (column == TRACKLIST_COVER_ROW && wm->IsCoverViewerVisible() == true) {
-			ppl6::CID3Tag Tag;
-			ppl6::CString File=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
-			if (Tag.Load(&File)) {
-				ppl6::CBinary cover;
-				if (Tag.GetPicture(3, cover)) {
+			ppl7::ID3Tag Tag;
+			ppl7::String File=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+			if (Tag.loaded(File)) {
+				ppl7::ByteArray cover;
+				if (Tag.getPicture(3, cover)) {
 					QPixmap trackCover;
-					trackCover.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+					trackCover.loadFromData((const uchar*)cover.ptr(), cover.size());
 					wm->UpdateCoverViewer(trackCover);
 				}
 			}
@@ -2305,43 +2261,29 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 							}
 						}
 					}
-
-
 				}
 			}
 		}
-
-
-		/* // Zu langsam
-		if (position==3) {
-			ppl6::CString Tmp;
-			Tmp.Setf("%i",((WMTreeItem*)item)->Track);
-			ui.track->setText(Tmp);
-			EditTrack();
-		}
-		*/
 	}
-	//FixFocus();
-
 }
 
 void Edit::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column)
 {
 	if (column == TRACKLIST_RATING_ROW) return;
 	else if (column == TRACKLIST_COVER_ROW) {
-		ppl6::CID3Tag Tag;
-		ppl6::CString File=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
-		if (Tag.Load(&File)) {
-			ppl6::CBinary cover;
-			if (Tag.GetPicture(3, cover)) {
+		ppl7::ID3Tag Tag;
+		ppl7::String File=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+		if (Tag.loaded(File)) {
+			ppl7::ByteArray cover;
+			if (Tag.getPicture(3, cover)) {
 				QPixmap trackCover;
-				trackCover.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+				trackCover.loadFromData((const uchar*)cover.ptr(), cover.size());
 				wm->OpenCoverViewer(trackCover);
 			}
 		}
 	} else {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
-		if (Path.IsEmpty()) return;
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+		if (Path.isEmpty()) return;
 		//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
 		wm->PlayFile(Path);
 	}
@@ -2487,8 +2429,8 @@ void Edit::on_contextSynchronizeKeys_triggered()
 		if (track) {
 			// Titel holen
 			DataTitle* title=wm->GetTitle(track->TitleId);
-			ppl6::CString Path=wm->GetAudioFilename(DeviceType, track->DeviceId, track->Page, track->Track);
-			if (title != NULL && Path.NotEmpty() == true) {
+			ppl7::String Path=wm->GetAudioFilename(DeviceType, track->DeviceId, track->Page, track->Track);
+			if (title != NULL && Path.notEmpty() == true) {
 				//printf ("Path: %s\n",(const char*)Path);
 				progress.setLabelText(Path);
 				TrackInfo tinfo;
@@ -2563,8 +2505,8 @@ void Edit::on_contextShowCover_triggered()
 
 void Edit::on_contextLoadCoverAllTracks_triggered()
 {
-	ppl6::CString Dir=wm->conf.LastCoverPath + "/";
-	if (Dir.IsEmpty()) {
+	ppl7::String Dir=wm->conf.LastCoverPath + "/";
+	if (Dir.isEmpty()) {
 		Dir=QDir::homePath();
 	}
 	QString newfile = QFileDialog::getOpenFileName(this, tr("Select cover image"),
@@ -2573,7 +2515,7 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 	if (newfile.isNull()) return;
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.LastCoverPath=ppl7::File::getPath(newfile);
 	wm->conf.trySave();
 
 	QPixmap GlobalCover;
@@ -2599,7 +2541,7 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 			if (ti) {
 				DataTitle Title;
 				Title.CopyFrom(ti);
-				ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
+				ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
 				saveCover(Path, GlobalCover);
 				Title.CoverPreview.copy(bytes.data(), bytes.size());
 				if (!wm->TitleStore.Put(&Title)) {
@@ -2617,8 +2559,8 @@ void Edit::on_contextCopyCover_triggered()
 {
 	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t != NULL) {
-		ppl6::CString Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
-		if (Path.IsEmpty()) return;
+		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+		if (Path.isEmpty()) return;
 		loadCoverToClipboard(Path);
 	}
 }
@@ -2650,8 +2592,8 @@ void Edit::on_contextFindMoreTitle_triggered()
 
 void Edit::on_contextPlayTrack_triggered()
 {
-	ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
-	if (Path.IsEmpty()) return;
+	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
+	if (Path.isEmpty()) return;
 	//printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
 	wm->PlayFile(Path);
 }
@@ -2659,8 +2601,8 @@ void Edit::on_contextPlayTrack_triggered()
 void Edit::on_contextEditTrack_triggered()
 {
 	showEditor();
-	ppl6::CString Tmp;
-	Tmp.Setf("%i", currentTrackListItem->Track);
+	ppl7::String Tmp;
+	Tmp.setf("%i", currentTrackListItem->Track);
 	TrackNum=0;
 	ui.track->setFocus();
 	ui.track->setText(Tmp);
@@ -2675,8 +2617,8 @@ void Edit::on_contextCopyTrack_triggered()
 void Edit::on_contextCopyFile_triggered()
 {
 	if (currentTrackListItem->Track > 0) {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
-		if (Path.IsEmpty()) return;
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
+		if (Path.isEmpty()) return;
 		QClipboard* clipboard = QApplication::clipboard();
 		QList<QUrl> list;
 		QString qf="file:://";
@@ -2692,15 +2634,6 @@ void Edit::on_contextCopyFile_triggered()
 void Edit::on_contextDeleteTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
-	//printf ("currentTrackListItem->Track=%u, currentTrackListItem->Id=%u\n",currentTrackListItem->Track,currentTrackListItem->Id);
-	/*
-	if (currentTrackListItem->Id) {
-		TrackList->Delete(currentTrackListItem->Track);
-	} else {
-		// Nachfolgende Tracks nach oben rücken
-		TrackList->DeleteShift(currentTrackListItem->Track,&wm->TitleStore);
-	}
-	*/
 	// Track löschen und nachfolgende nach oben rücken
 	TrackList->DeleteShift(currentTrackListItem->Track, &wm->TitleStore);
 	UpdateTrackListing();
@@ -2708,8 +2641,8 @@ void Edit::on_contextDeleteTrack_triggered()
 	if (w) {
 		trackList->scrollToItem(w);
 	}
-	ppl6::CString Tmp;
-	Tmp.Setf("%u", currentTrackListItem->Track);
+	ppl7::String Tmp;
+	Tmp.setf("%u", currentTrackListItem->Track);
 	ui.track->setText(Tmp);
 	ui.track->setFocus();
 }
@@ -2723,8 +2656,8 @@ void Edit::on_contextInsertTrack_triggered()
 	if (w) {
 		trackList->scrollToItem(w);
 	}
-	ppl6::CString Tmp;
-	Tmp.Setf("%u", currentTrackListItem->Track);
+	ppl7::String Tmp;
+	Tmp.setf("%u", currentTrackListItem->Track);
 	ui.track->setText(Tmp);
 	ui.track->setFocus();
 }
@@ -2734,27 +2667,13 @@ void Edit::on_coverSearchAmazon_clicked()
 {
 	FixFocus();
 	if (position < 3) return;
-	ppl6::CString Url;
+	ppl7::String Url;
 	// Interpret und Titel
-	ppl6::CString Artist=ui.artist->text();
-	Artist.Trim();
-	ppl6::CString Title=ui.title->text();
-	Title.Trim();
-
-	// Version
-
-	// http://www.amazon.de/s/ref=nb_sb_ss_i_0_16?__mk_de_DE=%C5M%C5Z%D5%D1&url=search-alias%3Ddigital-music&field-keywords=armin+van+buuren+mirage&x=0&y=0&sprefix=Armin+van+Buuren%2Cdigital-music%2C148
-	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&hs=3fV&rls=org.mozilla:de-DE:official&prmd=imvnsol&source=lnms&tbm=isch&ei=K-ERT8m9KMrsOdDn2YYD&sa=X&oi=mode_link&ct=mode&cd=2&ved=0CCcQ_AUoAQ&biw=971&bih=532#hl=de&client=firefox-a&hs=m0&rls=org.mozilla:de-DE%3Aofficial&tbm=isch&sa=1&q=Armin+van+buuren+mirage+cover&pbx=1&oq=Armin+van+buuren+mirage+cover&aq=f&aqi=g1&aql=&gs_sm=e&gs_upl=1037l2111l0l2973l6l6l0l3l3l0l314l610l1.1.0.1l3l0&bav=on.2,or.r_gc.r_pw.,cf.osb&fp=89a7740a921e9709&biw=971&bih=532
-	// http://www.google.de/search?q=Armin+van+buuren+mirage&hl=de&client=firefox-a&rls=org.mozilla:de-DE:official&tbm=vid&source=lnms&ei=E-IRT5TMHIqfOpnU1dQG&sa=X&oi=mode_link&ct=mode&cd=4&ved=0CDEQ_AUoAw&biw=971&bih=532
-	//s/?ie=UTF8&keywords=amazon+suchen&tag=googhydr08-21&index=aps&hvadid=9259989001&ref=pd_sl_4uh4d1aa33_b
-
-	//Url="http://www.google.com/search?q=cover+"+ppl6::UrlEncode(Artist)+"+"+ppl6::UrlEncode(Title)+"&tbm=isch";
-
-	Url="http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + ppl6::UrlEncode(Artist) + "+" + ppl6::UrlEncode(Title);
-
-	//ppl6::CString Cmd;
-	//Cmd="firefox \""+Url+"\" &";
-	//system(Cmd);
+	ppl7::String Artist=ui.artist->text();
+	Artist.trim();
+	ppl7::String Title=ui.title->text();
+	Title.trim();
+	Url="http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
 	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2762,17 +2681,13 @@ void Edit::on_coverSearchGoogle_clicked()
 {
 	FixFocus();
 	if (position < 3) return;
-	ppl6::CString Url;
+	ppl7::String Url;
 	// Interpret und Titel
-	ppl6::CString Artist=ui.artist->text();
-	Artist.Trim();
-	ppl6::CString Title=ui.title->text();
-	Title.Trim();
-
-	Url="https://www.google.com/search?num=10&site=imghp&tbm=isch&q=" + ppl6::UrlEncode(Artist) + "+" + ppl6::UrlEncode(Title);
-	//ppl6::CString Cmd;
-	//Cmd="firefox \""+Url+"\" &";
-	//system(Cmd);
+	ppl7::String Artist=ui.artist->text();
+	Artist.trim();
+	ppl7::String Title=ui.title->text();
+	Title.trim();
+	Url="https://www.google.com/search?num=10&site=imghp&tbm=isch&q=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
 	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2780,23 +2695,17 @@ void Edit::on_coverSearchDiscogs_clicked()
 {
 	FixFocus();
 	if (position < 3) return;
-	ppl6::CString Url;
+	ppl7::String Url;
 	// Interpret und Titel
-	ppl6::CString Artist=ui.artist->text();
-	Artist.Trim();
-	ppl6::CString Title=ui.title->text();
-	Title.Trim();
-
-	ppl6::CString Version=ui.version->text();
-	Version.Trim();
-
-	ppl6::CString Query=Artist + " " + Title + " " + Version;
-	Query.Replace("&", " ");
-
-	Url="http://www.discogs.com/search/?q=" + ppl6::UrlEncode(Query);
-	//ppl6::CString Cmd;
-	//Cmd="firefox \""+Url+"\" &";
-	//system(Cmd);
+	ppl7::String Artist=ui.artist->text();
+	Artist.trim();
+	ppl7::String Title=ui.title->text();
+	Title.trim();
+	ppl7::String Version=ui.version->text();
+	Version.trim();
+	ppl7::String Query=Artist + " " + Title + " " + Version;
+	Query.replace("&", " ");
+	Url="http://www.discogs.com/search/?q=" + ppl7::UrlEncode(Query);
 	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2805,18 +2714,13 @@ void Edit::on_coverSearchBeatport_clicked()
 {
 	FixFocus();
 	if (position < 3) return;
-	ppl6::CString Url;
+	ppl7::String Url;
 	// Interpret und Titel
-	ppl6::CString Artist=ui.artist->text();
-	Artist.Trim();
-	ppl6::CString Title=ui.title->text();
-	Title.Trim();
-
-	Url="http://www.beatport.com/search?query=" + ppl6::UrlEncode(Artist) + "+" + ppl6::UrlEncode(Title);
-
-	//ppl6::CString Cmd;
-	//Cmd="firefox \""+Url+"\" &";
-	//system(Cmd);
+	ppl7::String Artist=ui.artist->text();
+	Artist.trim();
+	ppl7::String Title=ui.title->text();
+	Title.trim();
+	Url="http://www.beatport.com/search?query=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
 	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2824,18 +2728,13 @@ void Edit::on_coverSearchSoundcloud_clicked()
 {
 	FixFocus();
 	if (position < 3) return;
-	ppl6::CString Url;
+	ppl7::String Url;
 	// Interpret und Titel
-	ppl6::CString Artist=ui.artist->text();
-	Artist.Trim();
-	ppl6::CString Title=ui.title->text();
-	Title.Trim();
-
-	Url="https://soundcloud.com/search?q=" + ppl6::UrlEncode(Artist) + "+" + ppl6::UrlEncode(Title);
-
-	//ppl6::CString Cmd;
-	//Cmd="firefox \""+Url+"\" &";
-	//system(Cmd);
+	ppl7::String Artist=ui.artist->text();
+	Artist.trim();
+	ppl7::String Title=ui.title->text();
+	Title.trim();
+	Url="https://soundcloud.com/search?q=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
 	QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2867,8 +2766,8 @@ void Edit::on_hideEditor_clicked()
 void Edit::on_deviceIcon_clicked()
 {
 	//printf ("Edit::on_deviceIcon_clicked\n");
-	ppl6::CString path=wm->GetAudioPath(DeviceType, DeviceId, Page);
-	if (path.NotEmpty()) {
+	ppl7::String path=wm->GetAudioPath(DeviceType, DeviceId, Page);
+	if (path.notEmpty()) {
 		QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 	}
 }

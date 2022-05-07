@@ -23,8 +23,8 @@
 #include "tablesearch.h"
 #include <QKeyEvent>
 
-TableSearch::TableSearch(QWidget *parent, CWmClient *client)
-    : QDialog(parent)
+TableSearch::TableSearch(QWidget* parent, CWmClient* client)
+	: QDialog(parent)
 {
 	wm=client;
 	ui.setupUi(this);
@@ -35,23 +35,23 @@ TableSearch::~TableSearch()
 
 }
 
-bool TableSearch::eventFilter(QObject *target, QEvent *event)
+bool TableSearch::eventFilter(QObject* target, QEvent* event)
 {
 	int type=event->type();
-	if (target==ui.search && type==QEvent::KeyPress) {
-		QKeyEvent *keyEvent=static_cast<QKeyEvent *>(event);
+	if (target == ui.search && type == QEvent::KeyPress) {
+		QKeyEvent* keyEvent=static_cast<QKeyEvent*>(event);
 		int key=keyEvent->key();
 		Qt::KeyboardModifiers modifier=keyEvent->modifiers();
-		if (key==Qt::Key_Return && modifier==Qt::ShiftModifier) {
+		if (key == Qt::Key_Return && modifier == Qt::ShiftModifier) {
 			done(ui.search->text().toInt());
 			return true;
 		}
 	}
-	return QWidget::eventFilter(target,event);
+	return QWidget::eventFilter(target, event);
 }
 
 
-void TableSearch::setSearchParams(const ppl6::CString &term, CTableStore *store, QString &Title)
+void TableSearch::setSearchParams(const ppl7::String& term, CTableStore* store, QString& Title)
 {
 	ui.search->setText(term);
 	setWindowTitle(Title);
@@ -72,24 +72,24 @@ void TableSearch::Search()
 	ui.list->setWordWrap(false);
 	ui.list->setSortingEnabled(false);
 
-	if (store->FindAll(Tmp,Result)) {
-		ppl6::CString Text;
-		CSimpleTable *t;
-		WMTreeItem *item;
+	if (store->FindAll(Tmp, Result)) {
+		ppl7::String Text;
+		CSimpleTable* t;
+		WMTreeItem* item;
 		Result.Reset();
-		while ((t=(CSimpleTable *)Result.GetNext())) {
+		while ((t=(CSimpleTable*)Result.GetNext())) {
 			item=new WMTreeItem;
 			item->Id=t->Id;
-			Text.Setf("%6i",t->Id);
-			item->setText(0,Text);
-			item->setText(1,t->Value);
+			Text.setf("%6i", t->Id);
+			item->setText(0, Text);
+			item->setText(1, t->Value);
 			ui.list->addTopLevelItem(item);
 		}
 	}
 	Result.Clear(true);
 	ui.list->setWordWrap(true);
 	ui.list->setSortingEnabled(true);
-	ui.list->sortByColumn(1,Qt::AscendingOrder);
+	ui.list->sortByColumn(1, Qt::AscendingOrder);
 
 }
 
@@ -102,8 +102,8 @@ void TableSearch::on_searchButton_clicked()
 
 }
 
-void TableSearch::on_list_itemDoubleClicked (QTreeWidgetItem * item, int )
+void TableSearch::on_list_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	WMTreeItem *i=(WMTreeItem*)item;
+	WMTreeItem* i=(WMTreeItem*)item;
 	done(i->Id);
 }

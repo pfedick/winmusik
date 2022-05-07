@@ -113,11 +113,11 @@ void PlaylistEdit::on_cancelButton_clicked()
 	done(0);
 }
 
-static ppl6::CString floatTimeToString(float sec)
+static ppl7::String floatTimeToString(float sec)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	int msec=(int)(sec * 1000.0f) - (int)sec * 1000;
-	Tmp.Setf("%0d:%02d.%03d", (int)(sec / 60.0f), (int)sec % 60, msec);
+	Tmp.setf("%0d:%02d.%03d", (int)(sec / 60.0f), (int)sec % 60, msec);
 	return Tmp;
 }
 
@@ -138,8 +138,8 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 	ui.labelName->setText(item->Label);
 	ui.album->setText(item->Album);
 	ui.remarks->setText(item->Remarks);
-	ui.bpm->setText(ppl6::ToString("%i", item->bpm));
-	ui.bpmPlayed->setText(ppl6::ToString("%i", item->bpmPlayed));
+	ui.bpm->setText(ppl7::ToString("%i", item->bpm));
+	ui.bpmPlayed->setText(ppl7::ToString("%i", item->bpmPlayed));
 	ui.musicKey->setText(DataTitle::keyName(item->musicKey, wm->conf.musicKeyDisplay));
 	ui.keyVerified->setChecked(item->keyVerified);
 	ui.energyLevel->setValue(item->energyLevel);
@@ -164,21 +164,17 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 	ui.cutEnd3->setText(floatTimeToString(item->cutEndPosition[3]));
 	ui.cutEnd4->setText(floatTimeToString(item->cutEndPosition[4]));
 
-	ui.trackLength->setText(ppl6::ToString("%0d:%02d.000", (int)(item->trackLength / 60), item->trackLength % 60));
+	ui.trackLength->setText(ppl7::ToString("%0d:%02d.000", (int)(item->trackLength / 60), item->trackLength % 60));
 
 	CoverPreview=item->CoverPreview;
 	Filename=item->File;
 
 	ppl7::ID3Tag Tag;
-	try {
-		Tag.load(item->File);
-	} catch (...) {
+	if (Tag.loaded(item->File)) {
 		ppl7::String Tmp=wm->GetAudioFilename(item->DeviceType, item->DeviceId, item->DevicePage, item->DeviceTrack);
 		if (Tmp.notEmpty() == true && Tmp != item->File) {
 			item->File=Tmp;
-			try {
-				Tag.load(item->File);
-			} catch (...) {}
+			Tag.loaded(item->File);
 		}
 	}
 	if (Tag.frameCount() > 0) {
@@ -196,7 +192,7 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.getKey()), wm->conf.musicKeyDisplay));
 		}
 	} else {
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "ID3-Tags not loaded");
+		//if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "ID3-Tags not loaded");
 	}
 	updateTotalTime();
 }
@@ -230,7 +226,6 @@ void PlaylistEdit::updateCoverPreview()
 
 void PlaylistEdit::loadTraktorCues(const ppl7::ID3Tag& Tag)
 {
-	ppl6::CString Tmp;
 	std::list <TraktorTagCue> cuelist;
 	std::list <TraktorTagCue>::const_iterator it;
 	getTraktorCues(cuelist, Tag);
@@ -240,7 +235,7 @@ void PlaylistEdit::loadTraktorCues(const ppl7::ID3Tag& Tag)
 
 	for (it=cuelist.begin();it != cuelist.end();it++) {
 		QTreeWidgetItem* item=new QTreeWidgetItem;
-		if (it->hotcue >= 0) item->setText(0, ppl6::ToString("%d", it->hotcue + 1));
+		if (it->hotcue >= 0) item->setText(0, ppl7::ToString("%d", it->hotcue + 1));
 		item->setText(1, it->typeName());
 		if (it->type == TraktorTagCue::GRID) item->setIcon(1, QIcon(":/icons/resources/cuegrid.png"));
 		else if (it->type == TraktorTagCue::IN) item->setIcon(1, QIcon(":/icons/resources/cuein.png"));
@@ -301,11 +296,14 @@ void PlaylistEdit::storeFileds(PlaylistItem* item)
 
 float PlaylistEdit::getSecondsFromLine(QLineEdit* line)
 {
-	ppl6::CTok Token(line->text(), ":");
-	float seconds=(float)ppl6::atoi(Token.Get(0)) * 60.0f + (float)ppl6::atoi(Token.Get(1));
-	Token.Split(Token.Get(1), ".");
-	if (Token.Num() > 1) seconds+=(float)ppl6::atoi(Token.Get(1)) / 1000.0f;
-	return seconds;
+	ppl7::Array Token(line->text(), ":");
+	if (Token.size() > 2) {
+		float seconds=(float)Token.get(0).toInt() * 60.0f + (float)Token.get(1).toInt();
+		ppl7::Array Token2(Token.get(1), ".");
+		if (Token2.size() > 1) seconds+=(float)Token2.get(1).toInt() / 1000.0f;
+		return seconds;
+	}
+	return 0.0f;
 }
 
 void PlaylistEdit::updateTotalTime()
@@ -382,7 +380,7 @@ void PlaylistEdit::on_coverLoadButton_clicked()
 	if (newfile.isNull()) return;
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.LastCoverPath=ppl7::File::getPath(newfile);
 	wm->conf.trySave();
 	if (!Cover.load(newfile)) {
 		QApplication::restoreOverrideCursor();
@@ -408,7 +406,7 @@ void PlaylistEdit::on_coverSaveButton_clicked()
 		tr("Images (*.png *.bmp *.jpg)"));
 	if (newfile.isNull()) return;
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	wm->conf.LastCoverPath=ppl6::GetPath(newfile);
+	wm->conf.LastCoverPath=ppl7::File::getPath(newfile);
 	wm->conf.trySave();
 	if (!Cover.save(newfile)) {
 		/*

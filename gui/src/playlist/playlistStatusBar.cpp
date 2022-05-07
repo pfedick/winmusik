@@ -23,7 +23,7 @@
 #include "winmusik3.h"
 
 
-PlaylistStatusBar::PlaylistStatusBar(QWidget *parent)
+PlaylistStatusBar::PlaylistStatusBar(QWidget* parent)
 	: QFrame(parent)
 {
 	setupUi();
@@ -34,21 +34,21 @@ PlaylistStatusBar::~PlaylistStatusBar()
 
 }
 
-static void addSpacer(QLayout *layout)
+static void addSpacer(QLayout* layout)
 {
-	QFrame *line = new QFrame();
+	QFrame* line = new QFrame();
 	line->setGeometry(QRect(320, 150, 118, 3));
 	line->setFrameShape(QFrame::VLine);
 	line->setFrameShadow(QFrame::Sunken);
 	layout->addWidget(line);
 }
 
-static QHBoxLayout *createPanel(QLayout *layout)
+static QHBoxLayout* createPanel(QLayout* layout)
 {
-	QHBoxLayout *l=new QHBoxLayout;
-	l->setContentsMargins(1,1,1,1);
+	QHBoxLayout* l=new QHBoxLayout;
+	l->setContentsMargins(1, 1, 1, 1);
 
-	QFrame *frame=new QFrame;
+	QFrame* frame=new QFrame;
 	frame->setFrameShape(QFrame::Panel);
 	frame->setFrameShadow(QFrame::Sunken);
 	frame->setLayout(l);
@@ -59,10 +59,10 @@ static QHBoxLayout *createPanel(QLayout *layout)
 
 void PlaylistStatusBar::setupUi()
 {
-	QHBoxLayout *panel;
-	QHBoxLayout *layout=new QHBoxLayout;
-	layout->setContentsMargins(1,1,1,1);
-	QLabel *label;
+	QHBoxLayout* panel;
+	QHBoxLayout* layout=new QHBoxLayout;
+	layout->setContentsMargins(1, 1, 1, 1);
+	QLabel* label;
 
 	// Search
 	setupSearch(layout);
@@ -78,16 +78,16 @@ void PlaylistStatusBar::setupUi()
 	displayMusicKey->addItem(tr("open key"));
 	displayMusicKey->addItem(wm_main->conf.customMusicKeyName);
 	layout->addWidget(displayMusicKey);
-	connect(displayMusicKey,SIGNAL(currentIndexChanged(int)),
-			this, SLOT(on_displayMusicKey_currentIndexChanged(int)));
+	connect(displayMusicKey, SIGNAL(currentIndexChanged(int)),
+		this, SLOT(on_displayMusicKey_currentIndexChanged(int)));
 	displayMusicKey->setEnabled(false);
 
 	musicKeyDisplay=wm_main->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
-		case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
-		case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(1); break;
-		case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(2); break;
-		default: displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
+	case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(2); break;
+	default: displayMusicKey->setCurrentIndex(1); break;
 	}
 
 	// Selection
@@ -156,35 +156,35 @@ void PlaylistStatusBar::setupUi()
 	panel->addWidget(totalMixLength);
 
 
-	this->setContentsMargins(0,0,0,0);
+	this->setContentsMargins(0, 0, 0, 0);
 	this->setLayout(layout);
 }
 
-void PlaylistStatusBar::setupSearch(QLayout *layout)
+void PlaylistStatusBar::setupSearch(QLayout* layout)
 {
 	//QHBoxLayout *panel=createPanel(layout);
 	searchWidget=new QWidget;
-	QHBoxLayout *panel=new QHBoxLayout();
-	panel->setContentsMargins(0,0,0,0);
+	QHBoxLayout* panel=new QHBoxLayout();
+	panel->setContentsMargins(0, 0, 0, 0);
 	searchWidget->setLayout(panel);
 
 	layout->addWidget(searchWidget);
 
-	QLabel *label;
+	QLabel* label;
 	//panel->setEnabled(false);			// TODO: Enablen, wenn fertig implementiert
 	label=new QLabel(tr("search:"));
 	panel->addWidget(label);
 
 	searchTextWidget=new QLineEdit;
 	panel->addWidget(searchTextWidget);
-	connect(searchTextWidget,SIGNAL(returnPressed()),
-				this, SLOT(on_search_clicked()));
+	connect(searchTextWidget, SIGNAL(returnPressed()),
+		this, SLOT(on_search_clicked()));
 
 	searchTriggerButton=new QToolButton();
 	searchTriggerButton->setIcon(QIcon(":/icons/resources/next.png"));
 	panel->addWidget(searchTriggerButton);
-	connect(searchTriggerButton,SIGNAL(clicked()),
-				this, SLOT(on_search_clicked()));
+	connect(searchTriggerButton, SIGNAL(clicked()),
+		this, SLOT(on_search_clicked()));
 }
 
 void PlaylistStatusBar::ReloadTranslation()
@@ -200,46 +200,46 @@ void PlaylistStatusBar::setMusicKeySelectionEnabled(bool flag)
 
 void PlaylistStatusBar::setTotalLength(int sec)
 {
-	setReadableLength(totalTrackLength,sec);
+	setReadableLength(totalTrackLength, sec);
 }
 
 void PlaylistStatusBar::setTotalTracks(int count)
 {
-	ppl6::CString Tmp;
-	Tmp.Setf("%d",count);
+	ppl7::String Tmp;
+	Tmp.setf("%d", count);
 	totalTracks->setText(Tmp);
 }
 
 void PlaylistStatusBar::setMixLength(int sec)
 {
-	setReadableLength(totalMixLength,sec);
+	setReadableLength(totalMixLength, sec);
 }
 
 void PlaylistStatusBar::setSelectedLength(int sec)
 {
-	setReadableLength(selectedTrackLength,sec);
+	setReadableLength(selectedTrackLength, sec);
 }
 
 void PlaylistStatusBar::setSelectedTracks(int count)
 {
-	ppl6::CString Tmp;
-	Tmp.Setf("%d",count);
+	ppl7::String Tmp;
+	Tmp.setf("%d", count);
 	selectedTracks->setText(Tmp);
 }
 
 void PlaylistStatusBar::setSelectedMixLength(int sec)
 {
-	setReadableLength(selectedMixLength,sec);
+	setReadableLength(selectedMixLength, sec);
 }
 
 
 void PlaylistStatusBar::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (displayMusicKey->currentIndex()) {
-		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-		case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
-		case 2: musicKeyDisplay=musicKeyTypeCustom; break;
-		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
+	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+	case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
+	case 2: musicKeyDisplay=musicKeyTypeCustom; break;
+	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	emit musicKeySelectionChanged(musicKeyDisplay);
 }
@@ -270,5 +270,3 @@ void PlaylistStatusBar::on_search_clicked()
 {
 	emit searchTriggered();
 }
-
-

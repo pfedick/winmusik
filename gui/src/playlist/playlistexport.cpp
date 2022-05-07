@@ -87,7 +87,7 @@ bool PlaylistExport::abortClicked() const
     return abort_state;
 }
 
-void PlaylistExport::setCurrentFile(const ppl6::CString& filename, size_t size)
+void PlaylistExport::setCurrentFile(const ppl7::String& filename, size_t size)
 {
     ui->progress_file->setMaximum((int)size);
     ui->current_file->setText(filename);

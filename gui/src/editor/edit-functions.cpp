@@ -50,22 +50,22 @@
 
 void Edit::UpdateDevice()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	wm->LoadDevice(DeviceType, DeviceId, &datadevice);
-	Tmp.Setf("%u", datadevice.Pages);
+	Tmp.setf("%u", datadevice.Pages);
 	ui.devicePages->setText(Tmp);
-	Tmp.Setf("%u", datadevice.NumTracks);
+	Tmp.setf("%u", datadevice.NumTracks);
 	ui.deviceTracks->setText(Tmp);
 	if (datadevice.Length > 0) {
-		Tmp.Setf("%0i:%02i", (int)(datadevice.Length / 60), datadevice.Length % 60);
+		Tmp.setf("%0i:%02i", (int)(datadevice.Length / 60), datadevice.Length % 60);
 		ui.deviceLength->setText(Tmp);
 	} else {
 		ui.deviceLength->setText("?");
 	}
-	Tmp.Setf("%0i:%02i", (int)(datadevice.Recorded / 60), datadevice.Recorded % 60);
+	Tmp.setf("%0i:%02i", (int)(datadevice.Recorded / 60), datadevice.Recorded % 60);
 	ui.deviceRecorded->setText(Tmp);
 
-	Tmp.Setf("%s\n%s", (datadevice.Title ? datadevice.Title : ""), (datadevice.SubTitle ? datadevice.SubTitle : ""));
+	Tmp.setf("%s\n%s", (datadevice.Title ? datadevice.Title : ""), (datadevice.SubTitle ? datadevice.SubTitle : ""));
 	ui.deviceTitle->setText(Tmp);
 	if (ui.page->text().toInt() > datadevice.Pages) {
 		Tmp="1";
@@ -78,12 +78,12 @@ void Edit::UpdateDevice()
 	}
 }
 
-ppluint32 Edit::EditDeviceDialog(ppluint32 id)
+uint32_t Edit::EditDeviceDialog(uint32_t id)
 {
 	EditDevice* w=new EditDevice(this, wm, DeviceType, id);
 	//w->setWindowFlags(Qt::Dialog|Qt::CustomizeWindowHint|Qt::WindowTitleHint|Qt::WindowSystemMenuHint|Qt::WindowCloseButtonHint);
 	w->setWindowFlags(Qt::Dialog);
-	ppluint32 ret=w->exec();
+	uint32_t ret=w->exec();
 	delete w;
 	return ret;
 }
@@ -94,7 +94,7 @@ bool Edit::EditTrack()
 {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	Cover=QPixmap();
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	DupeCheck=false;
 	DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	ClearEditFields();
@@ -102,12 +102,12 @@ bool Edit::EditTrack()
 	Track.Clear();
 	Track.SetValue(DeviceType, DeviceId, Page, TrackNum, 0);
 	Ti.Clear();
-	int t=(ppluint32)ui.track->text().toInt();
+	int t=(uint32_t)ui.track->text().toInt();
 	if (t < 1 || t> 65535) {
 		QApplication::restoreOverrideCursor();
 		return false;
 	}
-	TrackNum=(ppluint16)t;
+	TrackNum=(uint16_t)t;
 	// Track laden, falls es ihn schon gibt
 	if (TrackList->GetCopy(t, &Track)) {
 		DataTitle* ti=wm->GetTitle(Track.TitleId);
@@ -119,24 +119,24 @@ bool Edit::EditTrack()
 	}
 	if (Ti.TitleId) FillEditFields();
 	// Dateiname
-	ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-	if (Path.IsEmpty()) {
+	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+	if (Path.isEmpty()) {
 		ui.filename->setText(tr("file not found"));
 		ui.filename->setStyleSheet("color: red");
 		ui.filesize->setText("");
 	} else {
 		ui.filename->setText(Path);
 		ui.filename->setStyleSheet("");
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Path, de)) {
-			Tmp.Setf("%0.1f", (double)de.Size / 1048576.0);
+		ppl7::DirEntry de;
+		if (ppl7::File::stat(Path, de)) {
+			Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 			ui.filesize->setText(Tmp);
-			ppl6::CID3Tag Tag;
-			if (Tag.Load(Path)) {
+			ppl7::ID3Tag Tag;
+			if (Tag.loaded(Path)) {
 				// Cover?
-				ppl6::CBinary cover;
-				if (Tag.GetPicture(3, cover)) {
-					Cover.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+				ppl7::ByteArray cover;
+				if (Tag.getPicture(3, cover)) {
+					Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
 					ui.coverwidget->setPixmap(Cover);
 					wm->UpdateCoverViewer(Cover);
 				}
@@ -207,13 +207,13 @@ void Edit::ClearEditFields()
 
 void Edit::FillEditFields()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 
 
 	// TitleId und Version
-	Tmp.Setf("%u", Ti.TitleId);
+	Tmp.setf("%u", Ti.TitleId);
 	ui.titleId->setText(Tmp);
-	Tmp.Setf("%u", Ti.GetVersion());
+	Tmp.setf("%u", Ti.GetVersion());
 	ui.recordVersion->setText(Tmp);
 
 	// Interpret und Titel
@@ -221,21 +221,21 @@ void Edit::FillEditFields()
 	ui.title->setText(Ti.Title);
 
 	// Version
-	if (Ti.VersionId) Tmp.Setf("%u", Ti.VersionId); else Tmp="";
+	if (Ti.VersionId) Tmp.setf("%u", Ti.VersionId); else Tmp="";
 	ui.versionId->setText(Tmp);
 	ui.version->setText(wm->GetVersionText(Ti.VersionId));
 
 	// Genre
-	if (Ti.GenreId) Tmp.Setf("%u", Ti.GenreId); else Tmp="";
+	if (Ti.GenreId) Tmp.setf("%u", Ti.GenreId); else Tmp="";
 	ui.genreId->setText(Tmp);
 	ui.genre->setText(wm->GetGenreText(Ti.GenreId));
 
 	// Länge
-	if (Ti.Length > 0) Tmp.Setf("%0i:%02i", (int)(Ti.Length / 60), Ti.Length % 60); else Tmp.Clear();
+	if (Ti.Length > 0) Tmp.setf("%0i:%02i", (int)(Ti.Length / 60), Ti.Length % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 
 	// BPM
-	if (Ti.BPM > 0) Tmp.Setf("%i", Ti.BPM); else Tmp.Clear();
+	if (Ti.BPM > 0) Tmp.setf("%i", Ti.BPM); else Tmp.clear();
 	ui.bpm->setText(Tmp);
 
 	// Music Key
@@ -245,16 +245,16 @@ void Edit::FillEditFields()
 	ui.energyLevel->setValue(Ti.EnergyLevel);
 
 	// Bitrate
-	if (Ti.Bitrate > 0) Tmp.Setf("%i", Ti.Bitrate); else Tmp.Clear();
+	if (Ti.Bitrate > 0) Tmp.setf("%i", Ti.Bitrate); else Tmp.clear();
 	ui.bitrate->setText(Tmp);
 
 	// Erscheinungsjahr
 	QDate Date;
 	if (Ti.ReleaseDate > 0) {
-		Tmp.Setf("%u", Ti.ReleaseDate);
-		int year=Tmp.Mid(0, 4).ToInt();
-		int month=Tmp.Mid(4, 2).ToInt();
-		int day=Tmp.Mid(6, 2).ToInt();
+		Tmp.setf("%u", Ti.ReleaseDate);
+		int year=Tmp.mid(0, 4).toInt();
+		int month=Tmp.mid(4, 2).toInt();
+		int day=Tmp.mid(6, 2).toInt();
 		if (!month) month=1;
 		if (!day) day=1;
 		Date.setDate(year, month, day);
@@ -264,7 +264,7 @@ void Edit::FillEditFields()
 	ui.releaseDate->setDate(Date);
 
 	// Aufnahmedatum
-	Tmp.Setf("%u", Ti.RecordDate);
+	Tmp.setf("%u", Ti.RecordDate);
 	Date=QDate::fromString(Tmp, "yyyyMMdd");
 	ui.recordDate->setDate(Date);
 
@@ -273,17 +273,17 @@ void Edit::FillEditFields()
 	ui.album->setText(Ti.Album);
 
 	// Label
-	if (Ti.LabelId) Tmp.Setf("%u", Ti.LabelId); else Tmp="";
+	if (Ti.LabelId) Tmp.setf("%u", Ti.LabelId); else Tmp="";
 	ui.labelId->setText(Tmp);
 	ui.labelName->setText(wm->GetLabelText(Ti.LabelId));
 
 	// Aufnahmequelle
-	if (Ti.RecordSourceId) Tmp.Setf("%u", Ti.RecordSourceId); else Tmp="";
+	if (Ti.RecordSourceId) Tmp.setf("%u", Ti.RecordSourceId); else Tmp="";
 	ui.recordSourceId->setText(Tmp);
 	ui.recordSource->setText(wm->GetRecordSourceText(Ti.RecordSourceId));
 
 	// Aufnahmegerät
-	if (Ti.RecordDeviceId) Tmp.Setf("%u", Ti.RecordDeviceId); else Tmp="";
+	if (Ti.RecordDeviceId) Tmp.setf("%u", Ti.RecordDeviceId); else Tmp="";
 	ui.recordDeviceId->setText(Tmp);
 	ui.recordDevice->setText(wm->GetRecordDeviceText(Ti.RecordDeviceId));
 
@@ -325,7 +325,7 @@ void Edit::UpdateTrackListing()
  */
 {
 	QString QTmp;
-	ppl6::CString Text, Tmp;
+	ppl7::String Text, Tmp;
 	WMTreeItem* item;
 	DataTrack* track;
 	DataTitle* title;
@@ -340,8 +340,8 @@ void Edit::UpdateTrackListing()
 	trackList->setSortingEnabled(false);
 	trackList->setIconSize(QSize(64, 16));
 	int count=0;
-	ppluint32 length=0;
-	ppluint32 size=0;
+	uint32_t length=0;
+	uint32_t size=0;
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -354,7 +354,7 @@ void Edit::UpdateTrackListing()
 
 			item->Track=i;
 			item->Id=0;
-			Text.Setf("%5i", i);
+			Text.setf("%5i", i);
 			item->setText(TRACKLIST_TRACK_ROW, Text);
 			// Track holen
 			track=TrackList->Get(i);
@@ -374,11 +374,11 @@ void Edit::UpdateTrackListing()
 	}
 	QApplication::restoreOverrideCursor();
 
-	Tmp.Setf("%i", count);
+	Tmp.setf("%i", count);
 	ui.statsTracks->setText(Tmp);
-	Tmp.Setf("%4i:%02i", (int)(length / 60), length % 60);
+	Tmp.setf("%4i:%02i", (int)(length / 60), length % 60);
 	ui.statsLength->setText(Tmp);
-	Tmp.Setf("%0.1f", (double)size / 1048576.0);
+	Tmp.setf("%0.1f", (double)size / 1048576.0);
 	ui.statsSize->setText(Tmp);
 	resizeEvent(NULL);
 	trackList->sortByColumn(0, Qt::AscendingOrder);
@@ -465,23 +465,23 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 
 	if (title->Size == 0) {
 		//printf ("title->Size ist Null, führe Stat durch\n");
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, title->DeviceId, title->Page, title->Track);
-		if (Path.NotEmpty()) {
-			ppl6::CDirEntry de;
-			if (ppl6::CFile::Stat(Path, de)) {
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, title->DeviceId, title->Page, title->Track);
+		if (Path.notEmpty()) {
+			ppl7::DirEntry de;
+			if (ppl7::File::stat(Path, de)) {
 				//printf ("Stat erfolgreich\n");
 				DataTitle ti;
 				ti.CopyFrom(title);
 				ti.Size=de.Size;
 				title->Size=ti.Size;
 
-				ppl6::CID3Tag Tag;
-				if (Tag.Load(&Path)) {
+				ppl7::ID3Tag Tag;
+				if (Tag.loaded(&Path)) {
 					// Cover?
-					ppl6::CBinary cover;
+					ppl7::ByteArray cover;
 					QPixmap pix, icon;
-					if (Tag.GetPicture(3, cover)) {
-						pix.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+					if (Tag.getPicture(3, cover)) {
+						pix.loadFromData((const uchar*)cover.ptr(), cover.size());
 						icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 						item->setIcon(TRACKLIST_COVER_ROW, icon.copy(0, 0, 64, 16));
@@ -493,17 +493,12 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 						ti.CoverPreview.copy(bytes.data(), bytes.size());
 					}
 				}
-
-				if (!wm->TitleStore.Put(&ti)) {
+				if (!wm->TitleStore.Put(&ti)) { // TODO
 					printf("Speichern fehlgeschlagen!\n");
-					ppl6::PrintError();
-
 				}
-
 			}
 		}
 	} else {
-		//printf("Wir haben die Größe schon\n");
 		if (title->CoverPreview.size() > 0) {
 			QPixmap pix, icon;
 			pix.loadFromData((const uchar*)title->CoverPreview.ptr(), title->CoverPreview.size());
@@ -638,23 +633,22 @@ void Edit::SaveEditorTrack()
 	Ti.Track=TrackNum;
 
 	// Cover
-	ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-	if (Path.NotEmpty()) {
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Path, de)) {
-			Ti.Size=de.Size;
-			if (Cover.isNull()) {
-				Ti.CoverPreview.clear();
-			} else {
-				QPixmap icon=Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				QByteArray bytes;
-				QBuffer buffer(&bytes);
-				buffer.open(QIODevice::WriteOnly);
-				icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
-				Ti.CoverPreview.copy(bytes.data(), bytes.size());
-			}
+	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+	ppl7::DirEntry de;
+	if (ppl7::File::stat(Path, de)) {
+		Ti.Size=de.Size;
+		if (Cover.isNull()) {
+			Ti.CoverPreview.clear();
+		} else {
+			QPixmap icon=Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			QByteArray bytes;
+			QBuffer buffer(&bytes);
+			buffer.open(QIODevice::WriteOnly);
+			icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
+			Ti.CoverPreview.copy(bytes.data(), bytes.size());
 		}
 	}
+
 
 	if (!SaveTrack(Ti)) return;
 
@@ -702,9 +696,9 @@ bool Edit::SaveTrack(DataTitle& Ti)
 
 	// ID3-Tags speichern, sofern gewünscht und eine Datei vorhanden ist
 	if (wm_main->conf.bWriteID3Tags == true) {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, Track.DeviceId, Page, Track.Track);
-		if (Path.NotEmpty()) {
-			if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track, Ti)) {
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, Track.DeviceId, Page, Track.Track);
+		if (Path.notEmpty()) {
+			if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track, Ti)) { // TODO
 				wm->RaiseError(this, tr("Could not save ID3 Tags"));
 			}
 		}
@@ -743,18 +737,6 @@ void Edit::UpdateCompleters()
 				// Titel holen
 				title=wm->GetTitle(track->TitleId);
 				if (title) {
-					/*
-					if (title->Artist) {
-						item=new CStringCounterItem;
-						item->Name=title->Artist;
-						item->Count=1;
-						found=(CStringCounterItem*)TmpArtists.Find(item);
-						if (found) {
-							found->Count++;
-							delete item;
-						} else TmpArtists.Add(item);
-					}
-					*/
 					if (title->Title.notEmpty()) {
 						item=new CStringCounterItem;
 						item->Name=title->Title;
@@ -779,13 +761,6 @@ void Edit::UpdateCompleters()
 			}
 		}
 	}
-	/*
-	TmpArtists.Reset();
-	while ((item=(CStringCounterItem*)TmpArtists.GetNext())) {
-		QTmp=(const char*)item->Name;
-		Artists.append(QTmp);
-	}
-	*/
 
 	TmpTitles.Reset();
 	while ((item=(CStringCounterItem*)TmpTitles.GetNext())) {
@@ -809,15 +784,15 @@ void Edit::UpdateCompleters()
 
 void Edit::CopyFromTrackInfo(TrackInfo& info)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.artist->setText(info.Ti.Artist);		// Artist
 	ui.title->setText(info.Ti.Title);		// Title
 	ui.album->setText(info.Ti.Album);		// Album
 	QDate Date;								// ReleaseDate
-	Tmp.Setf("%u", info.Ti.ReleaseDate);
-	int year=Tmp.Mid(0, 4).ToInt();
-	int month=Tmp.Mid(4, 2).ToInt();
-	int day=Tmp.Mid(6, 2).ToInt();
+	Tmp.setf("%u", info.Ti.ReleaseDate);
+	int year=Tmp.mid(0, 4).toInt();
+	int month=Tmp.mid(4, 2).toInt();
+	int day=Tmp.mid(6, 2).toInt();
 	if (!month) month=1;
 	if (!day) day=1;
 	Date.setDate(year, month, day);
@@ -828,22 +803,22 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	if (info.Genre.notEmpty()) {
 		DataGenre* dg=(DataGenre*)wm->GenreStore.Find(info.Genre);
 		if (dg) {
-			Tmp.Setf("%u", dg->Id);
+			Tmp.setf("%u", dg->Id);
 			ui.genreId->setText(Tmp);
 		} else {
 			ui.genreId->setText("*");
 		}
 	}
 	if (info.Ti.Length > 0) {					// Laenge
-		Tmp.Setf("%0i:%02i", (int)(info.Ti.Length / 60), info.Ti.Length % 60);
+		Tmp.setf("%0i:%02i", (int)(info.Ti.Length / 60), info.Ti.Length % 60);
 		ui.length->setText(Tmp);
 	}
 	if (info.Ti.Bitrate > 0) {				// Bitrate
-		Tmp.Setf("%i", info.Ti.Bitrate);
+		Tmp.setf("%i", info.Ti.Bitrate);
 		ui.bitrate->setText(Tmp);
 	}
 	if (info.Ti.BPM > 0) {					// BPM
-		Tmp.Setf("%i", info.Ti.BPM);
+		Tmp.setf("%i", info.Ti.BPM);
 		ui.bpm->setText(Tmp);
 	}
 	if (info.Ti.EnergyLevel > 0) {			// EnergyLevel
@@ -864,7 +839,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	if (info.Version.notEmpty()) {
 		DataVersion* dv=(DataVersion*)wm->VersionStore.Find(info.Version);
 		if (dv) {
-			Tmp.Setf("%u", dv->Id);
+			Tmp.setf("%u", dv->Id);
 			ui.versionId->setText(Tmp);
 		} else {
 			ui.versionId->setText("*");
@@ -874,7 +849,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	if (info.Label.notEmpty()) {
 		DataLabel* dl=(DataLabel*)wm->LabelStore.Find(info.Label);
 		if (dl) {
-			Tmp.Setf("%u", dl->Id);
+			Tmp.setf("%u", dl->Id);
 			ui.labelId->setText(Tmp);
 		} else {
 			ui.labelId->setText("*");
@@ -947,12 +922,9 @@ void Edit::importFromCddb()
 		QCoreApplication::processEvents();
 		cddb.query(cd, matches);
 		QCoreApplication::processEvents();
-	} catch (const ppl6::Exception& e) {
+	} catch (const ppl7::Exception& e) {
 		msg.setVisible(false);
-		QString intro=tr("An error occured, when trying to access the audio cd or querying the internet database");
-		QMessageBox::critical(NULL, tr("Error"),
-			intro,
-			QMessageBox::Ok, QMessageBox::Ok);
+		ShowException(e, tr("An error occured, when trying to access the audio cd or querying the internet database"));
 		return;
 	}
 	msg.setVisible(false);
@@ -989,12 +961,12 @@ void Edit::importFromCddb()
 
 void Edit::renumber()
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	RenumberDialog Dialog(this, wm);
 	Dialog.setModal(true);
 	Dialog.setOldNumber(DeviceId);
 	if (!Dialog.exec()) return;
-	ppluint32 newDeviceId=Dialog.getNewNumber();
+	uint32_t newDeviceId=Dialog.getNewNumber();
 	if (newDeviceId < 1) {
 		QMessageBox::critical(NULL, tr("Error"),
 			tr("Invalid number"),
@@ -1007,9 +979,13 @@ void Edit::renumber()
 
 	// Zielverzeichnisse anlegen
 	for (int i=1;i <= datadevice.Pages;i++) {
-		ppl6::CString Path=wm->GetAudioPath(DeviceType, newDeviceId, i);
-		if (Path.NotEmpty()) {
-			ppl6::MkDir(Path, 1);
+		ppl7::String Path=wm->GetAudioPath(DeviceType, newDeviceId, i);
+		if (Path.notEmpty()) {
+			try {
+				ppl7::Dir::mkDir(Path, true);
+			} catch (const ppl7::Exception& exp) {
+				ShowException(exp, tr("could not create device directory in filesystem"));
+			}
 		}
 	}
 
@@ -1025,11 +1001,15 @@ void Edit::renumber()
 				wm->TrackStore.Put(track);
 				DataTitle* ti=wm->GetTitle(track->TitleId);
 				if (ti) {
-					ppl6::CString OldFile=wm->GetAudioFilename(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track);
-					if (OldFile.NotEmpty()) {
-						ppl6::CString NewPath=wm->GetAudioPath(DeviceType, newDeviceId, ti->Page);
-						if (NewPath.NotEmpty()) {
-							ppl6::CFile::MoveFile(OldFile, NewPath + "/" + GetFilename(OldFile));
+					ppl7::String OldFile=wm->GetAudioFilename(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track);
+					if (OldFile.notEmpty()) {
+						ppl7::String NewPath=wm->GetAudioPath(DeviceType, newDeviceId, ti->Page);
+						if (NewPath.notEmpty()) {
+							try {
+								ppl7::File::rename(OldFile, NewPath + "/" + ppl7::File::getFilename(OldFile));
+							} catch (const ppl7::Exception& exp) {
+								ShowException(exp, tr("could not rename audio file"));
+							}
 						}
 					}
 					ti->DeviceId=newDeviceId;
@@ -1065,12 +1045,16 @@ void Edit::on_coverwidget_imageDeleted()
 	Cover=QPixmap();
 	wm->UpdateCoverViewer(Cover);
 	if (wm_main->conf.bWriteID3Tags == true) {
-		ppl6::CString Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-		if (Path.NotEmpty()) {
-			ppl6::CID3Tag Tag;
-			Tag.Load(&Path);
-			Tag.RemovePicture(3);
-			Tag.Save();
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+		if (Path.notEmpty()) {
+			try {
+				ppl7::ID3Tag Tag;
+				Tag.load(&Path);
+				Tag.removePicture(3);
+				Tag.save();
+			} catch (const ppl7::Exception& exp) {
+				ShowException(exp, tr("could not remove cover picture from audio file"));
+			}
 		}
 	}
 }

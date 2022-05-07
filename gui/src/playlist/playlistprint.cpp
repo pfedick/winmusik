@@ -91,7 +91,6 @@ void ColumnDimension::set(int x, int width)
 
 void Playlist::on_printPlaylist_triggered()
 {
-    ppl6::CString Tmp;
     QPrinter Printer(QPrinter::HighResolution);
     if (wm->conf.bPrintColors) Printer.setColorMode(QPrinter::Color);
     else Printer.setColorMode(QPrinter::GrayScale);
@@ -312,8 +311,7 @@ void PlayListPrintDJ::printLine(PlaylistItem* item)
 void PlayListPrintDJ::print(const PlaylistTracks* tracks, QPrinter& Printer)
 {
     if (!painter.begin(&Printer)) {
-        ppl6::SetError(20027);
-        wm_main->RaiseError();
+        ShowError(QObject::tr("could not start printing"));
         return;
     }
     headerPrinted=false;

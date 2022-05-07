@@ -31,7 +31,7 @@ class RenumberDialog : public QDialog
     Q_OBJECT
 
 public:
-    RenumberDialog(QWidget *parent = 0, CWmClient *wm = NULL);
+    RenumberDialog(QWidget* parent = 0, CWmClient* wm = NULL);
     ~RenumberDialog();
 
     void setOldNumber(int number);
@@ -39,17 +39,17 @@ public:
     int getOldNumber() const;
     int getNewNumber() const;
 
-    bool isTargetPathUsable(ppluint8 DeviceType, ppluint32 newDeviceId) const;
-    bool isTargetDeviceFree(ppluint8 DeviceType, ppluint32 newDeviceId) const;
+    bool isTargetPathUsable(u_int8_t DeviceType, u_int32_t newDeviceId) const;
+    bool isTargetDeviceFree(u_int8_t DeviceType, u_int32_t newDeviceId) const;
 
 private:
     Ui::RenumberDialogClass ui;
-    CWmClient *wm;
+    CWmClient* wm;
 
 public slots:
 
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 
