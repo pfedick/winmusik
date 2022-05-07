@@ -25,10 +25,10 @@ SplashScreen::SplashScreen(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	ppl6::CString Tmp, DateFormat, Date;
+	ppl7::String Tmp, DateFormat, Date;
 
 	Tmp=tr("WinMusik Version %v% vom %d%");
-	Tmp.Replace("%v%", WM_VERSION);
+	Tmp.replace("%v%", WM_VERSION);
 	DateFormat=tr("%d.%m.%Y");
 
 	int a, year, month, day;
@@ -37,12 +37,12 @@ SplashScreen::SplashScreen(QWidget* parent)
 	a=a - year * 10000;
 	month=a / 100;
 	day=a - month * 100;
-	ppluint64 t=ppl6::MkTime(year, month, day);
-	ppl6::MkDate(Date, DateFormat, t);
+	ppl7::ppl_time_t t=ppl7::MkTime(year, month, day);
+	Date=ppl7::MkDate(DateFormat, t);
 
-	Tmp.Replace("%d%", (const char*)Date);
+	Tmp.replace("%d%", (const char*)Date);
 
-	Tmp.Concat(", ");
+	Tmp.append(", ");
 	Tmp+=WM_COPYRIGHT;
 	ui.copyright->setText(Tmp);
 }

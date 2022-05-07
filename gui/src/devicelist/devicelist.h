@@ -28,8 +28,8 @@
 
 class DeviceItem : public QTreeWidgetItem
 {
-	public:
-		ppluint32	Id;
+public:
+    uint32_t	Id;
 };
 
 
@@ -38,29 +38,29 @@ class DeviceList : public QWidget
     Q_OBJECT
 
 public:
-    DeviceList(QWidget *parent = 0, CWmClient *wm=NULL, int typ=0);
+    DeviceList(QWidget* parent = 0, CWmClient* wm=NULL, int typ=0);
     ~DeviceList();
     void ReloadTranslation();
 
 private:
     Ui::deviceListClass ui;
-    CWmClient *wm;
+    CWmClient* wm;
     int DeviceType;
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void closeEvent(QCloseEvent *event);
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
+    void closeEvent(QCloseEvent* event);
     void Resize();
-    bool on_KeyPress(QObject *target, int key,int modifier);
+    bool on_KeyPress(QObject* target, int key, int modifier);
 
-    bool consumeEvent(QObject *target, QEvent *event);
+    bool consumeEvent(QObject* target, QEvent* event);
 
 protected:
-    bool eventFilter(QObject *target, QEvent *event);
+    bool eventFilter(QObject* target, QEvent* event);
 
 
 public slots:
-	void on_list_itemDoubleClicked ( QTreeWidgetItem * item, int column);
-	void on_newButton_clicked();
+    void on_list_itemDoubleClicked(QTreeWidgetItem* item, int column);
+    void on_newButton_clicked();
 
 };
 

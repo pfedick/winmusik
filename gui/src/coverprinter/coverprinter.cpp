@@ -44,33 +44,6 @@ void CoverPrinter::ReloadTranslation()
 }
 
 
-/*
-void CoverPrinter::on_front_cover_dragEnterEvent(QDragEnterEvent *event)
- {
-	 if (event->mimeData()->hasImage())
-		 event->acceptProposedAction();
- }
-
-void CoverPrinter::on_front_cover_dropEvent(QDropEvent *event)
-{
-	ppl6::CString s;
-	if (event->mimeData()->hasImage()) ui.front_cover->setText(s);
-
-}
-
-void CoverPrinter::on_cover_dragEnterEvent(QDragEnterEvent *event)
- {
-	 //if (event->mimeData()->hasImage())
-		 event->acceptProposedAction();
- }
-
-void CoverPrinter::on_cover_dropEvent(QDropEvent *event)
-{
-
-
-}
-*/
-
 static const char* chan[]=
 {
 		"",

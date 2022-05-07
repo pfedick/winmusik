@@ -35,8 +35,8 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 	DeviceType=typ;
 	ui.deviceIcon->setPixmap(wm->GetDevicePixmap(DeviceType));
 	setWindowIcon(wm->GetDeviceIcon(DeviceType));
-	ppl6::CString Name;
-	Name.Setf("devicelist_type_%i", DeviceType);
+	ppl7::String Name;
+	Name.setf("devicelist_type_%i", DeviceType);
 	this->restoreGeometry(wm->GetGeometry(Name));
 	ui.list->installEventFilter(this);
 	ui.newButton->installEventFilter(this);
@@ -71,13 +71,13 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 		setWindowTitle(tr("List of Audio DVDs"));
 		break;
 	}
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	ui.deviceName->setText(windowTitle());
 	setWindowTitle(tr("WinMusik: ") + ui.deviceName->text());
 	int highest=wm->DeviceStore.GetHighestDevice(DeviceType);
-	ppluint64 totalLength=0;
-	ppluint32 totalTracks=0;
-	ppluint32 totalDevices=0;
+	uint64_t totalLength=0;
+	uint64_t totalTracks=0;
+	uint64_t totalDevices=0;
 
 	QString Style="QTreeView::item {\n"
 		"border-right: 1px solid #b9b9b9;\n"
@@ -102,16 +102,16 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 
 			DeviceItem* item=new(DeviceItem);
 			item->Id=d.DeviceId;
-			Tmp.Setf("%5i", d.DeviceId);
+			Tmp.setf("%5i", d.DeviceId);
 			item->setText(0, Tmp);
-			Tmp.Clear();
+			Tmp.clear();
 			if (d.Title) Tmp=d.Title;
 			if (d.SubTitle) {
-				if (Tmp.NotEmpty()) Tmp+=", ";
+				if (Tmp.notEmpty()) Tmp+=", ";
 				Tmp+=d.SubTitle;
 			}
 			item->setText(1, Tmp);
-			Tmp.Setf("%5i", d.NumTracks);
+			Tmp.setf("%5i", d.NumTracks);
 			item->setText(2, Tmp);
 
 			if (d.Recorded > 0) {
@@ -119,7 +119,7 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 				int m=d.Recorded - (h * 3600);
 				int s=m % 60;
 				m=m / 60;
-				Tmp.Setf("%0i:%02i:%02i", h, m, s);
+				Tmp.setf("%0i:%02i:%02i", h, m, s);
 				item->setText(3, Tmp);
 			} else {
 				item->setText(3, "?");
@@ -127,11 +127,11 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 
 			// Startdatum
 			QDate Date;
-			Tmp.Setf("%u", d.FirstDate);
+			Tmp.setf("%u", d.FirstDate);
 			Date=QDate::fromString(Tmp, "yyyyMMdd");
 			item->setText(4, Date.toString(tr("yyyy-MM-dd")));
 			// Enddatum
-			Tmp.Setf("%u", d.LastDate);
+			Tmp.setf("%u", d.LastDate);
 			Date=QDate::fromString(Tmp, "yyyyMMdd");
 			item->setText(5, Date.toString(tr("yyyy-MM-dd")));
 
@@ -143,11 +143,11 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 	int m=totalLength - (h * 3600);
 	int s=m % 60;
 	m=m / 60;
-	Tmp.Setf("%0i:%02i:%02i", h, m, s);
+	Tmp.setf("%0i:%02i:%02i", h, m, s);
 	ui.totalLength->setText(Tmp);
-	Tmp.Setf("%i", totalTracks);
+	Tmp.setf("%i", totalTracks);
 	ui.totalTracks->setText(Tmp);
-	Tmp.Setf("%i", totalDevices);
+	Tmp.setf("%i", totalDevices);
 	ui.totalDevices->setText(Tmp);
 
 
@@ -191,8 +191,8 @@ void DeviceList::resizeEvent(QResizeEvent* event)
 
 void DeviceList::closeEvent(QCloseEvent* event)
 {
-	ppl6::CString Name;
-	Name.Setf("devicelist_type_%i", DeviceType);
+	ppl7::String Name;
+	Name.setf("devicelist_type_%i", DeviceType);
 	if (wm) {
 		wm->SaveGeometry(Name, this->saveGeometry());
 	}
@@ -222,7 +222,6 @@ bool DeviceList::eventFilter(QObject* target, QEvent* event)
 
 bool DeviceList::consumeEvent(QObject* target, QEvent* event)
 {
-	ppl6::CString Tmp;
 	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
