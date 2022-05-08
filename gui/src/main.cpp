@@ -33,7 +33,7 @@
 #include <Python.h>
 #endif
 
-ppl6::CLog* wmlog=NULL;
+ppl7::Logger* wmlog=NULL;
 
 void help()
 {

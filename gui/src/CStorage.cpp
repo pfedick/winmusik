@@ -52,7 +52,7 @@ void CCallback::Update()
  * Änderung, sowie die Version.
  */
 
-/*!\var CStorageItem::fileid
+/*!\var CStorageBase::fileid
  * \brief ID der Datenbank-Datei
  */
 
@@ -90,7 +90,6 @@ CStorageItem::CStorageItem()
  */
 {
 	filepos=0;
-	fileid=0;
 	lastchange=0;
 	version=0;
 	formatversion=0;
@@ -103,7 +102,6 @@ CStorageItem::CStorageItem(const CStorageItem& other)
  */
 {
 	filepos=other.filepos;
-	fileid=other.fileid;
 	lastchange=other.lastchange;
 	version=other.version;
 	formatversion=other.formatversion;
@@ -134,26 +132,9 @@ void CStorageItem::ClearStorageData()
  */
 {
 	filepos=0;
-	fileid=0;
 	lastchange=0;
 	version=0;
 	formatversion=0;
-}
-
-void CStorageItem::CopyStorageFrom(const CStorageItem* item)
-/*!\brief Storage Daten kopieren
- *
- * Diese Funktion übernimmt die Storage Daten des angegebenen Datensatzes.
- *
- * \param[in] item Pointer auf einen anderen Datensatz
- */
-{
-	if (!item) return;
-	filepos=item->filepos;
-	fileid=item->fileid;
-	lastchange=item->lastchange;
-	version=item->version;
-	formatversion=item->formatversion;
 }
 
 void CStorageItem::CopyStorageFrom(const CStorageItem& other)
@@ -165,13 +146,12 @@ void CStorageItem::CopyStorageFrom(const CStorageItem& other)
  */
 {
 	filepos=other.filepos;
-	fileid=other.fileid;
 	lastchange=other.lastchange;
 	version=other.version;
 	formatversion=other.formatversion;
 }
 
-void CStorageItem::CopyStorageFrom(CWMFileChunk* chunk)
+void CStorageItem::CopyStorageFrom(const CWMFileChunk& chunk)
 /*!\brief Storage Daten kopieren
  *
  * Diese Funktion übernimmt die Storage Daten des angegebenen Chunks.
@@ -179,15 +159,13 @@ void CStorageItem::CopyStorageFrom(CWMFileChunk* chunk)
  * \param[in] chunk Pointer auf einen WinMusik Chunk vom Typ CWMFileChunk
  */
 {
-	if (!chunk) return;
-	filepos=chunk->GetFilepos();
-	fileid=1;
-	lastchange=chunk->GetTimestamp();
-	version=chunk->GetVersion();
-	formatversion=chunk->GetFormatVersion();
+	filepos=chunk.GetFilepos();
+	lastchange=chunk.GetTimestamp();
+	version=chunk.GetVersion();
+	formatversion=chunk.GetFormatVersion();
 }
 
-ppluint32 CStorageItem::GetVersion()
+uint32_t CStorageItem::GetVersion()
 /*!\brief Version auslesen
  *
  * Mit dieser Funktion kann die Version des Datensatzes ausgelesen werden
@@ -198,7 +176,7 @@ ppluint32 CStorageItem::GetVersion()
 	return version;
 }
 
-ppluint32 CStorageItem::GetLastChange()
+uint32_t CStorageItem::GetLastChange()
 /*!\brief Timestamp der letzten Änderung auslesen
  *
  * Mit dieser Funktion kann der Timestamp der letzten Änderung des Datensatzes ausgelesen werden
@@ -209,7 +187,7 @@ ppluint32 CStorageItem::GetLastChange()
 	return lastchange;
 }
 
-ppluint8 CStorageItem::GetFormatVersion()
+uint8_t CStorageItem::GetFormatVersion()
 /*!\brief Version des Datensatz-Formates auslesen
  *
  * Mit dieser Funktion kann die Version des Datensatz-Formates ausgelesen werden
@@ -222,8 +200,8 @@ ppluint8 CStorageItem::GetFormatVersion()
 
 void CStorageItem::PrintStorageData()
 {
-	printf("filepos: %u, fileid: %u, lastchange: %u, version: %u, format: %u\n",
-		filepos, fileid, lastchange, version, formatversion);
+	printf("filepos: %u, lastchange: %u, version: %u, format: %u\n",
+		filepos, lastchange, version, formatversion);
 }
 
 /*!\class CStorageType
@@ -234,71 +212,20 @@ void CStorageItem::PrintStorageData()
  *
  */
 
-CStorageType::CStorageType()
+CStorageBase::CStorageBase()
 /*!\brief Konstruktor der Klasse
  *
  * Der Konstruktor setz die Variablen CStorageType::type und CStorageType::Storage
  * auf NULL.
  */
 {
-	type=NULL;
 	Storage=NULL;
 }
 
-void CStorageType::Clear()
-/*!\brief Speicher freigeben
- *
- * Bei Aufruf dieser Funktion muss die Klasse sämtlichen Speicher freigeben, der durch
- * die verwalteten Datensätze allokiert wurde. Die Funktion ist rein virtuell und muss
- * daher von einer abgeleiteten Klasse reimplementiert werden.
- */
+CStorage& CStorageBase::getStorage() const
 {
-
-}
-
-const char* CStorageType::GetChunkName()
-/*!\brief Liefert den Chunknamen dieser Storage Klasse zurück
- *
- * Diese Funktion ist als virtuell deklariert und liefert den Namen des Chunks
- * dieser Klasse zurück. Sie muss in abgeleiteten Klassen reimplementiert werden.
- *
- * \returns Liefert einen Pointer auf den Chunknamen dieser Storage Klasse zurück.
- * Dieser ist immer 4 Byte lang und mit 0 terminiert.
- */
-{
-	return "INVL";
-}
-
-int CStorageType::CompareNode(CTreeItem* item)
-{
-	CStorageType* s=(CStorageType*)item;
-	int cmp=strcmp(s->type, type);
-	if (cmp == 0) return 0;
-	if (cmp > 0) return 1;
-	return -1;
-}
-
-int CStorageType::CompareValue(void* value)
-{
-	char* s=(char*)value;
-	int cmp=strcmp(s, type);
-	if (cmp == 0) return 0;
-	if (cmp > 0) return 1;
-	return -1;
-}
-
-int CStorageType::LoadChunk(CWMFileChunk*)
-/*!\brief Datensatz laden
- *
- * Mit dieser Funktion wird ein Chunk aus der Datenbank in den Speicher geladen.
- * Sie ist als virtuell definiert und muss von der ableitenden Klasse reimplementiert
- * werden.
- *
- * \param[in] chunk Pointer auf einen WinMusik Chunk vom Typ CWMFileChunk
- * \returns Konnte der Chunk erfolgreich importiert werden, muss die Funktion 1 zurückgeben, sonst 0.
- */
-{
-	return 1;
+	if (!Storage) throw StorageClassNotInitialized();
+	return *Storage;
 }
 
 /*!\class CStorage
@@ -317,7 +244,6 @@ int CStorageType::LoadChunk(CWMFileChunk*)
 CStorage::CStorage()
 {
 	bLoadDatabaseRunning=false;
-	bKeepFileOpen=false;
 }
 
 CStorage::~CStorage()
@@ -325,81 +251,70 @@ CStorage::~CStorage()
 	Clear();
 }
 
-int CStorage::StartImport()
-{
-	bKeepFileOpen=true;
-	StorageFile.Close();
-	return 1;
-}
-
-int CStorage::FinishImport()
-{
-	bKeepFileOpen=false;
-	StorageFile.Close();
-	return 1;
-}
-
-
 void CStorage::Clear()
 {
-	Mutex.Lock();
+	Mutex.lock();
 	ClearWithoutMutex();
-	Mutex.Unlock();
+	Mutex.unlock();
 }
 
 void CStorage::ClearWithoutMutex()
 {
-	CStorageType* t;
+	CStorageBase* t;
 	// Wir gehen alle Storage Klassen durch und übergeben ein Clear
-	StorageClasses.Reset();
-	while ((t=(CStorageType*)StorageClasses.GetNext())) {
-		t->Clear();
+	std::map<int, CStorageBase*>::const_iterator it;
+	for (it=StorageClasses.begin();it != StorageClasses.end();++it) {
+		it->second->Clear();
 	}
 }
 
-int CStorage::Init(const char* path)
+void CStorage::Init(const ppl7::String& path)
 {
 	DataPath=path;
-	return 1;
 }
 
-int CStorage::RegisterStorageType(CStorageType* type)
+void CStorage::RegisterStorageClass(CStorageBase* storageclass)
 {
-	if (!type) {
-		return 0;
+	if (!storageclass) {
+		throw InvalidStorageClass();
 	}
-	const char* t=type->GetChunkName();
-	if (!t) {
-		return 0;
+	const char* chunkname=storageclass->GetChunkName();
+	if (!chunkname) {
+		throw InvalidStorageClass();
 	}
-	Mutex.Lock();
+	int chunkid=ppl7::Peek32(chunkname);
+	if (!chunkname) {
+		throw InvalidStorageClass();
+	}
+	Mutex.lock();
+	storageclass->Storage=this;
 	// Haben wir schon so einen StorageType?
-	if (StorageClasses.Find((void*)&t)) {
-		Mutex.Unlock();
-		return 0;
+	std::map<int, CStorageBase*>::iterator it;
+	it=StorageClasses.find(chunkid);
+	if (it != StorageClasses.end()) {
+		it->second=storageclass;
+	} else {
+		StorageClasses.insert(std::pair<int, CStorageBase*>(chunkid, storageclass));
 	}
-	type->type=t;
-	if (!StorageClasses.Add(type)) {
-		type->type=0;
-		Mutex.Unlock();
-		return 0;
-	}
-	type->Storage=this;
-	Mutex.Unlock();
-	return 1;
+	Mutex.unlock();
 }
 
-CStorageType* CStorage::FindStorageType(const char* name)
+CStorageBase* CStorage::FindStorageClass(const char* name)
 {
-	CStorageType* t=NULL;
 	if (!name) return NULL;
-	Mutex.Lock();
-	t=(CStorageType*)StorageClasses.Find((void*)name);
-	Mutex.Unlock();
-	return t;
+	int chunkid=ppl7::Peek32(name);
+	std::map<int, CStorageBase*>::const_iterator it;
+	Mutex.lock();
+	it=StorageClasses.find(chunkid);
+	if (it == StorageClasses.end()) {
+		Mutex.unlock();
+		return NULL;
+	}
+	Mutex.unlock();
+	return it->second;
 }
 
-int CStorage::Save(CStorageType* type, CStorageItem* item, ppl6::CBinary* bin)
+void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein von CStorageType abgeleiteter Datensatz auf der Festplatte
@@ -417,43 +332,33 @@ int CStorage::Save(CStorageType* type, CStorageItem* item, ppl6::CBinary* bin)
  */
 {
 	// Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
-	if (bLoadDatabaseRunning) return 1;
-	ppl6::CString File;
-	if (DataPath.Len() == 0) {
-		ppl6::SetError(20014);
-		return 0;
+	if (bLoadDatabaseRunning) return;
+	ppl7::String File;
+	if (DataPath.size() == 0) {
+		throw StorageClassNotInitialized();
 	}
 
-	const char* t=type->type;
-	int size=bin->GetSize();
-	const char* ptr=(const char*)bin->GetPtr();
+	const char* t=type->GetChunkName();
+	size_t size=bin.size();
+	const char* ptr=(const char*)bin.ptr();
 	CWMFile ff;
 	CWMFileChunk chunk;
 	//printf ("CStorage::Save, formatversion=%i, type: %s\n",item->formatversion,t);
 	chunk.SetChunkData(t, ptr, size, item->filepos, item->version, item->formatversion);
 	File=DataPath;
 	if (strcmp(t, "OIMP") == 0) {
-		File.Concatf("/wmoimp.dat");
+		File+="/wmoimp.dat";
 	} else {
-		File.Concatf("/winmusik.dat");
+		File+="/winmusik.dat";
 	}
-	if (bKeepFileOpen) {
-		if (!StorageFile.IsOpen()) {
-			if (!StorageFile.Open(File)) return 0;
-		}
-		if (!StorageFile.SaveChunk(&chunk)) return 0;
-	} else {
-		if (!ff.Open(File)) return 0;
-		if (!ff.SaveChunk(&chunk)) return 0;
-	}
-	item->fileid=1;
+	ff.Open(File);
+	ff.SaveChunk(chunk);
 	item->filepos=chunk.filepos;
 	item->lastchange=chunk.timestamp;
 	item->version=chunk.version;
-	return 1;
 }
 
-int CStorage::Delete(CStorageType* type, CStorageItem* item)
+void CStorage::Delete(CStorageBase* type, CStorageItem* item)
 /*!\brief Datensatz löschen
  *
  * Mit dieser Funktion wird ein von CStorageType abgeleiteter Datensatz auf der Festplatte
@@ -470,34 +375,30 @@ int CStorage::Delete(CStorageType* type, CStorageItem* item)
  */
 {
 	// Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
-	if (bLoadDatabaseRunning) return 1;
-	ppl6::CString File;
-	if (DataPath.Len() == 0) {
-		ppl6::SetError(20014);
-		return 0;
+	if (bLoadDatabaseRunning) return;
+	ppl7::String File;
+	if (DataPath.size() == 0) {
+		throw StorageClassNotInitialized();
 	}
-
-	const char* t=type->type;
+	const char* t=type->GetChunkName();
 	CWMFile ff;
 	CWMFileChunk chunk;
 	chunk.SetChunkData(t, NULL, 0, item->filepos, item->version, item->formatversion);
 	File=DataPath;
 	if (strcmp(t, "OIMP") == 0) {
-		File.Concatf("/wmoimp.dat");
+		File+="/wmoimp.dat";
 	} else {
-		File.Concatf("/winmusik.dat");
+		File+="/winmusik.dat";
 	}
 
-	if (!ff.Open(File)) return 0;
-	if (!ff.DeleteChunk(&chunk)) return 0;
-	item->fileid=0;
+	ff.Open(File);
+	ff.DeleteChunk(chunk);
 	item->filepos=0;
 	item->lastchange=0;
 	item->version=0;
-	return 1;
 }
 
-int CStorage::LoadDatabase(CCallback* c)
+void CStorage::LoadDatabase(CCallback* c)
 /*!\brief Datenbank laden
  *
  * Mit dieser Funktion wird die Datenbank aus dem Filesystem in den Hauptspeicher geladen.
@@ -514,209 +415,94 @@ int CStorage::LoadDatabase(CCallback* c)
  */
 {
 	// We need to clear the database first
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Start loading Database");
+	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Start loading Database");
 	Clear();
-
-	if (DataPath.Len() == 0) {
-		ppl6::SetError(20014);
-		return 0;
+	if (DataPath.size() == 0) {
+		throw StorageClassNotInitialized();
 	}
-	ppl6::CString File;
+	ppl7::String File;
 	CWMFile ff;
 	CWMFileChunk chunk;
-	File=DataPath;
-	File.Concatf("/winmusik.dat");
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading Database from File: %s", (const char*)File);
-
-	if (!ff.Open(File)) return 0;
-	Mutex.Lock();
-	// Wir müssen verhindern, dass die StorageTypen versuchen den Datensatz beim Import gleich
-	// wieder zu speichern
-	bLoadDatabaseRunning=true;
-	int progress=0;
-	if (c) {
-		c->progress=0;
-		c->Update();
-	}
-	// **************************************************************************************
-	// Datenbank
-	ppluint32 size=ff.GetFileSize();
-	CStorageType* t=NULL;
-	ppluint32 pos=ff.GetFilePosition();
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading %u Bytes", size);
-	while (ff.GetNextChunk(&chunk)) {
-		progress=ff.GetFilePosition() * 90 / size;
+	File=DataPath + "/winmusik.dat";
+	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading Database from File: %s", (const char*)File);
+	ff.Open(File);
+	uint32_t size=ff.GetFileSize();
+	uint32_t pos=ff.GetFilePosition();
+	Mutex.lock();
+	try {
+		// Wir müssen verhindern, dass die StorageTypen versuchen den Datensatz beim Import gleich
+		// wieder zu speichern
+		bLoadDatabaseRunning=true;
+		int progress=0;
 		if (c) {
-			if (c->progress != progress) {
-				c->progress=progress;
-				c->Update();
-			}
+			c->progress=0;
+			c->Update();
 		}
-		t=(CStorageType*)StorageClasses.Find((void*)chunk.chunkname);
-		if (t) {
-			if (!t->LoadChunk(&chunk)) {
-				if (wmlog) {
-					wmlog->Printf(ppl6::LOG::ERROR, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Failed loading Chunk at Position: %u", pos);
-					wmlog->LogError();
-					ppl6::PushError();
-					chunk.HexDump(wmlog);
-					ppl6::PopError();
+		// **************************************************************************************
+		// Datenbank
+		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading %u Bytes", size);
+		while (ff.GetNextChunk(chunk)) {
+			if (c) {
+				progress=ff.GetFilePosition() * 90 / size;
+				if (c->progress != progress) {
+					c->progress=progress;
+					c->Update();
 				}
-				ppl6::PrintError();
-				bLoadDatabaseRunning=false;
-				Mutex.Unlock();
-				return 0;
 			}
+			int chunkid=ppl7::Peek32(chunk.chunkname);
+			std::map<int, CStorageBase*>::const_iterator it=StorageClasses.find(chunkid);
+			if (it != StorageClasses.end()) {
+				CStorageBase* t=it->second;
+				t->LoadChunk(chunk);
+
+			}
+			pos=ff.GetFilePosition();
 		}
-		pos=ff.GetFilePosition();
+	} catch (const ppl7::Exception& exp) {
+		bLoadDatabaseRunning=false;
+		Mutex.unlock();
+		if (wmlog) {
+			wmlog->printf(ppl7::Logger::ERR, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Failed loading Chunk at Position: %u", pos);
+			wmlog->printException(exp);
+			chunk.HexDump(wmlog);
+		}
+		exp.print();
+		throw;
 	}
-	ppluint32 highest=0;
-	t=(CStorageType*)StorageClasses.Find((void*)"TITL");
-	if (t) highest=((CTitleStore*)t)->GetHighestImportDataId();
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Done");
-
-	// **************************************************************************************
-	// MP3 Import Daten
-	t=(CStorageType*)StorageClasses.Find((void*)"OIMP");
-	if (t) {
-		File=DataPath;
-		File.Concatf("/wmoimp.dat");
-		if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading ID3Data from File: %s", (const char*)File);
-		if (ff.Open(File)) {
-			size=ff.GetFileSize();
-
-
-			while (ff.GetNextChunk(&chunk)) {
-				progress=90 + (ff.GetFilePosition() * 10 / size);
-				if (c) {
-					if (c->progress != progress) {
-						c->progress=progress;
-						c->Update();
-					}
-				}
-				if (!t->LoadChunk(&chunk)) {
-					if (wmlog) {
-						wmlog->Printf(ppl6::LOG::ERROR, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Failed loading Chunk");
-						wmlog->LogError();
-					}
-					ppl6::PrintError();
-					bLoadDatabaseRunning=false;
-					Mutex.Unlock();
-					return 0;
-				}
-			}
-		}
-		((COimpDataStore*)t)->SetHighestImportDataId(highest);
-	}
-
-
-
-
 	bLoadDatabaseRunning=false;
-	Mutex.Unlock();
+	Mutex.unlock();
+	/*
+	uint32_t highest=0;
+	CStorageBase* t=FindStorageType("TITL");
+	if (t) highest=((CTitleStore*)t)->GetHighestImportDataId();
+	*/
+	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Done");
 	if (c) {
 		c->progress=100;
 		c->Update();
-		ppl6::MSleep(200);
 	}
-	return 1;
 }
 
-int CStorage::DeleteDatabase()
+void CStorage::DeleteDatabase()
 {
-	ppl6::CString File;
-	if (DataPath.Len() == 0) {
-		ppl6::SetError(20014);
-		return 0;
+	ppl7::String File;
+	if (DataPath.size() == 0) {
+		throw StorageClassNotInitialized();
 	}
-	Mutex.Lock();
+	Mutex.lock();
 	ClearWithoutMutex();
-	File=DataPath;
-	File.Concatf("/winmusik.dat");
-	if (ppl6::FileExists(File)) {
-		ppl6::CFile::DeleteFile(File);
+	try {
+		File=DataPath + "/winmusik.dat";
+		if (ppl7::File::exists(File)) {
+			ppl7::File::remove(File);
+		}
+		File=DataPath + "/wmoimp.dat";
+		if (ppl7::File::exists(File)) {
+			ppl7::File::remove(File);
+		}
+	} catch (...) {
+		Mutex.unlock();
+		throw;
 	}
-	File.Concatf("/wmoimp.dat");
-	if (ppl6::FileExists(File)) {
-		ppl6::CFile::DeleteFile(File);
-	}
-	Mutex.Unlock();
-	return 1;
+	Mutex.unlock();
 }
-
-int CStorage::LoadOimpRecord(DataOimp* item)
-{
-	if (!item) {
-		ppl6::SetError(194);
-		return 0;
-	}
-	if (item->fileid == 0 || item->filepos == 0) {
-		ppl6::SetError(20025);
-		return 0;
-	}
-	ppl6::CString File;
-	CWMFile ff;
-	CWMFileChunk chunk;
-	File=DataPath;
-	File.Concatf("/wmoimp.dat");
-	if (!ff.Open(File)) {
-		ppl6::SetError(20025);
-		return 0;
-	}
-	if (!ff.GetChunk(&chunk, item->filepos)) return 0;
-	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk.GetChunkData(), chunk.GetChunkDataSize())) return 0;
-	if (!item->Import(&bin, chunk.GetFormatVersion())) return 0;
-	item->CopyStorageFrom(&chunk);
-	return 1;
-}
-
-
-/*
-int CStorage::CreateDatabase()
-{
-	ppl6::CString File;
-	CStorageType *type;
-	CWMFile ff;
-	CWMFileChunk chunk;
-	if (DataPath.Len()==0) {
-		ppl6::SetError(20014);
-		return 0;
-	}
-
-	Mutex.Lock();
-	ClearWithoutMutex();
-	File=DataPath;
-	File.Concatf("/data%04i.wm3",1);
-	if (ppl6::FileExists(File)) {
-		ppl6::DeleteFile(File);
-	}
-	if (!ff.Open(File)) {
-		Mutex.Unlock();
-		return 0;
-	}
-	ff.Close();
-	Mutex.Unlock();
-	// We now have a fresh but empty database. So lets put something into it...
-	type=FindStorageType("VERS");
-	if (type) {
-		CVersionStore *vs=(CVersionStore *)type;
-		DataVersion v;
-		v.SetValue("Single");
-		vs->Put(&v);
-		v.Clear();
-		v.SetValue("Maxi");
-		vs->Put(&v);
-		v.SetValue("Album");
-		vs->Put(&v);
-		v.Clear();
-
-	}
-	//Save(&v);
-
-
-
-	return 1;
-
-}
-*/

@@ -23,6 +23,8 @@
 #ifndef WINMUSIK3_H_
 #include "winmusik3.h"
 #endif
+#include <set>
+
  /*******************************************************
   * Storage Classes                                     *
   *******************************************************/
@@ -35,16 +37,16 @@ class CTrackList;
 class CCallback;
 class DataOimp;
 
+
 class CStorageItem
 {
 	friend class CStorage;
 private:
-	u_int32_t filepos;
-	u_int8_t  fileid;
-	u_int32_t lastchange;
-	u_int32_t version;
+	uint32_t filepos;
+	uint32_t lastchange;
+	uint32_t version;
 protected:
-	u_int8_t  formatversion;
+	uint8_t  formatversion;
 
 public:
 	CStorageItem();
@@ -53,63 +55,49 @@ public:
 	void Clear();
 	void ClearStorageData();
 	void CopyStorageFrom(const CStorageItem& other);
-	void CopyStorageFrom(const CStorageItem* item);
-	void CopyStorageFrom(CWMFileChunk* chunk);
-	u_int32_t GetVersion();
-	u_int32_t GetLastChange();
-	u_int8_t GetFormatVersion();
+	void CopyStorageFrom(const CWMFileChunk& chunk);
+	uint32_t GetVersion();
+	uint32_t GetLastChange();
+	uint8_t GetFormatVersion();
 	void PrintStorageData();
 };
 
-class CStorageType : public ppl6::CTreeItem
+class CStorageBase
 {
 	friend class CStorage;
-private:
-	const char* type;
-public:
-	CStorageType();
-	virtual int CompareNode(CTreeItem* item);
-	virtual int CompareValue(void* value);
-	virtual void Clear();
-
 	CStorage* Storage;
-	virtual const char* GetChunkName();
-	virtual int LoadChunk(CWMFileChunk* chunk);
+public:
+	CStorageBase();
+	CStorage& getStorage() const;
+	virtual void Clear()=0;
+	virtual const char* GetChunkName()=0;
+	virtual void LoadChunk(const CWMFileChunk& chunk)=0;
 };
 
 
 class CStorage
 {
 private:
-	ppl6::CMutex Mutex;
-	ppl6::CString DataPath;
-	ppl6::CTree StorageClasses;
-	ppl6::CTree Files;
+	ppl7::Mutex Mutex;
+	ppl7::String DataPath;
+	std::map<int, CStorageBase*> StorageClasses;
 	bool	bLoadDatabaseRunning;
-	bool	bKeepFileOpen;
 	CWMFile	StorageFile;
 
 	void ClearWithoutMutex();
-
-
 
 public:
 	CStorage();
 	virtual ~CStorage();
 	void Clear();
-	int Init(const char* path);
-	int RegisterStorageType(CStorageType* type);
-	CStorageType* FindStorageType(const char* name);
-	int Save(CStorageType* type, CStorageItem* item, ppl6::CBinary* bin);
-	int Delete(CStorageType* type, CStorageItem* item);
+	void Init(const ppl7::String& path);
+	void RegisterStorageClass(CStorageBase* storageclass);
+	CStorageBase* FindStorageClass(const char* name);
+	void Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin);
+	void Delete(CStorageBase* type, CStorageItem* item);
 
-	int LoadDatabase(CCallback* c);
-	int LoadOimpRecord(DataOimp* item);
-	int DeleteDatabase();
-
-	int StartImport();
-	int FinishImport();
-
+	void LoadDatabase(CCallback* c=NULL);
+	void DeleteDatabase();
 	bool isDatabaseLoading() { return bLoadDatabaseRunning; }
 
 	//int CreateDatabase();
@@ -120,40 +108,35 @@ public:
  * TITLES                                              *
  *******************************************************/
 
-typedef struct {
-	DataTitle* t;
-} TITLE;
 
 
-class CTitleStore : public CStorageType
+class CTitleStore : public CStorageBase
 {
 private:
-	ppl6::CMutex Mutex;
-	TITLE* TitleIndex;
-	u_int32_t max;
-	u_int32_t highestId;
-	u_int32_t highestOimp;
+	ppl7::Mutex Mutex;
+	DataTitle** TitleIndex;
+	uint32_t max;
+	uint32_t highestId;
 
-
-	int Increase(u_int32_t maxid);
-	int Save(DataTitle* t);
+	void Increase(uint32_t maxid);
+	void SaveToStorage(DataTitle& t);
+	DataTitle* SaveToMemory(const DataTitle& t);
 
 public:
 	CTitleStore();
 	virtual ~CTitleStore();
 	virtual const char* GetChunkName();
 	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
 
-	ppl6::CTree Artists;
+	std::set<ppl7::String> Artists;
 
-	int Put(DataTitle* title);
-	int Delete(DataTitle* entry);
-	DataTitle* Get(u_int32_t id);
-	int GetCopy(u_int32_t id, DataTitle* t);
-	virtual int LoadChunk(CWMFileChunk* chunk);
-	u_int32_t MaxId();
-
-	u_int32_t GetHighestImportDataId();
+	uint32_t Put(const DataTitle& title);
+	bool Exists(uint32_t id) const;
+	void Delete(uint32_t id);
+	const DataTitle& Get(uint32_t id) const;
+	const DataTitle* GetPtr(uint32_t id) const;
+	uint32_t MaxId() const;
 };
 
 
@@ -167,39 +150,37 @@ public:
 	ppl7::String	Album;
 	ppl7::String	Tags;
 	ppl7::ByteArray	CoverPreview;
-	u_int32_t		TitleId;
-	u_int32_t		DeviceId;
-	u_int32_t		Length;
-	u_int32_t		VersionId;
-	u_int32_t		LabelId;
-	u_int32_t		BPM;
-	u_int32_t		RecordDate;
-	u_int32_t		ReleaseDate;
-	u_int32_t		ImportData;
-	u_int32_t		Size;
-	u_int16_t		RecordSourceId;
-	u_int16_t		Track;
-	u_int16_t		Bitrate;
-	u_int16_t		GenreId;
-	u_int16_t		RecordDeviceId;
-	u_int8_t		DeviceType;
-	u_int8_t		Page;
-	u_int8_t		Channels;
-	u_int8_t		Quality;
-	u_int8_t		Rating;
-	u_int8_t		Flags;
-	u_int8_t		Key;
-	u_int8_t		EnergyLevel;
-	//void *operator new (size_t size);
-	//void operator delete (void *ptr, size_t size);
+	uint32_t		TitleId;
+	uint32_t		DeviceId;
+	uint32_t		Length;
+	uint32_t		VersionId;
+	uint32_t		LabelId;
+	uint32_t		BPM;
+	uint32_t		RecordDate;
+	uint32_t		ReleaseDate;
+	uint32_t		ImportData;
+	uint32_t		Size;
+	uint16_t		RecordSourceId;
+	uint16_t		Track;
+	uint16_t		Bitrate;
+	uint16_t		GenreId;
+	uint16_t		RecordDeviceId;
+	uint8_t		DeviceType;
+	uint8_t		Page;
+	uint8_t		Channels;
+	uint8_t		Quality;
+	uint8_t		Rating;
+	uint8_t		Flags;
+	uint8_t		Key;
+	uint8_t		EnergyLevel;
 
 	DataTitle();
 	DataTitle(const DataTitle& other);
 	~DataTitle();
 	void Clear();
 
-	int CopyFrom(const DataTitle* t);
-	int CopyFrom(const DataTitle& other);
+	void CopyFrom(const DataTitle& other);
+	void CopyDataFrom(const DataTitle& other);
 	void SetTitle(const char* title);
 	void SetArtist(const char* artist);
 	void SetRemarks(const char* remarks);
@@ -212,17 +193,17 @@ public:
 	void SetTags(const ppl7::String& tags);
 	void SetAlbum(const ppl7::String& album);
 	void SetKey(const ppl7::String& key);
-	ppl7::String getKeyName(MusicKeyType type);
+	ppl7::String getKeyName(MusicKeyType type) const;
 
-	ppl6::CBinary* Export();
-	int Import(ppl6::CBinary* bin, int version);
+	void Export(ppl7::ByteArray& bin);
+	void Import(const ppl7::ByteArrayPtr& bin, int version);
 
 	DataTitle& operator=(const DataTitle& other);
 	bool operator==(const DataTitle& other) const;
 	bool operator!=(const DataTitle& other) const;
 
-	static ppl7::String keyName(u_int8_t id, MusicKeyType type);
-	static u_int8_t keyId(const ppl7::String& name);
+	static ppl7::String keyName(uint8_t id, MusicKeyType type);
+	static uint8_t keyId(const ppl7::String& name);
 };
 
 
@@ -232,65 +213,73 @@ public:
 
 
 typedef struct {
-	u_int32_t		DeviceId;
-	u_int8_t		DeviceType;
+	uint32_t		DeviceId;
+	uint8_t		DeviceType;
 } DATADEVICE;
 
 class DataDevice : public CStorageItem, public ppl6::CTreeItem
 {
 private:
 public:
-	char* Title, * SubTitle;
-	u_int32_t		DeviceId;
-	u_int32_t		Length;
-	u_int32_t		Recorded;
-	u_int32_t		LabelId;
-	u_int32_t		PurchaseDate;
-	u_int32_t		DateCreated;
-	u_int32_t		FirstDate;
-	u_int32_t		LastDate;
-	u_int32_t		NumTracks;
+	ppl7::String	Title;
+	ppl7::String	SubTitle;
+	uint32_t		DeviceId;
+	uint32_t		Length;
+	uint32_t		Recorded;
+	uint32_t		LabelId;
+	uint32_t		PurchaseDate;
+	uint32_t		DateCreated;
+	uint32_t		FirstDate;
+	uint32_t		LastDate;
+	uint32_t		NumTracks;
 	float			PurchasePrice;
-	u_int16_t		PurchaseId;
-	u_int8_t		DeviceType;
-	u_int8_t		Pages;
+	uint16_t		PurchaseId;
+	uint8_t		DeviceType;
+	uint8_t		Pages;
 
 	DataDevice();
 	virtual ~DataDevice();
-	virtual int CompareNode(CTreeItem* item);
-	virtual int CompareValue(void* value);
 	void Clear();
 
-	int CopyFrom(DataDevice* t);
-	int SetTitle(const char* title);
-	int SetSubTitle(const char* artist);
-	ppl6::CString GetTitle() const;
-	ppl6::CString GetSubTitle() const;
+	void CopyFrom(const DataDevice& other);
+	void CopyDataFrom(const DataDevice& other);
+	void SetTitle(const ppl7::String& title);
+	void SetSubTitle(const ppl7::String& subtitle);
+	const ppl7::String& GetTitle() const;
+	const ppl7::String& GetSubTitle() const;
 
-	ppl6::CBinary* Export();
-	int Import(ppl6::CBinary* bin, int version);
+	void Export(ppl7::ByteArray& bin) const;
+	void Import(const ppl7::ByteArrayPtr& bin, int version);
 };
 
-class CDeviceStore : public CStorageType
+class CDeviceStore : public CStorageBase
 {
 private:
-	ppl6::CMutex Mutex;
-	ppl6::CTree Tree;
-	int Save(DataDevice* t);
-	u_int32_t highest[MAX_DEVICE_TYPES + 1];
+	ppl7::Mutex Mutex;
+	std::map<uint64_t, DataDevice>Tree;
+
+	void SaveToStorage(DataDevice& t);
+	DataTitle* SaveToMemory(const DataDevice& t);
+
+	uint32_t highest[MAX_DEVICE_TYPES + 1];
 
 public:
 	CDeviceStore();
 	virtual ~CDeviceStore();
-	virtual void Clear();
 	virtual const char* GetChunkName();
-	int Put(DataDevice* entry);
-	int Renumber(u_int8_t DeviceType, u_int32_t oldId, u_int32_t newId);
-	DataDevice* Get(u_int8_t DeviceType, u_int32_t DeviceId);
-	int GetCopy(u_int8_t DeviceType, u_int32_t DeviceId, DataDevice* t);
-	virtual int LoadChunk(CWMFileChunk* chunk);
-	u_int32_t GetHighestDevice(int DeviceType);
-	int Update(u_int8_t DeviceType, u_int32_t DeviceId);
+	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
+	int Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId);
+	uint32_t GetHighestDevice(uint8_t DeviceType) const;
+	int Update(uint8_t DeviceType, uint32_t DeviceId);
+
+	uint32_t Put(const DataDevice& entry);
+	bool Exists(uint8_t DeviceType, uint32_t DeviceId) const;
+	//void Delete(uint8_t DeviceType, uint32_t DeviceId);
+	const DataDevice& Get(uint8_t DeviceType, uint32_t DeviceId) const;
+	const DataDevice* GetPtr(uint8_t DeviceType, uint32_t DeviceId) const;
+	uint32_t MaxId(uint8_t) const;
+
 };
 
 /*******************************************************
@@ -303,11 +292,11 @@ class DataTrack : public CStorageItem, public ppl6::CTreeItem
 private:
 	//ppluint64	Key;
 public:
-	u_int32_t	DeviceId;
-	u_int32_t	TitleId;
-	u_int16_t	Track;
-	u_int8_t	Device;
-	u_int8_t	Page;
+	uint32_t	DeviceId;
+	uint32_t	TitleId;
+	uint16_t	Track;
+	uint8_t	Device;
+	uint8_t	Page;
 
 	DataTrack();
 	virtual ~DataTrack();
@@ -316,7 +305,7 @@ public:
 
 	void Clear();
 	int CopyFrom(DataTrack* t);
-	int SetValue(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track, u_int32_t TitleId);
+	int SetValue(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId);
 	ppl6::CBinary* Export();
 	int Import(ppl6::CBinary* bin, int version);
 };
@@ -325,9 +314,9 @@ public:
 class DataTrackHint : public ppl6::CTreeItem
 {
 public:
-	u_int32_t	DeviceId;
-	u_int8_t	Device;
-	u_int8_t	Page;
+	uint32_t	DeviceId;
+	uint8_t	Device;
+	uint8_t	Page;
 	int			min, max;
 
 	DataTrackHint();
@@ -336,7 +325,7 @@ public:
 	virtual int CompareValue(void* value);
 };
 
-class CTrackStore : public CStorageType
+class CTrackStore : public CStorageBase
 {
 private:
 	ppl6::CMutex Mutex;
@@ -344,19 +333,19 @@ private:
 	ppl6::CTree TrackHints;
 	int Save(DataTrack* t);
 	int UpdateHints(DataTrack* track);
-	DataTrackHint* GetHints(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page);
+	DataTrackHint* GetHints(uint8_t Device, uint32_t DeviceId, uint8_t Page);
 
 public:
 	CTrackStore();
 	virtual ~CTrackStore();
-	virtual void Clear();
 	virtual const char* GetChunkName();
+	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
 	int Put(DataTrack* entry);
 	int Delete(DataTrack* entry);
-	DataTrack* Get(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track);
-	int GetCopy(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page, u_int16_t Track, DataTrack* t);
-	CTrackList* GetTracklist(u_int8_t Device, u_int32_t DeviceId, u_int8_t Page);
-	virtual int LoadChunk(CWMFileChunk* chunk);
+	DataTrack* Get(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track);
+	int GetCopy(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, DataTrack* t);
+	CTrackList* GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page);
 
 };
 
@@ -391,7 +380,7 @@ public:
 	int Import(ppl6::CBinary* bin, int version);
 };
 
-class CShortcutStore : public CStorageType
+class CShortcutStore : public CStorageBase
 {
 private:
 	ppl6::CMutex Mutex;
@@ -401,14 +390,14 @@ private:
 public:
 	CShortcutStore();
 	virtual ~CShortcutStore();
-	virtual void Clear();
 	virtual const char* GetChunkName();
+	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
 	int Put(DataShortcut* entry);
 	DataShortcut* Get(const char* shortcut);
 	int Delete(const char* shortcut);
 	int GetCopy(const char* shortcut, DataShortcut* t);
 	void List();
-	virtual int LoadChunk(CWMFileChunk* chunk);
 	void Reset();
 	DataShortcut* GetFirst();
 	DataShortcut* GetNext();
@@ -423,8 +412,8 @@ public:
 class CSimpleTable : public CStorageItem, public ppl6::CTreeItem
 {
 public:
-	u_int32_t		Id;
-	u_int32_t		References;
+	uint32_t		Id;
+	uint32_t		References;
 	char* Value;
 	CSimpleTable();
 	CSimpleTable(const CSimpleTable& other);
@@ -452,22 +441,22 @@ typedef struct {
 	CSimpleTable* t;
 } TABLE;
 
-class CTableStore : public CStorageType
+class CTableStore : public CStorageBase
 {
 public:
-	typedef std::set<u_int32_t> IndexTree;
+	typedef std::set<uint32_t> IndexTree;
 private:
 	ppl6::CMutex Mutex;
 	ppl6::CTree Tree;
 	TABLE* TableIndex;
-	u_int32_t max;
-	u_int32_t highestId;
-	int Increase(u_int32_t maxid);
+	uint32_t max;
+	uint32_t highestId;
+	int Increase(uint32_t maxid);
 	int Save(CSimpleTable* t);
 	typedef std::map<ppl7::String, IndexTree >	WordTree;
 
-	void removeFromWordTree(u_int32_t id);
-	void addToWordTree(u_int32_t id);
+	void removeFromWordTree(uint32_t id);
+	void addToWordTree(uint32_t id);
 	void makeUnion(IndexTree& Result, const IndexTree& Tree1, const IndexTree& Tree2);
 	void copy(IndexTree& Result, const IndexTree& src);
 
@@ -476,18 +465,18 @@ private:
 public:
 	CTableStore();
 	virtual ~CTableStore();
-	virtual void Clear();
 	virtual const char* GetChunkName();
-	virtual int LoadChunk(CWMFileChunk* chunk);
+	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
 	int Put(CSimpleTable* entry);
-	CSimpleTable* Get(u_int32_t id);
+	CSimpleTable* Get(uint32_t id);
 	CSimpleTable* Find(const char* value);
 	int GetId(const char* value);
 	int FindOrAdd(const char* value);
 	int FindAll(ppl6::CWString& value, ppl6::CTree& Result);
-	int GetCopy(u_int32_t id, CSimpleTable* t);
+	int GetCopy(uint32_t id, CSimpleTable* t);
 
-	u_int32_t findWords(IndexTree& tree, const ppl7::String& words);
+	uint32_t findWords(IndexTree& tree, const ppl7::String& words);
 };
 
 class CVersionStore : public CTableStore
@@ -533,7 +522,7 @@ public:
 class DataOimp : public CStorageItem
 {
 public:
-	u_int32_t			Id;
+	uint32_t			Id;
 	ppl7::String		Filename;
 	ppl7::AssocArray	ID3v1;
 	ppl7::AssocArray	ID3v2;
@@ -554,27 +543,27 @@ typedef struct {
 	DataOimp* t;
 } OIMPDATA;
 
-class COimpDataStore : public CStorageType
+class COimpDataStore : public CStorageBase
 {
 private:
 	ppl6::CMutex Mutex;
 	OIMPDATA* TableIndex;
-	u_int32_t max;
-	u_int32_t highestId;
-	int Increase(u_int32_t maxid);
+	uint32_t max;
+	uint32_t highestId;
+	int Increase(uint32_t maxid);
 	int Save(DataOimp* t);
 
 public:
 	COimpDataStore();
 	virtual ~COimpDataStore();
-	virtual void Clear();
 	virtual const char* GetChunkName();
-	virtual int LoadChunk(CWMFileChunk* chunk);
+	virtual void Clear();
+	virtual void LoadChunk(const CWMFileChunk& chunk);
 	int Put(DataOimp* entry);
 
-	int GetCopy(u_int32_t id, DataOimp* t);
+	int GetCopy(uint32_t id, DataOimp* t);
 
-	void SetHighestImportDataId(u_int32_t id);
+	void SetHighestImportDataId(uint32_t id);
 
 	void List();
 };

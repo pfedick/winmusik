@@ -148,8 +148,6 @@ DataDevice::DataDevice()
  * Konstruktor der Klasse. Er setzt alle Variablen auf 0.
  */
 {
-	Title=NULL;
-	SubTitle=NULL;
 	DeviceId=0;
 	Length=0;
 	Recorded=0;
@@ -183,10 +181,8 @@ void DataDevice::Clear()
  * Storage-Klasse CStorageItem::Clear aufgerufen.
  */
 {
-	if (Title) free(Title);
-	if (SubTitle) free(SubTitle);
-	Title=NULL;
-	SubTitle=NULL;
+	Title.clear();
+	SubTitle.clear();
 	DeviceId=0;
 	Length=0;
 	Recorded=0;
@@ -204,58 +200,14 @@ void DataDevice::Clear()
 	formatversion=1;
 }
 
-int DataDevice::CompareNode(CTreeItem* item)
-/*!\brief Elemente vergleichen
- *
- * \desc
- * Funktion zum Vergleichen zweier Baumelemente.
- * Bei dieser Funktion wird als Parameter ein Pointer auf ein Baum-Element erwartet.
- *
- * \param[in] item Pointer auf ein Baum-Element, mit dem dieses Element verglichen werden soll
- *
- * \returns Die Funktion liefert einen der folgenden Werte zurück:
- * - 0: Der Wert in \p item ist identisch mit dem Wert dieses Elements
- * - +1: Der Wert in \p item ist größer als der Wert dieses Elements
- * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
- */
+void DataDevice::CopyFrom(const DataDevice& other)
 {
-	DataDevice* v=(DataDevice*)item;
-	// DeviceType vergleichen
-	if (v->DeviceType > DeviceType) return 1;
-	else if (v->DeviceType < DeviceType) return -1;
-	// DeviceId vergleichen
-	if (v->DeviceId > DeviceId) return 1;
-	else if (v->DeviceId < DeviceId) return -1;
-	return 0;
+	Clear();
+	CopyDataFrom(other);
+	CopyStorageFrom(other);
 }
 
-int DataDevice::CompareValue(void* value)
-/*!\brief Elemente vergleichen
- *
- * \desc
- * Funktion zum Vergleichen zweier Baumelemente.
- * Bei dieser Funktion wird als Parameter ein void Pointer auf eine Struktur vom
- * Typ DATADEVICE erwartet.
- *
- * \param[in] value Pointer auf eine Struktur DATADEVICE zum Vergleichen.
- *
- * \returns Die Funktion liefert einen der folgenden Werte zurück:
- * - 0: Der Wert in \p value ist identisch mit dem Wert dieses Elements
- * - +1: Der Wert in \p value ist größer als der Wert dieses Elements
- * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
- */
-{
-	DATADEVICE* v=(DATADEVICE*)value;
-	// Device vergleichen
-	if (v->DeviceType > DeviceType) return 1;
-	else if (v->DeviceType < DeviceType) return -1;
-	// DeviceId vergleichen
-	if (v->DeviceId > DeviceId) return 1;
-	else if (v->DeviceId < DeviceId) return -1;
-	return 0;
-}
-
-int DataDevice::CopyFrom(DataDevice* t)
+void DataDevice::CopyDataFrom(const DataDevice& other)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataDevice Datensatzes in diesen hineinkopiert.
@@ -269,32 +221,26 @@ int DataDevice::CopyFrom(DataDevice* t)
  * Auch die Storage-Datenm werden von \p t übernommen.
  */
 {
-	if (!t) {
-		ppl6::SetError(194, "int DataDevice::CopyFrom(==> DataDevice *t <==)");
-		return 0;
-	}
-	Clear();
-	SetTitle(t->Title);
-	SetSubTitle(t->SubTitle);
-	DeviceId=t->DeviceId;
-	Length=t->Length;
-	Recorded=t->Recorded;
-	LabelId=t->LabelId;
-	PurchaseDate=t->PurchaseDate;
-	DateCreated=t->DateCreated;
-	FirstDate=t->FirstDate;
-	LastDate=t->LastDate;
-	NumTracks=t->NumTracks;
-	PurchasePrice=t->PurchasePrice;
-	PurchaseId=t->PurchaseId;
-	DeviceType=t->DeviceType;
-	Pages=t->Pages;
-	CopyStorageFrom(t);
-	return 1;
+
+	Title=other.Title;
+	SubTitle=other.SubTitle;
+	DeviceId=other.DeviceId;
+	Length=other.Length;
+	Recorded=other.Recorded;
+	LabelId=other.LabelId;
+	PurchaseDate=other.PurchaseDate;
+	DateCreated=other.DateCreated;
+	FirstDate=other.FirstDate;
+	LastDate=other.LastDate;
+	NumTracks=other.NumTracks;
+	PurchasePrice=other.PurchasePrice;
+	PurchaseId=other.PurchaseId;
+	DeviceType=other.DeviceType;
+	Pages=other.Pages;
 }
 
 
-int DataDevice::SetTitle(const char* title)
+void DataDevice::SetTitle(const ppl7::String& title)
 /*!\brief Haupttitel setzen
  *
  * Mit dieser Funktion wird der Titel des Tonträgers gesetzt.
@@ -303,20 +249,10 @@ int DataDevice::SetTitle(const char* title)
  * \returns Liefert 1 zurück, wenn der Titel erfolgreich gesetzt werden konnte.
  */
 {
-	if (!title) {
-		ppl6::SetError(194, "int DataDevice::SetTitle(==> const char *title <==)");
-		return 0;
-	}
-	if (Title) free(Title);
-	Title=strdup(title);
-	if (!Title) {
-		ppl6::SetError(2);
-		return 0;
-	}
-	return 1;
+	this->Title=title;
 }
 
-int DataDevice::SetSubTitle(const char* subtitle)
+void DataDevice::SetSubTitle(const ppl7::String& subtitle)
 /*!\brief Untertitel setzen
  *
  * Mit dieser Funktion wird der Untertitel des Tonträgers gesetzt.
@@ -325,33 +261,21 @@ int DataDevice::SetSubTitle(const char* subtitle)
  * \returns Liefert 1 zurück, wenn der Untertitel erfolgreich gesetzt werden konnte.
  */
 {
-	if (!subtitle) {
-		ppl6::SetError(194, "int DataDevice::SetSubTitle(==> const char *subtitle <==)");
-		return 0;
-	}
-	if (SubTitle) free(SubTitle);
-	SubTitle=strdup(subtitle);
-	if (!SubTitle) {
-		ppl6::SetError(2);
-		return 0;
-	}
-	return 1;
+	this->SubTitle=subtitle;
 }
 
-ppl6::CString DataDevice::GetTitle() const
+const ppl7::String& DataDevice::GetTitle() const
 {
-	if (Title) return ppl6::CString(Title);
-	return ppl6::CString();
+	return Title;
 }
 
-ppl6::CString DataDevice::GetSubTitle() const
+const ppl7::String& DataDevice::GetSubTitle() const
 {
-	if (SubTitle) return ppl6::CString(SubTitle);
-	return ppl6::CString();
+	return SubTitle;
 }
 
 
-ppl6::CBinary* DataDevice::Export()
+void DataDevice::Export(ppl7::ByteArray& bin) const
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -366,47 +290,31 @@ ppl6::CBinary* DataDevice::Export()
 {
 	// Benötigte Bytes berechnen
 	int size=48;
-	int lenTitle=0;
-	int lenSubTitle=0;
-	if (Title) lenTitle=strlen(Title);
-	if (SubTitle) lenSubTitle=strlen(SubTitle);
+	int lenTitle=Title.size();
+	int lenSubTitle=SubTitle.size();
 	size=size + lenTitle + lenSubTitle;
 	// Speicher allokieren
-	char* a=(char*)malloc(size);
-	if (!a) {
-		ppl6::SetError(2);
-		return NULL;
-	}
-	ppl6::Poke8(a, DeviceType);
-	ppl6::Poke32(a + 1, DeviceId);
-	ppl6::Poke8(a + 5, Pages);
-	ppl6::Poke32(a + 6, Length);
-	ppl6::Poke32(a + 10, Recorded);
-	ppl6::Poke16(a + 14, PurchaseId);
-	ppl6::Poke32(a + 16, LabelId);
-	ppl6::Poke32(a + 20, PurchaseDate);
+	char* a=(char*)bin.malloc(size);
+	ppl7::Poke8(a, DeviceType);
+	ppl7::Poke32(a + 1, DeviceId);
+	ppl7::Poke8(a + 5, Pages);
+	ppl7::Poke32(a + 6, Length);
+	ppl7::Poke32(a + 10, Recorded);
+	ppl7::Poke16(a + 14, PurchaseId);
+	ppl7::Poke32(a + 16, LabelId);
+	ppl7::Poke32(a + 20, PurchaseDate);
 	ppl6::PokeFloat(a + 24, PurchasePrice);
-	ppl6::Poke32(a + 28, DateCreated);
-	ppl6::Poke32(a + 32, FirstDate);
-	ppl6::Poke32(a + 36, LastDate);
-	ppl6::Poke32(a + 40, NumTracks);
-	ppl6::Poke16(a + 44, lenTitle);
-	if (lenTitle) strncpy(a + 46, Title, lenTitle);
-	ppl6::Poke16(a + 46 + lenTitle, lenSubTitle);
-	if (lenSubTitle) strncpy(a + 48 + lenTitle, SubTitle, lenSubTitle);
-
-	ppl6::CBinary* bin=new ppl6::CBinary;
-	if (!bin) {
-		ppl6::SetError(2);
-		return NULL;
-	}
-	bin->Set(a, size);
-	// CBinary ist verantwortlich den Speicher wieder freizugeben
-	bin->ManageMemory();
-	return bin;
+	ppl7::Poke32(a + 28, DateCreated);
+	ppl7::Poke32(a + 32, FirstDate);
+	ppl7::Poke32(a + 36, LastDate);
+	ppl7::Poke32(a + 40, NumTracks);
+	ppl7::Poke16(a + 44, lenTitle);
+	if (lenTitle) strncpy(a + 46, (const char*)Title, lenTitle);
+	ppl7::Poke16(a + 46 + lenTitle, lenSubTitle);
+	if (lenSubTitle) strncpy(a + 48 + lenTitle, (const char*)SubTitle, lenSubTitle);
 }
 
-int DataDevice::Import(ppl6::CBinary* bin, int version)
+void DataDevice::Import(const ppl7::ByteArrayPtr& bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -417,40 +325,33 @@ int DataDevice::Import(ppl6::CBinary* bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-	if (!bin) {
-		ppl6::SetError(194, "int DataDevice::Import(==> ppl6::CBinary *bin <==)");
-		return 0;
-	}
 	if (version < 1 || version>1) {
-		ppl6::SetError(20023, "%i", version);
-		return 0;
+		throw UnknownRecordVersion("Device %d", version);
 	}
-	int size=bin->Size();
-	const char* a=(char*)bin->GetPtr();
+	size_t size=bin.size();
+	const char* a=(const char*)bin.ptr();
 	// Die Größe muss mindestens 48 Byte betragen
 	if (size < 48 || a == NULL) {
-		ppl6::SetError(20020);
-		return 0;
+		throw InvalidRecord();
 	}
 	Clear();
-	DeviceType=ppl6::Peek8(a);
-	DeviceId=ppl6::Peek32(a + 1);
-	Pages=ppl6::Peek8(a + 5);
-	Length=ppl6::Peek32(a + 6);
-	Recorded=ppl6::Peek32(a + 10);
-	PurchaseId=ppl6::Peek16(a + 14);
-	LabelId=ppl6::Peek32(a + 16);
-	PurchaseDate=ppl6::Peek32(a + 20);
+	DeviceType=ppl7::Peek8(a);
+	DeviceId=ppl7::Peek32(a + 1);
+	Pages=ppl7::Peek8(a + 5);
+	Length=ppl7::Peek32(a + 6);
+	Recorded=ppl7::Peek32(a + 10);
+	PurchaseId=ppl7::Peek16(a + 14);
+	LabelId=ppl7::Peek32(a + 16);
+	PurchaseDate=ppl7::Peek32(a + 20);
 	PurchasePrice=ppl6::PeekFloat(a + 24);
-	DateCreated=ppl6::Peek32(a + 28);
-	FirstDate=ppl6::Peek32(a + 32);
-	LastDate=ppl6::Peek32(a + 36);
-	NumTracks=ppl6::Peek32(a + 40);
-	int lenTitle=ppl6::Peek16(a + 44);
-	int lenSubTitle=ppl6::Peek16(a + 46 + lenTitle);
+	DateCreated=ppl7::Peek32(a + 28);
+	FirstDate=ppl7::Peek32(a + 32);
+	LastDate=ppl7::Peek32(a + 36);
+	NumTracks=ppl7::Peek32(a + 40);
+	int lenTitle=ppl7::Peek16(a + 44);
+	int lenSubTitle=ppl7::Peek16(a + 46 + lenTitle);
 	if (lenTitle) Title=ppl6::strndup(a + 46, lenTitle);
 	if (lenSubTitle) SubTitle=ppl6::strndup(a + 48 + lenTitle, lenSubTitle);
-	return 1;
 }
 
 
@@ -504,9 +405,9 @@ void CDeviceStore::Clear()
 {
 	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
 	// die alle Datensätze löscht.
-	Mutex.Lock();
-	Tree.Clear(true);
-	Mutex.Unlock();
+	Mutex.lock();
+	Tree.clear();
+	Mutex.unlock();
 }
 
 const char* CDeviceStore::GetChunkName()
@@ -745,7 +646,7 @@ int CDeviceStore::Update(ppluint8 DeviceType, ppluint32 DeviceId)
 	DataDevice* t;
 	CTrackList* tracks;
 	DataTrack* dt;
-	DataTitle* ti;
+	const DataTitle* ti;
 	Mutex.Lock();
 	t=(DataDevice*)Tree.Find((void*)&dd);
 	if (t) {

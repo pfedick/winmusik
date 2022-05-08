@@ -20,6 +20,7 @@
 
 
 #include "winmusik3.h"
+#include "wm_musicalkeys.h"
 
 
 TrackInfo::TrackInfo()
@@ -295,7 +296,7 @@ DataTitle::DataTitle(const DataTitle& other)
 	: CStorageItem(other)
 {
 	formatversion=5;
-	CopyFrom(&other);
+	CopyFrom(other);
 }
 
 DataTitle::~DataTitle()
@@ -307,46 +308,12 @@ DataTitle::~DataTitle()
 {
 }
 
-#ifdef OWNHEAP
-void* DataTitle::operator new (size_t size)
-/*!\brief Speicher allokieren
- *
- * Der New-Operator dieser Klasse wurde überschrieben, damit der Speicher nicht mehr aus dem
- * Hauptspeicher allokiert wird und diesen somit schnell fragmentiert, sondern aus dem internen
- * Heap.
- *
- * \param[in] size Größe des benötigten Speicherblocks. Dieser muss identisch sein mit
- * sizeof(CString)
- *
- * \returns bei Erfolg gibt die Funktion einen Pointer auf den Beginn des Speicherblocks zurück,
- * im Fehlerfall wird eine Exception generiert
- *
- */
-{
-	//printf ("Alloc %i Bytes for DataTitle\n",size);
-	void* mem=malloc(size);
-	return mem;
-}
 
-void DataTitle::operator delete (void* ptr, size_t size)
-/*!\brief Speicher freigeben
- *
- * Die Klasse verwendet Speicher aus dem internen Heap, der durch Aufruf dieses überladenen
- * delete-Operators wieder freigegeben wird
- *
- * \param[in] ptr Zeiger auf den freizugebenden Speicherblock
- * \param[in] size Größe des Speicherblocks.
- */
-{
-	//printf ("Delete\n");
-	free(ptr);
-}
-#endif
 
 
 DataTitle& DataTitle::operator=(const DataTitle& other)
 {
-	CopyFrom(&other);
+	CopyFrom(other);
 	return *this;
 }
 
@@ -434,12 +401,7 @@ void DataTitle::Clear()
 }
 
 
-int DataTitle::CopyFrom(const DataTitle& other)
-{
-	return CopyFrom(&other);
-}
-
-int DataTitle::CopyFrom(const DataTitle* t)
+void DataTitle::CopyFrom(const DataTitle& other)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen DataTitle Datensatzes in diesen hineinkopiert.
@@ -453,41 +415,42 @@ int DataTitle::CopyFrom(const DataTitle* t)
  * Auch die Storage-Daten werden von \p t übernommen.
  */
 {
-	if (!t) {
-		return 0;
-	}
 	Clear();
-	Artist=t->Artist;
-	Title=t->Title;
-	Remarks=t->Remarks;
-	Album=t->Album;
-	Tags=t->Tags;
-	TitleId=t->TitleId;
-	DeviceId=t->DeviceId;
-	Length=t->Length;
-	VersionId=t->VersionId;
-	GenreId=t->GenreId;
-	RecordSourceId=t->RecordSourceId;
-	RecordDeviceId=t->RecordDeviceId;
-	LabelId=t->LabelId;
-	BPM=t->BPM;
-	RecordDate=t->RecordDate;
-	ReleaseDate=t->ReleaseDate;
-	Track=t->Track;
-	Bitrate=t->Bitrate;
-	DeviceType=t->DeviceType;
-	Page=t->Page;
-	Channels=t->Channels;
-	Quality=t->Quality;
-	Rating=t->Rating;
-	Flags=t->Flags;
-	ImportData=t->ImportData;
-	CoverPreview=t->CoverPreview;
-	Size=t->Size;
-	Key=t->Key;
-	EnergyLevel=t->EnergyLevel;
-	CopyStorageFrom(t);
-	return 1;
+	CopyDataFrom(other);
+	CopyStorageFrom(other);
+}
+
+void DataTitle::CopyDataFrom(const DataTitle& other)
+{
+	Artist=other.Artist;
+	Title=other.Title;
+	Remarks=other.Remarks;
+	Album=other.Album;
+	Tags=other.Tags;
+	TitleId=other.TitleId;
+	DeviceId=other.DeviceId;
+	Length=other.Length;
+	VersionId=other.VersionId;
+	GenreId=other.GenreId;
+	RecordSourceId=other.RecordSourceId;
+	RecordDeviceId=other.RecordDeviceId;
+	LabelId=other.LabelId;
+	BPM=other.BPM;
+	RecordDate=other.RecordDate;
+	ReleaseDate=other.ReleaseDate;
+	Track=other.Track;
+	Bitrate=other.Bitrate;
+	DeviceType=other.DeviceType;
+	Page=other.Page;
+	Channels=other.Channels;
+	Quality=other.Quality;
+	Rating=other.Rating;
+	Flags=other.Flags;
+	ImportData=other.ImportData;
+	CoverPreview=other.CoverPreview;
+	Size=other.Size;
+	Key=other.Key;
+	EnergyLevel=other.EnergyLevel;
 }
 
 void DataTitle::SetTitle(const char* title)
@@ -611,7 +574,7 @@ void DataTitle::SetAlbum(const ppl7::String& album)
 }
 
 
-ppl7::String DataTitle::getKeyName(MusicKeyType type)
+ppl7::String DataTitle::getKeyName(MusicKeyType type) const
 {
 	return DataTitle::keyName(Key, type);
 }
@@ -733,7 +696,7 @@ ppluint8 DataTitle::keyId(const ppl7::String& name)
 }
 
 
-ppl6::CBinary* DataTitle::Export()
+void DataTitle::Export(ppl7::ByteArray& bin)
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -763,68 +726,53 @@ ppl6::CBinary* DataTitle::Export()
 	lenAlbum=static_cast<int>(Album.size());
 	size=size + lenArtist + lenTitle + lenRemarks + lenAlbum + lenTags + static_cast<int>(CoverPreview.size());
 	//size=size+lenArtist+lenTitle+lenRemarks+lenAlbum;
-	char* a=static_cast<char*>(malloc(static_cast<size_t>(size)));
-	if (!a) {
-		ppl6::SetError(2);
-		return nullptr;
-	}
-	ppl6::Poke32(a + 0, TitleId);
-	ppl6::Poke8(a + 4, Flags);
-	ppl6::Poke32(a + 5, DeviceId);
-	ppl6::Poke32(a + 9, Length);
-	ppl6::Poke32(a + 13, VersionId);
-	ppl6::Poke32(a + 17, LabelId);
-	ppl6::Poke32(a + 21, BPM);
-	ppl6::Poke32(a + 25, RecordDate);
-	ppl6::Poke32(a + 29, ReleaseDate);
-	ppl6::Poke16(a + 33, RecordSourceId);
-	ppl6::Poke16(a + 35, Track);
-	ppl6::Poke16(a + 37, Bitrate);
-	ppl6::Poke16(a + 39, GenreId);
-	ppl6::Poke16(a + 41, RecordDeviceId);
-	ppl6::Poke8(a + 43, DeviceType);
-	ppl6::Poke8(a + 44, Page);
-	ppl6::Poke8(a + 45, Channels);
-	ppl6::Poke8(a + 46, Quality);
-	ppl6::Poke8(a + 47, Rating);
-	ppl6::Poke32(a + 48, ImportData);
-	ppl6::Poke32(a + 52, Size);
-	ppl6::Poke8(a + 56, Key);
-	ppl6::Poke8(a + 57, EnergyLevel);
+	char* a=(char*)bin.malloc(size);
+	ppl7::Poke32(a + 0, TitleId);
+	ppl7::Poke8(a + 4, Flags);
+	ppl7::Poke32(a + 5, DeviceId);
+	ppl7::Poke32(a + 9, Length);
+	ppl7::Poke32(a + 13, VersionId);
+	ppl7::Poke32(a + 17, LabelId);
+	ppl7::Poke32(a + 21, BPM);
+	ppl7::Poke32(a + 25, RecordDate);
+	ppl7::Poke32(a + 29, ReleaseDate);
+	ppl7::Poke16(a + 33, RecordSourceId);
+	ppl7::Poke16(a + 35, Track);
+	ppl7::Poke16(a + 37, Bitrate);
+	ppl7::Poke16(a + 39, GenreId);
+	ppl7::Poke16(a + 41, RecordDeviceId);
+	ppl7::Poke8(a + 43, DeviceType);
+	ppl7::Poke8(a + 44, Page);
+	ppl7::Poke8(a + 45, Channels);
+	ppl7::Poke8(a + 46, Quality);
+	ppl7::Poke8(a + 47, Rating);
+	ppl7::Poke32(a + 48, ImportData);
+	ppl7::Poke32(a + 52, Size);
+	ppl7::Poke8(a + 56, Key);
+	ppl7::Poke8(a + 57, EnergyLevel);
 	p=58;
-	ppl6::Poke16(a + p, lenArtist & 0xffff);
+	ppl7::Poke16(a + p, lenArtist & 0xffff);
 	if (lenArtist) strncpy(a + p + 2, (const char*)Artist, lenArtist);
 	p+=lenArtist + 2;
-	ppl6::Poke16(a + p, lenTitle);
+	ppl7::Poke16(a + p, lenTitle);
 	if (lenTitle) strncpy(a + p + 2, (const char*)Title, lenTitle);
 	p+=lenTitle + 2;
-	ppl6::Poke16(a + p, lenRemarks);
+	ppl7::Poke16(a + p, lenRemarks);
 	if (lenRemarks) strncpy(a + p + 2, (const char*)Remarks, lenRemarks);
 	p+=lenRemarks + 2;
-	ppl6::Poke16(a + p, lenAlbum);
+	ppl7::Poke16(a + p, lenAlbum);
 	if (lenAlbum) strncpy(a + p + 2, (const char*)Album, lenAlbum);
 	p+=lenAlbum + 2;
-	ppl6::Poke16(a + p, lenTags);
+	ppl7::Poke16(a + p, lenTags);
 	if (lenTags) strncpy(a + p + 2, (const char*)Tags, lenTags);
 	p+=lenTags + 2;
 
-	ppl6::Poke16(a + p, CoverPreview.size());
+	ppl7::Poke16(a + p, CoverPreview.size());
 	if (CoverPreview.size()) memcpy(a + p + 2, CoverPreview.ptr(), CoverPreview.size());
 	p+=CoverPreview.size() + 2;
-
-
-	/*
-	ppluint32 crc=ppl6::crc32(a+4,size-4);
-	ppl6::Poke32(a,crc);
-	*/
-
-	ppl6::CBinary* bin=new ppl6::CBinary;
-	bin->Set(a, size);
-	bin->ManageMemory();
-	return bin;
 }
 
-int DataTitle::Import(ppl6::CBinary* bin, int version)
+void DataTitle::Import(const ppl7::ByteArrayPtr& bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -835,40 +783,27 @@ int DataTitle::Import(ppl6::CBinary* bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-	if (!bin) {
-		ppl6::SetError(194, "int DataTitle::Import(==> ppl6::CBinary *bin <==)");
-		return 0;
-	}
 	if (version < 1 || version>5) {
-		ppl6::SetError(20023, "%i", version);
-		return 0;
+		throw UnknownRecordVersion("%d", version);
 	}
-	int size=bin->Size();
-	const char* a=(const char*)bin->GetPtr();
+	size_t size=bin.size();
+	const char* a=(const char*)bin.ptr();
 	// Die Größe muss mindestens 60 Byte betragen
 	if (size < 60 || a == NULL) {
-		ppl6::SetError(20011);
-		return 0;
+		throw InvalidRecord();
 	}
-	/*
-	ppluint32 crc=ppl6::crc32(a+4,size-4);
-	if (crc!=ppl6::Peek32(a)) {
-		ppl6::SetError(20012);
-		return 0;
-	}
-	*/
 	Clear();
 	int p=0;
 	int len;
-	TitleId=ppl6::Peek32(a + 0);
-	Flags=ppl6::Peek8(a + 4);
-	DeviceId=ppl6::Peek32(a + 5);
-	Length=ppl6::Peek32(a + 9);
-	VersionId=ppl6::Peek32(a + 13);
-	LabelId=ppl6::Peek32(a + 17);
-	BPM=ppl6::Peek32(a + 21);
-	RecordDate=ppl6::Peek32(a + 25);
-	ReleaseDate=ppl6::Peek32(a + 29);
+	TitleId=ppl7::Peek32(a + 0);
+	Flags=ppl7::Peek8(a + 4);
+	DeviceId=ppl7::Peek32(a + 5);
+	Length=ppl7::Peek32(a + 9);
+	VersionId=ppl7::Peek32(a + 13);
+	LabelId=ppl7::Peek32(a + 17);
+	BPM=ppl7::Peek32(a + 21);
+	RecordDate=ppl7::Peek32(a + 25);
+	ReleaseDate=ppl7::Peek32(a + 29);
 	if (ReleaseDate < 10000000) {			// Korrektur fehlerhafter Timestamps
 		if (ReleaseDate > 1900 && ReleaseDate < 2015) {
 			ReleaseDate=ReleaseDate * 10000;
@@ -886,100 +821,54 @@ int DataTitle::Import(ppl6::CBinary* bin, int version)
 			RecordDate=ReleaseDate;
 		}
 	}
-	/*
-	if (ReleaseDate<10000000) {
-		printf ("ReleaseDate: %d, RecordDate: %d\n",ReleaseDate,RecordDate);
-	}
-	if (RecordDate<10000000) {
-		printf ("RecordDate: %d, ReleaseDate: %d\n",RecordDate, ReleaseDate);
-	}
-	*/
 
-	RecordSourceId=ppl6::Peek16(a + 33);
-	Track=ppl6::Peek16(a + 35);
-	Bitrate=ppl6::Peek16(a + 37);
-	GenreId=ppl6::Peek16(a + 39);
-	RecordDeviceId=ppl6::Peek16(a + 41);
-	DeviceType=ppl6::Peek8(a + 43);
-	Page=ppl6::Peek8(a + 44);
-	Channels=ppl6::Peek8(a + 45);
-	Quality=ppl6::Peek8(a + 46);
-	Rating=ppl6::Peek8(a + 47);
-	ImportData=ppl6::Peek32(a + 48);
+	RecordSourceId=ppl7::Peek16(a + 33);
+	Track=ppl7::Peek16(a + 35);
+	Bitrate=ppl7::Peek16(a + 37);
+	GenreId=ppl7::Peek16(a + 39);
+	RecordDeviceId=ppl7::Peek16(a + 41);
+	DeviceType=ppl7::Peek8(a + 43);
+	Page=ppl7::Peek8(a + 44);
+	Channels=ppl7::Peek8(a + 45);
+	Quality=ppl7::Peek8(a + 46);
+	Rating=ppl7::Peek8(a + 47);
+	ImportData=ppl7::Peek32(a + 48);
 	if (version == 1) {
 		p=52;
 		Size=0;
 	} else if (version >= 2) {
-		Size=ppl6::Peek32(a + 52);
+		Size=ppl7::Peek32(a + 52);
 		p=56;
 	}
 	if (version >= 4) {
-		Key=ppl6::Peek8(a + 56);
+		Key=ppl7::Peek8(a + 56);
 		p=57;
 	}
 	if (version >= 5) {
-		EnergyLevel=ppl6::Peek8(a + 57);
+		EnergyLevel=ppl7::Peek8(a + 57);
 		p=58;
 	}
-	len=ppl6::Peek16(a + p);
+	len=ppl7::Peek16(a + p);
 	if (len) Artist.set(a + p + 2, len);
 	p+=len + 2;
-	len=ppl6::Peek16(a + p);
+	len=ppl7::Peek16(a + p);
 	if (len) Title.set(a + p + 2, len);
 	p+=len + 2;
-	len=ppl6::Peek16(a + p);
+	len=ppl7::Peek16(a + p);
 	if (len) Remarks.set(a + p + 2, len);
 	p+=len + 2;
-	len=ppl6::Peek16(a + p);
+	len=ppl7::Peek16(a + p);
 	if (len) Album.set(a + p + 2, len);
 	p+=len + 2;
 	if (version >= 3) {
-		len=ppl6::Peek16(a + p);
+		len=ppl7::Peek16(a + p);
 		if (len) Tags.set(a + p + 2, len);
 		p+=len + 2;
 	}
 	if (version >= 2) {
-		len=ppl6::Peek16(a + p);
+		len=ppl7::Peek16(a + p);
 		if (len) CoverPreview.copy(a + p + 2, len);
 	}
-	return 1;
-}
-
-/*!\class CStringCounterItem
- * \brief Zählklasse für Strings
- *
- * Diese Klasse wird verwendet, um das Vorkommen von Strings zu zählen. Sie repräsentiert dabei
- * einen einzelnen Datensatz in einem binären AVL-Baum, weswegen sie von ppl6::CTreeItem abgeleitet ist.
- *
- * Die Klasse wird beispielsweise eingesetzt, um zu zählen, wie häufig der gleiche Interpret in
- * der Datenbank vorkommt.
- */
-
- /*!\var CStringCounterItem::Name
-  * \brief Enthält den String im Unicode-Format (Wide-Character)
-  */
-
-  /*!\var CStringCounterItem::Count
-   * \brief Zähler wie oft der String vorkommt
-   */
-
-int CStringCounterItem::CompareNode(CTreeItem* item)
-{
-	CStringCounterItem* s=(CStringCounterItem*)item;
-	int ret=s->Name.strcmp(Name);
-	//printf ("Item:   %s\nString 2: %s\nResult: %i\n",(char*)s->Name,(char*)Name,ret);
-	if (ret < 0) return -1;
-	if (ret > 0) return 1;
-	return 0;
-}
-
-int CStringCounterItem::CompareValue(void* value)
-{
-	ppl6::CWString* s=(ppl6::CWString*)value;
-	int ret=s->StrCmp(Name);
-	if (ret < 0) return -1;
-	if (ret > 0) return 1;
-	return 0;
 }
 
 
@@ -992,8 +881,6 @@ CTitleStore::CTitleStore()
 	TitleIndex=NULL;
 	max=0;
 	highestId=0;
-	Storage=NULL;
-	highestOimp=0;
 }
 
 CTitleStore::~CTitleStore()
@@ -1004,14 +891,13 @@ CTitleStore::~CTitleStore()
 void CTitleStore::Clear()
 {
 	for (ppluint32 i=0;i < max;i++) {
-		if (TitleIndex[i].t != NULL) delete TitleIndex[i].t;
+		if (TitleIndex[i] != NULL) delete TitleIndex[i];
 	}
 	free(TitleIndex);
 	TitleIndex=NULL;
 	max=0;
 	highestId=0;
-	highestOimp=0;
-	Artists.Clear(true);
+	Artists.clear();
 }
 
 const char* CTitleStore::GetChunkName()
@@ -1019,60 +905,25 @@ const char* CTitleStore::GetChunkName()
 	return "TITL";
 }
 
-int CTitleStore::Increase(ppluint32 maxid)
+void CTitleStore::Increase(ppluint32 maxid)
 {
-	ppluint32 h=maxid + 1000;
-	void* t=calloc(sizeof(TITLE), h);
-	if (!t) return 0;
+	ppluint32 h=maxid + 10000;
+	DataTitle** t=(DataTitle**)calloc(sizeof(DataTitle*), h);
+	if (!t) throw ppl7::OutOfMemoryException();
 	if (TitleIndex) {
-		memcpy(t, TitleIndex, max * sizeof(TITLE));
+		memcpy(t, TitleIndex, max * sizeof(DataTitle*));
 		free(TitleIndex);
 	}
-	TitleIndex=(TITLE*)t;
+	TitleIndex=t;
 	max=h;
-	return 1;
 }
 
-int CTitleStore::Save(DataTitle* t)
+void CTitleStore::SaveToStorage(DataTitle& t)
 {
-	if (!Storage) {
-		return 0;
-	}
-	if (!t) {
-		ppl6::SetError(194, "int CTitelStore::Save(==> CTitle *t <==)");
-		return 0;
-	}
-	if (!Storage->isDatabaseLoading()) {
-		ppl6::CBinary* bin=t->Export();
-		if (!bin) return 0;
-		if (!Storage->Save(this, t, bin)) {
-			ppl6::PushError();
-			delete bin;
-			ppl6::PopError();
-			return 0;
-		}
-		delete bin;
-	}
-	CStringCounterItem* found, * item;
-	if (t->Artist.notEmpty()) {
-		item=new CStringCounterItem;
-		item->Name=t->Artist;
-		item->Count=1;
-		found=(CStringCounterItem*)Artists.Find(item);
-		if (found) {
-			found->Count++;
-			delete item;
-		} else Artists.Add(item);
-	}
-
-
-	/*
-	CArtist *a=new CArtist;
-	a->Name=t->Artist;
-	if (!Artists.Add(a)) delete a;
-	*/
-
-	return 1;
+	CStorage& store=getStorage();
+	ppl7::ByteArray bin;
+	t.Export(bin);
+	store.Save(this, &t, bin);
 }
 
 /*!\brief Kopie eines Titels speichern
@@ -1085,175 +936,106 @@ int CTitleStore::Save(DataTitle* t)
  * den neuen Daten überschrieben und gespeichert.
  *
  */
-int CTitleStore::Put(DataTitle* title)
+uint32_t CTitleStore::Put(const DataTitle& title)
 {
-	if (!title) {
-		return 0;
+	Mutex.lock();
+	try {
+		DataTitle* new_title=SaveToMemory(title);
+		SaveToStorage(*new_title);
+		Mutex.unlock();
+		return new_title->TitleId;
+	} catch (...) {
+		Mutex.unlock();
+		throw;
 	}
-	if (!Storage) {
-		return 0;
-	}
-	ppluint32 save_highestId=highestId;
-	ppluint32 id=0;
-	Mutex.Lock();
-	if (title->TitleId == 0) {
+}
+
+
+DataTitle* CTitleStore::SaveToMemory(const DataTitle& title)
+{
+	uint32_t save_highestId=highestId;
+	uint32_t id=0;
+
+	if (title.TitleId == 0) {
 		// Wir haben einen neuen Titel und vergeben eine Id
-		highestId++;
-		id=highestId;
+		id=highestId + 1;
 	} else {
-		id=title->TitleId;
-		if (id > highestId) highestId=id;
+		id=title.TitleId;
 	}
-
 	if (id >= max) {
-		if (!Increase(id)) {
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
-		}
+		Increase(id);
 	}
+	if (id > highestId) highestId=id;
+
 	// Gibt's den Titel schon?
-	if (TitleIndex[id].t) {
-		if (TitleIndex[id].t != title) {
-			// CopyFrom führt ein Clear aus, daher müssen wir die Storage Daten retten
-			CStorageItem ssave;
-			ssave.CopyStorageFrom(TitleIndex[id].t);
-			// Nun können wir die Daten kopieren
-			if (!TitleIndex[id].t->CopyFrom(title)) {
-				highestId=save_highestId;
-				Mutex.Unlock();
-				return 0;
-			}
-			// StorageDaten wieder herstellen
-			TitleIndex[id].t->CopyStorageFrom(&ssave);
-			TitleIndex[id].t->TitleId=id;
-			if (!Save(TitleIndex[id].t)) {
-				highestId=save_highestId;
-				Mutex.Unlock();
-				return 0;
-			}
-			if (title->ImportData > highestOimp) highestOimp=title->ImportData;
-			// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-			title->CopyStorageFrom(TitleIndex[id].t);
-		} else {
-			if (!Save(TitleIndex[id].t)) {
-				highestId=save_highestId;
-				Mutex.Unlock();
-				return 0;
-			}
+	if (TitleIndex[id]) {
+		TitleIndex[id]->CopyDataFrom(title);
+		return TitleIndex[id];
+	} else {
+		TitleIndex[id]=new DataTitle;
+		if (!TitleIndex[id]) {
+			throw ppl7::OutOfMemoryException();
 		}
-		Mutex.Unlock();
-		return 1;
+		TitleIndex[id]->CopyDataFrom(title);
 	}
-	// Nein, neuer Titel
-	TitleIndex[id].t=new DataTitle;
-	if (!TitleIndex[id].t) {
-		highestId=save_highestId;
-		Mutex.Unlock();
-		return 0;
-	}
-	if (!TitleIndex[id].t->CopyFrom(title)) {
-		ppl6::PushError();
-		delete TitleIndex[id].t;
-		TitleIndex[id].t=NULL;
-		highestId=save_highestId;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	TitleIndex[id].t->TitleId=id;
-	if (!Save(TitleIndex[id].t)) {
-		ppl6::PushError();
-		delete TitleIndex[id].t;
-		TitleIndex[id].t=NULL;
-		highestId=save_highestId;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	if (title->ImportData > highestOimp) highestOimp=title->ImportData;
-	title->CopyStorageFrom(TitleIndex[id].t);
-	title->TitleId=id;
-	Mutex.Unlock();
-	return 1;
+	return TitleIndex[id];
 }
 
-int CTitleStore::Delete(DataTitle* entry)
+void CTitleStore::Delete(uint32_t id)
 {
-	if (!entry) {
-		ppl6::SetError(194, "int CTitleStore::Delete(==> DataTitle *entry <==)");
-		return 0;
-	}
-	if (!Storage) {
-		ppl6::SetError(20014, "CTitleStore");
-		return 0;
-	}
+	CStorage& store=getStorage();
 	// Gibt's den Track überhaupt?
-	ppluint32 id=entry->TitleId;
-	DataTitle* t;
-	t=Get(id);
-	if (!t) return 0;
-	Mutex.Lock();
-	Storage->Delete(this, t);
-	TitleIndex[id].t=NULL;
-	delete t;
-	if (id == highestId) highestId--;	// ID kann wiederverwendet werden
-	return 1;
+	Mutex.lock();
+	try {
+		if (id <= highestId && TitleIndex[id] != NULL) {
+			store.Delete(this, (CStorageItem*)TitleIndex[id]);
+			delete TitleIndex[id];
+			TitleIndex[id]=NULL;
+			if (id == highestId) highestId--;	// ID kann wiederverwendet werden
+		}
+	} catch (...) {
+		Mutex.unlock();
+		throw;
+	}
+	Mutex.unlock();
 }
 
 
-ppluint32 CTitleStore::GetHighestImportDataId()
-{
-	return highestOimp;
-}
-
-ppluint32 CTitleStore::MaxId()
+uint32_t CTitleStore::MaxId() const
 {
 	return highestId;
 }
 
-DataTitle* CTitleStore::Get(ppluint32 id)
+const DataTitle& CTitleStore::Get(uint32_t id) const
 {
-	if (id > highestId) {
-		ppl6::SetError(20010, "%u > %u", id, highestId);
-		return NULL;
+	if (id > highestId || TitleIndex == NULL || TitleIndex[id] == NULL) {
+		throw RecordDoesNotExist();
 	}
-	if (TitleIndex == NULL || TitleIndex[id].t == NULL) {
-		ppl6::SetError(20010, "%u", id);
-		return NULL;
-	}
-	return TitleIndex[id].t;
+	return *TitleIndex[id];
 }
 
-int CTitleStore::GetCopy(ppluint32 id, DataTitle* t)
+const DataTitle* CTitleStore::GetPtr(uint32_t id) const
 {
-	DataTitle* title=Get(id);
-	if (!title) return 0;
-	t->CopyFrom(title);
-	return 1;
+	if (id > highestId || TitleIndex == NULL || TitleIndex[id] == NULL) {
+		throw RecordDoesNotExist();
+	}
+	return TitleIndex[id];
 }
 
-int CTitleStore::LoadChunk(CWMFileChunk* chunk)
+bool CTitleStore::Exists(uint32_t id) const
+{
+	if (id > highestId || TitleIndex == NULL || TitleIndex[id] == NULL) {
+		return false;
+	}
+	return true;
+}
+
+
+void CTitleStore::LoadChunk(const CWMFileChunk& chunk)
 {
 	DataTitle data;
-	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
-	if (!data.Import(&bin, chunk->GetFormatVersion())) return 0;
+	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
-	//if (data.Track==0) return 1; 	// Workaround für einen vorherigen Bug
-	return Put(&data);
+	SaveToMemory(data);
 }
-
-
-
-class Artists : public ppl6::CTreeItem
-{
-private:
-
-public:
-	Artists();
-	virtual ~Artists();
-	virtual int CompareNode(CTreeItem* item);
-	virtual int CompareValue(void* value);
-
-};
