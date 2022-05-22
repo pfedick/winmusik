@@ -5,8 +5,8 @@
  *      Author: patrick
  */
 
-#ifndef LIB_INCLUDE_WM_MUSICALKEYS_H_
-#define LIB_INCLUDE_WM_MUSICALKEYS_H_
+#ifndef WM_MUSICALKEYS_H
+#define WM_MUSICALKEYS_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -48,5 +48,5 @@ public:
 
 }}}	// EOF Namespace de.pfp.winmusik
 
-#endif /* LIB_INCLUDE_WM_PLAYLIST_H_ */
+#endif /* WM_MUSICALKEYS_H */
 
