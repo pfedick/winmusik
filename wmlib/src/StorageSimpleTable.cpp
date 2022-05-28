@@ -20,6 +20,7 @@
 #include "wm_cwmfile.h"
 #include "wm_storage.h"
 #include "wm_exceptions.h"
+#include "wm_normalizer.h"
 
 namespace de {
 namespace pfp {
@@ -283,7 +284,6 @@ CTableStore::CTableStore()
 	TableIndex=NULL;
 	max=0;
 	highestId=0;
-	Storage=NULL;
 }
 
 CTableStore::~CTableStore()
@@ -304,16 +304,17 @@ void CTableStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	/*
-	for (ppluint32 i=0;i<max;i++) {
-		if (TableIndex[i].t!=NULL) delete TableIndex[i].t;
+	if (TableIndex) {
+		for (uint32_t i=0;i < max;i++) {
+			if (TableIndex[i] != NULL) delete TableIndex[i];
+		}
+		free(TableIndex);
 	}
-	*/
-	Tree.Clear(true);
-	free(TableIndex);
 	TableIndex=NULL;
 	max=0;
 	highestId=0;
+	Words.clear();
+	Tree.clear();
 }
 
 const char* CTableStore::GetChunkName()
@@ -327,66 +328,61 @@ const char* CTableStore::GetChunkName()
 	return NULL;
 }
 
-int CTableStore::Increase(ppluint32 maxid)
-/*!\brief Interne Tabelle vergrößern
- *
- * Diese Funktion wird intern aufgerufen um die Pointertabelle mit den Datensätzen
- * zu vergrößern.
- *
- * \param[in] maxid Die höchste ID, die benötigt wird. Die Funktion rechnet zusätzlich noch
- * 100 Datensätze hinzu, so dass die Tabelle nicht so schnell erneut erweitert werden
- * muss.
- * \returns Im Erfolgsfall liefert die Funktion 1 zurück, sonst 0. Ein Fehler kann nur
- * auftreten, wenn kein Speicher mehr zur Verfügung steht.
- */
+void CTableStore::Increase(uint32_t maxid)
 {
-	ppluint32 h=maxid + 100;
-	void* t=calloc(sizeof(TABLE), h);
-	if (!t) {
-		ppl6::SetError(2, "int CTableStore::Increase(ppluint32 maxid)");
-		wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Increase", __FILE__, __LINE__, "Faild to increase Table, could not alloc %u*%u Bytes (=%u) ", sizeof(TABLE), h, sizeof(TABLE) * h);
-		return 0;
+	uint32_t h=maxid + 10000;
+	CSimpleTable** t=(CSimpleTable**)calloc(sizeof(CSimpleTable*), h);
+	if (!t) throw ppl7::OutOfMemoryException();
+	if (TableIndex) {
+		memcpy(t, TableIndex, max * sizeof(CSimpleTable*));
+		free(TableIndex);
 	}
-	memcpy(t, TableIndex, max * sizeof(TABLE));
-	free(TableIndex);
-	TableIndex=(TABLE*)t;
+	TableIndex=t;
 	max=h;
-	return 1;
 }
 
-int CTableStore::Save(CSimpleTable* t)
-/*!\brief Datensatz auf Festplatte schreiben
- *
- * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
- * zunächst als Binary exportiert (CSimpleTable::Export) und damit CStorage::Save aufgerufen.
- * Die Funktion wird intern von CTableStore::Put verwendet.
- *
- * \param[in] t Pointer auf einen CSimpleTable Datensatz
- * \returns Konnte der Datensatz erfolgreich gespeichert werden, liefert die Funktion 1 zurück, sonst
- * 0.
- */
+void CTableStore::SaveToStorage(CSimpleTable& t)
 {
-	if (!Storage) {
-		return 0;
-	}
-	if (!t) {
-		ppl6::SetError(194, "int CTableStore::Save(==> CSimpleTable *t <==)");
-		return 0;
-	}
-	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary* bin=t->Export();
-	if (!bin) return 0;
-	if (!Storage->Save(this, t, bin)) {
-		ppl6::PushError();
-		delete bin;
-		ppl6::PopError();
-		return 0;
-	}
-	delete bin;
-	return 1;
+	CStorage& store=getStorage();
+	ppl7::ByteArray bin;
+	t.Export(bin);
+	store.Save(this, &t, bin);
 }
 
-int CTableStore::Put(CSimpleTable* entry)
+
+CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
+{
+	uint32_t id=0;
+
+	if (t.Id == 0) {
+		// Wir haben einen neuen Eintrag und vergeben eine Id
+		id=highestId + 1;
+	} else {
+		id=t.Id;
+	}
+	if (id >= max) {
+		Increase(id);
+	}
+
+	// Gibt's den Eintrag schon?
+	if (TableIndex[id]) {
+		removeFromWordTree(id);
+	} else {
+		TableIndex[id]=new CSimpleTable;
+		if (!TableIndex[id]) {
+			throw ppl7::OutOfMemoryException();
+		}
+	}
+	if (id > highestId) highestId=id;
+	TableIndex[id]->CopyDataFrom(t);
+	addToWordTree(id);
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(t.Value));
+	Tree.insert(std::pair<ppl7::String, uint32_t>(search, id));
+	return TableIndex[id];
+}
+
+
+uint32_t CTableStore::Put(const CSimpleTable& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -402,133 +398,45 @@ int CTableStore::Put(CSimpleTable* entry)
  * Text des Elements geändert hat.
  */
 {
-	if (!entry) {
-		ppl6::SetError(194, "int CTableStore::Put(==> CSimpleTable *entry <==)");
-		return 0;
-	}
-	if (!Storage) {
-		ppl6::SetError(20014, "CTableStore");
-		return 0;
-	}
-	ppluint32 save_highestId=highestId;
-	ppluint32 id=0;
-	Mutex.Lock();
-	if (entry->Id == 0) {
-		// Wir haben einen neuen Eintrag und vergeben eine Id
-		highestId++;
-		id=highestId;
-	} else {
-		id=entry->Id;
-		removeFromWordTree(id);
-		if (id > highestId) highestId=id;
-	}
-
-	if (id >= max) {
-		if (!Increase(id)) {
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
-		}
-	}
-	// Gibt's den Titel schon?
-	if (TableIndex[id].t) {
-		// CopyFrom führt ein Clear aus, daher müssen wir die Storage Daten retten
-		CStorageItem ssave;
-		ssave.CopyStorageFrom(TableIndex[id].t);
-		// Nun können wir die Daten kopieren
-		if (!TableIndex[id].t->CopyFrom(entry)) {
-			wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Put", __FILE__, __LINE__, "CopyFrom failed, existing record");
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
-		}
-		// StorageDaten wieder herstellen
-		TableIndex[id].t->CopyStorageFrom(&ssave);
-		// Datensatz zunächst aus dem Baum löschen, da sich der Text geändert haben kann
-		Tree.Delete(TableIndex[id].t);
-		// Dann mit dem neuen Text wieder einfügen
-		Tree.Add(TableIndex[id].t);
-
-		TableIndex[id].t->Id=id;
-		if (!Save(TableIndex[id].t)) {
-			wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Put", __FILE__, __LINE__, "Save failed, existing record");
-			highestId=save_highestId;
-			Mutex.Unlock();
-			return 0;
-		}
-		// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-		entry->CopyStorageFrom(TableIndex[id].t);
-		addToWordTree(id);
-		Mutex.Unlock();
-		return 1;
-	}
-	// Nein, neuer Titel
-	TableIndex[id].t=new CSimpleTable;
-	if (!TableIndex[id].t) {
-		wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Put", __FILE__, __LINE__, "out of memory, could not create object");
-		highestId=save_highestId;
-		Mutex.Unlock();
-		ppl6::SetError(2);
-		return 0;
-	}
-	if (!TableIndex[id].t->CopyFrom(entry)) {
-		wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Put", __FILE__, __LINE__, "CopyFrom failed, new record");
-		ppl6::PushError();
-		delete TableIndex[id].t;
-		TableIndex[id].t=NULL;
-		highestId=save_highestId;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	TableIndex[id].t->Id=id;
-	if (!Save(TableIndex[id].t)) {
-		wmlog->Printf(ppl6::LOG::ERROR, 2, "CTableStore", "Put", __FILE__, __LINE__, "Save failed, new record");
-		ppl6::PushError();
-		delete TableIndex[id].t;
-		TableIndex[id].t=NULL;
-		highestId=save_highestId;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	// Den internen Datensatz in den Tree hängen
-	Tree.Add(TableIndex[id].t);
-	// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-	entry->CopyStorageFrom(TableIndex[id].t);
-	entry->Id=id;
-	addToWordTree(id);
-	Mutex.Unlock();
-	return 1;
+	CSimpleTable* new_entry=SaveToMemory(entry);
+	SaveToStorage(*new_entry);
+	return new_entry->Id;
 }
 
-CSimpleTable* CTableStore::Get(ppluint32 id)
+const CSimpleTable& CTableStore::Get(uint32_t id) const
 /*!\brief Datensatz auslesen
  *
  * Mit dieser Funktion kann der zu \p id zugehörige Datensatz ausgelesen werden.
  *
  * \param[in] id ID des gewünschten Datensatzes
- * \returns Liefert einen Pointer auf den gewünschten Datensatz zurück, oder NULL, wenn
- * er nicht vorhanden ist.
- *
- * \attention Der Datensatz darf nicht selbst verändert werden, da sonst die interne
- * Sortierung der Texte durcheinander gerät. Ist dies beabsichtigt, muss entwerder
- * eine Kopie gemacht werden (CSimpleTable::CopyFrom) oder gleich eine Kopie
- * geholt werden (CTableStore::GetCopy).
+ * \returns Liefert eine Referenz auf den gewünschten Datensatz zurück
+ * \throws RecordDoesNotExistException Wird geworfen, wenn der Datensatz nicht vorhanden ist
  */
 {
-	if (id > highestId) {
-		ppl6::SetError(20015, "%u", id);
-		return NULL;
+	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+		throw RecordDoesNotExistException();
 	}
-	if (TableIndex == NULL || TableIndex[id].t == NULL) {
-		ppl6::SetError(20015, "%u", id);
-		return NULL;
-	}
-	return TableIndex[id].t;
+	return *TableIndex[id];
 }
 
-CSimpleTable* CTableStore::Find(const char* value)
+const CSimpleTable* CTableStore::GetPtr(uint32_t id) const
+/*!\brief Datensatz auslesen
+ *
+ * Mit dieser Funktion kann der zu \p id zugehörige Datensatz ausgelesen werden.
+ *
+ * \param[in] id ID des gewünschten Datensatzes
+ * \returns Liefert eine Referenz auf den gewünschten Datensatz zurück
+ * oder NULL, wenn der Datensatz nicht vorhanden ist
+ */
+{
+	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+		return NULL;
+	}
+	return TableIndex[id];
+}
+
+
+const CSimpleTable* CTableStore::Find(const ppl7::String& value) const
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann ein Datensatz anhand seines Textwertes gefunden werden.
@@ -539,116 +447,77 @@ CSimpleTable* CTableStore::Find(const char* value)
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	CSimpleTable* t;
-	Mutex.Lock();
-	t=(CSimpleTable*)Tree.Find((void*)value);
-	Mutex.Unlock();
-	return t;
+	std::map<ppl7::String, uint32_t>::const_iterator it;
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
+	it=Tree.find(value);
+	if (it == Tree.end()) return NULL;
+	return GetPtr(it->second);
 }
 
-int CTableStore::FindOrAdd(const char* value)
+uint32_t CTableStore::FindOrAdd(const ppl7::String& value)
 {
-	if (!value) return 0;
-	if (strlen(value) == 0) return 0;
-	CSimpleTable* t=Find(value);
-	if (t) return t->Id;
+	std::map<ppl7::String, uint32_t>::const_iterator it;
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
+	it=Tree.find(value);
+	if (it != Tree.end()) return it->second;
 	// Neu anlegen
 	CSimpleTable item;
 	item.Id=0;
 	item.References=1;
 	item.SetValue(value);
-	if (Put(&item)) return item.Id;
-	return 0;
+	return Put(item);
 }
 
-int CTableStore::GetId(const char* value)
+uint32_t CTableStore::GetId(const ppl7::String& value) const
 {
-	if (!value) return 0;
-	if (strlen(value) == 0) return 0;
-	CSimpleTable* t=Find(value);
-	if (t) return t->Id;
-	return 0;
+	std::map<ppl7::String, uint32_t>::const_iterator it;
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
+	it=Tree.find(value);
+	if (it == Tree.end()) return 0;
+	return it->second;
 }
 
-int CTableStore::FindAll(ppl6::CWString& value, ppl6::CTree& Result)
+size_t CTableStore::FindAll(const ppl7::String& value, IndexTree& Result)
 {
-	Result.Clear(true);
-	value.Trim();
-	value.LCase();
-	Mutex.Lock();
-	CSimpleTable* t, * copy;
-	ppl6::CWString Tmp;
-	Tree.Reset();
-	while ((t=(CSimpleTable*)Tree.GetNext())) {
-		if (t->Value) {
-			Tmp=t->Value;
-			Tmp.LCase();
-			if (Tmp.Instr(value) >= 0) {
-				copy=new CSimpleTable;
-				copy->CopyFrom(t);
-				Result.Add(copy);
-			}
-		}
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
+	Result.clear();
+	std::map<ppl7::String, uint32_t>::const_iterator it;
+	for (it=Tree.begin();it != Tree.end();++it) {
+		if (it->first.instr(search) >= 0) Result.insert(it->second);
 	}
-	Mutex.Unlock();
-	return Result.Num();
+	return Result.size();
 }
 
-int CTableStore::GetCopy(ppluint32 id, CSimpleTable* t)
-/*!\brief Kopie eines Datensatzes erstellen
- *
- * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
- *
- * \param[in] id ID des gewünschten Datensatzes
- * \param[in,out] t Pointer auf eine Klasse vom Typ CSimpleTable
- *
- * \returns Ist der Datensatz vorhanden und konnte kopiert werden, liefert die Funktion 1
- * zurück, sonst 0.
- */
-{
-	CSimpleTable* entry=Get(id);
-	if (!entry) return 0;
-	t->CopyFrom(entry);
-	return 1;
-}
 
-int CTableStore::LoadChunk(CWMFileChunk* chunk)
+void CTableStore::LoadChunk(const CWMFileChunk& chunk)
 {
 	CSimpleTable data;
-	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) {
-		return 0;
-	}
-	if (!data.Import(&bin, chunk->GetFormatVersion())) {
-		return 0;
-	}
+	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
-	if (!Put(&data)) {
-		return 0;
-	}
-	return 1;
+	SaveToMemory(data);
 }
 
 
-void CTableStore::removeFromWordTree(ppluint32 id)
+void CTableStore::removeFromWordTree(uint32_t id)
 {
-	CSimpleTable* t=Get(id);
-	if (t == NULL || t->Value == NULL) return;
+	const CSimpleTable* t=GetPtr(id);
+	if (t == NULL || t->Value.isEmpty() == true) return;
 	ppl7::Array words;
-	if (wm_main->GetWords(t->Value, words)) {
+	if (GetNormalizer().GetWords(t->Value, words)) {
 		for (size_t i=0;i < words.size();i++) {
 			Words[words[i]].erase(id);
 		}
 	}
 }
 
-void CTableStore::addToWordTree(ppluint32 id)
+void CTableStore::addToWordTree(uint32_t id)
 {
-	CSimpleTable* t=Get(id);
-	if (t == NULL || t->Value == NULL) return;
+	const CSimpleTable* t=GetPtr(id);
+	if (t == NULL || t->Value.isEmpty() == true) return;
 
 	ppl7::Array words;
-	if (wm_main->GetWords(t->Value, words)) {
+	if (GetNormalizer().GetWords(t->Value, words)) {
 		for (size_t i=0;i < words.size();i++) {
 			Words[words[i]].insert(id);
 		}
@@ -682,13 +551,13 @@ void CTableStore::copy(IndexTree& Result, const IndexTree& src)
 	}
 }
 
-ppluint32 CTableStore::findWords(IndexTree& Result, const ppl7::String& words)
+uint32_t CTableStore::findWords(IndexTree& Result, const ppl7::String& words)
 {
-	ppluint32 count=0;
+	uint32_t count=0;
 	ppl7::Array w;
-	if (wm_main->GetWords(words, w)) {
+	if (GetNormalizer().GetWords(words, w)) {
 		for (size_t i=0;i < w.size();i++) {
-			WordTree::const_iterator it=Words.find(w[i]);
+			std::map<ppl7::String, IndexTree >::const_iterator it=Words.find(w[i]);
 			if (it != Words.end()) {
 				if (!count) copy(Result, it->second);
 				else {

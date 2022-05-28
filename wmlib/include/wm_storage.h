@@ -23,6 +23,7 @@
 #include <ppl7.h>
 #include "wm_cwmfile.h"
 #include "wm_tracklist.h"
+#include "wm_normalizer.h"
 
 namespace de {
 namespace pfp {
@@ -409,7 +410,6 @@ class DataRecordDevice : public CSimpleTable {};
 class DataGenre : public CSimpleTable {};
 
 
-#ifdef TODO
 typedef struct {
 	CSimpleTable* t;
 } TABLE;
@@ -419,21 +419,22 @@ class CTableStore : public CStorageBase
 public:
 	typedef std::set<uint32_t> IndexTree;
 private:
-	ppl6::CMutex Mutex;
-	ppl6::CTree Tree;
-	TABLE* TableIndex;
+
+	std::map<ppl7::String, IndexTree >	Words;
+	std::map<ppl7::String, uint32_t> Tree;
+	CSimpleTable** TableIndex;
 	uint32_t max;
 	uint32_t highestId;
-	int Increase(uint32_t maxid);
-	int Save(CSimpleTable* t);
-	typedef std::map<ppl7::String, IndexTree >	WordTree;
+
+	void Increase(uint32_t maxid);
+	void SaveToStorage(CSimpleTable& t);
+	CSimpleTable* SaveToMemory(const CSimpleTable& t);
 
 	void removeFromWordTree(uint32_t id);
 	void addToWordTree(uint32_t id);
 	void makeUnion(IndexTree& Result, const IndexTree& Tree1, const IndexTree& Tree2);
 	void copy(IndexTree& Result, const IndexTree& src);
 
-	WordTree Words;
 
 public:
 	CTableStore();
@@ -441,15 +442,19 @@ public:
 	virtual const char* GetChunkName();
 	virtual void Clear();
 	virtual void LoadChunk(const CWMFileChunk& chunk);
-	int Put(CSimpleTable* entry);
-	CSimpleTable* Get(uint32_t id);
-	CSimpleTable* Find(const char* value);
-	int GetId(const char* value);
-	int FindOrAdd(const char* value);
-	int FindAll(ppl6::CWString& value, ppl6::CTree& Result);
-	int GetCopy(uint32_t id, CSimpleTable* t);
 
+	uint32_t Put(const CSimpleTable& entry);
+	bool Exists(uint32_t id) const;
+	void Delete(uint32_t id);
+	const CSimpleTable& Get(uint32_t id) const;
+	const CSimpleTable* GetPtr(uint32_t id) const;
+	uint32_t MaxId() const;
+	const CSimpleTable* Find(const ppl7::String& value) const;
+	uint32_t GetId(const ppl7::String& value) const;
+	uint32_t FindOrAdd(const ppl7::String& value);
+	size_t FindAll(const ppl7::String& value, IndexTree& Result);
 	uint32_t findWords(IndexTree& tree, const ppl7::String& words);
+
 };
 
 class CVersionStore : public CTableStore
@@ -488,7 +493,6 @@ public:
 	virtual const char* GetChunkName();
 };
 
-#endif // TODO
 
 }
 }
