@@ -17,8 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "wm_cwmfile.h"
+#include "wm_storage.h"
+#include "wm_exceptions.h"
 
-#include "winmusik3.h"
+namespace de {
+namespace pfp {
+namespace winmusik {
 
 /*!\class DataVersion
  * \brief Datentyp für Musikversion
@@ -88,7 +93,6 @@ CSimpleTable::CSimpleTable()
 {
 	Id=0;
 	References=0;
-	Value=NULL;
 	formatversion=1;
 }
 
@@ -97,18 +101,15 @@ CSimpleTable::CSimpleTable(const CSimpleTable& other)
  *
  * Konstruktor der Klasse
  */
-	: CStorageItem(other), CTreeItem()
+	: CStorageItem(other)
 {
-	Id=0;
-	References=0;
-	Value=NULL;
-	formatversion=1;
-	CopyFrom(&other);
+	CopyDataFrom(other);
 }
 
 CSimpleTable& CSimpleTable::operator = (const CSimpleTable& other)
 {
-	CopyFrom(&other);
+	formatversion=1;
+	CopyFrom(other);
 	return *this;
 }
 
@@ -121,51 +122,6 @@ CSimpleTable::~CSimpleTable()
 	Clear();
 }
 
-int CSimpleTable::CompareNode(CTreeItem* item)
-/*!\brief Elemente vergleichen
- *
- * \desc
- * Funktion zum Vergleichen zweier Baumelemente.
- * Bei dieser Funktion wird als Parameter ein Pointer auf ein Baum-Element erwartet.
- *
- * \param[in] item Pointer auf ein Baum-Element, mit dem dieses Element verglichen werden soll
- *
- * \returns Die Funktion liefert einen der folgenden Werte zurück:
- * - 0: Der Wert in \p item ist identisch mit dem Wert dieses Elements
- * - +1: Der Wert in \p item ist größer als der Wert dieses Elements
- * - -1: Der Wert in \p item ist kleiner als der Wert dieses Elements
- */
-{
-	CSimpleTable* n=(CSimpleTable*)item;
-	int ret=strcasecmp(n->Value, Value);
-	if (ret < 0) return -1;
-	if (ret > 0) return 1;
-	return 0;
-}
-
-int CSimpleTable::CompareValue(void* value)
-/*!\brief Elemente vergleichen
- *
- * \desc
- * Funktion zum Vergleichen zweier Baumelemente.
- * Bei dieser Funktion wird als Parameter ein void Pointer auf einen beliebigen
- * Wert erwartet.
- *
- * \param[in] value Pointer auf einen String.
- *
- * \returns Die Funktion liefert einen der folgenden Werte zurück:
- * - 0: Der Wert in \p value ist identisch mit dem Wert dieses Elements
- * - +1: Der Wert in \p value ist größer als der Wert dieses Elements
- * - -1: Der Wert in \p value ist kleiner als der Wert dieses Elements
- */
-{
-	const char* v=(const char*)value;
-	int ret=strcasecmp(v, Value);
-	if (ret < 0) return -1;
-	if (ret > 0) return 1;
-	return 0;
-}
-
 
 void CSimpleTable::Clear()
 /*!\brief Speicher freigeben
@@ -176,13 +132,12 @@ void CSimpleTable::Clear()
 {
 	Id=0;
 	References=0;
-	if (Value) free(Value);
-	Value=NULL;
+	Value.clear();
 	CStorageItem::Clear();
 	formatversion=1;
 }
 
-int CSimpleTable::CopyFrom(const CSimpleTable* t)
+void CSimpleTable::CopyFrom(const CSimpleTable& other)
 /*!\brief Daten kopieren
  *
  * Mit dieser Funktion werden die Daten einers anderen CSimpleTable Datensatzes in diesen hineinkopiert.
@@ -193,44 +148,20 @@ int CSimpleTable::CopyFrom(const CSimpleTable* t)
  * \returns Konnten die Daten erfolgreich kopiert werden, liefert die Funktion 1 zurück, im Fehlerfall 0.
  */
 {
-	if (!t) {
-		ppl6::SetError(194, "int CSimpleTable::CopyFrom(==> CSimpleTable *t <==)");
-		return 0;
-	}
 	Clear();
-	Id=t->Id;
-	References=t->References;
-	if (t->Value) {
-		Value=strdup(t->Value);
-		if (!Value) {	// Out of Memory
-			Clear();
-			if (wmlog) {
-				wmlog->Printf(ppl6::LOG::ERROR, 2, "CSimpleTable", "CopyFrom", __FILE__, __LINE__, "this: %llu, strdup failed, id: %u, references: %u, *Value=%llu", (ppluint64)((ppliptr)this), Id, References, (ppluint64)((ppliptr)t->Value));
-				wmlog->HexDump(t->Value, 32);
-			}
-
-			ppl6::SetError(2);
-			return 0;
-		}
-	} else {
-		Value=strdup("");
-		if (!Value) {	// Out of Memory
-			Clear();
-			ppl6::SetError(2);
-			return 0;
-		}
-	}
-	CopyStorageFrom(t);
-	return 1;
+	CopyDataFrom(other);
+	CopyStorageFrom(other);
 }
 
-int CSimpleTable::CopyFrom(const CSimpleTable& other)
+void CSimpleTable::CopyDataFrom(const CSimpleTable& other)
 {
-	return CopyFrom(&other);
+	Id=other.Id;
+	References=other.References;
+	Value=other.Value;
 }
 
 
-int CSimpleTable::SetValue(const char* value)
+void CSimpleTable::SetValue(const ppl7::String& value)
 /*!\brief Wert setzen
  *
  * Mit dieser Funktion wird der Wert der Klasse verändert.
@@ -242,19 +173,15 @@ int CSimpleTable::SetValue(const char* value)
  * da sonst die Sortierung durcheinander gerät.
  */
 {
-	if (Value) free(Value);
-	Value=NULL;
-	if (value) {
-		Value=strdup(value);
-		if (!Value) {	// Out of Memory
-			ppl6::SetError(2);
-			return 0;
-		}
-	}
-	return 1;
+	this->Value=value;
 }
 
-ppl6::CBinary* CSimpleTable::Export()
+const ppl7::String& CSimpleTable::GetValue() const
+{
+	return Value;
+}
+
+void CSimpleTable::Export(ppl7::ByteArray& bin) const
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -269,28 +196,16 @@ ppl6::CBinary* CSimpleTable::Export()
 {
 	// Zunächst den benötigten Speicher berechnen
 	int size=9;
-	if (Value) size+=strlen(Value);
-	char* a=(char*)malloc(size);
-	if (!a) {
-		ppl6::SetError(2);
-		return NULL;
-	}
-	ppl6::Poke32(a, Id);
-	ppl6::Poke32(a + 4, References);
-	if (Value) strcpy(a + 8, Value);
-	else ppl6::Poke8(a + 8, 0);
-	ppl6::CBinary* bin=new ppl6::CBinary;
-	if (!bin) {
-		ppl6::SetError(2);
-		return NULL;
-	}
-	bin->Set(a, size);
-	// CBinary ist verantwortlich den Speicher wieder freizugeben
-	bin->ManageMemory();
-	return bin;
+	int lenValue=Value.size();
+	if (Value) size+=lenValue;
+	char* a=(char*)bin.malloc(size);
+	ppl7::Poke32(a, Id);
+	ppl7::Poke32(a + 4, References);
+	if (lenValue) strcpy(a + 8, Value);
+	else ppl7::Poke8(a + 8, 0);
 }
 
-int CSimpleTable::Import(ppl6::CBinary* bin, int version)
+void CSimpleTable::Import(const ppl7::ByteArrayPtr& bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -301,26 +216,19 @@ int CSimpleTable::Import(ppl6::CBinary* bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-	if (!bin) {
-		ppl6::SetError(194, "int CSimpleTable::Import(==> ppl6::CBinary *bin <==)");
-		return 0;
-	}
 	if (version < 1 || version>1) {
-		ppl6::SetError(20023, "%i", version);
-		return 0;
+		throw UnknownRecordVersionException("SimpleTable, got version %d", version);
 	}
-	int size=bin->Size();
-	const char* a=(char*)bin->GetPtr();
+	int size=bin.size();
+	const char* a=(char*)bin.ptr();
 	// Die Größe muss mindestens 9 Byte betragen
 	if (size < 9 || a == NULL) {
-		ppl6::SetError(20013);
-		return 0;
+		throw InvalidRecordException();
 	}
 	Clear();
-	Id=ppl6::Peek32(a);
-	References=ppl6::Peek32(a + 4);
-	if (ppl6::Peek8(a + 8) != 0) Value=ppl6::strndup(a + 8, size - 8);
-	return 1;
+	Id=ppl7::Peek32(a);
+	References=ppl7::Peek32(a + 4);
+	if (ppl7::Peek8(a + 8) != 0) Value.set(a + 8, size - 8);
 }
 
 
@@ -869,4 +777,9 @@ const char* CRecordDeviceStore::GetChunkName()
 const char* CGenreStore::GetChunkName()
 {
 	return "GENR";
+}
+
+
+}
+}
 }

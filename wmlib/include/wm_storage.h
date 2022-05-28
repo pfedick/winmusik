@@ -158,8 +158,6 @@ public:
 	void SetRemarks(const ppl7::String& remarks);
 	void SetTags(const ppl7::String& tags);
 	void SetAlbum(const ppl7::String& album);
-	void SetKey(const ppl7::String& key);
-	//ppl7::String getKeyName(MusicKeyType type) const;
 
 	void Export(ppl7::ByteArray& bin);
 	void Import(const ppl7::ByteArrayPtr& bin, int version);
@@ -379,32 +377,28 @@ public:
 	const_iterator end() const;
 };
 
-#ifdef TODO
-
 /*******************************************************
  * TABLES                                              *
  *******************************************************/
 
 
-class CSimpleTable : public CStorageItem, public ppl6::CTreeItem
-{
+class CSimpleTable : public CStorageItem {
 public:
 	uint32_t		Id;
 	uint32_t		References;
-	char* Value;
+	ppl7::String	Value;
 	CSimpleTable();
 	CSimpleTable(const CSimpleTable& other);
 	CSimpleTable& operator = (const CSimpleTable& other);
 	virtual ~CSimpleTable();
-	virtual int CompareNode(CTreeItem* item);
-	virtual int CompareValue(void* value);
 
 	void Clear();
-	int CopyFrom(const CSimpleTable* t);
-	int CopyFrom(const CSimpleTable& other);
-	int SetValue(const char* value);
-	ppl6::CBinary* Export();
-	int Import(ppl6::CBinary* bin, int version);
+	void CopyFrom(const CSimpleTable& other);
+	void CopyDataFrom(const CSimpleTable& other);
+	void Export(ppl7::ByteArray& bin) const;
+	void Import(const ppl7::ByteArrayPtr& bin, int version);
+	void SetValue(const ppl7::String& value);
+	const ppl7::String& GetValue() const;
 };
 
 class DataVersion : public CSimpleTable {};
@@ -414,6 +408,8 @@ class DataPurchaseSource : public CSimpleTable {};
 class DataRecordDevice : public CSimpleTable {};
 class DataGenre : public CSimpleTable {};
 
+
+#ifdef TODO
 typedef struct {
 	CSimpleTable* t;
 } TABLE;
