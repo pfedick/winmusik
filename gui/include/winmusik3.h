@@ -491,11 +491,6 @@ private:
 	int PrintTracklistHeader(QFont& Font, QPainter& painter, int x, int y);
 	int PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, DataDevice* device);
 	int PrintTracklistDisclaimer(QFont& Font, QPainter& painter);
-	void initLetterReplacements();
-	void initFilenameLetterReplacements();
-	void addLetterReplacement(wchar_t letter, wchar_t replacement);
-	void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
-	void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
 	void* MainMenue;
 	//ppl6::CGenericList EditorWindows;
 	//ppl6::CGenericList SearchWindows;
@@ -508,9 +503,6 @@ private:
 	void* CoverViewerWindow;
 
 	QDate					LatestPurchaseDate;
-
-	std::map<wchar_t, wchar_t> letterReplacements;
-	std::map<wchar_t, wchar_t> filenameLetterReplacements;
 
 
 public:

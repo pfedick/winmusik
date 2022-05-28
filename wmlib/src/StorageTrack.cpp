@@ -114,16 +114,6 @@ DataTrack::DataTrack()
 	formatversion=1;
 }
 
-DataTrack::~DataTrack()
-/*!\brief Destruktor der Klasse
- *
- * Destruktor der Klasse. Da kein Speicher innerhalb dieser Klasse dynamisch allokiert wird,
- * hat er gegenwärtig keine Funktion.
- */
-{
-	CStorageItem::Clear();
-}
-
 void DataTrack::Clear()
 /*!\brief Variablen auf 0 setzen.
  *
@@ -261,7 +251,7 @@ CTrackStore::~CTrackStore()
 
 inline static uint64_t getKey(uint8_t Device, uint32_t DeviceId, uint8_t Page)
 {
-	return (Device << 40) + (Page << 32) + DeviceId;
+	return ((uint64_t)Device << 40) + ((uint64_t)Page << 32) + DeviceId;
 }
 
 void CTrackStore::Clear()
@@ -410,7 +400,7 @@ const DataTrack& CTrackStore::Get(uint8_t Device, uint32_t DeviceId, uint8_t Pag
 	return (*t);
 }
 
-CTrackList& CTrackStore::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page) const
+CTrackList CTrackStore::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page) const
 /*!\brief Trackliste für einen bestimmten Datenträger erstellen
  *
  * Diese Funktion erstellt eine Trackliste für den gewünschten Datenträger. Dabei werden

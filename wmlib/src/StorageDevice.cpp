@@ -574,7 +574,7 @@ void CDeviceStore::Update(uint8_t DeviceType, uint32_t DeviceId)
 	t.LastDate=0;
 	CTitleStore* tistore=(CTitleStore*)getStorage().FindStorageClass("TITL");
 	for (uint8_t page=1;page <= t.Pages;page++) {
-		CTrackList& tracks=trackstore->GetTracklist(DeviceType, DeviceId, page);
+		CTrackList tracks=trackstore->GetTracklist(DeviceType, DeviceId, page);
 		CTrackList::const_iterator it;
 		for (it=tracks.begin();it != tracks.end();++it) {
 			t.NumTracks++;

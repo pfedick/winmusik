@@ -320,7 +320,7 @@ public:
 
 	const DataTrack& Get(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const;
 	const DataTrack* GetPtr(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const;
-	CTrackList& GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page) const;
+	CTrackList GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page) const;
 };
 
 
