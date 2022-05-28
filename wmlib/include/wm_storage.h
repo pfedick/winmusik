@@ -356,7 +356,7 @@ private:
 	std::map<ppl7::String, DataShortcut> Tree;
 
 	void SaveToStorage(DataShortcut& t);
-	DataTrack* SaveToMemory(const DataShortcut& t);
+	DataShortcut* SaveToMemory(const DataShortcut& t);
 
 public:
 	typedef std::map<ppl7::String, DataShortcut>::iterator iterator;

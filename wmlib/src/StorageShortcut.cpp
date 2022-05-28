@@ -178,9 +178,7 @@ void CShortcutStore::Clear()
 {
 	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
 	// die alle Datensätze löscht.
-	Mutex.Lock();
-	Tree.Clear(true);
-	Mutex.Unlock();
+	Tree.clear();
 }
 
 const char* CShortcutStore::GetChunkName()
@@ -194,39 +192,33 @@ const char* CShortcutStore::GetChunkName()
 	return "SHRT";
 }
 
-int CShortcutStore::Save(DataShortcut* t)
-/*!\brief Datensatz auf Festplatte schreiben
- *
- * Diese Funktion speichert den übergebenen Datensatz auf die Festplatte. Dazu wird der Inhalt
- * zunächst als Binary exportiert (DataShortcut::Export) und damit CStorage::Save aufgerufen.
- * Die Funktion wird intern von CShortcutStore::Put verwendet.
- *
- * \param[in] t Pointer auf einen DataShortcut Datensatz
- * \returns Konnte der Datensatz erfolgreich gespeichert werden, liefert die Funktion 1 zurück, sonst
- * 0.
- */
+void CShortcutStore::SaveToStorage(DataShortcut& t)
 {
-	if (!Storage) {
-		return 0;
-	}
-	if (!t) {
-		ppl6::SetError(194, "int CShortcutStore::Save(==> DataShortcut *t <==)");
-		return 0;
-	}
-	if (Storage->isDatabaseLoading()) return 1;
-	ppl6::CBinary* bin=t->Export();
-	if (!bin) return 0;
-	if (!Storage->Save(this, t, bin)) {
-		ppl6::PushError();
-		delete bin;
-		ppl6::PopError();
-		return 0;
-	}
-	delete bin;
-	return 1;
+	CStorage& store=getStorage();
+	ppl7::ByteArray bin;
+	t.Export(bin);
+	store.Save(this, &t, bin);
 }
 
-int CShortcutStore::Put(DataShortcut* entry)
+DataShortcut* CShortcutStore::SaveToMemory(const DataShortcut& t)
+{
+	// Gibt's die Abkürzung schon?
+	ppl7::String search=ppl7::LowerCase(t.shortcut);
+	std::map<ppl7::String, DataShortcut>::iterator it;
+	it=Tree.find(search);
+	if (it != Tree.end()) {
+		// Jepp, gibt's schon. Wir machen ein Update
+		it->second=t;
+		return &it->second;
+	}
+	std::pair<CShortcutStore::iterator, bool> new_it;
+	new_it=Tree.insert(std::pair<ppl7::String, DataShortcut>(search, t));
+	return &new_it.first->second;
+}
+
+
+
+void CShortcutStore::Put(const DataShortcut& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -241,146 +233,49 @@ int CShortcutStore::Put(DataShortcut* entry)
  * Text des Elements geändert hat.
  */
 {
-	if (!entry) {
-		ppl6::SetError(194, "int CShortcutStore::Put(==> DataShortcut *entry <==)");
-		return 0;
-	}
-	if (!Storage) {
-		ppl6::SetError(20014, "CShortcutStore");
-		return 0;
-	}
-	const char* shortcut=entry->GetShortcut();
-	if (!shortcut) {
-		ppl6::SetError(20038);
-		return 0;
-	}
-	Mutex.Lock();
-	// Gibt's die Abkürzung schon?
-
-	DataShortcut* t;
-	t=(DataShortcut*)Tree.Find((void*)shortcut);
-	if (t) {	// Jepp, gibt's schon. Wir machen ein Update
-		if (t->artist) free(t->artist);
-		if (entry->artist) t->artist=strdup(entry->artist);
-		if (!Save(t)) {
-			Mutex.Unlock();
-			return 0;
-		}
-		// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-		entry->CopyStorageFrom(t);
-		Mutex.Unlock();
-		return 1;
-	}
-	// Nein, neue Abkürzung
-	t=new DataShortcut;
-	if (!t) {
-		Mutex.Unlock();
-		ppl6::SetError(2);
-		return 0;
-	}
-	if (!t->CopyFrom(entry)) {
-		ppl6::PushError();
-		delete t;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	if (!Save(t)) {
-		ppl6::PushError();
-		delete t;
-		Mutex.Unlock();
-		ppl6::PopError();
-		return 0;
-	}
-	// Den internen Datensatz in den Tree hängen
-	Tree.Add(t);
-	// Wir müssen die Storagedaten aus dem internen Datensatz kopieren
-	entry->CopyStorageFrom(t);
-	Mutex.Unlock();
-	return 1;
+	DataShortcut* t=SaveToMemory(entry);
+	SaveToStorage(*t);
 }
 
-DataShortcut* CShortcutStore::Get(const char* shortcut)
-/*!\brief Datensatz finden
- *
- * Mit dieser Funktion kann nach einer Abkürzung gesucht werden.
- *
- * \param[in] shortcut Pointer auf die zu suchende Abkürzung
- * \returns Wurde die angegebene Abkürzung \p shortcut gefunden, wird ein Pointer auf den
- * DataShortcut Datensatz zurückgeliefert, der den Text enthält. Wurde er nicht
- * gefunden, wird NULL zurückgegeben.
- */
+const DataShortcut& CShortcutStore::Get(const ppl7::String& shortcut) const
 {
 	// Make search string to lowercase
-	ppl6::CWString s=shortcut;
-	s.LCase();
-	const char* search=s.GetPtr();
-	DataShortcut* t;
-	Mutex.Lock();
-	t=(DataShortcut*)Tree.Find((void*)search);
-	Mutex.Unlock();
-	return t;
+	ppl7::String search=ppl7::LowerCase(shortcut);
+	std::map<ppl7::String, DataShortcut>::const_iterator it;
+	it=Tree.find(search);
+	if (it == Tree.end())  throw RecordDoesNotExistException();
+	return it->second;
 }
 
-int CShortcutStore::GetCopy(const char* shortcut, DataShortcut* t)
-/*!\brief Kopie eines Datensatzes erstellen
- *
- * Mit dieser Funktion kann eine Kopie eines vorhandenen Datensatzes erstellt werden.
- *
- * \param[in] shortcut Pointer auf die zu suchende Abkürzung
- * \param[in,out] t Pointer auf eine Klasse vom Typ DataShortcut
- *
- * \returns Ist der Datensatz vorhanden und konnte kopiert werden, liefert die Funktion 1
- * zurück, sonst 0.
- */
+const DataShortcut* CShortcutStore::GetPtr(const ppl7::String& shortcut) const
 {
 	// Make search string to lowercase
-	ppl6::CWString s=shortcut;
-	s.LCase();
-	const char* search=s.GetPtr();
-
-	DataShortcut* res;
-	Mutex.Lock();
-	res=(DataShortcut*)Tree.Find((void*)search);
-	if (res) {
-		t->CopyFrom(res);
-	}
-	Mutex.Unlock();
-	if (res) return 1;
-	return 0;
+	ppl7::String search=ppl7::LowerCase(shortcut);
+	std::map<ppl7::String, DataShortcut>::const_iterator it;
+	it=Tree.find(search);
+	if (it == Tree.end()) return NULL;
+	return &it->second;
 }
 
-
-int CShortcutStore::LoadChunk(CWMFileChunk* chunk)
+void CShortcutStore::LoadChunk(const CWMFileChunk& chunk)
 {
 	DataShortcut data;
-	ppl6::CBinary bin;
-	if (!bin.Set((void*)chunk->GetChunkData(), chunk->GetChunkDataSize())) return 0;
-	if (!data.Import(&bin, chunk->GetFormatVersion())) return 0;
+	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
-	return Put(&data);
+	SaveToMemory(data);
 }
 
 
 void CShortcutStore::Delete(const ppl7::String& shortcut)
 {
-	DataShortcut* sc;
-	if (!Storage) {
-		return 0;
+	ppl7::String search=ppl7::LowerCase(shortcut);
+	std::map<ppl7::String, DataShortcut>::iterator it;
+	it=Tree.find(search);
+	if (it != Tree.end()) {
+		getStorage().Delete(this, &it->second);
+		Tree.erase(it);
 	}
-	Mutex.Lock();
-	// Gibt's die Abkürzung?
-	sc=(DataShortcut*)Tree.Find((void*)shortcut);
-	if (!sc) {
-		Mutex.Unlock();
-		return 0;
-	}
-	if (!Storage->Delete(this, sc)) {
-		Mutex.Unlock();
-		return 0;
-	}
-	Mutex.Unlock();
-	return 1;
 }
 
 CShortcutStore::iterator CShortcutStore::begin()
