@@ -205,7 +205,7 @@ void CWMFile::Open(const char* filename)
 			throw;
 		}
 	}
-	ff.open(filename, ppl7::File::READ);
+	ff.open(filename, ppl7::File::READWRITE);
 	ff.setMapReadAhead(1024 * 1024 * 10);
 	// Header einlesen und prüfen
 
