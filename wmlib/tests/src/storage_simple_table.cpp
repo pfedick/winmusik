@@ -23,8 +23,8 @@
 #include <locale.h>
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
-
-#include "ppl7.h"
+#include "../include/wm_storage.h"
+#include "wm_playlist.h"
 #include "wmlib-tests.h"
 
 namespace {
@@ -32,32 +32,53 @@ namespace {
 using namespace de::pfp::winmusik;
 
 
-class StorageTest : public ::testing::Test {
+class StorageSimpleTableTest : public ::testing::Test {
 protected:
-	StorageTest() {
-		if (setlocale(LC_CTYPE, DEFAULT_LOCALE) == NULL) {
-			printf("setlocale fehlgeschlagen\n");
-			throw std::exception();
-		}
+	StorageSimpleTableTest() {
+
 	}
-	~StorageTest()
+	~StorageSimpleTableTest()
 	{
 
 	}
 };
 
-TEST_F(StorageTest, ConstructorWithoutParam) {
-	ASSERT_NO_THROW({
-		//CStorage storage;
-		});
+TEST_F(StorageSimpleTableTest, DataObject) {
+	CSimpleTable t1;
+	t1.Id=1;
+	t1.References=10;
+	t1.Value.set("Test");
+
+	CSimpleTable t2;
+	t2=t1;
+	ppl7::ByteArray bin;
+
+	t2.Export(bin);
+	ASSERT_EQ((size_t)13, bin.size());
+
+	CSimpleTable t3;
+	t3.Import(bin, 1);
+	ASSERT_EQ((uint32_t)1, t3.Id);
+	ASSERT_EQ((uint32_t)10, t3.References);
+	ASSERT_EQ(ppl7::String("Test"), t3.Value);
 }
 
-TEST_F(StorageTest, loadDatabase) {
-	//CDataBase db;
-	//CStorage storage;
-	//storage.loadDatabase("/home/patrick/ownCloud/WinMusik3/winmusik.dat",db);
+TEST_F(StorageSimpleTableTest, Put) {
+	CStorage storage;
+	ppl7::Dir::mkDir("tmp");
+	storage.Init("tmp");
+	CVersionStore vstore;
+	storage.RegisterStorageClass(&vstore);
+	storage.DeleteDatabase();
+	try {
+		vstore.FindOrAdd("Single");
+	} catch (const ppl7::Exception& exp) {
+		exp.print();
+		throw;
+	}
 
 }
+
 
 
 
