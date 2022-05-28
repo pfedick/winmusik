@@ -56,4 +56,5 @@
 /ui_player.h
 /setup64.iss
 /.vscode/
-wmlib/tests/tmp/winmusik.dat
+wmlib/tests/tmp/
+wmlib/tests/src/tmp/

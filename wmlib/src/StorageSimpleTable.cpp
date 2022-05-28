@@ -97,6 +97,14 @@ CSimpleTable::CSimpleTable()
 	formatversion=1;
 }
 
+CSimpleTable::CSimpleTable(uint32_t id, const ppl7::String& value, uint32_t references)
+{
+	formatversion=1;
+	this->Id=id;
+	this->Value=value;
+	this->References=references;
+}
+
 CSimpleTable::CSimpleTable(const CSimpleTable& other)
 /*!\brief Konstruktor der Klasse
  *
@@ -375,6 +383,7 @@ CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 	}
 	if (id > highestId) highestId=id;
 	TableIndex[id]->CopyDataFrom(t);
+	TableIndex[id]->Id=id;
 	addToWordTree(id);
 	ppl7::String search=ppl7::LowerCase(ppl7::Trim(t.Value));
 	Tree.insert(std::pair<ppl7::String, uint32_t>(search, id));
@@ -449,7 +458,7 @@ const CSimpleTable* CTableStore::Find(const ppl7::String& value) const
 {
 	std::map<ppl7::String, uint32_t>::const_iterator it;
 	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(value);
+	it=Tree.find(search);
 	if (it == Tree.end()) return NULL;
 	return GetPtr(it->second);
 }
@@ -458,7 +467,7 @@ uint32_t CTableStore::FindOrAdd(const ppl7::String& value)
 {
 	std::map<ppl7::String, uint32_t>::const_iterator it;
 	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(value);
+	it=Tree.find(search);
 	if (it != Tree.end()) return it->second;
 	// Neu anlegen
 	CSimpleTable item;
@@ -472,7 +481,7 @@ uint32_t CTableStore::GetId(const ppl7::String& value) const
 {
 	std::map<ppl7::String, uint32_t>::const_iterator it;
 	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(value);
+	it=Tree.find(search);
 	if (it == Tree.end()) return 0;
 	return it->second;
 }
