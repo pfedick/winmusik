@@ -49,6 +49,7 @@ DataShortcut::DataShortcut()
 }
 
 DataShortcut::DataShortcut(const DataShortcut& other)
+	: CStorageItem(other)
 {
 	shortcut=other.shortcut;
 	artist=other.artist;
