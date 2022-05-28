@@ -389,6 +389,7 @@ public:
 	uint32_t		References;
 	ppl7::String	Value;
 	CSimpleTable();
+	CSimpleTable(uint32_t id, const ppl7::String& value, uint32_t references=0);
 	CSimpleTable(const CSimpleTable& other);
 	CSimpleTable& operator = (const CSimpleTable& other);
 	virtual ~CSimpleTable();
