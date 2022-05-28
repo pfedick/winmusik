@@ -12,6 +12,7 @@ OBJS_RELEASE =	release/object_title.o \
 	release/Searchlist.o \
 	release/MusicalKeys.o \
 	release/functions.o \
+	release/normalizer.o \
 	release/CID3TagSaver.o \
 	release/traktor.o \
 	release/CWMFile.o \
@@ -33,6 +34,7 @@ OBJS_DEBUG =	debug/object_title.o \
 	debug/Searchlist.o \
 	debug/MusicalKeys.o \
 	debug/functions.o \
+	debug/normalizer.o \
 	debug/CID3TagSaver.o \
 	debug/traktor.o \
 	debug/CWMFile.o \
@@ -124,6 +126,10 @@ release/functions.o: src/functions.cpp include/wm_functions.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/functions.o -c src/functions.cpp
 
+release/normalizer.o: src/normalizer.cpp include/wm_normalizer.h Makefile
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/normalizer.o -c src/normalizer.cpp
+
 release/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/CID3TagSaver.o -c src/CID3TagSaver.cpp
@@ -189,6 +195,10 @@ debug/traktor.o: src/traktor.cpp include/wm_traktor.h Makefile
 debug/functions.o: src/functions.cpp include/wm_functions.h Makefile
 	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/functions.o -c src/functions.cpp
+
+debug/normalizer.o: src/normalizer.cpp include/wm_normalizer.h Makefile
+	-mkdir -p debug
+	$(CXX) $(CXXDEBUGFLAGS) -o debug/normalizer.o -c src/normalizer.cpp
 
 debug/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p debug
