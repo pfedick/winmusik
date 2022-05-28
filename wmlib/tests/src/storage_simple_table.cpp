@@ -25,6 +25,7 @@
 #include "libwinmusik3.h"
 #include "../include/wm_storage.h"
 #include "wm_playlist.h"
+#include "wm_exceptions.h"
 #include "wmlib-tests.h"
 
 namespace {
@@ -42,6 +43,37 @@ protected:
 
 	}
 };
+
+static void AddDefaults(CVersionStore& vstore)
+{
+	vstore.Put(CSimpleTable(1, "Single", 100));
+	vstore.FindOrAdd("Single");
+	vstore.Put(CSimpleTable(2, "Maxi", 5));
+	vstore.FindOrAdd("Extended Version");
+	vstore.FindOrAdd("Extended Mix");
+	vstore.FindOrAdd("Extended Mix");
+	vstore.FindOrAdd("12\" Version");
+	vstore.FindOrAdd("Maxi");
+	vstore.FindOrAdd("Album Version");
+	vstore.FindOrAdd("Radio Edit");
+	vstore.FindOrAdd("Original Version");
+	vstore.FindOrAdd("Original Mix");
+	vstore.FindOrAdd("Radio Mix");
+	vstore.Put(CSimpleTable(16, "Test Mix 1"));
+	vstore.FindOrAdd("Test Mix 2");
+	vstore.Put(CSimpleTable(20, "Delete Test 1"));
+	vstore.Put(CSimpleTable(21, "Delete Test 2"));
+	vstore.Put(CSimpleTable(22, "No Delete Test 3"));
+}
+
+static void PrepareCut(CStorage& storage, CVersionStore& vstore)
+{
+	ppl7::Dir::mkDir("tmp");
+	storage.Init("tmp");
+	storage.RegisterStorageClass(&vstore);
+	storage.DeleteDatabase();
+	AddDefaults(vstore);
+}
 
 TEST_F(StorageSimpleTableTest, DataObject) {
 	CSimpleTable t1;
@@ -63,7 +95,7 @@ TEST_F(StorageSimpleTableTest, DataObject) {
 	ASSERT_EQ(ppl7::String("Test"), t3.Value);
 }
 
-TEST_F(StorageSimpleTableTest, Put) {
+TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 	CStorage storage;
 	ppl7::Dir::mkDir("tmp");
 	storage.Init("tmp");
@@ -90,8 +122,84 @@ TEST_F(StorageSimpleTableTest, Put) {
 		exp.print();
 		throw;
 	}
+	ASSERT_EQ((uint32_t)17, vstore.MaxId());
+	ASSERT_EQ((uint32_t)10001, vstore.Capacity());
+	ASSERT_EQ((uint32_t)12, vstore.Size());
+}
+
+TEST_F(StorageSimpleTableTest, Delete) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+	ASSERT_EQ((uint32_t)15, vstore.Size());
+	ASSERT_EQ((uint32_t)22, vstore.MaxId());
+	vstore.Delete(22);
+	ASSERT_EQ((uint32_t)14, vstore.Size());
+	ASSERT_EQ((uint32_t)21, vstore.MaxId());
+	vstore.Delete(21);
+	vstore.Delete(20);
+	ASSERT_EQ((uint32_t)12, vstore.Size());
+	ASSERT_EQ((uint32_t)17, vstore.MaxId());
+}
+
+TEST_F(StorageSimpleTableTest, Get) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+
+	const CSimpleTable& t1=vstore.Get(1);
+	ASSERT_EQ(ppl7::String("Single"), t1.Value);
+	ASSERT_EQ((uint32_t)100, t1.References);
+	const CSimpleTable& t2=vstore.Get(2);
+	ASSERT_EQ(ppl7::String("Maxi"), t2.Value);
+	ASSERT_EQ((uint32_t)5, t2.References);
+
+	ASSERT_THROW(vstore.Get(30), RecordDoesNotExistException);
+
+	ASSERT_EQ(NULL, vstore.GetPtr(30));
+
 
 }
+
+TEST_F(StorageSimpleTableTest, GetId) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+	ASSERT_EQ((uint32_t)0, vstore.GetId("Unknown Entry"));
+	ASSERT_EQ((uint32_t)1, vstore.GetId("Single"));
+	ASSERT_EQ((uint32_t)2, vstore.GetId("Maxi"));
+	ASSERT_EQ((uint32_t)4, vstore.GetId("Extended Mix"));
+}
+
+TEST_F(StorageSimpleTableTest, Find) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+	const CSimpleTable* t;
+	t=vstore.Find("Unknown Entry");
+	ASSERT_EQ(NULL, t);
+	t=vstore.Find("Extended Mix");
+	ASSERT_FALSE(t == NULL);
+	ASSERT_EQ((uint32_t)4, t->Id);
+	ASSERT_EQ(ppl7::String("Extended Mix"), t->Value);
+}
+
+TEST_F(StorageSimpleTableTest, FindAll) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+	CVersionStore::IndexTree Result;
+	ASSERT_EQ((size_t)5, vstore.FindAll("Mix", Result));
+	//4, 10, 11, 16, 17
+	ASSERT_TRUE(Result.find(4) != Result.end());
+	ASSERT_TRUE(Result.find(10) != Result.end());
+	ASSERT_TRUE(Result.find(11) != Result.end());
+	ASSERT_TRUE(Result.find(16) != Result.end());
+	ASSERT_TRUE(Result.find(17) != Result.end());
+
+}
+
+
 
 
 

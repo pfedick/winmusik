@@ -264,9 +264,11 @@ CTrackList::const_iterator CTrackList::end() const
 
 DataTrack* CTrackList::SaveToMemory(const DataTrack& t)
 {
-	Tracks.insert(std::pair<int, DataTrack>(t.Track, t));
+	std::pair<std::map<int, DataTrack>::iterator, bool> new_it;
+	new_it=Tracks.insert(std::pair<int, DataTrack>(t.Track, t));
 	if (min == 0 || t.Track < min) min=t.Track;
 	if (t.Track > max) max=t.Track;
+	return &new_it.first->second;
 }
 
 void CTrackList::SaveToStorage(DataTrack& t)

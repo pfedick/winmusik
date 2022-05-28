@@ -6,7 +6,7 @@ LIBDEP	:= ../pplib/release/libpplib.a
 
 
 
-OBJS_RELEASE =	release/object_title.o \
+OBJS_RELEASE =	\
 	release/config.o \
 	release/Playlist.o \
 	release/Searchlist.o \
@@ -28,7 +28,7 @@ OBJS_RELEASE =	release/object_title.o \
 
 
 
-OBJS_DEBUG =	debug/object_title.o \
+OBJS_DEBUG =	\
 	debug/config.o \
 	debug/Playlist.o \
 	debug/Searchlist.o \

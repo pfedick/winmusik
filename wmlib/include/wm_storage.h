@@ -426,6 +426,7 @@ private:
 	CSimpleTable** TableIndex;
 	uint32_t max;
 	uint32_t highestId;
+	size_t size;
 
 	void Increase(uint32_t maxid);
 	void SaveToStorage(CSimpleTable& t);
@@ -433,6 +434,7 @@ private:
 
 	void removeFromWordTree(uint32_t id);
 	void addToWordTree(uint32_t id);
+	void removeFromTree(uint32_t id);
 	void makeUnion(IndexTree& Result, const IndexTree& Tree1, const IndexTree& Tree2);
 	void copy(IndexTree& Result, const IndexTree& src);
 
@@ -450,6 +452,8 @@ public:
 	const CSimpleTable& Get(uint32_t id) const;
 	const CSimpleTable* GetPtr(uint32_t id) const;
 	uint32_t MaxId() const;
+	uint32_t Capacity() const;
+	uint32_t Size() const;
 	const CSimpleTable* Find(const ppl7::String& value) const;
 	uint32_t GetId(const ppl7::String& value) const;
 	uint32_t FindOrAdd(const ppl7::String& value);

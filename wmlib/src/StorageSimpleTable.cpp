@@ -292,6 +292,7 @@ CTableStore::CTableStore()
 	TableIndex=NULL;
 	max=0;
 	highestId=0;
+	size=0;
 }
 
 CTableStore::~CTableStore()
@@ -321,6 +322,7 @@ void CTableStore::Clear()
 	TableIndex=NULL;
 	max=0;
 	highestId=0;
+	size=0;
 	Words.clear();
 	Tree.clear();
 }
@@ -375,11 +377,13 @@ CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 	// Gibt's den Eintrag schon?
 	if (TableIndex[id]) {
 		removeFromWordTree(id);
+		removeFromTree(id);
 	} else {
 		TableIndex[id]=new CSimpleTable;
 		if (!TableIndex[id]) {
 			throw ppl7::OutOfMemoryException();
 		}
+		size++;
 	}
 	if (id > highestId) highestId=id;
 	TableIndex[id]->CopyDataFrom(t);
@@ -389,7 +393,6 @@ CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 	Tree.insert(std::pair<ppl7::String, uint32_t>(search, id));
 	return TableIndex[id];
 }
-
 
 uint32_t CTableStore::Put(const CSimpleTable& entry)
 /*!\brief Datensatz speichern
@@ -443,6 +446,41 @@ const CSimpleTable* CTableStore::GetPtr(uint32_t id) const
 	}
 	return TableIndex[id];
 }
+
+void CTableStore::Delete(uint32_t id)
+{
+	CSimpleTable* t=(CSimpleTable*)GetPtr(id);
+	if (!t) return;
+	removeFromWordTree(id);
+	removeFromTree(id);
+	TableIndex[id]=NULL;
+	getStorage().Delete(this, t);
+	size--;
+	delete t;
+	if (id != highestId) return;
+	uint32_t new_highestId=0;
+	for (uint32_t i=1;i < highestId;i++) {
+		if (TableIndex[i]) new_highestId=i;
+	}
+	highestId=new_highestId;
+}
+
+
+uint32_t CTableStore::MaxId() const
+{
+	return highestId;
+}
+
+uint32_t CTableStore::Capacity() const
+{
+	return max;
+}
+
+uint32_t CTableStore::Size() const
+{
+	return size;
+}
+
 
 
 const CSimpleTable* CTableStore::Find(const ppl7::String& value) const
@@ -505,6 +543,16 @@ void CTableStore::LoadChunk(const CWMFileChunk& chunk)
 	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
 	SaveToMemory(data);
+}
+
+
+void CTableStore::removeFromTree(uint32_t id)
+{
+	const CSimpleTable* t=GetPtr(id);
+	if (!t) return;
+	ppl7::String search=ppl7::LowerCase(ppl7::Trim(TableIndex[id]->Value));
+	std::map<ppl7::String, uint32_t>::iterator it=Tree.find(search);
+	if (it != Tree.end() && it->second == id) Tree.erase(it);
 }
 
 
