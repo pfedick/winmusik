@@ -33,12 +33,12 @@ private:
 	ppl7::String customname;
 	ppl7::String customkey[26];
 public:
-	void setCustomName(const ppl7::String &name);
+	void setCustomName(const ppl7::String& name);
 	const ppl7::String& customName() const;
-	void setCustomKeyName(int key, const ppl7::String &name);
+	void setCustomKeyName(int key, const ppl7::String& name);
 
 	ppl7::String keyName(int id, MusicKeyType type) const;
-	int keyId(const ppl7::String &name) const;
+	int keyId(const ppl7::String& name) const;
 
 	static ppl7::String sharpName(int id);
 	static ppl7::String openKeyName(int id);
@@ -46,7 +46,8 @@ public:
 
 
 
-}}}	// EOF Namespace de.pfp.winmusik
+}
+}
+}	// EOF Namespace de.pfp.winmusik
 
 #endif /* WM_MUSICALKEYS_H */
-
