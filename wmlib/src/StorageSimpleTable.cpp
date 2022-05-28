@@ -198,7 +198,7 @@ void CSimpleTable::Export(ppl7::ByteArray& bin) const
 	// Zunächst den benötigten Speicher berechnen
 	int size=9;
 	int lenValue=Value.size();
-	if (Value) size+=lenValue;
+	if (lenValue) size+=lenValue;
 	char* a=(char*)bin.malloc(size);
 	ppl7::Poke32(a, Id);
 	ppl7::Poke32(a + 4, References);
