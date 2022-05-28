@@ -753,10 +753,12 @@ CTitleStore::~CTitleStore()
 
 void CTitleStore::Clear()
 {
-	for (uint32_t i=0;i < max;i++) {
-		if (TitleIndex[i] != NULL) delete TitleIndex[i];
+	if (TitleIndex) {
+		for (uint32_t i=0;i < max;i++) {
+			if (TitleIndex[i] != NULL) delete TitleIndex[i];
+		}
+		free(TitleIndex);
 	}
-	free(TitleIndex);
 	TitleIndex=NULL;
 	max=0;
 	highestId=0;
@@ -816,9 +818,7 @@ uint32_t CTitleStore::Put(const DataTitle& title)
 
 DataTitle* CTitleStore::SaveToMemory(const DataTitle& title)
 {
-	uint32_t save_highestId=highestId;
 	uint32_t id=0;
-
 	if (title.TitleId == 0) {
 		// Wir haben einen neuen Titel und vergeben eine Id
 		id=highestId + 1;
@@ -828,19 +828,18 @@ DataTitle* CTitleStore::SaveToMemory(const DataTitle& title)
 	if (id >= max) {
 		Increase(id);
 	}
-	if (id > highestId) highestId=id;
 
 	// Gibt's den Titel schon?
-	if (TitleIndex[id]) {
-		TitleIndex[id]->CopyDataFrom(title);
-		return TitleIndex[id];
+	if (!TitleIndex[id]) {
 	} else {
 		TitleIndex[id]=new DataTitle;
 		if (!TitleIndex[id]) {
 			throw ppl7::OutOfMemoryException();
 		}
-		TitleIndex[id]->CopyDataFrom(title);
+
 	}
+	TitleIndex[id]->CopyDataFrom(title);
+	if (id > highestId) highestId=id;
 	return TitleIndex[id];
 }
 
