@@ -456,7 +456,7 @@ public:
 	uint32_t GetId(const ppl7::String& value) const;
 	uint32_t FindOrAdd(const ppl7::String& value);
 	size_t FindAll(const ppl7::String& value, IndexTree& Result);
-	uint32_t findWords(IndexTree& tree, const ppl7::String& words);
+	size_t FindWords(const ppl7::String& words, IndexTree& tree);
 
 };
 

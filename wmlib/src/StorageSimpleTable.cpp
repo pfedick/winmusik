@@ -624,15 +624,14 @@ void CTableStore::copy(IndexTree& Result, const IndexTree& src)
 	}
 }
 
-uint32_t CTableStore::findWords(IndexTree& Result, const ppl7::String& words)
+size_t CTableStore::FindWords(const ppl7::String& words, IndexTree& Result)
 {
-	uint32_t count=0;
 	ppl7::Array w;
 	if (GetNormalizer().GetWords(words, w)) {
 		for (size_t i=0;i < w.size();i++) {
 			std::map<ppl7::String, IndexTree >::const_iterator it=Words.find(w[i]);
 			if (it != Words.end()) {
-				if (!count) copy(Result, it->second);
+				if (!Result.size()) copy(Result, it->second);
 				else {
 					IndexTree res2;
 					makeUnion(res2, Result, it->second);
@@ -642,10 +641,9 @@ uint32_t CTableStore::findWords(IndexTree& Result, const ppl7::String& words)
 				Result.clear();
 				return 0;
 			}
-			count++;
 		}
 	}
-	return count;
+	return Result.size();
 }
 
 
