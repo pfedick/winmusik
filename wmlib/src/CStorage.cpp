@@ -69,6 +69,7 @@ CStorage::CStorage()
 {
 	bLoadDatabaseRunning=false;
 	logger=NULL;
+	DatabaseFile="winmusik.dat";
 }
 
 CStorage::~CStorage()
@@ -97,9 +98,10 @@ void CStorage::ClearWithoutMutex()
 	}
 }
 
-void CStorage::Init(const ppl7::String& path)
+void CStorage::Init(const ppl7::String& path, const ppl7::String& file)
 {
 	DataPath=path;
+	DatabaseFile=file;
 }
 
 void CStorage::RegisterStorageClass(CStorageBase* storageclass)
@@ -178,7 +180,7 @@ void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArra
 	if (strcmp(t, "OIMP") == 0) {
 		File+="/wmoimp.dat";
 	} else {
-		File+="/winmusik.dat";
+		File+="/" + DatabaseFile;
 	}
 	ff.Open(File);
 	ff.SaveChunk(chunk);
@@ -217,7 +219,7 @@ void CStorage::Delete(CStorageBase* type, CStorageItem* item)
 	if (strcmp(t, "OIMP") == 0) {
 		File+="/wmoimp.dat";
 	} else {
-		File+="/winmusik.dat";
+		File+="/" + DatabaseFile;
 	}
 
 	ff.Open(File);
@@ -252,7 +254,7 @@ void CStorage::LoadDatabase(CProgressUpdate* progressCallback)
 	ppl7::String File;
 	CWMFile ff;
 	CWMFileChunk chunk;
-	File=DataPath + "/winmusik.dat";
+	File=DataPath + "/" + DatabaseFile;
 	if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading Database from File: %s", (const char*)File);
 	ff.Open(File);
 	uint32_t size=ff.GetFileSize();
@@ -315,7 +317,7 @@ void CStorage::DeleteDatabase()
 	Mutex.lock();
 	ClearWithoutMutex();
 	try {
-		File=DataPath + "/winmusik.dat";
+		File=DataPath + "/" + DatabaseFile;
 		if (ppl7::File::exists(File)) {
 			ppl7::File::remove(File);
 		}

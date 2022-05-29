@@ -77,6 +77,7 @@ class CStorage
 private:
 	ppl7::Mutex Mutex;
 	ppl7::String DataPath;
+	ppl7::String DatabaseFile;
 	std::map<uint32_t, CStorageBase*> StorageClasses;
 	bool	bLoadDatabaseRunning;
 	CWMFile	StorageFile;
@@ -89,7 +90,7 @@ public:
 	virtual ~CStorage();
 	void Clear();
 	void SetLogger(ppl7::Logger* logger);
-	void Init(const ppl7::String& path);
+	void Init(const ppl7::String& path, const ppl7::String& file=ppl7::String("winmusik.dat"));
 	void RegisterStorageClass(CStorageBase* storageclass);
 	CStorageBase* FindStorageClass(const char* name);
 	void Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin);
@@ -420,7 +421,7 @@ class CTableStore : public CStorageBase
 public:
 	typedef std::set<uint32_t> IndexTree;
 private:
-
+	ppl7::String unknown;
 	std::map<ppl7::String, IndexTree >	Words;
 	std::map<ppl7::String, uint32_t> Tree;
 	CSimpleTable** TableIndex;
@@ -451,6 +452,7 @@ public:
 	void Delete(uint32_t id);
 	const CSimpleTable& Get(uint32_t id) const;
 	const CSimpleTable* GetPtr(uint32_t id) const;
+	const ppl7::String& GetValue(uint32_t id) const;
 	uint32_t MaxId() const;
 	uint32_t Capacity() const;
 	uint32_t Size() const;
