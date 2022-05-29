@@ -18,10 +18,16 @@ LIBS_COVERAGE	= compile/libgtest.a -L../debug -lwinmusik3   ../../pplib/debug/li
 PROGNAME = testsuite
 
 
-OBJECTS = compile/main.o compile/storage.o \
+OBJECTS = compile/main.o \
 	compile/traktor.o compile/playlist.o compile/cwmfile.o \
 	compile/id3tagsaver.o \
-	compile/storage_simple_table.o
+	compile/storage.o \
+	compile/storage_device.o \
+	compile/storage_item.o \
+	compile/storage_shortcut.o \
+	compile/storage_simple_table.o \
+	compile/storage_title.o \
+	compile/storage_track.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h ../debug/libwinmusik3.a
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -93,3 +99,24 @@ compile/playlist.o: src/playlist.cpp Makefile wmlib-tests.h
 compile/storage_simple_table.o: src/storage_simple_table.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/storage_simple_table.o -c src/storage_simple_table.cpp
+
+
+compile/storage_device.o: src/storage_device.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_device.o -c src/storage_device.cpp
+
+compile/storage_item.o: src/storage_item.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_item.o -c src/storage_item.cpp
+
+compile/storage_shortcut.o: src/storage_shortcut.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_shortcut.o -c src/storage_shortcut.cpp
+
+compile/storage_title.o: src/storage_title.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_title.o -c src/storage_title.cpp
+
+compile/storage_track.o: src/storage_track.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_track.o -c src/storage_track.cpp
