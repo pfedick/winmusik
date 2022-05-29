@@ -194,11 +194,13 @@ TEST_F(StorageSimpleTableTest, FindAll) {
 	PrepareCut(storage, vstore);
 	CVersionStore::IndexTree Result;
 	ASSERT_EQ((size_t)5, vstore.FindAll("Mix", Result));
-	//4, 10, 11, 16, 17
+	//4, 9, 10, 16, 17
+	/*
 	CVersionStore::IndexTree::const_iterator it;
 	for (it=Result.begin();it != Result.end();++it) {
 		printf("found: %d = %s\n", (*it), (const char*)vstore.GetValue((*it)));
 	}
+	*/
 
 	ASSERT_TRUE(Result.find(4) != Result.end());
 	ASSERT_TRUE(Result.find(9) != Result.end());
@@ -227,6 +229,27 @@ TEST_F(StorageSimpleTableTest, Rename) {
 	ASSERT_EQ((uint32_t)0, vstore.GetId("Maxi"));
 
 }
+
+TEST_F(StorageSimpleTableTest, FindWords) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore);
+	vstore.Put(CSimpleTable(19, "Test Mix 1"));
+	vstore.Put(CSimpleTable(23, "Delete Mix 1"));
+	CVersionStore::IndexTree Result;
+	ASSERT_EQ((size_t)3, vstore.FindWords("Test Delete", Result));
+	/*
+	CVersionStore::IndexTree::const_iterator it;
+	for (it=Result.begin();it != Result.end();++it) {
+		printf("found: %d = %s\n", (*it), (const char*)vstore.GetValue((*it)));
+	}
+	*/
+
+	ASSERT_TRUE(Result.find(20) != Result.end());
+	ASSERT_TRUE(Result.find(21) != Result.end());
+	ASSERT_TRUE(Result.find(22) != Result.end());
+}
+
 
 
 
