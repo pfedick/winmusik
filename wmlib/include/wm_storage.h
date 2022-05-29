@@ -340,6 +340,8 @@ public:
 
 	DataShortcut();
 	DataShortcut(const DataShortcut& other);
+	DataShortcut(const ppl7::String& shortcut, const ppl7::String& artist);
+	DataShortcut& operator = (const DataShortcut& other);
 	void Clear();
 	void CopyFrom(const DataShortcut& other);
 	void CopyDataFrom(const DataShortcut& other);
@@ -372,6 +374,7 @@ public:
 	const DataShortcut& Get(const ppl7::String& shortcut) const;
 	const DataShortcut* GetPtr(const ppl7::String& shortcut) const;
 	void Delete(const ppl7::String& shortcut);
+	size_t Size() const;
 
 	iterator begin();
 	iterator end();

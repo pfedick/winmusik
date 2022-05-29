@@ -56,6 +56,13 @@ DataShortcut::DataShortcut(const DataShortcut& other)
 	formatversion=1;
 }
 
+DataShortcut::DataShortcut(const ppl7::String& shortcut, const ppl7::String& artist)
+{
+	formatversion=1;
+	this->shortcut=shortcut;
+	this->artist=artist;
+}
+
 void DataShortcut::Clear()
 /*!\brief Speicher freigeben
  *
@@ -80,6 +87,13 @@ void DataShortcut::CopyFrom(const DataShortcut& other)
 {
 	CopyDataFrom(other);
 	CopyStorageFrom(other);
+}
+
+DataShortcut& DataShortcut::operator = (const DataShortcut& other)
+{
+	CopyDataFrom(other);
+	CopyStorageFrom(other);
+	return *this;
 }
 
 void DataShortcut::SetValue(const ppl7::String& shortcut, const ppl7::String& artist)
@@ -107,9 +121,9 @@ void DataShortcut::Export(ppl7::ByteArray& bin) const
 	// Speicher allokieren
 	char* a=(char*)bin.malloc(size);
 	ppl7::Poke16(a, lenShortcut);
-	if (shortcut) strncpy(a + 2, shortcut, lenShortcut);
+	if (lenShortcut) strncpy(a + 2, shortcut, lenShortcut);
 	ppl7::Poke16(a + 2 + lenShortcut, lenArtist);
-	if (artist) strncpy(a + 4 + lenShortcut, artist, lenArtist);
+	if (lenArtist) strncpy(a + 4 + lenShortcut, artist, lenArtist);
 }
 
 void DataShortcut::Import(const ppl7::ByteArrayPtr& bin, int version)
@@ -177,8 +191,6 @@ void CShortcutStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
-	// die alle Datensätze löscht.
 	Tree.clear();
 }
 
@@ -204,12 +216,12 @@ void CShortcutStore::SaveToStorage(DataShortcut& t)
 DataShortcut* CShortcutStore::SaveToMemory(const DataShortcut& t)
 {
 	// Gibt's die Abkürzung schon?
-	ppl7::String search=ppl7::LowerCase(t.shortcut);
+	ppl7::String search=ppl7::Trim(ppl7::LowerCase(t.shortcut));
 	std::map<ppl7::String, DataShortcut>::iterator it;
 	it=Tree.find(search);
 	if (it != Tree.end()) {
 		// Jepp, gibt's schon. Wir machen ein Update
-		it->second=t;
+		it->second.artist=t.artist;
 		return &it->second;
 	}
 	std::pair<CShortcutStore::iterator, bool> new_it;
@@ -241,7 +253,7 @@ void CShortcutStore::Put(const DataShortcut& entry)
 const DataShortcut& CShortcutStore::Get(const ppl7::String& shortcut) const
 {
 	// Make search string to lowercase
-	ppl7::String search=ppl7::LowerCase(shortcut);
+	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
 	std::map<ppl7::String, DataShortcut>::const_iterator it;
 	it=Tree.find(search);
 	if (it == Tree.end())  throw RecordDoesNotExistException();
@@ -251,11 +263,16 @@ const DataShortcut& CShortcutStore::Get(const ppl7::String& shortcut) const
 const DataShortcut* CShortcutStore::GetPtr(const ppl7::String& shortcut) const
 {
 	// Make search string to lowercase
-	ppl7::String search=ppl7::LowerCase(shortcut);
+	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
 	std::map<ppl7::String, DataShortcut>::const_iterator it;
 	it=Tree.find(search);
 	if (it == Tree.end()) return NULL;
 	return &it->second;
+}
+
+size_t CShortcutStore::Size() const
+{
+	return Tree.size();
 }
 
 void CShortcutStore::LoadChunk(const CWMFileChunk& chunk)
@@ -270,7 +287,7 @@ void CShortcutStore::LoadChunk(const CWMFileChunk& chunk)
 
 void CShortcutStore::Delete(const ppl7::String& shortcut)
 {
-	ppl7::String search=ppl7::LowerCase(shortcut);
+	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
 	std::map<ppl7::String, DataShortcut>::iterator it;
 	it=Tree.find(search);
 	if (it != Tree.end()) {

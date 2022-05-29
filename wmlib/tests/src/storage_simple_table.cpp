@@ -96,9 +96,9 @@ TEST_F(StorageSimpleTableTest, DataObject) {
 }
 
 TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
+	CVersionStore vstore;
 	CStorage storage;
 	storage.Init("tmp/simpletable", "PutAndFindOrAdd.dat");
-	CVersionStore vstore;
 	storage.RegisterStorageClass(&vstore);
 	storage.DeleteDatabase();
 	try {
@@ -127,8 +127,8 @@ TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 }
 
 TEST_F(StorageSimpleTableTest, Delete) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore, "Delete.dat");
 	ASSERT_EQ((uint32_t)15, vstore.Size());
 	ASSERT_EQ((uint32_t)22, vstore.MaxId());
@@ -147,8 +147,8 @@ TEST_F(StorageSimpleTableTest, Delete) {
 }
 
 TEST_F(StorageSimpleTableTest, Get) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore);
 
 	const CSimpleTable& t1=vstore.Get(1);
@@ -166,8 +166,8 @@ TEST_F(StorageSimpleTableTest, Get) {
 }
 
 TEST_F(StorageSimpleTableTest, GetId) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore);
 	ASSERT_EQ((uint32_t)0, vstore.GetId("Unknown Entry"));
 	ASSERT_EQ((uint32_t)1, vstore.GetId("Single"));
@@ -176,8 +176,8 @@ TEST_F(StorageSimpleTableTest, GetId) {
 }
 
 TEST_F(StorageSimpleTableTest, Find) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore);
 	const CSimpleTable* t;
 	t=vstore.Find("Unknown Entry");
@@ -189,8 +189,8 @@ TEST_F(StorageSimpleTableTest, Find) {
 }
 
 TEST_F(StorageSimpleTableTest, FindAll) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore);
 	CVersionStore::IndexTree Result;
 	ASSERT_EQ((size_t)5, vstore.FindAll("Mix", Result));
@@ -211,8 +211,8 @@ TEST_F(StorageSimpleTableTest, FindAll) {
 
 
 TEST_F(StorageSimpleTableTest, Rename) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore, "Rename.dat");
 	CSimpleTable t=vstore.Get(4);
 	t.Value="Extended Cut";
@@ -231,8 +231,8 @@ TEST_F(StorageSimpleTableTest, Rename) {
 }
 
 TEST_F(StorageSimpleTableTest, FindWords) {
-	CStorage storage;
 	CVersionStore vstore;
+	CStorage storage;
 	PrepareCut(storage, vstore);
 	vstore.Put(CSimpleTable(19, "Test Mix 1"));
 	vstore.Put(CSimpleTable(23, "Delete Mix 1"));
