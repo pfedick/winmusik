@@ -36,6 +36,7 @@ using namespace de::pfp::winmusik;
 class StorageSimpleTableTest : public ::testing::Test {
 protected:
 	StorageSimpleTableTest() {
+		ppl7::Dir::mkDir("tmp/simpletable", true);
 
 	}
 	~StorageSimpleTableTest()
@@ -66,10 +67,9 @@ static void AddDefaults(CVersionStore& vstore)
 	vstore.Put(CSimpleTable(22, "No Delete Test 3"));
 }
 
-static void PrepareCut(CStorage& storage, CVersionStore& vstore)
+static void PrepareCut(CStorage& storage, CVersionStore& vstore, const ppl7::String db_file=ppl7::String("winmusik.dat"))
 {
-	ppl7::Dir::mkDir("tmp");
-	storage.Init("tmp");
+	storage.Init("tmp/simpletable", db_file);
 	storage.RegisterStorageClass(&vstore);
 	storage.DeleteDatabase();
 	AddDefaults(vstore);
@@ -97,8 +97,7 @@ TEST_F(StorageSimpleTableTest, DataObject) {
 
 TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 	CStorage storage;
-	ppl7::Dir::mkDir("tmp");
-	storage.Init("tmp");
+	storage.Init("tmp/simpletable", "PutAndFindOrAdd.dat");
 	CVersionStore vstore;
 	storage.RegisterStorageClass(&vstore);
 	storage.DeleteDatabase();
@@ -130,7 +129,7 @@ TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 TEST_F(StorageSimpleTableTest, Delete) {
 	CStorage storage;
 	CVersionStore vstore;
-	PrepareCut(storage, vstore);
+	PrepareCut(storage, vstore, "Delete.dat");
 	ASSERT_EQ((uint32_t)15, vstore.Size());
 	ASSERT_EQ((uint32_t)22, vstore.MaxId());
 	vstore.Delete(22);
@@ -140,6 +139,11 @@ TEST_F(StorageSimpleTableTest, Delete) {
 	vstore.Delete(20);
 	ASSERT_EQ((uint32_t)12, vstore.Size());
 	ASSERT_EQ((uint32_t)17, vstore.MaxId());
+
+	ASSERT_TRUE(NULL == vstore.GetPtr(22));
+	ASSERT_TRUE(NULL == vstore.GetPtr(21));
+	ASSERT_TRUE(NULL == vstore.GetPtr(20));
+	ASSERT_TRUE(NULL != vstore.GetPtr(17));
 }
 
 TEST_F(StorageSimpleTableTest, Get) {
@@ -191,11 +195,36 @@ TEST_F(StorageSimpleTableTest, FindAll) {
 	CVersionStore::IndexTree Result;
 	ASSERT_EQ((size_t)5, vstore.FindAll("Mix", Result));
 	//4, 10, 11, 16, 17
+	CVersionStore::IndexTree::const_iterator it;
+	for (it=Result.begin();it != Result.end();++it) {
+		printf("found: %d = %s\n", (*it), (const char*)vstore.GetValue((*it)));
+	}
+
 	ASSERT_TRUE(Result.find(4) != Result.end());
+	ASSERT_TRUE(Result.find(9) != Result.end());
 	ASSERT_TRUE(Result.find(10) != Result.end());
-	ASSERT_TRUE(Result.find(11) != Result.end());
 	ASSERT_TRUE(Result.find(16) != Result.end());
 	ASSERT_TRUE(Result.find(17) != Result.end());
+}
+
+
+TEST_F(StorageSimpleTableTest, Rename) {
+	CStorage storage;
+	CVersionStore vstore;
+	PrepareCut(storage, vstore, "Rename.dat");
+	CSimpleTable t=vstore.Get(4);
+	t.Value="Extended Cut";
+	vstore.Put(t);
+	CVersionStore::IndexTree Result;
+	ASSERT_EQ((size_t)4, vstore.FindAll("Mix", Result));
+	ASSERT_EQ(NULL, vstore.Find("Extended Mix"));
+
+	t=vstore.Get(2);
+	t.Value="Maxi Version";
+	vstore.Put(t);
+	ASSERT_TRUE(NULL != vstore.Find("Maxi Version"));
+	ASSERT_EQ((uint32_t)2, vstore.GetId("Maxi Version"));
+	ASSERT_EQ((uint32_t)0, vstore.GetId("Maxi"));
 
 }
 

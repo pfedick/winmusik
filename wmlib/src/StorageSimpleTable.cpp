@@ -447,6 +447,22 @@ const CSimpleTable* CTableStore::GetPtr(uint32_t id) const
 	return TableIndex[id];
 }
 
+const ppl7::String& CTableStore::GetValue(uint32_t id) const
+/*!\brief Datensatz auslesen
+ *
+ * Mit dieser Funktion kann der zu \p id zugehörige Datensatz ausgelesen werden.
+ *
+ * \param[in] id ID des gewünschten Datensatzes
+ * \returns Liefert eine Referenz auf den gewünschten Datensatz zurück
+ * \throws RecordDoesNotExistException Wird geworfen, wenn der Datensatz nicht vorhanden ist
+ */
+{
+	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+		return unknown;
+	}
+	return TableIndex[id]->Value;
+}
+
 void CTableStore::Delete(uint32_t id)
 {
 	CSimpleTable* t=(CSimpleTable*)GetPtr(id);
