@@ -412,10 +412,6 @@ class DataRecordDevice : public CSimpleTable {};
 class DataGenre : public CSimpleTable {};
 
 
-typedef struct {
-	CSimpleTable* t;
-} TABLE;
-
 class CTableStore : public CStorageBase
 {
 public:
