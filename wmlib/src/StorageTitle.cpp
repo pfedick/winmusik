@@ -370,6 +370,7 @@ void DataTitle::Clear()
 	VersionId=0;
 	LabelId=0;
 	BPM=0;
+	Size=0;
 	RecordDate=0;
 	ReleaseDate=0;
 	RecordSourceId=0;
@@ -444,64 +445,7 @@ void DataTitle::CopyDataFrom(const DataTitle& other)
 	EnergyLevel=other.EnergyLevel;
 }
 
-void DataTitle::SetTitle(const char* title)
-/*!\brief Songtitel setzen
- *
- * Mit dieser Funktion wird der Titel des Songs gesetzt.
- *
- * \param[in] title Pointer auf einen String mit dem Titel.
- */
-{
-	Title.set(title);
-}
 
-void DataTitle::SetArtist(const char* artist)
-/*!\brief Interpreten setzen
- *
- * Mit dieser Funktion wird der Interpret des Songs gesetzt.
- *
- * \param[in] artist Pointer auf einen String mit dem Namen des Interpreten.
- */
-{
-	Artist.set(artist);
-}
-
-void DataTitle::SetRemarks(const char* remarks)
-/*!\brief Bemerkung setzen
- *
- * Mit dieser Funktion kann eine Bemerkung zu dem Titel hinterlegt werden.
- *
- * \param[in] remarks Pointer auf einen String mit der Bemerkung.
-  */
-
-{
-	Remarks.set(remarks);
-}
-
-void DataTitle::SetTags(const char* tags)
-/*!\brief Suchtags setzen
- *
- * Mit dieser Funktion können optionale Suchtags gesetzt werden.
- *
- * \param[in] tags Pointer auf einen String mit den Suchtags
-  */
-
-{
-	Tags.set(tags);
-}
-
-
-
-void DataTitle::SetAlbum(const char* album)
-/*!\brief Album setzen
- *
- * Mit dieser Funktion kann der Name des Albums gesetzt werden, von dem dieser Titel stammt.
- *
- * \param[in] album Pointer auf einen String mit dem Namen des Albums.
- */
-{
-	Album.set(album);
-}
 
 void DataTitle::SetTitle(const ppl7::String& title)
 /*!\brief Songtitel setzen
@@ -744,6 +688,7 @@ CTitleStore::CTitleStore()
 	TitleIndex=NULL;
 	max=0;
 	highestId=0;
+	size=0;
 }
 
 CTitleStore::~CTitleStore()
@@ -803,16 +748,9 @@ void CTitleStore::SaveToStorage(DataTitle& t)
  */
 uint32_t CTitleStore::Put(const DataTitle& title)
 {
-	Mutex.lock();
-	try {
-		DataTitle* new_title=SaveToMemory(title);
-		SaveToStorage(*new_title);
-		Mutex.unlock();
-		return new_title->TitleId;
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
+	DataTitle* new_title=SaveToMemory(title);
+	SaveToStorage(*new_title);
+	return new_title->TitleId;
 }
 
 
@@ -831,14 +769,17 @@ DataTitle* CTitleStore::SaveToMemory(const DataTitle& title)
 
 	// Gibt's den Titel schon?
 	if (!TitleIndex[id]) {
-	} else {
 		TitleIndex[id]=new DataTitle;
 		if (!TitleIndex[id]) {
 			throw ppl7::OutOfMemoryException();
 		}
-
+		size++;
+	} else {
+		RemoveArtist(TitleIndex[id]->Artist);
 	}
 	TitleIndex[id]->CopyDataFrom(title);
+	TitleIndex[id]->TitleId=id;
+	AddArtist(TitleIndex[id]->Artist);
 	if (id > highestId) highestId=id;
 	return TitleIndex[id];
 }
@@ -847,19 +788,16 @@ void CTitleStore::Delete(uint32_t id)
 {
 	CStorage& store=getStorage();
 	// Gibt's den Track überhaupt?
-	Mutex.lock();
-	try {
-		if (id <= highestId && TitleIndex[id] != NULL) {
-			store.Delete(this, (CStorageItem*)TitleIndex[id]);
-			delete TitleIndex[id];
-			TitleIndex[id]=NULL;
-			if (id == highestId) highestId--;	// ID kann wiederverwendet werden
+	if (id <= highestId && TitleIndex[id] != NULL) {
+		store.Delete(this, (CStorageItem*)TitleIndex[id]);
+		RemoveArtist(TitleIndex[id]->Artist);
+		delete TitleIndex[id];
+		TitleIndex[id]=NULL;
+		if (size > 0) size--;
+		if (id == highestId) {	// ID kann wiederverwendet werden
+			for (;highestId > 0;highestId--) if (TitleIndex[highestId] != NULL) break;
 		}
-	} catch (...) {
-		Mutex.unlock();
-		throw;
 	}
-	Mutex.unlock();
 }
 
 
@@ -892,6 +830,29 @@ bool CTitleStore::Exists(uint32_t id) const
 	return true;
 }
 
+void CTitleStore::AddArtist(const ppl7::String& artist)
+{
+	std::map<ppl7::String, uint32_t>::iterator it;
+	it=Artists.find(artist);
+	if (it == Artists.end()) {
+		Artists.insert(std::pair<ppl7::String, uint32_t>(artist, 1));
+	} else {
+		// we already have this artist, just increase the reference counter
+		it->second++;
+	}
+}
+
+void CTitleStore::RemoveArtist(const ppl7::String& artist)
+{
+	std::map<ppl7::String, uint32_t>::iterator it;
+	it=Artists.find(artist);
+	if (it != Artists.end()) {
+		// decrease reference counter or remove artist, if there are no references any longer
+		if (it->second > 1) it->second--;
+		else Artists.erase(it);
+	}
+}
+
 
 void CTitleStore::LoadChunk(const CWMFileChunk& chunk)
 {
@@ -900,6 +861,16 @@ void CTitleStore::LoadChunk(const CWMFileChunk& chunk)
 	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
 	SaveToMemory(data);
+}
+
+uint32_t CTitleStore::Capacity() const
+{
+	return max;
+}
+
+uint32_t CTitleStore::Size() const
+{
+	return size;
 }
 
 }

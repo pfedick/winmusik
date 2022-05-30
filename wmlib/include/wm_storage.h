@@ -52,10 +52,11 @@ public:
 	void ClearStorageData();
 	void CopyStorageFrom(const CStorageItem& other);
 	void CopyStorageFrom(const CWMFileChunk& chunk);
-	uint32_t GetVersion();
-	uint32_t GetLastChange();
-	uint8_t GetFormatVersion();
-	void PrintStorageData();
+	uint32_t GetVersion() const;
+	uint32_t GetLastChange() const;
+	uint32_t GetFilePos() const;
+	uint8_t GetFormatVersion() const;
+	void PrintStorageData() const;
 };
 
 
@@ -149,12 +150,6 @@ public:
 
 	void CopyFrom(const DataTitle& other);
 	void CopyDataFrom(const DataTitle& other);
-	void SetTitle(const char* title);
-	void SetArtist(const char* artist);
-	void SetRemarks(const char* remarks);
-	void SetTags(const char* tags);
-	void SetAlbum(const char* album);
-
 	void SetTitle(const ppl7::String& title);
 	void SetArtist(const ppl7::String& artist);
 	void SetRemarks(const ppl7::String& remarks);
@@ -174,14 +169,16 @@ public:
 class CTitleStore : public CStorageBase
 {
 private:
-	ppl7::Mutex Mutex;
 	DataTitle** TitleIndex;
 	uint32_t max;
 	uint32_t highestId;
+	uint32_t size;
 
 	void Increase(uint32_t maxid);
 	void SaveToStorage(DataTitle& t);
 	DataTitle* SaveToMemory(const DataTitle& t);
+	void AddArtist(const ppl7::String& artist);
+	void RemoveArtist(const ppl7::String& artist);
 
 public:
 	CTitleStore();
@@ -190,7 +187,7 @@ public:
 	virtual void Clear();
 	virtual void LoadChunk(const CWMFileChunk& chunk);
 
-	std::set<ppl7::String> Artists;
+	std::map<ppl7::String, uint32_t> Artists;
 
 	uint32_t Put(const DataTitle& title);
 	bool Exists(uint32_t id) const;
@@ -198,6 +195,8 @@ public:
 	const DataTitle& Get(uint32_t id) const;
 	const DataTitle* GetPtr(uint32_t id) const;
 	uint32_t MaxId() const;
+	uint32_t Capacity() const;
+	uint32_t Size() const;
 };
 
 

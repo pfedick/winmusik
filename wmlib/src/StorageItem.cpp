@@ -147,7 +147,7 @@ void CStorageItem::CopyStorageFrom(const CWMFileChunk& chunk)
 	formatversion=chunk.GetFormatVersion();
 }
 
-uint32_t CStorageItem::GetVersion()
+uint32_t CStorageItem::GetVersion() const
 /*!\brief Version auslesen
  *
  * Mit dieser Funktion kann die Version des Datensatzes ausgelesen werden
@@ -158,7 +158,7 @@ uint32_t CStorageItem::GetVersion()
 	return version;
 }
 
-uint32_t CStorageItem::GetLastChange()
+uint32_t CStorageItem::GetLastChange() const
 /*!\brief Timestamp der letzten Änderung auslesen
  *
  * Mit dieser Funktion kann der Timestamp der letzten Änderung des Datensatzes ausgelesen werden
@@ -169,7 +169,13 @@ uint32_t CStorageItem::GetLastChange()
 	return lastchange;
 }
 
-uint8_t CStorageItem::GetFormatVersion()
+
+uint32_t CStorageItem::GetFilePos() const
+{
+	return filepos;
+}
+
+uint8_t CStorageItem::GetFormatVersion() const
 /*!\brief Version des Datensatz-Formates auslesen
  *
  * Mit dieser Funktion kann die Version des Datensatz-Formates ausgelesen werden
@@ -180,7 +186,7 @@ uint8_t CStorageItem::GetFormatVersion()
 	return formatversion;
 }
 
-void CStorageItem::PrintStorageData()
+void CStorageItem::PrintStorageData() const
 {
 	printf("filepos: %u, lastchange: %u, version: %u, format: %u\n",
 		filepos, lastchange, version, formatversion);
