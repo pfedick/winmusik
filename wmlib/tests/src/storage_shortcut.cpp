@@ -46,15 +46,6 @@ protected:
 };
 
 
-static void PrepareCut(CStorage& storage, CShortcutStore& store, const ppl7::String db_file=ppl7::String("winmusik.dat"))
-{
-	storage.Init("tmp/shortcut", db_file);
-	storage.RegisterStorageClass(&store);
-	storage.DeleteDatabase();
-
-}
-
-
 TEST_F(StorageShortcutTest, DataObject) {
 	DataShortcut t1;
 	t1.SetValue("psb", "Pet Shop Boys");
@@ -82,7 +73,7 @@ TEST_F(StorageShortcutTest, PutAndGet) {
 	storage.DeleteDatabase();
 	try {
 		store.Put(DataShortcut("psb", "Pet Shop Boys"));
-		store.Put(DataShortcut("omd", "Orchestral Manoeuvres in the Dark"));
+		store.Put(DataShortcut("oMd", "Orchestral Manoeuvres in the Dark"));
 		store.Put(DataShortcut("elo", "Electric Light Orchestra"));
 	} catch (const ppl7::Exception& exp) {
 		exp.print();
@@ -92,10 +83,12 @@ TEST_F(StorageShortcutTest, PutAndGet) {
 
 	ASSERT_THROW(store.Get("abc"), RecordDoesNotExistException);
 	ASSERT_EQ(ppl7::String("Orchestral Manoeuvres in the Dark"), store.Get("OMD").artist);
+	ASSERT_EQ(NULL, store.GetPtr("abc"));
 
 	// Overwrite
 	store.Put(DataShortcut("psb", "Pet Boys Shop"));
 	ASSERT_EQ((size_t)3, store.Size());
+	ASSERT_EQ(ppl7::String("Pet Boys Shop"), store.Get("psb").artist);
 }
 
 
