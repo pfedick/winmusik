@@ -243,12 +243,11 @@ public:
 class CDeviceStore : public CStorageBase
 {
 private:
-	std::map<uint64_t, DataDevice>Tree;
+	typedef std::map<uint32_t, DataDevice> DeviceTree;
+	std::map<uint8_t, DeviceTree>Tree;
 
 	void SaveToStorage(DataDevice& t);
 	DataDevice* SaveToMemory(const DataDevice& t);
-
-	std::map<uint8_t, uint32_t> highest_device_no;
 
 public:
 	CDeviceStore();

@@ -455,32 +455,21 @@ DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
 	// Gibt's den Tonträger schon?
 	uint32_t newDeviceId=entry.DeviceId;
 	if (entry.DeviceId == 0) {
-		std::map<uint8_t, uint32_t>::const_iterator it;
-		it=highest_device_no.find(entry.DeviceType);
-		if (it != highest_device_no.end()) {
-			newDeviceId=(*it).second + 1;
-		} else {
-			newDeviceId=1;
-		}
+		newDeviceId=GetHighestDevice(entry.DeviceType) + 1;
 	}
-	uint64_t id=((uint64_t)entry.DeviceType << 32) || newDeviceId;
+	DeviceTree& DTree=Tree[entry.DeviceId];
 
-	std::map<uint64_t, DataDevice>::iterator dit;
-	dit=Tree.find(id);
-	if (dit != Tree.end()) {	// Device ist schon vorhanden
+	DeviceTree::iterator dit;
+	dit=DTree.find(newDeviceId);
+	if (dit != DTree.end()) {	// Device ist schon vorhanden
 		DataDevice& device=(*dit).second;
 		device.CopyDataFrom(entry);
 		return &device;
 	} else {	// Neues Device
-		Tree.insert(std::pair<uint64_t, DataDevice>(id, entry));
-		dit=Tree.find(id);
-		DataDevice& device=(*dit).second;
+		std::pair<DeviceTree::iterator, bool> new_it;
+		new_it=DTree.insert(std::pair<uint32_t, DataDevice>(newDeviceId, entry));
+		DataDevice& device=new_it.first->second;
 		device.DeviceId=newDeviceId;
-		std::map<uint8_t, uint32_t>::const_iterator it;
-		it=highest_device_no.find(newDeviceId);
-		if (it == highest_device_no.end() || newDeviceId > highest_device_no[entry.DeviceType]) {
-			highest_device_no[entry.DeviceType]=newDeviceId;
-		}
 		return &device;
 	}
 }
@@ -498,11 +487,15 @@ const DataDevice& CDeviceStore::Get(uint8_t DeviceType, uint32_t DeviceId) const
  */
 {
 	// Gibt's den Tonträger schon?
-	uint64_t id=((uint64_t)DeviceType << 32) || DeviceId;
-	std::map<uint64_t, DataDevice>::const_iterator dit;
-	dit=Tree.find(id);
-	if (dit == Tree.end()) throw RecordDoesNotExistException();
-	return (*dit).second;
+	std::map<uint8_t, DeviceTree>::const_iterator it;
+	it=Tree.find(DeviceType);
+	if (it != Tree.end() && it->second.empty() == false) {
+		const DeviceTree& DTree=it->second;
+		DeviceTree::const_iterator dit;
+		dit=DTree.find(DeviceId);
+		if (dit != DTree.end()) return (*dit).second;
+	}
+	throw RecordDoesNotExistException();
 }
 
 const DataDevice* CDeviceStore::GetPtr(uint8_t DeviceType, uint32_t DeviceId) const
@@ -518,20 +511,29 @@ const DataDevice* CDeviceStore::GetPtr(uint8_t DeviceType, uint32_t DeviceId) co
  */
 {
 	// Gibt's den Tonträger schon?
-	uint64_t id=((uint64_t)DeviceType << 32) || DeviceId;
-	std::map<uint64_t, DataDevice>::const_iterator dit;
-	dit=Tree.find(id);
-	if (dit == Tree.end()) return NULL;
-	return &(*dit).second;
+	std::map<uint8_t, DeviceTree>::const_iterator it;
+	it=Tree.find(DeviceType);
+	if (it != Tree.end() && it->second.empty() == false) {
+		const DeviceTree& DTree=it->second;
+		DeviceTree::const_iterator dit;
+		dit=DTree.find(DeviceId);
+		if (dit != DTree.end()) return &(*dit).second;
+	}
+	return NULL;
 }
 
 bool CDeviceStore::Exists(uint8_t DeviceType, uint32_t DeviceId) const
 {
-	uint64_t id=((uint64_t)DeviceType << 32) || DeviceId;
-	std::map<uint64_t, DataDevice>::const_iterator dit;
-	dit=Tree.find(id);
-	if (dit == Tree.end()) return false;
-	return true;
+	// Gibt's den Tonträger schon?
+	std::map<uint8_t, DeviceTree>::const_iterator it;
+	it=Tree.find(DeviceType);
+	if (it != Tree.end() && it->second.empty() == false) {
+		const DeviceTree& DTree=it->second;
+		DeviceTree::const_iterator dit;
+		dit=DTree.find(DeviceId);
+		if (dit != DTree.end()) return true;
+	}
+	return false;
 }
 
 void CDeviceStore::LoadChunk(const CWMFileChunk& chunk)
@@ -545,10 +547,13 @@ void CDeviceStore::LoadChunk(const CWMFileChunk& chunk)
 
 void CDeviceStore::Update(uint8_t DeviceType, uint32_t DeviceId)
 {
-	uint64_t id=((uint64_t)DeviceType << 32) || DeviceId;
-	std::map<uint64_t, DataDevice>::iterator dit;
-	dit=Tree.find(id);
-	if (dit == Tree.end()) {
+	std::map<uint8_t, DeviceTree>::iterator it;
+	it=Tree.find(DeviceType);
+	if (it == Tree.end() || it->second.empty() == true) return;
+	DeviceTree& DTree=it->second;
+	DeviceTree::iterator dit;
+	dit=DTree.find(DeviceId);
+	if (dit == DTree.end()) {
 		return;
 	}
 	DataDevice& t=(*dit).second;
@@ -596,12 +601,10 @@ uint32_t CDeviceStore::GetHighestDevice(uint8_t DeviceType) const
  * ist oder ein ungültiger \p DeviceType angegeben wurde.
  */
 {
-	std::map<uint8_t, uint32_t>::const_iterator it;
-	it=highest_device_no.find(DeviceType);
-	if (it == highest_device_no.end()) {
-		return 0;
-	}
-	return it->second;
+	std::map<uint8_t, DeviceTree>::const_iterator it;
+	it=Tree.find(DeviceType);
+	if (it == Tree.end() || it->second.empty() == true) return 0;
+	return it->second.rbegin()->first;
 }
 
 void CDeviceStore::Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId)
@@ -616,13 +619,10 @@ void CDeviceStore::Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId)
 		throw RecordDoesNotExistException("Cannot renumber, because source device %d does not exist", oldId);
 	}
 	DataDevice d=Get(DeviceType, oldId);
-
-	uint64_t id=((uint64_t)DeviceType << 32) || oldId;
-	Tree.erase(id);
 	d.DeviceId=newId;
 	DataDevice* new_entry=SaveToMemory(d);
 	SaveToStorage(*new_entry);
-	Tree.erase(id);
+	Tree[DeviceType].erase(oldId);
 }
 
 
