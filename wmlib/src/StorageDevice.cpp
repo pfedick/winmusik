@@ -406,9 +406,7 @@ void CDeviceStore::Clear()
 {
 	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
 	// die alle Datensätze löscht.
-	Mutex.lock();
 	Tree.clear();
-	Mutex.unlock();
 }
 
 const char* CDeviceStore::GetChunkName()
@@ -434,16 +432,9 @@ void CDeviceStore::SaveToStorage(DataDevice& entry)
 
 uint32_t CDeviceStore::Put(const DataDevice& entry)
 {
-	Mutex.lock();
-	try {
-		DataDevice* new_entry=SaveToMemory(entry);
-		SaveToStorage(*new_entry);
-		Mutex.unlock();
-		return new_entry->DeviceId;
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
+	DataDevice* new_entry=SaveToMemory(entry);
+	SaveToStorage(*new_entry);
+	return new_entry->DeviceId;
 }
 
 DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
@@ -555,11 +546,9 @@ void CDeviceStore::LoadChunk(const CWMFileChunk& chunk)
 void CDeviceStore::Update(uint8_t DeviceType, uint32_t DeviceId)
 {
 	uint64_t id=((uint64_t)DeviceType << 32) || DeviceId;
-	Mutex.lock();
 	std::map<uint64_t, DataDevice>::iterator dit;
 	dit=Tree.find(id);
 	if (dit == Tree.end()) {
-		Mutex.unlock();
 		return;
 	}
 	DataDevice& t=(*dit).second;
@@ -594,7 +583,6 @@ void CDeviceStore::Update(uint8_t DeviceType, uint32_t DeviceId)
 		previous.FirstDate != t.FirstDate ||
 		previous.LastDate != t.LastDate
 		) SaveToStorage(t);
-	Mutex.unlock();
 }
 
 uint32_t CDeviceStore::GetHighestDevice(uint8_t DeviceType) const
@@ -629,19 +617,12 @@ void CDeviceStore::Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId)
 	}
 	DataDevice d=Get(DeviceType, oldId);
 
-	Mutex.lock();
 	uint64_t id=((uint64_t)DeviceType << 32) || oldId;
 	Tree.erase(id);
 	d.DeviceId=newId;
-	try {
-		DataDevice* new_entry=SaveToMemory(d);
-		SaveToStorage(*new_entry);
-		Tree.erase(id);
-		Mutex.unlock();
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
+	DataDevice* new_entry=SaveToMemory(d);
+	SaveToStorage(*new_entry);
+	Tree.erase(id);
 }
 
 

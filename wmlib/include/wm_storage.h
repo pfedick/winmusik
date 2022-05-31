@@ -243,7 +243,6 @@ public:
 class CDeviceStore : public CStorageBase
 {
 private:
-	ppl7::Mutex Mutex;
 	std::map<uint64_t, DataDevice>Tree;
 
 	void SaveToStorage(DataDevice& t);
