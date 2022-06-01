@@ -37,17 +37,16 @@ class CTrackList
 {
     friend class CTrackStore;
 private:
-    ppl7::Mutex Mutex;
     std::map<int, DataTrack> Tracks;
-    int min, max;
     CTrackStore* storage;
-    void Add(int track, const DataTrack& entry);
     uint32_t	DeviceId;
     uint8_t	DeviceType;
     uint8_t	Page;
 
     DataTrack* SaveToMemory(const DataTrack& t);
     void SaveToStorage(DataTrack& t);
+    void Add(uint16_t Track, const DataTrack& t);
+    void copy(const CTrackList& other);
 
 
 public:
@@ -57,17 +56,17 @@ public:
     CTrackList();
     CTrackList(CTrackStore* storage);
     CTrackList(const CTrackList& other);
-    CTrackList(const CTrackList* other);
     ~CTrackList();
-    void copy(const CTrackList& other);
+    CTrackList& operator=(const CTrackList& other);
     void Clear();
-    int GetMin();
-    int GetMax();
-    int Num();
+    int GetMin() const;
+    int GetMax() const;
+    int Num() const;
+    size_t Size() const;
     const DataTrack& Get(int track) const;
     const DataTrack* GetPtr(int track) const;
-    bool Exists(int track);
-    void Put(const DataTrack& entry);
+    bool Exists(int track) const;
+    const DataTrack& Put(const DataTrack& entry);
     void Delete(int track);
     //void DeleteShift(int track, CTitleStore* tistore);
     //void InsertShift(int track, CTitleStore* tistore);

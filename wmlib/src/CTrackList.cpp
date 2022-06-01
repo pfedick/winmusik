@@ -72,8 +72,6 @@ CTrackList::CTrackList()
  * Der Konstruktor setzt alle Variablen auf 0.
  */
 {
-	min=0;
-	max=0;
 	storage=NULL;
 	DeviceId=0;
 	DeviceType=0;
@@ -86,8 +84,6 @@ CTrackList::CTrackList(CTrackStore* storage)
  * Der Konstruktor setzt alle Variablen auf 0.
  */
 {
-	min=0;
-	max=0;
 	this->storage=storage;
 	DeviceId=0;
 	DeviceType=0;
@@ -99,8 +95,6 @@ CTrackList::CTrackList(const CTrackList& other)
 /*!\brief Copy Konstruktor der Klasse
  */
 {
-	min=0;
-	max=0;
 	storage=NULL;
 	DeviceId=0;
 	DeviceType=0;
@@ -108,32 +102,14 @@ CTrackList::CTrackList(const CTrackList& other)
 	copy(other);
 }
 
-CTrackList::CTrackList(const CTrackList* other)
-/*!\brief Copy Konstruktor der Klasse
- */
-{
-	min=0;
-	max=0;
-	storage=NULL;
-	DeviceId=0;
-	DeviceType=0;
-	Page=0;
-	if (other) copy(*other);
-}
-
 void CTrackList::copy(const CTrackList& other)
 {
 	Clear();
-	min=other.min;
-	max=other.max;
 	storage=other.storage;
 	DeviceId=other.DeviceId;
 	DeviceType=other.DeviceType;
 	Page=other.Page;
-	std::map<int, DataTrack>::const_iterator it;
-	for (it=other.Tracks.begin();it != other.Tracks.end();++it) {
-		Tracks.insert(std::pair<int, DataTrack>((*it).first, (*it).second));
-	}
+	Tracks=other.Tracks;
 }
 
 CTrackList::~CTrackList()
@@ -145,6 +121,12 @@ CTrackList::~CTrackList()
 	Clear();
 }
 
+CTrackList& CTrackList::operator=(const CTrackList& other)
+{
+	copy(other);
+	return *this;
+}
+
 void CTrackList::Clear()
 /*!\brief Daten löschen
  *
@@ -153,30 +135,9 @@ void CTrackList::Clear()
  */
 {
 	Tracks.clear();
-	min=0;
-	max=0;
 }
 
-void CTrackList::Add(int track, const DataTrack& entry)
-/*!\brief Track hinzufügen
- *
- * Diese Funktion wird intern von CTrackStore::GetTracklist aufgerufen, um initial Tracks in die
- * Liste einzutragen.
- *
- * \param[in] track Nummer des Tracks
- * \param[in] entry Pointer auf die Daten des Tracks
- * \returns Bei Erfolg liefert die Funktion 1 zurück, sonst 0.
- */
-{
-	if (track < 1 || track >65535) {
-		throw InvalidTrackNumberException("Track must be between 1 and 65535");
-	}
-	Tracks.insert(std::pair<int, DataTrack>(track, entry));
-	if (min == 0 || track < min) min=track;
-	if (track > max) max=track;
-}
-
-int CTrackList::GetMin()
+int CTrackList::GetMin() const
 /*!\brief Kleinste Tracknummer
  *
  * Diese Funktion liefert die kleinste Tracknummer der Liste zurück
@@ -184,15 +145,21 @@ int CTrackList::GetMin()
  * \returns Track-Nummer
  */
 {
-	return min;
+	if (Tracks.empty()) return 0;
+	return Tracks.begin()->first;
 }
 
-int CTrackList::Num()
+int CTrackList::Num() const
 {
 	return (int)Tracks.size();
 }
 
-int CTrackList::GetMax()
+size_t CTrackList::Size() const
+{
+	return Tracks.size();
+}
+
+int CTrackList::GetMax() const
 /*!\brief Größte Tracknummer
  *
  * Diese Funktion liefert die größte Tracknummer der Liste zurück
@@ -200,7 +167,8 @@ int CTrackList::GetMax()
  * \returns Track-Nummer
  */
 {
-	return max;
+	if (Tracks.empty()) return 0;
+	return Tracks.rbegin()->first;
 }
 
 const DataTrack& CTrackList::Get(int track) const
@@ -234,7 +202,7 @@ const DataTrack* CTrackList::GetPtr(int track) const
 	return &(*it).second;
 }
 
-bool CTrackList::Exists(int track)
+bool CTrackList::Exists(int track) const
 {
 	const DataTrack* t=GetPtr(track);
 	if (t) return true;
@@ -266,9 +234,12 @@ DataTrack* CTrackList::SaveToMemory(const DataTrack& t)
 {
 	std::pair<std::map<int, DataTrack>::iterator, bool> new_it;
 	new_it=Tracks.insert(std::pair<int, DataTrack>(t.Track, t));
-	if (min == 0 || t.Track < min) min=t.Track;
-	if (t.Track > max) max=t.Track;
 	return &new_it.first->second;
+}
+
+void CTrackList::Add(uint16_t Track, const DataTrack& t)
+{
+	Tracks.insert(std::pair<int, DataTrack>(Track, t));
 }
 
 void CTrackList::SaveToStorage(DataTrack& t)
@@ -278,7 +249,7 @@ void CTrackList::SaveToStorage(DataTrack& t)
 	}
 }
 
-void CTrackList::Put(const DataTrack& entry)
+const DataTrack& CTrackList::Put(const DataTrack& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -298,11 +269,10 @@ void CTrackList::Put(const DataTrack& entry)
 		throw InvalidTrackNumberException("Track must be between 1 and 65535");
 	}
 	if (storage) {
-		storage->Put(entry);
-		const DataTrack& memtrack=storage->Get(entry.Device, entry.DeviceId, entry.Page, entry.Track);
-		SaveToMemory(memtrack);
+		const DataTrack& memtrack=storage->Put(entry);
+		return *SaveToMemory(memtrack);
 	} else {
-		SaveToMemory(entry);
+		return *SaveToMemory(entry);
 	}
 }
 
