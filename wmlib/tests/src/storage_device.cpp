@@ -247,4 +247,177 @@ TEST_F(StorageDeviceTest, DataDevice_ExportImport) {
 }
 
 
+TEST_F(StorageDeviceTest, PutGetExists) {
+	CDeviceStore store;
+	CStorage storage;
+	storage.Init("tmp/device", "PutAndGet.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+
+	DataDevice d1;
+	d1.SetTitle("Title 1");
+	d1.SetSubTitle("SubTitle 1");
+	d1.DeviceType=1;
+	d1.DeviceId=1;
+
+	d1.Length=2;
+	d1.Recorded=3;
+	d1.LabelId=4;
+	d1.PurchaseDate=5;
+	d1.DateCreated=6;
+	d1.FirstDate=7;
+	d1.LastDate=8;
+	d1.PurchasePrice=9.65f;
+	d1.PurchaseId=10;
+	d1.Pages=1;
+	{
+		const DataDevice& dnew=store.Put(d1);
+		ASSERT_EQ((uint8_t)1, dnew.DeviceType);
+		ASSERT_EQ((uint32_t)1, dnew.DeviceId);
+	}
+
+	d1.DeviceId=0;
+	d1.SetTitle("Title 2");
+	d1.SetSubTitle("SubTitle 2");
+	{
+		const DataDevice& dnew=store.Put(d1);
+		ASSERT_EQ((uint8_t)1, dnew.DeviceType);
+		ASSERT_EQ((uint32_t)2, dnew.DeviceId);
+	}
+	d1.DeviceId=10;
+	d1.DeviceType=2;
+	d1.SetTitle("DeviceType 2, Title 10");
+	d1.SetSubTitle("SubTitle");
+	{
+		const DataDevice& dnew=store.Put(d1);
+		ASSERT_EQ((uint8_t)2, dnew.DeviceType);
+		ASSERT_EQ((uint32_t)10, dnew.DeviceId);
+	}
+
+	ASSERT_EQ((uint32_t)2, store.GetHighestDevice(1));
+	ASSERT_EQ((uint32_t)10, store.GetHighestDevice(2));
+	ASSERT_EQ((uint32_t)0, store.GetHighestDevice(3));
+
+	ASSERT_TRUE(store.Exists(1, 1));
+	ASSERT_TRUE(store.Exists(1, 2));
+	ASSERT_FALSE(store.Exists(1, 3));
+	ASSERT_TRUE(store.Exists(2, 10));
+	ASSERT_FALSE(store.Exists(2, 1));
+
+	{
+		const DataDevice& found=store.Get(1, 1);
+		ASSERT_EQ(ppl7::String("Title 1"), found.Title);
+		ASSERT_EQ((uint32_t)1, found.DeviceId);
+	}
+	ASSERT_THROW(store.Get(1, 3), RecordDoesNotExistException);
+	{
+		const DataDevice& found=store.Get(2, 10);
+		ASSERT_EQ(ppl7::String("DeviceType 2, Title 10"), found.Title);
+		ASSERT_EQ((uint32_t)10, found.DeviceId);
+	}
+	{
+		ASSERT_EQ(NULL, store.GetPtr(1, 3));
+		const DataDevice* found=store.GetPtr(2, 10);
+		ASSERT_EQ(ppl7::String("DeviceType 2, Title 10"), found->Title);
+		ASSERT_EQ((uint32_t)10, found->DeviceId);
+	}
+
+
+}
+
+TEST_F(StorageDeviceTest, Renumber) {
+	CDeviceStore store;
+	CStorage storage;
+	storage.Init("tmp/device", "Renumber.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+
+	DataDevice d1;
+	d1.SetTitle("Title 1");
+	d1.SetSubTitle("SubTitle 1");
+	d1.DeviceType=1;
+	d1.DeviceId=1;
+	store.Put(d1);
+
+	d1.DeviceId=0;
+	d1.SetTitle("Title 2");
+	d1.SetSubTitle("SubTitle 2");
+	store.Put(d1);
+
+	d1.DeviceId=10;
+	d1.DeviceType=2;
+	d1.SetTitle("DeviceType 2, Title 10");
+	d1.SetSubTitle("SubTitle");
+	store.Put(d1);
+
+	store.Renumber(1, 2, 5);
+	ASSERT_TRUE(store.Exists(1, 1));
+	ASSERT_FALSE(store.Exists(1, 2));
+	ASSERT_TRUE(store.Exists(1, 5));
+	ASSERT_TRUE(store.Exists(2, 10));
+	ASSERT_EQ((uint32_t)5, store.GetHighestDevice(1));
+
+	store.Renumber(1, 5, 4);
+	ASSERT_TRUE(store.Exists(1, 4));
+	ASSERT_FALSE(store.Exists(1, 5));
+	ASSERT_EQ((uint32_t)4, store.GetHighestDevice(1));
+
+	ASSERT_THROW(store.Renumber(1, 1, 4), DeviceAlreadyExistsException);
+	ASSERT_THROW(store.Renumber(1, 3, 7), RecordDoesNotExistException);
+
+}
+
+TEST_F(StorageDeviceTest, Delete) {
+	CDeviceStore store;
+	CStorage storage;
+	storage.Init("tmp/device", "Delete.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+
+	DataDevice d1;
+	d1.SetTitle("Title 1");
+	d1.SetSubTitle("SubTitle 1");
+	d1.DeviceType=1;
+	d1.DeviceId=1;
+	store.Put(d1);
+
+	d1.DeviceId=0;
+	d1.SetTitle("Title 2");
+	d1.SetSubTitle("SubTitle 2");
+	store.Put(d1);
+
+	d1.DeviceId=0;
+	d1.SetTitle("Title 3");
+	d1.SetSubTitle("SubTitle 3");
+	store.Put(d1);
+
+	d1.DeviceId=10;
+	d1.DeviceType=2;
+	d1.SetTitle("DeviceType 2, Title 10");
+	d1.SetSubTitle("SubTitle");
+	store.Put(d1);
+
+
+	ASSERT_TRUE(store.Exists(1, 1));
+	ASSERT_TRUE(store.Exists(1, 2));
+	ASSERT_TRUE(store.Exists(1, 3));
+	ASSERT_TRUE(store.Exists(2, 10));
+	ASSERT_EQ((uint32_t)3, store.GetHighestDevice(1));
+
+	store.Delete(1, 2);
+	ASSERT_TRUE(store.Exists(1, 1));
+	ASSERT_FALSE(store.Exists(1, 2));
+	ASSERT_TRUE(store.Exists(1, 3));
+	ASSERT_TRUE(store.Exists(2, 10));
+	ASSERT_EQ((uint32_t)3, store.GetHighestDevice(1));
+
+	store.Delete(1, 3);
+	ASSERT_TRUE(store.Exists(1, 1));
+	ASSERT_FALSE(store.Exists(1, 2));
+	ASSERT_FALSE(store.Exists(1, 3));
+	ASSERT_TRUE(store.Exists(2, 10));
+	ASSERT_EQ((uint32_t)1, store.GetHighestDevice(1));
+
+}
+
 } // EOF namespace

@@ -259,12 +259,11 @@ public:
 	uint32_t GetHighestDevice(uint8_t DeviceType) const;
 	void Update(uint8_t DeviceType, uint32_t DeviceId);
 
-	uint32_t Put(const DataDevice& entry);
+	const DataDevice& Put(const DataDevice& entry);
 	bool Exists(uint8_t DeviceType, uint32_t DeviceId) const;
-	//void Delete(uint8_t DeviceType, uint32_t DeviceId);
+	void Delete(uint8_t DeviceType, uint32_t DeviceId);
 	const DataDevice& Get(uint8_t DeviceType, uint32_t DeviceId) const;
 	const DataDevice* GetPtr(uint8_t DeviceType, uint32_t DeviceId) const;
-	uint32_t MaxId(uint8_t DeviceType) const;
 
 };
 

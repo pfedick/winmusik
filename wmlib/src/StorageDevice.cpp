@@ -430,11 +430,11 @@ void CDeviceStore::SaveToStorage(DataDevice& entry)
 
 
 
-uint32_t CDeviceStore::Put(const DataDevice& entry)
+const DataDevice& CDeviceStore::Put(const DataDevice& entry)
 {
 	DataDevice* new_entry=SaveToMemory(entry);
 	SaveToStorage(*new_entry);
-	return new_entry->DeviceId;
+	return *new_entry;
 }
 
 DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
@@ -457,7 +457,7 @@ DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
 	if (entry.DeviceId == 0) {
 		newDeviceId=GetHighestDevice(entry.DeviceType) + 1;
 	}
-	DeviceTree& DTree=Tree[entry.DeviceId];
+	DeviceTree& DTree=Tree[entry.DeviceType];
 
 	DeviceTree::iterator dit;
 	dit=DTree.find(newDeviceId);
@@ -536,6 +536,21 @@ bool CDeviceStore::Exists(uint8_t DeviceType, uint32_t DeviceId) const
 	return false;
 }
 
+void CDeviceStore::Delete(uint8_t DeviceType, uint32_t DeviceId)
+{
+	// Gibt's den Tonträger schon?
+	std::map<uint8_t, DeviceTree>::iterator it;
+	it=Tree.find(DeviceType);
+	if (it == Tree.end() || it->second.empty() == true) return;
+	DeviceTree& DTree=it->second;
+	DeviceTree::iterator dit;
+	dit=DTree.find(DeviceId);
+	if (dit == DTree.end()) return;
+	getStorage().Delete(this, &dit->second);
+	DTree.erase(dit);
+}
+
+
 void CDeviceStore::LoadChunk(const CWMFileChunk& chunk)
 {
 	DataDevice data;
@@ -610,13 +625,13 @@ uint32_t CDeviceStore::GetHighestDevice(uint8_t DeviceType) const
 void CDeviceStore::Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId)
 {
 	if (newId == oldId) return;
-	// Neue ID darf nicht existieren
-	if (Exists(DeviceType, newId)) {
-		throw DeviceAlreadyExistsException("Cannot renumber, because target device %d already exists", newId);
-	}
 	// Alte ID muss vorhanden sein
 	if (!Exists(DeviceType, oldId)) {
 		throw RecordDoesNotExistException("Cannot renumber, because source device %d does not exist", oldId);
+	}
+	// Neue ID darf nicht existieren
+	if (Exists(DeviceType, newId)) {
+		throw DeviceAlreadyExistsException("Cannot renumber, because target device %d already exists", newId);
 	}
 	DataDevice d=Get(DeviceType, oldId);
 	d.DeviceId=newId;
