@@ -274,8 +274,6 @@ public:
 
 class DataTrack : public CStorageItem
 {
-private:
-	//ppluint64	Key;
 public:
 	uint32_t	DeviceId;
 	uint32_t	TitleId;

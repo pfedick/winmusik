@@ -45,6 +45,54 @@ protected:
 	}
 };
 
+TEST_F(StorageTrackTest, DataTrack_Constructor) {
+	DataTrack d1;
+	ASSERT_EQ((uint32_t)0, d1.DeviceId);
+	ASSERT_EQ((uint32_t)0, d1.TitleId);
+	ASSERT_EQ((uint16_t)0, d1.Track);
+	ASSERT_EQ((uint8_t)0, d1.Device);
+	ASSERT_EQ((uint8_t)0, d1.Page);
+
+}
+
+TEST_F(StorageTrackTest, DataTrack_CopyFrom) {
+	DataTrack d1;
+	d1.SetValue(1, 2, 3, 4, 1234);
+
+	DataTrack d2;
+	d2.CopyFrom(d1);
+	ASSERT_EQ((uint32_t)2, d2.DeviceId);
+	ASSERT_EQ((uint32_t)1234, d2.TitleId);
+	ASSERT_EQ((uint16_t)4, d2.Track);
+	ASSERT_EQ((uint8_t)1, d2.Device);
+	ASSERT_EQ((uint8_t)3, d2.Page);
+}
+
+TEST_F(StorageTrackTest, DataTrack_Clear) {
+	DataTrack d1;
+	d1.SetValue(1, 2, 3, 4, 1234);
+	d1.Clear();
+	ASSERT_EQ((uint32_t)0, d1.DeviceId);
+	ASSERT_EQ((uint32_t)0, d1.TitleId);
+	ASSERT_EQ((uint16_t)0, d1.Track);
+	ASSERT_EQ((uint8_t)0, d1.Device);
+	ASSERT_EQ((uint8_t)0, d1.Page);
+}
+
+TEST_F(StorageTrackTest, DataTrack_ExportImport) {
+	DataTrack d1;
+	d1.SetValue(1, 2, 3, 4, 1234);
+	ppl7::ByteArray bin;
+	d1.Export(bin);
+	ASSERT_EQ((uint8_t)1, d1.GetFormatVersion());
+	DataTrack d2;
+	d2.Import(bin, d1.GetFormatVersion());
+	ASSERT_EQ((uint32_t)2, d2.DeviceId);
+	ASSERT_EQ((uint32_t)1234, d2.TitleId);
+	ASSERT_EQ((uint16_t)4, d2.Track);
+	ASSERT_EQ((uint8_t)1, d2.Device);
+	ASSERT_EQ((uint8_t)3, d2.Page);
+}
 
 
 

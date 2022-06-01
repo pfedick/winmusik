@@ -23,14 +23,16 @@
 #include <locale.h>
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
-#include "../include/wm_storage.h"
+#include "wm_storage.h"
 #include "wm_playlist.h"
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 
-namespace {
+namespace de {
+namespace pfp {
+namespace winmusik {
 
-using namespace de::pfp::winmusik;
+
 
 
 class StorageItemTest : public ::testing::Test {
@@ -49,4 +51,6 @@ protected:
 
 
 
+}
+}
 } // EOF namespace
