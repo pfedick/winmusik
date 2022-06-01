@@ -95,6 +95,85 @@ TEST_F(StorageTrackTest, DataTrack_ExportImport) {
 }
 
 
+TEST_F(StorageTrackTest, PutGetExists) {
+	CTrackStore store;
+	CStorage storage;
+	storage.Init("tmp/track", "PutAndGet.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+
+	DataTrack d1(1, 10, 2, 1, 10001);
+	{
+		const DataTrack& newd=store.Put(d1);
+		ASSERT_EQ((uint32_t)10, newd.DeviceId);
+		ASSERT_EQ((uint32_t)10001, newd.TitleId);
+		ASSERT_EQ((uint16_t)1, newd.Track);
+		ASSERT_EQ((uint8_t)1, newd.Device);
+		ASSERT_EQ((uint8_t)2, newd.Page);
+	}
+	store.Put(DataTrack(1, 10, 2, 1, 10000));
+	store.Put(DataTrack(1, 10, 2, 2, 10001));
+	store.Put(DataTrack(1, 10, 2, 3, 10002));
+	store.Put(DataTrack(1, 10, 2, 4, 10004));
+
+	ASSERT_TRUE(store.Exists(1, 10, 2));
+	ASSERT_FALSE(store.Exists(1, 10, 1));
+	ASSERT_TRUE(store.Exists(1, 10, 2, 1));
+	ASSERT_TRUE(store.Exists(1, 10, 2, 4));
+	ASSERT_FALSE(store.Exists(1, 10, 2, 5));
+	ASSERT_FALSE(store.Exists(1, 10, 2, 0));
+
+	ASSERT_EQ((uint32_t)10000, store.Get(1, 10, 2, 1).TitleId);
+	ASSERT_EQ((uint32_t)10004, store.Get(1, 10, 2, 4).TitleId);
+
+	ASSERT_THROW(store.Get(1, 10, 2, 5), RecordDoesNotExistException);
+	ASSERT_EQ(NULL, store.GetPtr(1, 10, 2, 5));
+	ASSERT_EQ((uint32_t)10002, store.GetPtr(1, 10, 2, 3)->TitleId);
+
+}
+
+
+TEST_F(StorageTrackTest, GetTracklist) {
+	CTrackStore store;
+	CStorage storage;
+	storage.Init("tmp/track", "GetTracklist.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+	store.Put(DataTrack(1, 10, 2, 1, 10000));
+	store.Put(DataTrack(1, 10, 2, 2, 10001));
+	store.Put(DataTrack(1, 10, 2, 3, 10002));
+	store.Put(DataTrack(1, 10, 2, 4, 10004));
+	store.Put(DataTrack(1, 10, 2, 5, 10005));
+
+	CTrackList tl=store.GetTracklist(1, 10, 2);
+	ASSERT_EQ((size_t)5, tl.Size());
+	ASSERT_EQ((uint32_t)10002, tl.Get(3).TitleId);
+
+}
+
+TEST_F(StorageTrackTest, Delete) {
+	CTrackStore store;
+	CStorage storage;
+	storage.Init("tmp/track", "Delete.dat");
+	storage.RegisterStorageClass(&store);
+	storage.DeleteDatabase();
+	store.Put(DataTrack(1, 10, 2, 1, 10000));
+	store.Put(DataTrack(1, 10, 2, 2, 10001));
+	store.Put(DataTrack(1, 10, 2, 3, 10002));
+	store.Put(DataTrack(1, 10, 2, 4, 10004));
+	store.Put(DataTrack(1, 10, 2, 5, 10005));
+
+	CTrackList tl=store.GetTracklist(1, 10, 2);
+	ASSERT_EQ((size_t)5, tl.Size());
+
+	store.Delete(DataTrack(1, 10, 2, 3, 10002));
+
+	tl=store.GetTracklist(1, 10, 2);
+	ASSERT_EQ((size_t)4, tl.Size());
+	ASSERT_FALSE(store.Exists(1, 10, 2, 3));
+
+
+}
 
 
 } // EOF namespace

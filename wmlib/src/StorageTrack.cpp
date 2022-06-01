@@ -114,6 +114,16 @@ DataTrack::DataTrack()
 	formatversion=1;
 }
 
+DataTrack::DataTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId)
+{
+	formatversion=1;
+	this->DeviceId=DeviceId;
+	this->TitleId=TitleId;
+	this->Track=Track;
+	this->Device=Device;
+	this->Page=Page;
+}
+
 void DataTrack::Clear()
 /*!\brief Variablen auf 0 setzen.
  *

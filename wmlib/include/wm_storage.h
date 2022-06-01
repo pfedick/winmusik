@@ -282,6 +282,7 @@ public:
 	uint8_t		Page;
 
 	DataTrack();
+	DataTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId);
 
 	void Clear();
 	void CopyFrom(const DataTrack& other);
