@@ -251,7 +251,7 @@ CTrackStore::~CTrackStore()
 
 inline static uint64_t getKey(uint8_t Device, uint32_t DeviceId, uint8_t Page)
 {
-	return ((uint64_t)Device << 40) + ((uint64_t)Page << 32) + DeviceId;
+	return ((uint64_t)Device << 40) + ((uint64_t)DeviceId << 8) + Page;
 }
 
 void CTrackStore::Clear()
@@ -334,17 +334,22 @@ bool CTrackStore::Exists(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16
 
 void CTrackStore::Delete(const DataTrack& entry)
 {
-	uint64_t key=getKey(entry.Device, entry.DeviceId, entry.Page);
+	Delete(entry.Device, entry.DeviceId, entry.Page, entry.Track);
+}
+
+void CTrackStore::Delete(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track)
+{
+	uint64_t key=getKey(Device, DeviceId, Page);
 	std::map<uint64_t, DataTrackMap>::iterator it;
 	it=Tracks.find(key);
 	if (it == Tracks.end()) return;
-	DataTrackMap::iterator dtm_it=it->second.find(entry.Track);
+	DataTrackMap::iterator dtm_it=it->second.find(Track);
 	if (dtm_it == it->second.end()) return;
 	getStorage().Delete(this, &dtm_it->second);
 	it->second.erase(dtm_it);
 }
 
-void CTrackStore::Put(const DataTrack& entry)
+const  DataTrack& CTrackStore::Put(const DataTrack& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -361,6 +366,7 @@ void CTrackStore::Put(const DataTrack& entry)
 {
 	DataTrack* t=SaveToMemory(entry);
 	SaveToStorage(*t);
+	return *t;
 }
 
 const DataTrack* CTrackStore::GetPtr(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const

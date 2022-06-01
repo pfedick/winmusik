@@ -308,10 +308,11 @@ public:
 	virtual const char* GetChunkName();
 	virtual void Clear();
 	virtual void LoadChunk(const CWMFileChunk& chunk);
-	void Put(const DataTrack& entry);
+	const  DataTrack& Put(const DataTrack& entry);
 	bool Exists(uint8_t Device, uint32_t DeviceId, uint8_t Page) const;
 	bool Exists(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const;
 	void Delete(const DataTrack& entry);
+	void Delete(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track);
 
 	const DataTrack& Get(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const;
 	const DataTrack* GetPtr(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const;
