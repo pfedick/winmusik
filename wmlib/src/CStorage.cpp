@@ -107,16 +107,13 @@ void CStorage::Init(const ppl7::String& path, const ppl7::String& file)
 void CStorage::RegisterStorageClass(CStorageBase* storageclass)
 {
 	if (!storageclass) {
-		throw InvalidStorageClassException();
+		throw InvalidStorageClassException("storage class must not be NULL");
 	}
 	const char* chunkname=storageclass->GetChunkName();
-	if (!chunkname) {
-		throw InvalidStorageClassException();
+	if (chunkname == NULL || strnlen(chunkname, 5) != 4) {
+		throw InvalidStorageClassException("storage class has invalid chunkname");
 	}
 	uint32_t chunkid=ppl7::Peek32(chunkname);
-	if (!chunkname) {
-		throw InvalidStorageClassException();
-	}
 	Mutex.lock();
 	storageclass->Storage=this;
 	// Haben wir schon so einen StorageType?
@@ -143,6 +140,21 @@ CStorageBase* CStorage::FindStorageClass(const char* name)
 	}
 	Mutex.unlock();
 	return it->second;
+}
+
+CStorageBase& CStorage::GetStorageClass(const char* name)
+{
+	if (!name) throw InvalidStorageClassException("name must not me NULL");
+	uint32_t chunkid=ppl7::Peek32(name);
+	std::map<uint32_t, CStorageBase*>::const_iterator it;
+	Mutex.lock();
+	it=StorageClasses.find(chunkid);
+	if (it == StorageClasses.end()) {
+		Mutex.unlock();
+		if (!name) throw InvalidStorageClassException("storageclass with name %s is unknown", name);
+	}
+	Mutex.unlock();
+	return *it->second;
 }
 
 void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin)
@@ -182,8 +194,15 @@ void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArra
 	} else {
 		File+="/" + DatabaseFile;
 	}
-	ff.Open(File);
-	ff.SaveChunk(chunk);
+	Mutex.lock();
+	try {
+		ff.Open(File);
+		ff.SaveChunk(chunk);
+	} catch (...) {
+		Mutex.unlock();
+		throw;
+	}
+	Mutex.unlock();
 	item->filepos=chunk.GetFilepos();
 	item->lastchange=chunk.GetTimestamp();
 	item->version=chunk.GetVersion();
@@ -221,9 +240,15 @@ void CStorage::Delete(CStorageBase* type, CStorageItem* item)
 	} else {
 		File+="/" + DatabaseFile;
 	}
-
-	ff.Open(File);
-	ff.DeleteChunk(chunk);
+	Mutex.lock();
+	try {
+		ff.Open(File);
+		ff.DeleteChunk(chunk);
+	} catch (...) {
+		Mutex.unlock();
+		throw;
+	}
+	Mutex.unlock();
 	item->filepos=0;
 	item->lastchange=0;
 	item->version=0;

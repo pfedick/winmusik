@@ -94,6 +94,7 @@ public:
 	void Init(const ppl7::String& path, const ppl7::String& file=ppl7::String("winmusik.dat"));
 	void RegisterStorageClass(CStorageBase* storageclass);
 	CStorageBase* FindStorageClass(const char* name);
+	CStorageBase& GetStorageClass(const char* name);
 	void Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin);
 	void Delete(CStorageBase* type, CStorageItem* item);
 
