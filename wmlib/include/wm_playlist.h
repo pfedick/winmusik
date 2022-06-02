@@ -1,12 +1,24 @@
 /*
- * cwmfile.h
+ * This file is part of WinMusik 3 by Patrick Fedick
  *
- *  Created on: 20.06.2016
- *      Author: patrick
+ * Copyright (c) 2022 Patrick Fedick
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIB_INCLUDE_WM_PLAYLIST_H_
-#define LIB_INCLUDE_WM_PLAYLIST_H_
+#ifndef WM_PLAYLIST_H_
+#define WM_PLAYLIST_H_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,87 +34,89 @@ namespace winmusik {
 
 class PlaylistItem
 {
-	public:
-		uint32_t		titleId;
-		int				startPositionSec;
-		int				endPositionSec;
-		int				cutStartPosition[5];
-		int				cutEndPosition[5];
-		ppl7::String	Artist;
-		ppl7::String	Title;
-		ppl7::String	Version;
-		ppl7::String	Genre;
-		ppl7::String	Label;
-		ppl7::String	Album;
-		ppl7::String	File;
-		ppl7::String	Remarks;
-		ppl7::ByteArray	CoverPreview;
-		int				musicKey;
-		int				bpm;
-		int				bpmPlayed;
-		int				rating;
-		int				trackLength;
-		int				mixLength;
-		int				energyLevel;
-		bool			keyVerified;
-		uint32_t		DeviceId;
-		uint16_t		DeviceTrack;
-		uint8_t		DeviceType;
-		uint8_t		DevicePage;
+public:
+	uint32_t		titleId;
+	int				startPositionSec;
+	int				endPositionSec;
+	int				cutStartPosition[5];
+	int				cutEndPosition[5];
+	ppl7::String	Artist;
+	ppl7::String	Title;
+	ppl7::String	Version;
+	ppl7::String	Genre;
+	ppl7::String	Label;
+	ppl7::String	Album;
+	ppl7::String	File;
+	ppl7::String	Remarks;
+	ppl7::ByteArray	CoverPreview;
+	int				musicKey;
+	int				bpm;
+	int				bpmPlayed;
+	int				rating;
+	int				trackLength;
+	int				mixLength;
+	int				energyLevel;
+	bool			keyVerified;
+	uint32_t		DeviceId;
+	uint16_t		DeviceTrack;
+	uint8_t		DeviceType;
+	uint8_t		DevicePage;
 
-		PlaylistItem();
-		void clear();
+	PlaylistItem();
+	void clear();
 
-		ppl7::String exportAsXML(int indention=3) const;
-		ppl7::String getExistingFilename() const;
-		void importFromXML(const ppl7::String &xml);
-		void loadCoverPreview();
+	ppl7::String exportAsXML(int indention=3) const;
+	ppl7::String getExistingFilename() const;
+	void importFromXML(const ppl7::String& xml);
+	void loadCoverPreview();
 
-		float calcMixLength() const;
+	float calcMixLength() const;
 };
 
 class Playlist
 {
-	private:
-		ppl7::String Name,SubName;
-		ppl7::DateTime IssueDate;
-		int IssueNumber;
+private:
+	ppl7::String Name, SubName;
+	ppl7::DateTime IssueDate;
+	int IssueNumber;
 
-		std::list<PlaylistItem> playlist;
+	std::list<PlaylistItem> playlist;
 
-	public:
+public:
 
-        PPL7EXCEPTION(InvalidXMLFileException, Exception)
-        PPL7EXCEPTION(InvalidPlaylistException, Exception)
+	PPL7EXCEPTION(InvalidXMLFileException, Exception)
+		PPL7EXCEPTION(InvalidPlaylistException, Exception)
 
 		typedef std::list<de::pfp::winmusik::PlaylistItem>::const_iterator const_iterator;
 
-		Playlist();
-		~Playlist();
-		void clear();
-		void load(const ppl7::String &filename);
-		void save(const ppl7::String &filename);
-		void setName(const ppl7::String &Name);
-		ppl7::String getName() const;
-		void setSubName(const ppl7::String &Name);
-		ppl7::String getSubName() const;
-		void setIssueNumber(int number);
-		int getIssueNumber() const;
-		void setIssueDate(const ppl7::DateTime &Date);
-		ppl7::DateTime getIssueDate() const;
-		int getTotalTracks() const;
-		int getTotalLength() const;
-		int getTotalMixLength() const;
+	Playlist();
+	~Playlist();
+	void clear();
+	void load(const ppl7::String& filename);
+	void save(const ppl7::String& filename);
+	void setName(const ppl7::String& Name);
+	ppl7::String getName() const;
+	void setSubName(const ppl7::String& Name);
+	ppl7::String getSubName() const;
+	void setIssueNumber(int number);
+	int getIssueNumber() const;
+	void setIssueDate(const ppl7::DateTime& Date);
+	ppl7::DateTime getIssueDate() const;
+	int getTotalTracks() const;
+	int getTotalLength() const;
+	int getTotalMixLength() const;
 
-		size_t size() const;
+	size_t size() const;
 
-		Playlist::const_iterator begin() const;
-		Playlist::const_iterator end() const;
+	Playlist::const_iterator begin() const;
+	Playlist::const_iterator end() const;
 
 
 
 };
 
-}}}	// EOF Namespace de.pfp.winmusik
+}
+}
+}	// EOF Namespace de.pfp.winmusik
 
-#endif /* LIB_INCLUDE_WM_PLAYLIST_H_ */
+#endif /* WM_PLAYLIST_H_ */
