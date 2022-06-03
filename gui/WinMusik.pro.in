@@ -1,9 +1,10 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -106,22 +107,16 @@ SOURCES += src/CSearchlist.cpp \
     src/searchlists/dupecheckthread.cpp \
     src/menue/menue.cpp \
     src/search/search.cpp \
-    src/StorageOriginalImportData.cpp \
     src/properties/regexpedit.cpp \
     src/properties/properties.cpp \
     src/splashscreen/splashscreen.cpp \
-    src/StorageTrack.cpp \
-    src/StorageDevice.cpp \
     src/config.cpp \
     src/functions.cpp \
     src/regexpcapture.cpp \
     src/colorscheme.cpp \
     src/musickey.cpp \
-    src/CStorage.cpp \
     src/coverviewer/coverviewer.cpp \
     src/CHashes.cpp \
-    src/CTrackList.cpp \
-    src/CWmFile.cpp \
     src/coverprinter/coverprinter.cpp \
     src/editor/shortcutdialog.cpp \
     src/editor/cddbimport.cpp \
@@ -137,7 +132,6 @@ SOURCES += src/CSearchlist.cpp \
     src/firststart/firststart.cpp \
     src/firststart/langselect.cpp \
     src/firststart/InitialDatabase.cpp \
-    src/StorageTitle.cpp \
     src/devicelist/devicelist.cpp \
     src/resultfilter.cpp \
     src/about/about.cpp \
@@ -149,10 +143,8 @@ SOURCES += src/CSearchlist.cpp \
     src/playlist/playlistprint.cpp \
     src/playlist/playlisttracks.cpp \
     src/playlist/setbpmplayed.cpp \
-    src/StorageSimpleTable.cpp \
     src/printdevicedialog/printdevicedialog.cpp \
     src/CTableControl.cpp \
-    src/StorageShortcut.cpp \
     src/CWmClient.cpp \
     widgets/fkeys.cpp \
     widgets/wmcoverwidget.cpp \
@@ -205,7 +197,6 @@ HEADERS += widgets/edittrack.h \
     include/winmusik3.h \
     include/version.h \
     include/csearchlist.h \
-    include/wmstorage.h \
     include/resultfilter.h \
     include/tablecontrol.h \
     include/exceptions.h \

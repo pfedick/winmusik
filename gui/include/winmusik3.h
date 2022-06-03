@@ -47,6 +47,8 @@
 #include "exceptions.h"
 
 #include "wm_id3tagsaver.h"
+#include "libwinmusik3.h"
+
 
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2022"
  // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
@@ -168,7 +170,6 @@ enum MusicKeyType
 
 
 
-#include "wmstorage.h"
 #include "regexpcapture.h"
 
 
@@ -199,53 +200,6 @@ ppl7::String getReadableTimeFromSeconds(int seconds);
 
 
 
-
-
-
-class CTrackListItem : ppl6::CTreeItem
-{
-	friend class CTrackList;
-private:
-	int id;
-	DataTrack* track;
-public:
-	virtual int CompareNode(CTreeItem* item);
-	virtual int CompareValue(void* value);
-};
-
-class CTrackList
-{
-	friend class CTrackStore;
-private:
-	ppl6::CMutex Mutex;
-	ppl6::CTree	Tracks;
-	int min, max;
-	CTrackStore* storage;
-	int Add(int track, DataTrack* entry);
-	uint32_t	DeviceId;
-	uint8_t	DeviceType;
-	uint8_t	Page;
-
-public:
-	CTrackList();
-	CTrackList(const CTrackList& other);
-	CTrackList(const CTrackList* other);
-	~CTrackList();
-	void copy(const CTrackList& other);
-	void Clear();
-	int GetMin();
-	int GetMax();
-	int Num();
-	DataTrack* Get(int track);
-	int GetCopy(int track, DataTrack* t);
-	int Put(DataTrack* entry);
-	int Delete(int track);
-	int DeleteShift(int track, CTitleStore* tistore);
-	int InsertShift(int track, CTitleStore* tistore);
-	void Reset();
-	DataTrack* GetFirst();
-	DataTrack* GetNext();
-};
 
 
 

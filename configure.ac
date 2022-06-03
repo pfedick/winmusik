@@ -23,8 +23,8 @@
 ###############################################################################
 
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.69)
-AC_INIT([winmusik], [3.7.0], [patrick@pfp.de], [winmusik-3.7.0.tar.bz2])
+AC_PREREQ([2.71])
+AC_INIT([winmusik],[3.7.0],[patrick@pfp.de],[winmusik-3.7.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
@@ -227,7 +227,12 @@ PKG_PROG_PKG_CONFIG()
 #--------------------------------------------------------------------
 
 AC_HEADER_STDBOOL
-AC_HEADER_TIME
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -334,9 +339,8 @@ AC_CHECK_FUNCS([sched_yield pthread_yield])
 
 
 AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/socket.h>], [struct sockaddr s; s.sa_len;],
-ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
+#include <sys/socket.h>]], [[struct sockaddr s; s.sa_len;]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])])
 if test $ac_cv_struct_sa_len = yes; then
   AC_DEFINE(HAVE_SOCKADDR_SA_LEN)
 fi

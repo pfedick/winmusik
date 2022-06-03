@@ -50,7 +50,7 @@ cat WinMusik.pro.header > WinMusik.pro.in
 	echo ""
 	echo ""
 	echo -n "FORMS += "
-	filelist=`find widgets src forms -name '*.ui'`
+	filelist=`find widgets src -name '*.ui'`
 	for file in $filelist; do
 		echo "$file \\"
 		echo -n "    "
