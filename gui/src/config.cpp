@@ -76,7 +76,7 @@ Config::Config()
 	musicKeyDisplay=musicKeyTypeOpenKey;
 	musicKeyTag=musicKeyTypeMusicalSharps;
 	customMusicKeyName=tr("custom format");
-	for (int i=0;i < 26;i++) customMusicKey[i]=DataTitle::keyName(i, musicKeyTypeMusicalSharps);
+	for (int i=0;i < 26;i++) customMusicKey[i]=wm_main->MusicKeys.keyName(i, musicKeyTypeMusicalSharps);
 	playlistView=0;
 
 	JpegQualityCover=95;
@@ -371,8 +371,8 @@ void Config::load()
 	customMusicKeyName=c.getFromSection("musicKey", "customMusicKeyName", Tmp);
 
 	for (int i=0;i < 26;i++) customMusicKey[i]=c.getFromSection("musicKey",
-		(const char*)ppl6::ToString("customMusicKey[%i]", i),
-		(const char*)DataTitle::keyName(i, musicKeyTypeMusicalSharps));
+		(const char*)ppl7::ToString("customMusicKey[%i]", i),
+		(const char*)wm_main->MusicKeys.keyName(i, musicKeyTypeMusicalSharps));
 
 	// CDDB
 	cddb.cddevice=c.getFromSection("cddb", "cddevice", "");

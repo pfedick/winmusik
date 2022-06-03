@@ -126,6 +126,7 @@ ppl7::String MusicalKeys::openKeyName(int id)
 
 int MusicalKeys::keyId(const ppl7::String& name) const
 {
+	// TODO: can be improved and speed up by using a map for all keynames
 	ppl7::String k=ppl7::LowerCase(ppl7::Trim(name));
 	k.replace("♯", "#");
 	k.replace("♭", "b");

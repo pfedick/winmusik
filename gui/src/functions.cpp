@@ -74,14 +74,6 @@ ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date)
 }
 
 
-void NormalizeImportString(ppl6::CString& Buffer)
-{
-	Buffer.Replace("_", " ");
-	Buffer.Replace("'", "'");
-	Buffer.Replace("`", "'");
-	Buffer.Trim();
-}
-
 void NormalizeImportString(ppl7::String& Buffer)
 {
 	Buffer.replace("_", " ");
@@ -162,7 +154,7 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 		NormalizeImportString(Tmp);
 		info.Ti.SetAlbum(Tmp);
 		// ReleaseDate
-		info.Ti.ReleaseDate=ppl6::atoi(id3.Year) * 10000;
+		info.Ti.ReleaseDate=atoi(id3.Year) * 10000;
 		Tmp.set(id3.Comment, 29);
 		NormalizeImportString(Tmp);
 		info.Ti.SetRemarks(Tmp);
@@ -206,7 +198,7 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 	info.Ti.BPM=Tmp.toInt();
 
 	// Music Key
-	info.Ti.SetKey(Tag.getKey());
+	info.Ti.Key=wm_main->MusicKeys.keyId(Tag.getKey());
 
 	// EnergyLevel
 	info.Ti.EnergyLevel=(char)(Tag.getEnergyLevel().toInt() & 255);
@@ -354,9 +346,9 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
 
 bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version)
 {
-	ppl6::CDirEntry de;
+	ppl7::DirEntry de;
 	//printf ("getTrackInfoFromFile: %s\n",(const char*)Filename);
-	if (ppl6::CFile::Stat(Filename, de)) {
+	if (ppl7::File::stat(Filename, de)) {
 		info.Ti.Size=de.Size;
 	} else return false;
 	//printf ("debug 1\n");
@@ -390,7 +382,7 @@ bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int pre
 	return true;
 }
 
-ppluint32 findTitleIdByFilename(const ppl7::String& Filename)
+uint32_t findTitleIdByFilename(const ppl7::String& Filename)
 {
 	ppl7::String LowerFilename=Filename;
 	LowerFilename.lowerCase();
@@ -492,14 +484,14 @@ void setReadableLength(QLabel* label, int length)
 }
 
 
-void SetWindowGeometry(QWidget* widget, const ppl6::CString& name)
+void SetWindowGeometry(QWidget* widget, const ppl7::String& name)
 {
 	widget->restoreGeometry(wm_main->GetGeometry(name));
 	if (widget->pos().x() < 0) widget->move(0, widget->pos().y());
 	if (widget->pos().y() < 0) widget->move(widget->pos().x(), 0);
 }
 
-void SaveWindowGeometry(QWidget* widget, const ppl6::CString& name)
+void SaveWindowGeometry(QWidget* widget, const ppl7::String& name)
 {
 	wm_main->SaveGeometry(name, widget->saveGeometry());
 }

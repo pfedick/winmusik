@@ -67,7 +67,7 @@ Search::Search(QWidget* parent, CWmClient* wm)
 	}
 	ui.displayMusicKey->setItemText(2, wm->conf.customMusicKeyName);
 	for (int i=1;i <= 25;i++) {
-		ui.keywheel->setKeyName(i, DataTitle::keyName(i, musicKeyDisplay));
+		ui.keywheel->setKeyName(i, wm_main->MusicKeys.keyName(i, musicKeyDisplay));
 	}
 	on_setThisYear_clicked();
 	on_setRecordingDate0_clicked();
@@ -323,7 +323,7 @@ void Search::FastSearch(const ppl7::String& Artist, const ppl7::String& Title, c
 	}
 	ui.progressBar->setValue(30);
 
-	std::list<DataTitle*> list, sorted_list;
+	std::list<const DataTitle*> list, sorted_list;
 	FilterResult(res, list);
 	LimitResult(list, sorted_list);
 	SortResult(sorted_list, Results);
@@ -387,10 +387,10 @@ void Search::DoSearch()
 }
 
 
-void Search::FilterResult(const CHashes::TitleTree& in, std::list<DataTitle*>& out)
+void Search::FilterResult(const CHashes::TitleTree& in, std::list<const DataTitle*>& out)
 {
 	CHashes::TitleTree::const_iterator it;
-	DataTitle* ti;
+	const DataTitle* ti;
 	for (it=in.begin();it != in.end();it++) {
 		ti=wm->GetTitle(*it);
 		if (ti->DeviceType < 20 && AllowedDevices[ti->DeviceType] == 1) {
@@ -399,36 +399,36 @@ void Search::FilterResult(const CHashes::TitleTree& in, std::list<DataTitle*>& o
 	}
 }
 
-void Search::SortResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out)
+void Search::SortResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out)
 {
 	out.clear();
-	std::map<ppl7::String, DataTitle*> sorter;
-	std::list<DataTitle*>::const_iterator it;
+	std::map<ppl7::String, const DataTitle*> sorter;
+	std::list<const DataTitle*>::const_iterator it;
 	for (it=in.begin();it != in.end();++it) {
-		DataTitle* ti=(*it);
-		sorter.insert(std::pair<ppl7::String, DataTitle*>(
+		const DataTitle* ti=(*it);
+		sorter.insert(std::pair<ppl7::String, const DataTitle*>(
 			ppl7::ToString("%08u:%08u", ti->ReleaseDate, ti->TitleId),
 			ti));
 	}
-	std::map<ppl7::String, DataTitle*>::const_reverse_iterator it_sorted;
+	std::map<ppl7::String, const DataTitle*>::const_reverse_iterator it_sorted;
 	for (it_sorted=sorter.rbegin();it_sorted != sorter.rend();++it_sorted) {
 		out.push_back(it_sorted->second);
 	}
 }
 
-void Search::RandomResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out, size_t num)
+void Search::RandomResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out, size_t num)
 {
 	// Zuerst kopieren wir die Eingangsliste zum besseren Zugriff in einen vector
-	std::vector<DataTitle*> list, list2;
+	std::vector<const DataTitle*> list, list2;
 	size_t r;
-	std::list<DataTitle*>::const_iterator it;
+	std::list<const DataTitle*>::const_iterator it;
 	for (it=in.begin();it != in.end();++it) {
 		list.push_back((*it));
 	}
 	if (num > list.size()) num=list.size();
 	while (num) {
 		num--;
-		DataTitle* ti=NULL;
+		const DataTitle* ti=NULL;
 		while (!ti) {
 			r=ppl7::rand(0, list.size() - 1);
 			ti=list[r];
@@ -449,7 +449,7 @@ void Search::RandomResult(const std::list<DataTitle*>& in, std::list<DataTitle*>
 	}
 }
 
-void Search::LimitResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out)
+void Search::LimitResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out)
 {
 	size_t limit=ui.limitResultSpinBox->value();
 	if (ui.randomResultCheckBox->isChecked()) {
@@ -459,12 +459,12 @@ void Search::LimitResult(const std::list<DataTitle*>& in, std::list<DataTitle*>&
 		return;
 	}
 	if (limit == 0 || limit >= in.size()) {
-		std::list<DataTitle*>::const_reverse_iterator it;
+		std::list<const DataTitle*>::const_reverse_iterator it;
 		for (it=in.rbegin(); it != in.rend();++it) {
 			out.push_back((*it));
 		}
 	} else {
-		std::list<DataTitle*>::const_iterator it;
+		std::list<const DataTitle*>::const_iterator it;
 		size_t i;
 		for (i=0, it=in.begin();(i < limit) && (it != in.end());i++, ++it) {
 			out.push_back((*it));
@@ -477,14 +477,14 @@ void Search::updateTrackListing()
 	for (int i=0;i < trackList->topLevelItemCount();i++) {
 		WMTreeItem* item=(WMTreeItem*)trackList->topLevelItem(i);
 		if (item != NULL && item->Id > 0) {
-			DataTitle* ti=wm->GetTitle(item->Id);
+			const DataTitle* ti=wm->GetTitle(item->Id);
 			if (ti) renderTrack(item, ti);
 		}
 	}
 }
 
 
-void Search::renderTrack(WMTreeItem* item, DataTitle* ti)
+void Search::renderTrack(WMTreeItem* item, const DataTitle* ti)
 {
 	const char Seite[]="?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	ppl7::String Tmp;
@@ -517,7 +517,7 @@ void Search::renderTrack(WMTreeItem* item, DataTitle* ti)
 	// BPM, Key und EnergyLevel
 	Tmp.setf("%d", (int)ti->BPM);
 	item->setText(SEARCH_TRACKLIST_BPM_ROW, Tmp);
-	item->setText(SEARCH_TRACKLIST_KEY_ROW, ti->getKeyName(musicKeyDisplay));
+	item->setText(SEARCH_TRACKLIST_KEY_ROW, wm_main->MusicKeys.keyName(ti->Key, musicKeyDisplay));
 
 	if ((ti->Flags & 16)) item->setForeground(SEARCH_TRACKLIST_KEY_ROW, QColor(0, 0, 0));
 	else item->setForeground(SEARCH_TRACKLIST_KEY_ROW, QColor(192, 192, 192));
@@ -581,10 +581,10 @@ void Search::PresentResults()
 
 	ppluint64 totalLength=0;
 
-	std::list<DataTitle*>::const_iterator it;
+	std::list<const DataTitle*>::const_iterator it;
 	ppluint32 i=0;
 	for (it=Results.begin();it != Results.end();++it) {
-		DataTitle* ti=(*it);
+		const DataTitle* ti=(*it);
 		i++;
 		WMTreeItem* item=new WMTreeItem;
 		item->Track=i;
@@ -676,7 +676,7 @@ void Search::on_quicksearchButton_clicked()
 		ui.numTracks->setText(Tmp);
 	}
 	ui.progressBar->setValue(30);
-	std::list<DataTitle*> list1, sorted_list1;
+	std::list<const DataTitle*> list1, sorted_list1;
 	FilterResult(res, list1);
 	LimitResult(list1, sorted_list1);
 	SortResult(sorted_list1, Results);
@@ -760,7 +760,7 @@ void Search::on_trackList_customContextMenuRequested(const QPoint& pos)
 	//printf ("Custom Context %i\n",currentTrackListItem->Track);
 	if (!currentTrackListItem) return;
 	int DeviceType=0;
-	DataTitle* t=NULL;
+	const DataTitle* t=NULL;
 	t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		DeviceType=t->DeviceType;
@@ -807,44 +807,47 @@ void Search::on_trackList_customContextMenuRequested(const QPoint& pos)
 
 void Search::createSetMusicKeyContextMenu(QMenu* m)
 {
+	de::pfp::winmusik::MusicalKeys& keys=wm_main->MusicKeys;
 	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(DataTitle::keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(DataTitle::keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(DataTitle::keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(DataTitle::keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(DataTitle::keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(DataTitle::keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(DataTitle::keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(DataTitle::keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(DataTitle::keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(DataTitle::keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(DataTitle::keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(DataTitle::keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(DataTitle::keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(DataTitle::keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(DataTitle::keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(DataTitle::keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(DataTitle::keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(DataTitle::keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(DataTitle::keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(DataTitle::keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(DataTitle::keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(DataTitle::keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(DataTitle::keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(DataTitle::keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
-	m->addAction(DataTitle::keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
+	m->addAction(keys.keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(keys.keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(keys.keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(keys.keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(keys.keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(keys.keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(keys.keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(keys.keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(keys.keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(keys.keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(keys.keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(keys.keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(keys.keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(keys.keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(keys.keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(keys.keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(keys.keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(keys.keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(keys.keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(keys.keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(keys.keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(keys.keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(keys.keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(keys.keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(keys.keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
 }
 
 
 void Search::on_contextMusicKeyVerified_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 	DataTitle tUpdate=*t;
 	if (tUpdate.Flags & 16) tUpdate.Flags-=16;
 	else tUpdate.Flags|=16;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 	renderTrack(currentTrackListItem, &tUpdate);
@@ -854,13 +857,15 @@ void Search::on_contextMusicKeyVerified_triggered()
 void Search::on_contextSetMusicKey(int k)
 {
 	if (!currentTrackListItem) return;
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.Key=k;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 	renderTrack(currentTrackListItem, &tUpdate);
@@ -871,7 +876,7 @@ void Search::on_contextSetMusicKey(int k)
 void Search::on_trackList_itemClicked(QTreeWidgetItem* item, int)
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers();
-	DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
+	const DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
 		QClipboard* clipboard = QApplication::clipboard();
 		ppl7::String Text;
@@ -893,7 +898,7 @@ void Search::on_trackList_itemClicked(QTreeWidgetItem* item, int)
 
 void Search::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
+	const DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t != NULL) {
 		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
 		if (Path.isEmpty()) return;
@@ -906,7 +911,7 @@ void Search::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int)
 
 void Search::on_contextFindMoreMedium_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		CTrackList* l=wm->GetTracklist(t->DeviceType, t->DeviceId, t->Page);
 		if (l) {
@@ -919,9 +924,11 @@ void Search::on_contextFindMoreMedium_triggered()
 			int min=l->GetMin();
 			int max=l->GetMax();
 			for (int i=min;i <= max;i++) {
-				DataTrack* track=l->Get(i);
-				t=wm->GetTitle(track->TitleId);
-				if (t) Results.push_back(t);
+				const DataTrack* track=l->GetPtr(i);
+				if (track) {
+					t=wm->GetTitle(track->TitleId);
+					if (t) Results.push_back(t);
+				}
 			}
 			PresentResults();
 			ui.progressBar->setValue(100);
@@ -936,7 +943,7 @@ void Search::on_contextFindMoreMedium_triggered()
 
 void Search::on_contextFindMoreVersions_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		FastSearch(t->Artist, t->Title);
 	}
@@ -945,7 +952,7 @@ void Search::on_contextFindMoreVersions_triggered()
 
 void Search::on_contextFindMoreArtist_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		FastSearch(t->Artist, "");
 	}
@@ -954,7 +961,7 @@ void Search::on_contextFindMoreArtist_triggered()
 
 void Search::on_contextFindMoreTitle_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		FastSearch("", t->Title);
 	}
@@ -963,7 +970,7 @@ void Search::on_contextFindMoreTitle_triggered()
 
 void Search::on_contextPlayTrack_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t != NULL) {
 		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
 		if (Path.isEmpty()) return;
@@ -977,7 +984,7 @@ void Search::on_contextEditTrack_triggered()
 {
 	ui.artist->setFocus();
 	if (!currentTrackListItem) return;
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 	wm->OpenEditor(t->DeviceType, t->DeviceId, t->Page, t->Track);
 }
@@ -990,7 +997,7 @@ void Search::on_contextCopyTrack_triggered()
 
 void Search::on_contextCopyFile_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t != NULL) {
 		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
 		if (Path.isEmpty()) return;
@@ -1009,7 +1016,7 @@ void Search::on_contextCopyFile_triggered()
 
 void Search::on_contextCopyCover_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t != NULL) {
 		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
 		if (Path.isEmpty()) return;
@@ -1020,13 +1027,15 @@ void Search::on_contextCopyCover_triggered()
 void Search::rateCurrentTrack(int value)
 {
 	if (!currentTrackListItem) return;
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 	if (value == t->Rating) return;
 	DataTitle tUpdate=*t;
 	tUpdate.Rating=value;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 	renderTrack(currentTrackListItem, &tUpdate);
@@ -1106,7 +1115,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
 	int count=0;
 	for (int i=0;i < Items.size();i++) {
 		item=(WMTreeItem*)Items[i];
-		DataTitle* t=wm->GetTitle(item->Id);
+		const DataTitle* t=wm->GetTitle(item->Id);
 		xml+="<item>\n";
 		xml+=wm->getXmlTitle(item->Id);
 		if (t != NULL) {
@@ -1305,7 +1314,7 @@ void Search::on_displayMusicKey_currentIndexChanged(int)
 	}
 	updateTrackListing();
 	for (int i=1;i <= 24;i++) {
-		ui.keywheel->setKeyName(i, DataTitle::keyName(i, musicKeyDisplay));
+		ui.keywheel->setKeyName(i, wm_main->MusicKeys.keyName(i, musicKeyDisplay));
 	}
 	ui.keywheel->repaint();
 }

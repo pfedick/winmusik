@@ -55,13 +55,10 @@ CWmClient* wm_main=NULL;
 CWmClient::CWmClient()
 {
 	wm_main=this;
-	InitErrors();
 	MainMenue=NULL;
 	CoverViewerWindow=NULL;
 	LatestPurchaseDate=QDate::currentDate();
 	Hashes.wm=this;
-	initLetterReplacements();
-	initFilenameLetterReplacements();
 }
 
 CWmClient::~CWmClient()
@@ -92,13 +89,13 @@ void CWmClient::Init(int argc, char** argv, QApplication* app)
 	InitStorage();
 }
 
-int CWmClient::RaiseError()
+int CWmClient::RaiseError(QWidget* object, const QString& error)
 {
-	QString m=tr("The following error occured:");
-	return RaiseError(NULL, m);
+	QString msg=tr("The following error occured:");
+	return RaiseError(object, msg, error);
 }
 
-int CWmClient::RaiseError(QWidget* object, QString msg)
+int CWmClient::RaiseError(QWidget* object, const QString& msg, const QString& error)
 {
 	int err=ppl6::GetErrorCode();
 	ppl7::String descr=ppl6::GetError();
@@ -138,6 +135,7 @@ int CWmClient::Start()
 		}
 	}
 	LoadTranslation();
+	InitMusicKeys();
 	InitLogging();
 
 	InitDataPath();
@@ -158,6 +156,12 @@ int CWmClient::Start()
 	Mutex.unlock();
 	Hashes.threadStart();
 	return 1;
+}
+
+void CWmClient::InitMusicKeys()
+{
+	MusicKeys.setCustomName(conf.customMusicKeyName);
+	for (int i=0;i < 26;i++) MusicKeys.setCustomKeyName(i, conf.customMusicKey[i]);
 }
 
 void CWmClient::InitLogging()

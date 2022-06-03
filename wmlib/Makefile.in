@@ -7,7 +7,6 @@ LIBDEP	:= ../pplib/release/libpplib.a
 
 
 OBJS_RELEASE =	\
-	release/config.o \
 	release/Playlist.o \
 	release/Searchlist.o \
 	release/MusicalKeys.o \
@@ -29,7 +28,6 @@ OBJS_RELEASE =	\
 
 
 OBJS_DEBUG =	\
-	debug/config.o \
 	debug/Playlist.o \
 	debug/Searchlist.o \
 	debug/MusicalKeys.o \
@@ -134,10 +132,6 @@ release/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/CID3TagSaver.o -c src/CID3TagSaver.cpp
 
-release/config.o: src/config.cpp include/libwinmusik3.h Makefile
-	-mkdir -p release
-	$(CXX) $(CXXFLAGS) -o release/config.o -c src/config.cpp
-
 release/CTrackList.o: src/CTrackList.cpp include/libwinmusik3.h Makefile include/wm_tracklist.h
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/CTrackList.o -c src/CTrackList.cpp
@@ -204,10 +198,6 @@ debug/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/CID3TagSaver.o -c src/CID3TagSaver.cpp
 
-debug/config.o: src/config.cpp include/libwinmusik3.h Makefile
-	-mkdir -p release
-	$(CXX) $(CXXDEBUGFLAGS) -o debug/config.o -c src/config.cpp
-
 debug/CTrackList.o: src/CTrackList.cpp include/libwinmusik3.h Makefile include/wm_tracklist.h
-	-mkdir -p release
+	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/CTrackList.o -c src/CTrackList.cpp

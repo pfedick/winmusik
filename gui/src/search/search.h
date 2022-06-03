@@ -69,7 +69,7 @@ private:
 	Ui::searchClass ui;
 	CWmClient* wm;
 	int resultmode;
-	std::list<DataTitle*> Results;
+	std::list<const DataTitle*> Results;
 	CSearchTrackList* trackList;
 	WMTreeItem* currentTrackListItem;
 	QPoint startPos;	// Für Drag/Drop und multiple Markierungen
@@ -97,14 +97,14 @@ private:
 	void NormalizeTerm(ppl7::String& term);
 	void DefaultTracklistHeader();
 
-	void FilterResult(const CHashes::TitleTree& in, std::list<DataTitle*>& out);
-	void LimitResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out);
-	void RandomResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out, size_t num);
-	void SortResult(const std::list<DataTitle*>& in, std::list<DataTitle*>& out);
+	void FilterResult(const CHashes::TitleTree& in, std::list<const DataTitle*>& out);
+	void LimitResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out);
+	void RandomResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out, size_t num);
+	void SortResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out);
 	void rateCurrentTrack(int value);
 
 	void updateTrackListing();
-	void renderTrack(WMTreeItem* item, DataTitle* ti);
+	void renderTrack(WMTreeItem* item, const  DataTitle* ti);
 	void createSetMusicKeyContextMenu(QMenu* m);
 
 	void configureFilter(ResultFilter& filter);

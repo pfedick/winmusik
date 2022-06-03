@@ -72,7 +72,7 @@ static const char* errors[] ={
 	"unknown"
 };
 
-
+/*
 static const pplchar* geterror(pplint32 code)
 {
 	pplint32 max=sizeof(errors) / sizeof(char*) - 2;
@@ -86,3 +86,4 @@ void CWmClient::InitErrors()
 {
 	ppl6::AttachErrorHandler(geterror, 20000, 20999);
 }
+*/

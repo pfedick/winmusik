@@ -93,7 +93,7 @@ void getHarmonicKeys(std::map<int, HarmonicType>& harmonics, int key)
 
 
 
-int getMusicKeyId(const ppl6::CString& name)
+int getMusicKeyId(const ppl7::String& name)
 {
     ppl7::String k=ppl7::LowerCase(ppl7::Trim(name));
     k.replace("♯", "#");
@@ -130,7 +130,7 @@ int getMusicKeyId(const ppl6::CString& name)
     return 0;
 }
 
-ppl6::CString keyNameSharps(int id)
+ppl7::String keyNameSharps(int id)
 {
     switch (id) {
     case 1: return "G#m";
@@ -162,7 +162,7 @@ ppl6::CString keyNameSharps(int id)
     }
 }
 
-ppl6::CString keyNameOpenKey(int id)
+ppl7::String keyNameOpenKey(int id)
 {
     switch (id) {
     case 1: return " 6m";	// G#m
@@ -194,7 +194,7 @@ ppl6::CString keyNameOpenKey(int id)
     }
 }
 
-ppl6::CString keyNameCustom(int id)
+ppl7::String keyNameCustom(int id)
 {
     if (id == 0 || id > 25) return "";
     if (id == 25) return "none";
@@ -215,7 +215,7 @@ MusicKey::MusicKey(int wm_keyid)
     setKey(wm_keyid);
 }
 
-MusicKey::MusicKey(const ppl6::CString& name)
+MusicKey::MusicKey(const ppl7::String& name)
 {
     setKey(getMusicKeyId(name));
 }
@@ -288,7 +288,7 @@ int MusicKey::wmKeyId() const
     return wmid;
 }
 
-ppl6::CString MusicKey::name(MusicKeyType type) const
+ppl7::String MusicKey::name(MusicKeyType type) const
 {
     if (type == musicKeyTypeMusicalSharps) return keyNameSharps(wmid);
     else if (type == musicKeyTypeOpenKey) return keyNameOpenKey(wmid);

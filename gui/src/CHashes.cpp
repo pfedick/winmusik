@@ -131,7 +131,7 @@ void CHashes::FindWords(const WordTree& Tree, const ppl7::Array& words, TitleTre
 			ppl7::String expression;
 			expression="/^" + key2 + "$/i";
 
-			if (log) log->Printf(ppl6::LOG::DEBUG, 10, "CHashes", "FindWords", __FILE__, __LINE__, "Wildcard-Search: %s", (const char*)expression);
+			if (log) log->printf(ppl7::Logger::DEBUG, 10, "CHashes", "FindWords", __FILE__, __LINE__, "Wildcard-Search: %s", (const char*)expression);
 			// Wildcard Suche
 			bool found=false;
 			WordTree::const_iterator it;
@@ -344,7 +344,7 @@ void CHashes::run()
 {
 	if (!wm) return;
 	Mutex.lock();
-	if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Erstelle interne Suchtrees");
+	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Erstelle interne Suchtrees");
 
 	Artist.clear();
 	Title.clear();
@@ -357,29 +357,29 @@ void CHashes::run()
 
 	CTitleStore* store=&wm->TitleStore;
 	if (!store) {
-		wmlog->Printf(ppl6::LOG::ERROR, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Kein Titlestore");
+		wmlog->printf(ppl7::Logger::ERR, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Kein Titlestore");
 		return;
 	}
-	DataTitle* ti;
+	const DataTitle* ti;
 	uint32_t max=store->MaxId();
 	for (uint32_t id=0;id <= max;id++) {
-		ti=store->Get(id);
+		ti=store->GetPtr(id);
 		if (ti) {
 			AddTitleInternal(id, ti);
 		}
 	}
 
 	if (wmlog) {
-		wmlog->Printf(ppl6::LOG::DEBUG, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Interne Suchtrees fertig erstellt");
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Artist: %zu", Artist.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Title: %zu", Title.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Version: %zu", Version.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Genre: %zu", Genre.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Tags: %zu", Tags.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Remarks: %zu", Remarks.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Album: %zu", Album.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Label: %zu", Label.size());
-		wmlog->Printf(ppl6::LOG::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl MusicKeys: %zu", MusicKeys.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 1, "CHashes", "ThreadMain", __FILE__, __LINE__, "Interne Suchtrees fertig erstellt");
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Artist: %zu", Artist.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Title: %zu", Title.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Version: %zu", Version.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Genre: %zu", Genre.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Tags: %zu", Tags.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Remarks: %zu", Remarks.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Album: %zu", Album.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl Worte in Label: %zu", Label.size());
+		wmlog->printf(ppl7::Logger::DEBUG, 2, "CHashes", "ThreadMain", __FILE__, __LINE__, "Anzahl MusicKeys: %zu", MusicKeys.size());
 		log=wmlog;
 	}
 	Mutex.unlock();
@@ -394,7 +394,7 @@ int CHashes::Find(const ppl7::String& Artist, const ppl7::String& Title, TitleTr
 	wm->GetWords(Artist, WordsArtist);
 	wm->GetWords(Title, WordsTitle);
 	if (WordsArtist.size() == 0 && WordsTitle.size() == 0) {
-		ppl6::SetError(20028);
+		//ppl6::SetError(20028);
 		return 0;
 	}
 	Mutex.lock();
@@ -513,7 +513,7 @@ int CHashes::CheckDupes(const ppl7::String& Artist, const ppl7::String& Title, u
 		Result.erase(Ignore);
 	}
 	if (Version) {
-		DataTitle* Ti;
+		const DataTitle* Ti;
 		TitleTree::const_iterator it;
 		for (it=Result.begin();it != Result.end();it++) {
 			Ti=wm->GetTitle(*it);
@@ -527,7 +527,7 @@ int CHashes::CheckDupes(const ppl7::String& Artist, const ppl7::String& Title, u
 int CHashes::FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags, const ResultFilter& filter)
 {
 	Result.clear();
-	if (log) log->Printf(ppl6::LOG::DEBUG, 10, "CHashes", "FindGlobal", __FILE__, __LINE__, "Query=%s", (const char*)Query);
+	if (log) log->printf(ppl7::Logger::DEBUG, 10, "CHashes", "FindGlobal", __FILE__, __LINE__, "Query=%s", (const char*)Query);
 	// Zuerst die Wortliste erstellen
 	ppl7::Array WordsQuery;
 	wm->GetWords(Query, WordsQuery);
@@ -538,7 +538,7 @@ int CHashes::FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags,
 	}
 	*/
 	if (!Mutex.tryLock()) {
-		if (log) log->Printf(ppl6::LOG::DEBUG, 10, "CHashes", "FindGlobal", __FILE__, __LINE__, "Search Trees are not ready yet, waiting...");
+		if (log) log->printf(ppl7::Logger::DEBUG, 10, "CHashes", "FindGlobal", __FILE__, __LINE__, "Search Trees are not ready yet, waiting...");
 		asynchronousMessage message;
 		message.setMessageText(asynchronousMessage::tr("search trees are created, please wait..."));
 		message.show();
@@ -580,7 +580,7 @@ int CHashes::FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags,
 		// Leerer Query, alle Titel kommen ins Result-Set, sofern sie den Filter bestehen
 		uint32_t max=wm_main->TitleStore.MaxId();
 		for (uint32_t i=0;i <= max;i++) {
-			DataTitle* ti=wm_main->TitleStore.Get(i);
+			const DataTitle* ti=wm_main->TitleStore.GetPtr(i);
 			if (ti) {
 				if (filter.pass(*ti)) Result.insert(i);
 			}

@@ -42,12 +42,13 @@
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
-#include "ppl6.h"
 #include "ppl7.h"
 #include "exceptions.h"
 
 #include "wm_id3tagsaver.h"
 #include "libwinmusik3.h"
+
+using namespace de::pfp::winmusik;
 
 
 #define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2022"
@@ -101,74 +102,6 @@ public:
 };
 
 
-class CWMFileChunk
-{
-	friend class CWMFile;
-	friend class CStorage;
-private:
-	char		chunkname[5];
-	uint32_t	filepos;
-	uint32_t	size;
-	uint32_t	timestamp;
-	uint32_t	version;
-	uint32_t	datasize;
-	uint8_t	formatversion;
-	const char* data;
-
-public:
-	CWMFileChunk();
-	~CWMFileChunk();
-	void		Clear();
-	uint32_t	GetChunkDataSize() const;
-	const char* GetChunkData() const;
-	const char* GetChunkName() const;
-	int			SetChunkData(const char* chunkname, const char* data, uint32_t size, uint32_t oldfilepos=0, uint32_t version=0, uint8_t formatversion=1);
-	void		SetFormatVersion(uint8_t v);
-	uint32_t	GetFilepos() const;
-	uint32_t	GetTimestamp() const;
-	uint32_t	GetVersion() const;
-	uint8_t	GetFormatVersion() const;
-	void		HexDump(ppl7::Logger* log=nullptr) const;
-};
-
-class CWMFile
-{
-private:
-	ppl7::File ff;
-	uint8_t	version, subversion;
-	uint32_t	timestamp, lastchange;
-	uint32_t	pos, first, eof;
-	bool		enableCompression;
-
-public:
-	CWMFile();
-	~CWMFile();
-	bool IsOpen() const;
-	void Open(const char* filename);
-	void Close();
-	void Reset();
-	bool GetNextChunk(CWMFileChunk& chunk);
-	void GetChunk(CWMFileChunk& chunk, uint32_t filepos);
-	void SaveChunk(CWMFileChunk& chunk);
-	void DeleteChunk(CWMFileChunk& chunk);
-	void ListChunks();
-	void EnableCompression(bool flag);
-	static bool IsValidChunkName(const char* name);
-	uint32_t GetFileSize() const;
-	uint32_t GetFilePosition() const;
-	static int CopyDatabase(CWMFile& oldfile, CWMFile& newfile, CCallback* callback=nullptr);
-};
-
-
-enum MusicKeyType
-{
-	musicKeyTypeNone=0,
-	musicKeyTypeMusicalSharps,
-	musicKeyTypeOpenKey,
-	musicKeyTypeCustom=99
-};
-
-
 
 #include "regexpcapture.h"
 
@@ -188,8 +121,8 @@ void setReadableLength(QLabel* label, int length);
 void loadCoverToClipboard(const ppl7::String& Filename);
 
 
-void SetWindowGeometry(QWidget* widget, const ppl6::CString& name);
-void SaveWindowGeometry(QWidget* widget, const ppl6::CString& name);
+void SetWindowGeometry(QWidget* widget, const ppl7::String& name);
+void SaveWindowGeometry(QWidget* widget, const ppl7::String& name);
 
 ppl7::String getReadableTimeFromSeconds(int seconds);
 
@@ -337,6 +270,7 @@ public:
 
 };
 
+/*
 class CStringCounterItem : public ppl6::CTreeItem
 {
 public:
@@ -346,6 +280,7 @@ public:
 	virtual int CompareValue(void* value);
 
 };
+*/
 
 class ResultFilter;
 
@@ -433,30 +368,34 @@ private:
 	char** argv;
 
 	//ppl6::CpplThreadPool Threads;
-	void InitErrors();
+
 
 	QTranslator qtTranslator;
 	QTranslator wmTranslator;
 
+	void InitMusicKeys();
 	int FirstStartDialog();
 	int SelectLanguage();
 	int LoadTranslation();
 	int PrintTracklistTableHeader(QFont& Font, QPainter& painter, int x, int y);
 	int PrintTracklistHeader(QFont& Font, QPainter& painter, int x, int y);
-	int PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, DataDevice* device);
+	int PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, const DataDevice* device);
 	int PrintTracklistDisclaimer(QFont& Font, QPainter& painter);
 	void* MainMenue;
 	//ppl6::CGenericList EditorWindows;
 	//ppl6::CGenericList SearchWindows;
+	/*
 	ppl6::CGenericList CoverPrinterWindows;
 	ppl6::CGenericList PlaylistWindows;
 	ppl6::CGenericList SearchlistOverviewWindows;
 	ppl6::CGenericList SearchlistWindows;
 	ppl6::CGenericList DeviceListWindows;
+	*/
 	std::set<QWidget*> WindowsList;
 	void* CoverViewerWindow;
 
 	QDate					LatestPurchaseDate;
+	de::pfp::winmusik::WMNormalizer normalizer;
 
 
 public:
@@ -480,12 +419,14 @@ public:
 	RegularExpressionCapture	RegExpCapture;
 	CHashes					Hashes;
 
+	de::pfp::winmusik::MusicalKeys MusicKeys;
+
 	CWmClient();
 	~CWmClient();
 	void Init(int argc, char** argv, QApplication* app);
 
-	static int RaiseError();
-	static int RaiseError(QWidget* object, QString msg);
+	static int RaiseError(QWidget* object, const QString& msg, const QString& error);
+	static int RaiseError(QWidget* object, const QString& error);
 
 	int Start();
 	void InitStorage();

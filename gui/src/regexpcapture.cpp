@@ -138,14 +138,14 @@ void RegularExpressionCapture::addDefaultPatterns()
 void RegularExpressionCapture::save()
 {
 	if (!wm_main) return;
-	ppl6::CString File=wm_main->conf.DataPath + "/regexp.conf";
+	ppl7::String File=wm_main->conf.DataPath + "/regexp.conf";
 	QSettings settings(File, QSettings::IniFormat);
 	std::vector<RegExpPattern>::const_iterator it;
 
 	size_t pos=0;
-	ppl6::CString Group;
+	ppl7::String Group;
 	for (it = patterns.begin(); it != patterns.end(); ++it) {
-		Group.Setf("%i", (int)pos);
+		Group.setf("%i", (int)pos);
 		settings.beginGroup(Group);
 		settings.setValue("Name", (*it).Name);
 		settings.setValue("Pattern", (*it).Pattern);

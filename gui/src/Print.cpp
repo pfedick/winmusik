@@ -35,7 +35,7 @@
 
 #include "src/printdevicedialog/printdevicedialog.h"
 
-int CWmClient::PrintCoverDialog(QWidget* parent, int DeviceType, ppluint32 DeviceId)
+int CWmClient::PrintCoverDialog(QWidget* parent, int DeviceType, uint32_t DeviceId)
 {
 	PrintDeviceDialog Dialog(parent);
 	Dialog.setDeviceType(DeviceType);
@@ -50,8 +50,7 @@ int CWmClient::PrintCoverDialog(QWidget* parent, int DeviceType, ppluint32 Devic
 		if (Dialog.printCover()) {
 			if (DeviceType == 2) return PrintMP3Cover(parent, DeviceType, Dialog.min(), Dialog.max());
 			if (DeviceType == 7) return PrintMP3Cover(parent, DeviceType, Dialog.min(), Dialog.max());
-			ppl6::SetError(20039);
-			RaiseError(parent, tr("Cannot print cover"));
+			RaiseError(parent, tr("Cannot print cover"), tr("Coverdruck steht für diese Tonträgerart nicht zur Verfügung"));
 		} else {
 			PrintTracklist(parent, DeviceType, Dialog.min(), Dialog.max());
 		}
@@ -60,9 +59,9 @@ int CWmClient::PrintCoverDialog(QWidget* parent, int DeviceType, ppluint32 Devic
 	return 1;
 }
 
-int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, ppluint32 end)
+int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, uint32_t end)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	const char* tmp;
 	QPrinter Printer(QPrinter::HighResolution);
 	if (conf.bPrintColors) Printer.setColorMode(QPrinter::Color);
@@ -70,11 +69,11 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 	//Printer.setPrinterName(conf.PrinterName);
 	conf.DefaultPrintPath.trim();
 	if (conf.DefaultPrintPath.isEmpty()) conf.DefaultPrintPath=QDir::homePath();
-	ppl6::CString Filename=conf.DefaultPrintPath;
-	Filename.Concatf("/");
+	ppl7::String Filename=conf.DefaultPrintPath;
+	Filename.appendf("/");
 	Filename+=tr("WinMusik Cover", "Default Filename in Printdialog");
-	if (start != end) Filename.Concatf(" - %s %i-%i.", (const char*)GetDeviceNameShort(DeviceType), start, end);
-	else Filename.Concatf(" - %s %i.pdf", (const char*)GetDeviceNameShort(DeviceType), start);
+	if (start != end) Filename.appendf(" - %s %i-%i.", (const char*)GetDeviceNameShort(DeviceType), start, end);
+	else Filename.appendf(" - %s %i.pdf", (const char*)GetDeviceNameShort(DeviceType), start);
 
 	Printer.setOutputFileName(Filename);
 
@@ -83,7 +82,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 	if (printDialog.exec() != QDialog::Accepted) return 0;
 
 	// Save Options
-	conf.DefaultPrintPath=ppl6::GetPath(Printer.outputFileName());
+	conf.DefaultPrintPath=ppl7::File::getPath(Printer.outputFileName());
 	conf.PrinterName=Printer.printerName();
 	if (Printer.colorMode() == QPrinter::Color) conf.bPrintColors=true;
 	else conf.bPrintColors=false;
@@ -114,8 +113,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 	RedPen.setBrush(Qt::red);
 
 	if (!painter.begin(&Printer)) {
-		ppl6::SetError(20027);
-		RaiseError();
+		RaiseError(parent, tr("Druckvorgang kann nicht gestartet werden"));
 		return 0;
 	}
 	float w=(float)Printer.width() / (float)Printer.widthMM();
@@ -124,11 +122,11 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 	Font.setFamily(conf.PrinterFont);
 
 	// Nun können wir der Reihe nach alle Cover drucken
-	for (ppluint32 DeviceId=start;DeviceId <= end;DeviceId++) {
+	for (uint32_t DeviceId=start;DeviceId <= end;DeviceId++) {
 		if (DeviceId > start) Printer.newPage();
 		// Tonträger laden
 		CTrackList* tracklist=GetTracklist(DeviceType, DeviceId, 1);
-		DataDevice* device=DeviceStore.Get(DeviceType, DeviceId);
+		const DataDevice* device=DeviceStore.GetPtr(DeviceType, DeviceId);
 		if (!device) continue;
 
 		// Hilfslinien zeichnen
@@ -145,7 +143,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 		Font.setPointSize(20);
 		Font.setBold(true);
 		painter.setFont(Font);
-		Tmp.Setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
+		Tmp.setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
 		//Rect.setRect ((int)(60*w), (int)(4*h), (int)(119*w),(int)(80*h));
 		//bbox=painter.boundingRect ( Rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextSingleLine,Tmp);
 		painter.drawText((int)(65 * w), (int)(8 * h), Tmp);
@@ -167,9 +165,9 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 			painter.drawText((int)(82 * w), (int)(y * h), device->SubTitle);
 			y+=5;
 		}
-		Tmp.Setf("%u", device->NumTracks);
+		Tmp.setf("%u", device->NumTracks);
 		painter.drawText((int)(82 * w), (int)(40 * h), Tmp);
-		Tmp.Setf("%i:%02i ", (int)(device->Recorded / 60), device->Recorded % 60);
+		Tmp.setf("%i:%02i ", (int)(device->Recorded / 60), device->Recorded % 60);
 		Tmp+=tr("min.", "Shortcut für Minutes on Cover");
 		painter.drawText((int)(82 * w), (int)(45 * h), Tmp);
 
@@ -179,7 +177,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 		Font.setBold(true);
 		painter.setFont(Font);
 		painter.rotate(90.0);
-		Tmp.Setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
+		Tmp.setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
 		painter.drawText((int)(123 * h), (int)(-146 * w), Tmp);
 		Font.setPointSize(10);
 		Font.setBold(false);
@@ -206,15 +204,15 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 		Font.setPointSize(20);
 		Font.setBold(true);
 		painter.setFont(Font);
-		Tmp.Setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
+		Tmp.setf("%s %u", (const char*)GetDeviceNameShort(DeviceType), DeviceId);
 		painter.drawText((int)(10 * w), (int)(128 * h), Tmp);
 		Font.setPointSize(10);
 		Font.setBold(true);
 		painter.setFont(Font);
-		Tmp.Clear();
+		Tmp.clear();
 		if (device->Title) Tmp=device->Title;
 		if (device->SubTitle) {
-			if (Tmp.NotEmpty()) Tmp+=", ";
+			if (Tmp.notEmpty()) Tmp+=", ";
 			Tmp+=device->SubTitle;
 		}
 		painter.drawText((int)(10 * w), (int)(135 * h), Tmp);
@@ -250,21 +248,21 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 		int rowheight=bbox.height();
 		int row=0;
 		for (int Track=tracklist->GetMin();Track <= tracklist->GetMax();Track++) {
-			DataTrack* t=tracklist->Get(Track);
+			const DataTrack* t=tracklist->GetPtr(Track);
 			if (t) {
-				DataTitle* ti=GetTitle(t->TitleId);
+				const DataTitle* ti=GetTitle(t->TitleId);
 				if (ti) {
-					Tmp.Setf("%u.", Track);
+					Tmp.setf("%u.", Track);
 					painter.drawText(x, y, Tmp);
-					Tmp.Setf("%s - %s ",
+					Tmp.setf("%s - %s ",
 						(ti->Artist.notEmpty() ? (const char*)ti->Artist : "?"),
 						(ti->Title.notEmpty() ? (const char*)ti->Title : "?"));
 					bbox=painter.boundingRect(Rect, Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, Tmp);
 					painter.drawText((int)(x + 4 * w), y, Tmp);
-					Tmp.Setf("(%i.%02i ", (int)(ti->Length / 60), ti->Length % 60);
+					Tmp.setf("(%i.%02i ", (int)(ti->Length / 60), ti->Length % 60);
 					Tmp+=tr("min.", "Shortcut für Minutes on Cover");
 					tmp=GetVersionText(ti->VersionId);
-					if (tmp) Tmp.Concatf(", %s", tmp);
+					if (tmp) Tmp.appendf(", %s", tmp);
 					Tmp+=")";
 					painter.setPen(RedPen);
 					painter.drawText((int)(x + 4 * w + bbox.width()), y, Tmp);
@@ -291,7 +289,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, ppluint32 start, p
 		Font.setBold(false);
 		painter.setFont(Font);
 		Tmp=tr("Printed by WinMusik");
-		Tmp.Concatf(" %s, %s", WM_VERSION, WM_COPYRIGHT);
+		Tmp.appendf(" %s, %s", WM_VERSION, WM_COPYRIGHT);
 		painter.drawText((int)(10 * w), (int)(236 * h), Tmp);
 
 
@@ -342,7 +340,7 @@ int CWmClient::PrintTracklistTableHeader(QFont& Font, QPainter& painter, int rx,
 
 int CWmClient::PrintTracklistDisclaimer(QFont& Font, QPainter& painter)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	const QPaintDevice* device=painter.device();
 
 	float w=(float)device->width() / (float)device->widthMM();
@@ -353,14 +351,14 @@ int CWmClient::PrintTracklistDisclaimer(QFont& Font, QPainter& painter)
 	Font.setBold(false);
 	painter.setFont(Font);
 	Tmp=tr("Printed by WinMusik");
-	Tmp.Concatf(" %s, %s", WM_VERSION, WM_COPYRIGHT);
+	Tmp.appendf(" %s, %s", WM_VERSION, WM_COPYRIGHT);
 	painter.drawText((int)(15 * w), (int)(device->height() - 5 * h), Tmp);
 	return 1;
 }
 
-int CWmClient::PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, DataDevice* device)
+int CWmClient::PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, const DataDevice* device)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	QRect Rect;
 	const QPaintDevice* paintdevice=painter.device();
 	QBrush NormalBrush(Qt::black, Qt::NoBrush);
@@ -379,7 +377,7 @@ int CWmClient::PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x,
 	Font.setPointSize(20);
 	Font.setBold(true);
 	painter.setFont(Font);
-	Tmp.Setf("%s %u", (const char*)GetDeviceName(device->DeviceType), device->DeviceId);
+	Tmp.setf("%s %u", (const char*)GetDeviceName(device->DeviceType), device->DeviceId);
 	//Rect.setRect ((int)(60*w), (int)(4*h), (int)(119*w),(int)(80*h));
 	//bbox=painter.boundingRect ( Rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextSingleLine,Tmp);
 	painter.drawText((int)(x * w), (int)(y * h), Tmp);
@@ -402,20 +400,20 @@ int CWmClient::PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x,
 	if (device->SubTitle) {
 		painter.drawText((int)((x + 20) * w), (int)(y1 * h), device->SubTitle);
 	}
-	Tmp.Setf("%u", device->NumTracks);
+	Tmp.setf("%u", device->NumTracks);
 	painter.drawText((int)((x + 20) * w), (int)((y + 20) * h), Tmp);
 	if (device->Pages > 1) {
-		Tmp.Setf("%u", device->Pages);
+		Tmp.setf("%u", device->Pages);
 		painter.drawText((int)((x + 70) * w), (int)((y + 20) * h), Tmp);
 	}
 	ppl7::String FirstDate="?", LastDate="?", DateFormat=tr("%d.%m.%Y", "Date format");
 	if (device->FirstDate) FirstDate=Long2Date(DateFormat, device->FirstDate);
 	if (device->LastDate) LastDate=Long2Date(DateFormat, device->LastDate);
-	Tmp.Setf("%s - %s", (const char*)FirstDate, (const char*)LastDate);
+	Tmp.setf("%s - %s", (const char*)FirstDate, (const char*)LastDate);
 	painter.drawText((int)((x + 90) * w), (int)((y + 25) * h), Tmp);
 
 
-	Tmp.Setf("%i:%02i ", (int)(device->Recorded / 60), device->Recorded % 60);
+	Tmp.setf("%i:%02i ", (int)(device->Recorded / 60), device->Recorded % 60);
 	Tmp+=tr("min.", "Shortcut für Minutes on Cover");
 	painter.drawText((int)((x + 20) * w), (int)((y + 25) * h), Tmp);
 	QPixmap Icon=GetDevicePixmap(device->DeviceType);
@@ -432,20 +430,20 @@ int CWmClient::PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x,
 	return 35;
 }
 
-int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, ppluint32 end)
+int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, uint32_t end)
 {
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	QPrinter Printer(QPrinter::HighResolution);
 	if (conf.bPrintColors) Printer.setColorMode(QPrinter::Color);
 	else Printer.setColorMode(QPrinter::GrayScale);
 	//Printer.setPrinterName(conf.PrinterName);
 	conf.DefaultPrintPath.trim();
 	if (conf.DefaultPrintPath.isEmpty()) conf.DefaultPrintPath=QDir::homePath();
-	ppl6::CString Filename=conf.DefaultPrintPath;
-	Filename.Concatf("/");
+	ppl7::String Filename=conf.DefaultPrintPath;
+	Filename.appendf("/");
 	Filename+=tr("WinMusik Tracklist", "Default Filename in Printdialog");
-	if (start != end) Filename.Concatf(" - %s %i-%i-Tracklist.pdf", (const char*)GetDeviceNameShort(DeviceType), start, end);
-	else Filename.Concatf(" - %s %i-Tracklist.pdf", (const char*)GetDeviceNameShort(DeviceType), start);
+	if (start != end) Filename.appendf(" - %s %i-%i-Tracklist.pdf", (const char*)GetDeviceNameShort(DeviceType), start, end);
+	else Filename.appendf(" - %s %i-Tracklist.pdf", (const char*)GetDeviceNameShort(DeviceType), start);
 
 	Printer.setOutputFileName(Filename);
 
@@ -454,7 +452,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 	if (printDialog.exec() != QDialog::Accepted) return 0;
 
 	// Save Options
-	conf.DefaultPrintPath=ppl6::GetPath(Printer.outputFileName());
+	conf.DefaultPrintPath=ppl7::File::getPath(Printer.outputFileName());
 	conf.PrinterName=Printer.printerName();
 	if (Printer.colorMode() == QPrinter::Color) conf.bPrintColors=true;
 	else conf.bPrintColors=false;
@@ -487,8 +485,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 	RedPen.setBrush(Qt::red);
 
 	if (!painter.begin(&Printer)) {
-		ppl6::SetError(20027);
-		RaiseError();
+		RaiseError(NULL, tr("Druckvorgang kann nicht gestartet werden"));
 		return 0;
 	}
 	float w=(float)Printer.width() / (float)Printer.widthMM();
@@ -499,7 +496,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 	x=15;
 	y=10;
 	// Nun können wir der Reihe nach alle Cover drucken
-	for (ppluint32 DeviceId=start;DeviceId <= end;DeviceId++) {
+	for (uint32_t DeviceId=start;DeviceId <= end;DeviceId++) {
 		if (DeviceId > start) {
 			Printer.newPage();
 			x=15;
@@ -510,7 +507,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 		painter.setBrush(Brush);
 
 		// Tonträger laden
-		DataDevice* device=DeviceStore.Get(DeviceType, DeviceId);
+		const DataDevice* device=DeviceStore.GetPtr(DeviceType, DeviceId);
 		if (!device) continue;
 
 		y+=PrintTracklistDeviceHeader(Font, painter, x, y, device);
@@ -524,7 +521,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 				Font.setBold(true);
 				painter.setFont(Font);
 				Tmp=tr("Page");
-				Tmp.Concatf(" %i:", page);
+				Tmp.appendf(" %i:", page);
 				painter.drawText(QRect(rx, ry, (int)(50 * w), (int)(10 * h)), Qt::AlignLeft, Tmp);
 
 				ry+=(int)(10 * h);
@@ -534,19 +531,20 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 				ry+=PrintTracklistTableHeader(Font, painter, rx, ry);
 
 
-				tracklist->Reset();
-				DataTrack* t;
+
 				Font.setPointSize(8);
 				Font.setBold(false);
 				painter.setFont(Font);
 				bbox=painter.boundingRect(Rect, Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, "WÄge|ßchen§");
 				rowheight=bbox.height();
-				while ((t=tracklist->GetNext())) {
-					DataTitle* ti=GetTitle(t->TitleId);
+				CTrackList::const_iterator it;
+				for (it=tracklist->begin();it != tracklist->end();++it) {
+					const DataTrack& t=it->second;
+					const DataTitle* ti=GetTitle(t.TitleId);
 					if (ti) {
-						Tmp.Setf("%u.", t->Track);
+						Tmp.setf("%u.", t.Track);
 						painter.drawText(QRect(rx, ry, (int)(10 * w), rowheight), Qt::AlignLeft, Tmp);
-						Tmp.Setf("%s - %s ",
+						Tmp.setf("%s - %s ",
 							(ti->Artist.notEmpty() ? (const char*)ti->Artist : "?"),
 							(ti->Title.notEmpty() ? (const char*)ti->Title : "?"));
 						painter.drawText(QRect(rx + (int)(10 * w), ry, (int)(80 * w), rowheight), Qt::AlignLeft, Tmp);
@@ -556,7 +554,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 						painter.setPen(Pen);
 						Tmp=GetGenreText(ti->GenreId);
 						painter.drawText(QRect(rx + (int)(140 * w), ry, (int)(20 * w), rowheight), Qt::AlignLeft, Tmp);
-						Tmp.Setf("%i.%02i ", (int)(ti->Length / 60), ti->Length % 60);
+						Tmp.setf("%i.%02i ", (int)(ti->Length / 60), ti->Length % 60);
 						Tmp+=tr("min.", "Shortcut für Minutes on Cover");
 						painter.drawText(QRect(rx + (int)(160 * w), ry, (int)(20 * w), rowheight), Qt::AlignRight, Tmp);
 						ry+=rowheight;
@@ -574,7 +572,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, ppluint32 start, 
 								Font.setBold(true);
 								painter.setFont(Font);
 								Tmp=tr("Page");
-								Tmp.Concatf(" %i:", page);
+								Tmp.appendf(" %i:", page);
 								painter.drawText(QRect(rx, ry, (int)(50 * w), (int)(10 * h)), Qt::AlignLeft, Tmp);
 
 								ry+=(int)(10 * h);
