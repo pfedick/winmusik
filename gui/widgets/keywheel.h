@@ -24,7 +24,6 @@
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 
 #include <QLabel>
-#include "ppl6.h"
 #include <QPainter>
 #include <QFont>
 

@@ -579,10 +579,10 @@ void Search::PresentResults()
 	Resize();
 	trackList->update();
 
-	ppluint64 totalLength=0;
+	uint64_t totalLength=0;
 
 	std::list<const DataTitle*>::const_iterator it;
-	ppluint32 i=0;
+	uint32_t i=0;
 	for (it=Results.begin();it != Results.end();++it) {
 		const DataTitle* ti=(*it);
 		i++;
@@ -618,10 +618,10 @@ void Search::configureFilter(ResultFilter& filter)
 	if (ui.enableRecordingDateSearch->isChecked()) {
 		QDate Date=ui.recordDateStart->date();
 		ppl7::String Tmp=Date.toString("yyyyMMdd");
-		ppluint32 start=Tmp.toInt();
+		uint32_t start=Tmp.toInt();
 		Date=ui.recordDateEnd->date();
 		Tmp=Date.toString("yyyyMMdd");
-		ppluint32 end=Tmp.toInt();
+		uint32_t end=Tmp.toInt();
 		filter.setRecordingRange(true, start, end);
 	}
 	if (ui.enableRatingSearch->isChecked()) {
@@ -1295,7 +1295,7 @@ void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 				Tmp.setf("%5u", 0);
 				item->setText(0, Tmp);
 				item->setText(1, entry.File);
-				Tmp.setf("%u MB", (ppluint32)(entry.Size / 1024 / 1024));
+				Tmp.setf("%u MB", (uint32_t)(entry.Size / 1024 / 1024));
 				item->setText(2, Tmp);
 				trackList->addTopLevelItem(item);
 

@@ -444,7 +444,7 @@ int CHashes::Find(const ppl7::String& Artist, const ppl7::String& Title, const p
 		&& WordsLabel.size() == 0
 		&& WordsGenre.size() == 0
 		&& WordsTags.size() == 0) {
-		ppl6::SetError(20028);
+		//ppl6::SetError(20028);
 		return 0;
 	}
 	Mutex.lock();
