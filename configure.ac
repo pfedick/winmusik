@@ -28,17 +28,11 @@ AC_INIT([winmusik],[3.7.0],[patrick@pfp.de],[winmusik-3.7.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
-AC_CONFIG_SRCDIR([ppl6/include/ppl6.h])
-AC_CONFIG_SRCDIR([ppl6/include/config.h.in])
-AC_CONFIG_SRCDIR([ppl6/include/ppl6-config.h.in])
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
 AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
 AC_CONFIG_SRCDIR([wmlib/include/wm_config.h.in])
 
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([ppl6/Makefile])
-AC_CONFIG_HEADERS([ppl6/include/config.h])
-AC_CONFIG_HEADERS([ppl6/include/ppl6-config.h])
 AC_CONFIG_FILES([pplib/Makefile])
 AC_CONFIG_FILES([pplib/tests/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
@@ -425,11 +419,11 @@ then
 fi
 if test -x "$qmake"
 then
-	report_have_qt="yes 2, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 if test -x "$ac_cv_path_qmake"
 then
-	report_have_qt="yes 3, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 
 SRCDIR=`pwd`

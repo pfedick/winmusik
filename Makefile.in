@@ -50,15 +50,13 @@ gui          := gui
 
 .PHONY: release debug release/WinMusik debug/WinMusik
 
-release: ppl7_release wmlib_release ppl6_release gui_release
+release: ppl7_release wmlib_release gui_release
 
-debug: ppl7_debug wmlib_debug ppl6_debug gui_debug
+debug: ppl7_debug wmlib_debug gui_debug
 
 all: release debug
 
 ppl7: ppl7_release ppl7_debug
-
-ppl6: ppl6_release ppl6_debug
 
 wmlib: wmlib_release wmlib_debug
 
@@ -80,10 +78,6 @@ ppl7_release:
 wmlib_release:
 	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
-ppl6_release:
-	mkdir -p ppl6/release
-	$(MAKE) --directory=ppl6 release
-
 gui_release:
 	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/release
@@ -102,10 +96,6 @@ ppl7_debug:
 
 wmlib_debug:
 	$(MAKE) --directory=wmlib debug/libwinmusik3.a
-
-ppl6_debug:
-	mkdir -p ppl6/debug
-	$(MAKE) --directory=ppl6 debug
 
 gui_debug:
 	VERSION=${VERSION} ./update_version.sh
@@ -135,16 +125,14 @@ deinstall:
 clean:
 	@rm -rf documentation release debug
 	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
-	@rm -rf gui/release gui/debug release debug ppl6/release pplib/debug lib/compile
+	@rm -rf gui/release gui/debug release debug pplib/debug lib/compile
 	@rm -rf gui/ui_*.h
 	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
-	-@ $(MAKE) --directory=ppl6 clean > /dev/null 2>&1
 	-@ $(MAKE) --directory=wmlib clean > /dev/null 2>&1
 
 distclean: clean
 	@rm -rf gui/Makefile* gui/WinMusik.pro .qmake.stash autom4te.cache
 	@rm -rf config.log config.status
-	@rm -rf ppl6/include/config.h ppl6/include/ppl6-config.h ppl6/Makefile
 	@rm -rf Package/WinMusik.desktop
 	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
 	-@ $(MAKE) --directory=wmlib distclean > /dev/null 2>&1

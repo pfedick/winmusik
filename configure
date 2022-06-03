@@ -617,9 +617,6 @@ PACKAGE_BUGREPORT='patrick@pfp.de'
 PACKAGE_URL=''
 
 ac_unique_file="gui/include/winmusik3.h"
-ac_unique_file="ppl6/include/ppl6.h"
-ac_unique_file="ppl6/include/config.h.in"
-ac_unique_file="ppl6/include/ppl6-config.h.in"
 ac_unique_file="pplib/include/ppl7.h"
 ac_unique_file="pplib/include/config_ppl7.h.in"
 ac_unique_file="wmlib/include/wm_config.h.in"
@@ -3467,16 +3464,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
-
-
 ac_config_files="$ac_config_files Makefile"
-
-ac_config_files="$ac_config_files ppl6/Makefile"
-
-ac_config_headers="$ac_config_headers ppl6/include/config.h"
-
-ac_config_headers="$ac_config_headers ppl6/include/ppl6-config.h"
 
 ac_config_files="$ac_config_files pplib/Makefile"
 
@@ -4096,7 +4084,6 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 # iconv.m4 serial AM7 (gettext-0.18)
-
 
 
 
@@ -15795,11 +15782,11 @@ then
 fi
 if test -x "$qmake"
 then
-	report_have_qt="yes 2, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 if test -x "$ac_cv_path_qmake"
 then
-	report_have_qt="yes 3, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 
 SRCDIR=`pwd`
@@ -16781,9 +16768,6 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "ppl6/Makefile") CONFIG_FILES="$CONFIG_FILES ppl6/Makefile" ;;
-    "ppl6/include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS ppl6/include/config.h" ;;
-    "ppl6/include/ppl6-config.h") CONFIG_HEADERS="$CONFIG_HEADERS ppl6/include/ppl6-config.h" ;;
     "pplib/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/Makefile" ;;
     "pplib/tests/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/tests/Makefile" ;;
     "pplib/include/ppl7-config.h") CONFIG_HEADERS="$CONFIG_HEADERS pplib/include/ppl7-config.h" ;;

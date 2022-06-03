@@ -41,8 +41,6 @@ else {
     unix:TARGET = release/WinMusik
 }
 
-#DEFINES += PPL6LIB
-#DEFINES += PPL7LIB
 DEFINES += HAVE_CONFIG_H
 
 QMAKE_CC = @CC@
@@ -59,7 +57,6 @@ RC_FILE = resource.rc
 INCLUDEPATH += include
 INCLUDEPATH += widgets
 INCLUDEPATH += ../pplib/include
-INCLUDEPATH += ../ppl6/include
 INCLUDEPATH += ../wmlib/include
 
 unix:INCLUDEPATH += /usr/local/include
@@ -69,11 +66,9 @@ win32:QMAKE_LFLAGS += -static-libgcc
 
 CONFIG(debug, debug|release) {
 	LIBS += ../wmlib/debug/libwinmusik3.a
-	LIBS += ../ppl6/debug/libppl6-debug.a
 	LIBS += ../pplib/debug/libpplib.a
 } else {
 	LIBS += ../wmlib/release/libwinmusik3.a
-	LIBS += ../ppl6/release/libppl6.a
 	LIBS += ../pplib/release/libpplib.a
 }
 LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
