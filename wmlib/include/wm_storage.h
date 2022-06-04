@@ -227,6 +227,8 @@ public:
 	uint8_t		Pages;
 
 	DataDevice();
+	DataDevice(const DataDevice& other);
+	DataDevice& operator=(const DataDevice& other);
 	virtual ~DataDevice();
 	void Clear();
 

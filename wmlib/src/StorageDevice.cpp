@@ -164,6 +164,12 @@ DataDevice::DataDevice()
 	formatversion=1;
 }
 
+DataDevice::DataDevice(const DataDevice& other)
+{
+	formatversion=1;
+	CopyFrom(other);
+}
+
 DataDevice::~DataDevice()
 /*!\brief Destruktor der Klasse
  *
@@ -172,6 +178,13 @@ DataDevice::~DataDevice()
  */
 {
 	Clear();
+}
+
+DataDevice& DataDevice::operator=(const DataDevice& other)
+{
+	formatversion=1;
+	CopyFrom(other);
+	return *this;
 }
 
 void DataDevice::Clear()
