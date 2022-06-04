@@ -111,11 +111,11 @@ bool CTableControl::on_Id_FocusIn()
 
 void CTableControl::UpdateText()
 {
-	ppl6::CString s=idWidget->text();
-	s.Trim();
+	ppl7::String s=idWidget->text();
+	s.trim();
 	if (s == "*") return;
-	ppluint32 id=idWidget->text().toInt();
-	CSimpleTable* item=store->Get(id);
+	uint32_t id=idWidget->text().toInt();
+	const CSimpleTable* item=store->GetPtr(id);
 	if (item == NULL) {
 		//textWidget->setText(wm->Unknown());
 		textWidget->setText("");
@@ -128,16 +128,16 @@ void CTableControl::UpdateText()
 bool CTableControl::on_Id_KeyPress(__attribute__((unused)) QKeyEvent* event, int key, int modifier)
 {
 	if (modifier == Qt::NoModifier && key == Qt::Key_F4) {		// Suchen in Tabelle
-		ppl6::CString Tmp;
+		ppl7::String Tmp;
 		Tmp=idWidget->text();
 		TableSearch* search=new TableSearch(window, wm);
 		search->setSearchParams(Tmp, store, Title);
 		search->Search();
-		ppluint32 ret=search->exec();
+		uint32_t ret=search->exec();
 		delete search;
 		if (!ret) return false;
 
-		Tmp.Setf("%u", ret);
+		Tmp.setf("%u", ret);
 		idWidget->setText(Tmp);
 		UpdateText();
 		return false;
@@ -153,13 +153,13 @@ bool CTableControl::on_Id_KeyRelease(__attribute__((unused)) QKeyEvent* event, _
 
 bool CTableControl::on_Text_FocusIn(int reason)
 {
-	CSimpleTable* item=NULL;
-	ppl6::CString Value=idWidget->text();
-	Value.Trim();
+	const CSimpleTable* item=NULL;
+	ppl7::String Value=idWidget->text();
+	Value.trim();
 	// Gibt's die ID?
-	int id=Value.ToInt();
+	int id=Value.toInt();
 	if (id > 0 || Value == "*") {
-		if (id > 0) item=store->Get(id);
+		if (id > 0) item=store->GetPtr(id);
 		// Falls mit der Maus reingeklickt wurde, ist es egal
 		if (reason == Qt::MouseFocusReason || Value == "*" || (id > 0 && (item == NULL || item->Value == NULL))) {
 			if (item == 0 && Value != "*") textWidget->setText("");
@@ -188,42 +188,44 @@ bool CTableControl::on_Text_FocusOut()
 		skipFocusOut=false;
 		return false;
 	}
-	ppl6::CString Value;
-	ppl6::CString ID=idWidget->text();
-	ID.Trim();
-	if (ID.IsEmpty()) return false;
-	ppluint32 id=ID.ToInt();
-	CSimpleTable label, * found;
+	ppl7::String Value;
+	ppl7::String ID=idWidget->text();
+	ID.trim();
+	if (ID.isEmpty()) return false;
+	uint32_t id=ID.toInt();
+	CSimpleTable label;
 	Value=textWidget->text();
-	Value.Trim();
+	Value.trim();
 	if (id > 0) {
-		store->GetCopy(id, &label);
+		if (store->Exists(id)) label=store->Get(id);
 	}
 	if (label.Id == 0) {
 		// Suchen, ob es den Eintrag schon gibt
-		found=store->Find((const char*)Value);
+		const CSimpleTable* found=store->Find(Value);
 		if (found) {
-			Value.Setf("%u", found->Id);
+			Value.setf("%u", found->Id);
 			idWidget->setText(Value);
 			return false;
 		}
 	}
 	// Wir speichern nur wenn ID>0 oder ein Text angegeben wurde
-	if (label.Id > 0 || Value.Len() > 0) {
+	if (label.Id > 0 || Value.len() > 0) {
 		label.SetValue(Value);
-		if (store->Put(&label)) {
-			Value.Setf("%u", label.Id);
+		try {
+			Value.setf("%u", store->Put(label).Id);
 			idWidget->setText(Value);
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not save data"));
 		}
 	}
 	return false;
 }
 
 
-void CTableControl::SetId(ppluint32 id)
+void CTableControl::SetId(uint32_t id)
 {
-	ppl6::CString v;
-	v.Setf("%u", id);
+	ppl7::String v;
+	v.setf("%u", id);
 	idWidget->setText(v);
 	UpdateText();
 }
@@ -231,28 +233,28 @@ void CTableControl::SetId(ppluint32 id)
 
 int CTableControl::Finish()
 {
-	CSimpleTable* item=NULL;
+	const CSimpleTable* item=NULL;
 
-	ppl6::CString Value;
-	ppl6::CString ID=idWidget->text();
-	ID.Trim();
-	ppluint32 id=ID.ToInt();
+	ppl7::String Value;
+	ppl7::String ID=idWidget->text();
+	ID.trim();
+	uint32_t id=ID.toInt();
 	if (id > 0) {
-		item=store->Get(id);
+		item=store->GetPtr(id);
 		if (!item) return 0;	// Die ID gibt's nicht
 		Value=item->Value;
 		textWidget->setText(Value);
 		return 1;
 	}
 	Value=textWidget->text();
-	Value.Trim();
-	if (Value.IsEmpty() == 1 || ID != "*") {
+	Value.trim();
+	if (Value.isEmpty() == 1 || ID != "*") {
 		idWidget->setText("0");
 		return 1;
 	}
-	item=store->Find((const char*)Value);
+	item=store->Find(Value);
 	if (item) {
-		Value.Setf("%u", item->Id);
+		Value.setf("%u", item->Id);
 		idWidget->setText(Value);
 		Value=item->Value;
 		textWidget->setText(Value);
@@ -260,10 +262,12 @@ int CTableControl::Finish()
 	}
 	CSimpleTable label;
 	label.SetValue(Value);
-	if (store->Put(&label)) {
-		Value.Setf("%u", label.Id);
+	try {
+		Value.setf("%u", store->Put(label).Id);
 		idWidget->setText(Value);
 		return 1;
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save data"));
 	}
 	return 0;
 }

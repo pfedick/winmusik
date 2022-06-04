@@ -54,7 +54,7 @@ public:
 	float			mixLength;
 	u_int8_t		energyLevel;
 	bool			keyVerified;
-	pplint8         keyModification;
+	int8_t          keyModification;
 	u_int16_t       bitrate;
 
 	u_int32_t		DeviceId;

@@ -140,7 +140,7 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 	ui.remarks->setText(item->Remarks);
 	ui.bpm->setText(ppl7::ToString("%i", item->bpm));
 	ui.bpmPlayed->setText(ppl7::ToString("%i", item->bpmPlayed));
-	ui.musicKey->setText(DataTitle::keyName(item->musicKey, wm->conf.musicKeyDisplay));
+	ui.musicKey->setText(wm_main->MusicKeys.keyName(item->musicKey, wm->conf.musicKeyDisplay));
 	ui.keyVerified->setChecked(item->keyVerified);
 	ui.energyLevel->setValue(item->energyLevel);
 	ui.musicKeyModificationSpinBox->setValue(item->keyModification);
@@ -189,7 +189,7 @@ void PlaylistEdit::filloutFields(PlaylistItem* item)
 		}
 		if (item->musicKey == 0) {
 			// Music Key
-			ui.musicKey->setText(DataTitle::keyName(DataTitle::keyId(Tag.getKey()), wm->conf.musicKeyDisplay));
+			ui.musicKey->setText(wm_main->MusicKeys.keyName(wm_main->MusicKeys.keyId(Tag.getKey()), wm->conf.musicKeyDisplay));
 		}
 	} else {
 		//if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 9, "WinMusik", "PlaylistEdit::filloutFields", __FILE__, __LINE__, "ID3-Tags not loaded");
@@ -271,7 +271,7 @@ void PlaylistEdit::storeFileds(PlaylistItem* item)
 	item->Label=ui.labelName->text().trimmed();
 	item->Album=ui.album->text().trimmed();
 	item->Remarks=ui.remarks->text().trimmed();
-	item->musicKey=DataTitle::keyId(ui.musicKey->text().trimmed());
+	item->musicKey=wm_main->MusicKeys.keyId(ui.musicKey->text().trimmed());
 	item->keyVerified=ui.keyVerified->isChecked();
 	item->bpm=ui.bpm->text().trimmed().toInt();
 	item->bpmPlayed=ui.bpmPlayed->text().trimmed().toInt();

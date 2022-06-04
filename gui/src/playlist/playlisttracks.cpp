@@ -86,7 +86,7 @@ ppl7::String PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent + "   <File>" + ppl7::EscapeHTMLTags(File) + "</File>\n";
 	ret+=Indent + "   <musicKey verified=\"";
 	if (keyVerified) ret+="true"; else ret+="false";
-	ret+="\">" + ppl7::EscapeHTMLTags(DataTitle::keyName(musicKey, musicKeyTypeMusicalSharps)) + "</musicKey>\n";
+	ret+="\">" + ppl7::EscapeHTMLTags(wm_main->MusicKeys.keyName(musicKey, musicKeyTypeMusicalSharps)) + "</musicKey>\n";
 	ret+=Indent + "   <keyModification>" + ppl7::ToString("%d", keyModification) + "</keyModification>\n";
 	ret+=Indent + "   <energyLevel>" + ppl7::ToString("%u", energyLevel) + "</energyLevel>\n";
 	ret+=Indent + "   <bpm>" + ppl7::ToString("%u", bpm) + "</bpm>\n";
@@ -179,13 +179,13 @@ void PlaylistItem::importFromXML(QDomElement& e)
 	}
 	node =e.namedItem("musicKey");
 	if (node.isNull() == false && node.isElement() == true) {
-		musicKey=DataTitle::keyId(node.toElement().text());
+		musicKey=wm_main->MusicKeys.keyId(node.toElement().text());
 		Tmp=node.toElement().attribute("verified", "false");
 		keyVerified=Tmp.toBool();
 	}
 	node =e.namedItem("keyModification");
 	if (node.isNull() == false && node.isElement() == true) {
-		keyModification=static_cast<pplint8>(node.toElement().text().toInt());
+		keyModification=static_cast<int8_t>(node.toElement().text().toInt());
 	}
 
 	node =e.namedItem("energyLevel");
@@ -264,7 +264,7 @@ void PlaylistItem::loadCoverPreview()
 {
 	// Cover laden
 	if (titleId > 0) {
-		DataTitle* ti=wm_main->GetTitle(titleId);
+		const DataTitle* ti=wm_main->GetTitle(titleId);
 		if (ti) {
 			//printf ("Cover-Preview from Database\n");
 			CoverPreview=ti->CoverPreview;
@@ -283,7 +283,7 @@ void PlaylistItem::loadCoverPreview()
 void PlaylistItem::updateFromDatabase()
 {
 	if (titleId == 0) return;
-	DataTitle* ti=wm_main->GetTitle(titleId);
+	const DataTitle* ti=wm_main->GetTitle(titleId);
 	if (!ti) return;
 	CoverPreview=ti->CoverPreview;
 	trackLength=ti->Length;

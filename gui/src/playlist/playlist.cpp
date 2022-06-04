@@ -440,7 +440,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 
 bool Playlist::loadTrackFromDatabase(PlaylistItem* item, u_int32_t titleId)
 {
-	DataTitle* ti=wm->GetTitle(titleId);
+	const DataTitle* ti=wm->GetTitle(titleId);
 	if (!ti) return false;
 	item->DeviceId=ti->DeviceId;
 	item->DeviceTrack=ti->Track;
@@ -781,7 +781,7 @@ void Playlist::renderTrackViewDJ(PlaylistItem* item)
 		else Tmp.appendf(" ▼ %d", item->keyModification);
 		item->setText(columnMusicKey, Tmp);
 	} else {
-		item->setText(columnMusicKey, DataTitle::keyName(item->musicKey, musicKeyDisplay));
+		item->setText(columnMusicKey, wm_main->MusicKeys.keyName(item->musicKey, musicKeyDisplay));
 	}
 	QFont f=item->font(columnMusicKey);
 	if ((item->keyVerified)) {
@@ -894,12 +894,12 @@ void Playlist::editTrack(PlaylistItem* item)
 void Playlist::saveTitle(PlaylistItem* item)
 {
 	if (item->titleId == 0) return;
-	DataTitle* ti=wm_main->GetTitle(item->titleId);
+	const DataTitle* ti=wm_main->GetTitle(item->titleId);
 	if (!ti) return;
 
 	DataTitle Ti, OldTi;
-	Ti.CopyFrom(ti);
-	OldTi.CopyFrom(ti);
+	Ti.CopyFrom(*ti);
+	OldTi.CopyFrom(*ti);
 
 	Ti.SetArtist(item->Artist);
 	Ti.SetTitle(item->Title);
@@ -917,8 +917,10 @@ void Playlist::saveTitle(PlaylistItem* item)
 	if (Ti != OldTi) {
 		//printf ("Changed detected, saving...\n");
 		if (Ti.TitleId > 0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
-		if (!wm_main->TitleStore.Put(&Ti)) {
-			wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+		try {
+			wm_main->TitleStore.Put(Ti);
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not save Title in TitleStore"));
 			if (Ti.TitleId > 0) wm_main->Hashes.AddTitle(Ti.TitleId);
 		}
 	}
@@ -1235,31 +1237,31 @@ void Playlist::on_tracks_customContextMenuRequested(const QPoint& pos)
 void Playlist::createSetMusicKeyContextMenu(QMenu* m)
 {
 	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(DataTitle::keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(DataTitle::keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(DataTitle::keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(DataTitle::keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(DataTitle::keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(DataTitle::keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(DataTitle::keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(DataTitle::keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(DataTitle::keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(DataTitle::keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(DataTitle::keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(DataTitle::keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(DataTitle::keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(DataTitle::keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(DataTitle::keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(DataTitle::keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(DataTitle::keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(DataTitle::keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(DataTitle::keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(DataTitle::keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(DataTitle::keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(DataTitle::keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(DataTitle::keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(DataTitle::keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
-	m->addAction(DataTitle::keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(wm_main->MusicKeys.keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
 }
 
 void Playlist::createSetEnergyLevelContextMenu(QMenu* m)
@@ -1282,14 +1284,16 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 	if (!currentTreeItem) return;
 	setChanged(true);
 	currentTreeItem->keyVerified=!currentTreeItem->keyVerified;
-	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (t) {
 		DataTitle tUpdate=*t;
 		if (tUpdate.Flags & 16) tUpdate.Flags-=16;
 		else tUpdate.Flags|=16;
 		currentTreeItem->keyVerified=(tUpdate.Flags & 16) >> 4;
-		if (!wm->TitleStore.Put(&tUpdate)) {
-			wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+		try {
+			wm->TitleStore.Put(tUpdate);
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not save Title in TitleStore"));
 			return;
 		}
 	}
@@ -1304,14 +1308,15 @@ void Playlist::on_contextSetMusicKey(int k)
 	currentTreeItem->musicKey=k;
 	renderTrack(currentTreeItem);
 
-	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.Key=k;
-
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 	if (!wm->SaveID3Tags(t->DeviceType, t->DeviceId, t->Page, t->Track, tUpdate)) {
@@ -1326,13 +1331,15 @@ void Playlist::on_contextSetEnergyLevel(int v)
 	currentTreeItem->energyLevel=v;
 	renderTrack(currentTreeItem);
 
-	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.EnergyLevel=v;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 }
@@ -1344,14 +1351,16 @@ void Playlist::rateCurrentTrack(int value)
 	currentTreeItem->rating=value;
 	renderTrack(currentTreeItem);
 
-	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 	if (value == t->Rating) return;
 
 	DataTitle tUpdate=*t;
 	tUpdate.Rating=value;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
 }
@@ -1394,7 +1403,7 @@ void Playlist::on_contextRate6_clicked()
 void Playlist::on_contextPasteCover_triggered()
 {
 	if (!currentTreeItem) return;
-	DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
 	if (!t) return;
 
 	QClipboard* clipboard = QApplication::clipboard();
@@ -1411,13 +1420,14 @@ void Playlist::on_contextPasteCover_triggered()
 	QApplication::restoreOverrideCursor();
 
 	// Titel speichern
-	if (!wm_main->TitleStore.Put(&Ti)) {
+	try {
+		wm_main->TitleStore.Put(Ti);
+	} catch (const ppl7::Exception& exp) {
 		QApplication::restoreOverrideCursor();
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
-	} else {
-		this->renderTrack(currentTreeItem);
-		QApplication::restoreOverrideCursor();
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 	}
+	this->renderTrack(currentTreeItem);
+	QApplication::restoreOverrideCursor();
 }
 
 
