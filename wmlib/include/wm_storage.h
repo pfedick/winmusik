@@ -445,7 +445,7 @@ public:
 	virtual void Clear();
 	virtual void LoadChunk(const CWMFileChunk& chunk);
 
-	uint32_t Put(const CSimpleTable& entry);
+	const CSimpleTable& Put(const CSimpleTable& entry);
 	bool Exists(uint32_t id) const;
 	void Delete(uint32_t id);
 	const CSimpleTable& Get(uint32_t id) const;

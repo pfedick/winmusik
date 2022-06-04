@@ -102,9 +102,9 @@ TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 	storage.RegisterStorageClass(&vstore);
 	storage.DeleteDatabase();
 	try {
-		ASSERT_EQ((uint32_t)1, vstore.Put(CSimpleTable(1, "Single", 1)));
+		ASSERT_EQ((uint32_t)1, vstore.Put(CSimpleTable(1, "Single", 1)).Id);
 		ASSERT_EQ((uint32_t)1, vstore.FindOrAdd("Single"));
-		ASSERT_EQ((uint32_t)2, vstore.Put(CSimpleTable(2, "Maxi", 5)));
+		ASSERT_EQ((uint32_t)2, vstore.Put(CSimpleTable(2, "Maxi", 5)).Id);
 		ASSERT_EQ((uint32_t)3, vstore.FindOrAdd("Extended Version"));
 		vstore.FindOrAdd("Extended Mix");
 		vstore.FindOrAdd("Extended Mix");
@@ -115,7 +115,7 @@ TEST_F(StorageSimpleTableTest, PutAndFindOrAdd) {
 		vstore.FindOrAdd("Original Version");
 		vstore.FindOrAdd("Original Mix");
 		vstore.FindOrAdd("Radio Mix");
-		ASSERT_EQ((uint32_t)16, vstore.Put(CSimpleTable(16, "Test Mix 1")));
+		ASSERT_EQ((uint32_t)16, vstore.Put(CSimpleTable(16, "Test Mix 1")).Id);
 		ASSERT_EQ((uint32_t)17, vstore.FindOrAdd("Test Mix 2"));
 	} catch (const ppl7::Exception& exp) {
 		exp.print();

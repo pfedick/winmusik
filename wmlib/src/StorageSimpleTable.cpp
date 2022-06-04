@@ -394,7 +394,7 @@ CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 	return TableIndex[id];
 }
 
-uint32_t CTableStore::Put(const CSimpleTable& entry)
+const CSimpleTable& CTableStore::Put(const CSimpleTable& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -412,7 +412,7 @@ uint32_t CTableStore::Put(const CSimpleTable& entry)
 {
 	CSimpleTable* new_entry=SaveToMemory(entry);
 	SaveToStorage(*new_entry);
-	return new_entry->Id;
+	return *new_entry;
 }
 
 const CSimpleTable& CTableStore::Get(uint32_t id) const
@@ -528,7 +528,7 @@ uint32_t CTableStore::FindOrAdd(const ppl7::String& value)
 	item.Id=0;
 	item.References=1;
 	item.SetValue(value);
-	return Put(item);
+	return Put(item).Id;
 }
 
 uint32_t CTableStore::GetId(const ppl7::String& value) const
