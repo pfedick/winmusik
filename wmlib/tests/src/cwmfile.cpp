@@ -57,7 +57,7 @@ public:
 
 TEST_F(CWMFileTest, Parse) {
     CWMFile ff;
-    ff.Open("/home/patrick/Nextcloud/WinMusik3/winmusik.dat");
+    ff.Open("testdata/winmusik.dat");
     CWMFileChunk chunk;
     int count=0;
     std::map<ppl7::String, ChunkStats> stats;

@@ -285,8 +285,8 @@ TEST_F(StorageTitleTest, PutGet) {
 	DataTitle t1;
 	getDefaultTitle(t1);
 	t1.TitleId=0;
-	uint32_t id=store.Put(t1);
-	ASSERT_EQ((uint32_t)1, id);
+	const DataTitle& newti=store.Put(t1);
+	ASSERT_EQ((uint32_t)1, newti.TitleId);
 
 	const DataTitle& t2=store.Get(1);
 	ASSERT_EQ(t1.Artist, t2.Artist);
@@ -335,12 +335,12 @@ TEST_F(StorageTitleTest, PutOverwriteGet) {
 	getDefaultTitle(t1);
 	t1.TitleId=0;
 	ASSERT_EQ((size_t)0, store.Artists.size());
-	uint32_t id=store.Put(t1);
-	ASSERT_EQ((uint32_t)1, id);
-	ASSERT_EQ((uint32_t)2, store.Put(t1));
-	ASSERT_EQ((uint32_t)3, store.Put(t1));
+	const DataTitle& newTi=store.Put(t1);
+	ASSERT_EQ((uint32_t)1, newTi.TitleId);
+	ASSERT_EQ((uint32_t)2, store.Put(t1).TitleId);
+	ASSERT_EQ((uint32_t)3, store.Put(t1).TitleId);
 	t1.TitleId=10;
-	ASSERT_EQ((uint32_t)10, store.Put(t1));
+	ASSERT_EQ((uint32_t)10, store.Put(t1).TitleId);
 
 	ASSERT_EQ((size_t)1, store.Artists.size());
 	ASSERT_EQ((uint32_t)10001, store.Capacity());
@@ -357,7 +357,7 @@ TEST_F(StorageTitleTest, PutOverwriteGet) {
 	DataTitle t2=store.Get(2);
 	t2.Artist="Tsitra";
 	t2.Title="Eltit";
-	ASSERT_EQ((uint32_t)2, store.Put(t2));
+	ASSERT_EQ((uint32_t)2, store.Put(t2).TitleId);
 
 	const DataTitle& t3=store.Get(2);
 

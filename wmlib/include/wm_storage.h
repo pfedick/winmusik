@@ -190,7 +190,7 @@ public:
 
 	std::map<ppl7::String, uint32_t> Artists;
 
-	uint32_t Put(const DataTitle& title);
+	const DataTitle& Put(const DataTitle& title);
 	bool Exists(uint32_t id) const;
 	void Delete(uint32_t id);
 	const DataTitle& Get(uint32_t id) const;

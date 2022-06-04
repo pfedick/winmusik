@@ -746,11 +746,11 @@ void CTitleStore::SaveToStorage(DataTitle& t)
  * den neuen Daten überschrieben und gespeichert.
  *
  */
-uint32_t CTitleStore::Put(const DataTitle& title)
+const DataTitle& CTitleStore::Put(const DataTitle& title)
 {
 	DataTitle* new_title=SaveToMemory(title);
 	SaveToStorage(*new_title);
-	return new_title->TitleId;
+	return *new_title;
 }
 
 
