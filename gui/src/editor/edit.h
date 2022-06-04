@@ -30,7 +30,6 @@
 #include <QTreeWidgetItem>
 #include "fkeys.h"
 #include "ui_edit.h"
-#include "oimpinfo.h"
 #include "colorscheme.h"
 #include "ppl7-audio.h"
 
@@ -93,7 +92,7 @@ public:
     void UpdateFkeys();
     void UpdateDevice();
     void UpdateTrackListing();
-    void RenderTrack(WMTreeItem* item, DataTitle* title);
+    void RenderTrack(WMTreeItem* item, const DataTitle& title);
     uint32_t EditDeviceDialog(uint32_t id);
     void ClearEditFields();
     void FillEditFields();
@@ -124,7 +123,6 @@ private:
     CTrackList* TrackList;
     DataTrack	Track;
     DataTitle	Ti;
-    DataOimp	Oimp;
 
     CTableControl TCVersion;
     CTableControl TCGenre;
@@ -143,7 +141,6 @@ private:
     const char* DupeCheckIcon;
     MusicKeyType	musicKeyDisplay;
 
-    OimpInfo* oimpInfo;
 
     CTitleList* trackList;
     WMTreeItem* currentTrackListItem;
@@ -229,7 +226,6 @@ private:
     void CopyFromTrackInfo(TrackInfo& info);
 
     void UpdateCompleters();
-    void ShowOimpInfo();
     void CheckDupes();
     void UpdateCover();
     //void index_LostFocus();

@@ -62,37 +62,32 @@ int CWmClient::CreateInitialDatabase()
  *
  */
 {
-	if (!Storage.DeleteDatabase()) return 0;
-
+	Storage.DeleteDatabase();
 	// First, we create some common used versions
-	DataVersion v;
 	for (int i=0;;i++) {
 		if (versions[i] == NULL) break;
-		v.Clear();
-		if (!v.SetValue(versions[i])) return 0;
-		if (!VersionStore.Put(&v)) return 0;
+		DataVersion v;
+		v.SetValue(versions[i]);
+		VersionStore.Put(v);
 	}
 
 	// Now the default genres defined by http://www.id3.org/
-	ppl7::String genre;
-	DataGenre g;
 	try {
 		for (int i=0;;i++) {
-			genre=ppl7::GetID3GenreName(i);
+			ppl7::String genre=ppl7::GetID3GenreName(i);
 			if (genre.isEmpty()) break;
-			g.Clear();
-			if (!g.SetValue(genre)) return 0;
-			if (!GenreStore.Put(&g)) return 0;
+			DataGenre g;
+			g.SetValue(genre);
+			GenreStore.Put(g);
 		}
 	} catch (const ppl7::InvalidGenreException&) {}
 
 	// A few artist shortcuts
-	DataShortcut s;
 	for (int i=0;;i++) {
 		if (!shortcuts[i].shortcut) break;
-		s.Clear();
-		if (!s.SetValue(shortcuts[i].shortcut, shortcuts[i].artist)) return 0;
-		if (!ShortcutStore.Put(&s)) return 0;
+		DataShortcut s;
+		s.SetValue(shortcuts[i].shortcut, shortcuts[i].artist);
+		ShortcutStore.Put(s);
 	}
 	return 1;
 }

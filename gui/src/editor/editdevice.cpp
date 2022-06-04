@@ -76,7 +76,8 @@ EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, u_int32_t Device
 
 
 	// Device laden
-	if (wm->DeviceStore.GetCopy(DeviceType, DeviceId, &Device)) {
+	if (wm->DeviceStore.Exists(DeviceType, DeviceId)) {
+		Device=wm->DeviceStore.Get(DeviceType, DeviceId);
 		if (Device.Title) ui.title->setText(Device.Title);
 		if (Device.SubTitle) ui.subTitle->setText(Device.SubTitle);
 		ui.pages->setValue(Device.Pages);
@@ -150,10 +151,8 @@ bool EditDevice::consumeEvent(QObject* target, QEvent* event)
 	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
-	//QFocusEvent *focusEvent=NULL;
-
 	// Id auslesen
-	__attribute__((unused)) int id=target->property("id").toInt();
+	int id=target->property("id").toInt();
 	int type=event->type();
 	if (type == QEvent::KeyPress) {
 		keyEvent= static_cast<QKeyEvent*>(event);
@@ -227,19 +226,21 @@ bool EditDevice::Save()
 	Device.Pages=ui.pages->value();
 	Device.PurchasePrice=ui.purchasePrice->text().toFloat();
 
-	if (wm->DeviceStore.Put(&Device)) {
-		DeviceId=Device.DeviceId;
-		for (int i=1;i <= Device.Pages;i++) {
-			ppl7::String Path=wm->GetAudioPath(DeviceType, DeviceId, i);
-			if (Path.notEmpty()) {
-				try {
-					ppl7::Dir::mkDir(Path, true);
-				} catch (...) {}
-			}
-		}
-		return true;
+	try {
+		DeviceId=wm->DeviceStore.Put(Device).DeviceId;
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save device in DeviceStore"));
+		return false;
 	}
-	return false;
+	for (int i=1;i <= Device.Pages;i++) {
+		ppl7::String Path=wm->GetAudioPath(DeviceType, DeviceId, i);
+		if (Path.notEmpty()) {
+			try {
+				ppl7::Dir::mkDir(Path, true);
+			} catch (...) {}
+		}
+	}
+	return true;
 }
 
 void EditDevice::on_okButton_clicked()

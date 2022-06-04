@@ -30,16 +30,15 @@ ShortcutDialog::ShortcutDialog(QWidget* parent, CWmClient* wm)
 {
 	ui.setupUi(this);
 	this->wm=wm;
-
-	wm->ShortcutStore.Reset();
-	DataShortcut* sc;
 	ui.treeWidget->clear();
 	ui.treeWidget->setSortingEnabled(false);
 	QTreeWidgetItem* item;
-	while ((sc=wm->ShortcutStore.GetNext())) {
+	CShortcutStore::const_iterator it;
+	for (it=wm->ShortcutStore.begin();it != wm->ShortcutStore.end();++it) {
+		const DataShortcut& sc=it->second;;
 		item = new QTreeWidgetItem;
-		item->setText(0, sc->GetShortcut());
-		item->setText(1, sc->GetArtist());
+		item->setText(0, sc.GetShortcut());
+		item->setText(1, sc.GetArtist());
 		ui.treeWidget->addTopLevelItem(item);
 	}
 	ui.treeWidget->setSortingEnabled(true);
@@ -126,11 +125,12 @@ void ShortcutDialog::on_contextDelete_triggered()
 {
 	if (currentTreeItem) {
 		ppl7::String ShortCut=currentTreeItem->text(0);
-		if (wm->ShortcutStore.Delete(ShortCut)) {
+		try {
+			wm->ShortcutStore.Delete(ShortCut);
 			delete currentTreeItem;
 			currentTreeItem=NULL;
-		} else {
-			wm->RaiseError(this, tr("Could not delete shortcut"));
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not delete shortcut"));
 		}
 	}
 }
@@ -154,7 +154,7 @@ void ShortcutDialog::on_saveButton_clicked()
 	SelectedArtist.trim();
 	if (ShortCut.size() > 0) {
 		ds.SetValue(ShortCut, SelectedArtist);
-		wm->ShortcutStore.Put(&ds);
+		wm->ShortcutStore.Put(ds);
 		done(1);
 	}
 }
@@ -166,9 +166,8 @@ void ShortcutDialog::on_cancelButton_clicked()
 
 void ShortcutDialog::SetShortcut(const char* name)
 {
-	DataShortcut* sc;
 	ui.shortcutEdit->setText(name);
-	sc=wm->ShortcutStore.Get(name);
+	const DataShortcut* sc=wm->ShortcutStore.GetPtr(name);
 	if (sc) {
 		ui.artistEdit->setText(sc->GetArtist());
 	}

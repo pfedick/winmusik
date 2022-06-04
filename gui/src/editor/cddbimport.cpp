@@ -363,12 +363,12 @@ void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_
 {
 	ppl7::String Tmp;
 	CTrackList* tracklist=wm->GetTracklist(devicetype, deviceid, page);
-	DataDevice datadevice;
-	if (!wm->DeviceStore.GetCopy(devicetype, deviceid, &datadevice)) {
+	if (!wm->DeviceStore.Exists(devicetype, deviceid)) {
 		wm->RaiseError(NULL, tr("Unexpected Error, Device does not exist"));
 		return;
 	}
-	if (datadevice.GetTitle().IsEmpty()) {
+	DataDevice datadevice=wm->DeviceStore.Get(devicetype, deviceid);
+	if (datadevice.GetTitle().isEmpty()) {
 		Tmp=ui.album->text();
 		datadevice.SetTitle(Tmp);
 	}
@@ -394,10 +394,13 @@ void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_
 		}
 		trackNum++;
 	}
-
 	// Tonträger aktualisieren
-	wm->DeviceStore.Put(&datadevice);
-	wm->DeviceStore.Update(devicetype, deviceid);
+	try {
+		wm->DeviceStore.Put(datadevice);
+		wm->DeviceStore.Update(devicetype, deviceid);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save device"));
+	}
 }
 
 
@@ -512,26 +515,28 @@ void CDDBImport::addDataFromFile(DataTitle& Ti)
 int CDDBImport::saveTitle(CTrackList* tracklist, DataTitle& Ti)
 {
 	// Titel speichern
-	if (!wm->TitleStore.Put(&Ti)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(Ti);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return 0;
 	}
 	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
 	// sondern den Pointer innerhalb der Datenbank
-	DataTitle* dt=wm->TitleStore.Get(Ti.TitleId);
+	const DataTitle* dt=wm->TitleStore.GetPtr(Ti.TitleId);
 	if (dt) wm->Hashes.AddTitle(Ti.TitleId, dt);
 	// Track speichern
 	DataTrack Track;
 	Track.SetValue(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track, Ti.TitleId);
-	if (!tracklist->Put(&Track)) {
-		wm->RaiseError(this, tr("Could not save Track in TrackList"));
-		ui.artist->setFocus();
+	try {
+		tracklist->Put(Track);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Track in TrackList"));
 		return 0;
 	}
 
 	if (wm_main->conf.bWriteID3Tags == true) {
 		wm->SaveID3Tags(Track.Device, Track.DeviceId, Track.Page, Track.Track, Ti);
 	}
-
 	return 1;
 }

@@ -98,7 +98,6 @@ bool Edit::EditTrack()
 	DupeCheck=false;
 	DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	ClearEditFields();
-	Oimp.Clear();
 	Track.Clear();
 	Track.SetValue(DeviceType, DeviceId, Page, TrackNum, 0);
 	Ti.Clear();
@@ -109,10 +108,11 @@ bool Edit::EditTrack()
 	}
 	TrackNum=(uint16_t)t;
 	// Track laden, falls es ihn schon gibt
-	if (TrackList->GetCopy(t, &Track)) {
-		DataTitle* ti=wm->GetTitle(Track.TitleId);
+	if (TrackList->Exists(t)) {
+		Track=TrackList->Get(t);
+		const DataTitle* ti=wm->GetTitle(Track.TitleId);
 		if (ti) {
-			Ti.CopyFrom(ti);
+			Ti.CopyFrom(*ti);
 		}
 	} else {
 		Track.SetValue(DeviceType, DeviceId, Page, TrackNum, 0);
@@ -146,20 +146,6 @@ bool Edit::EditTrack()
 
 	QApplication::restoreOverrideCursor();
 	return true;
-}
-
-void Edit::ShowOimpInfo()
-{
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
-	oimpInfo=new OimpInfo(this, &Oimp);
-	oimpInfo->setWindowFlags(Qt::SubWindow);
-	oimpInfo->setBackgroundRole(QPalette::ToolTipBase);
-	oimpInfo->move((geometry().width() - oimpInfo->width()) / 2, 50 + ui.titleEdit->y() - oimpInfo->height());
-	//oimpInfo->move(10,10);
-	oimpInfo->show();
 }
 
 void Edit::ClearEditFields()
@@ -197,12 +183,6 @@ void Edit::ClearEditFields()
 	Cover=QPixmap();
 	ui.coverwidget->clear();
 
-
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
-
 }
 
 void Edit::FillEditFields()
@@ -239,7 +219,7 @@ void Edit::FillEditFields()
 	ui.bpm->setText(Tmp);
 
 	// Music Key
-	ui.musickey->setText(ppl7::Trim(Ti.getKeyName(musicKeyDisplay)));
+	ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(Ti.Key, musicKeyDisplay)));
 
 	// EnergyLevel
 	ui.energyLevel->setValue(Ti.EnergyLevel);
@@ -327,8 +307,8 @@ void Edit::UpdateTrackListing()
 	QString QTmp;
 	ppl7::String Text, Tmp;
 	WMTreeItem* item;
-	DataTrack* track;
-	DataTitle* title;
+	const DataTrack* track;
+	const DataTitle* title;
 
 	//	Artists.clear();
 	//	Titles.clear();
@@ -357,7 +337,7 @@ void Edit::UpdateTrackListing()
 			Text.setf("%5i", i);
 			item->setText(TRACKLIST_TRACK_ROW, Text);
 			// Track holen
-			track=TrackList->Get(i);
+			track=TrackList->GetPtr(i);
 			if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
 				item->Id=track->TitleId;
 				// Titel holen
@@ -365,7 +345,7 @@ void Edit::UpdateTrackListing()
 				if (title) {
 					count++;
 					length+=title->Length;
-					RenderTrack(item, title);
+					RenderTrack(item, *title);
 					size+=title->Size;
 				}
 			}
@@ -385,7 +365,7 @@ void Edit::UpdateTrackListing()
 	trackList->setSortingEnabled(true);
 }
 
-void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
+void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 {
 	//QString QTmp;
 	ppl7::String Text, Tmp;
@@ -397,49 +377,49 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 	Brush.setColor("red");
 
 	Text.setf("%s - %s",
-		(title->Artist.notEmpty() ? (const char*)title->Artist : unknown),
-		(title->Title.notEmpty() ? (const char*)title->Title : unknown));
+		(title.Artist.notEmpty() ? (const char*)title.Artist : unknown),
+		(title.Title.notEmpty() ? (const char*)title.Title : unknown));
 
 	item->setText(TRACKLIST_NAME_ROW, Text);
 	// Version holen
-	version=wm->GetVersion(title->VersionId);
+	version=wm->GetVersion(title.VersionId);
 	if (version) Text.set(version->Value);
 	else Text.set(unknown);
 	item->setText(TRACKLIST_VERSION_ROW, Text);
 	item->setForeground(TRACKLIST_VERSION_ROW, Brush);
 	// Genre holen
-	genre=wm->GetGenre(title->GenreId);
+	genre=wm->GetGenre(title.GenreId);
 	if (genre) Text.set(genre->Value);
 	else Text.set(unknown);
 	item->setText(TRACKLIST_GENRE_ROW, Text);
-	Text.setf("%4i:%02i", (int)(title->Length / 60), title->Length % 60);
+	Text.setf("%4i:%02i", (int)(title.Length / 60), title.Length % 60);
 	item->setText(TRACKLIST_LENGTH_ROW, Text);
 
 	// BPM, Key und EnergyLevel
-	Text.setf("%d", (int)title->BPM);
+	Text.setf("%d", (int)title.BPM);
 	item->setText(TRACKLIST_BPM_ROW, Text);
-	item->setText(TRACKLIST_KEY_ROW, title->getKeyName(musicKeyDisplay));
+	item->setText(TRACKLIST_KEY_ROW, wm_main->MusicKeys.keyName(title.Key, musicKeyDisplay));
 	QFont f=item->font(TRACKLIST_KEY_ROW);
-	if ((title->Flags & 16)) {
+	if ((title.Flags & 16)) {
 		f.setBold(true);
 		f.setWeight(QFont::Black);
 	} else {
 		f.setBold(false);
 	}
 	item->setFont(TRACKLIST_KEY_ROW, f);
-	Text.setf("%d", (int)title->EnergyLevel);
+	Text.setf("%d", (int)title.EnergyLevel);
 	item->setText(TRACKLIST_ENERGYLEVEL_ROW, Text);
 
-	Text.setf("%d", (int)title->ReleaseDate / 10000);
+	Text.setf("%d", (int)title.ReleaseDate / 10000);
 	item->setText(TRACKLIST_YEAR, Text);
 
-	Text.setf("%d", (int)title->Bitrate);
+	Text.setf("%d", (int)title.Bitrate);
 	item->setText(TRACKLIST_BITRATE_ROW, Text);
 	item->setTextAlignment(TRACKLIST_BITRATE_ROW, Qt::AlignRight);
 
 
 	// Rating
-	switch (title->Rating) {
+	switch (title.Rating) {
 	case 0: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-0.png"));
 		item->setText(TRACKLIST_RATING_ROW, "0");
 		break;
@@ -463,9 +443,9 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 		break;
 	}
 
-	if (title->Size == 0) {
+	if (title.Size == 0) {
 		//printf ("title->Size ist Null, führe Stat durch\n");
-		ppl7::String Path=wm->GetAudioFilename(DeviceType, title->DeviceId, title->Page, title->Track);
+		ppl7::String Path=wm->GetAudioFilename(DeviceType, title.DeviceId, title.Page, title.Track);
 		if (Path.notEmpty()) {
 			ppl7::DirEntry de;
 			if (ppl7::File::stat(Path, de)) {
@@ -473,10 +453,8 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 				DataTitle ti;
 				ti.CopyFrom(title);
 				ti.Size=de.Size;
-				title->Size=ti.Size;
-
 				ppl7::ID3Tag Tag;
-				if (Tag.loaded(&Path)) {
+				if (Tag.loaded(Path)) {
 					// Cover?
 					ppl7::ByteArray cover;
 					QPixmap pix, icon;
@@ -493,15 +471,17 @@ void Edit::RenderTrack(WMTreeItem* item, DataTitle* title)
 						ti.CoverPreview.copy(bytes.data(), bytes.size());
 					}
 				}
-				if (!wm->TitleStore.Put(&ti)) { // TODO
-					printf("Speichern fehlgeschlagen!\n");
+				try {
+					wm->TitleStore.Put(ti);
+				} catch (...) {
+
 				}
 			}
 		}
 	} else {
-		if (title->CoverPreview.size() > 0) {
+		if (title.CoverPreview.size() > 0) {
 			QPixmap pix, icon;
-			pix.loadFromData((const uchar*)title->CoverPreview.ptr(), title->CoverPreview.size());
+			pix.loadFromData((const uchar*)title.CoverPreview.ptr(), title.CoverPreview.size());
 			icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 			item->setIcon(TRACKLIST_COVER_ROW, icon.copy(0, 0, 64, 16));
 		}
@@ -566,7 +546,7 @@ void Edit::SaveEditorTrack()
 	Ti.BPM=ui.bpm->text().toInt();
 
 	// Music Key
-	Ti.SetKey(ui.musickey->text());
+	Ti.Key=wm_main->MusicKeys.keyId(ui.musickey->text());
 
 	// EnergyLevel
 	Ti.EnergyLevel=ui.energyLevel->value();
@@ -665,27 +645,31 @@ bool Edit::SaveTrack(DataTitle& Ti)
 {
 	bool weHaveChanges=true;
 	if (Ti.TitleId > 0) {
-		DataTitle* OldTi=wm->TitleStore.Get(Ti.TitleId);
+		const DataTitle* OldTi=wm->TitleStore.GetPtr(Ti.TitleId);
 		if (OldTi != NULL && *OldTi == Ti) weHaveChanges=false;
 	}
 	if (weHaveChanges) {
 		//printf ("changes detected\n");
 		// Titel speichern
 		if (Ti.TitleId > 0) wm->Hashes.RemoveTitle(Ti.TitleId);
-		if (!wm->TitleStore.Put(&Ti)) {
-			wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+		try {
+			Ti.TitleId=wm->TitleStore.Put(Ti).TitleId;
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not save Title in TitleStore"));
 			ui.artist->setFocus();
 			if (Ti.TitleId > 0) wm->Hashes.AddTitle(Ti.TitleId);
 			return false;
 		}
 		// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
 		// sondern den Pointer innerhalb der Datenbank
-		DataTitle* dt=wm->TitleStore.Get(Ti.TitleId);
+		const DataTitle* dt=wm->TitleStore.GetPtr(Ti.TitleId);
 		if (dt) wm->Hashes.AddTitle(Ti.TitleId, dt);
 		// Track speichern
 		Track.TitleId=Ti.TitleId;
-		if (!TrackList->Put(&Track)) {
-			wm->RaiseError(this, tr("Could not save Track in TrackList"));
+		try {
+			TrackList->Put(Track);
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not save Track in TrackList"));
 			ui.artist->setFocus();
 			return false;
 		}
@@ -708,77 +692,45 @@ bool Edit::SaveTrack(DataTitle& Ti)
 
 void Edit::UpdateCompleters()
 {
-	DataTrack* track;
-	DataTitle* title;
-
-	QString QTmp;
 	Artists.clear();
 	Titles.clear();
 	Albums.clear();
-	ppl6::CTree* t=&wm->TitleStore.Artists;
-	t->Reset();
-	CStringCounterItem* item, * found;
-	while ((item=(CStringCounterItem*)t->GetNext())) {
-		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
-		Artists.append(QTmp);
+	std::map<ppl7::String, uint32_t>::const_iterator it;
+	for (it=wm->TitleStore.Artists.begin();it != wm->TitleStore.Artists.begin();++it) {
+		Artists.append((*it).first);
 	}
-
-	// Wir bauen neue Trees auf
-	ppl6::CTree TmpTitles;
-	ppl6::CTree TmpAlbums;
+	std::set<ppl7::String>TmpTitles;
+	std::set<ppl7::String>TmpAlbums;
 
 	if (TrackList) {
 		// Höchste Tracknummer
 		int max=TrackList->GetMax();
 		for (int i=1;i <= max;i++) {
 			// Track holen
-			track=TrackList->Get(i);
+			const DataTrack* track=TrackList->GetPtr(i);
 			if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
 				// Titel holen
-				title=wm->GetTitle(track->TitleId);
+				const DataTitle* title=wm->GetTitle(track->TitleId);
 				if (title) {
 					if (title->Title.notEmpty()) {
-						item=new CStringCounterItem;
-						item->Name=title->Title;
-						item->Count=1;
-						found=(CStringCounterItem*)TmpTitles.Find(item);
-						if (found) {
-							found->Count++;
-							delete item;
-						} else TmpTitles.Add(item);
+						TmpTitles.insert(title->Title);
 					}
 					if (title->Album.notEmpty()) {
-						item=new CStringCounterItem;
-						item->Name=title->Album;
-						item->Count=1;
-						found=(CStringCounterItem*)TmpAlbums.Find(item);
-						if (found) {
-							found->Count++;
-							delete item;
-						} else TmpAlbums.Add(item);
+						TmpAlbums.insert(title->Album);
 					}
 				}
 			}
 		}
 	}
-
-	TmpTitles.Reset();
-	while ((item=(CStringCounterItem*)TmpTitles.GetNext())) {
-		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
-		//printf ("Append Titles: %s\n",(const char*)item->Name);
-		Titles.append(QTmp);
+	{
+		std::set<ppl7::String>::const_iterator it;
+		for (it=TmpTitles.begin();it != TmpTitles.end();++it) {
+			Titles.append(*it);
+		}
+		for (it=TmpAlbums.begin();it != TmpAlbums.end();++it) {
+			Albums.append(*it);
+		}
 	}
-	//TmpArtists.Clear(true);
-	TmpTitles.Clear(true);
-
-	TmpAlbums.Reset();
-	while ((item=(CStringCounterItem*)TmpAlbums.GetNext())) {
-		QTmp=QString::fromWCharArray((const wchar_t*)item->Name);
-		//printf ("Append Titles: %s\n",(const char*)item->Name);
-		Albums.append(QTmp);
-	}
-	//TmpArtists.Clear(true);
-	TmpAlbums.Clear(true);
 
 }
 
@@ -826,7 +778,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	}
 
 	// Music Key
-	ui.musickey->setText(ppl7::Trim(info.Ti.getKeyName(musicKeyDisplay)));
+	ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(Ti.Key, musicKeyDisplay)));
 
 	if (info.Version.isEmpty()) {			// Version
 		if (info.Ti.Length < 5 * 60) {
@@ -991,19 +943,19 @@ void Edit::renumber()
 
 	// Titel updaten
 	for (int p=1;p <= datadevice.Pages;p++) {
-		CTrackList* tl=wm->GetTracklist(DeviceType, DeviceId, p);
+		const CTrackList* tl=wm->GetTracklist(DeviceType, DeviceId, p);
 		if (tl) {
 			//printf ("Tracks auf Seite %i: %i\n",p,tl->Num());
-			tl->Reset();
-			DataTrack* track;
-			while ((track=tl->GetNext())) {
-				track->DeviceId=newDeviceId;
+			CTrackList::const_iterator it;
+			for (it=tl->begin();it != tl->end();++it) {
+				DataTrack track=it->second;
+				track.DeviceId=newDeviceId;
 				wm->TrackStore.Put(track);
-				DataTitle* ti=wm->GetTitle(track->TitleId);
-				if (ti) {
-					ppl7::String OldFile=wm->GetAudioFilename(ti->DeviceType, ti->DeviceId, ti->Page, ti->Track);
+				if (wm->TitleStore.Exists(track.TitleId)) {
+					DataTitle ti=wm->TitleStore.Get(track.TitleId);
+					ppl7::String OldFile=wm->GetAudioFilename(ti.DeviceType, ti.DeviceId, ti.Page, ti.Track);
 					if (OldFile.notEmpty()) {
-						ppl7::String NewPath=wm->GetAudioPath(DeviceType, newDeviceId, ti->Page);
+						ppl7::String NewPath=wm->GetAudioPath(DeviceType, newDeviceId, ti.Page);
 						if (NewPath.notEmpty()) {
 							try {
 								ppl7::File::rename(OldFile, NewPath + "/" + ppl7::File::getFilename(OldFile));
@@ -1012,7 +964,7 @@ void Edit::renumber()
 							}
 						}
 					}
-					ti->DeviceId=newDeviceId;
+					ti.DeviceId=newDeviceId;
 					wm->TitleStore.Put(ti);
 
 				}
@@ -1020,14 +972,15 @@ void Edit::renumber()
 		}
 	}
 	// Vorhandene Dateien verschieben
-
-	if (wm->DeviceStore.Renumber(DeviceType, DeviceId, newDeviceId)) {
-		//printf ("Renumber ok\n");
+	try {
+		wm->DeviceStore.Renumber(DeviceType, DeviceId, newDeviceId);
 		wm->DeviceStore.Update(DeviceType, DeviceId);
 		OpenTrack(newDeviceId, Page, 0);
 		return;
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not renumber Device"));
 	}
-	//printf ("Renumber FAILED!\n");
+
 }
 
 

@@ -27,9 +27,7 @@
 #include <QKeyEvent>
 #include "tablecontrol.h"
 
-#include "ppl6-sound.h"
 #include "fkeys.h"
-#include "src/editor/oimpinfo.h"
 
 
 
@@ -43,14 +41,14 @@ public:
 
     void setWinMusikClient(CWmClient* wm);
     void setData(const TrackInfo& data);
-    void setFilename(const ppl6::CString& Filename);
+    void setFilename(const ppl7::String& Filename);
     void setFkeys(Fkeys* fkeys);
     const TrackInfo& getData();
     void setFocus();
     void setFocus(Qt::FocusReason reason);
     void ReloadTranslation();
 
-    PPLNORMALEXCEPTION(DataIncompleteException);
+    PPL7EXCEPTION(DataIncompleteException, Exception);
 
 
 private:
@@ -99,7 +97,6 @@ signals:
     void pageDownPressed();
     void pageUpPressed();
     void save();
-    void showOimpData(const DataOimp& data);
     void updateFkeys(int position);
 
 };

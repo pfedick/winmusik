@@ -163,7 +163,6 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	TrackList=NULL;
 	position=0;
 	oldposition=0;
-	oimpInfo=NULL;
 	titleCompleter=NULL;
 	artistCompleter=NULL;
 	albumCompleter=NULL;
@@ -300,7 +299,6 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 Edit::~Edit()
 {
 	if (DupeTimer) delete DupeTimer;
-	if (oimpInfo) delete oimpInfo;
 	if (TrackList) delete TrackList;
 	if (titleCompleter) delete titleCompleter;
 	if (artistCompleter) delete artistCompleter;
@@ -663,21 +661,11 @@ void Edit::closeEvent(QCloseEvent* event)
 	if (wm) {
 		wm->SaveGeometry(Name, this->saveGeometry());
 	}
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
 	QWidget::closeEvent(event);
 }
 
 void Edit::moveEvent(QMoveEvent* event)
 {
-	/*
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
-	*/
 	QWidget::moveEvent(event);
 }
 
@@ -789,7 +777,6 @@ void Edit::UpdateFkeys()
 		ui.fkeys->setFkey(12, ":/fkeys/resources/fkeys/f-key-1012.png", t[6]);
 		if (wm->conf.DevicePath[DeviceType].notEmpty() == true) {
 			ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-1006.png", t[10]);
-			if (Ti.ImportData > 0) ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-1009.png", t[12]);
 		}
 	}
 	if (position > 7) {
@@ -1357,15 +1344,6 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 		on_contextLoadCoverAllTracks_triggered();
 		return true;
 		// *************************************************************************** F9
-	} else if (key == Qt::Key_F9 && modifier == Qt::NoModifier && position > 3 && Ti.ImportData > 0) {
-		if (oimpInfo) {
-			delete oimpInfo;
-			oimpInfo=NULL;
-		} else if (wm->OimpDataStore.GetCopy(Ti.ImportData, &Oimp)) {
-			ShowOimpInfo();
-		}
-		return true;
-		// *************************************************************************** F9
 	} else if (key == Qt::Key_F9 && modifier == Qt::NoModifier && position == 3 && wm->conf.DevicePath[DeviceType].notEmpty() == true) {
 		return on_f9_UpdateAllID3Tags();
 		// *************************************************************************** F10
@@ -1558,10 +1536,6 @@ bool Edit::on_track_FocusIn()
 	}
 	UpdateFkeys();
 	UpdateCompleters();
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
 	if (TrackList->Num() == 0) showEditor();
 	ui.track->deselect();
 	ui.track->selectAll();
@@ -1584,10 +1558,6 @@ void Edit::ReloadTracks()
 	ui.track->setText(a);
 	UpdateFkeys();
 	UpdateCompleters();
-	if (oimpInfo) {
-		delete oimpInfo;
-		oimpInfo=NULL;
-	}
 	this->setFocus();
 	ui.track->setFocus();
 	ui.track->deselect();
@@ -1735,10 +1705,9 @@ bool Edit::on_f5_ShortCut(int modifier)
 	Artist.trim();
 
 	if (modifier == Qt::NoModifier) {
-		DataShortcut sc;
-		if (wm->ShortcutStore.GetCopy(Artist, &sc)) {
-			Artist=sc.GetArtist();
-			ui.artist->setText(Artist);
+		const DataShortcut* sc=wm->ShortcutStore.GetPtr(Artist);
+		if (sc) {
+			ui.artist->setText(sc->artist);
 			return true;
 		}
 	}
@@ -1804,12 +1773,6 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 	QClipboard* clipboard = QApplication::clipboard();
 	clipboard->setText(Songname);
 	if (modifier == Qt::NoModifier) {
-		if (wm->conf.bSaveOriginalMp3Tags) {
-			if (wm->SaveOriginalAudioInfo(Path, Oimp)) {
-				Ti.ImportData=Oimp.Id;
-				//ShowOimpInfo();
-			}
-		}
 		TrackInfo tinfo;
 		bool ret=getTrackInfoFromFile(tinfo, Path);
 		if (ret) {
@@ -1843,7 +1806,8 @@ bool Edit::on_f7_DeleteTrack()
 			// Track löschen
 			wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
 			// Nachfolgende Tracks nach oben rücken
-			TrackList->DeleteShift(Track.Track, &wm->TitleStore);
+			// TODO
+			//TrackList->DeleteShift(Track.Track, &wm->TitleStore);
 			UpdateTrackListing();
 			QTreeWidgetItem* w=trackList->topLevelItem(Track.Track);
 			if (w) {
@@ -1859,7 +1823,8 @@ bool Edit::on_f7_DeleteTrack()
 bool Edit::on_f8_InsertTrack()
 {
 	if (Track.Track > 0) {
-		TrackList->InsertShift(Track.Track, &wm->TitleStore);
+		// TODO
+		//TrackList->InsertShift(Track.Track, &wm->TitleStore);
 		UpdateTrackListing();
 		QTreeWidgetItem* w=trackList->topLevelItem(Track.Track);
 		if (w) {
@@ -2000,15 +1965,6 @@ void Edit::on_f8_clicked()
 void Edit::on_f9_clicked()
 {
 	if (position == 3) on_f9_UpdateAllID3Tags();
-	else if (position > 3 && Ti.ImportData > 0) {
-		if (oimpInfo) {
-			delete oimpInfo;
-			oimpInfo=NULL;
-		} else if (wm->OimpDataStore.GetCopy(Ti.ImportData, &Oimp)) {
-			ShowOimpInfo();
-		}
-		return;
-	}
 }
 
 void Edit::on_f10_clicked()
@@ -2074,7 +2030,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
 	for (int i=0;i < Items.size();i++) {
 		item=(WMTreeItem*)Items[i];
 		if (Icon.isNull()) {
-			DataTitle* ti=wm->GetTitle(item->Id);
+			const DataTitle* ti=wm->GetTitle(item->Id);
 			if (ti != NULL && ti->CoverPreview.size() > 0) {
 				Icon.loadFromData((const uchar*)ti->CoverPreview.ptr(), ti->CoverPreview.size());
 			}
@@ -2149,7 +2105,7 @@ static void setItemBackground(WMTreeItem* item, const QBrush& c)
 void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 {
 	Qt::KeyboardModifiers key=QApplication::keyboardModifiers();
-	DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
+	const DataTitle* t=wm->GetTitle(((WMTreeItem*)item)->Id);
 	if (t) {
 		QClipboard* clipboard = QApplication::clipboard();
 		ppl7::String Text;
@@ -2171,8 +2127,10 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 			if (r != t->Rating) {
 				DataTitle tUpdate=*t;
 				tUpdate.Rating=r;
-				if (!wm->TitleStore.Put(&tUpdate)) {
-					wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+				try {
+					wm->TitleStore.Put(tUpdate);
+				} catch (const ppl7::Exception& exp) {
+					ShowException(exp, tr("Could not save Title in TitleStore"));
 					return;
 				}
 				if (wm_main->conf.bWriteID3Tags == true) {
@@ -2237,7 +2195,7 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 			for (int i=0;i < count;i++) {
 				WMTreeItem* item=(WMTreeItem*)trackList->topLevelItem(i);
 				if (item) {
-					DataTitle* title=wm->GetTitle(item->Id);
+					const DataTitle* title=wm->GetTitle(item->Id);
 					QBrush q=item->background(TRACKLIST_TRACK_ROW);
 					setItemBackground(item, q);
 
@@ -2305,7 +2263,7 @@ void Edit::on_trackList_customContextMenuRequested(const QPoint& pos)
 	currentTrackListItem=(WMTreeItem*)trackList->itemAt(pos);
 	if (!currentTrackListItem) return;
 	//printf ("Custom Context %i\n",currentTrackListItem->Track);
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 
 	QMenu* m=new QMenu(this);
 	QAction* a=NULL;
@@ -2350,59 +2308,63 @@ void Edit::on_trackList_customContextMenuRequested(const QPoint& pos)
 void Edit::createSetMusicKeyContextMenu(QMenu* m)
 {
 	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(DataTitle::keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(DataTitle::keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(DataTitle::keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(DataTitle::keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(DataTitle::keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(DataTitle::keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(DataTitle::keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(DataTitle::keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(DataTitle::keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(DataTitle::keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(DataTitle::keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(DataTitle::keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(DataTitle::keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(DataTitle::keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(DataTitle::keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(DataTitle::keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(DataTitle::keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(DataTitle::keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(DataTitle::keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(DataTitle::keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(DataTitle::keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(DataTitle::keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(DataTitle::keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(DataTitle::keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
-	m->addAction(DataTitle::keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
+	m->addAction(wm->MusicKeys.keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
+	m->addAction(wm->MusicKeys.keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
+	m->addAction(wm->MusicKeys.keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
+	m->addAction(wm->MusicKeys.keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
+	m->addAction(wm->MusicKeys.keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
+	m->addAction(wm->MusicKeys.keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
+	m->addAction(wm->MusicKeys.keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
+	m->addAction(wm->MusicKeys.keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
+	m->addAction(wm->MusicKeys.keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
+	m->addAction(wm->MusicKeys.keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
+	m->addAction(wm->MusicKeys.keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
+	m->addAction(wm->MusicKeys.keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
+	m->addAction(wm->MusicKeys.keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
+	m->addAction(wm->MusicKeys.keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
+	m->addAction(wm->MusicKeys.keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
+	m->addAction(wm->MusicKeys.keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
+	m->addAction(wm->MusicKeys.keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
+	m->addAction(wm->MusicKeys.keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
+	m->addAction(wm->MusicKeys.keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
+	m->addAction(wm->MusicKeys.keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
+	m->addAction(wm->MusicKeys.keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
+	m->addAction(wm->MusicKeys.keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
+	m->addAction(wm->MusicKeys.keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
+	m->addAction(wm->MusicKeys.keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
+	m->addAction(wm->MusicKeys.keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
 }
 
 void Edit::on_contextMusicKeyVerified_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 	DataTitle tUpdate=*t;
 	if (tUpdate.Flags & 16) tUpdate.Flags-=16;
 	else tUpdate.Flags|=16;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
-	RenderTrack(currentTrackListItem, &tUpdate);
+	RenderTrack(currentTrackListItem, tUpdate);
 
 }
 
 void Edit::on_contextSetMusicKey(int k)
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (!t) return;
 	DataTitle tUpdate=*t;
 	tUpdate.Key=k;
-	if (!wm->TitleStore.Put(&tUpdate)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(tUpdate);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
-	RenderTrack(currentTrackListItem, &tUpdate);
+	RenderTrack(currentTrackListItem, tUpdate);
 }
 
 
@@ -2425,10 +2387,10 @@ void Edit::on_contextSynchronizeKeys_triggered()
 		progress.setValue(i);
 		QCoreApplication::processEvents();
 		if (progress.wasCanceled())	break;
-		DataTrack* track=TrackList->Get(i);
+		const DataTrack* track=TrackList->GetPtr(i);
 		if (track) {
 			// Titel holen
-			DataTitle* title=wm->GetTitle(track->TitleId);
+			const DataTitle* title=wm->GetTitle(track->TitleId);
 			ppl7::String Path=wm->GetAudioFilename(DeviceType, track->DeviceId, track->Page, track->Track);
 			if (title != NULL && Path.notEmpty() == true) {
 				//printf ("Path: %s\n",(const char*)Path);
@@ -2436,7 +2398,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 				TrackInfo tinfo;
 				if (getTrackInfoFromFile(tinfo, Path)) {
 					DataTitle Ti;
-					Ti.CopyFrom(title);
+					Ti.CopyFrom(*title);
 					bool modified=false;
 					bool modifyid3=false;
 					if (tinfo.Ti.Key != title->Key && (title->Flags & 16) == 16) {
@@ -2479,8 +2441,10 @@ void Edit::on_contextSynchronizeKeys_triggered()
 
 					}
 					if (modified) {
-						if (!wm->TitleStore.Put(&Ti)) {
-							wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+						try {
+							wm->TitleStore.Put(Ti);
+						} catch (const ppl7::Exception& exp) {
+							ShowException(exp, tr("Could not save Title in TitleStore"));
 							break;
 						}
 					}
@@ -2535,17 +2499,19 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 	//Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 
 	for (int i=TrackList->GetMin();i <= TrackList->GetMax();i++) {
-		DataTrack track;
-		if (TrackList->GetCopy(i, &track)) {
-			DataTitle* ti=wm->GetTitle(track.TitleId);
+		const DataTrack* track=TrackList->GetPtr(i);
+		if (track) {
+			const DataTitle* ti=wm->GetTitle(track->TitleId);
 			if (ti) {
 				DataTitle Title;
-				Title.CopyFrom(ti);
+				Title.CopyFrom(*ti);
 				ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
 				saveCover(Path, GlobalCover);
 				Title.CoverPreview.copy(bytes.data(), bytes.size());
-				if (!wm->TitleStore.Put(&Title)) {
-					wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+				try {
+					wm->TitleStore.Put(Title);
+				} catch (const ppl7::Exception& exp) {
+					ShowException(exp, tr("Could not save Title in TitleStore"));
 					return;
 				}
 			}
@@ -2557,7 +2523,7 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 
 void Edit::on_contextCopyCover_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t != NULL) {
 		ppl7::String Path=wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
 		if (Path.isEmpty()) return;
@@ -2568,7 +2534,7 @@ void Edit::on_contextCopyCover_triggered()
 
 void Edit::on_contextFindMoreVersions_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		searchWindow=wm->OpenOrReuseSearch(searchWindow, t->Artist, t->Title);
 	}
@@ -2576,7 +2542,7 @@ void Edit::on_contextFindMoreVersions_triggered()
 
 void Edit::on_contextFindMoreArtist_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		searchWindow=wm->OpenOrReuseSearch(searchWindow, t->Artist);
 	}
@@ -2584,7 +2550,7 @@ void Edit::on_contextFindMoreArtist_triggered()
 
 void Edit::on_contextFindMoreTitle_triggered()
 {
-	DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
+	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
 		searchWindow=wm->OpenOrReuseSearch(searchWindow, NULL, t->Title);
 	}
@@ -2635,7 +2601,8 @@ void Edit::on_contextDeleteTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
 	// Track löschen und nachfolgende nach oben rücken
-	TrackList->DeleteShift(currentTrackListItem->Track, &wm->TitleStore);
+	// TODO
+	//TrackList->DeleteShift(currentTrackListItem->Track, &wm->TitleStore);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
 	if (w) {
@@ -2650,7 +2617,8 @@ void Edit::on_contextDeleteTrack_triggered()
 void Edit::on_contextInsertTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
-	TrackList->InsertShift(currentTrackListItem->Track, &wm->TitleStore);
+	// TODO
+	//TrackList->InsertShift(currentTrackListItem->Track, &wm->TitleStore);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
 	if (w) {

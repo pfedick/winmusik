@@ -120,7 +120,6 @@ SOURCES += src/CSearchlist.cpp \
     src/editor/tablesearch.cpp \
     src/editor/renumberdialog.cpp \
     src/editor/cddbselect.cpp \
-    src/editor/oimpinfo.cpp \
     src/editor/edit.cpp \
     src/editor/edittrackdialog.cpp \
     src/editor/massimport.cpp \
@@ -170,7 +169,6 @@ HEADERS += widgets/edittrack.h \
     src/editor/cddbimport.h \
     src/editor/tablesearch.h \
     src/editor/shortcutdialog.h \
-    src/editor/oimpinfo.h \
     src/editor/edit.h \
     src/editor/massimport.h \
     src/editor/editdevice.h \
@@ -221,7 +219,6 @@ FORMS += widgets/wmcoverwidget.ui \
     src/editor/edittrackdialog.ui \
     src/editor/shortcutdialog.ui \
     src/editor/cddbselect.ui \
-    src/editor/oimpinfo.ui \
     src/editor/edit.ui \
     src/editor/tablesearch.ui \
     src/firststart/firststart.ui \

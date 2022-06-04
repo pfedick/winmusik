@@ -196,7 +196,7 @@ bool MassImport::consumeEvent(QObject* target, QEvent* event)
 }
 
 
-int MassImport::load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppluint16 StartTrack)
+int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16_t StartTrack)
 {
 
 	this->DeviceType=DeviceType;
@@ -214,7 +214,7 @@ int MassImport::load(ppluint8 DeviceType, ppluint32 DeviceId, ppluint8 Page, ppl
 	Path=MP3Path;
 	Path.trimRight("/");
 	Path.trimRight("\\");
-	Path.appendf("/%02u/%03u/", (ppluint32)(DeviceId / 100), DeviceId);
+	Path.appendf("/%02u/%03u/", (uint32_t)(DeviceId / 100), DeviceId);
 	Pattern.setf("*.mp3");
 	ppl7::Dir Dir;
 	ppl7::DirEntry entry;
@@ -274,11 +274,11 @@ void MassImport::addTrack(const ppl7::String Filename)
 }
 
 
-static void FilterResult(const CHashes::TitleTree& in, std::list<DataTitle*>& out)
+static void FilterResult(const CHashes::TitleTree& in, std::list<const DataTitle*>& out)
 {
 	CHashes::TitleTree::const_iterator it;
 	for (it=in.begin();it != in.end();it++) {
-		DataTitle* ti=wm_main->GetTitle(*it);
+		const DataTitle* ti=wm_main->GetTitle(*it);
 		if (ti->DeviceType == 7) out.push_back(ti);
 	}
 }
@@ -301,7 +301,7 @@ void MassImport::checkDupes(TreeItem* item)
 	} else {
 		LocalDupeCheck.insert(Key);
 		CHashes::TitleTree Result;
-		std::list<DataTitle*>list;
+		std::list<const DataTitle*>list;
 		wm->Hashes.Find(item->info.Ti.Artist, item->info.Ti.Title, Version, "", "", "", Result);
 		FilterResult(Result, list);
 		if (list.size() > 1) {
@@ -311,7 +311,7 @@ void MassImport::checkDupes(TreeItem* item)
 			item->dupePresumption=90;
 			item->import=false;
 		} else {
-			std::list<DataTitle*> list2;
+			std::list<const DataTitle*> list2;
 			wm->Hashes.Find(item->info.Ti.Artist, item->info.Ti.Title, Result);
 			FilterResult(Result, list2);
 			if (list2.size() > 3) {
@@ -587,13 +587,13 @@ void MassImport::on_dateApplyButton_clicked()
 	// Erscheinungsjahr
 	QDate Date=ui.releaseDate->date();
 	Tmp=Date.toString("yyyyMMdd");
-	ppluint32 ReleaseDate=Tmp.toInt();
+	uint32_t ReleaseDate=Tmp.toInt();
 
 	// Aufnahmedatum
 	Date=ui.recordDate->date();
 	Tmp=Date.toString("yyyyMMdd");
 	//printf ("Date: %s\n",(const char*)Tmp);
-	ppluint32 RecordDate=Tmp.toInt();
+	uint32_t RecordDate=Tmp.toInt();
 
 
 	QList<QTreeWidgetItem*> list;
@@ -779,11 +779,13 @@ bool MassImport::importTrack(TreeItem* item)
 	Track.Track=TrackList->GetMax() + 1;	// Wo kommt die Tracknummer her?
 	Ti.Track=Track.Track;
 
-	if (!wm->TitleStore.Put(&Ti)) {
-		wm->RaiseError(this, tr("Could not save Title in TitleStore"));
+	try {
+		wm->TitleStore.Put(Ti);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return false;
 	}
-	DataTitle* dt=wm->TitleStore.Get(Ti.TitleId);
+	const DataTitle* dt=wm->TitleStore.GetPtr(Ti.TitleId);
 	if (dt) wm->Hashes.AddTitle(Ti.TitleId, dt);
 
 	// Track speichern
@@ -791,8 +793,10 @@ bool MassImport::importTrack(TreeItem* item)
 	Track.Device=DeviceType;
 	Track.DeviceId=DeviceId;
 	Track.Page=Page;
-	if (!TrackList->Put(&Track)) {
-		wm->RaiseError(this, tr("Could not save Track in TrackList"));
+	try {
+		TrackList->Put(Track);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not save Track in TrackList"));
 		return false;
 	}
 	// Datei muss umbenannt werden

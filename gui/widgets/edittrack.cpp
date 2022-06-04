@@ -28,6 +28,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QDesktopServices>
+#include <ppl7-audio.h>
 
 EditTrack::EditTrack(QWidget* parent)
 	: QWidget(parent)
@@ -110,25 +111,25 @@ void EditTrack::setWinMusikClient(CWmClient* wm)
 	TCRecordDevice.SetNextWidget(ui.remarks);
 }
 
-void EditTrack::setFilename(const ppl6::CString& Filename)
+void EditTrack::setFilename(const ppl7::String& Filename)
 {
 	Cover=QPixmap();
-	ppl6::CString Tmp;
-	if (Filename.IsEmpty()) {
+	ppl7::String Tmp;
+	if (Filename.isEmpty()) {
 		ui.filename->setText("");
 		ui.filesize->setText("");
 	} else {
 		ui.filename->setText(Filename);
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Filename, de)) {
-			Tmp.Setf("%0.1f", (double)de.Size / 1048576.0);
+		ppl7::DirEntry de;
+		if (ppl7::File::stat(Filename, de)) {
+			Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 			ui.filesize->setText(Tmp);
-			ppl6::CID3Tag Tag;
-			if (Tag.Load(Filename)) {
+			ppl7::ID3Tag Tag;
+			if (Tag.loaded(Filename)) {
 				// Cover?
-				ppl6::CBinary cover;
-				if (Tag.GetPicture(3, cover)) {
-					Cover.loadFromData((const uchar*)cover.GetPtr(), cover.GetSize());
+				ppl7::ByteArray cover;
+				if (Tag.getPicture(3, cover)) {
+					Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
 					ui.cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 				}
 			}
@@ -139,13 +140,13 @@ void EditTrack::setFilename(const ppl6::CString& Filename)
 void EditTrack::setData(const TrackInfo& data)
 {
 	this->data=data;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	DataTitle	Ti=data.Ti;
 
 	// TitleId und Version
-	Tmp.Setf("%u", Ti.TitleId);
+	Tmp.setf("%u", Ti.TitleId);
 	ui.titleId->setText(Tmp);
-	Tmp.Setf("%u", Ti.GetVersion());
+	Tmp.setf("%u", Ti.GetVersion());
 	ui.recordVersion->setText(Tmp);
 
 	// Interpret und Titel
@@ -155,7 +156,7 @@ void EditTrack::setData(const TrackInfo& data)
 	// Version
 	ui.version->setText(data.Version);
 	if (Ti.VersionId) {
-		Tmp.Setf("%u", Ti.VersionId);
+		Tmp.setf("%u", Ti.VersionId);
 		ui.version->setText(wm->GetVersionText(Ti.VersionId));
 	} else Tmp="*";
 	ui.versionId->setText(Tmp);
@@ -164,40 +165,40 @@ void EditTrack::setData(const TrackInfo& data)
 	// Genre
 	ui.genre->setText(data.Genre);
 	if (Ti.GenreId) {
-		Tmp.Setf("%u", Ti.GenreId);
+		Tmp.setf("%u", Ti.GenreId);
 		ui.genre->setText(wm->GetGenreText(Ti.GenreId));
 	} else Tmp="*";
 	ui.genreId->setText(Tmp);
 
 
 	// Länge
-	if (Ti.Length > 0) Tmp.Setf("%0i:%02i", (int)(Ti.Length / 60), Ti.Length % 60); else Tmp.Clear();
+	if (Ti.Length > 0) Tmp.setf("%0i:%02i", (int)(Ti.Length / 60), Ti.Length % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 
 	// BPM
-	if (Ti.BPM > 0) Tmp.Setf("%i", Ti.BPM); else Tmp.Clear();
+	if (Ti.BPM > 0) Tmp.setf("%i", Ti.BPM); else Tmp.clear();
 	ui.bpm->setText(Tmp);
 
 	// Music Key
-	ui.musickey->setText(Ti.getKeyName(wm->conf.musicKeyDisplay));
+	ui.musickey->setText(wm->MusicKeys.keyName(Ti.Key, wm->conf.musicKeyDisplay));
 
 	// Bitrate
-	if (Ti.Bitrate > 0) Tmp.Setf("%i", Ti.Bitrate); else Tmp.Clear();
+	if (Ti.Bitrate > 0) Tmp.setf("%i", Ti.Bitrate); else Tmp.clear();
 	ui.bitrate->setText(Tmp);
 
 	// Erscheinungsjahr
 	QDate Date;
-	Tmp.Setf("%u", Ti.ReleaseDate);
-	int year=Tmp.Mid(0, 4).ToInt();
-	int month=Tmp.Mid(4, 2).ToInt();
-	int day=Tmp.Mid(6, 2).ToInt();
+	Tmp.setf("%u", Ti.ReleaseDate);
+	int year=Tmp.mid(0, 4).toInt();
+	int month=Tmp.mid(4, 2).toInt();
+	int day=Tmp.mid(6, 2).toInt();
 	if (!month) month=1;
 	if (!day) day=1;
 	Date.setDate(year, month, day);
 	ui.releaseDate->setDate(Date);
 
 	// Aufnahmedatum
-	Tmp.Setf("%u", Ti.RecordDate);
+	Tmp.setf("%u", Ti.RecordDate);
 	Date=QDate::fromString(Tmp, "yyyyMMdd");
 	ui.recordDate->setDate(Date);
 
@@ -208,14 +209,14 @@ void EditTrack::setData(const TrackInfo& data)
 	ui.labelName->setText(data.Label);
 	if (Ti.LabelId) {
 		ui.labelName->setText(wm->GetLabelText(Ti.LabelId));
-		Tmp.Setf("%u", Ti.LabelId);
+		Tmp.setf("%u", Ti.LabelId);
 	} else Tmp="";
 	ui.labelId->setText(Tmp);
 
 	// Aufnahmequelle
 	ui.recordSource->setText(data.RecordingSource);
 	if (Ti.RecordSourceId) {
-		Tmp.Setf("%u", Ti.RecordSourceId);
+		Tmp.setf("%u", Ti.RecordSourceId);
 		ui.recordSource->setText(wm->GetRecordSourceText(Ti.RecordSourceId));
 	} else Tmp="";
 	ui.recordSourceId->setText(Tmp);
@@ -223,7 +224,7 @@ void EditTrack::setData(const TrackInfo& data)
 	// Aufnahmegerät
 	ui.recordDevice->setText(data.RecordingDevice);
 	if (Ti.RecordDeviceId) {
-		Tmp.Setf("%u", Ti.RecordDeviceId);
+		Tmp.setf("%u", Ti.RecordDeviceId);
 		ui.recordDevice->setText(wm->GetRecordDeviceText(Ti.RecordDeviceId));
 	} else Tmp="";
 	ui.recordDeviceId->setText(Tmp);
@@ -333,7 +334,7 @@ const TrackInfo& EditTrack::getData()
 	data.Ti.BPM=ui.bpm->text().toInt();
 
 	// Music Key
-	data.Ti.SetKey(ui.musickey->text());
+	data.Ti.Key=wm->MusicKeys.keyId(ui.musickey->text());
 
 	// Bitrate
 	data.Ti.Bitrate=ui.bitrate->text().toInt();
@@ -392,10 +393,10 @@ const TrackInfo& EditTrack::getData()
 	data.Ti.Rating=ui.rating->currentIndex();
 
 	// Cover
-	ppl6::CString Path=wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
-	if (Path.NotEmpty()) {
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Path, de)) {
+	ppl7::String Path=wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
+	if (Path.notEmpty()) {
+		ppl7::DirEntry de;
+		if (ppl7::File::stat(Path, de)) {
 			data.Ti.Size=de.Size;
 			if (Cover.isNull()) {
 				data.Ti.CoverPreview.clear();
@@ -458,7 +459,6 @@ bool EditTrack::eventFilter(QObject* target, QEvent* event)
  */
 bool EditTrack::consumeEvent(QObject* target, QEvent* event)
 {
-	ppl6::CString Tmp;
 	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
@@ -613,13 +613,13 @@ void EditTrack::CheckDupes()
 	DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	DupeCheck=true;
 	TCVersion.Finish();
-	ppl6::CString Tmp, Artist, Title;
+	ppl7::String Tmp, Artist, Title;
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	Title=ui.title->text();
-	Title.Trim();
-	ppluint32 Version=ui.versionId->text().toInt();
+	Title.trim();
+	uint32_t Version=ui.versionId->text().toInt();
 	if (wm->Hashes.CheckDupes(Artist, Title, Version, data.Ti.TitleId)) {
 		if (!DupeTimer) {
 			DupeTimer=new QTimer(this);
@@ -674,7 +674,7 @@ bool EditTrack::checkKeyPress(QObject*, int key, int modifier)
 		// *************************************************************************** F2
 		/*
 	} else if (key==Qt::Key_F2 && modifier==Qt::NoModifier && position>1) {
-		ppluint32 ret=EditDeviceDialog(DeviceId);
+		uint32_t ret=EditDeviceDialog(DeviceId);
 		((QWidget*)target)->setFocus();
 		if (ret==DeviceId) UpdateDevice();
 		return true;
@@ -710,13 +710,6 @@ bool EditTrack::checkKeyPress(QObject*, int key, int modifier)
 	} else if (key==Qt::Key_F8 && position>3 && modifier==Qt::NoModifier) {
 		return on_f8_InsertTrack();
 		*/
-		// *************************************************************************** F9
-	} else if (data.Ti.DeviceType == 7 && key == Qt::Key_F9 && modifier == Qt::NoModifier && position > 3 && data.Ti.ImportData > 0) {
-		DataOimp	Oimp;
-		if (wm->OimpDataStore.GetCopy(data.Ti.ImportData, &Oimp)) {
-			emit showOimpData(Oimp);
-		}
-		return true;
 		// *************************************************************************** F9
 		/*
 	} else if (DeviceType==7 && key==Qt::Key_F9 && modifier==Qt::NoModifier && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
@@ -808,9 +801,9 @@ void EditTrack::MoveToNextWidget()
 
 bool EditTrack::on_length_FocusOut()
 {
-	ppl6::CString Tmp;
-	ppluint32 l=Time2Int(Tmp=ui.length->text());
-	if (l > 0) Tmp.Setf("%0i:%02i", (int)(l / 60), l % 60); else Tmp.Clear();
+	ppl7::String Tmp;
+	uint32_t l=Time2Int(Tmp=ui.length->text());
+	if (l > 0) Tmp.setf("%0i:%02i", (int)(l / 60), l % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 	return false;
 }

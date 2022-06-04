@@ -95,7 +95,8 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 
 	for (int i=1;i <= highest;i++) {
 		DataDevice d;
-		if (wm->DeviceStore.GetCopy(DeviceType, i, &d)) {
+		if (wm->DeviceStore.Exists(DeviceType, i)) {
+			const DataDevice& d=wm->DeviceStore.Get(DeviceType, i);
 			totalDevices++;
 			totalTracks+=d.NumTracks;
 			totalLength+=d.Recorded;

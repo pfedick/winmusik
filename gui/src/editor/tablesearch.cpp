@@ -65,28 +65,29 @@ void TableSearch::setSearchParams(const ppl7::String& term, CTableStore* store, 
 
 void TableSearch::Search()
 {
-	ppl6::CWString Tmp;
+	ppl7::String Tmp;
 	ui.list->clear();
-	Tmp=ui.search->text();
-	ppl6::CTree Result;
+	Tmp=ppl7::Trim(ui.search->text());
+	CTableStore::IndexTree Result;
 	ui.list->setWordWrap(false);
 	ui.list->setSortingEnabled(false);
-
 	if (store->FindAll(Tmp, Result)) {
 		ppl7::String Text;
-		CSimpleTable* t;
+
 		WMTreeItem* item;
-		Result.Reset();
-		while ((t=(CSimpleTable*)Result.GetNext())) {
-			item=new WMTreeItem;
-			item->Id=t->Id;
-			Text.setf("%6i", t->Id);
-			item->setText(0, Text);
-			item->setText(1, t->Value);
-			ui.list->addTopLevelItem(item);
+		CTableStore::IndexTree::const_iterator it;
+		for (it=Result.begin();it != Result.end();++it) {
+			const CSimpleTable* t=store->GetPtr(*it);
+			if (t) {
+				item=new WMTreeItem;
+				item->Id=*it;
+				Text.setf("%6i", item->Id);
+				item->setText(0, Text);
+				item->setText(1, t->Value);
+				ui.list->addTopLevelItem(item);
+			}
 		}
 	}
-	Result.Clear(true);
 	ui.list->setWordWrap(true);
 	ui.list->setSortingEnabled(true);
 	ui.list->sortByColumn(1, Qt::AscendingOrder);

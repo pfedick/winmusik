@@ -18,7 +18,6 @@
  */
 
 #include "winmusik3.h"
-#include "wmstorage.h"
 #include "resultfilter.h"
 
 
@@ -103,22 +102,22 @@ void ResultFilter::setMusicKey(bool enabled, int key)
 	musicKey=key;
 }
 
-void ResultFilter::setGenres(bool enabled, const ppl6::CString& genres)
+void ResultFilter::setGenres(bool enabled, const ppl7::String& genres)
 {
 	genresEnabled=enabled;
 	genreSet.clear();
 	unwantedGenreSet.clear();
 	// genres nach Komma splitten
-	ppl6::CArray gens(genres, ",");
+	ppl7::Array gens(genres, ",");
 
 	CTableStore::IndexTree Result;
 	CTableStore::IndexTree::const_iterator it;
 
-	for (int i=0;i < gens.Num();i++) {
+	for (size_t i=0;i < gens.size();i++) {
 		Result.clear();
-		ppl6::CString g=gens[i];
-		g.Trim();
-		wm_main->GenreStore.findWords(Result, g);
+		ppl7::String g=gens[i];
+		g.trim();
+		wm_main->GenreStore.FindWords(g, Result);
 		if (g[0] == '!') {
 			for (it=Result.begin();it != Result.end();++it) {
 				unwantedGenreSet.insert(*it);
@@ -164,9 +163,9 @@ bool ResultFilter::pass(const DataTitle& ti) const
 	return true;
 }
 
-bool ResultFilter::pass(ppluint32 titleId) const
+bool ResultFilter::pass(uint32_t titleId) const
 {
-	DataTitle* ti=wm_main->GetTitle(titleId);
+	const DataTitle* ti=wm_main->GetTitle(titleId);
 	if (!ti) return false;
 	return pass(*ti);
 }
@@ -204,7 +203,7 @@ bool ResultFilter::passMusicKey(const DataTitle& ti) const
 
 bool ResultFilter::passGenres(const DataTitle& ti) const
 {
-	std::set<ppluint32>::iterator it=unwantedGenreSet.find(ti.GenreId);
+	std::set<uint32_t>::iterator it=unwantedGenreSet.find(ti.GenreId);
 	if (it != unwantedGenreSet.end()) return false;
 	if (genreSet.size() == 0) return true;
 	it=genreSet.find(ti.GenreId);

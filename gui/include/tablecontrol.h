@@ -30,37 +30,37 @@ class CTableControl
 {
 	Q_DECLARE_TR_FUNCTIONS(CTableControl)
 
-	private:
-		QLineEdit	*idWidget;
-		QLineEdit	*textWidget;
-		QWidget		*nextWidget;
-		CTableStore *store;
-		QWidget		*window;
-		CWmClient	*wm;
-		int			oldposition, position;
-		bool		skipFocusOut;
+private:
+	QLineEdit* idWidget;
+	QLineEdit* textWidget;
+	QWidget* nextWidget;
+	CTableStore* store;
+	QWidget* window;
+	CWmClient* wm;
+	int			oldposition, position;
+	bool		skipFocusOut;
 
-	    bool on_Id_FocusIn();
-	    bool on_Id_KeyPress(QKeyEvent *event,int key,int modifier);
-	    bool on_Id_KeyRelease(QKeyEvent *event,int key,int modifier);
-	    bool on_Text_FocusOut();
-	    bool on_Text_FocusIn(int reason);
-	    void UpdateText();
+	bool on_Id_FocusIn();
+	bool on_Id_KeyPress(QKeyEvent* event, int key, int modifier);
+	bool on_Id_KeyRelease(QKeyEvent* event, int key, int modifier);
+	bool on_Text_FocusOut();
+	bool on_Text_FocusIn(int reason);
+	void UpdateText();
 
-	public:
-		QString Title;
-		CTableControl();
-		void SetWindow(QWidget *window);
-		void SetCWmClient(CWmClient *wm);
-		void SetIdWidget(QLineEdit *widget);
-		void SetTextWidget(QLineEdit *widget);
-		void SetNextWidget(QWidget *widget);
-		void SetStore(CTableStore *store);
-		void Init(QWidget *window, CWmClient *wm, QLineEdit *id, QLineEdit *text, CTableStore *store);
-		bool ConsumeEvent(QObject *target, QEvent *event, int oldpos, int newpos);
+public:
+	QString Title;
+	CTableControl();
+	void SetWindow(QWidget* window);
+	void SetCWmClient(CWmClient* wm);
+	void SetIdWidget(QLineEdit* widget);
+	void SetTextWidget(QLineEdit* widget);
+	void SetNextWidget(QWidget* widget);
+	void SetStore(CTableStore* store);
+	void Init(QWidget* window, CWmClient* wm, QLineEdit* id, QLineEdit* text, CTableStore* store);
+	bool ConsumeEvent(QObject* target, QEvent* event, int oldpos, int newpos);
 
-		void SetId(ppluint32 id);
-		int Finish();
+	void SetId(uint32_t id);
+	int Finish();
 
 };
 
