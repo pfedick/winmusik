@@ -351,6 +351,18 @@ enum class WinMusikEvent
 	retranslateUi=(QEvent::Type)(QEvent::User + 1)
 };
 
+enum class WindowType
+{
+	Misc=0,
+	Editor=1,
+	Search,
+	CoverPrinter,
+	Playlist,
+	SearchlistOverview,
+	Searchlist,
+	DeviceList
+
+};
 
 
 /*******************************************************
@@ -382,16 +394,7 @@ private:
 	int PrintTracklistDeviceHeader(QFont& Font, QPainter& painter, int x, int y, const DataDevice* device);
 	int PrintTracklistDisclaimer(QFont& Font, QPainter& painter);
 	void* MainMenue;
-	//ppl6::CGenericList EditorWindows;
-	//ppl6::CGenericList SearchWindows;
-	/*
-	ppl6::CGenericList CoverPrinterWindows;
-	ppl6::CGenericList PlaylistWindows;
-	ppl6::CGenericList SearchlistOverviewWindows;
-	ppl6::CGenericList SearchlistWindows;
-	ppl6::CGenericList DeviceListWindows;
-	*/
-	std::set<QWidget*> WindowsList;
+	std::map<WindowType, std::set<QWidget*>> WindowsList;
 	void* CoverViewerWindow;
 
 	QDate					LatestPurchaseDate;
@@ -436,15 +439,15 @@ public:
 
 	bool isValidDataPath(const ppl7::String& Path);
 
-	int CloseDatabase();
+	void CloseDatabase();
 	int LoadDatabase();
 	int ImportDatabaseWM20();
 	int CreateInitialDatabase();
 
 	void MainMenueClosed();
 
-	void RegisterWindow(QWidget* widget);
-	void UnRegisterWindow(QWidget* widget);
+	void RegisterWindow(WindowType type, QWidget* widget);
+	void UnRegisterWindow(WindowType type, QWidget* widget);
 
 
 	void OpenEditor(int devicetype, int deviceId=0, int page=0, int track=0);
@@ -458,14 +461,8 @@ public:
 
 	QWidget* OpenSearch(const char* artist=nullptr, const char* title=nullptr);
 	QWidget* OpenOrReuseSearch(QWidget* q, const char* artist=nullptr, const char* title=nullptr);
-	//void EditorClosed(void* object);
-	//void SearchClosed(void* object);
-	void SearchlistOverviewClosed(void* object);
 	void UpdateSearchlistOverviews();
-	void SearchlistDialogClosed(void* object);
-	void CoverPrinterClosed(void* object);
-	void PlaylistClosed(void* object);
-	void DeviceListClosed(void* object);
+
 	void OpenCoverViewer(const QPixmap& pix);
 	void UpdateCoverViewer(const QPixmap& pix);
 	void CoverViewerClosed();
@@ -480,20 +477,20 @@ public:
 	void SetLatestPurchaseDate(QDate Date);
 	int LoadDevice(uint8_t DeviceType, uint32_t DeviceId, DataDevice* data);
 	void UpdateDevice(uint8_t DeviceType, uint32_t DeviceId);
-	CTrackList* GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page);
-	DataTrack* GetTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track);
+	CTrackList GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page);
+	const DataTrack* GetTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track);
 	const DataTitle* GetTitle(uint32_t TitleId) const;
-	DataVersion* GetVersion(uint32_t Id);
-	DataGenre* GetGenre(uint32_t Id);
-	DataLabel* GetLabel(uint32_t Id);
-	DataRecordSource* GetRecordSource(uint32_t Id);
-	DataRecordDevice* GetRecordDevice(uint32_t Id);
+	const DataVersion* GetVersion(uint32_t Id);
+	const DataGenre* GetGenre(uint32_t Id);
+	const DataLabel* GetLabel(uint32_t Id);
+	const DataRecordSource* GetRecordSource(uint32_t Id);
+	const DataRecordDevice* GetRecordDevice(uint32_t Id);
 
-	const char* GetVersionText(uint32_t Id);
-	const char* GetGenreText(uint32_t Id);
-	const char* GetLabelText(uint32_t Id);
-	const char* GetRecordSourceText(uint32_t Id);
-	const char* GetRecordDeviceText(uint32_t Id);
+	const ppl7::String& GetVersionText(uint32_t Id);
+	const ppl7::String& GetGenreText(uint32_t Id);
+	const ppl7::String& GetLabelText(uint32_t Id);
+	const ppl7::String& GetRecordSourceText(uint32_t Id);
+	const ppl7::String& GetRecordDeviceText(uint32_t Id);
 
 	ppl7::String getXmlTitle(uint32_t TitleId);
 

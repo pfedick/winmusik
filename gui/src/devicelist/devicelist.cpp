@@ -31,6 +31,7 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	if (wm) wm->RegisterWindow(WindowType::DeviceList, this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
 	DeviceType=typ;
 	ui.deviceIcon->setPixmap(wm->GetDevicePixmap(DeviceType));
@@ -158,9 +159,7 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 
 DeviceList::~DeviceList()
 {
-	if (wm) {
-		wm->DeviceListClosed(this);
-	}
+	if (wm) wm->UnRegisterWindow(WindowType::DeviceList, this);
 }
 
 

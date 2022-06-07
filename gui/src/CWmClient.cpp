@@ -89,29 +89,19 @@ void CWmClient::Init(int argc, char** argv, QApplication* app)
 	InitStorage();
 }
 
-int CWmClient::RaiseError(QWidget* object, const QString& error)
+int CWmClient::RaiseError(QWidget* parent, const QString& error)
 {
 	QString msg=tr("The following error occured:");
-	return RaiseError(object, msg, error);
+	return RaiseError(parent, msg, error);
 }
 
-int CWmClient::RaiseError(QWidget* object, const QString& msg, const QString& error)
+int CWmClient::RaiseError(QWidget* parent, const QString& msg, const QString& error)
 {
-	int err=ppl6::GetErrorCode();
-	ppl7::String descr=ppl6::GetError();
-	ppl7::String sub=ppl6::GetExtendedError();
-
-	ppl7::String m=msg;
-	m.trim();
-	ppl7::String a=tr("Errorcode");
-	m.appendf("\n\n%s: %u\n", (const char*)a, err);
-	a=tr("Description");
-	m.appendf("%s: %s\n", (const char*)a, (const char*)descr);
-	if (sub.size() > 0) {
-		a=tr("Extended Description");
-		m.appendf("%s: %s\n", (const char*)a, (const char*)sub);
+	QString m="<b>" + msg + "</b>";
+	if (!error.isEmpty()) {
+		m+="\n\n" + error;
 	}
-	return QMessageBox::critical(object, tr("WinMusik"),
+	return QMessageBox::critical(parent, tr("WinMusik"),
 		m,
 		QMessageBox::Ok);
 }
@@ -178,11 +168,13 @@ void CWmClient::InitLogging()
 			"Logfile initialized, Debuglevel: %i, Maxsize: %i MB, Generations: %i",
 			conf.Debuglevel, conf.LogfileSize, conf.LogfileGenerations);
 
+		/*
 		wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "initFilenameLetterReplacements", __FILE__, __LINE__, "Letter Replacements for Filenames:");
 		std::map<wchar_t, wchar_t>::const_iterator it;
 		for (it=filenameLetterReplacements.begin();it != filenameLetterReplacements.end();it++) {
 			wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "initFilenameLetterReplacements", __FILE__, __LINE__, "%d => %d (\"%lc\" => \"%lc\")", it->first, it->second, it->first, it->second);
 		}
+		*/
 	} else {
 		if (wmlog) wmlog->terminate();
 	}
@@ -280,70 +272,18 @@ void CWmClient::ReloadTranslation()
 {
 	LoadTranslation();
 	Mutex.lock();
-	std::set<QWidget*>::iterator it;
-	for (it=WindowsList.begin();it != WindowsList.end();it++) {
-		QEvent* event=new QEvent((QEvent::Type)WinMusikEvent::retranslateUi);
-		QCoreApplication::postEvent((*it), event);
-	}
-
-
 	// Alle Fenster aktualisieren
+	std::map<WindowType, std::set<QWidget*>>::iterator type_it;
+	std::set<QWidget*>::iterator win_it;
+	for (type_it=WindowsList.begin();type_it != WindowsList.end();++type_it) {
+		std::set<QWidget*>& widgets=type_it->second;
+		for (win_it=widgets.begin();win_it != widgets.end();++win_it) {
+			QEvent* event=new QEvent((QEvent::Type)WinMusikEvent::retranslateUi);
+			QCoreApplication::postEvent((*win_it), event);
+		}
+	}
 	if (MainMenue) ((Menue*)MainMenue)->ReloadTranslation();
-
-	/*
-	Edit* edit;
-	EditorWindows.Reset();
-	while ((edit=(Edit*)EditorWindows.GetNext())) {
-		edit->ReloadTranslation();
-	}
-
-	Search* search;
-	SearchWindows.Reset();
-	while ((search=(Search*)SearchWindows.GetNext())) {
-		search->ReloadTranslation();
-	}
-	*/
-	CoverPrinter* cover;
-	CoverPrinterWindows.Reset();
-	while ((cover=(CoverPrinter*)CoverPrinterWindows.GetFirst())) {
-		cover->ReloadTranslation();
-	}
-	Playlist* playlist;
-	PlaylistWindows.Reset();
-	while ((playlist=(Playlist*)PlaylistWindows.GetFirst())) {
-		playlist->ReloadTranslation();
-	}
-	/*
-	PlaylistEditor *playlisteditor;
-	PlaylistEditWindows.Reset();
-	while ((playlisteditor=(PlaylistEditor *)PlaylistEditWindows.GetFirst())) {
-		playlisteditor->ReloadTranslation();
-	}
-	*/
-	DeviceList* devicelist;
-	DeviceListWindows.Reset();
-	while ((devicelist=(DeviceList*)DeviceListWindows.GetFirst())) {
-		devicelist->ReloadTranslation();
-	}
-
-	{
-		Searchlists* list;
-		SearchlistOverviewWindows.Reset();
-		while ((list=(Searchlists*)SearchlistOverviewWindows.GetFirst())) {
-			list->ReloadTranslation();
-		}
-	}
-
-	{
-		SearchlistDialog* list;
-		SearchlistWindows.Reset();
-		while ((list=(SearchlistDialog*)SearchlistWindows.GetFirst())) {
-			list->ReloadTranslation();
-		}
-	}
-
 	Mutex.unlock();
-
 }
 
 int CWmClient::FirstStartDialog()
@@ -387,7 +327,7 @@ bool CWmClient::isValidDataPath(const ppl7::String& Path)
 	}
 }
 
-int CWmClient::CloseDatabase()
+void CWmClient::CloseDatabase()
 /*!\brief Close the database and all active windows
  *
  * This function closes all currently active windows and the main database.
@@ -402,83 +342,29 @@ int CWmClient::CloseDatabase()
 {
 	Hashes.Clear();
 	Mutex.lock();
-	std::set<QWidget*>::iterator it;
-	for (it=WindowsList.begin(); it != WindowsList.end(); ++it) {
-		(*it)->close();
+	std::map<WindowType, std::set<QWidget*>>::iterator type_it;
+	std::set<QWidget*>::iterator win_it;
+	for (type_it=WindowsList.begin();type_it != WindowsList.end();++type_it) {
+		std::set<QWidget*>& widgets=type_it->second;
+		for (win_it=widgets.begin();win_it != widgets.end();++win_it) {
+			(*win_it)->setAttribute(Qt::WA_DeleteOnClose);
+			(*win_it)->close();
+		}
 	}
-
-	/*
-	Edit* edit;
-	while ((edit=(Edit*)EditorWindows.GetFirst())) {
-		Mutex.unlock();
-		delete edit;
-		Mutex.lock();
-	}
-	Search* search;
-	while ((search=(Search*)SearchWindows.GetFirst())) {
-		Mutex.unlock();
-		delete search;
-		Mutex.lock();
-	}
-	*/
-	CoverPrinter* cover;
-	while ((cover=(CoverPrinter*)CoverPrinterWindows.GetFirst())) {
-		Mutex.unlock();
-		delete cover;
-		Mutex.lock();
-	}
-	Playlist* playlist;
-	while ((playlist=(Playlist*)PlaylistWindows.GetFirst())) {
-		Mutex.unlock();
-		delete playlist;
-		Mutex.lock();
-	}
-	/*
-	PlaylistEditor *playlisteditor;
-	while ((playlisteditor=(PlaylistEditor *)PlaylistEditWindows.GetFirst())) {
-		Mutex.unlock();
-		delete playlisteditor;
-		Mutex.lock();
-	}
-	*/
-	DeviceList* devicelist;
-	while ((devicelist=(DeviceList*)DeviceListWindows.GetFirst())) {
-		Mutex.unlock();
-		delete devicelist;
-		Mutex.lock();
-	}
-	Searchlists* searchlists;
-	while ((searchlists=(Searchlists*)SearchlistOverviewWindows.GetFirst())) {
-		Mutex.unlock();
-		delete searchlists;
-		Mutex.lock();
-	}
-
-	SearchlistDialog* searchlistdialog;
-	while ((searchlistdialog=(SearchlistDialog*)SearchlistWindows.GetFirst())) {
-		Mutex.unlock();
-		delete searchlistdialog;
-		Mutex.lock();
-	}
-
+	Mutex.unlock();
 	if (CoverViewerWindow) {
-		Mutex.unlock();
 		delete (CoverViewer*)CoverViewerWindow;
 		CoverViewerWindow=NULL;
-		Mutex.lock();
 	}
-
-	Mutex.unlock();
-	return 1;
 }
 
 void CWmClient::UpdateSearchlistOverviews()
 {
 	Mutex.lock();
-	Searchlists* list;
-	SearchlistOverviewWindows.Reset();
-	while ((list=(Searchlists*)SearchlistOverviewWindows.GetNext())) {
-		list->Update();
+	std::set<QWidget*>& widgets=WindowsList[WindowType::SearchlistOverview];
+	std::set<QWidget*>::iterator win_it;
+	for (win_it=widgets.begin();win_it != widgets.end();++win_it) {
+		(static_cast<Searchlists*>(*win_it))->Update();
 	}
 	Mutex.unlock();
 }
@@ -504,16 +390,6 @@ void CWmClient::OpenCoverPrinter()
 {
 	CoverPrinter* w=new CoverPrinter((Menue*)MainMenue, this);
 	w->show();
-	Mutex.lock();
-	CoverPrinterWindows.Add(w);
-	Mutex.unlock();
-}
-
-void CWmClient::CoverPrinterClosed(void* object)
-{
-	Mutex.lock();
-	CoverPrinterWindows.Delete(object);
-	Mutex.unlock();
 }
 
 void CWmClient::OpenPlaylistDialog()
@@ -522,18 +398,9 @@ void CWmClient::OpenPlaylistDialog()
 	Playlist* w=new Playlist((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.lock();
-	PlaylistWindows.Add(w);
-	Mutex.unlock();
 }
 
-void CWmClient::PlaylistClosed(void* object)
-{
-	Mutex.lock();
-	PlaylistWindows.Delete(object);
-	Mutex.unlock();
 
-}
 
 void CWmClient::OpenSearchlistOverview()
 {
@@ -541,17 +408,6 @@ void CWmClient::OpenSearchlistOverview()
 	Searchlists* w=new Searchlists((Menue*)MainMenue, this);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.lock();
-	SearchlistOverviewWindows.Add(w);
-	Mutex.unlock();
-}
-
-void CWmClient::SearchlistOverviewClosed(void* object)
-{
-	Mutex.lock();
-	SearchlistOverviewWindows.Delete(object);
-	Mutex.unlock();
-
 }
 
 void CWmClient::OpenSearchlistDialog(const ppl7::String Filename)
@@ -560,17 +416,6 @@ void CWmClient::OpenSearchlistDialog(const ppl7::String Filename)
 	SearchlistDialog* w=new SearchlistDialog((Menue*)MainMenue, this, Filename);
 	w->setWindowFlags(Qt::Window);
 	w->show();
-	Mutex.lock();
-	SearchlistWindows.Add(w);
-	Mutex.unlock();
-}
-
-void CWmClient::SearchlistDialogClosed(void* object)
-{
-	Mutex.lock();
-	SearchlistWindows.Delete(object);
-	Mutex.unlock();
-
 }
 
 QWidget* CWmClient::OpenSearch(const char* artist, const char* title)
@@ -590,8 +435,8 @@ QWidget* CWmClient::OpenOrReuseSearch(QWidget* q, const char* artist, const char
 	Search* w;
 	if (q) {
 		Mutex.lock();
-		std::set<QWidget*>::iterator it=WindowsList.find(q);
-		if (it != WindowsList.end()) {
+		std::set<QWidget*>::iterator it=WindowsList[WindowType::Search].find(q);
+		if (it != WindowsList[WindowType::Search].end()) {
 			Mutex.unlock();
 			w=(Search*)q;
 			w->setFocus();
@@ -672,17 +517,6 @@ void CWmClient::OpenDeviceList(int devicetype)
 	DeviceList* edit=new DeviceList((Menue*)MainMenue, this, devicetype);
 	edit->setWindowFlags(Qt::Window);
 	edit->show();
-	Mutex.lock();
-	DeviceListWindows.Add(edit);
-	Mutex.unlock();
-}
-
-void CWmClient::DeviceListClosed(void* object)
-{
-	Mutex.lock();
-	DeviceListWindows.Delete(object);
-	Mutex.unlock();
-
 }
 
 uint32_t CWmClient::GetHighestDeviceId(int DeviceType)
@@ -821,8 +655,12 @@ void CWmClient::SetLatestPurchaseDate(QDate Date)
 int CWmClient::LoadDevice(uint8_t DeviceType, uint32_t DeviceId, DataDevice* data)
 {
 	data->Clear();
-	//DeviceStore.Update(DeviceType,DeviceId);
-	return DeviceStore.GetCopy(DeviceType, DeviceId, data);
+	const DataDevice* dd=DeviceStore.GetPtr(DeviceType, DeviceId);
+	if (dd) {
+		data->CopyFrom(*dd);
+		return 1;
+	}
+	return 0;
 }
 
 void CWmClient::UpdateDevice(uint8_t DeviceType, uint32_t DeviceId)
@@ -830,14 +668,14 @@ void CWmClient::UpdateDevice(uint8_t DeviceType, uint32_t DeviceId)
 	DeviceStore.Update(DeviceType, DeviceId);
 }
 
-CTrackList* CWmClient::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page)
+CTrackList CWmClient::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page)
 {
 	return TrackStore.GetTracklist(Device, DeviceId, Page);
 }
 
-DataTrack* CWmClient::GetTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track)
+const DataTrack* CWmClient::GetTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track)
 {
-	return TrackStore.Get(Device, DeviceId, Page, Track);
+	return TrackStore.GetPtr(Device, DeviceId, Page, Track);
 }
 
 const DataTitle* CWmClient::GetTitle(uint32_t TitleId) const
@@ -845,38 +683,38 @@ const DataTitle* CWmClient::GetTitle(uint32_t TitleId) const
 	return TitleStore.GetPtr(TitleId);
 }
 
-DataVersion* CWmClient::GetVersion(uint32_t Id)
+const DataVersion* CWmClient::GetVersion(uint32_t Id)
 {
-	return (DataVersion*)VersionStore.Get(Id);
+	return (const DataVersion*)VersionStore.GetPtr(Id);
 }
 
-const char* CWmClient::GetVersionText(uint32_t Id)
+const ppl7::String& CWmClient::GetVersionText(uint32_t Id)
 {
-	DataVersion* v=(DataVersion*)VersionStore.Get(Id);
+	const DataVersion* v=(const DataVersion*)VersionStore.GetPtr(Id);
 	if (v) return v->Value;
 	return Str_Unknown;
 }
 
-DataGenre* CWmClient::GetGenre(uint32_t Id)
+const DataGenre* CWmClient::GetGenre(uint32_t Id)
 {
-	return (DataGenre*)GenreStore.Get(Id);
+	return (const DataGenre*)GenreStore.GetPtr(Id);
 }
 
-const char* CWmClient::GetGenreText(uint32_t Id)
+const ppl7::String& CWmClient::GetGenreText(uint32_t Id)
 {
-	DataGenre* v=(DataGenre*)GenreStore.Get(Id);
+	const DataGenre* v=(const DataGenre*)GenreStore.GetPtr(Id);
 	if (v) return v->Value;
 	return Str_Unknown;
 }
 
-DataLabel* CWmClient::GetLabel(uint32_t Id)
+const DataLabel* CWmClient::GetLabel(uint32_t Id)
 {
-	return (DataLabel*)LabelStore.Get(Id);
+	return (const DataLabel*)LabelStore.GetPtr(Id);
 }
 
-const char* CWmClient::GetLabelText(uint32_t Id)
+const ppl7::String& CWmClient::GetLabelText(uint32_t Id)
 {
-	DataLabel* v=(DataLabel*)LabelStore.Get(Id);
+	const DataLabel* v=(const DataLabel*)LabelStore.GetPtr(Id);
 	if (v) return v->Value;
 	return Str_Unknown;
 }
@@ -904,32 +742,32 @@ ppl7::String CWmClient::getXmlTitle(uint32_t TitleId)
 	r.appendf("<energyLevel>%i</energyLevel>\n", (int)ti.EnergyLevel);
 	r+="<musicKey verified=\"";
 	if (ti.Flags & 16) r+="true"; else r+="false";
-	r+="\">" + ti.getKeyName(musicKeyTypeMusicalSharps) + "</musicKey>\n";
+	r+="\">" + MusicKeys.keyName(ti.Key, musicKeyTypeMusicalSharps) + "</musicKey>\n";
 	return r;
 }
 
 
-DataRecordSource* CWmClient::GetRecordSource(uint32_t Id)
+const DataRecordSource* CWmClient::GetRecordSource(uint32_t Id)
 {
-	return (DataRecordSource*)RecordSourceStore.Get(Id);
+	return (const DataRecordSource*)RecordSourceStore.GetPtr(Id);
 }
 
-const char* CWmClient::GetRecordSourceText(uint32_t Id)
+const ppl7::String& CWmClient::GetRecordSourceText(uint32_t Id)
 {
-	DataRecordSource* v=(DataRecordSource*)RecordSourceStore.Get(Id);
+	const DataRecordSource* v=(const DataRecordSource*)RecordSourceStore.GetPtr(Id);
 	if (v) return v->Value;
 	return Str_Unknown;
 }
 
 
-DataRecordDevice* CWmClient::GetRecordDevice(uint32_t Id)
+const DataRecordDevice* CWmClient::GetRecordDevice(uint32_t Id)
 {
-	return (DataRecordDevice*)RecordDeviceStore.Get(Id);
+	return (const DataRecordDevice*)RecordDeviceStore.GetPtr(Id);
 }
 
-const char* CWmClient::GetRecordDeviceText(uint32_t Id)
+const ppl7::String& CWmClient::GetRecordDeviceText(uint32_t Id)
 {
-	DataRecordDevice* v=(DataRecordDevice*)RecordDeviceStore.Get(Id);
+	const DataRecordDevice* v=(const DataRecordDevice*)RecordDeviceStore.GetPtr(Id);
 	if (v) return v->Value;
 	return Str_Unknown;
 }
@@ -965,7 +803,7 @@ ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, 
 	ppl7::String Pattern;
 	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
 	if (Path.isEmpty()) return Path;
-	Pattern.setf("%03u-*.(mp3|aiff)", Track);
+	Pattern.setf("%03u-*.(mp3|aiff|aif)", Track);
 	ppl6::CDir Dir;
 	const ppl6::CDirEntry* de;
 	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
@@ -1313,7 +1151,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 	system((const char*)cmd);
 #endif
 	return 1;
-}
+	}
 
 int CWmClient::TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {
@@ -1395,66 +1233,7 @@ int CWmClient::RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Pa
 	return 1;
 }
 
-void CWmClient::initLetterReplacements()
-{
-	addLetterReplacement(ppl7::WideString(L"&+()_,!?/"), L' ');
-	addLetterReplacement(ppl7::WideString(L".:''`"), 0);
-	addLetterReplacement(ppl7::WideString(L"°"), L'o');
-	addLetterReplacement(ppl7::WideString(L"àáâãäåāăąæ"), L'a');
-	addLetterReplacement(ppl7::WideString(L"þ"), L'b');
-	addLetterReplacement(ppl7::WideString(L"çćĉċč"), L'c');
-	addLetterReplacement(ppl7::WideString(L"ďđ"), L'd');
-	addLetterReplacement(ppl7::WideString(L"èéêëēĕėęě"), L'e');
-	addLetterReplacement(ppl7::WideString(L"ĝğġģ"), L'g');
-	addLetterReplacement(ppl7::WideString(L"ĥħ"), L'h');
-	addLetterReplacement(ppl7::WideString(L"ìíîïĩīĭįı"), L'i');
-	addLetterReplacement(ppl7::WideString(L"ĵ"), L'j');
-	addLetterReplacement(ppl7::WideString(L"ķĸ"), L'k');
-	addLetterReplacement(ppl7::WideString(L"ĺļľŀł"), L'l');
-	addLetterReplacement(ppl7::WideString(L"ñńņňŉŋ"), L'n');
-	addLetterReplacement(ppl7::WideString(L"òóôõöøōŏőœ"), L'o');
-	addLetterReplacement(ppl7::WideString(L"ŕŗř"), L'r');
-	addLetterReplacement(ppl7::WideString(L"śŝşš"), L's');
-	addLetterReplacement(ppl7::WideString(L"ţťŧ"), L't');
-	addLetterReplacement(ppl7::WideString(L"ùúûüũūŭůűų"), L'u');
-	addLetterReplacement(ppl7::WideString(L"ŵ"), L'w');
-	addLetterReplacement(ppl7::WideString(L"ýÿŷ"), L'y');
-	addLetterReplacement(ppl7::WideString(L"źżž"), L'z');
-	addLetterReplacement(ppl7::WideString(L"–"), L' ');
-}
 
-void CWmClient::initFilenameLetterReplacements()
-{
-	addFilenameLetterReplacement(ppl7::WideString(L"&"), L'+');
-	addFilenameLetterReplacement(ppl7::WideString(L"\"´`"), L'\'');
-	addFilenameLetterReplacement(ppl7::WideString(L"{"), L'(');
-	addFilenameLetterReplacement(ppl7::WideString(L"}"), L')');
-	addFilenameLetterReplacement(ppl7::WideString(L"|%#;:<>*?\\/"), L' ');
-	addFilenameLetterReplacement(ppl7::WideString(L"$"), L'S');
-	addFilenameLetterReplacement(ppl7::WideString(L"°"), L'o');
-	addFilenameLetterReplacement(ppl7::WideString(L"þ"), L'b');
-
-}
-
-void CWmClient::addLetterReplacement(wchar_t letter, wchar_t replacement)
-{
-	letterReplacements[letter]=replacement;
-}
-
-void CWmClient::addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement)
-{
-	for (size_t i=0;i < letters.size();i++) {
-		addLetterReplacement(letters[i], replacement);
-	}
-}
-
-void CWmClient::addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement)
-{
-	//printf ("Adding Letters: %ls (%i letters)",(const wchar_t*)letters,letters.Len());
-	for (size_t i=0;i < letters.size();i++) {
-		filenameLetterReplacements[letters[i]]=replacement;
-	}
-}
 
 static void ReplaceIfExists(ppl7::WideString& s, const wchar_t* search, const ppl7::WideString& replace)
 {
@@ -1536,17 +1315,17 @@ int CWmClient::GetWords(const ppl7::String& str, ppl7::Array& words)
 	return 1;
 }
 
-void CWmClient::RegisterWindow(QWidget* widget)
+void CWmClient::RegisterWindow(WindowType type, QWidget* widget)
 {
 	Mutex.lock();
-	WindowsList.insert(widget);
+	WindowsList[type].insert(widget);
 	Mutex.unlock();
 }
 
-void CWmClient::UnRegisterWindow(QWidget* widget)
+void CWmClient::UnRegisterWindow(WindowType type, QWidget* widget)
 {
 	Mutex.lock();
-	WindowsList.erase(widget);
+	WindowsList[type].erase(widget);
 	Mutex.unlock();
 
 }
