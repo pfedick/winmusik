@@ -25,15 +25,14 @@
 #include <QDialog>
 #include "ui_splashscreen.h"
 
-class SplashScreen : public QDialog, public CCallback
+class SplashScreen : public QDialog, public de::pfp::winmusik::CProgressUpdate
 {
     Q_OBJECT
 
 public:
-    SplashScreen(QWidget *parent = 0);
+    SplashScreen(QWidget* parent = 0);
     virtual ~SplashScreen();
-
-    virtual void Update();
+    void ProgressUpdate(int progress);
     void setMessage(QString msg);
 
 

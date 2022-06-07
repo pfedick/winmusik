@@ -58,7 +58,7 @@ void SplashScreen::setMessage(QString msg)
 	qApp->processEvents();
 }
 
-void SplashScreen::Update()
+void SplashScreen::ProgressUpdate(int progress)
 {
 	ui.progressBar->setValue(progress);
 	qApp->processEvents();
