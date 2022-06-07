@@ -32,6 +32,7 @@ Searchlists::Searchlists(QWidget* parent, CWmClient* wm)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	if (wm) wm->RegisterWindow(WindowType::SearchlistOverview, this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
 
 	QString Style="QTreeView::item {\n"
@@ -51,9 +52,7 @@ Searchlists::Searchlists(QWidget* parent, CWmClient* wm)
 
 Searchlists::~Searchlists()
 {
-	if (wm) {
-		wm->SearchlistOverviewClosed(this);
-	}
+	if (wm) wm->UnRegisterWindow(WindowType::SearchlistOverview, this);
 }
 
 void Searchlists::show()

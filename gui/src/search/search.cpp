@@ -36,7 +36,7 @@ Search::Search(QWidget* parent, CWmClient* wm)
 {
 	ui.setupUi(this);
 	this->wm=wm;
-	wm->RegisterWindow(this);
+	wm->RegisterWindow(WindowType::Search, this);
 	resultmode=0;
 	ClipBoardTimer.setParent(this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
@@ -115,7 +115,7 @@ Search::~Search()
 		wm->conf.SearchDevice[8]=ui.traeger_8->isChecked();
 		wm->conf.SearchDevice[9]=ui.traeger_9->isChecked();
 		wm->conf.trySave();
-		wm->UnRegisterWindow(this);
+		wm->UnRegisterWindow(WindowType::Search, this);
 	}
 }
 

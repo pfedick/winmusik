@@ -53,6 +53,9 @@ using namespace de::pfp::winmusik;
 Playlist::Playlist(QWidget* parent, CWmClient* wm)
 	: QMainWindow(parent)
 {
+	if (wm) {
+		wm->RegisterWindow(WindowType::Playlist, this);
+	}
 	ui.setupUi(this);
 	ui.filterFrame->setVisible(false);
 	this->setStatusBar(nullptr);
@@ -101,7 +104,7 @@ Playlist::Playlist(QWidget* parent, CWmClient* wm)
 Playlist::~Playlist()
 {
 	if (wm) {
-		wm->PlaylistClosed(this);
+		wm->UnRegisterWindow(WindowType::Playlist, this);
 	}
 }
 

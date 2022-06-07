@@ -34,6 +34,7 @@
 SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::String& Filename)
 	: QWidget(parent)
 {
+	if (wm) wm->RegisterWindow(WindowType::Searchlist, this);
 	dupeCheckThread=new DupeCheckThread(this);
 	statusbar=NULL;
 	ui.setupUi(this);
@@ -98,9 +99,7 @@ SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::S
 SearchlistDialog::~SearchlistDialog()
 {
 	dupeCheckThread->stopThread();
-	if (wm) {
-		wm->SearchlistDialogClosed(this);
-	}
+	if (wm) wm->UnRegisterWindow(WindowType::Searchlist, this);
 }
 
 

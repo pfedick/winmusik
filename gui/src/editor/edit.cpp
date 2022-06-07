@@ -155,7 +155,7 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 {
 	ui.setupUi(this);
 	this->wm=wm;
-	wm->RegisterWindow(this);
+	wm->RegisterWindow(WindowType::Editor, this);
 	setAttribute(Qt::WA_DeleteOnClose, true);
 	DeviceType=typ;
 	DeviceId=0;
@@ -304,7 +304,7 @@ Edit::~Edit()
 	if (artistCompleter) delete artistCompleter;
 	if (albumCompleter) delete albumCompleter;
 	//if (searchWindow) delete searchWindow;
-	wm->UnRegisterWindow(this);
+	wm->UnRegisterWindow(WindowType::Editor, this);
 }
 
 void Edit::setTracklistCaptions()

@@ -26,15 +26,14 @@ CoverPrinter::CoverPrinter(QWidget* parent, CWmClient* wm)
 {
 	ui.setupUi(this);
 	this->wm=wm;
+	if (wm) wm->RegisterWindow(WindowType::CoverPrinter, this);
 	Printer=new QPrinter(QPrinter::HighResolution);
-	//QSettings settings("Patrick F.-Productions","CoverPrinter");
-	//CoverPath=settings.value("coverpath","").toString();
 }
 
 CoverPrinter::~CoverPrinter()
 {
 	delete Printer;
-	if (wm) wm->CoverPrinterClosed(this);
+	if (wm) wm->UnRegisterWindow(WindowType::CoverPrinter, this);
 }
 
 
