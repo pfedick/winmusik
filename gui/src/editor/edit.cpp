@@ -299,7 +299,6 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 Edit::~Edit()
 {
 	if (DupeTimer) delete DupeTimer;
-	if (TrackList) delete TrackList;
 	if (titleCompleter) delete titleCompleter;
 	if (artistCompleter) delete artistCompleter;
 	if (albumCompleter) delete albumCompleter;
@@ -344,8 +343,7 @@ void Edit::show()
 
 void Edit::OpenTrack(uint32_t deviceId, uint8_t page, uint16_t track)
 {
-	if (TrackList) delete TrackList;
-	TrackList=NULL;
+	TrackList.Clear();
 	Page=0;
 	DeviceId=0;
 	TrackNum=0;
@@ -369,7 +367,7 @@ void Edit::OpenTrack(uint32_t deviceId, uint8_t page, uint16_t track)
 		UpdateTrackListing();
 		ui.titleEdit->setEnabled(true);
 		ui.track->setFocus();
-		if (track > 0 || TrackList->Num() == 0) {
+		if (track > 0 || TrackList.Num() == 0) {
 			showEditor();
 			ui.track->setText(ppl7::ToString("%i", track));
 			ui.artist->setFocus();
@@ -1235,7 +1233,7 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 	}
 	ppl7::String Tmp, FinalFile;
 
-	TrackNum=TrackList->GetMax() + 1;
+	TrackNum=TrackList.GetMax() + 1;
 	FinalFile.setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)ppl7::File::getFilename(NewFile));
 	try {
 		ppl7::File::rename(NewFile, FinalFile);
@@ -1411,8 +1409,7 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 bool Edit::on_index_FocusIn()
 {
 	ui.coverwidget->setEnabled(false);
-	if (TrackList) delete TrackList;
-	TrackList=NULL;
+	TrackList.Clear();
 	Page=0;
 	DeviceId=0;
 	TrackNum=0;
@@ -1449,9 +1446,8 @@ bool Edit::on_page_FocusIn()
 	ui.coverwidget->setEnabled(false);
 	Page=0;
 	TrackNum=0;
-	if (TrackList) delete TrackList;
 	ClearEditFields();
-	TrackList=NULL;
+	TrackList.Clear();
 	ppl7::String Tmp;
 	if (oldposition < 2) {
 		DeviceId=ui.index->text().toInt();
@@ -1519,24 +1515,18 @@ bool Edit::on_track_FocusIn()
 			return true;
 		}
 		// Trackliste laden
-		if (TrackList) delete TrackList;
 		TrackList=wm->GetTracklist(DeviceType, DeviceId, Page);
-		if (!TrackList) {
-			// TODO: Ein Bug, darf nicht vorkommen
-			ui.index->setFocus();
-			return true;
-		}
 		UpdateTrackListing();
 		//asyncTrackUpdate.ThreadStop();
 		//asyncTrackUpdate.ThreadStart();
 
 		ppl7::String a;
-		a.setf("%u", TrackList->GetMax() + 1);
+		a.setf("%u", TrackList.GetMax() + 1);
 		ui.track->setText(a);
 	}
 	UpdateFkeys();
 	UpdateCompleters();
-	if (TrackList->Num() == 0) showEditor();
+	if (TrackList.Num() == 0) showEditor();
 	ui.track->deselect();
 	ui.track->selectAll();
 	return false;
@@ -1545,16 +1535,10 @@ bool Edit::on_track_FocusIn()
 
 void Edit::ReloadTracks()
 {
-	if (TrackList) delete TrackList;
 	TrackList=wm->GetTracklist(DeviceType, DeviceId, Page);
-	if (!TrackList) {
-		// TODO: Ein Bug, darf nicht vorkommen
-		ui.index->setFocus();
-		return;
-	}
 	UpdateTrackListing();
 	ppl7::String a;
-	a.setf("%u", TrackList->GetMax() + 1);
+	a.setf("%u", TrackList.GetMax() + 1);
 	ui.track->setText(a);
 	UpdateFkeys();
 	UpdateCompleters();
@@ -1798,7 +1782,7 @@ bool Edit::on_f7_DeleteTrack()
 {
 	if (Track.Track > 0) {
 		if (Track.TitleId) {
-			TrackList->Delete(Track.Track);
+			TrackList.Delete(Track.Track);
 			UpdateTrackListing();
 			EditTrack();
 			ui.artist->setFocus();
@@ -1839,7 +1823,7 @@ bool Edit::on_f8_InsertTrack()
 
 bool Edit::on_f10_WritePlaylist()
 {
-	if (wm->WritePlaylist(DeviceType, DeviceId, Page, TrackList, &datadevice)) {
+	if (wm->WritePlaylist(DeviceType, DeviceId, Page, &TrackList, &datadevice)) {
 		QMessageBox::information(this, tr("WinMusik: Notice"),
 			tr("Playlists wurden erfolgreich erstellt"));
 		return true;
@@ -2075,7 +2059,7 @@ bool Edit::on_f9_UpdateAllID3Tags()
 		tr("Update ID3-Tags of all tracks?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
 		== QMessageBox::No) return true;
 
-	if (wm->UpdateID3Tags(DeviceType, DeviceId, Page, TrackList)) {
+	if (wm->UpdateID3Tags(DeviceType, DeviceId, Page, &TrackList)) {
 		QMessageBox::information(this, tr("WinMusik: Notice"),
 			tr("Update of ID3-Tags on all tracks has been started"));
 		return true;
@@ -2268,7 +2252,7 @@ void Edit::on_trackList_customContextMenuRequested(const QPoint& pos)
 	QMenu* m=new QMenu(this);
 	QAction* a=NULL;
 	//m->setTitle("Ein Titel");
-	if (TrackList != NULL &&
+	if (TrackList.Num() > 0 &&
 		(trackList->currentColumn() == TRACKLIST_KEY_ROW
 			|| trackList->currentColumn() == TRACKLIST_BPM_ROW
 			|| trackList->currentColumn() == TRACKLIST_ENERGYLEVEL_ROW
@@ -2296,7 +2280,7 @@ void Edit::on_trackList_customContextMenuRequested(const QPoint& pos)
 		m->addSeparator();
 		m->addAction(QIcon(":/icons/resources/delete-track.png"), tr("Delete Track", "trackList Context Menue"), this, SLOT(on_contextDeleteTrack_triggered()));
 		m->addAction(QIcon(":/icons/resources/insert-track.png"), tr("Insert Track", "trackList Context Menue"), this, SLOT(on_contextInsertTrack_triggered()));
-		if (TrackList != NULL && trackList->currentColumn() == TRACKLIST_BPM_ROW) {
+		if (TrackList.Num() > 0 && trackList->currentColumn() == TRACKLIST_BPM_ROW) {
 			m->addSeparator();
 			m->addAction(QIcon(":/icons/resources/edit.png"), tr("Read BPM and Key from ID3-Tag", "trackList Context Menue"), this, SLOT(on_contextReadBpmAndKey_triggered()));
 		}
@@ -2370,9 +2354,8 @@ void Edit::on_contextSetMusicKey(int k)
 
 void Edit::on_contextSynchronizeKeys_triggered()
 {
-	if (!TrackList) return;
 	// Höchste Tracknummer
-	int max=TrackList->GetMax();
+	int max=TrackList.GetMax();
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	QProgressDialog progress(tr("Reading ID3-Tags from Files..."), tr("Abort"), 0, max, this);
@@ -2387,7 +2370,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
 		progress.setValue(i);
 		QCoreApplication::processEvents();
 		if (progress.wasCanceled())	break;
-		const DataTrack* track=TrackList->GetPtr(i);
+		const DataTrack* track=TrackList.GetPtr(i);
 		if (track) {
 			// Titel holen
 			const DataTitle* title=wm->GetTitle(track->TitleId);
@@ -2498,8 +2481,8 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 	icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
 	//Ti.CoverPreview.Copy(bytes.data(),bytes.size());
 
-	for (int i=TrackList->GetMin();i <= TrackList->GetMax();i++) {
-		const DataTrack* track=TrackList->GetPtr(i);
+	for (int i=TrackList.GetMin();i <= TrackList.GetMax();i++) {
+		const DataTrack* track=TrackList.GetPtr(i);
 		if (track) {
 			const DataTitle* ti=wm->GetTitle(track->TitleId);
 			if (ti) {
@@ -2711,7 +2694,7 @@ bool Edit::on_f6_MassImport()
 	MassImport Import(this, wm);
 	Import.setSearchWindow(searchWindow);
 	Import.show();
-	if (!Import.load(DeviceType, DeviceId, Page, TrackList->GetMax() + 1)) {
+	if (!Import.load(DeviceType, DeviceId, Page, TrackList.GetMax() + 1)) {
 		return true;
 	}
 	Import.exec();

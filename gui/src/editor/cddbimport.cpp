@@ -346,8 +346,8 @@ void CDDBImport::on_cancelButton_clicked()
 
 bool CDDBImport::checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
-	CTrackList* tracklist=wm->GetTracklist(devicetype, deviceid, page);
-	if (tracklist->Num() == 0) return true;
+	CTrackList tracklist=wm->GetTracklist(devicetype, deviceid, page);
+	if (tracklist.Num() == 0) return true;
 
 	int ret=QMessageBox::warning(this, tr("WinMusik: Attention"),
 		tr("This device already has tracks in the database. When you start "
@@ -362,7 +362,7 @@ bool CDDBImport::checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid,
 void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
 	ppl7::String Tmp;
-	CTrackList* tracklist=wm->GetTracklist(devicetype, deviceid, page);
+	CTrackList tracklist=wm->GetTracklist(devicetype, deviceid, page);
 	if (!wm->DeviceStore.Exists(devicetype, deviceid)) {
 		wm->RaiseError(NULL, tr("Unexpected Error, Device does not exist"));
 		return;
@@ -378,7 +378,7 @@ void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_
 	if (datadevice.PurchaseId == 0) {
 		datadevice.PurchaseId=ui.recordSourceId->text().toInt();
 	}
-	int trackNum=tracklist->GetMax() + 1;
+	int trackNum=tracklist.GetMax() + 1;
 	ppl7::CDDB::Disc::TrackList::const_iterator it;
 	for (it=disc.Tracks.begin();it != disc.Tracks.end();++it) {
 		DataTitle Ti;
@@ -388,7 +388,7 @@ void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_
 		Ti.Page=page;
 		Ti.Track=trackNum;
 		addDataFromFile(Ti);
-		if (!saveTitle(tracklist, Ti)) {
+		if (!saveTitle(&tracklist, Ti)) {
 			it=disc.Tracks.end();
 			break;
 		}

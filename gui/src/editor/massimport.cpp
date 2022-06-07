@@ -99,7 +99,7 @@ MassImport::MassImport(QWidget* parent, CWmClient* wm)
 
 MassImport::~MassImport()
 {
-	if (TrackList) delete TrackList;
+
 }
 
 void MassImport::setSearchWindow(QWidget* widget)
@@ -776,7 +776,7 @@ bool MassImport::importTrack(TreeItem* item)
 	}
 
 	DataTrack Track;
-	Track.Track=TrackList->GetMax() + 1;	// Wo kommt die Tracknummer her?
+	Track.Track=TrackList.GetMax() + 1;	// Wo kommt die Tracknummer her?
 	Ti.Track=Track.Track;
 
 	try {
@@ -794,7 +794,7 @@ bool MassImport::importTrack(TreeItem* item)
 	Track.DeviceId=DeviceId;
 	Track.Page=Page;
 	try {
-		TrackList->Put(Track);
+		TrackList.Put(Track);
 	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Track in TrackList"));
 		return false;

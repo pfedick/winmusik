@@ -913,18 +913,18 @@ void Search::on_contextFindMoreMedium_triggered()
 {
 	const DataTitle* t=wm->GetTitle(currentTrackListItem->Id);
 	if (t) {
-		CTrackList* l=wm->GetTracklist(t->DeviceType, t->DeviceId, t->Page);
-		if (l) {
+		CTrackList l=wm->GetTracklist(t->DeviceType, t->DeviceId, t->Page);
+		if (l.Num() > 0) {
 			ui.numTracks->setText("");
 			currentTrackListItem=NULL;
 			trackList->clear();
 			trackList->setWordWrap(false);
 			trackList->setSortingEnabled(false);
 			Results.clear();
-			int min=l->GetMin();
-			int max=l->GetMax();
+			int min=l.GetMin();
+			int max=l.GetMax();
 			for (int i=min;i <= max;i++) {
-				const DataTrack* track=l->GetPtr(i);
+				const DataTrack* track=l.GetPtr(i);
 				if (track) {
 					t=wm->GetTitle(track->TitleId);
 					if (t) Results.push_back(t);
@@ -934,7 +934,6 @@ void Search::on_contextFindMoreMedium_triggered()
 			ui.progressBar->setValue(100);
 			trackList->sortByColumn(0, Qt::AscendingOrder);
 			trackList->setSortingEnabled(true);
-			delete l;
 		}
 	}
 	ui.artist->setFocus();

@@ -125,7 +125,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, ui
 	for (uint32_t DeviceId=start;DeviceId <= end;DeviceId++) {
 		if (DeviceId > start) Printer.newPage();
 		// Tonträger laden
-		CTrackList* tracklist=GetTracklist(DeviceType, DeviceId, 1);
+		CTrackList tracklist=GetTracklist(DeviceType, DeviceId, 1);
 		const DataDevice* device=DeviceStore.GetPtr(DeviceType, DeviceId);
 		if (!device) continue;
 
@@ -218,7 +218,7 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, ui
 		painter.drawText((int)(10 * w), (int)(135 * h), Tmp);
 
 		// Tracklisting
-		int num=tracklist->Num();
+		int num=tracklist.Num();
 		x=(int)(10 * w);
 		y=(int)(140 * h);
 		// Wir müssen ein paar entscheidungen anhand der Anzahl Tracks treffen
@@ -247,8 +247,8 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, ui
 		bbox=painter.boundingRect(Rect, Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, "WÄgelchen");
 		int rowheight=bbox.height();
 		int row=0;
-		for (int Track=tracklist->GetMin();Track <= tracklist->GetMax();Track++) {
-			const DataTrack* t=tracklist->GetPtr(Track);
+		for (int Track=tracklist.GetMin();Track <= tracklist.GetMax();Track++) {
+			const DataTrack* t=tracklist.GetPtr(Track);
 			if (t) {
 				const DataTitle* ti=GetTitle(t->TitleId);
 				if (ti) {
@@ -293,7 +293,6 @@ int CWmClient::PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, ui
 		painter.drawText((int)(10 * w), (int)(236 * h), Tmp);
 
 
-		if (tracklist) delete tracklist;
 
 	}
 	painter.end();
@@ -515,7 +514,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, u
 		int ry=(int)(y * h);
 		int rowheight;
 		for (int page=1;page <= device->Pages;page++) {
-			CTrackList* tracklist=GetTracklist(DeviceType, DeviceId, page);
+			CTrackList tracklist=GetTracklist(DeviceType, DeviceId, page);
 			if (device->Pages > 0) {
 				Font.setPointSize(12);
 				Font.setBold(true);
@@ -526,7 +525,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, u
 
 				ry+=(int)(10 * h);
 			}
-			if (tracklist) {
+			if (tracklist.Num() > 0) {
 				// Tabellenkopf
 				ry+=PrintTracklistTableHeader(Font, painter, rx, ry);
 
@@ -538,7 +537,7 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, u
 				bbox=painter.boundingRect(Rect, Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine, "WÄge|ßchen§");
 				rowheight=bbox.height();
 				CTrackList::const_iterator it;
-				for (it=tracklist->begin();it != tracklist->end();++it) {
+				for (it=tracklist.begin();it != tracklist.end();++it) {
 					const DataTrack& t=it->second;
 					const DataTitle* ti=GetTitle(t.TitleId);
 					if (ti) {
@@ -585,7 +584,6 @@ int CWmClient::PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, u
 						}
 					}
 				}
-				delete tracklist;
 			}
 			ry+=(int)(5 * h);
 		}

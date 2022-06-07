@@ -108,8 +108,8 @@ bool Edit::EditTrack()
 	}
 	TrackNum=(uint16_t)t;
 	// Track laden, falls es ihn schon gibt
-	if (TrackList->Exists(t)) {
-		Track=TrackList->Get(t);
+	if (TrackList.Exists(t)) {
+		Track=TrackList.Get(t);
 		const DataTitle* ti=wm->GetTitle(Track.TitleId);
 		if (ti) {
 			Ti.CopyFrom(*ti);
@@ -325,33 +325,32 @@ void Edit::UpdateTrackListing()
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	if (TrackList) {
 		// Höchste Tracknummer
-		int max=TrackList->GetMax();
+	int max=TrackList.GetMax();
 
-		for (int i=1;i <= max;i++) {
-			item=new WMTreeItem;
+	for (int i=1;i <= max;i++) {
+		item=new WMTreeItem;
 
-			item->Track=i;
-			item->Id=0;
-			Text.setf("%5i", i);
-			item->setText(TRACKLIST_TRACK_ROW, Text);
-			// Track holen
-			track=TrackList->GetPtr(i);
-			if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
-				item->Id=track->TitleId;
-				// Titel holen
-				title=wm->GetTitle(track->TitleId);
-				if (title) {
-					count++;
-					length+=title->Length;
-					RenderTrack(item, *title);
-					size+=title->Size;
-				}
+		item->Track=i;
+		item->Id=0;
+		Text.setf("%5i", i);
+		item->setText(TRACKLIST_TRACK_ROW, Text);
+		// Track holen
+		track=TrackList.GetPtr(i);
+		if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
+			item->Id=track->TitleId;
+			// Titel holen
+			title=wm->GetTitle(track->TitleId);
+			if (title) {
+				count++;
+				length+=title->Length;
+				RenderTrack(item, *title);
+				size+=title->Size;
 			}
-			trackList->addTopLevelItem(item);
 		}
+		trackList->addTopLevelItem(item);
 	}
+
 	QApplication::restoreOverrideCursor();
 
 	Tmp.setf("%i", count);
@@ -371,8 +370,8 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 	ppl7::String Text, Tmp;
 	ppl7::String Unknown=tr("unknown");
 	const char* unknown=(const char*)Unknown;
-	DataVersion* version;
-	DataGenre* genre;
+	const DataVersion* version;
+	const DataGenre* genre;
 	QBrush Brush(Qt::SolidPattern);
 	Brush.setColor("red");
 
@@ -667,7 +666,7 @@ bool Edit::SaveTrack(DataTitle& Ti)
 		// Track speichern
 		Track.TitleId=Ti.TitleId;
 		try {
-			TrackList->Put(Track);
+			TrackList.Put(Track);
 		} catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not save Track in TrackList"));
 			ui.artist->setFocus();
@@ -702,26 +701,26 @@ void Edit::UpdateCompleters()
 	std::set<ppl7::String>TmpTitles;
 	std::set<ppl7::String>TmpAlbums;
 
-	if (TrackList) {
-		// Höchste Tracknummer
-		int max=TrackList->GetMax();
-		for (int i=1;i <= max;i++) {
-			// Track holen
-			const DataTrack* track=TrackList->GetPtr(i);
-			if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
-				// Titel holen
-				const DataTitle* title=wm->GetTitle(track->TitleId);
-				if (title) {
-					if (title->Title.notEmpty()) {
-						TmpTitles.insert(title->Title);
-					}
-					if (title->Album.notEmpty()) {
-						TmpAlbums.insert(title->Album);
-					}
+
+	// Höchste Tracknummer
+	int max=TrackList.GetMax();
+	for (int i=1;i <= max;i++) {
+		// Track holen
+		const DataTrack* track=TrackList.GetPtr(i);
+		if (track) {	// Kann NULL sein, wenn Tracks bei der Eingabe übersprungen wurden
+			// Titel holen
+			const DataTitle* title=wm->GetTitle(track->TitleId);
+			if (title) {
+				if (title->Title.notEmpty()) {
+					TmpTitles.insert(title->Title);
+				}
+				if (title->Album.notEmpty()) {
+					TmpAlbums.insert(title->Album);
 				}
 			}
 		}
 	}
+
 	{
 		std::set<ppl7::String>::const_iterator it;
 		for (it=TmpTitles.begin();it != TmpTitles.end();++it) {
@@ -943,11 +942,11 @@ void Edit::renumber()
 
 	// Titel updaten
 	for (int p=1;p <= datadevice.Pages;p++) {
-		const CTrackList* tl=wm->GetTracklist(DeviceType, DeviceId, p);
-		if (tl) {
+		const CTrackList tl=wm->GetTracklist(DeviceType, DeviceId, p);
+		if (tl.Num()) {
 			//printf ("Tracks auf Seite %i: %i\n",p,tl->Num());
 			CTrackList::const_iterator it;
-			for (it=tl->begin();it != tl->end();++it) {
+			for (it=tl.begin();it != tl.end();++it) {
 				DataTrack track=it->second;
 				track.DeviceId=newDeviceId;
 				wm->TrackStore.Put(track);

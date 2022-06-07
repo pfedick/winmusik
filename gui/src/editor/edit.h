@@ -120,7 +120,7 @@ private:
     Ui::EditClass ui;
 
     DataDevice	datadevice;
-    CTrackList* TrackList;
+    CTrackList  TrackList;
     DataTrack	Track;
     DataTitle	Ti;
 

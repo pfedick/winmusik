@@ -64,7 +64,7 @@ private:
 	TreeItem* currentTrackListItem;
 	int			position, oldposition;
 
-	CTrackList* TrackList;
+	CTrackList    TrackList;
 
 	CTableControl TCVersion;
 	CTableControl TCGenre;
