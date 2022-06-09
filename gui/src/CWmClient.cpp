@@ -804,31 +804,37 @@ ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, 
 	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
 	if (Path.isEmpty()) return Path;
 	Pattern.setf("%03u-*.(mp3|aiff|aif)", Track);
-	ppl6::CDir Dir;
-	const ppl6::CDirEntry* de;
-	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
-		if ((de=Dir.GetFirstPattern(Pattern, true))) {
-			Path=de->File;
-			if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
-			return Path;
-		}
-
-	}
-	Pattern.setf("/^%03u\\.(mp3|aiff)$/i8", Track);
-	if ((de=Dir.GetFirstRegExp(Pattern))) {
-		Path=de->File;
-		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
+	ppl7::Dir Dir;
+	try {
+		Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE);
+	} catch (...) {
+		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "could not open directory: %s", (const char*)Path);
+		Path.clear();
 		return Path;
 	}
-	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff)$/i8", Track);
-	if ((de=Dir.GetFirstRegExp(Pattern))) {
-		Path=de->File;
+	ppl7::Dir::Iterator it;
+	try {
+		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern, true);
+		Path=de.File;
 		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return Path;
-	}
+	} catch (...) {}
 
+	Pattern.setf("/^%03u\\.(mp3|aiff|aif)$/i8", Track);
+	try {
+		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern);
+		Path=de.File;
+		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
+		return Path;
+	} catch (...) {}
+	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff|aif)$/i8", Track);
+	try {
+		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern);
+		Path=de.File;
+		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
+		return Path;
 
-
+	} catch (...) {}
 	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Nicht gefunden");
 	Path.clear();
 	return Path;
@@ -841,36 +847,47 @@ ppl7::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uin
 	ppl7::String Pattern;
 	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
 	if (Path.isEmpty()) return Path;
-	ppl6::CDir Dir;
-	const ppl6::CDirEntry* entry;
+	ppl7::Dir Dir;
 	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Öffne Verzeichnis: %s", (const char*)Path);
-	if (Dir.Open(Path, ppl6::CDir::Sort_Filename_IgnoreCase)) {
-		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "%i Dateien vorhanden, suche nach Pattern...", Dir.Num());
-		while ((entry=Dir.GetNext())) {
-			Filename=entry->Filename;
-			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
-			if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
-				// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
-				if (entry->Size > 256) {
-					if (Filename.pregMatch("/^.*\\.(mp3|aiff|aif|wav)$/i") == true) {
-						// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
-						if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Datei passt auf Pattern: %s", (const char*)Filename);
-						ppl7::String newFilename;
-						newFilename.setf("%s/%03u-%s", (const char*)entry->Path, Track, (const char*)Filename);
-						if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s", (const char*)entry->File, (const char*)newFilename);
-						// Wir versuchen sie umzubenennen
-						try {
-							ppl7::File::rename(entry->File, newFilename);
-							return newFilename;
-						} catch (...) {}
-						//if (wmlog) wmlog->LogError();
-						if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Error, versuche nächste Datei");
-						// Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
+	try {
+		Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE);
+		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "%i Dateien vorhanden, suche nach Pattern...", Dir.num());
+		try {
+			ppl7::Dir::Iterator it;
+			Dir.reset(it);
+			while (true) {
+				const ppl7::DirEntry& entry=Dir.getNext(it);
+				Filename=entry.Filename;
+				// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
+				if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
+					// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
+					if (entry.Size > 256) {
+						if (Filename.pregMatch("/^.*\\.(mp3|aiff|aif|wav)$/i") == true) {
+							// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
+							if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Datei passt auf Pattern: %s", (const char*)Filename);
+							ppl7::String newFilename;
+							newFilename.setf("%s/%03u-%s", (const char*)entry.Path, Track, (const char*)Filename);
+							if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s", (const char*)entry.File, (const char*)newFilename);
+							// Wir versuchen sie umzubenennen
+							try {
+								ppl7::File::rename(entry.File, newFilename);
+								return newFilename;
+							} catch (...) {}
+							//if (wmlog) wmlog->LogError();
+							if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Error, versuche nächste Datei");
+							// Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
+						}
 					}
 				}
 			}
-		}
-	}
+
+		} catch (...) {}
+
+	} catch (...) {}
+
+
+
+
 	// Nichts passendes gefunden, wir geben einen leeren String zurück
 	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Nichts passendes gefunden");
 	Path.clear();
@@ -896,18 +913,14 @@ ppl7::String CWmClient::NormalizeFilename(uint8_t DeviceType, uint32_t DeviceId,
 	}
 	Tmp+=".";
 	Tmp+=Suffix;
-	// Problematische Zeichen rausfiltern
-	Tmp.replace("ß", "ss");
-	Tmp.trim();
-	// Wir müssen mit Unicode arbeiten
-	ppl7::WideString w=Tmp;
-	NormalizeLetters(filenameLetterReplacements, w);
-	if (w.size() > (size_t)conf.MaxFilenameLength) {
-		w.cut(conf.MaxFilenameLength - Suffix.size() - 1);
-		w+=".";
-		w+=ppl7::WideString(Suffix);
+	normalizer.NormalizeFilename(Tmp);
+	ppl7::WideString s=Tmp;
+	if (s.size() > (size_t)conf.MaxFilenameLength) {
+		s.cut(conf.MaxFilenameLength - Suffix.size() - 1);
+		Tmp=s;
+		Tmp+=".";
+		Tmp+=ppl7::String(Suffix);
 	}
-	Tmp=w;
 	Filename+=Tmp;
 	return Filename;
 }
@@ -921,7 +934,7 @@ int CWmClient::SaveID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, 
 	else InternalFilename=GetAudioFilename(DeviceType, DeviceId, Page, Track);
 	if (InternalFilename.isEmpty()) {
 		Tmp=tr("Track: %i");
-		ppl6::SetError(20022, Tmp, Track);
+		//ppl6::SetError(20022, Tmp, Track);
 		return 0;
 	}
 
@@ -960,7 +973,7 @@ int CWmClient::SaveID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, 
 	if (Ti.EnergyLevel > 0) Job.setf("EnergyLevel", "%d", Ti.EnergyLevel);
 	if (Ti.BPM > 0) Job.setf("bpm", "%u", Ti.BPM);
 	else Job.setf("bpm", "");
-	if (conf.musicKeyTag != musicKeyTypeNone) Job.set("key", Ti.getKeyName(conf.musicKeyTag));
+	if (conf.musicKeyTag != musicKeyTypeNone) Job.set("key", MusicKeys.keyName(Ti.Key, conf.musicKeyTag));
 	Job.set("genre", GetGenreText(Ti.GenreId));
 	Job.set("publisher", GetLabelText(Ti.LabelId));
 	Tmp.setf("%u", Ti.ReleaseDate);
@@ -976,111 +989,115 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 	const DataTrack* track;
 	const DataTitle* Ti;
 	if (!DeviceId) {
-		ppl6::SetError(20040);
+		//ppl6::SetError(20040);
 		return 0;
 	}
 	if (!list) {
-		ppl6::SetError(20041);
+		//ppl6::SetError(20041);
 		return 0;
 	}
 	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
 	if (Path.isEmpty()) {
-		ppl6::SetError(20042);
+		//ppl6::SetError(20042);
 		return 0;
 	}
 
 	Minuten=tr("min", "Minutes in Tracklisting of Playlist");
 
-	ppl6::CFile m3u;
-	if (!m3u.Openf("%s/000index.m3u", "wb", (const char*)Path)) return 0;
+	try {
+		ppl7::File m3u;
+		m3u.open(ppl7::ToString("%s/000index.m3u", (const char*)Path), ppl7::File::WRITE);
 
-	ppl6::CFile pls;
-	if (!pls.Openf("%s/000index.pls", "wb", (const char*)Path)) return 0;
+		ppl7::File pls;
+		pls.open(ppl7::ToString("%s/000index.pls", (const char*)Path), ppl7::File::WRITE);
 
-	ppl6::CFile txt;
-	if (!txt.Openf("%s/000index.txt", "wb", (const char*)Path)) return 0;
+		ppl7::File txt;
+		txt.open(ppl7::ToString("%s/000index.txt", (const char*)Path), ppl7::File::WRITE);
 
-	ppl6::CFile xspf;
-	if (!xspf.Openf("%s/000index.xspf", "wb", (const char*)Path)) return 0;
+		ppl7::File xspf;
+		xspf.open(ppl7::ToString("%s/000index.xspf", (const char*)Path), ppl7::File::WRITE);
 
-	m3u.Puts("#EXTM3U\n");
-	pls.Puts("[playlist]\n");
+		m3u.puts("#EXTM3U\n");
+		pls.puts("[playlist]\n");
 
-	Tmp=tr("Tracklisting MP3-Medium", "Subject of Playlist");
-	Tmp.appendf(" %u\r\n", DeviceId);
-	txt.Puts(Tmp);
-	if (device != NULL && device->Title != NULL) {
-		Tmp=device->Title;
+		Tmp=tr("Tracklisting MP3-Medium", "Subject of Playlist");
+		Tmp.appendf(" %u\r\n", DeviceId);
+		txt.puts(Tmp);
+		if (device != NULL && device->Title != NULL) {
+			Tmp=device->Title;
+			Tmp.trim();
+			txt.puts(Tmp);
+			txt.puts("\r\n");
+		}
+		txt.puts("\r\n");
+
+		xspf.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		xspf.puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
+		Tmp=tr("Playlist created by WinMusik");
 		Tmp.trim();
-		txt.Puts(Tmp);
-		txt.Puts("\r\n");
-	}
-	txt.Puts("\r\n");
+		Tmp.appendf(" %s", WM_VERSION);
+		xspf.putsf("<creator>%s</creator>\n", (const char*)Tmp);
+		xspf.puts("<trackList>\n");
+		int count=0;
+		int min=list->GetMin();
+		int max=list->GetMax();
+		for (int i=min;i <= max;i++) {
+			track=list->GetPtr(i);
+			if (track) {
+				Ti=GetTitle(track->TitleId);
+				if (Ti) {
+					count++;
+					if (Ti->Artist.notEmpty()) Tmp=Ti->Artist;
+					else Tmp="unknown";
+					Tmp+=" - ";
+					if (Ti->Title.notEmpty()) Tmp+=Ti->Title;
+					else Tmp+="unknown";
+					Tmp+=" (";
+					// Version holen
+					Tmp+=GetVersionText(Ti->VersionId);
+					Tmp+=")";
 
-	xspf.Puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	xspf.Puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
-	Tmp=tr("Playlist created by WinMusik");
-	Tmp.trim();
-	Tmp.appendf(" %s", WM_VERSION);
-	xspf.Putsf("<creator>%s</creator>\n", (const char*)Tmp);
-	xspf.Puts("<trackList>\n");
-	int count=0;
-	int min=list->GetMin();
-	int max=list->GetMax();
-	for (int i=min;i <= max;i++) {
-		track=list->Get(i);
-		if (track) {
-			Ti=GetTitle(track->TitleId);
-			if (Ti) {
-				count++;
-				if (Ti->Artist.notEmpty()) Tmp=Ti->Artist;
-				else Tmp="unknown";
-				Tmp+=" - ";
-				if (Ti->Title.notEmpty()) Tmp+=Ti->Title;
-				else Tmp+="unknown";
-				Tmp+=" (";
-				// Version holen
-				Tmp+=GetVersionText(Ti->VersionId);
-				Tmp+=")";
+					FilePath=GetAudioFilename(DeviceType, DeviceId, Page, i);
+					Filename=ppl7::File::getFilename(FilePath);
+					m3u.putsf("#EXTINF:%u,%s\n", Ti->Length, (const char*)Tmp);
+					m3u.putsf("%s\n", (const char*)Filename);
 
-				FilePath=GetAudioFilename(DeviceType, DeviceId, Page, i);
-				Filename=ppl7::File::getFilename(FilePath);
-				m3u.Putsf("#EXTINF:%u,%s\n", Ti->Length, (const char*)Tmp);
-				m3u.Putsf("%s\n", (const char*)Filename);
+					pls.putsf("File%i=%s\n", count, (const char*)Filename);
+					pls.putsf("Title%i=%s\n", count, (const char*)Tmp);
+					pls.putsf("Length%i=%u\n", count, Ti->Length);
 
-				pls.Putsf("File%i=%s\n", count, (const char*)Filename);
-				pls.Putsf("Title%i=%s\n", count, (const char*)Tmp);
-				pls.Putsf("Length%i=%u\n", count, Ti->Length);
+					xspf.putsf("  <track>\n");
+					xspf.putsf("     <trackNum>%u</trackNum>\n", i);
+					ppl7::String TmpTxt=Tmp;
+					TmpTxt.chop(1);
+					txt.putsf("%3u. %s, %0i:%02i %s)\r\n", i, (const char*)TmpTxt, (int)(Ti->Length / 60), Ti->Length % 60, (const char*)Minuten);
 
-				xspf.Putsf("  <track>\n");
-				xspf.Putsf("     <trackNum>%u</trackNum>\n", i);
-				ppl7::String TmpTxt=Tmp;
-				TmpTxt.chop(1);
-				txt.Putsf("%3u. %s, %0i:%02i %s)\r\n", i, (const char*)TmpTxt, (int)(Ti->Length / 60), Ti->Length % 60, (const char*)Minuten);
-
-				//Tmp=ppl6::UrlEncode(FilePath);
-				//Tmp.Replace("+","%20");
-				xspf.Putsf("     <location>file://%s</location>\n", (const char*)ppl6::EscapeHTMLTags(FilePath));
-				if (Ti->Artist.notEmpty()) xspf.Putsf("     <creator>%s</creator>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Artist));
-				if (Ti->Title.notEmpty()) xspf.Putsf("     <title>%s - %s (%s)</title>\n",
-					(const char*)ppl6::EscapeHTMLTags(Ti->Artist),
-					(const char*)ppl6::EscapeHTMLTags(Ti->Title),
-					(const char*)ppl6::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
-				//xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
-				if (Ti->Album.notEmpty()) xspf.Putsf("     <album>%s</album>\n", (const char*)ppl6::EscapeHTMLTags(Ti->Album));
-				xspf.Putsf("     <duration>%u</duration>\n", Ti->Length * 1000);  // Bringt VLC zum Absturz
-				xspf.Putsf("  </track>\n");
+					//Tmp=ppl6::UrlEncode(FilePath);
+					//Tmp.Replace("+","%20");
+					xspf.putsf("     <location>file://%s</location>\n", (const char*)ppl7::EscapeHTMLTags(FilePath));
+					if (Ti->Artist.notEmpty()) xspf.putsf("     <creator>%s</creator>\n", (const char*)ppl7::EscapeHTMLTags(Ti->Artist));
+					if (Ti->Title.notEmpty()) xspf.putsf("     <title>%s - %s (%s)</title>\n",
+						(const char*)ppl7::EscapeHTMLTags(Ti->Artist),
+						(const char*)ppl7::EscapeHTMLTags(Ti->Title),
+						(const char*)ppl7::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
+					//xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
+					if (Ti->Album.notEmpty()) xspf.putsf("     <album>%s</album>\n", (const char*)ppl7::EscapeHTMLTags(Ti->Album));
+					xspf.putsf("     <duration>%u</duration>\n", Ti->Length * 1000);  // Bringt VLC zum Absturz
+					xspf.putsf("  </track>\n");
 
 
+				}
 			}
 		}
+		pls.putsf("NumberOfEntries=%i\nVersion=2\n", count);
+
+		xspf.putsf("</trackList>\n</playlist>\n");
+
+
+		return 1;
+	} catch (...) {
+		return 0;
 	}
-	pls.Putsf("NumberOfEntries=%i\nVersion=2\n", count);
-
-	xspf.Putsf("</trackList>\n</playlist>\n");
-
-
-	return 1;
 }
 
 int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, CTrackList* list)
@@ -1089,22 +1106,22 @@ int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 	const DataTrack* track;
 	const DataTitle* Ti;
 	if (!DeviceId) {
-		ppl6::SetError(20040);
+		//ppl6::SetError(20040);
 		return 0;
 	}
 	if (!list) {
-		ppl6::SetError(20041);
+		//ppl6::SetError(20041);
 		return 0;
 	}
 	ppl7::String DevicePath=conf.DevicePath[DeviceType];
 	if (DevicePath.isEmpty()) {
-		ppl6::SetError(20042);
+		//ppl6::SetError(20042);
 		return 0;
 	}
 	int min=list->GetMin();
 	int max=list->GetMax();
 	for (int i=min;i <= max;i++) {
-		track=list->Get(i);
+		track=list->GetPtr(i);
 		if (track) {
 			Ti=GetTitle(track->TitleId);
 			if (Ti) {
@@ -1151,7 +1168,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 	system((const char*)cmd);
 #endif
 	return 1;
-	}
+}
 
 int CWmClient::TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {
@@ -1230,88 +1247,6 @@ int CWmClient::RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Pa
 		return 0;
 	}
 	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Erfolgreich");
-	return 1;
-}
-
-
-
-static void ReplaceIfExists(ppl7::WideString& s, const wchar_t* search, const ppl7::WideString& replace)
-{
-	if (s.isEmpty()) return;
-	const wchar_t* buffer=(wchar_t*)s.getPtr();
-	if (!buffer) return;
-	if (wcsstr(buffer, search)) {
-		ppl7::WideString ss;
-		ss.set(search);
-		s.replace(ss, replace);
-	}
-}
-
-void CWmClient::NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term)
-{
-	wchar_t* buffer;
-	std::map<wchar_t, wchar_t>::const_iterator it;
-	size_t ss=term.size();
-	size_t target=0;
-	buffer=(wchar_t*)term.getPtr();
-	wchar_t c;
-	for (size_t i=0;i < ss;i++) {
-		c=buffer[i];
-		if (c < L'A' || c>L'z' || (c > L'Z' && c < L'a')) {
-			it=letters.find(c);
-			if (it != letters.end()) {
-				if (it->second != (wchar_t)0) {
-					buffer[target++]=it->second;
-				}
-			} else {
-				buffer[target++]=c;
-			}
-		} else {
-			buffer[target++]=c;
-		}
-	}
-	term.cut(target);
-}
-
-void CWmClient::NormalizeTerm(ppl7::String& term)
-{
-	if (term.isEmpty()) return;
-	ppl7::WideString s=term;
-	ppl7::WideString search, replace;
-	s.lowerCase();
-	replace.set(L" ");
-	ReplaceIfExists(s, L" versus ", replace);
-	ReplaceIfExists(s, L" pres. ", replace);
-	ReplaceIfExists(s, L" presents ", replace);
-	ReplaceIfExists(s, L" vs. ", replace);
-	ReplaceIfExists(s, L" vs ", replace);
-	ReplaceIfExists(s, L" ft. ", replace);
-	ReplaceIfExists(s, L" ft ", replace);
-	ReplaceIfExists(s, L" feat. ", replace);
-	ReplaceIfExists(s, L" featuring ", replace);
-	ReplaceIfExists(s, L" und ", replace);
-	ReplaceIfExists(s, L" and ", replace);
-	ReplaceIfExists(s, L" - ", replace);
-	ReplaceIfExists(s, L" x ", replace);
-	ReplaceIfExists(s, L" with ", replace);
-	ReplaceIfExists(s, L" /\\ ", replace);
-	ReplaceIfExists(s, L"DJ ", replace);
-	ReplaceIfExists(s, L" ", replace);		// U+00A0, c2 a0, NO-BREAK SPACE
-	s.trim();
-	s.replace(L"  ", L" ");
-	NormalizeLetters(letterReplacements, s);
-	term=s;
-}
-
-int CWmClient::GetWords(const ppl7::String& str, ppl7::Array& words)
-{
-	words.clear();
-	ppl7::String s=str;
-	s.trim();
-	if (s.isEmpty()) return 0;
-	// Bestimmte Zeichen filtern wir raus
-	NormalizeTerm(s);
-	words.explode(s, " ", 0, true);
 	return 1;
 }
 

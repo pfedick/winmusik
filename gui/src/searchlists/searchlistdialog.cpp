@@ -650,7 +650,7 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 	}
 	s.lowerCase();
 	ppl7::Array searchwords;
-	if (!wm->GetWords(s, searchwords)) return;
+	if (!wm->normalizer.GetWords(s, searchwords)) return;
 
 	ClipBoardTimer.stop();
 	SearchlistTreeItem* item;
@@ -660,7 +660,7 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 			s=item->Track.Artist + " " + item->Track.Title;
 			s.lowerCase();
 			ppl7::Array words;
-			if (wm->GetWords(s, words)) {
+			if (wm->normalizer.GetWords(s, words)) {
 				if (matchWords(searchwords, words) > 70) ui.trackList->setCurrentItem(item);
 			}
 		}

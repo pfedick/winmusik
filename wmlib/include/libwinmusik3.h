@@ -39,7 +39,6 @@ namespace winmusik {
 class CProgressUpdate
 {
 public:
-	virtual ~CProgressUpdate()=0;
 	virtual void ProgressUpdate(int progress)=0;
 };
 

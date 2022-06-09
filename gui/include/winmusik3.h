@@ -148,7 +148,6 @@ public:
 	ppl7::String	RecordingDevice;
 	ppl7::ByteArray	Cover;
 
-	TrackInfo();
 	void clear();
 
 };
@@ -398,7 +397,6 @@ private:
 	void* CoverViewerWindow;
 
 	QDate					LatestPurchaseDate;
-	de::pfp::winmusik::WMNormalizer normalizer;
 
 
 public:
@@ -423,6 +421,7 @@ public:
 	CHashes					Hashes;
 
 	de::pfp::winmusik::MusicalKeys MusicKeys;
+	de::pfp::winmusik::WMNormalizer normalizer;
 
 	CWmClient();
 	~CWmClient();
@@ -518,10 +517,6 @@ public:
 	int PrintMP3Cover(QWidget* parent, int DeviceType, uint32_t start, uint32_t end);
 	int PrintTracklist(QWidget* parent, int DeviceType, uint32_t start, uint32_t end);
 
-
-	void NormalizeTerm(ppl7::String& term);
-	void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term);
-	int GetWords(const ppl7::String& str, ppl7::Array& words);
 
 };
 

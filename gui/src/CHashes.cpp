@@ -211,19 +211,19 @@ int CHashes::AddTitleInternal(uint32_t TitleId, const DataTitle* title)
 	ppl7::Array words;
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
-	if (wm->GetWords(title->Artist, words)) {
+	if (wm->normalizer.GetWords(title->Artist, words)) {
 		AddWords(Artist, words, title);
 		//AddWords(Global,words,title);
 	}
-	if (wm->GetWords(title->Title, words)) {
+	if (wm->normalizer.GetWords(title->Title, words)) {
 		AddWords(Title, words, title);
 		//AddWords(Global,words,title);
 	}
-	if (wm->GetWords(title->Album, words)) {
+	if (wm->normalizer.GetWords(title->Album, words)) {
 		AddWords(Album, words, title);
 		//AddWords(Global,words,title);
 	}
-	if (wm->GetWords(title->Remarks, words)) {
+	if (wm->normalizer.GetWords(title->Remarks, words)) {
 		AddWords(Remarks, words, title);
 		//AddWords(Global,words,title);
 	}
@@ -237,14 +237,14 @@ int CHashes::AddTitleInternal(uint32_t TitleId, const DataTitle* title)
 	const char* tmp;
 	tmp=wm->GetVersionText(title->VersionId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			AddWords(Version, words, title);
 			//AddWords(Global,words,title);
 		}
 	}
 	tmp=wm->GetGenreText(title->GenreId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			AddWords(Genre, words, title);
 			//AddWords(Global,words,title);
 		}
@@ -252,7 +252,7 @@ int CHashes::AddTitleInternal(uint32_t TitleId, const DataTitle* title)
 	}
 	tmp=wm->GetLabelText(title->LabelId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			AddWords(Label, words, title);
 			//AddWords(Global,words,title);
 		}
@@ -290,16 +290,16 @@ int CHashes::RemoveTitle(uint32_t TitleId, const DataTitle* title)
 	if (!title) title=wm->GetTitle(TitleId);
 	if (!title) return 0;
 	Mutex.lock();
-	if (wm->GetWords(title->Artist, words)) {
+	if (wm->normalizer.GetWords(title->Artist, words)) {
 		RemoveWords(Artist, words, title);
 	}
-	if (wm->GetWords(title->Title, words)) {
+	if (wm->normalizer.GetWords(title->Title, words)) {
 		RemoveWords(Title, words, title);
 	}
-	if (wm->GetWords(title->Album, words)) {
+	if (wm->normalizer.GetWords(title->Album, words)) {
 		RemoveWords(Album, words, title);
 	}
-	if (wm->GetWords(title->Remarks, words)) {
+	if (wm->normalizer.GetWords(title->Remarks, words)) {
 		RemoveWords(Remarks, words, title);
 	}
 
@@ -312,19 +312,19 @@ int CHashes::RemoveTitle(uint32_t TitleId, const DataTitle* title)
 	const char* tmp;
 	tmp=wm->GetVersionText(title->VersionId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			RemoveWords(Version, words, title);
 		}
 	}
 	tmp=wm->GetLabelText(title->LabelId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			RemoveWords(Label, words, title);
 		}
 	}
 	tmp=wm->GetGenreText(title->GenreId);
 	if (tmp) {
-		if (wm->GetWords(tmp, words)) {
+		if (wm->normalizer.GetWords(tmp, words)) {
 			RemoveWords(Genre, words, title);
 		}
 		MyTags.appendf("%s;", tmp);
@@ -391,8 +391,8 @@ int CHashes::Find(const ppl7::String& Artist, const ppl7::String& Title, TitleTr
 	// Zuerst die Wortlisten erstellen
 	ppl7::Array WordsArtist;
 	ppl7::Array WordsTitle;
-	wm->GetWords(Artist, WordsArtist);
-	wm->GetWords(Title, WordsTitle);
+	wm->normalizer.GetWords(Artist, WordsArtist);
+	wm->normalizer.GetWords(Title, WordsTitle);
 	if (WordsArtist.size() == 0 && WordsTitle.size() == 0) {
 		//ppl6::SetError(20028);
 		return 0;
@@ -432,11 +432,11 @@ int CHashes::Find(const ppl7::String& Artist, const ppl7::String& Title, const p
 	ppl7::Array WordsGenre;
 	ppl7::Array WordsTags;
 	ppl7::Array WordsLabel;
-	wm->GetWords(Artist, WordsArtist);
-	wm->GetWords(Title, WordsTitle);
-	wm->GetWords(Version, WordsVersion);
-	wm->GetWords(Label, WordsLabel);
-	wm->GetWords(Genre, WordsGenre);
+	wm->normalizer.GetWords(Artist, WordsArtist);
+	wm->normalizer.GetWords(Title, WordsTitle);
+	wm->normalizer.GetWords(Version, WordsVersion);
+	wm->normalizer.GetWords(Label, WordsLabel);
+	wm->normalizer.GetWords(Genre, WordsGenre);
 	GetTags(Tags, WordsTags);
 	if (WordsArtist.size() == 0
 		&& WordsTitle.size() == 0
@@ -530,7 +530,7 @@ int CHashes::FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags,
 	if (log) log->printf(ppl7::Logger::DEBUG, 10, "CHashes", "FindGlobal", __FILE__, __LINE__, "Query=%s", (const char*)Query);
 	// Zuerst die Wortliste erstellen
 	ppl7::Array WordsQuery;
-	wm->GetWords(Query, WordsQuery);
+	wm->normalizer.GetWords(Query, WordsQuery);
 	/*
 	if (WordsQuery.Num()==0) {
 		ppl6::SetError(20028);

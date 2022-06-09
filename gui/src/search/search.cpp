@@ -1200,7 +1200,7 @@ void Search::on_ClipBoardTimer_update()
 		s.pregReplace("/\\(.*?\\)/", "");
 		//printf ("NO RegExpMatch: %s\n",(const char*)s);
 	}
-	wm->NormalizeTerm(s);
+	wm->normalizer.NormalizeTerm(s);
 	ClipBoardTimer.stop();
 	//printf ("Update\n");
 
@@ -1223,7 +1223,7 @@ void Search::on_hardDiskSearchButton_clicked()
 {
 	if (wm->conf.DirectorySearch.size() == 0) return;
 	ppl7::String Query=ui.query_harddisk->text();
-	wm->NormalizeTerm(Query);
+	wm->normalizer.NormalizeTerm(Query);
 
 	QTreeWidgetItem* item=new QTreeWidgetItem;
 
@@ -1278,7 +1278,7 @@ void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 				RecursiveDirSearch(search, entry.File);
 		} else if (entry.isFile()) {
 			File=entry.Filename;
-			wm->NormalizeTerm(File);
+			wm->normalizer.NormalizeTerm(File);
 			// Wir prüfen, ob jedes Suchwort im Filenamen auftaucht
 			bool match=true;
 			for (size_t i=0;i < search.size();i++) {

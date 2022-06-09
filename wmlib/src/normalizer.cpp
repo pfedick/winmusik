@@ -167,6 +167,16 @@ void WMNormalizer::NormalizeTerm(ppl7::String& term) const
 	term=s;
 }
 
+void WMNormalizer::NormalizeFilename(ppl7::String& term) const
+{
+	if (term.isEmpty()) return;
+	ppl7::WideString s=term;
+	s.replace(L"ß", L"ss");
+	s.trim();
+	NormalizeLetters(filenameLetterReplacements, s);
+	term=s;
+}
+
 size_t WMNormalizer::GetWords(const ppl7::String& str, ppl7::Array& words) const
 {
 	words.clear();
