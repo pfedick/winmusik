@@ -436,6 +436,8 @@ public:
 	void InitLogging();
 	void UpdateMenue();
 
+	ppl7::String GetWmVersion() const;
+
 	bool isValidDataPath(const ppl7::String& Path);
 
 	void CloseDatabase();

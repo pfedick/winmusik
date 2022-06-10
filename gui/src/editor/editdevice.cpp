@@ -33,9 +33,9 @@ EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, u_int32_t Device
 	ppl7::String Tmp, Subject;
 
 	if (Device.DeviceId) {
-		Tmp=tr("Edit Device:");
+		Tmp=wm->GetWmVersion() + " - " + ppl7::String(tr("Edit Device:"));
 	} else {
-		Tmp=tr("New Device:");
+		Tmp=wm->GetWmVersion() + " - " + ppl7::String(tr("New Device:"));
 	}
 	Tmp+=" ";
 	Tmp+=wm->GetDeviceName(DeviceType);
@@ -78,8 +78,8 @@ EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, u_int32_t Device
 	// Device laden
 	if (wm->DeviceStore.Exists(DeviceType, DeviceId)) {
 		Device=wm->DeviceStore.Get(DeviceType, DeviceId);
-		if (Device.Title) ui.title->setText(Device.Title);
-		if (Device.SubTitle) ui.subTitle->setText(Device.SubTitle);
+		if (Device.Title.notEmpty()) ui.title->setText(Device.Title);
+		if (Device.SubTitle.notEmpty()) ui.subTitle->setText(Device.SubTitle);
 		ui.pages->setValue(Device.Pages);
 		Label.SetId(Device.LabelId);
 		PurchaseSource.SetId(Device.PurchaseId);

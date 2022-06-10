@@ -1264,3 +1264,11 @@ void CWmClient::UnRegisterWindow(WindowType type, QWidget* widget)
 	Mutex.unlock();
 
 }
+
+ppl7::String CWmClient::GetWmVersion() const
+{
+	ppl7::String Tmp=tr("WinMusik %v%");
+	Tmp.replace("%v%", WM_VERSION);
+	return Tmp;
+
+}

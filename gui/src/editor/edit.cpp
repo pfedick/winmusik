@@ -245,33 +245,34 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	ui.deviceIcon->setIcon(wm->GetDeviceIcon(typ));
 	setWindowIcon(wm->GetDeviceIcon(typ));
 
+	QString WmTitle=wm->GetWmVersion() + " - ";
 	switch (typ) {
 	case 1:	// Cassette
-		setWindowTitle(tr("Edit Music Cassette"));
+		setWindowTitle(WmTitle + tr("Edit Music Cassette"));
 		break;
 	case 2:	// CD
-		setWindowTitle(tr("Edit Audio CD"));
+		setWindowTitle(WmTitle + tr("Edit Audio CD"));
 		break;
 	case 3:	// Data CD
-		setWindowTitle(tr("Edit Data CD"));
+		setWindowTitle(WmTitle + tr("Edit Data CD"));
 		break;
 	case 4:	// Vinyl Record
-		setWindowTitle(tr("Edit Vinyl Record"));
+		setWindowTitle(WmTitle + tr("Edit Vinyl Record"));
 		break;
 	case 5:	// VHS
-		setWindowTitle(tr("Edit Video Tape"));
+		setWindowTitle(WmTitle + tr("Edit Video Tape"));
 		break;
 	case 6:	// Other
-		setWindowTitle(tr("Edit Other Media Type"));
+		setWindowTitle(WmTitle + tr("Edit Other Media Type"));
 		break;
 	case 7:	// MP3
-		setWindowTitle(tr("Edit MP3 CD"));
+		setWindowTitle(WmTitle + tr("Edit MP3 CD"));
 		break;
 	case 8:	// Tape
-		setWindowTitle(tr("Edit Music Tape"));
+		setWindowTitle(WmTitle + tr("Edit Music Tape"));
 		break;
 	case 9:	// DVD
-		setWindowTitle(tr("Edit Audio DVD"));
+		setWindowTitle(WmTitle + tr("Edit Audio DVD"));
 		break;
 	}
 

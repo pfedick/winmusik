@@ -107,8 +107,8 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 			Tmp.setf("%5i", d.DeviceId);
 			item->setText(0, Tmp);
 			Tmp.clear();
-			if (d.Title) Tmp=d.Title;
-			if (d.SubTitle) {
+			if (d.Title.notEmpty()) Tmp=d.Title;
+			if (d.SubTitle.notEmpty()) {
 				if (Tmp.notEmpty()) Tmp+=", ";
 				Tmp+=d.SubTitle;
 			}

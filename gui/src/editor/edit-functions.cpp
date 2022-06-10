@@ -65,7 +65,9 @@ void Edit::UpdateDevice()
 	Tmp.setf("%0i:%02i", (int)(datadevice.Recorded / 60), datadevice.Recorded % 60);
 	ui.deviceRecorded->setText(Tmp);
 
-	Tmp.setf("%s\n%s", (datadevice.Title ? datadevice.Title : ""), (datadevice.SubTitle ? datadevice.SubTitle : ""));
+	Tmp.setf("%s\n%s",
+		(datadevice.Title.notEmpty() ? (const char*)datadevice.Title : ""),
+		(datadevice.SubTitle.notEmpty() ? (const char*)datadevice.SubTitle : ""));
 	ui.deviceTitle->setText(Tmp);
 	if (ui.page->text().toInt() > datadevice.Pages) {
 		Tmp="1";

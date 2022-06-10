@@ -417,8 +417,6 @@ void CDeviceStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
-	// die alle Datensätze löscht.
 	Tree.clear();
 }
 
