@@ -228,7 +228,6 @@ void CWmClient::InitStorage()
 	Storage.RegisterStorageClass(&ShortcutStore);
 	Storage.RegisterStorageClass(&TrackStore);
 	Storage.RegisterStorageClass(&DeviceStore);
-	//Storage.RegisterStorageClass(&OimpDataStore);
 }
 
 int CWmClient::SelectLanguage()
@@ -1154,7 +1153,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-}
+	}
 #else
 	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),
@@ -1168,7 +1167,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 	system((const char*)cmd);
 #endif
 	return 1;
-}
+	}
 
 int CWmClient::TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {

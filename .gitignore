@@ -58,3 +58,4 @@
 /.vscode/
 wmlib/tests/tmp/
 wmlib/tests/src/tmp/
+valgrind.log

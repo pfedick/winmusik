@@ -403,7 +403,6 @@ public:
 	Config conf;
 
 	// Storage
-	CStorage				Storage;
 	CTitleStore				TitleStore;
 	CVersionStore			VersionStore;
 	CRecordSourceStore		RecordSourceStore;
@@ -414,7 +413,7 @@ public:
 	CShortcutStore			ShortcutStore;
 	CTrackStore				TrackStore;
 	CDeviceStore			DeviceStore;
-	//COimpDataStore			OimpDataStore;
+	CStorage				Storage;
 
 	de::pfp::winmusik::CID3TagSaver		ID3TagSaver;
 	RegularExpressionCapture	RegExpCapture;
@@ -442,7 +441,6 @@ public:
 
 	void CloseDatabase();
 	int LoadDatabase();
-	int ImportDatabaseWM20();
 	int CreateInitialDatabase();
 
 	void MainMenueClosed();

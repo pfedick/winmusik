@@ -109,6 +109,45 @@ TEST_F(StorageTest, loadDatabase) {
 	ASSERT_EQ((uint32_t)2,
 		static_cast<CShortcutStore&>(storage.GetStorageClass("SHRT")).Size());
 
+	storage.DeleteDatabase();
+
+
+
+}
+
+TEST_F(StorageTest, loadRealDatabase) {
+	CTitleStore titlestore;
+	CDeviceStore devicestore;
+	CTrackStore trackstore;
+	CShortcutStore shortcutstore;
+	CVersionStore versionstore;
+	CRecordSourceStore recordsourcestore;
+	CLabelStore labelstore;
+	CPurchaseSourceStore purchasesourcestore;
+	CRecordDeviceStore recorddevicestore;
+	CGenreStore genrestore;
+	CStorage storage;
+
+	storage.RegisterStorageClass(&titlestore);
+	storage.RegisterStorageClass(&devicestore);
+	storage.RegisterStorageClass(&trackstore);
+	storage.RegisterStorageClass(&shortcutstore);
+	storage.RegisterStorageClass(&versionstore);
+	storage.RegisterStorageClass(&recordsourcestore);
+	storage.RegisterStorageClass(&labelstore);
+	storage.RegisterStorageClass(&purchasesourcestore);
+	storage.RegisterStorageClass(&recorddevicestore);
+	storage.RegisterStorageClass(&genrestore);
+
+
+	if (ppl7::File::exists("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat")) {
+
+		ppl7::File::copy("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat", "tmp/loadtest.dat");
+		storage.Init("tmp", "loadtest.dat");
+		storage.LoadDatabase();
+		storage.DeleteDatabase();
+	}
+
 
 
 }
