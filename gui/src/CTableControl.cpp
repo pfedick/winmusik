@@ -120,7 +120,7 @@ void CTableControl::UpdateText()
 		//textWidget->setText(wm->Unknown());
 		textWidget->setText("");
 	} else {
-		if (item->Value) textWidget->setText(item->Value);
+		if (item->Value.notEmpty()) textWidget->setText(item->Value);
 		else textWidget->setText("");
 	}
 }
@@ -161,7 +161,7 @@ bool CTableControl::on_Text_FocusIn(int reason)
 	if (id > 0 || Value == "*") {
 		if (id > 0) item=store->GetPtr(id);
 		// Falls mit der Maus reingeklickt wurde, ist es egal
-		if (reason == Qt::MouseFocusReason || Value == "*" || (id > 0 && (item == NULL || item->Value == NULL))) {
+		if (reason == Qt::MouseFocusReason || Value == "*" || (id > 0 && (item == NULL || item->Value.isEmpty()))) {
 			if (item == 0 && Value != "*") textWidget->setText("");
 			textWidget->deselect();
 			textWidget->selectAll();
@@ -248,7 +248,7 @@ int CTableControl::Finish()
 	}
 	Value=textWidget->text();
 	Value.trim();
-	if (Value.isEmpty() == 1 || ID != "*") {
+	if (Value.isEmpty() == true || ID != "*") {
 		idWidget->setText("0");
 		return 1;
 	}
