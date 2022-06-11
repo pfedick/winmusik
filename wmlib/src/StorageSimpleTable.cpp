@@ -383,6 +383,7 @@ CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 		if (!TableIndex[id]) {
 			throw ppl7::OutOfMemoryException();
 		}
+		TableIndex[id]->CopyStorageFrom(t);
 		size++;
 	}
 	if (id > highestId) highestId=id;

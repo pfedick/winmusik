@@ -773,6 +773,7 @@ DataTitle* CTitleStore::SaveToMemory(const DataTitle& title)
 		if (!TitleIndex[id]) {
 			throw ppl7::OutOfMemoryException();
 		}
+		TitleIndex[id]->CopyStorageFrom(title);
 		size++;
 	} else {
 		RemoveArtist(TitleIndex[id]->Artist);
@@ -860,6 +861,7 @@ void CTitleStore::LoadChunk(const CWMFileChunk& chunk)
 	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
 	data.Import(bin, chunk.GetFormatVersion());
 	data.CopyStorageFrom(chunk);
+	printf("version=%d\n", data.GetVersion());
 	SaveToMemory(data);
 }
 
