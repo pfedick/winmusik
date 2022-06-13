@@ -779,7 +779,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	}
 
 	// Music Key
-	ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(Ti.Key, musicKeyDisplay)));
+	ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(info.Ti.Key, musicKeyDisplay)));
 
 	if (info.Version.isEmpty()) {			// Version
 		if (info.Ti.Length < 5 * 60) {
