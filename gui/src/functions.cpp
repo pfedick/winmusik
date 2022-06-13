@@ -189,7 +189,8 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 	info.Ti.SetAlbum(Tmp);
 
 	// POPM
-	info.Ti.Rating=Tag.getPopularimeter("winmusik@pfp.de") * 5 / 255;
+	info.Ti.Rating=(int)Tag.getPopularimeter("winmusik@pfp.de") * 5 / 255;
+	if (!info.Ti.Rating) info.Ti.Rating=(int)Tag.getPopularimeter() * 5 / 255;
 	if (info.Ti.Rating > 0) info.Ti.Rating+=1;
 
 	// BPM
@@ -347,7 +348,6 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
 bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version)
 {
 	ppl7::DirEntry de;
-	//printf ("getTrackInfoFromFile: %s\n",(const char*)Filename);
 	if (ppl7::File::stat(Filename, de)) {
 		info.Ti.Size=de.Size;
 	} else return false;

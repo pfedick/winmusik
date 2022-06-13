@@ -777,6 +777,10 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
 	if (info.Ti.EnergyLevel > 0) {			// EnergyLevel
 		ui.energyLevel->setValue(info.Ti.EnergyLevel);
 	}
+	if (info.Ti.Rating > 0) {			// Rating
+		ui.rating->setCurrentIndex(info.Ti.Rating);
+	}
+
 
 	// Music Key
 	ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(info.Ti.Key, musicKeyDisplay)));
