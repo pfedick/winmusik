@@ -4,10 +4,17 @@
 
 Version 3.7.0
     - pplib (ppl7) is now included as git submodule
-    - replaced ppl6 with ppl7
-    - use wmlib (traktor tag-reader, ID3TagSaver)
+    - upgraded code from ppl6 to ppl7 and removed ppl6
+    - moved some componentes from gui to library:
+      - traktor tag-reader
+      - ID3TagSaver
+      - Storage and in memory database
+    - completely refactored in memory database
+    - speed up loading time of database a bit
     - removed import from WinMusik 2.x.
     - refactored configure and Makefile
+    - removed storing of original ID3-Tags on file import
+      (wmoimp.dat is not used anymore)
 
     Known issues:
       - import from Audio-CD crashes
