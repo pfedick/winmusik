@@ -1799,6 +1799,8 @@ bool Edit::on_f7_DeleteTrack()
 				trackList->scrollToItem(w);
 			}
 			ClearEditFields();
+			ui.titleEdit->setEnabled(true);
+			ui.track->setFocus();
 			ui.artist->setFocus();
 		}
 	}
