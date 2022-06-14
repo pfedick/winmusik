@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.4 $
- * $Date: 2011/05/15 10:55:57 $
- * $Id: main.cpp,v 1.4 2011/05/15 10:55:57 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,40 +33,39 @@
 #include <Python.h>
 #endif
 
-ppl6::CLog *wmlog=NULL;
+ppl7::Logger* wmlog=NULL;
 
 void help()
 {
-	printf ("%s, Version %s\n",WM_APPNAME,WM_VERSION);
-	printf ("\nCommandline options:\n"
-			"  -h | --help   Show this help\n"
-			"  -c FILE       Alternative configfile\n"
-			);
+    printf("%s, Version %s\n", WM_APPNAME, WM_VERSION);
+    printf("\nCommandline options:\n"
+        "  -h | --help   Show this help\n"
+        "  -c FILE       Alternative configfile\n"
+    );
 }
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     //printf ("DEBUG\n");
-    ppl6::PPLInit();
     //ppl6::grafix::CGrafix gfx;
-	if (ppl6::getargv(argc,argv,"-h")!=NULL || ppl6::getargv(argc,argv,"--help")!=NULL) {
-		help();
-		return 0;
-	}
+    if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
+        help();
+        return 0;
+    }
 
     QApplication a(argc, argv);
 
 #ifdef Q_OS_WIN
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",QSettings::NativeFormat);
-    if(settings.value("AppsUseLightTheme")==0){
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+    if (settings.value("AppsUseLightTheme") == 0) {
         qApp->setStyle(QStyleFactory::create("Fusion"));
         QPalette darkPalette;
-        QColor darkColor = QColor(45,45,45);
-        QColor disabledColor = QColor(127,127,127);
+        QColor darkColor = QColor(45, 45, 45);
+        QColor disabledColor = QColor(127, 127, 127);
         darkPalette.setColor(QPalette::Window, darkColor);
         darkPalette.setColor(QPalette::WindowText, Qt::white);
-        darkPalette.setColor(QPalette::Base, QColor(18,18,18));
+        darkPalette.setColor(QPalette::Base, QColor(18, 18, 18));
         darkPalette.setColor(QPalette::AlternateBase, darkColor);
         darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
         darkPalette.setColor(QPalette::ToolTipText, Qt::white);
@@ -96,17 +89,17 @@ int main(int argc, char *argv[])
 
     // Deprecated in Qt5, Qt5 geht davon aus, dass der Sourcecode UTF-8 kodiert ist
 #if QT_VERSION < 0x050000
-    	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-    	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
-    if (setlocale(LC_CTYPE,"")==NULL) {
-		printf ("setlocale fehlgeschlagen\n");
-		throw std::exception();
+    if (setlocale(LC_CTYPE, "") == NULL) {
+        printf("setlocale fehlgeschlagen\n");
+        throw std::exception();
     }
-    if (setlocale(LC_NUMERIC,"C")==NULL) {
-		printf ("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
-		throw std::exception();
+    if (setlocale(LC_NUMERIC, "C") == NULL) {
+        printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
+        throw std::exception();
     }
     //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
 #ifdef HAVE_PYTHON
@@ -115,26 +108,16 @@ int main(int argc, char *argv[])
 
 
     CWmClient Client;
-    if (!Client.Init(argc,argv,&a)) {
-    	Client.RaiseError();
-#ifdef HAVE_PYTHON
-    	Py_Finalize();
-#endif
-    	return 1;
+    try {
+        Client.Init(argc, argv, &a);
+    } catch (const ppl7::Exception& exp) {
+        ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
+        return 1;
     }
     if (!Client.Start()) {
-    	if (ppl6::GetErrorCode()>0) {
-    		Client.RaiseError();
-    	}
-#ifdef HAVE_PYTHON
-    	Py_Finalize();
-#endif
-    	return 1;
+        return 1;
     }
     a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
     int ret=a.exec();
-#ifdef HAVE_PYTHON
-    Py_Finalize();
-#endif
     return ret;
 }

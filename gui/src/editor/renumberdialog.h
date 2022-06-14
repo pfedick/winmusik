@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: shortcutdialog.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2014 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +18,7 @@
  */
 
 
+
 #ifndef RENUMBERDIALOG_H_
 #define RENUMBERDIALOG_H_
 
@@ -36,7 +31,7 @@ class RenumberDialog : public QDialog
     Q_OBJECT
 
 public:
-    RenumberDialog(QWidget *parent = 0, CWmClient *wm = NULL);
+    RenumberDialog(QWidget* parent = 0, CWmClient* wm = NULL);
     ~RenumberDialog();
 
     void setOldNumber(int number);
@@ -44,17 +39,17 @@ public:
     int getOldNumber() const;
     int getNewNumber() const;
 
-    bool isTargetPathUsable(ppluint8 DeviceType, ppluint32 newDeviceId) const;
-    bool isTargetDeviceFree(ppluint8 DeviceType, ppluint32 newDeviceId) const;
+    bool isTargetPathUsable(u_int8_t DeviceType, u_int32_t newDeviceId) const;
+    bool isTargetDeviceFree(u_int8_t DeviceType, u_int32_t newDeviceId) const;
 
 private:
     Ui::RenumberDialogClass ui;
-    CWmClient *wm;
+    CWmClient* wm;
 
 public slots:
 
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 

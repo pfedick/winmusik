@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: tablecontrol.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,37 +30,37 @@ class CTableControl
 {
 	Q_DECLARE_TR_FUNCTIONS(CTableControl)
 
-	private:
-		QLineEdit	*idWidget;
-		QLineEdit	*textWidget;
-		QWidget		*nextWidget;
-		CTableStore *store;
-		QWidget		*window;
-		CWmClient	*wm;
-		int			oldposition, position;
-		bool		skipFocusOut;
+private:
+	QLineEdit* idWidget;
+	QLineEdit* textWidget;
+	QWidget* nextWidget;
+	CTableStore* store;
+	QWidget* window;
+	CWmClient* wm;
+	int			oldposition, position;
+	bool		skipFocusOut;
 
-	    bool on_Id_FocusIn();
-	    bool on_Id_KeyPress(QKeyEvent *event,int key,int modifier);
-	    bool on_Id_KeyRelease(QKeyEvent *event,int key,int modifier);
-	    bool on_Text_FocusOut();
-	    bool on_Text_FocusIn(int reason);
-	    void UpdateText();
+	bool on_Id_FocusIn();
+	bool on_Id_KeyPress(QKeyEvent* event, int key, int modifier);
+	bool on_Id_KeyRelease(QKeyEvent* event, int key, int modifier);
+	bool on_Text_FocusOut();
+	bool on_Text_FocusIn(int reason);
+	void UpdateText();
 
-	public:
-		QString Title;
-		CTableControl();
-		void SetWindow(QWidget *window);
-		void SetCWmClient(CWmClient *wm);
-		void SetIdWidget(QLineEdit *widget);
-		void SetTextWidget(QLineEdit *widget);
-		void SetNextWidget(QWidget *widget);
-		void SetStore(CTableStore *store);
-		void Init(QWidget *window, CWmClient *wm, QLineEdit *id, QLineEdit *text, CTableStore *store);
-		bool ConsumeEvent(QObject *target, QEvent *event, int oldpos, int newpos);
+public:
+	QString Title;
+	CTableControl();
+	void SetWindow(QWidget* window);
+	void SetCWmClient(CWmClient* wm);
+	void SetIdWidget(QLineEdit* widget);
+	void SetTextWidget(QLineEdit* widget);
+	void SetNextWidget(QWidget* widget);
+	void SetStore(CTableStore* store);
+	void Init(QWidget* window, CWmClient* wm, QLineEdit* id, QLineEdit* text, CTableStore* store);
+	bool ConsumeEvent(QObject* target, QEvent* event, int oldpos, int newpos);
 
-		void SetId(ppluint32 id);
-		int Finish();
+	void SetId(uint32_t id);
+	int Finish();
 
 };
 

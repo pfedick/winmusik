@@ -2,6 +2,23 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.7.0
+    - pplib (ppl7) is now included as git submodule
+    - upgraded code from ppl6 to ppl7 and removed ppl6
+    - moved some componentes from gui to library:
+      - traktor tag-reader
+      - ID3TagSaver
+      - Storage and in memory database
+    - completely refactored in memory database
+    - speed up loading time of database a bit
+    - removed import from WinMusik 2.x.
+    - refactored configure and Makefile
+    - removed storing of original ID3-Tags on file import
+      (wmoimp.dat is not used anymore)
+
+    Known issues:
+      - import from Audio-CD crashes
+
 Version 3.6.1
 	- Added Bitrate-row in search result
 	- Added Bitrate-row in editor
@@ -11,7 +28,7 @@ Version 3.6.1
     - implemented drag'n'drop of files into search
     - Playlist: key modification is stored as value and show in playlist
     - runtime of playlist is show as hh:mm:ss instead of mmmm:ss for better readability
-	
+
 Version 3.6.0, Releasedate: 02.08.2020 (Tag: REL_3_6_0)
     - Merged sourcecode from pplib 6 into WinMusik
     - added configure script
@@ -36,7 +53,7 @@ Version 3.5.2, Releasedate: 26.10.2019 (Tag: REL_3_5_2)
       - Bei Drag'n'Drop aus der Suchliste wird die Laufzeit des Tracks
         mit übernommen
       - added Qt::MetaModifier (aka Windows key) when Click on Titlelist
-        as alternative to Alt-Key to copy artist and title to clipboard  
+        as alternative to Alt-Key to copy artist and title to clipboard
       - RegExpCapture supports HTML
       - Reduced write operations on database when saving a track without any
         changes
@@ -107,9 +124,9 @@ Version 3.5.0, Releasedate: 21.01.2018 (Tag: REL_3_5_0)
       - Drag-/Drop aus einer Suchliste in den Editor implementiert
       - Klick auf Trackliste: Key-Modifier geändert. Statt Meta-Key
         (Windows-/Apfel-Taste) kann jetzt Shift oder Strg verwendet werden,
-        um nur Interpret und Titel in die Zwischenablage zu kopieren 
+        um nur Interpret und Titel in die Zwischenablage zu kopieren
       - F3 Anfangsbuchstaben gross machen: Tick (') wird nicht mehr als Word-
-        trenner erkannt      
+        trenner erkannt
     - Playlist:
       - Beim Suchen nach Dateien in der Playlist werden Pfade Lowercase
         betrachtet
@@ -128,13 +145,13 @@ Version 3.5.0, Releasedate: 21.01.2018 (Tag: REL_3_5_0)
         copied to clipboard
       - Klick auf Trackliste: Key-Modifier geändert. Statt Meta-Key
         (Windows-/Apfel-Taste) kann jetzt Shift oder Strg verwendet werden,
-        um nur Interpret und Titel in die Zwischenablage zu kopieren       
+        um nur Interpret und Titel in die Zwischenablage zu kopieren
     - Verschiedenes:
       - MingW64-/GCC-Update, Dependencies für Setup aktualisiert
       - Zeichenkombination "/\" wird als Trenner im Interpreten erkannt
       - removed unused variables
       - removed ppl6::grafix::CGrafix initialisation, because it is not used
-      - removed includes for ppl6-grafix.h      
+      - removed includes for ppl6-grafix.h
 
 Version 3.4.0, Releasedate: 25.12.2016 (Tag: REL_3_4_0)
     - Im Suchfilter kann nun auch die Tracklänge eingeschränkt werden,
@@ -148,7 +165,7 @@ Version 3.4.0, Releasedate: 25.12.2016 (Tag: REL_3_4_0)
     - Playlist, Track-Editor: markierte Traktor Cuepoints können nun auch
       Track-Start und -Ende zugewiesen werden.
     - Playlist, Track-Editor: Buttons sum setzen des Trackstarts auf 0:00,
-      bzw. Ende auf das Ende des Tracks  
+      bzw. Ende auf das Ende des Tracks
     - Editor: Dateien können nun per Drag'n'Drop in das WinMusik-Verzeichnis
       des ausgewählten Tonträgers kopiert und importiert werden.
     - Suchlisten: Tracks können nun per Drag'n'Drop zwischen mehreren
@@ -169,8 +186,8 @@ Version 3.3.1, Releasedate: 03.01.2015	(SVN-Tag: REL_3_3_1)
       wird jetzt wieder abgeschaltet, wenn man in eine andere Spalte klickt.
     - Laden von Playlists beschleunigt
     - Cover kann nun aus den Tracklisten im Editor und dem Suchergebnis in die
-      Zwischenablage kopiert werden 
-      
+      Zwischenablage kopiert werden
+
 
 Version 3.3.0, Releasedate: 13.07.2014	(SVN-Tag: REL_3_3_0)
     - Update auf Qt5
@@ -195,7 +212,7 @@ Version 3.3.0, Releasedate: 13.07.2014	(SVN-Tag: REL_3_3_0)
     - Bugfix im Editor: Nach dem Editieren/Import eines Titels wurde die
       Seite des Tonträgers immer auf "1" geändert, auch wenn man auf einer
       anderen Seite ist.
-    
+
 Version 3.2.1, Releasedate: 18.05.2014	(SVN-Tag: REL_3_2_1)
     - Bei Synchronisation von Tracks im Editor Kontextmenü werden nun auch
       Bitrate und Tracklänge synchronisiert
@@ -268,7 +285,7 @@ Version 3.2.0, Releasedate: 16.02.2014	(SVN-Tag: REL_3_2_0)
     - Schreiben von ID3-Tags kann nun deaktiviert werden
     - Anpassungen an Refakturierung von ppl6::CDir in Version > 6.4.18
     - Hauptmenue hat nun ein Suchfeld
-      
+
 Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
     - Laden der Datenbank wurde beschleunigt
     - Neues Datenfeld für Titel: Music-Key (initiale Tonart)
@@ -298,7 +315,7 @@ Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
 	  Installer nicht mit installiert. Dadurch wurden keine Plattencover ange-
 	  zeigt
 	- Im Suchergebnis kann jetzt die Bewertung eines Titels über das Kontext-
-	  menü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert werden	
+	  menü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert werden
 	- Suchliste: Die Bewertung eines Titels kann nun ebenfalls über das
 	  Kontextmenü mittels Rechtsklick in der Spalte "Bewertung" direkt geändert
 	  werden
@@ -327,7 +344,7 @@ Version 3.1.0, Releasedate: 05.11.2013	(SVN-Tag: REL_3_1_0)
 	  Konfigurationsdatei angegeben werden kann (nützlich zum Debuggen)
 	- Bugfix: Absturz beim ID3-Tag-Import von leeren MP3-Files behoben.
 	- Registrierungsinterface deaktiviert
-	  
+
 Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
 	- Umbenennung des Binaries von WinMusik3 in WinMusik
     - Filter für Schnellsuche über Zwischenablage
@@ -348,7 +365,7 @@ Version 3.0.6, Releasedate: 28.05.2012	(SVN-Tag: REL_3_0_6)
       Ist die Cover-Ansicht schon offen, genügt auch ein normaler Click.
     - Beim Öffnen des Editors ist der Edit-Bereich nun per Default nicht
       mehr sichtbar. Er kann per Button ein und ausgeschaltet werden.
-    
+
 Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Fkey-Leiste ist jetzt in einem eigenem Widget untergebracht und kann
 	  dadurch in anderen Dialogen wiederverwendet werden
@@ -360,7 +377,7 @@ Version 3.0.5, Releasedate: 19.02.2012	(CVS-Tag: REL_3_0_5)
 	- Track editieren ist jetzt in einem eigenen Widget untergebracht
 	- Titelbewertung wird jetzt in der Trackliste des Editors angezeigt und
 	  kann dort auch direkt per Mausklick geändert werden
-	- Titelbewertung wird im Suchergebnis angezeigt	
+	- Titelbewertung wird im Suchergebnis angezeigt
 
 Version 3.0.4, Releasedate: 30.10.2011	(CVS-Tag: REL_3_0_4)
 	- Im Suchergebnis wird jetzt die Gesamtlänge aller gefundenen

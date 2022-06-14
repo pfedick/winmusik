@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author$
- * $Revision$
- * $Date$
- * $Id$
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,17 +21,16 @@
 #include "winmusik3.h"
 #include "version.h"
 #include "menue.h"
-#include "search.h"
 #include "src/search/search.h"
 #include "src/properties/properties.h"
-#include "about.h"
+#include "src/about/about.h"
 #include "wmtoolbutton.h"
 
 
-Menue::Menue(QWidget *parent, CWmClient *client)
-    : QWidget(parent)
+Menue::Menue(QWidget* parent, CWmClient* client)
+	: QWidget(parent)
 {
-	setAttribute(Qt::WA_DeleteOnClose,true);
+	setAttribute(Qt::WA_DeleteOnClose, true);
 	ui.setupUi(this);
 	wm=client;
 	searchWindow=NULL;
@@ -47,7 +40,7 @@ Menue::Menue(QWidget *parent, CWmClient *client)
 	Title+=" ";
 	Title+=tr("build");
 	Title+=" ";
-	Title+=WM_SVN_REVISION;
+	Title+=WM_REVISION;
 
 	this->setWindowTitle(Title);
 	QByteArray r=wm->GetGeometry("menue");
@@ -84,13 +77,13 @@ void Menue::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void Menue::closeEvent(QCloseEvent *event)
+void Menue::closeEvent(QCloseEvent* event)
 {
 	if (wm) {
-		wm->SaveGeometry("menue",this->saveGeometry());
+		wm->SaveGeometry("menue", this->saveGeometry());
 		wm->MainMenueClosed();
 	}
-    QWidget::closeEvent(event);
+	QWidget::closeEvent(event);
 }
 
 void Menue::OpenEditDialog(int traeger)
@@ -120,7 +113,7 @@ void Menue::OpenSearchDialog()
 
 void Menue::OpenPropertiesDialog()
 {
-	Properties *w=new Properties(NULL, wm);
+	Properties* w=new Properties(NULL, wm);
 	//w->setWindowFlags(Qt::Dialog|Qt::CustomizeWindowHint|Qt::WindowTitleHint|Qt::WindowSystemMenuHint);
 	w->exec();
 
@@ -159,10 +152,10 @@ void Menue::OpenSearchlistDialog()
 
 void Menue::on_searchEdit_returnPressed()
 {
-	ppl6::CString words=ui.searchEdit->text();
-	words.Trim();
+	ppl7::String words=ui.searchEdit->text();
+	words.trim();
 	searchWindow=wm->OpenOrReuseSearch(searchWindow);
-	Search *win=(Search*)searchWindow;
+	Search* win=(Search*)searchWindow;
 	win->FastSearch(words);
 	ui.searchEdit->setFocus();
 }

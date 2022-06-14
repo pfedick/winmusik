@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.4 $
- * $Date: 2010/11/26 16:08:40 $
- * $Id: search.h,v 1.4 2010/11/26 16:08:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,81 +47,83 @@ class ResultFilter;
 
 class Search : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    friend class CSearchTrackList;
+		friend class CSearchTrackList;
 public:
-    Search(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~Search();
+	Search(QWidget* parent = 0, CWmClient* wm=NULL);
+	~Search();
 
-    //void StartSearch(const char *artist, const char *title);
-    void FastSearch(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString &Version=ppl6::CString(),const ppl6::CString &Genre=ppl6::CString(),const ppl6::CString &Tags=ppl6::CString(),const ppl6::CString &Label=ppl6::CString());
-    void FastSearch(const ppl6::CString &Words);
-    void ReloadTranslation();
+	//void StartSearch(const char *artist, const char *title);
+	void FastSearch(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String& Version=ppl7::String(), const ppl7::String& Genre=ppl7::String(), const ppl7::String& Tags=ppl7::String(), const ppl7::String& Label=ppl7::String());
+	void FastSearch(const ppl7::String& Words);
 
-    void DoSearch();
-    void Resize();
-    void show();
+	void DoSearch();
+	void Resize();
+	void show();
+
+protected:
+	void customEvent(QEvent* event);
 
 private:
-    Ui::searchClass ui;
-    CWmClient *wm;
-    int resultmode;
-    ppl6::CGenericList Results;
-    CSearchTrackList *trackList;
-    WMTreeItem *currentTrackListItem;
-    QPoint startPos;	// Für Drag/Drop und multiple Markierungen
-    char AllowedDevices[20];
+	Ui::searchClass ui;
+	CWmClient* wm;
+	int resultmode;
+	std::list<const DataTitle*> Results;
+	CSearchTrackList* trackList;
+	WMTreeItem* currentTrackListItem;
+	QPoint startPos;	// Für Drag/Drop und multiple Markierungen
+	char AllowedDevices[20];
 
-    QTimer		ClipBoardTimer;
-    ppl6::CString	LastClipboardString;
-    MusicKeyType	musicKeyDisplay;
+	QTimer		ClipBoardTimer;
+	ppl7::String	LastClipboardString;
+	MusicKeyType	musicKeyDisplay;
 
-    void PresentResults();
-    void SetupTrackList();
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    bool eventFilter(QObject *target, QEvent *event);
-    void closeEvent(QCloseEvent *event);
+	void PresentResults();
+	void SetupTrackList();
+	void resizeEvent(QResizeEvent* event);
+	void showEvent(QShowEvent* event);
+	bool eventFilter(QObject* target, QEvent* event);
+	void closeEvent(QCloseEvent* event);
 
-    void handleDropEvent(QDropEvent *event);
+	void handleDropEvent(QDropEvent* event);
 
-    bool on_trackList_MousePress(QMouseEvent *event);
-    bool on_trackList_MouseRelease(QMouseEvent *event);
-    bool on_trackList_MouseMove(QMouseEvent *event);
-    void CheckAllowedDevices();
+	bool on_trackList_MousePress(QMouseEvent* event);
+	bool on_trackList_MouseRelease(QMouseEvent* event);
+	bool on_trackList_MouseMove(QMouseEvent* event);
+	void CheckAllowedDevices();
 
-    void RecursiveDirSearch(ppl6::CArray &search, const ppl6::CString &dir);
-    void NormalizeTerm(ppl6::CString &term);
-    void DefaultTracklistHeader();
+	void RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir);
+	void NormalizeTerm(ppl7::String& term);
+	void DefaultTracklistHeader();
 
-    void FilterResult(const CHashes::TitleTree &in, ppl6::CGenericList &out);
-    void LimitResult(const ppl6::CGenericList &in, ppl6::CGenericList &out);
-    void RandomResult(const ppl6::CGenericList &in, ppl6::CGenericList &out, size_t num);
-    void SortResult(const ppl6::CGenericList &in, ppl6::CGenericList &out);
-    void rateCurrentTrack(int value);
+	void FilterResult(const CHashes::TitleTree& in, std::list<const DataTitle*>& out);
+	void LimitResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out);
+	void RandomResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out, size_t num);
+	void SortResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out);
+	void rateCurrentTrack(int value);
 
-    void updateTrackListing();
-    void renderTrack(WMTreeItem *item, DataTitle *ti);
-    void createSetMusicKeyContextMenu(QMenu *m);
+	void updateTrackListing();
+	void renderTrack(WMTreeItem* item, const  DataTitle* ti);
+	void createSetMusicKeyContextMenu(QMenu* m);
 
-    void configureFilter(ResultFilter &filter);
+	void configureFilter(ResultFilter& filter);
 
 
 
 public slots:
-    void on_searchButton_clicked();
-    void on_quicksearchButton_clicked();
-    void on_watchClipboard_toggled (bool checked);
-    void on_ClipBoardTimer_update();
-    void on_hardDiskSearchButton_clicked();
-    void on_watchClipboardHarddisk_toggled (bool checked);
+	void on_searchButton_clicked();
+	void on_quicksearchButton_clicked();
+	void on_watchClipboard_toggled(bool checked);
+	void on_ClipBoardTimer_update();
+	void on_hardDiskSearchButton_clicked();
+	void on_watchClipboardHarddisk_toggled(bool checked);
 
 
 
-	void on_trackList_customContextMenuRequested ( const QPoint & pos );
-	void on_trackList_itemClicked ( QTreeWidgetItem * item, int column);
-	void on_trackList_itemDoubleClicked ( QTreeWidgetItem * item, int column);
+	void on_trackList_customContextMenuRequested(const QPoint& pos);
+	void on_trackList_itemClicked(QTreeWidgetItem* item, int column);
+	void on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column);
 	void on_markAllButton_clicked();
 	void on_markNoneButton_clicked();
 
@@ -212,38 +208,38 @@ public slots:
 class CSearchTrackList : public QTreeWidget
 {
 	friend class Search;
-	private:
-		Search *search;
-		CWmClient *wm;
-		QPoint startPos;
+private:
+	Search* search;
+	CWmClient* wm;
+	QPoint startPos;
 
-	public:
-		CSearchTrackList(QWidget * parent = 0)
+public:
+	CSearchTrackList(QWidget* parent = 0)
 		: QTreeWidget(parent)
-		{
-			search=NULL;
-			wm=NULL;
-		}
+	{
+		search=NULL;
+		wm=NULL;
+	}
 
 
-	private:
-		//void mouseDoubleClickEvent ( QMouseEvent * event);
-		//void itemClicked ( QTreeWidgetItem * item, int column);
-		//void itemDoubleClicked ( QTreeWidgetItem * item, int column);
-		void mousePressEvent ( QMouseEvent * event ) {
-			search->on_trackList_MousePress(event);
-			QTreeWidget::mousePressEvent(event);
-		}
-		void mouseReleaseEvent ( QMouseEvent * event ) {
-			search->on_trackList_MouseRelease(event);
-			QTreeWidget::mouseReleaseEvent(event);
-		}
-		void mouseMoveEvent ( QMouseEvent * event ) {
-			search->on_trackList_MouseMove(event);
-		}
+private:
+	//void mouseDoubleClickEvent ( QMouseEvent * event);
+	//void itemClicked ( QTreeWidgetItem * item, int column);
+	//void itemDoubleClicked ( QTreeWidgetItem * item, int column);
+	void mousePressEvent(QMouseEvent* event) {
+		search->on_trackList_MousePress(event);
+		QTreeWidget::mousePressEvent(event);
+	}
+	void mouseReleaseEvent(QMouseEvent* event) {
+		search->on_trackList_MouseRelease(event);
+		QTreeWidget::mouseReleaseEvent(event);
+	}
+	void mouseMoveEvent(QMouseEvent* event) {
+		search->on_trackList_MouseMove(event);
+	}
 
-		//void contextMenuEvent(QContextMenuEvent *event);
-		//void customContextMenuRequested ( const QPoint & pos );
+	//void contextMenuEvent(QContextMenuEvent *event);
+	//void customContextMenuRequested ( const QPoint & pos );
 };
 
 #endif // SEARCH_H

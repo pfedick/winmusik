@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: tablesearch.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +18,13 @@
  */
 
 
+
 #include "winmusik3.h"
 #include "tablesearch.h"
 #include <QKeyEvent>
 
-TableSearch::TableSearch(QWidget *parent, CWmClient *client)
-    : QDialog(parent)
+TableSearch::TableSearch(QWidget* parent, CWmClient* client)
+	: QDialog(parent)
 {
 	wm=client;
 	ui.setupUi(this);
@@ -40,23 +35,23 @@ TableSearch::~TableSearch()
 
 }
 
-bool TableSearch::eventFilter(QObject *target, QEvent *event)
+bool TableSearch::eventFilter(QObject* target, QEvent* event)
 {
 	int type=event->type();
-	if (target==ui.search && type==QEvent::KeyPress) {
-		QKeyEvent *keyEvent=static_cast<QKeyEvent *>(event);
+	if (target == ui.search && type == QEvent::KeyPress) {
+		QKeyEvent* keyEvent=static_cast<QKeyEvent*>(event);
 		int key=keyEvent->key();
 		Qt::KeyboardModifiers modifier=keyEvent->modifiers();
-		if (key==Qt::Key_Return && modifier==Qt::ShiftModifier) {
+		if (key == Qt::Key_Return && modifier == Qt::ShiftModifier) {
 			done(ui.search->text().toInt());
 			return true;
 		}
 	}
-	return QWidget::eventFilter(target,event);
+	return QWidget::eventFilter(target, event);
 }
 
 
-void TableSearch::setSearchParams(const ppl6::CString &term, CTableStore *store, QString &Title)
+void TableSearch::setSearchParams(const ppl7::String& term, CTableStore* store, QString& Title)
 {
 	ui.search->setText(term);
 	setWindowTitle(Title);
@@ -70,31 +65,32 @@ void TableSearch::setSearchParams(const ppl6::CString &term, CTableStore *store,
 
 void TableSearch::Search()
 {
-	ppl6::CWString Tmp;
+	ppl7::String Tmp;
 	ui.list->clear();
-	Tmp=ui.search->text();
-	ppl6::CTree Result;
+	Tmp=ppl7::Trim(ui.search->text());
+	CTableStore::IndexTree Result;
 	ui.list->setWordWrap(false);
 	ui.list->setSortingEnabled(false);
+	if (store->FindAll(Tmp, Result)) {
+		ppl7::String Text;
 
-	if (store->FindAll(Tmp,Result)) {
-		ppl6::CString Text;
-		CSimpleTable *t;
-		WMTreeItem *item;
-		Result.Reset();
-		while ((t=(CSimpleTable *)Result.GetNext())) {
-			item=new WMTreeItem;
-			item->Id=t->Id;
-			Text.Setf("%6i",t->Id);
-			item->setText(0,Text);
-			item->setText(1,t->Value);
-			ui.list->addTopLevelItem(item);
+		WMTreeItem* item;
+		CTableStore::IndexTree::const_iterator it;
+		for (it=Result.begin();it != Result.end();++it) {
+			const CSimpleTable* t=store->GetPtr(*it);
+			if (t) {
+				item=new WMTreeItem;
+				item->Id=*it;
+				Text.setf("%6i", item->Id);
+				item->setText(0, Text);
+				item->setText(1, t->Value);
+				ui.list->addTopLevelItem(item);
+			}
 		}
 	}
-	Result.Clear(true);
 	ui.list->setWordWrap(true);
 	ui.list->setSortingEnabled(true);
-	ui.list->sortByColumn(1,Qt::AscendingOrder);
+	ui.list->sortByColumn(1, Qt::AscendingOrder);
 
 }
 
@@ -107,8 +103,8 @@ void TableSearch::on_searchButton_clicked()
 
 }
 
-void TableSearch::on_list_itemDoubleClicked (QTreeWidgetItem * item, int )
+void TableSearch::on_list_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	WMTreeItem *i=(WMTreeItem*)item;
+	WMTreeItem* i=(WMTreeItem*)item;
 	done(i->Id);
 }

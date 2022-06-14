@@ -2,11 +2,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -49,12 +50,12 @@ cat WinMusik.pro.header > WinMusik.pro.in
 	echo ""
 	echo ""
 	echo -n "FORMS += "
-	filelist=`find widgets src forms -name '*.ui'`
+	filelist=`find widgets src -name '*.ui'`
 	for file in $filelist; do
 		echo "$file \\"
 		echo -n "    "
 	done
-	echo ""	
+	echo ""
 ) >>  WinMusik.pro.in
 cd ..
 
@@ -62,4 +63,3 @@ cd ..
 $ACLOCAL
 $AUTOMAKE --add-missing --copy
 $AUTOCONF
-

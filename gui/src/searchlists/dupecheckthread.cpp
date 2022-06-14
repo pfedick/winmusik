@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/14 13:20:11 $
- * $Id: SearchlistDialog.cpp,v 1.1 2010/11/14 13:20:11 pafe Exp $
- *
- *
- * Copyright (c) 2012 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,23 +22,23 @@
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
-DupeCheckThread::DupeCheckThread(QObject * parent)
+DupeCheckThread::DupeCheckThread(QObject* parent)
 	:QThread(parent)
 {
 	stop=false;
 	trackList=0;
 }
 
-void DupeCheckThread::setTracklist(QTreeWidget *trackList)
+void DupeCheckThread::setTracklist(QTreeWidget* trackList)
 {
 	this->trackList=trackList;
 }
 
 void DupeCheckThread::run()
 {
-	for (int i=0;i<trackList->topLevelItemCount();i++) {
+	for (int i=0;i < trackList->topLevelItemCount();i++) {
 		if (stop) return;
-		QTreeWidgetItem *item=trackList->topLevelItem(i);
+		QTreeWidgetItem* item=trackList->topLevelItem(i);
 		emit updateItem(item, dupeCheckOnTrack(item));
 	}
 }
@@ -62,23 +56,22 @@ void DupeCheckThread::startThread()
 	start();
 }
 
-int DupeCheckThread::dupeCheckOnTrack(QTreeWidgetItem *tw_item)
+int DupeCheckThread::dupeCheckOnTrack(QTreeWidgetItem* tw_item)
 {
-	SearchlistDialog::SearchlistTreeItem *item=(SearchlistDialog::SearchlistTreeItem *)tw_item;
-	ppl6::CString Tmp;
+	SearchlistDialog::SearchlistTreeItem* item=(SearchlistDialog::SearchlistTreeItem*)tw_item;
 	// Titel in Datenbank suchen
 	CHashes::TitleTree Result;
 	int dupePresumption=0;
-	wm_main->Hashes.Find(item->Track.Artist,item->Track.Title,item->Track.Version,"","","",Result);
-	if (Result.size()>1) {
+	wm_main->Hashes.Find(item->Track.Artist, item->Track.Title, item->Track.Version, "", "", "", Result);
+	if (Result.size() > 1) {
 		dupePresumption=100;
-	} else if (Result.size()>0) {
+	} else if (Result.size() > 0) {
 		dupePresumption=90;
 	} else {
-		wm_main->Hashes.Find(item->Track.Artist,item->Track.Title,Result);
-		if (Result.size()>3) {
+		wm_main->Hashes.Find(item->Track.Artist, item->Track.Title, Result);
+		if (Result.size() > 3) {
 			dupePresumption=70;
-		} else if (Result.size()>0) {
+		} else if (Result.size() > 0) {
 			dupePresumption=40;
 		}
 	}

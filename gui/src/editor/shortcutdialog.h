@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: shortcutdialog.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,29 +30,29 @@ class ShortcutDialog : public QDialog
     Q_OBJECT
 
 public:
-	ShortcutDialog(QWidget *parent = 0, CWmClient *wm = NULL);
+    ShortcutDialog(QWidget* parent = 0, CWmClient* wm = NULL);
     ~ShortcutDialog();
 
-    const char *GetArtist();
-    void SetShortcut(const char *name);
+    const char* GetArtist();
+    void SetShortcut(const char* name);
 
 private:
     Ui::ShortcutDialogClass ui;
-    CWmClient *wm;
-    void resizeEvent ( QResizeEvent * event );
-    ppl6::CString	SelectedArtist;
-    QTreeWidgetItem	*currentTreeItem;
+    CWmClient* wm;
+    void resizeEvent(QResizeEvent* event);
+    ppl7::String	SelectedArtist;
+    QTreeWidgetItem* currentTreeItem;
 
 public slots:
 
-	void on_treeWidget_customContextMenuRequested ( const QPoint & pos );
-	void on_contextUse_triggered();
-	void on_contextEdit_triggered();
-	void on_contextNew_triggered();
-	void on_contextDelete_triggered();
-	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
-	void on_saveButton_clicked();
-	void on_cancelButton_clicked();
+    void on_treeWidget_customContextMenuRequested(const QPoint& pos);
+    void on_contextUse_triggered();
+    void on_contextEdit_triggered();
+    void on_contextNew_triggered();
+    void on_contextDelete_triggered();
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
+    void on_saveButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 

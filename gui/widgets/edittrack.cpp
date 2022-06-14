@@ -1,3 +1,22 @@
+/*
+ * This file is part of WinMusik 3 by Patrick Fedick
+ *
+ * Copyright (c) 2022 Patrick Fedick
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "winmusik3.h"
 #include "edittrack.h"
 #include "src/editor/tablesearch.h"
@@ -9,9 +28,10 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QDesktopServices>
+#include <ppl7-audio.h>
 
-EditTrack::EditTrack(QWidget *parent)
-    : QWidget(parent)
+EditTrack::EditTrack(QWidget* parent)
+	: QWidget(parent)
 {
 	ui.setupUi(this);
 	position=0;
@@ -31,33 +51,33 @@ EditTrack::EditTrack(QWidget *parent)
 	ui.recordDate->setDate(QDate::currentDate());
 
 	// Events capturen
-	InstallFilter(ui.artist,4);
-	InstallFilter(ui.title,5);
-	InstallFilter(ui.versionId,6);
-	InstallFilter(ui.version,7);
-	InstallFilter(ui.genreId,8);
-	InstallFilter(ui.genre,9);
-	InstallFilter(ui.length,10);
-	InstallFilter(ui.bpm,11);
-	InstallFilter(ui.musickey,30);
-	InstallFilter(ui.bitrate,29);
-	InstallFilter(ui.releaseDate,12);
-	InstallFilter(ui.recordDate,13);
-	InstallFilter(ui.album,14);
-	InstallFilter(ui.labelId,15);
-	InstallFilter(ui.labelName,16);
-	InstallFilter(ui.recordSourceId,17);
-	InstallFilter(ui.recordSource,18);
-	InstallFilter(ui.recordDeviceId,19);
-	InstallFilter(ui.recordDevice,20);
-	InstallFilter(ui.remarks,21);
-	InstallFilter(ui.tags,22);
-	InstallFilter(ui.complete,23);
-	InstallFilter(ui.realTitle,24);
-	InstallFilter(ui.interrupted,25);
-	InstallFilter(ui.channels,26);
-	InstallFilter(ui.quality,27);
-	InstallFilter(ui.rating,28);
+	InstallFilter(ui.artist, 4);
+	InstallFilter(ui.title, 5);
+	InstallFilter(ui.versionId, 6);
+	InstallFilter(ui.version, 7);
+	InstallFilter(ui.genreId, 8);
+	InstallFilter(ui.genre, 9);
+	InstallFilter(ui.length, 10);
+	InstallFilter(ui.bpm, 11);
+	InstallFilter(ui.musickey, 30);
+	InstallFilter(ui.bitrate, 29);
+	InstallFilter(ui.releaseDate, 12);
+	InstallFilter(ui.recordDate, 13);
+	InstallFilter(ui.album, 14);
+	InstallFilter(ui.labelId, 15);
+	InstallFilter(ui.labelName, 16);
+	InstallFilter(ui.recordSourceId, 17);
+	InstallFilter(ui.recordSource, 18);
+	InstallFilter(ui.recordDeviceId, 19);
+	InstallFilter(ui.recordDevice, 20);
+	InstallFilter(ui.remarks, 21);
+	InstallFilter(ui.tags, 22);
+	InstallFilter(ui.complete, 23);
+	InstallFilter(ui.realTitle, 24);
+	InstallFilter(ui.interrupted, 25);
+	InstallFilter(ui.channels, 26);
+	InstallFilter(ui.quality, 27);
+	InstallFilter(ui.rating, 28);
 
 
 }
@@ -67,66 +87,66 @@ EditTrack::~EditTrack()
 
 }
 
-void EditTrack::setWinMusikClient(CWmClient *wm)
+void EditTrack::setWinMusikClient(CWmClient* wm)
 {
 	this->wm=wm;
 	TCVersion.Title=tr("Version");
-	TCVersion.Init(this,wm,ui.versionId,ui.version,&wm->VersionStore);
+	TCVersion.Init(this, wm, ui.versionId, ui.version, &wm->VersionStore);
 	TCVersion.SetNextWidget(ui.genreId);
 
 	TCGenre.Title=tr("Genre");
-	TCGenre.Init(this,wm,ui.genreId,ui.genre,&wm->GenreStore);
+	TCGenre.Init(this, wm, ui.genreId, ui.genre, &wm->GenreStore);
 	TCGenre.SetNextWidget(ui.length);
 
 	TCLabel.Title=tr("Label");
-	TCLabel.Init(this,wm,ui.labelId,ui.labelName,&wm->LabelStore);
+	TCLabel.Init(this, wm, ui.labelId, ui.labelName, &wm->LabelStore);
 	TCLabel.SetNextWidget(ui.recordSourceId);
 
 	TCRecordSource.Title=tr("Record Source");
-	TCRecordSource.Init(this,wm,ui.recordSourceId,ui.recordSource,&wm->RecordSourceStore);
+	TCRecordSource.Init(this, wm, ui.recordSourceId, ui.recordSource, &wm->RecordSourceStore);
 	TCRecordSource.SetNextWidget(ui.recordDeviceId);
 
 	TCRecordDevice.Title=tr("Record Device");
-	TCRecordDevice.Init(this,wm,ui.recordDeviceId,ui.recordDevice,&wm->RecordDeviceStore);
+	TCRecordDevice.Init(this, wm, ui.recordDeviceId, ui.recordDevice, &wm->RecordDeviceStore);
 	TCRecordDevice.SetNextWidget(ui.remarks);
 }
 
-void EditTrack::setFilename(const ppl6::CString &Filename)
+void EditTrack::setFilename(const ppl7::String& Filename)
 {
 	Cover=QPixmap();
-	ppl6::CString Tmp;
-	if (Filename.IsEmpty()) {
+	ppl7::String Tmp;
+	if (Filename.isEmpty()) {
 		ui.filename->setText("");
 		ui.filesize->setText("");
 	} else {
 		ui.filename->setText(Filename);
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Filename,de)) {
-			Tmp.Setf("%0.1f",(double)de.Size/1048576.0);
+		ppl7::DirEntry de;
+		if (ppl7::File::stat(Filename, de)) {
+			Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 			ui.filesize->setText(Tmp);
-			ppl6::CID3Tag Tag;
-			if (Tag.Load(Filename)) {
+			ppl7::ID3Tag Tag;
+			if (Tag.loaded(Filename)) {
 				// Cover?
-				ppl6::CBinary cover;
-				if (Tag.GetPicture(3,cover)) {
-					Cover.loadFromData((const uchar*)cover.GetPtr(),cover.GetSize());
-					ui.cover->setPixmap(Cover.scaled(128,128,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+				ppl7::ByteArray cover;
+				if (Tag.getPicture(3, cover)) {
+					Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
+					ui.cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 				}
 			}
 		}
 	}
 }
 
-void EditTrack::setData(const TrackInfo &data)
+void EditTrack::setData(const TrackInfo& data)
 {
 	this->data=data;
-	ppl6::CString Tmp;
+	ppl7::String Tmp;
 	DataTitle	Ti=data.Ti;
 
 	// TitleId und Version
-	Tmp.Setf("%u",Ti.TitleId);
+	Tmp.setf("%u", Ti.TitleId);
 	ui.titleId->setText(Tmp);
-	Tmp.Setf("%u",Ti.GetVersion());
+	Tmp.setf("%u", Ti.GetVersion());
 	ui.recordVersion->setText(Tmp);
 
 	// Interpret und Titel
@@ -136,7 +156,7 @@ void EditTrack::setData(const TrackInfo &data)
 	// Version
 	ui.version->setText(data.Version);
 	if (Ti.VersionId) {
-		Tmp.Setf("%u",Ti.VersionId);
+		Tmp.setf("%u", Ti.VersionId);
 		ui.version->setText(wm->GetVersionText(Ti.VersionId));
 	} else Tmp="*";
 	ui.versionId->setText(Tmp);
@@ -145,41 +165,41 @@ void EditTrack::setData(const TrackInfo &data)
 	// Genre
 	ui.genre->setText(data.Genre);
 	if (Ti.GenreId) {
-		Tmp.Setf("%u",Ti.GenreId);
+		Tmp.setf("%u", Ti.GenreId);
 		ui.genre->setText(wm->GetGenreText(Ti.GenreId));
 	} else Tmp="*";
 	ui.genreId->setText(Tmp);
 
 
 	// Länge
-	if (Ti.Length>0) Tmp.Setf("%0i:%02i",(int)(Ti.Length/60),Ti.Length%60); else Tmp.Clear();
+	if (Ti.Length > 0) Tmp.setf("%0i:%02i", (int)(Ti.Length / 60), Ti.Length % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 
 	// BPM
-	if (Ti.BPM>0) Tmp.Setf("%i",Ti.BPM); else Tmp.Clear();
+	if (Ti.BPM > 0) Tmp.setf("%i", Ti.BPM); else Tmp.clear();
 	ui.bpm->setText(Tmp);
 
 	// Music Key
-	ui.musickey->setText(Ti.getKeyName(wm->conf.musicKeyDisplay));
+	ui.musickey->setText(wm->MusicKeys.keyName(Ti.Key, wm->conf.musicKeyDisplay));
 
 	// Bitrate
-	if (Ti.Bitrate>0) Tmp.Setf("%i",Ti.Bitrate); else Tmp.Clear();
+	if (Ti.Bitrate > 0) Tmp.setf("%i", Ti.Bitrate); else Tmp.clear();
 	ui.bitrate->setText(Tmp);
 
 	// Erscheinungsjahr
 	QDate Date;
-	Tmp.Setf("%u",Ti.ReleaseDate);
-	int year=Tmp.Mid(0,4).ToInt();
-	int month=Tmp.Mid(4,2).ToInt();
-	int day=Tmp.Mid(6,2).ToInt();
+	Tmp.setf("%u", Ti.ReleaseDate);
+	int year=Tmp.mid(0, 4).toInt();
+	int month=Tmp.mid(4, 2).toInt();
+	int day=Tmp.mid(6, 2).toInt();
 	if (!month) month=1;
 	if (!day) day=1;
-	Date.setDate(year,month,day);
+	Date.setDate(year, month, day);
 	ui.releaseDate->setDate(Date);
 
 	// Aufnahmedatum
-	Tmp.Setf("%u",Ti.RecordDate);
-	Date=QDate::fromString(Tmp,"yyyyMMdd");
+	Tmp.setf("%u", Ti.RecordDate);
+	Date=QDate::fromString(Tmp, "yyyyMMdd");
 	ui.recordDate->setDate(Date);
 
 	// Album
@@ -189,14 +209,14 @@ void EditTrack::setData(const TrackInfo &data)
 	ui.labelName->setText(data.Label);
 	if (Ti.LabelId) {
 		ui.labelName->setText(wm->GetLabelText(Ti.LabelId));
-		Tmp.Setf("%u",Ti.LabelId);
+		Tmp.setf("%u", Ti.LabelId);
 	} else Tmp="";
 	ui.labelId->setText(Tmp);
 
 	// Aufnahmequelle
 	ui.recordSource->setText(data.RecordingSource);
 	if (Ti.RecordSourceId) {
-		Tmp.Setf("%u",Ti.RecordSourceId);
+		Tmp.setf("%u", Ti.RecordSourceId);
 		ui.recordSource->setText(wm->GetRecordSourceText(Ti.RecordSourceId));
 	} else Tmp="";
 	ui.recordSourceId->setText(Tmp);
@@ -204,7 +224,7 @@ void EditTrack::setData(const TrackInfo &data)
 	// Aufnahmegerät
 	ui.recordDevice->setText(data.RecordingDevice);
 	if (Ti.RecordDeviceId) {
-		Tmp.Setf("%u",Ti.RecordDeviceId);
+		Tmp.setf("%u", Ti.RecordDeviceId);
 		ui.recordDevice->setText(wm->GetRecordDeviceText(Ti.RecordDeviceId));
 	} else Tmp="";
 	ui.recordDeviceId->setText(Tmp);
@@ -217,13 +237,13 @@ void EditTrack::setData(const TrackInfo &data)
 
 
 	// Flags
-	if (Ti.Flags&1) ui.complete->setChecked(true);
+	if (Ti.Flags & 1) ui.complete->setChecked(true);
 	else ui.complete->setChecked(false);
 
-	if (Ti.Flags&2) ui.realTitle->setChecked(true);
+	if (Ti.Flags & 2) ui.realTitle->setChecked(true);
 	else ui.realTitle->setChecked(false);
 
-	if (Ti.Flags&8) ui.interrupted->setChecked(true);
+	if (Ti.Flags & 8) ui.interrupted->setChecked(true);
 	else ui.interrupted->setChecked(false);
 
 	// Ton
@@ -243,20 +263,20 @@ void EditTrack::setFocus()
 	ui.artist->setFocus();
 }
 
-void EditTrack::setFocus (Qt::FocusReason reason)
+void EditTrack::setFocus(Qt::FocusReason reason)
 {
 	//this->setFocus(reason);
 	ui.artist->setFocus(reason);
 }
 
-void EditTrack::setFkeys(Fkeys *fkeys)
+void EditTrack::setFkeys(Fkeys* fkeys)
 {
 	this->fkeys=fkeys;
 }
 
-const TrackInfo &EditTrack::getData()
+const TrackInfo& EditTrack::getData()
 {
-	ppl6::CString Tmp, Artist, Title;
+	ppl7::String Tmp, Artist, Title;
 	// Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
 	if (!TCVersion.Finish()) {
 		ui.versionId->setFocus();
@@ -282,18 +302,18 @@ const TrackInfo &EditTrack::getData()
 
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	data.Ti.SetArtist(Artist);
 	Title=ui.title->text();
-	Title.Trim();
+	Title.trim();
 	data.Ti.SetTitle(Title);
 
-	if ((Artist.IsEmpty()) && (Title.IsEmpty())) {
+	if ((Artist.isEmpty()) && (Title.isEmpty())) {
 		// Warning
 		int ret=QMessageBox::warning(this, tr("WinMusik: Attention"),
-				tr("Artist and title are empty!\nDo you realy want to save this track?"),
-				QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
-		if (ret==QMessageBox::No) {
+			tr("Artist and title are empty!\nDo you realy want to save this track?"),
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+		if (ret == QMessageBox::No) {
 			ui.artist->setFocus();
 			throw DataIncompleteException();
 		}
@@ -314,7 +334,7 @@ const TrackInfo &EditTrack::getData()
 	data.Ti.BPM=ui.bpm->text().toInt();
 
 	// Music Key
-	data.Ti.SetKey(ui.musickey->text());
+	data.Ti.Key=wm->MusicKeys.keyId(ui.musickey->text());
 
 	// Bitrate
 	data.Ti.Bitrate=ui.bitrate->text().toInt();
@@ -322,13 +342,13 @@ const TrackInfo &EditTrack::getData()
 	// Erscheinungsjahr
 	QDate Date=ui.releaseDate->date();
 	Tmp=Date.toString("yyyyMMdd");
-	data.Ti.ReleaseDate=Tmp.ToInt();
+	data.Ti.ReleaseDate=Tmp.toInt();
 
 	// Aufnahmedatum
 	Date=ui.recordDate->date();
 	Tmp=Date.toString("yyyyMMdd");
 	//printf ("Date: %s\n",(const char*)Tmp);
-	data.Ti.RecordDate=Tmp.ToInt();
+	data.Ti.RecordDate=Tmp.toInt();
 
 	// Album
 	Tmp=ui.album->text();
@@ -352,16 +372,16 @@ const TrackInfo &EditTrack::getData()
 
 	// Tags
 	Tmp=ui.tags->text();
-	Tmp=ppl6::Trim(ppl6::LCase(Tmp));
+	Tmp=ppl7::Trim(ppl7::LowerCase(Tmp));
 	data.Ti.SetTags(Tmp);
 
 	// Flags
 	if (ui.complete->isChecked()) data.Ti.Flags|=1;
-	else data.Ti.Flags&=(0xff-1);
+	else data.Ti.Flags&=(0xff - 1);
 	if (ui.realTitle->isChecked()) data.Ti.Flags|=2;
-	else data.Ti.Flags&=(0xff-2);
+	else data.Ti.Flags&=(0xff - 2);
 	if (ui.interrupted->isChecked()) data.Ti.Flags|=8;
-	else data.Ti.Flags&=(0xff-8);
+	else data.Ti.Flags&=(0xff - 8);
 
 	// Ton
 	data.Ti.Channels=ui.channels->currentIndex();
@@ -373,20 +393,20 @@ const TrackInfo &EditTrack::getData()
 	data.Ti.Rating=ui.rating->currentIndex();
 
 	// Cover
-	ppl6::CString Path=wm->GetAudioFilename(data.Ti.DeviceType,data.Ti.DeviceId,data.Ti.Page,data.Ti.Track);
-	if (Path.NotEmpty()) {
-		ppl6::CDirEntry de;
-		if (ppl6::CFile::Stat(Path,de)) {
+	ppl7::String Path=wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
+	if (Path.notEmpty()) {
+		ppl7::DirEntry de;
+		if (ppl7::File::stat(Path, de)) {
 			data.Ti.Size=de.Size;
 			if (Cover.isNull()) {
-				data.Ti.CoverPreview.Clear();
+				data.Ti.CoverPreview.clear();
 			} else {
-				QPixmap icon=Cover.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				QPixmap icon=Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				QByteArray bytes;
 				QBuffer buffer(&bytes);
 				buffer.open(QIODevice::WriteOnly);
-				icon.save(&buffer, "JPEG",70);
-				data.Ti.CoverPreview.Copy(bytes.data(),bytes.size());
+				icon.save(&buffer, "JPEG", 70);
+				data.Ti.CoverPreview.copy(bytes.data(), bytes.size());
 			}
 		}
 	}
@@ -398,10 +418,10 @@ void EditTrack::ReloadTranslation()
 	ui.retranslateUi(this);
 }
 
-void EditTrack::InstallFilter(QObject *object, int id)
+void EditTrack::InstallFilter(QObject* object, int id)
 {
 	object->installEventFilter(this);
-	object->setProperty("id",id);
+	object->setProperty("id", id);
 }
 
 /*!\brief Event Handler
@@ -416,10 +436,10 @@ void EditTrack::InstallFilter(QObject *object, int id)
  * \returns Liefert \c true zurück, wenn der Event von Edit::consumeEvent verarbeitet wurde. Andernfalls
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
-bool EditTrack::eventFilter(QObject *target, QEvent *event)
+bool EditTrack::eventFilter(QObject* target, QEvent* event)
 {
-	if (consumeEvent(target,event)) return true;
-	return QWidget::eventFilter(target,event);
+	if (consumeEvent(target, event)) return true;
+	return QWidget::eventFilter(target, event);
 }
 
 
@@ -437,60 +457,58 @@ bool EditTrack::eventFilter(QObject *target, QEvent *event)
  * \param[in] event Pointer auf eine QEvent Klasse, die den Event näher beschreibt
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
-bool EditTrack::consumeEvent(QObject *target, QEvent *event)
+bool EditTrack::consumeEvent(QObject* target, QEvent* event)
 {
-	ppl6::CString Tmp;
-	QKeyEvent *keyEvent=NULL;
+	QKeyEvent* keyEvent=NULL;
 	int key=0;
 	int modifier=Qt::NoModifier;
-    //QFocusEvent *focusEvent=NULL;
+	//QFocusEvent *focusEvent=NULL;
 
 	// Id auslesen
 	int id=target->property("id").toInt();
 	int type=event->type();
-	if (type==QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent *>(event);
+	if (type == QEvent::KeyPress) {
+		keyEvent= static_cast<QKeyEvent*>(event);
 		key=keyEvent->key();
 		modifier=keyEvent->modifiers();
-		if (checkKeyPress(target,key,modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
-	} else if (type==QEvent::FocusIn || type==QEvent::FocusOut) {
-        //focusEvent=static_cast<QFocusEvent *>(event);
-		if (type==QEvent::FocusIn) {
+		if (checkKeyPress(target, key, modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
+	} else if (type == QEvent::FocusIn || type == QEvent::FocusOut) {
+		//focusEvent=static_cast<QFocusEvent *>(event);
+		if (type == QEvent::FocusIn) {
 			position=id;
 			UpdateFkeys();
-			if (position>7 && DupeCheck==false) {
+			if (position > 7 && DupeCheck == false) {
 				CheckDupes();
-			} else if (position<8 && DupeCheck==true) DupeCheck=false;
-		}
-		else if (type==QEvent::FocusOut) {
+			} else if (position < 8 && DupeCheck == true) DupeCheck=false;
+		} else if (type == QEvent::FocusOut) {
 			oldposition=id;
-			if (oldposition==10) on_length_FocusOut();
+			if (oldposition == 10) on_length_FocusOut();
 		}
 	}
 
-	if (target==ui.artist) {
-		if (type==QEvent::FocusIn) {
+	if (target == ui.artist) {
+		if (type == QEvent::FocusIn) {
 
 		}
-	} else if (target==ui.title) {
-	} else if (target==ui.version || target==ui.versionId) {
-		return TCVersion.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.genre || target==ui.genreId) {
-		return TCGenre.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.labelName || target==ui.labelId) {
-		return TCLabel.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.recordSource || target==ui.recordSourceId) {
-		return TCRecordSource.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.recordDevice || target==ui.recordDeviceId) {
-		return TCRecordDevice.ConsumeEvent(target,event,oldposition,position);
-	} else if (target==ui.album) {
-	} else if (target==ui.length) {
-	} else if (target==ui.bpm) {
-	} else if (target==ui.musickey) {
-	} else if (target==ui.bitrate) {
-	} else if (target==ui.album) {
-	} else if (target==ui.remarks) {
-	} else if (target==ui.tags) {
+	} else if (target == ui.title) {
+	} else if (target == ui.version || target == ui.versionId) {
+		return TCVersion.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.genre || target == ui.genreId) {
+		return TCGenre.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.labelName || target == ui.labelId) {
+		return TCLabel.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.recordSource || target == ui.recordSourceId) {
+		return TCRecordSource.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.recordDevice || target == ui.recordDeviceId) {
+		return TCRecordDevice.ConsumeEvent(target, event, oldposition, position);
+	} else if (target == ui.album) {
+	} else if (target == ui.length) {
+	} else if (target == ui.bpm) {
+	} else if (target == ui.musickey) {
+	} else if (target == ui.bitrate) {
+	} else if (target == ui.album) {
+	} else if (target == ui.remarks) {
+	} else if (target == ui.tags) {
 	}
 	return false;
 }
@@ -498,19 +516,19 @@ bool EditTrack::consumeEvent(QObject *target, QEvent *event)
 void EditTrack::UpdateFkeys()
 {
 	if (fkeys) {
-		fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-0000.png"," ",false);
-		fkeys->setFkey(1,":/fkeys/resources/fkeys/f-key-0001.png"," ",false);
-		fkeys->setFkey(2,":/fkeys/resources/fkeys/f-key-0002.png"," ",false);
-		fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-0003.png"," ",false);
-		fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-0004.png"," ",false);
-		fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-0005.png"," ",false);
-		fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-0006.png"," ",false);
-		fkeys->setFkey(7,":/fkeys/resources/fkeys/f-key-0007.png"," ",false);
-		fkeys->setFkey(8,":/fkeys/resources/fkeys/f-key-0008.png"," ",false);
-		fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-0009.png"," ",false);
-		fkeys->setFkey(10,":/fkeys/resources/fkeys/f-key-0010.png"," ",false);
-		fkeys->setFkey(11,":/fkeys/resources/fkeys/f-key-0011.png"," ",false);
-		fkeys->setFkey(12,":/fkeys/resources/fkeys/f-key-0012.png"," ",false);
+		fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-0000.png", " ", false);
+		fkeys->setFkey(1, ":/fkeys/resources/fkeys/f-key-0001.png", " ", false);
+		fkeys->setFkey(2, ":/fkeys/resources/fkeys/f-key-0002.png", " ", false);
+		fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-0003.png", " ", false);
+		fkeys->setFkey(4, ":/fkeys/resources/fkeys/f-key-0004.png", " ", false);
+		fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-0005.png", " ", false);
+		fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-0006.png", " ", false);
+		fkeys->setFkey(7, ":/fkeys/resources/fkeys/f-key-0007.png", " ", false);
+		fkeys->setFkey(8, ":/fkeys/resources/fkeys/f-key-0008.png", " ", false);
+		fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-0009.png", " ", false);
+		fkeys->setFkey(10, ":/fkeys/resources/fkeys/f-key-0010.png", " ", false);
+		fkeys->setFkey(11, ":/fkeys/resources/fkeys/f-key-0011.png", " ", false);
+		fkeys->setFkey(12, ":/fkeys/resources/fkeys/f-key-0012.png", " ", false);
 
 		QString t[20];
 		t[0]=tr("close");
@@ -534,56 +552,56 @@ void EditTrack::UpdateFkeys()
 		t[18]=tr("mass import");
 
 		switch (position) {
-			case 4:		// Interpret
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				fkeys->setFkey(5,":/fkeys/resources/fkeys/f-key-1005.png",t[11]);
-				break;
-			case 5:		// Titel
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 6:		// VersionId
-				break;
-			case 7:		// Version
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 9:		// Genre
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 14:		// Album
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 16:		// Label
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 18:		// Aufnahmequelle
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 20:		// Aufnahmegerät
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
-			case 21:		// Bemerkung
-				fkeys->setFkey(3,":/fkeys/resources/fkeys/f-key-1003.png",t[9]);
-				break;
+		case 4:		// Interpret
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-1005.png", t[11]);
+			break;
+		case 5:		// Titel
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 6:		// VersionId
+			break;
+		case 7:		// Version
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 9:		// Genre
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 14:		// Album
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 16:		// Label
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 18:		// Aufnahmequelle
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 20:		// Aufnahmegerät
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 21:		// Bemerkung
+			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
 		}
-		if (position>1) {
-			fkeys->setFkey(0,":/fkeys/resources/fkeys/f-key-2000.png",t[2]);
+		if (position > 1) {
+			fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-2000.png", t[2]);
 		}
-		if (position>3) {
-			fkeys->setFkey(12,":/fkeys/resources/fkeys/f-key-1012.png",t[6]);
-			if (wm->conf.DevicePath[data.Ti.DeviceType].NotEmpty()==true) {
-				fkeys->setFkey(6,":/fkeys/resources/fkeys/f-key-1006.png",t[10]);
-				if (data.Ti.ImportData>0) fkeys->setFkey(9,":/fkeys/resources/fkeys/f-key-1009.png",t[12]);
+		if (position > 3) {
+			fkeys->setFkey(12, ":/fkeys/resources/fkeys/f-key-1012.png", t[6]);
+			if (wm->conf.DevicePath[data.Ti.DeviceType].notEmpty() == true) {
+				fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-1006.png", t[10]);
+				if (data.Ti.ImportData > 0) fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-1009.png", t[12]);
 			}
 		}
-		if (position>7) {
+		if (position > 7) {
 			// DupeCheck
-			fkeys->setFkey(5,DupeCheckIcon,t[13]);
+			fkeys->setFkey(5, DupeCheckIcon, t[13]);
 		}
 
 		// Suchbutton
-		if (position==4 || position==5 || position==6 || position==8
-				||position==15 || position==17 || position==19) {
-			fkeys->setFkey(4,":/fkeys/resources/fkeys/f-key-1004.png",t[4]);
+		if (position == 4 || position == 5 || position == 6 || position == 8
+			|| position == 15 || position == 17 || position == 19) {
+			fkeys->setFkey(4, ":/fkeys/resources/fkeys/f-key-1004.png", t[4]);
 		}
 	}
 	emit updateFkeys(position);
@@ -595,14 +613,14 @@ void EditTrack::CheckDupes()
 	DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
 	DupeCheck=true;
 	TCVersion.Finish();
-	ppl6::CString Tmp, Artist, Title;
+	ppl7::String Tmp, Artist, Title;
 	// Interpret und Titel
 	Artist=ui.artist->text();
-	Artist.Trim();
+	Artist.trim();
 	Title=ui.title->text();
-	Title.Trim();
-	ppluint32 Version=ui.versionId->text().toInt();
-	if (wm->Hashes.CheckDupes(Artist,Title,Version,data.Ti.TitleId)) {
+	Title.trim();
+	uint32_t Version=ui.versionId->text().toInt();
+	if (wm->Hashes.CheckDupes(Artist, Title, Version, data.Ti.TitleId)) {
 		if (!DupeTimer) {
 			DupeTimer=new QTimer(this);
 			connect(DupeTimer, SIGNAL(timeout()), this, SLOT(on_DupeTimer_update()));
@@ -615,14 +633,14 @@ void EditTrack::on_DupeTimer_update()
 {
 	static int count=0;
 	count++;
-	if (count&1) DupeCheckIcon=":/fkeys/resources/fkeys/f-key-3005.png";
+	if (count & 1) DupeCheckIcon=":/fkeys/resources/fkeys/f-key-3005.png";
 	else DupeCheckIcon=":/fkeys/resources/fkeys/f-key-2005.png";
-	if (position>7) {
-		if (fkeys) fkeys->setFkey(5,DupeCheckIcon,"");
+	if (position > 7) {
+		if (fkeys) fkeys->setFkey(5, DupeCheckIcon, "");
 	}
 }
 
-bool EditTrack::checkKeyPress(QObject *, int key, int modifier)
+bool EditTrack::checkKeyPress(QObject*, int key, int modifier)
 /*!\brief Globale KeyPress Events behandeln
  *
  * Diese Funktion behandelt globale KeyPress Events, als Beispielsweise das Drücken der ESC-Taste,
@@ -637,26 +655,26 @@ bool EditTrack::checkKeyPress(QObject *, int key, int modifier)
  */
 {
 	// ******************************************************************************* ESC
-	if (key==Qt::Key_Escape) {
-		if (position>3) ui.artist->setFocus();
+	if (key == Qt::Key_Escape) {
+		if (position > 3) ui.artist->setFocus();
 		emit escPressed();
 		return true;
 		// *************************************************************************** Return/Enter
-	} else if (key==Qt::Key_Return || key==Qt::Key_Enter) {
+	} else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
 		MoveToNextWidget();
 		return true;
 		// *************************************************************************** Page down
-	} else if (key==Qt::Key_PageDown) {
+	} else if (key == Qt::Key_PageDown) {
 		emit pageDownPressed();
 		return true;
 		// *************************************************************************** Page up
-	} else if (key==Qt::Key_PageUp) {
+	} else if (key == Qt::Key_PageUp) {
 		emit pageUpPressed();
 		return true;
 		// *************************************************************************** F2
 		/*
 	} else if (key==Qt::Key_F2 && modifier==Qt::NoModifier && position>1) {
-		ppluint32 ret=EditDeviceDialog(DeviceId);
+		uint32_t ret=EditDeviceDialog(DeviceId);
 		((QWidget*)target)->setFocus();
 		if (ret==DeviceId) UpdateDevice();
 		return true;
@@ -693,13 +711,6 @@ bool EditTrack::checkKeyPress(QObject *, int key, int modifier)
 		return on_f8_InsertTrack();
 		*/
 		// *************************************************************************** F9
-	} else if (data.Ti.DeviceType==7 && key==Qt::Key_F9 && modifier==Qt::NoModifier && position>3 && data.Ti.ImportData>0) {
-		DataOimp	Oimp;
-		if (wm->OimpDataStore.GetCopy(data.Ti.ImportData,&Oimp)) {
-			emit showOimpData(Oimp);
-		}
-		return true;
-		// *************************************************************************** F9
 		/*
 	} else if (DeviceType==7 && key==Qt::Key_F9 && modifier==Qt::NoModifier && position==3 && wm->conf.DevicePath[DeviceType].NotEmpty()==true) {
 		return on_f9_UpdateAllID3Tags();
@@ -712,35 +723,35 @@ bool EditTrack::checkKeyPress(QObject *, int key, int modifier)
 		return true;
 		*/
 		// *************************************************************************** F12
-	} else if (key==Qt::Key_F12 && modifier==Qt::NoModifier) {
+	} else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
 		emit save();
 		return true;
 		// *************************************************************************** Alt & b
-	} else if (key==Qt::Key_B && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_B && modifier == Qt::AltModifier) {
 		ui.remarks->setFocus();
 		return true;
 		// *************************************************************************** Alt & a
-	} else if (key==Qt::Key_A && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_A && modifier == Qt::AltModifier) {
 		ui.album->setFocus();
 		return true;
 		// *************************************************************************** Alt & d
-	} else if (key==Qt::Key_D && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_D && modifier == Qt::AltModifier) {
 		ui.recordDate->setFocus();
 		return true;
 		// *************************************************************************** Alt & l
-	} else if (key==Qt::Key_L && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_L && modifier == Qt::AltModifier) {
 		ui.labelId->setFocus();
 		return true;
 		// *************************************************************************** Alt & t
-	} else if (key==Qt::Key_T && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_T && modifier == Qt::AltModifier) {
 		ui.tags->setFocus();
 		return true;
 		// *************************************************************************** Alt & y
-	} else if (key==Qt::Key_Y && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_Y && modifier == Qt::AltModifier) {
 		ui.releaseDate->setFocus();
 		return true;
 		// *************************************************************************** Alt & j
-	} else if (key==Qt::Key_J && modifier==Qt::AltModifier) {
+	} else if (key == Qt::Key_J && modifier == Qt::AltModifier) {
 		ui.releaseDate->setFocus();
 		return true;
 	}
@@ -755,45 +766,44 @@ void EditTrack::MoveToNextWidget()
  */
 {
 	switch (position) {
-		case 3: ui.artist->setFocus(); break;
-		case 4: ui.title->setFocus(); break;
-		case 5: ui.versionId->setFocus(); break;
-		case 6: ui.version->setFocus(); break;
-		case 7: ui.genreId->setFocus(); break;
-		case 8: ui.genre->setFocus(); break;
-		case 9: ui.length->setFocus(); break;
-		case 10: ui.bpm->setFocus(); break;
-		case 11: ui.musickey->setFocus(); break;
-		case 30: ui.bitrate->setFocus(); break;
-		case 29: ui.releaseDate->setFocus(); break;
-		case 12: ui.recordDate->setFocus(); break;
-		case 13: ui.album->setFocus(); break;
-		case 14: ui.labelId->setFocus(); break;
-		case 15: ui.labelName->setFocus(); break;
-		case 16: ui.recordSourceId->setFocus(); break;
-		case 17: ui.recordSource->setFocus(); break;
-		case 18: ui.recordDeviceId->setFocus(); break;
-		case 19: ui.recordDevice->setFocus(); break;
-		case 20: ui.remarks->setFocus(); break;
-		case 21: ui.tags->setFocus(); break;
-		case 22: ui.artist->setFocus(); break;
-		//case 21: ui.complete->setFocus(); break;
-		case 24: ui.realTitle->setFocus(); break;
-		case 25: ui.interrupted->setFocus(); break;
-		case 26: ui.channels->setFocus(); break;
-		case 27: ui.quality->setFocus(); break;
-		case 28: ui.rating->setFocus(); break;
-		case 31: ui.artist->setFocus(); break;
+	case 3: ui.artist->setFocus(); break;
+	case 4: ui.title->setFocus(); break;
+	case 5: ui.versionId->setFocus(); break;
+	case 6: ui.version->setFocus(); break;
+	case 7: ui.genreId->setFocus(); break;
+	case 8: ui.genre->setFocus(); break;
+	case 9: ui.length->setFocus(); break;
+	case 10: ui.bpm->setFocus(); break;
+	case 11: ui.musickey->setFocus(); break;
+	case 30: ui.bitrate->setFocus(); break;
+	case 29: ui.releaseDate->setFocus(); break;
+	case 12: ui.recordDate->setFocus(); break;
+	case 13: ui.album->setFocus(); break;
+	case 14: ui.labelId->setFocus(); break;
+	case 15: ui.labelName->setFocus(); break;
+	case 16: ui.recordSourceId->setFocus(); break;
+	case 17: ui.recordSource->setFocus(); break;
+	case 18: ui.recordDeviceId->setFocus(); break;
+	case 19: ui.recordDevice->setFocus(); break;
+	case 20: ui.remarks->setFocus(); break;
+	case 21: ui.tags->setFocus(); break;
+	case 22: ui.artist->setFocus(); break;
+	//case 21: ui.complete->setFocus(); break;
+	case 24: ui.realTitle->setFocus(); break;
+	case 25: ui.interrupted->setFocus(); break;
+	case 26: ui.channels->setFocus(); break;
+	case 27: ui.quality->setFocus(); break;
+	case 28: ui.rating->setFocus(); break;
+	case 31: ui.artist->setFocus(); break;
 	};
 }
 
 
 bool EditTrack::on_length_FocusOut()
 {
-	ppl6::CString Tmp;
-	ppluint32 l=Time2Int(Tmp=ui.length->text());
-	if (l>0) Tmp.Setf("%0i:%02i",(int)(l/60),l%60); else Tmp.Clear();
+	ppl7::String Tmp;
+	uint32_t l=Time2Int(Tmp=ui.length->text());
+	if (l > 0) Tmp.setf("%0i:%02i", (int)(l / 60), l % 60); else Tmp.clear();
 	ui.length->setText(Tmp);
 	return false;
 }
-

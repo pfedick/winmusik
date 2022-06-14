@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: shortcutdialog.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2014 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +18,15 @@
  */
 
 
+
 #ifndef CDDBIMPORT_H_
 #define CDDBIMPORT_H_
 
 #include "winmusik3.h"
 #include "tablecontrol.h"
-#include <ppl6-sound.h>
 #include <QDialog>
+
+#include "ppl7-audio.h"
 #include "ui_cddbimport.h"
 
 class CDDBImport : public QDialog
@@ -38,44 +34,44 @@ class CDDBImport : public QDialog
     Q_OBJECT
 
 public:
-    CDDBImport(QWidget *parent = 0, CWmClient *wm = NULL);
+    CDDBImport(QWidget* parent = 0, CWmClient* wm = NULL);
     ~CDDBImport();
 
-    void setDisc(ppl6::CDDB::Disc &disc);
+    void setDisc(ppl7::CDDB::Disc& disc);
 
-    bool checkAndConfirmOverwrite(ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
-    void startImport(ppl6::CDDB::Disc &disc, ppluint8 devicetype, ppluint32 deviceid, ppluint8 page);
+    bool checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page);
+    void startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page);
 
 private:
     Ui::CDDBImport ui;
-    CWmClient *wm;
+    CWmClient* wm;
     int position, oldposition;
     CTableControl TCGenre;
     CTableControl TCLabel;
     CTableControl TCRecordSource;
     CTableControl TCRecordDevice;
 
-    void InstallFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
-    void resizeEvent ( QResizeEvent * event );
-    ppl6::CString getVersionFromTitle(ppl6::CString &Title, int length);
+    void InstallFilter(QObject* object, int id);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
+    void resizeEvent(QResizeEvent* event);
+    ppl7::String getVersionFromTitle(ppl7::String& Title, int length);
 
     // Globale Events
-    bool on_KeyPress(QObject *target, int key,int modifier);
+    bool on_KeyPress(QObject* target, int key, int modifier);
     void MoveToNextWidget();
-    QWidget *GetWidgetFromPosition(int position);
+    QWidget* GetWidgetFromPosition(int position);
     void FixFocus();
 
-    void updateTracklist(ppl6::CDDB::Disc &disc);
-    void getTitle(DataTitle &Ti, const ppl6::CDDB::Track &track);
-    void addDataFromFile(DataTitle &Ti);
-    int saveTitle(CTrackList *tracklist, DataTitle &Ti);
+    void updateTracklist(ppl7::CDDB::Disc& disc);
+    void getTitle(DataTitle& Ti, const ppl7::CDDB::Track& track);
+    void addDataFromFile(DataTitle& Ti);
+    int saveTitle(CTrackList* tracklist, DataTitle& Ti);
 
 public slots:
 
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
 };
 
 

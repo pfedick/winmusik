@@ -30,10 +30,10 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{611E500A-4D60-400C-9829-0114ADE682D5}}
 AppName=WinMusik
-AppVerName=WinMusik 3.6.1
+AppVerName=WinMusik 3.7.0
 AppCopyright=Copyright (C) 2022 Patrick Fedick
-AppVersion=3.6.1.0
-VersionInfoVersion=3.6.1
+AppVersion=3.7.0.0
+VersionInfoVersion=3.7.0
 AppPublisher=Patrick F.-Productions
 AppPublisherURL=http://www.pfp.de/
 AppSupportURL=http://www.pfp.de/
@@ -42,7 +42,7 @@ DefaultDirName={pf}\Patrick F.-Productions\WinMusik3
 DefaultGroupName=Patrick F.-Productions\WinMusik 3
 AllowNoIcons=yes
 OutputDir=distfiles
-OutputBaseFilename=WinMusik-3.6.1-Setup-64bit
+OutputBaseFilename=WinMusik-3.7.0-Setup-64bit
 SetupIconFile=gui\resources\WinMusik3.ico
 Compression=lzma/ultra64
 SolidCompression=yes
@@ -74,38 +74,34 @@ Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libbrotlicommon.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libcrypto-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libdouble-conversion.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicudt68.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuin68.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuuc68.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicudt69.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuin69.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libicuuc69.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libidn2-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libintl-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libmp3lame-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libmd4c.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libnghttp2-14.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libpsl-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libssh2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libunistring-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "C:/msys64/mingw64/bin/libzstd.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libpsl-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libdouble-conversion.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
-
-; Dependencies of qt imageplugins
 Source: "C:\msys64\mingw64\bin\libjpeg-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libjasper-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\msys64\mingw64\bin\libmng-2.dll"; DestDir: "{app}"; Flags: ignoreversion;

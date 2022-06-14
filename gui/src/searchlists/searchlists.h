@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.1 $
- * $Date: 2010/11/14 13:20:11 $
- * $Id: Searchlists.h,v 1.1 2010/11/14 13:20:11 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,8 +29,8 @@
 
 class SearchlistTreeItem : public QTreeWidgetItem
 {
-	public:
-		ppl6::CString	Filename;
+public:
+    ppl7::String	Filename;
 };
 
 
@@ -45,7 +39,7 @@ class Searchlists : public QWidget
     Q_OBJECT
 
 public:
-    Searchlists(QWidget *parent = 0, CWmClient *wm=NULL);
+    Searchlists(QWidget* parent = 0, CWmClient* wm=NULL);
     ~Searchlists();
     void ReloadTranslation();
     void Update();
@@ -53,17 +47,17 @@ public:
 
 private:
     Ui::SearchlistsClass ui;
-    CWmClient *wm;
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void closeEvent(QCloseEvent *event);
+    CWmClient* wm;
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
+    void closeEvent(QCloseEvent* event);
     void Resize();
 
 
 public slots:
-	void on_newSearchlistButton_clicked();
-	void on_deleteSearchlistButton_clicked();
-	void on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+    void on_newSearchlistButton_clicked();
+    void on_deleteSearchlistButton_clicked();
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 
 };

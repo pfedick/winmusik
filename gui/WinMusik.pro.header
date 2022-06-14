@@ -1,11 +1,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,19 +30,17 @@ QT += core \
     widgets \
     network \
     printsupport
-    
+
 CONFIG += debug_and_release
-CONFIG(debug, debug|release) { 
+CONFIG(debug, debug|release) {
     win32:TARGET = WinMusik
     unix:TARGET = debug/WinMusik
 }
-else { 
+else {
     win32:TARGET = WinMusik
     unix:TARGET = release/WinMusik
 }
 
-DEFINES += PPL6LIB
-DEFINES += PPL7LIB
 DEFINES += HAVE_CONFIG_H
 
 QMAKE_CC = @CC@
@@ -57,7 +56,8 @@ RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include
 INCLUDEPATH += widgets
-INCLUDEPATH += pplib/include
+INCLUDEPATH += ../pplib/include
+INCLUDEPATH += ../wmlib/include
 
 unix:INCLUDEPATH += /usr/local/include
 win32:INCLUDEPATH += C:/mingw/usr/local/include
@@ -65,8 +65,10 @@ win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
 CONFIG(debug, debug|release) {
-	LIBS += ../pplib/debug/libpplib-debug.a
+	LIBS += ../wmlib/debug/libwinmusik3.a
+	LIBS += ../pplib/debug/libpplib.a
 } else {
+	LIBS += ../wmlib/release/libwinmusik3.a
 	LIBS += ../pplib/release/libpplib.a
 }
 LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
@@ -80,10 +82,10 @@ CODECFORTR = UTF-8
 TRANSLATIONS = winmusik_de.ts \
     winmusik_en.ts
 
-DISTFILES += \
-    WinMusik.includes \
-    setup.iss \
-    setup64.iss \
-    HISTORY.TXT \
-    build_mingw64.sh
-
+#For what is this?
+#DISTFILES += \
+#    WinMusik.includes \
+#    setup.iss \
+#    setup64.iss \
+#    HISTORY.TXT \
+#    build_mingw64.sh

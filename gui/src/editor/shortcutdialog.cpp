@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: shortcutdialog.cpp,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,30 +25,29 @@
 
 
 
-ShortcutDialog::ShortcutDialog(QWidget *parent, CWmClient *wm)
-: QDialog(parent)
+ShortcutDialog::ShortcutDialog(QWidget* parent, CWmClient* wm)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->wm=wm;
-
-	wm->ShortcutStore.Reset();
-	DataShortcut *sc;
 	ui.treeWidget->clear();
 	ui.treeWidget->setSortingEnabled(false);
-	QTreeWidgetItem *item;
-	while ((sc=wm->ShortcutStore.GetNext())) {
+	QTreeWidgetItem* item;
+	CShortcutStore::const_iterator it;
+	for (it=wm->ShortcutStore.begin();it != wm->ShortcutStore.end();++it) {
+		const DataShortcut& sc=it->second;;
 		item = new QTreeWidgetItem;
-		item->setText(0,sc->GetShortcut());
-		item->setText(1,sc->GetArtist());
+		item->setText(0, sc.GetShortcut());
+		item->setText(1, sc.GetArtist());
 		ui.treeWidget->addTopLevelItem(item);
 	}
 	ui.treeWidget->setSortingEnabled(true);
-	ui.treeWidget->sortByColumn(0,Qt::AscendingOrder);
+	ui.treeWidget->sortByColumn(0, Qt::AscendingOrder);
 	currentTreeItem=NULL;
 
 }
 
-void ShortcutDialog::resizeEvent ( QResizeEvent * event )
+void ShortcutDialog::resizeEvent(QResizeEvent* event)
 /*!\brief Größenänderung des Fensters
  *
  * Diese Funktion wird durch Qt aufgerufen, wenn sich die Größe
@@ -63,8 +56,8 @@ void ShortcutDialog::resizeEvent ( QResizeEvent * event )
  */
 {
 	int w=ui.treeWidget->width();
-	ui.treeWidget->setColumnWidth(0,w*20/100);
-	ui.treeWidget->setColumnWidth(1,w*80/100);
+	ui.treeWidget->setColumnWidth(0, w * 20 / 100);
+	ui.treeWidget->setColumnWidth(1, w * 80 / 100);
 	QWidget::resizeEvent(event);
 }
 
@@ -73,12 +66,12 @@ ShortcutDialog::~ShortcutDialog()
 
 }
 
-const char *ShortcutDialog::GetArtist()
+const char* ShortcutDialog::GetArtist()
 {
 	return SelectedArtist;
 }
 
-void ShortcutDialog::on_treeWidget_customContextMenuRequested ( const QPoint & pos )
+void ShortcutDialog::on_treeWidget_customContextMenuRequested(const QPoint& pos)
 /*!\brief Kontext-Menue der Liste
  *
  * Diese Funktion wird aufgerufen, wenn der Anwender mit der rechten Maustaste
@@ -88,19 +81,19 @@ void ShortcutDialog::on_treeWidget_customContextMenuRequested ( const QPoint & p
  * \param[in] pos Mausposition des Klicks
  */
 {
-    QPoint p=mapToGlobal(pos);
-    currentTreeItem=ui.treeWidget->itemAt(pos);
-    if (!currentTreeItem) return;
-    //printf ("Custom Context %i\n",currentTrackListItem->Track);
+	QPoint p=mapToGlobal(pos);
+	currentTreeItem=ui.treeWidget->itemAt(pos);
+	if (!currentTreeItem) return;
+	//printf ("Custom Context %i\n",currentTrackListItem->Track);
 
-    QMenu *m=new QMenu(this);
-    m->setTitle("Ein Titel");
-    m->addAction (QIcon(":/icons/resources/button_ok.png"),tr("Use this entry","Context Menue"),this,SLOT(on_contextUse_triggered()));
-    m->addSeparator();
-    m->addAction (QIcon(":/icons/resources/edit.png"),tr("Edit this entry","Context Menue"),this,SLOT(on_contextEdit_triggered()));
-    m->addAction (QIcon(":/icons/resources/filenew.png"),tr("New entry","Context Menue"),this,SLOT(on_contextNew_triggered()));
-    m->addAction (QIcon(":/icons/resources/trash-16.png"),tr("Delete entry","Context Menue"),this,SLOT(on_contextDelete_triggered()));
-    m->popup(p);
+	QMenu* m=new QMenu(this);
+	m->setTitle("Ein Titel");
+	m->addAction(QIcon(":/icons/resources/button_ok.png"), tr("Use this entry", "Context Menue"), this, SLOT(on_contextUse_triggered()));
+	m->addSeparator();
+	m->addAction(QIcon(":/icons/resources/edit.png"), tr("Edit this entry", "Context Menue"), this, SLOT(on_contextEdit_triggered()));
+	m->addAction(QIcon(":/icons/resources/filenew.png"), tr("New entry", "Context Menue"), this, SLOT(on_contextNew_triggered()));
+	m->addAction(QIcon(":/icons/resources/trash-16.png"), tr("Delete entry", "Context Menue"), this, SLOT(on_contextDelete_triggered()));
+	m->popup(p);
 }
 
 
@@ -131,19 +124,20 @@ void ShortcutDialog::on_contextNew_triggered()
 void ShortcutDialog::on_contextDelete_triggered()
 {
 	if (currentTreeItem) {
-		ppl6::CString ShortCut=currentTreeItem->text(0);
-		if (wm->ShortcutStore.Delete(ShortCut)) {
+		ppl7::String ShortCut=currentTreeItem->text(0);
+		try {
+			wm->ShortcutStore.Delete(ShortCut);
 			delete currentTreeItem;
 			currentTreeItem=NULL;
-		} else {
-			wm->RaiseError(this,tr("Could not delete shortcut"));
+		} catch (const ppl7::Exception& exp) {
+			ShowException(exp, tr("Could not delete shortcut"));
 		}
 	}
 }
 
-void ShortcutDialog::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, int column )
+void ShortcutDialog::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column)
 {
-	(void) column;
+	(void)column;
 	if (item) {
 		ui.shortcutEdit->setText(item->text(0));
 		ui.artistEdit->setText(item->text(1));
@@ -154,13 +148,13 @@ void ShortcutDialog::on_treeWidget_itemDoubleClicked ( QTreeWidgetItem * item, i
 void ShortcutDialog::on_saveButton_clicked()
 {
 	DataShortcut ds;
-	ppl6::CString ShortCut=ui.shortcutEdit->text();
-	ShortCut.Trim();
+	ppl7::String ShortCut=ui.shortcutEdit->text();
+	ShortCut.trim();
 	SelectedArtist=ui.artistEdit->text();
-	SelectedArtist.Trim();
-	if (ShortCut.Len()>0) {
-		ds.SetValue(ShortCut,SelectedArtist);
-		wm->ShortcutStore.Put(&ds);
+	SelectedArtist.trim();
+	if (ShortCut.size() > 0) {
+		ds.SetValue(ShortCut, SelectedArtist);
+		wm->ShortcutStore.Put(ds);
 		done(1);
 	}
 }
@@ -170,11 +164,10 @@ void ShortcutDialog::on_cancelButton_clicked()
 	done(0);
 }
 
-void ShortcutDialog::SetShortcut(const char *name)
+void ShortcutDialog::SetShortcut(const char* name)
 {
-	DataShortcut *sc;
 	ui.shortcutEdit->setText(name);
-	sc=wm->ShortcutStore.Get(name);
+	const DataShortcut* sc=wm->ShortcutStore.GetPtr(name);
 	if (sc) {
 		ui.artistEdit->setText(sc->GetArtist());
 	}

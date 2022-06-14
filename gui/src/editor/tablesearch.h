@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: tablesearch.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2010 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,24 +27,24 @@
 
 class TableSearch : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 protected:
-	bool eventFilter(QObject *target, QEvent *event);
+	bool eventFilter(QObject* target, QEvent* event);
 public:
-	TableSearch(QWidget *parent = 0, CWmClient *client=NULL);
-	void setSearchParams(const ppl6::CString &term, CTableStore *store, QString &Title);
+	TableSearch(QWidget* parent = 0, CWmClient* client=NULL);
+	void setSearchParams(const ppl7::String& term, CTableStore* store, QString& Title);
 	void Search();
-    ~TableSearch();
+	~TableSearch();
 
 private:
-	CWmClient *wm;
-	CTableStore *store;
-    Ui::TablePopup ui;
+	CWmClient* wm;
+	CTableStore* store;
+	Ui::TablePopup ui;
 
 private slots:
-    void on_searchButton_clicked();
-    void on_list_itemDoubleClicked ( QTreeWidgetItem * item, int column );
+	void on_searchButton_clicked();
+	void on_list_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 };
 

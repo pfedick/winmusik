@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.15 $
- * $Date: 2010/12/23 18:04:40 $
- * $Id: search.cpp,v 1.15 2010/12/23 18:04:40 pafe Exp $
- *
- *
- * Copyright (c) 2014 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +18,6 @@
  */
 
 #include "winmusik3.h"
-#include "wmstorage.h"
 #include "resultfilter.h"
 
 
@@ -43,8 +36,8 @@ void ResultFilter::disableAll()
 	ratingEnabled=false;
 	lengthEnabled=false;
 	energyEnabled=false;
-    tracksWithFilesOnlyEnabled=false;
-    tracksWithCoverOnlyEnabled=false;
+	tracksWithFilesOnlyEnabled=false;
+	tracksWithCoverOnlyEnabled=false;
 	bpmStart=0;
 	bpmEnd=999;
 	yearStart=0;
@@ -70,8 +63,8 @@ void ResultFilter::setBpmRange(bool enabled, int start, int end)
 void ResultFilter::setYearRange(bool enabled, int start, int end)
 {
 	yearEnabled=enabled;
-	yearStart=start*10000;
-	yearEnd=end*10000+1231;
+	yearStart=start * 10000;
+	yearEnd=end * 10000 + 1231;
 	//printf ("start: %d, End: %d\n",start,end);
 }
 
@@ -109,28 +102,28 @@ void ResultFilter::setMusicKey(bool enabled, int key)
 	musicKey=key;
 }
 
-void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
+void ResultFilter::setGenres(bool enabled, const ppl7::String& genres)
 {
 	genresEnabled=enabled;
 	genreSet.clear();
 	unwantedGenreSet.clear();
 	// genres nach Komma splitten
-	ppl6::CArray gens(genres,",");
+	ppl7::Array gens(genres, ",");
 
 	CTableStore::IndexTree Result;
 	CTableStore::IndexTree::const_iterator it;
 
-	for (int i=0;i<gens.Num();i++) {
+	for (size_t i=0;i < gens.size();i++) {
 		Result.clear();
-		ppl6::CString g=gens[i];
-		g.Trim();
-		wm_main->GenreStore.findWords(Result,g);
-		if (g[0]=='!') {
-			for (it=Result.begin();it!=Result.end();++it) {
+		ppl7::String g=gens[i];
+		g.trim();
+		wm_main->GenreStore.FindWords(g, Result);
+		if (g[0] == '!') {
+			for (it=Result.begin();it != Result.end();++it) {
 				unwantedGenreSet.insert(*it);
 			}
 		} else {
-			for (it=Result.begin();it!=Result.end();++it) {
+			for (it=Result.begin();it != Result.end();++it) {
 				genreSet.insert(*it);
 			}
 		}
@@ -146,99 +139,99 @@ void ResultFilter::setGenres(bool enabled, const ppl6::CString &genres)
 
 void ResultFilter::setTracksWithFilesOnly(bool enabled)
 {
-    tracksWithFilesOnlyEnabled=enabled;
+	tracksWithFilesOnlyEnabled=enabled;
 }
 
 void ResultFilter::setTracksWithCoverOnly(bool enabled)
 {
-    tracksWithCoverOnlyEnabled=enabled;
+	tracksWithCoverOnlyEnabled=enabled;
 }
 
 
-bool ResultFilter::pass(const DataTitle &ti) const
+bool ResultFilter::pass(const DataTitle& ti) const
 {
-	if (bpmEnabled==true && passBpm(ti)==false) return false;
-	if (ratingEnabled==true && passRating(ti)==false) return false;
-	if (yearEnabled==true && passYear(ti)==false) return false;
-	if (recordingDateEnabled==true && passRecordingDate(ti)==false) return false;
-	if (musicKeyEnabled==true && passMusicKey(ti)==false) return false;
-	if (genresEnabled==true && passGenres(ti)==false) return false;
-	if (lengthEnabled==true && passLength(ti)==false) return false;
-	if (energyEnabled==true && passEnergyLevel(ti)==false) return false;
-    if (tracksWithFilesOnlyEnabled==true && passTrackWithFile(ti)==false) return false;
-    if (tracksWithCoverOnlyEnabled==true && passTrackWithCover(ti)==false) return false;
+	if (bpmEnabled == true && passBpm(ti) == false) return false;
+	if (ratingEnabled == true && passRating(ti) == false) return false;
+	if (yearEnabled == true && passYear(ti) == false) return false;
+	if (recordingDateEnabled == true && passRecordingDate(ti) == false) return false;
+	if (musicKeyEnabled == true && passMusicKey(ti) == false) return false;
+	if (genresEnabled == true && passGenres(ti) == false) return false;
+	if (lengthEnabled == true && passLength(ti) == false) return false;
+	if (energyEnabled == true && passEnergyLevel(ti) == false) return false;
+	if (tracksWithFilesOnlyEnabled == true && passTrackWithFile(ti) == false) return false;
+	if (tracksWithCoverOnlyEnabled == true && passTrackWithCover(ti) == false) return false;
 	return true;
 }
 
-bool ResultFilter::pass(ppluint32 titleId) const
+bool ResultFilter::pass(uint32_t titleId) const
 {
-	DataTitle *ti=wm_main->GetTitle(titleId);
+	const DataTitle* ti=wm_main->GetTitle(titleId);
 	if (!ti) return false;
 	return pass(*ti);
 }
 
-bool ResultFilter::passBpm(const DataTitle &ti) const
+bool ResultFilter::passBpm(const DataTitle& ti) const
 {
-	if (ti.BPM>=bpmStart && ti.BPM<=bpmEnd) return true;
+	if (ti.BPM >= bpmStart && ti.BPM <= bpmEnd) return true;
 	return false;
 }
 
-bool ResultFilter::passRating(const DataTitle &ti) const
+bool ResultFilter::passRating(const DataTitle& ti) const
 {
-	if (ti.Rating>=ratingStart && ti.Rating<=ratingEnd) return true;
+	if (ti.Rating >= ratingStart && ti.Rating <= ratingEnd) return true;
 	return false;
 }
 
-bool ResultFilter::passYear(const DataTitle &ti) const
+bool ResultFilter::passYear(const DataTitle& ti) const
 {
-	if (ti.ReleaseDate>=yearStart && ti.ReleaseDate<=yearEnd) return true;
+	if (ti.ReleaseDate >= yearStart && ti.ReleaseDate <= yearEnd) return true;
 	return false;
 }
 
-bool ResultFilter::passRecordingDate(const DataTitle &ti) const
+bool ResultFilter::passRecordingDate(const DataTitle& ti) const
 {
-	if (ti.RecordDate>=recordingStart && ti.RecordDate<=recordingEnd) return true;
+	if (ti.RecordDate >= recordingStart && ti.RecordDate <= recordingEnd) return true;
 	return false;
 
 }
 
-bool ResultFilter::passMusicKey(const DataTitle &ti) const
+bool ResultFilter::passMusicKey(const DataTitle& ti) const
 {
-	if (ti.Key==musicKey) return true;
+	if (ti.Key == musicKey) return true;
 	return false;
 }
 
-bool ResultFilter::passGenres(const DataTitle &ti) const
+bool ResultFilter::passGenres(const DataTitle& ti) const
 {
-	std::set<ppluint32>::iterator it=unwantedGenreSet.find(ti.GenreId);
-	if (it!=unwantedGenreSet.end()) return false;
-	if (genreSet.size()==0) return true;
+	std::set<uint32_t>::iterator it=unwantedGenreSet.find(ti.GenreId);
+	if (it != unwantedGenreSet.end()) return false;
+	if (genreSet.size() == 0) return true;
 	it=genreSet.find(ti.GenreId);
-	if (it!=genreSet.end()) return true;
+	if (it != genreSet.end()) return true;
 	return false;
 }
 
-bool ResultFilter::passLength(const DataTitle &ti) const
+bool ResultFilter::passLength(const DataTitle& ti) const
 {
-	if (ti.Length>=lengthStart && ti.Length<=lengthEnd) return true;
+	if (ti.Length >= lengthStart && ti.Length <= lengthEnd) return true;
 	return false;
 
 }
 
-bool ResultFilter::passEnergyLevel(const DataTitle &ti) const
+bool ResultFilter::passEnergyLevel(const DataTitle& ti) const
 {
-	if (ti.EnergyLevel>=energyStart && ti.EnergyLevel<=energyEnd) return true;
+	if (ti.EnergyLevel >= energyStart && ti.EnergyLevel <= energyEnd) return true;
 	return false;
 }
 
-bool ResultFilter::passTrackWithFile(const DataTitle &ti) const
+bool ResultFilter::passTrackWithFile(const DataTitle& ti) const
 {
-    if (ti.Size>0 || ti.Bitrate>0) return true;
-    return false;
+	if (ti.Size > 0 || ti.Bitrate > 0) return true;
+	return false;
 }
 
-bool ResultFilter::passTrackWithCover(const DataTitle &ti) const
+bool ResultFilter::passTrackWithCover(const DataTitle& ti) const
 {
-	if (ti.CoverPreview.Size()>0) return true;
-    return false;
+	if (ti.CoverPreview.size() > 0) return true;
+	return false;
 }

@@ -1,11 +1,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -23,6 +24,7 @@
 ###############################################################################
 ### Global Options
 ###############################################################################
+VERSION ?= "3.7.0"
 
 PREFIX		?= @prefix@
 CC		= @CC@
@@ -44,25 +46,40 @@ gui          := gui
 
 #.PHONY: all $(gui) $(libraries)
 
-all: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
-
-release: pplib/release/libpplib.a lib/compile/libwinmusik.a gui/Makefile release/WinMusik
-
-debug: pplib/debug/libpplib-debug.a lib/compile/libwinmusik.a gui/Makefile debug/WinMusik
 
 
+.PHONY: release debug release/WinMusik debug/WinMusik
+
+release: ppl7_release wmlib_release gui_release
+
+debug: ppl7_debug wmlib_debug gui_debug
+
+all: release debug
+
+ppl7: ppl7_release ppl7_debug
+
+wmlib: wmlib_release wmlib_debug
+
+gui: release
+
+mingw:
+	VERSION=${VERSION} ./update_version.sh
+	mingw32-make -j8 release
+	cd gui && lupdate WinMusik.pro
+	rm -rf release/deploy
+	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
 ###########################################################################
 ### RELEASE
 ###########################################################################
-pplib/release/libpplib.a: Makefile pplib/Makefile
-	mkdir -p pplib/release
-	$(MAKE) --directory=pplib release
+ppl7_release:
+	$(MAKE) --directory=pplib release/libppl7-core.a release/libppl7-crypto.a release/libppl7-inet.a release/libppl7-audio.a
+	ar -r pplib/release/libpplib.a pplib/release/*.o
 
-lib/compile/libwinmusik.a: Makefile lib/Makefile pplib/release/libpplib.a
-	mkdir -p lib/compile
-	$(MAKE) --directory=lib release
+wmlib_release:
+	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
-release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a lib/compile/libwinmusik.a
+gui_release: gui/Makefile
+	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -72,12 +89,16 @@ release/WinMusik: $(libraries) Makefile gui/Makefile pplib/release/libpplib.a li
 ###########################################################################
 ### DEBUG
 ###########################################################################
+ppl7_debug:
+	$(MAKE) --directory=pplib debug/libppl7-core.a debug/libppl7-crypto.a debug/libppl7-inet.a debug/libppl7-audio.a
+	ar -r pplib/debug/libpplib.a pplib/debug/*.o
 
-pplib/debug/libpplib-debug.a: Makefile pplib/Makefile
-	mkdir -p pplib/debug
-	$(MAKE) --directory=pplib debug
 
-debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/compile/libwinmusik.a
+wmlib_debug:
+	$(MAKE) --directory=wmlib debug/libwinmusik3.a
+
+gui_debug: gui/Makefile
+	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug
@@ -85,7 +106,7 @@ debug/WinMusik: $(libraries) Makefile gui/Makefile pplib/debug/libpplib.a lib/co
 	cp gui/debug/WinMusik debug/WinMusik
 
 ###########################################################################
-### DEBUG
+### MISC
 ###########################################################################
 
 install: release/WinMusik Makefile
@@ -100,12 +121,24 @@ deinstall:
 	rm -rf $(PREFIX)/share/pixmaps/WinMusik.png
 	rm -rf $(PREFIX)/share/doc/WinMusik
 	rm -rf $(PREFIX)/share/applications/WinMusik.desktop
-	
+
 clean:
-	rm -rf documentation
-	rm -rf gui/release gui/debug release debug pplib/release pplib/debug lib/compile
+	@rm -rf documentation release debug
+	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
+	-@ $(MAKE) --directory=gui clean > /dev/null 2>&1
+	@rm -rf gui/release gui/debug gui/Makefile* release debug pplib/debug lib/compile
+	@rm -rf gui/ui_*.h
+	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
+	-@ $(MAKE) --directory=wmlib clean > /dev/null 2>&1
+
+distclean: clean
+	@rm -rf gui/Makefile* gui/WinMusik.pro .qmake.stash autom4te.cache
+	@rm -rf config.log config.status
+	@rm -rf Package/WinMusik.desktop
+	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
+	-@ $(MAKE) --directory=wmlib distclean > /dev/null 2>&1
+	@rm -rf Makefile
+
 
 gui/Makefile: gui/WinMusik.pro
 	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
-
-

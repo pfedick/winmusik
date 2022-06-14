@@ -1,0 +1,122 @@
+CC = @CC@
+CXX	= @CXX@
+GTEST_DIR	= googletest-release-1.10.0/googletest
+EXTRA_CFLAGS =
+INCLUDE	= -I. -I../include -I../../pplib/include -I$(GTEST_DIR)/include
+CFLAGS	= -ggdb -Wall  $(INCLUDE) @CFLAGS@ @DEFS@  @PTHREAD_CFLAGS@ @ZLIB_CFLAGS@ @BZ2_CFLAGS@ \
+	 @PCRE_CFLAGS@ @OPENSSL_INCLUDES@ @ICONV_CFLAGS@ @LIBCURL_CPPFLAGS@ \
+	 @LIBCDIO_CFLAGS@ $(EXTRA_CFLAGS)
+CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS	= compile/libgtest.a -L../debug -lwinmusik3 ../../pplib/debug/libpplib.a \
+	@LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@ \
+	@BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@ \
+	@OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@ \
+	@LIBCDIO_LDFLAGS@ \
+	-lstdc++
+LIBS_COVERAGE	= compile/libgtest.a -L../debug -lwinmusik3   ../../pplib/debug/libpplib.a  -lgcov -lstdc++
+PROGNAME = testsuite
+
+
+OBJECTS = compile/main.o \
+	compile/traktor.o compile/playlist.o compile/cwmfile.o \
+	compile/id3tagsaver.o \
+	compile/storage.o \
+	compile/storage_device.o \
+	compile/storage_item.o \
+	compile/storage_shortcut.o \
+	compile/storage_simple_table.o \
+	compile/storage_title.o \
+	compile/storage_track.o
+
+$(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h ../debug/libwinmusik3.a
+	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
+
+$(PROGNAME)_coverage: compile/libgtest.a $(OBJECTS) wmlib-tests.h ../debug/libwinmusik3.a
+	$(CXX) -O -ggdb -o $(PROGNAME)_coverage $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS_COVERAGE)
+
+
+all: $(PROGNAME) $(PROGNAME)_coverage
+
+coverage: $(PROGNAME)_coverage
+	rm -rf tmp
+	mkdir -p tmp
+	./$(PROGNAME)_coverage
+
+
+test: $(PROGNAME)
+	rm -rf tmp
+	mkdir -p tmp
+	./$(PROGNAME)
+
+xml: $(PROGNAME)
+	rm -rf tmp
+	mkdir -p tmp
+	./$(PROGNAME) --gtest_output=xml
+
+memcheck: $(PROGNAME)
+	valgrind --tool=memcheck --leak-check=full --show-reachable=no --suppressions=valgrind.suppressions --xml=yes --xml-file=testsuite.valgrind ./$(PROGNAME)
+
+clean:
+	-rm -rf compile tmp
+	-rm -rf *.core
+	-rm -rf $(PROGNAME) $(PROGNAME)_coverage
+
+distclean: clean
+	- rm -rf Makefile
+
+compile/libgtest.a:
+	mkdir -p compile
+	$(CXX) -I${GTEST_DIR}/include -I${GTEST_DIR} -o compile/gtest-all.o -c ${GTEST_DIR}/src/gtest-all.cc
+	ar -rv compile/libgtest.a compile/gtest-all.o
+
+
+compile/main.o: src/main.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/main.o -c src/main.cpp
+
+compile/cwmfile.o: src/cwmfile.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/cwmfile.o -c src/cwmfile.cpp
+
+compile/storage.o: src/storage.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage.o -c src/storage.cpp
+
+
+compile/traktor.o: src/traktor.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/traktor.o -c src/traktor.cpp
+
+compile/id3tagsaver.o: src/id3tagsaver.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/id3tagsaver.o -c src/id3tagsaver.cpp
+
+compile/playlist.o: src/playlist.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/playlist.o -c src/playlist.cpp
+
+compile/storage_simple_table.o: src/storage_simple_table.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_simple_table.o -c src/storage_simple_table.cpp
+
+
+compile/storage_device.o: src/storage_device.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_device.o -c src/storage_device.cpp
+
+compile/storage_item.o: src/storage_item.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_item.o -c src/storage_item.cpp
+
+compile/storage_shortcut.o: src/storage_shortcut.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_shortcut.o -c src/storage_shortcut.cpp
+
+compile/storage_title.o: src/storage_title.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_title.o -c src/storage_title.cpp
+
+compile/storage_track.o: src/storage_track.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/storage_track.o -c src/storage_track.cpp

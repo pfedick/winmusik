@@ -1,11 +1,12 @@
 ###############################################################################
 # This file is part of WinMusik 3 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
+# Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2019, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -22,23 +23,23 @@
 ###############################################################################
 
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.69)
-AC_INIT([winmusik], [3.6.0], [patrick@pfp.de], [winmusik-3.6.0.tar.bz2])
+AC_PREREQ([2.71])
+AC_INIT([winmusik],[3.7.0],[patrick@pfp.de],[winmusik-3.7.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
-AC_CONFIG_SRCDIR([pplib/include/ppl6.h])
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
-AC_CONFIG_SRCDIR([pplib/include/config.h.in])
+AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
+AC_CONFIG_SRCDIR([wmlib/include/wm_config.h.in])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([pplib/Makefile])
-AC_CONFIG_FILES([lib/Makefile])
-AC_CONFIG_FILES([lib/tests/Makefile])
+AC_CONFIG_FILES([pplib/tests/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])
-AC_CONFIG_HEADERS([pplib/include/config.h])
-AC_CONFIG_HEADERS([lib/include/wm_config.h])
+AC_CONFIG_HEADERS([wmlib/include/wm_config.h])
+AC_CONFIG_FILES([wmlib/Makefile])
+AC_CONFIG_FILES([wmlib/tests/Makefile])
 AC_CONFIG_FILES([gui/WinMusik.pro])
 AC_CONFIG_FILES([Package/WinMusik.desktop])
 
@@ -46,24 +47,28 @@ AC_CONFIG_FILES([Package/WinMusik.desktop])
 ###############################################################################
 # Includes
 ###############################################################################
-sinclude(autoconf/ax_cxx_compile_stdcxx.m4)
-sinclude(autoconf/ax_check_openssl.m4)
-sinclude(autoconf/libcurl.m4)
-sinclude(autoconf/ax_path_lib_pcre.m4)
-sinclude(autoconf/ax_pthread.m4)
-sinclude(autoconf/lib-link.m4)
-sinclude(autoconf/iconv.m4)
-sinclude(autoconf/bzip2.m4)
-sinclude(autoconf/ax_check_zlib.m4)
-sinclude(autoconf/ax_lib_crypto.m4)
-sinclude(autoconf/checkfuncs.m4)
-sinclude(autoconf/ax_gcc_x86_cpuid.m4)
-sinclude(autoconf/ax_check_compile_flag.m4)
-sinclude(autoconf/ax_check_compiler_flags.m4)
-sinclude(autoconf/ax_gcc_archflag.m4)
+
+sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
+sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
+sinclude(pplib/autoconf/ax_pthread.m4)
+sinclude(pplib/autoconf/checkfuncs.m4)
+sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
+sinclude(pplib/autoconf/ax_check_compile_flag.m4)
+sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
+sinclude(pplib/autoconf/ax_gcc_archflag.m4)
+sinclude(pplib/autoconf/lib-link.m4)
+sinclude(pplib/autoconf/ax_check_openssl.m4)
+sinclude(pplib/autoconf/libcurl.m4)
+sinclude(pplib/autoconf/iconv.m4)
+sinclude(pplib/autoconf/bzip2.m4)
+sinclude(pplib/autoconf/ax_check_zlib.m4)
+sinclude(pplib/autoconf/ax_lib_crypto.m4)
+sinclude(pplib/autoconf/gtest.m4)
+
 sinclude(autoconf/libcdio.m4)
-sinclude(autoconf/gtest.m4)
 sinclude(autoconf/ax_find_qmake.m4)
+
+
 #sinclude(autoconf/ax_have_qt.m4)
 
 report_have_pthreads="no"
@@ -86,7 +91,7 @@ AC_LANG(C++)
 AC_EXEEXT
 
 
-AX_CXX_COMPILE_STDCXX(11) 
+AX_CXX_COMPILE_STDCXX(11)
 
 AX_CHECK_COMPILE_FLAG([-no-pie],
     LDFLAGS="-no-pie $LDFLAGS"
@@ -96,14 +101,14 @@ AX_CHECK_COMPILE_FLAG([-no-pie],
 AC_SUBST(NOPIE)
 
 
-  
+
 case "$host_os" in
 	freebsd* )
 		CFLAGS="-I/usr/local/include $CFLAGS"
 		LDFLAGS="-L/usr/local/lib $LDFLAGS"
   		;;
 esac
- 
+
 case "$host_os" in
 	*mingw32*|msys )
 		report_have_pthreads="yes, Windows Threads"
@@ -113,7 +118,7 @@ case "$host_os" in
   		;;
 	*)
 		AX_PTHREAD([report_have_pthreads="yes, pthreads"]
-			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])			
+			AC_DEFINE(HAVE_PTHREADS,1, [Define to 1 if we have pthreads])
 		)
 		;;
 esac
@@ -204,7 +209,7 @@ AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
 
 # AX_HAVE_QT scheint unter FreeBSD nicht kompatibel zu sein. Der produzierte Code
-# läuft zwar unter FreeBSD, aber nicht unter Linux oder MinGW 
+# läuft zwar unter FreeBSD, aber nicht unter Linux oder MinGW
 dnl AX_HAVE_QT
 
 PKG_PROG_PKG_CONFIG()
@@ -216,22 +221,21 @@ PKG_PROG_PKG_CONFIG()
 #--------------------------------------------------------------------
 
 AC_HEADER_STDBOOL
-AC_HEADER_TIME
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_TYPE_UID_T
 AC_TYPE_OFF_T
-dnl AC_SIZEOF_TYPE(off_t)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_STRUCT_TM
-# FPOS_T ist ein Struct?
 AX_FPOS_ISSTRUCT()
-
 AX_TM_HAS_GMTOFF()
-
 AC_PATH_XTRA
 
 
@@ -320,17 +324,24 @@ AC_CHECK_FUNCS([opendir closedir readdir readdir_r stat])
 AC_CHECK_FUNCS([clock_gettime])
 AC_CHECK_FUNCS([inet_ntop inet_pton inet_aton inet_ntoa inet_ntoa_r inet_addr inet_network inet_makeaddr])
 
+AC_CHECK_LIB(pthread, pthread_set_name_np,
+	AC_DEFINE(HAVE_PTHREAD_SET_NAME_NP,1),,)
+AC_CHECK_LIB(pthread, pthread_setname_np,
+	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP,1),,)
+
+AC_CHECK_FUNCS([sched_yield pthread_yield])
+
+
 AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/socket.h>], [struct sockaddr s; s.sa_len;],
-ac_cv_struct_sa_len=yes, ac_cv_struct_sa_len=no)])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
+#include <sys/socket.h>]], [[struct sockaddr s; s.sa_len;]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])])
 if test $ac_cv_struct_sa_len = yes; then
   AC_DEFINE(HAVE_SOCKADDR_SA_LEN)
 fi
 
 
 AM_ICONV
-if test "$am_cv_func_iconv_works" = "yes" 
+if test "$am_cv_func_iconv_works" = "yes"
 then
 	report_have_iconv="yes"
 	ICONV_CFLAGS=$INCICONV
@@ -360,31 +371,31 @@ AX_PATH_LIB_PCRE(
             report_have_pcre="yes"
             ,
             )
-       
+
 AX_CHECK_OPENSSL(
 	AC_DEFINE(HAVE_OPENSSL, 1, [ Define if you have openssl. ])
 	report_have_openssl="yes"
-	
+
 	am_save_CPPFLAGS="$CPPFLAGS"
 	am_save_CFLAGS="$CFLAGS"
 	am_save_LIBS="$LIBS"
 	am_save_LDFLAGS="$LDFLAGS"
-	
+
 	LIBS="$LIBS $OPENSSL_LIBS"
 	CFLAGS="$CFLAGS $OPENSSL_INCLUDES"
-	
+
 	AC_CHECK_FUNCS([TLS_method TLS_server_method TLS_client_method])
 	AC_CHECK_FUNCS([EVP_aes_128_ecb EVP_aes_192_ecb EVP_aes_256_ecb EVP_aria_128_ecb EVP_aria_192_ecb EVP_aria_256_ecb])
 	AC_CHECK_FUNCS([EVP_bf_ecb EVP_camellia_128_ecb EVP_camellia_192_ecb EVP_camellia_256_ecb EVP_cast5_ecb])
 	AC_CHECK_FUNCS([EVP_des_ecb EVP_des_ede3_ecb EVP_idea_ecb EVP_rc2_ecb EVP_rc5_32_12_16_ecb])
 	AC_CHECK_FUNCS([SSLv23_method SSLv23_server_method SSLv23_client_method])
-	
-	
+
+
 	CPPFLAGS="$am_save_CPPFLAGS"
 	CFLAGS="$am_save_CFLAGS"
 	LIBS="$am_save_LIBS"
-	LDFLAGS="$am_save_LDFLAGS"	
-	
+	LDFLAGS="$am_save_LDFLAGS"
+
 	, :)
 
 report_have_curl="no"
@@ -394,7 +405,7 @@ LIBCURL_CHECK_CONFIG([yes],[7.30.0],
 	AC_SUBST(LIBCURL)
 	AC_SUBST(LIBCURL_CPPFLAGS)
 	report_have_curl="yes",:)
-	
+
 report_have_libcdio="no"
 AX_CHECK_LIBCDIO(
         report_have_libcdio="yes",
@@ -408,17 +419,17 @@ then
 fi
 if test -x "$qmake"
 then
-	report_have_qt="yes 2, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 if test -x "$ac_cv_path_qmake"
 then
-	report_have_qt="yes 3, $qt_version"
+	report_have_qt="yes, $qt_version"
 fi
 
 SRCDIR=`pwd`
 AC_SUBST(SRCDIR)
 
- 
+
 # If we support __thread, that can speed up tcmalloc a bit.
 # Note, however, that our code tickles a bug in gcc < 4.1.2
 # involving TLS and -fPIC (which our libraries will use) on x86:
@@ -434,7 +445,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([#if defined(__GNUC__) && (defined(__i386__) || 
 
 # We also need to check if the kernel supports __thread, which requires uname()
 AC_CHECK_DECLS(uname,,, [#include <sys/utsname.h>])
- 
+
 
 
 
@@ -470,7 +481,7 @@ case "${host_cpu}-${host_os}" in
         ;;
 esac;
 
-         
+
 
 
 AC_SUBST(report_have_zlib)
@@ -482,6 +493,64 @@ AC_SUBST(report_have_pthreads)
 AC_SUBST(report_have_curl)
 AC_SUBST(report_have_libcdio)
 
+###
+JPEG_CFLAGS=""
+MYSQL_CFLAGS=""
+POSTGRESQL_CFLAGS=""
+SQLITE3_CFLAGS=""
+LAME_CFLAGS=""
+LIBMICROHTTPD_CFLAGS=""
+LIBCDIO_CFLAGS=""
+LIBIDN_CFLAGS=""
+LIBLDNS_CFLAGS=""
+IMLIB_CFLAGS=""
+FT2_CFLAGS=""
+HAVE_X86_ASSEMBLER=""
+MPG123_CFLAGS=""
+SDL2_CFLAGS=""
+IMLIB_LIBS=""
+FT2_LIBS=""
+MYSQL_LDFLAGS=""
+POSTGRESQL_LDFLAGS=""
+SQLITE3_LDFLAGS=""
+LAME_LIBS=""
+LIBLDNS_LIBS=""
+MPG123_LIBS=""
+SDL2_LIBS=""
+LIBMICROHTTPD_LIBS=""
+LIBIDN_LIBS=""
+ASM=""
+ASMFLAGS=""
+ASMDEBUGFLAGS=""
+
+AC_SUBST(JPEG_CFLAGS)
+AC_SUBST(MYSQL_CFLAGS)
+AC_SUBST(POSTGRESQL_CFLAGS)
+AC_SUBST(SQLITE3_CFLAGS)
+AC_SUBST(LAME_CFLAGS)
+AC_SUBST(LIBMICROHTTPD_CFLAGS)
+AC_SUBST(LIBCDIO_CFLAGS)
+AC_SUBST(LIBIDN_CFLAGS)
+AC_SUBST(LIBLDNS_CFLAGS)
+AC_SUBST(IMLIB_CFLAGS)
+AC_SUBST(FT2_CFLAGS)
+AC_SUBST(HAVE_X86_ASSEMBLER)
+AC_SUBST(MPG123_CFLAGS)
+AC_SUBST(SDL2_CFLAGS)
+AC_SUBST(IMLIB_LIBS)
+AC_SUBST(FT2_LIBS)
+AC_SUBST(MYSQL_LDFLAGS)
+AC_SUBST(POSTGRESQL_LDFLAGS)
+AC_SUBST(SQLITE3_LDFLAGS)
+AC_SUBST(LAME_LIBS)
+AC_SUBST(LIBLDNS_LIBS)
+AC_SUBST(MPG123_LIBS)
+AC_SUBST(SDL2_LIBS)
+AC_SUBST(LIBMICROHTTPD_LIBS)
+AC_SUBST(LIBIDN_LIBS)
+AC_SUBST(ASM)
+AC_SUBST(ASMFLAGS)
+AC_SUBST(ASMDEBUGFLAGS)
 
 ###############################################################################
 # Output
@@ -499,13 +568,13 @@ AC_MSG_RESULT([
 ******************************************************************************
 ** Configuration summary for $PACKAGE_NAME Version $PACKAGE_VERSION
 ** Target: $target_os        CPU: $target_cpu
-** 
+**
 ** Byteorder: $report_byteorder
 **   Size of char         $ac_cv_sizeof_char     Size of float        $ac_cv_sizeof_float
 **   Size of short        $ac_cv_sizeof_short     Size of double       $ac_cv_sizeof_double
 **   Size of int          $ac_cv_sizeof_int     Size of void*        $ac_cv_sizeof_voidp
 **   Size of long         $ac_cv_sizeof_long     Size of wchar_t      $ac_cv_sizeof_wchar_t
-**   Size of long long    $ac_cv_sizeof_long_long     
+**   Size of long long    $ac_cv_sizeof_long_long
 **   Size of size_t       $ac_cv_sizeof_size_t
 ******************************************************************************
 **
@@ -557,4 +626,3 @@ then
 else
 	AC_MSG_RESULT([])
 fi
-

@@ -1,13 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * $Author: pafe $
- * $Revision: 1.2 $
- * $Date: 2010/05/16 12:40:40 $
- * $Id: shortcutdialog.h,v 1.2 2010/05/16 12:40:40 pafe Exp $
- *
- *
- * Copyright (c) 2014 Patrick Fedick
+ * Copyright (c) 2022 Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +22,10 @@
 #define CDDBSELECT_H_
 
 #include "winmusik3.h"
-#include <ppl6-sound.h>
 #include <QDialog>
 #include <QTreeWidgetItem>
+
+#include "ppl7-audio.h"
 #include "ui_cddbselect.h"
 
 class CDDBSelect : public QDialog
@@ -38,34 +33,34 @@ class CDDBSelect : public QDialog
     Q_OBJECT
 
 public:
-    CDDBSelect(QWidget *parent = 0, CWmClient *wm = NULL);
+    CDDBSelect(QWidget* parent = 0, CWmClient* wm = NULL);
     ~CDDBSelect();
 
-    void setMatches(const ppl6::CDDB::Matches &matches);
-    ppl6::CDDB::Disc getSelected();
+    void setMatches(const ppl7::CDDB::Matches& matches);
+    ppl7::CDDB::Disc getSelected();
 
 
 private:
     class CddbItem : public QTreeWidgetItem
     {
-    	public:
-    	ppl6::CDDB::Disc disc;
+    public:
+        ppl7::CDDB::Disc disc;
     };
     Ui::CDDBSelect ui;
-    CWmClient *wm;
-    CddbItem *selectedItem;
+    CWmClient* wm;
+    CddbItem* selectedItem;
 
-    void InstallFilter(QObject *object, int id);
-    bool eventFilter(QObject *target, QEvent *event);
-    bool consumeEvent(QObject *target, QEvent *event);
-    void resizeEvent ( QResizeEvent * event );
+    void InstallFilter(QObject* object, int id);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
+    void resizeEvent(QResizeEvent* event);
 
     // Globale Events
-    bool on_KeyPress(QObject *target, int key,int modifier);
+    bool on_KeyPress(QObject* target, int key, int modifier);
 
 public slots:
-	void on_tracklist_itemDoubleClicked (QTreeWidgetItem * item, int column);
-	void on_cancelButton_clicked();
+    void on_tracklist_itemDoubleClicked(QTreeWidgetItem* item, int column);
+    void on_cancelButton_clicked();
 };
 
 

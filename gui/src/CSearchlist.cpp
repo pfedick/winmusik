@@ -1,13 +1,25 @@
 /*
- * CSearchlist.cpp
+ * This file is part of WinMusik 3 by Patrick Fedick
  *
- *  Created on: 14.01.2012
- *      Author: patrick
+ * Copyright (c) 2022 Patrick Fedick
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <winmusik3.h>
 #include "csearchlist.h"
-//
+ //
 
 SearchlistItem::SearchlistItem()
 {
@@ -18,14 +30,14 @@ SearchlistItem::SearchlistItem()
 	Rating=0;
 }
 
-SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
+SearchlistItem::SearchlistItem(const ppl7::String& Misc)
 {
 	found=false;
 	selected=false;
 	Length=0;
 	DateAdded.setCurrentTime();
 	RegExpMatch match;
-	if (wm_main->RegExpCapture.match(Misc,match)) {
+	if (wm_main->RegExpCapture.match(Misc, match)) {
 		Artist=match.Artist;
 		Title=match.Title;
 		Version=match.Version;
@@ -36,44 +48,44 @@ SearchlistItem::SearchlistItem(const ppl6::CString &Misc)
 	}
 
 
-	ppl6::CArray Matches;
-	if (Misc.PregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/",Matches)) {
+	ppl7::Array Matches;
+	if (Misc.pregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Matches)) {
 		//printf ("Match ASOT\n");
-		Artist=ppl6::Trim(Matches[1]);
-		Title=ppl6::Trim(Matches[2]);
-		Version=ppl6::Trim(Matches[3]);
-	} else if (Misc.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/",Matches)) {
-		Artist=ppl6::Trim(Matches[3]);
-		Title=ppl6::Trim(Matches[1]);
-		Version=ppl6::Trim(Matches[2]);
-	} else if (Misc.PregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/",Matches)) {
-		Artist=ppl6::Trim(Matches[3]);
-		Title=ppl6::Trim(Matches[1]);
-		Version=ppl6::Trim(Matches[2]);
-	} else if (Misc.PregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/",Matches)) {
-		Artist=ppl6::Trim(Matches[1]);
-		Title=ppl6::Trim(Matches[2]);
-		Version=ppl6::Trim(Matches[3]);
-	} else if (Misc.PregMatch("/^(.*?)\\-(.*?)$/",Matches)) {
-		Artist=ppl6::Trim(Matches[1]);
-		Title=ppl6::Trim(Matches[2]);
+		Artist=ppl7::Trim(Matches[1]);
+		Title=ppl7::Trim(Matches[2]);
+		Version=ppl7::Trim(Matches[3]);
+	} else if (Misc.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Matches)) {
+		Artist=ppl7::Trim(Matches[3]);
+		Title=ppl7::Trim(Matches[1]);
+		Version=ppl7::Trim(Matches[2]);
+	} else if (Misc.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Matches)) {
+		Artist=ppl7::Trim(Matches[3]);
+		Title=ppl7::Trim(Matches[1]);
+		Version=ppl7::Trim(Matches[2]);
+	} else if (Misc.pregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Matches)) {
+		Artist=ppl7::Trim(Matches[1]);
+		Title=ppl7::Trim(Matches[2]);
+		Version=ppl7::Trim(Matches[3]);
+	} else if (Misc.pregMatch("/^(.*?)\\-(.*?)$/", Matches)) {
+		Artist=ppl7::Trim(Matches[1]);
+		Title=ppl7::Trim(Matches[2]);
 	}
-	if (Title.PregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
+	if (Title.pregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
 		Title=Matches[1];
 		Artist+=Matches[2];
-	} else if (Title.PregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
-			Title=Matches[1];
-			Artist+=Matches[2];
-	} else if (Title.PregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
-			Title=Matches[1];
-			Artist+=Matches[2];
-	} else if (Title.PregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
-			Title=Matches[1];
-			Artist+=Matches[2];
+	} else if (Title.pregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
+		Title=Matches[1];
+		Artist+=Matches[2];
+	} else if (Title.pregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
+		Title=Matches[1];
+		Artist+=Matches[2];
+	} else if (Title.pregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
+		Title=Matches[1];
+		Artist+=Matches[2];
 	}
 }
 
-SearchlistItem::SearchlistItem(const ppl6::CString &Artist, const ppl6::CString &Title, const ppl6::CString Version)
+SearchlistItem::SearchlistItem(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String Version)
 {
 	this->Artist=Artist;
 	this->Title=Title;
@@ -87,63 +99,63 @@ void SearchlistItem::clear()
 {
 	found=false;
 	selected=false;
-	Artist.Clear();
-	Title.Clear();
-	Version.Clear();
-	Genre.Clear();
-	Comment.Clear();
+	Artist.clear();
+	Title.clear();
+	Version.clear();
+	Genre.clear();
+	Comment.clear();
 	ReleaseDate.clear();
 	DateAdded.clear();
 }
 
-void SearchlistItem::importXML(const ppl6::CString &xml)
+void SearchlistItem::importXML(const ppl7::String& xml)
 {
-	ppl6::CArray Matches;
-	if (xml.PregMatch("/\\<artist\\>(.*)\\<\\/artist\\>/s",Matches)) Artist=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
-	if (xml.PregMatch("/\\<title\\>(.*)\\<\\/title\\>/s",Matches)) Title=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
-	if (xml.PregMatch("/\\<version\\>(.*)\\<\\/version\\>/s",Matches)) Version=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
-	if (xml.PregMatch("/\\<genre\\>(.*)\\<\\/genre\\>/s",Matches)) Genre=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
-	if (xml.PregMatch("/\\<comment\\>(.*)\\<\\/comment\\>/s",Matches)) Comment=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
+	ppl7::Array Matches;
+	if (xml.pregMatch("/\\<artist\\>(.*)\\<\\/artist\\>/s", Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/\\<title\\>(.*)\\<\\/title\\>/s", Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/\\<version\\>(.*)\\<\\/version\\>/s", Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/\\<genre\\>(.*)\\<\\/genre\\>/s", Matches)) Genre=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/\\<comment\\>(.*)\\<\\/comment\\>/s", Matches)) Comment=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	try {
-		if (xml.PregMatch("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s",Matches)) ReleaseDate=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
+		if (xml.pregMatch("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s", Matches)) ReleaseDate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	} catch (...) {
 		ReleaseDate.clear();
 	}
 	try {
-		if (xml.PregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s",Matches)) DateAdded=ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1]));
+		if (xml.pregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s", Matches)) DateAdded=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	} catch (...) {
 		DateAdded.clear();
 	}
-	if (xml.PregMatch("/\\<length\\>(.*)\\<\\/length\\>/s",Matches)) Length=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
-	if (xml.PregMatch("/\\<found\\>(.*)\\<\\/found\\>/s",Matches)) found=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
-	if (xml.PregMatch("/\\<selected\\>(.*)\\<\\/selected\\>/s",Matches)) selected=ppl6::IsTrue(ppl6::Trim(ppl6::UnescapeHTMLTags(Matches[1])));
-	if (xml.PregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s",Matches)) Rating=ppl6::atoi(ppl6::UnescapeHTMLTags(Matches[1]));
+	if (xml.pregMatch("/\\<length\\>(.*)\\<\\/length\\>/s", Matches)) Length=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
+	if (xml.pregMatch("/\\<found\\>(.*)\\<\\/found\\>/s", Matches)) found=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+	if (xml.pregMatch("/\\<selected\\>(.*)\\<\\/selected\\>/s", Matches)) selected=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+	if (xml.pregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s", Matches)) Rating=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
 }
 
-ppl6::CString SearchlistItem::exportXML() const
+ppl7::String SearchlistItem::exportXML() const
 {
-	ppl6::CString s;
+	ppl7::String s;
 	s="<searchlistitem>\n"
-			"	<artist>"+ppl6::EscapeHTMLTags(Artist)+"</artist>\n"
-			"	<title>"+ppl6::EscapeHTMLTags(Title)+"</title>\n"
-			"	<version>"+ppl6::EscapeHTMLTags(Version)+"</version>\n"
-			"	<genre>"+ppl6::EscapeHTMLTags(Genre)+"</genre>\n"
-			"	<comment>"+ppl6::EscapeHTMLTags(Comment)+"</comment>\n";
+		"	<artist>" + ppl7::EscapeHTMLTags(Artist) + "</artist>\n"
+		"	<title>" + ppl7::EscapeHTMLTags(Title) + "</title>\n"
+		"	<version>" + ppl7::EscapeHTMLTags(Version) + "</version>\n"
+		"	<genre>" + ppl7::EscapeHTMLTags(Genre) + "</genre>\n"
+		"	<comment>" + ppl7::EscapeHTMLTags(Comment) + "</comment>\n";
 	try {
-		s+="	<releasedate>"+ReleaseDate.getISO8601()+"</releasedate>\n";
+		s+="	<releasedate>" + ReleaseDate.getISO8601() + "</releasedate>\n";
 	} catch (...) {
 
 	}
 	try {
-		s+="	<dateadded>"+DateAdded.getISO8601()+"</dateadded>\n";
+		s+="	<dateadded>" + DateAdded.getISO8601() + "</dateadded>\n";
 	} catch (...) {
 
 	}
-	s+=		"	<length>"+ppl6::ToString("%i",Length)+"</length>\n"
-			"	<found>"+(found?"true":"false")+"</found>\n"
-			"	<selected>"+(selected?"true":"false")+"</selected>\n"
-			"	<rating>"+ppl6::ToString("%i",Rating)+"</rating>\n"
-			"</searchlistitem>\n";
+	s+=		"	<length>" + ppl7::ToString("%i", Length) + "</length>\n"
+		"	<found>" + (found ? "true" : "false") + "</found>\n"
+		"	<selected>" + (selected ? "true" : "false") + "</selected>\n"
+		"	<rating>" + ppl7::ToString("%i", Rating) + "</rating>\n"
+		"</searchlistitem>\n";
 	return s;
 }
 
@@ -159,22 +171,22 @@ CSearchlist::~CSearchlist()
 
 }
 
-void CSearchlist::setName(const ppl6::CString &name)
+void CSearchlist::setName(const ppl7::String& name)
 {
 	this->Name=name;
 }
 
-const ppl6::CString &CSearchlist::name() const
+const ppl7::String& CSearchlist::name() const
 {
 	return Name;
 }
 
-const ppl6::CDateTime &CSearchlist::dateCreated() const
+const ppl7::DateTime& CSearchlist::dateCreated() const
 {
 	return DateCreated;
 }
 
-const ppl6::CDateTime &CSearchlist::dateUpdated() const
+const ppl7::DateTime& CSearchlist::dateUpdated() const
 {
 	return DateUpdated;
 }
@@ -187,43 +199,43 @@ size_t CSearchlist::size() const
 
 void CSearchlist::clear()
 {
-	Name.Clear();
+	Name.clear();
 	list.clear();
 	DateUpdated.setCurrentTime();
 	//DateCreated.setCurrentTime();	// Das bleibt, wie es war
 }
 
-void CSearchlist::add(const SearchlistItem &item)
+void CSearchlist::add(const SearchlistItem& item)
 {
 	list.push_back(item);
 	DateUpdated.setCurrentTime();
 }
 
-void CSearchlist::insert(size_t pos, const SearchlistItem &item)
+void CSearchlist::insert(size_t pos, const SearchlistItem& item)
 {
-	if (pos>=list.size()) {		// Am Ende einfügen
+	if (pos >= list.size()) {		// Am Ende einfügen
 		list.push_back(item);
 		return;
 	}
 	std::vector<SearchlistItem>::iterator it;
 	it=list.begin();
-	list.insert(it+pos,item);
+	list.insert(it + pos, item);
 	DateUpdated.setCurrentTime();
 }
 
-void CSearchlist::replace(size_t pos, const SearchlistItem &item)
+void CSearchlist::replace(size_t pos, const SearchlistItem& item)
 {
-	SearchlistItem &old=list.at(pos);
+	SearchlistItem& old=list.at(pos);
 	old=item;
 	DateUpdated.setCurrentTime();
 }
 
 void CSearchlist::remove(size_t pos)
 {
-	if (pos>list.size()) return;
+	if (pos > list.size()) return;
 	std::vector<SearchlistItem>::iterator it;
 	it=list.begin();
-	list.erase(it+pos);
+	list.erase(it + pos);
 	DateUpdated.setCurrentTime();
 }
 
@@ -247,54 +259,52 @@ SearchlistItem& CSearchlist::operator[] (size_t pos)
 	return list.at(pos);
 }
 
-ppl6::CString CSearchlist::toXML() const
+ppl7::String CSearchlist::toXML() const
 {
-	ppl6::CString s;
+	ppl7::String s;
 	s="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
 	s+="<searchlist>\n";
 	s+="<header>\n";
-	s+="   <name>"+ppl6::EscapeHTMLTags(Name)+"</name>\n";
-	s+="   <tracks>"+ppl6::ToString("%zu",list.size())+"</tracks>\n";
-	s+="   <dateCreated>"+DateCreated.getISO8601()+"</dateCreated>\n";
-	s+="   <dateUpdated>"+DateUpdated.getISO8601()+"</dateUpdated>\n";
+	s+="   <name>" + ppl7::EscapeHTMLTags(Name) + "</name>\n";
+	s+="   <tracks>" + ppl7::ToString("%zu", list.size()) + "</tracks>\n";
+	s+="   <dateCreated>" + DateCreated.getISO8601() + "</dateCreated>\n";
+	s+="   <dateUpdated>" + DateUpdated.getISO8601() + "</dateUpdated>\n";
 	s+="</header>\n";
-	for (size_t i=0;i<list.size();i++) {
+	for (size_t i=0;i < list.size();i++) {
 		s+=list.at(i).exportXML();
 	}
 	s+="</searchlist>\n";
 	return s;
 }
 
-int CSearchlist::save(const ppl6::CString &filename) const
+void CSearchlist::save(const ppl7::String& filename) const
 {
-	ppl6::CFile ff;
-	if (!ff.Open(filename,"wb")) return 0;
-	ff.Puts(toXML());
-	return 1;
+	ppl7::File ff;
+	ff.open(filename, ppl7::File::WRITE);
+	ff.puts(toXML());
 }
 
-int CSearchlist::load(const ppl6::CString &filename, bool headerOnly)
+void CSearchlist::load(const ppl7::String& filename, bool headerOnly)
 {
 	clear();
-	ppl6::CFile ff;
-	if (!ff.Open(filename,"rb")) return 0;
-	ppl6::CString content;
-	if (!ff.Load(content)) return 0;
-	if (content.PregMatch("/\\<header\\>(.*?)\\<\\/header\\>/s")) {
-		ppl6::CString header=content.GetMatch(1);
-		if (header.PregMatch("/\\<name\\>(.*)\\<\\/name\\>/s")) Name=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
-		if (header.PregMatch("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s")) DateCreated=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
-		if (header.PregMatch("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s")) DateUpdated=ppl6::Trim(ppl6::UnescapeHTMLTags(header.GetMatch(1)));
+	ppl7::String content;
+	ppl7::File::load(content, filename);
+	ppl7::Array matches;
+
+	if (content.pregMatch("/\\<header\\>(.*?)\\<\\/header\\>/s", matches)) {
+		ppl7::String header=matches.get(1);
+		if (header.pregMatch("/\\<name\\>(.*)\\<\\/name\\>/s", matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
+		if (header.pregMatch("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s", matches)) DateCreated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
+		if (header.pregMatch("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s", matches)) DateUpdated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
 
 	}
-	if (headerOnly) return 1;
-	ppl6::CArray rows;
-	rows.Explode(content,"<searchlistitem>");
-	for (int i=1;i<rows.Num();i++) {
+	if (headerOnly) return;
+	ppl7::Array rows;
+	rows.explode(content, "<searchlistitem>");
+	for (size_t i=1;i < rows.size();i++) {
 		SearchlistItem item;
-		item.importXML(rows.GetString(i));
+		item.importXML(rows.get(i));
 		list.push_back(item);
 	}
-	return 1;
+	return;
 }
-

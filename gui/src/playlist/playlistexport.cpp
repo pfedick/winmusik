@@ -1,8 +1,27 @@
+/*
+ * This file is part of WinMusik 3 by Patrick Fedick
+ *
+ * Copyright (c) 2022 Patrick Fedick
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "playlistexport.h"
 #include "ui_playlistexport.h"
 #include <QFileDialog>
 
-PlaylistExport::PlaylistExport(QWidget *parent, CWmClient *wm) :
+PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm) :
     QDialog(parent),
     ui(new Ui::PlaylistExport)
 {
@@ -34,7 +53,7 @@ void PlaylistExport::on_okButton_clicked()
     wm->conf.playlist_export.export_pls=ui->export_pls->isChecked();
     wm->conf.playlist_export.export_xspf=ui->export_xspf->isChecked();
     wm->conf.playlist_export.export_txt=ui->export_txt->isChecked();
-    wm->conf.Save();
+    wm->conf.trySave();
     done(1);
 }
 
@@ -68,7 +87,7 @@ bool PlaylistExport::abortClicked() const
     return abort_state;
 }
 
-void PlaylistExport::setCurrentFile(const ppl6::CString &filename, size_t size)
+void PlaylistExport::setCurrentFile(const ppl7::String& filename, size_t size)
 {
     ui->progress_file->setMaximum((int)size);
     ui->current_file->setText(filename);
@@ -83,4 +102,3 @@ void PlaylistExport::setFileProgress(size_t bytes)
 {
     ui->progress_file->setValue((int)bytes);
 }
-

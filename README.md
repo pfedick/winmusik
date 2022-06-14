@@ -33,7 +33,7 @@ Prerequirements
 ---------------
 
 You have to install the following packages:
-  - C++ compiler with c++11 support (gcc 4.8, clang4 or higher)
+  - C++ compiler with c++11 support (gcc or clang)
   - QT, version 5.x or higher
   - zlib (developer package)
   - bzip2 (developer package)
@@ -43,13 +43,24 @@ You have to install the following packages:
   - iconv (only if you have to import files from old WinMusik version 2.x)
   - libcdio (developer package)
 
+### Fedora 35/36
+
+    sudo dnf install gcc gcc-c++ qt5-qtbase-devel qt5-devel libcdio-devel zlib-devel \
+        bzip2-devel libpng-devel pcre-devel
+
+
+### Ubuntu 22.04
+
+    sudo apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools dpkg-dev \
+        libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev
+
 ### Windows 10 with Msys/mingw
 
 For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
 
     pacman -S git make mingw-w64-x86_64-gcc mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv \
-         mingw-w64-x86_64-bzip2 mingw-w64-x86_64-SDL2 mingw-w64-x86_64-mpg123 \
-         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng mingw-w64-x86_64-curl mingw-w64-x86_64-qt5
+         mingw-w64-x86_64-bzip2 \
+         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng mingw-w64-x86_64-qt5
 
 Configure and compile
 ---------------------
@@ -60,10 +71,10 @@ can simply type
 	./configure
 
 and the script will finds everything automatically. In practice, it probably
-will not, and you have to specify some paths manually. See 
+will not, and you have to specify some paths manually. See
 
 	./configure --help
-	
+
 for a description of all parameters. By default, the application will be
 installed in below /usr/local (e.g. /usr/local/bin, /usr/local/share...).
 If you want to install somewhere else, use "--prefix=PATH" with configure.
@@ -79,7 +90,7 @@ You should find a WinMusik binary in the release-Folder
 Type
 
 	make install
-	
+
 to install it.
 
 Credits
