@@ -13,7 +13,7 @@ jobs:
           submodules: 'true'
           #fetch-depth: 0
       - name: Install Dependencies
-        run: sudo apt install -y qt5-default qt5-qmake dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
+        run: sudo apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
       - name: configure
         run: ./configure
       - name: make
