@@ -5,8 +5,8 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-22.04
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -17,5 +17,4 @@ jobs:
       - name: configure
         run: ./configure
       - name: make
-        run: make
-
+        run: make -j
