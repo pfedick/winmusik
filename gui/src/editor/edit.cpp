@@ -1792,7 +1792,7 @@ bool Edit::on_f7_DeleteTrack()
 			wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
 			// Nachfolgende Tracks nach oben rücken
 			// TODO
-			//TrackList->DeleteShift(Track.Track, &wm->TitleStore);
+			DeleteShift(Track.Track); //, &wm->TitleStore
 			UpdateTrackListing();
 			QTreeWidgetItem* w=trackList->topLevelItem(Track.Track);
 			if (w) {
@@ -1809,7 +1809,7 @@ bool Edit::on_f8_InsertTrack()
 {
 	if (Track.Track > 0) {
 		// TODO
-		//TrackList->InsertShift(Track.Track, &wm->TitleStore);
+		InsertShift(Track.Track);
 		UpdateTrackListing();
 		QTreeWidgetItem* w=trackList->topLevelItem(Track.Track);
 		if (w) {
@@ -2586,7 +2586,7 @@ void Edit::on_contextDeleteTrack_triggered()
 	if (!currentTrackListItem->Track) return;
 	// Track löschen und nachfolgende nach oben rücken
 	// TODO
-	//TrackList->DeleteShift(currentTrackListItem->Track, &wm->TitleStore);
+	DeleteShift(currentTrackListItem->Track);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
 	if (w) {
@@ -2602,7 +2602,7 @@ void Edit::on_contextInsertTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
 	// TODO
-	//TrackList->InsertShift(currentTrackListItem->Track, &wm->TitleStore);
+	InsertShift(currentTrackListItem->Track);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
 	if (w) {

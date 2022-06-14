@@ -1021,3 +1021,65 @@ void Edit::on_coverwidget_gotFocus()
 {
 	FixFocus();
 }
+
+void Edit::DeleteShift(int track)
+{
+	if (track < 1 || track>65535) return;
+	// Zuerst löschen wir den Track, falls er noch vorhanden ist
+	TrackList.Delete(track);
+	for (int i=track + 1;i <= TrackList.GetMax();i++) {
+		if (TrackList.Exists(i)) {
+			const de::pfp::winmusik::DataTrack& t=TrackList.Get(i);
+			de::pfp::winmusik::DataTrack new_track;
+			new_track.CopyDataFrom(t);
+			// Erst nehmen wir den Track aus dem Tree
+			TrackList.Delete(i);
+			// Track-Nummer verkleinern
+			new_track.Track=i - 1;
+			// speichern
+			TrackList.Put(new_track);
+
+			// Titel korrigieren
+			if (new_track.TitleId > 0 && wm->TitleStore.Exists(new_track.TitleId)) {
+				DataTitle Ti=wm->TitleStore.Get(new_track.TitleId);
+				if (Ti.DeviceId == new_track.DeviceId
+					&& Ti.DeviceType == new_track.Device
+					&& Ti.Page == new_track.Page) {
+					Ti.Track=new_track.Track;
+					wm->TitleStore.Put(Ti);
+				}
+			}
+			wm->RenameAudioFile(DeviceType, DeviceId, Page, i, i - 1);
+		}
+	}
+}
+
+void Edit::InsertShift(int track)
+{
+	if (track < 1 || track>65535) return;
+	if (track<TrackList.GetMin() || track>TrackList.GetMax()) return;
+	for (int i=TrackList.GetMax();i >= track;i--) {	// Von hinten nach vorne
+		if (TrackList.Exists(i)) {
+			const de::pfp::winmusik::DataTrack& t=TrackList.Get(i);
+			de::pfp::winmusik::DataTrack new_track;
+			new_track.CopyDataFrom(t);
+			// Erst nehmen wir den Track aus dem Tree
+			TrackList.Delete(i);
+			// Track-Nummer vergrößern
+			new_track.Track=i + 1;
+			// Track speichern
+			TrackList.Put(new_track);
+			// Titel korrigieren
+			if (new_track.TitleId > 0 && wm->TitleStore.Exists(new_track.TitleId)) {
+				DataTitle Ti=wm->TitleStore.Get(new_track.TitleId);
+				if (Ti.DeviceId == new_track.DeviceId
+					&& Ti.DeviceType == new_track.Device
+					&& Ti.Page == new_track.Page) {
+					Ti.Track=new_track.Track;
+					wm->TitleStore.Put(Ti);
+				}
+			}
+			wm->RenameAudioFile(DeviceType, DeviceId, Page, i, i + 1);
+		}
+	}
+}

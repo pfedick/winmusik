@@ -231,6 +231,8 @@ private:
     //void index_LostFocus();
     void importFromCddb();
     void renumber();
+    void DeleteShift(int track);
+    void InsertShift(int track);
 
 
 public slots:
