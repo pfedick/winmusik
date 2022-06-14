@@ -78,7 +78,7 @@ ppl7_release:
 wmlib_release:
 	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
-gui_release:
+gui_release: gui/Makefile
 	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
@@ -97,7 +97,7 @@ ppl7_debug:
 wmlib_debug:
 	$(MAKE) --directory=wmlib debug/libwinmusik3.a
 
-gui_debug:
+gui_debug: gui/Makefile
 	VERSION=${VERSION} ./update_version.sh
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
@@ -125,7 +125,8 @@ deinstall:
 clean:
 	@rm -rf documentation release debug
 	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
-	@rm -rf gui/release gui/debug release debug pplib/debug lib/compile
+	-@ $(MAKE) --directory=gui clean > /dev/null 2>&1
+	@rm -rf gui/release gui/debug gui/Makefile* release debug pplib/debug lib/compile
 	@rm -rf gui/ui_*.h
 	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
 	-@ $(MAKE) --directory=wmlib clean > /dev/null 2>&1
