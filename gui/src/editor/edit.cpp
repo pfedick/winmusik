@@ -1818,6 +1818,7 @@ bool Edit::on_f8_InsertTrack()
 		ClearEditFields();
 		EditTrack();
 		ui.artist->setFocus();
+		return true;
 	}
 	return false;
 }
@@ -2585,7 +2586,6 @@ void Edit::on_contextDeleteTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
 	// Track löschen und nachfolgende nach oben rücken
-	// TODO
 	DeleteShift(currentTrackListItem->Track);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
@@ -2601,7 +2601,6 @@ void Edit::on_contextDeleteTrack_triggered()
 void Edit::on_contextInsertTrack_triggered()
 {
 	if (!currentTrackListItem->Track) return;
-	// TODO
 	InsertShift(currentTrackListItem->Track);
 	UpdateTrackListing();
 	QTreeWidgetItem* w=trackList->topLevelItem(currentTrackListItem->Track);
