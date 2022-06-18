@@ -348,7 +348,7 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
 bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version)
 {
 	ppl7::DirEntry de;
-	if (ppl7::File::stat(Filename, de)) {
+	if (ppl7::File::tryStatFile(Filename, de)) {
 		info.Ti.Size=de.Size;
 	} else return false;
 	//printf ("debug 1\n");

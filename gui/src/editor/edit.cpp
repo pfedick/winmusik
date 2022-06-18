@@ -992,7 +992,7 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	QString file=url.toLocalFile();
 	ppl7::String f=file;
 	ppl7::DirEntry de;
-	if (!ppl7::File::stat(f, de)) return;
+	if (!ppl7::File::tryStatFile(f, de)) return;
 
 	int tn=ui.track->text().toInt();
 	if (tn < 1) return;
@@ -1176,7 +1176,7 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 	foreach(QUrl url, urlList) {
 		ppl7::String filename=url.toLocalFile();
 		ppl7::DirEntry file;
-		if (ppl7::File::stat(filename, file)) {
+		if (ppl7::File::tryStatFile(filename, file)) {
 			if (file.isDir()) {
 				traverseDirectoryForFiles(filename, fileList);
 			} else if (file.isFile()) {
@@ -1745,7 +1745,7 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 	ppl7::String Songname=ppl7::File::getFilename(Path);
 	ui.filename->setText(Songname);
 	ppl7::DirEntry de;
-	if (ppl7::File::stat(Path, de)) {
+	if (ppl7::File::tryStatFile(Path, de)) {
 		Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 		ui.filesize->setText(Tmp);
 	} else {

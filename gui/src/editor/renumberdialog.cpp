@@ -80,7 +80,7 @@ bool RenumberDialog::isTargetPathUsable(uint8_t DeviceType, uint32_t newDeviceId
 	ppl7::String Path=wm->GetAudioPath(DeviceType, newDeviceId, 1);
 	Path.trimRight("/");
 	ppl7::DirEntry de;
-	if (ppl7::File::stat(Path, de)) {
+	if (ppl7::File::tryStatFile(Path, de)) {
 		if (!de.isDir()) {
 			Tmp=tr("A file with the name of the new device already exists and is not a directory.\n\n");
 			Tmp+=Path;

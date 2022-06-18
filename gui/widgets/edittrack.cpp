@@ -121,7 +121,7 @@ void EditTrack::setFilename(const ppl7::String& Filename)
 	} else {
 		ui.filename->setText(Filename);
 		ppl7::DirEntry de;
-		if (ppl7::File::stat(Filename, de)) {
+		if (ppl7::File::tryStatFile(Filename, de)) {
 			Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 			ui.filesize->setText(Tmp);
 			ppl7::ID3Tag Tag;
@@ -396,7 +396,7 @@ const TrackInfo& EditTrack::getData()
 	ppl7::String Path=wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
 	if (Path.notEmpty()) {
 		ppl7::DirEntry de;
-		if (ppl7::File::stat(Path, de)) {
+		if (ppl7::File::tryStatFile(Path, de)) {
 			data.Ti.Size=de.Size;
 			if (Cover.isNull()) {
 				data.Ti.CoverPreview.clear();

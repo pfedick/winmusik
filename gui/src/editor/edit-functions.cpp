@@ -130,7 +130,7 @@ bool Edit::EditTrack()
 		ui.filename->setText(Path);
 		ui.filename->setStyleSheet("");
 		ppl7::DirEntry de;
-		if (ppl7::File::stat(Path, de)) {
+		if (ppl7::File::tryStatFile(Path, de)) {
 			Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
 			ui.filesize->setText(Tmp);
 			ppl7::ID3Tag Tag;
@@ -455,7 +455,7 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 		ppl7::String Path=wm->GetAudioFilename(DeviceType, title.DeviceId, title.Page, title.Track);
 		if (Path.notEmpty()) {
 			ppl7::DirEntry de;
-			if (ppl7::File::stat(Path, de)) {
+			if (ppl7::File::tryStatFile(Path, de)) {
 				//printf ("Stat erfolgreich\n");
 				DataTitle ti;
 				ti.CopyFrom(title);
@@ -622,7 +622,7 @@ void Edit::SaveEditorTrack()
 	// Cover
 	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
 	ppl7::DirEntry de;
-	if (ppl7::File::stat(Path, de)) {
+	if (ppl7::File::tryStatFile(Path, de)) {
 		Ti.Size=de.Size;
 		if (Cover.isNull()) {
 			Ti.CoverPreview.clear();
