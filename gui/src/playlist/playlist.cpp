@@ -430,7 +430,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 		QString file=url.toLocalFile();
 		PlaylistItem* item=new PlaylistItem;
 		item->File=file;
-		u_int32_t titleId=findTitleIdByFilename(file);
+		uint32_t titleId=findTitleIdByFilename(file);
 		if (titleId) loadTrackFromDatabase(item, titleId);
 		else loadTrackFromFile(item, file);
 		renderTrack(item);
@@ -441,7 +441,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 	}
 }
 
-bool Playlist::loadTrackFromDatabase(PlaylistItem* item, u_int32_t titleId)
+bool Playlist::loadTrackFromDatabase(PlaylistItem* item, uint32_t titleId)
 {
 	const DataTitle* ti=wm->GetTitle(titleId);
 	if (!ti) return false;
@@ -1959,8 +1959,8 @@ void Playlist::filterChanged()
 	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
 		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
 		item->setHidden(true);
-		if (item->bpm >= (u_int32_t)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
-			if (item->bpm <= (u_int32_t)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
+		if (item->bpm >= (uint32_t)ui.tt_bpmStartSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
+			if (item->bpm <= (uint32_t)ui.tt_bpmEndSpinBox->value() || ui.tt_bpmCheckBox->isChecked() == false) {
 
 				MusicKey itemKey=MusicKey(item->musicKey).addSemitone(ui.tt_keyModificationSpinBox->value());
 				if (itemKey == key && ui.tt_sameKeyCheckBox->isChecked()) item->setHidden(false);

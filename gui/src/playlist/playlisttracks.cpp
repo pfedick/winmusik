@@ -116,7 +116,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("deviceType");
 	if (node.isNull() == false && node.isElement() == true) {
-		DeviceType=static_cast<u_int8_t>(node.toElement().text().toUInt());
+		DeviceType=static_cast<uint8_t>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceId");
 	if (node.isNull() == false && node.isElement() == true) {
@@ -124,7 +124,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 	}
 	node =e.namedItem("devicePage");
 	if (node.isNull() == false && node.isElement() == true) {
-		DevicePage=static_cast<u_int8_t>(node.toElement().text().toUInt());
+		DevicePage=static_cast<uint8_t>(node.toElement().text().toUInt());
 	}
 	node =e.namedItem("deviceTrack");
 	if (node.isNull() == false && node.isElement() == true) {
@@ -190,7 +190,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("energyLevel");
 	if (node.isNull() == false && node.isElement() == true) {
-		energyLevel=static_cast<u_int8_t>(node.toElement().text().toUInt());
+		energyLevel=static_cast<uint8_t>(node.toElement().text().toUInt());
 	}
 
 	node =e.namedItem("bpm");
@@ -211,7 +211,7 @@ void PlaylistItem::importFromXML(QDomElement& e)
 
 	node =e.namedItem("rating");
 	if (node.isNull() == false && node.isElement() == true) {
-		rating=static_cast<u_int8_t>(node.toElement().text().toUInt());
+		rating=static_cast<uint8_t>(node.toElement().text().toUInt());
 	}
 
 	mixLength=endPositionSec - startPositionSec;
@@ -609,7 +609,7 @@ bool PlaylistTracks::saveWMP(const ppl7::String& Filename)
 		xml+="   <date>" + IssueDate.getDate() + "</date>\n";
 		int count=topLevelItemCount();
 		xml+="   <totalTracks>" + ppl7::ToString("%u", count) + "</totalTracks>\n";
-		u_int64_t totalTrackLength=0;
+		uint64_t totalTrackLength=0;
 		double totalMixLength=0;
 		for (int i=0;i < count;i++) {
 			PlaylistItem* item=static_cast<PlaylistItem*>(this->topLevelItem(i));

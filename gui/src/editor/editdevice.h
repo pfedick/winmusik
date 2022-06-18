@@ -31,7 +31,7 @@ class EditDevice : public QDialog
     Q_OBJECT
 
 public:
-    EditDevice(QWidget* parent = 0, CWmClient* wm=NULL, int typ=0, u_int32_t DeviceId=0);
+    EditDevice(QWidget* parent = 0, CWmClient* wm=NULL, int typ=0, uint32_t DeviceId=0);
     ~EditDevice();
 
 private:

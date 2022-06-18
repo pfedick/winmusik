@@ -71,7 +71,7 @@ void RenumberDialog::on_cancelButton_clicked()
 }
 
 
-bool RenumberDialog::isTargetPathUsable(u_int8_t DeviceType, u_int32_t newDeviceId) const
+bool RenumberDialog::isTargetPathUsable(uint8_t DeviceType, uint32_t newDeviceId) const
 {
 	// Falls Filesystem verwendet wird, darf die neue Nummer nicht existieren oder
 	// das Verzeichnis muss leer sein
@@ -115,7 +115,7 @@ bool RenumberDialog::isTargetPathUsable(u_int8_t DeviceType, u_int32_t newDevice
 	return true;
 }
 
-bool RenumberDialog::isTargetDeviceFree(u_int8_t DeviceType, u_int32_t newDeviceId) const
+bool RenumberDialog::isTargetDeviceFree(uint8_t DeviceType, uint32_t newDeviceId) const
 {
 	ppl7::String Tmp;
 	DataDevice targetDevice;

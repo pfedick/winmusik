@@ -39,8 +39,8 @@ public:
     int getOldNumber() const;
     int getNewNumber() const;
 
-    bool isTargetPathUsable(u_int8_t DeviceType, u_int32_t newDeviceId) const;
-    bool isTargetDeviceFree(u_int8_t DeviceType, u_int32_t newDeviceId) const;
+    bool isTargetPathUsable(uint8_t DeviceType, uint32_t newDeviceId) const;
+    bool isTargetDeviceFree(uint8_t DeviceType, uint32_t newDeviceId) const;
 
 private:
     Ui::RenumberDialogClass ui;

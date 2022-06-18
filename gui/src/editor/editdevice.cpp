@@ -21,7 +21,7 @@
 #include "editdevice.h"
 #include "src/editor/tablesearch.h"
 
-EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, u_int32_t DeviceId)
+EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, uint32_t DeviceId)
 	: QDialog(parent)
 {
 	ui.setupUi(this);

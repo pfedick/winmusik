@@ -32,11 +32,11 @@ class Playlist;
 class PlaylistItem : public QTreeWidgetItem
 {
 public:
-	u_int32_t	titleId;
-	float		startPositionSec;
-	float		endPositionSec;
-	float		cutStartPosition[5];
-	float		cutEndPosition[5];
+	uint32_t		titleId;
+	float			startPositionSec;
+	float			endPositionSec;
+	float			cutStartPosition[5];
+	float			cutEndPosition[5];
 	ppl7::String	Artist;
 	ppl7::String	Title;
 	ppl7::String	Version;
@@ -46,21 +46,21 @@ public:
 	ppl7::String	File;
 	ppl7::String	Remarks;
 	ppl7::ByteArray	CoverPreview;
-	u_int8_t		musicKey;
-	u_int32_t		bpm;
-	u_int32_t		bpmPlayed;
-	u_int8_t		rating;
-	u_int32_t		trackLength;
+	uint8_t			musicKey;
+	uint32_t		bpm;
+	uint32_t		bpmPlayed;
+	uint8_t			rating;
+	uint32_t		trackLength;
 	float			mixLength;
-	u_int8_t		energyLevel;
+	uint8_t			energyLevel;
 	bool			keyVerified;
 	int8_t          keyModification;
-	u_int16_t       bitrate;
+	uint16_t		bitrate;
 
-	u_int32_t		DeviceId;
-	u_int16_t		DeviceTrack;
-	u_int8_t		DeviceType;
-	u_int8_t		DevicePage;
+	uint32_t		DeviceId;
+	uint16_t		DeviceTrack;
+	uint8_t			DeviceType;
+	uint8_t			DevicePage;
 
 
 

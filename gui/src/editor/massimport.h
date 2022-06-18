@@ -36,7 +36,7 @@ public:
 	MassImport(QWidget* parent = 0, CWmClient* wm=NULL);
 	~MassImport();
 	void ReloadTranslation();
-	int load(u_int8_t DeviceType, u_int32_t DeviceId, u_int8_t Page, u_int16_t StartTrack);
+	int load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16_t StartTrack);
 
 	class TreeItem : public QTreeWidgetItem
 	{
@@ -55,10 +55,10 @@ public:
 private:
 	Ui::massimportClass ui;
 	CWmClient* wm;
-	u_int8_t DeviceType;
-	u_int32_t DeviceId;
-	u_int8_t Page;
-	u_int16_t StartTrack;
+	uint8_t DeviceType;
+	uint32_t DeviceId;
+	uint8_t Page;
+	uint16_t StartTrack;
 	std::set<ppl7::String> LocalDupeCheck;
 	QWidget* searchWindow;
 	TreeItem* currentTrackListItem;
