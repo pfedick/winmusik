@@ -416,8 +416,7 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 
 	Text.setf("%d", (int)title.Bitrate);
 	item->setText(TRACKLIST_BITRATE_ROW, Text);
-	item->setTextAlignment(TRACKLIST_BITRATE_ROW, Qt::AlignRight);
-
+	item->setTextAlignment(TRACKLIST_BITRATE_ROW, Qt::AlignRight | Qt::AlignCenter);
 
 	// Rating
 	switch (title.Rating) {
