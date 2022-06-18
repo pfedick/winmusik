@@ -430,9 +430,11 @@ void Edit::SetupTrackList()
 			"}\n"
 			"";
 			*/
-	QString Style="QTreeView::item {\n"
+	QString Style="QTreeWidget::item {\n"
 		"margin: 0px;\n"
-		"padding: 0px;\n"
+		"padding-top: 0px;\n"
+		"padding-bottom: 0px;\n"
+		"border: 0px;\n"
 		"}\n";
 	//trackList->setStyleSheet(Style);
 
