@@ -326,7 +326,9 @@ void CStorage::LoadDatabase(CProgressUpdate* progressCallback)
 			logger->printException(exp);
 			chunk.HexDump(logger);
 		}
-		exp.print();
+		//exp.print();
+		//printf("Failed loading Chunk %s at Position: %u\n", chunk.GetChunkName(), pos);
+		//chunk.HexDump();
 		throw;
 	}
 	bLoadDatabaseRunning=false;

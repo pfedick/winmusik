@@ -47,13 +47,10 @@ void help()
 
 int main(int argc, char* argv[])
 {
-    //printf ("DEBUG\n");
-    //ppl6::grafix::CGrafix gfx;
     if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
         help();
         return 0;
     }
-
     QApplication a(argc, argv);
 
 #ifdef Q_OS_WIN
@@ -92,6 +89,7 @@ int main(int argc, char* argv[])
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
+    ppl7::String::setGlobalEncoding("UTF-8");
 
     if (setlocale(LC_CTYPE, "") == NULL) {
         printf("setlocale fehlgeschlagen\n");
