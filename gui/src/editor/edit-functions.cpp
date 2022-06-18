@@ -394,11 +394,15 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 	else Text.set(unknown);
 	item->setText(TRACKLIST_GENRE_ROW, Text);
 	Text.setf("%4i:%02i", (int)(title.Length / 60), title.Length % 60);
+	item->setTextAlignment(TRACKLIST_LENGTH_ROW, Qt::AlignRight | Qt::AlignCenter);
 	item->setText(TRACKLIST_LENGTH_ROW, Text);
 
 	// BPM, Key und EnergyLevel
 	Text.setf("%d", (int)title.BPM);
+	item->setTextAlignment(TRACKLIST_BPM_ROW, Qt::AlignRight | Qt::AlignCenter);
 	item->setText(TRACKLIST_BPM_ROW, Text);
+
+	item->setTextAlignment(TRACKLIST_KEY_ROW, Qt::AlignVCenter | Qt::AlignCenter);
 	item->setText(TRACKLIST_KEY_ROW, wm_main->MusicKeys.keyName(title.Key, musicKeyDisplay));
 	QFont f=item->font(TRACKLIST_KEY_ROW);
 	if ((title.Flags & 16)) {
@@ -409,8 +413,11 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 	}
 	item->setFont(TRACKLIST_KEY_ROW, f);
 	Text.setf("%d", (int)title.EnergyLevel);
+
+	item->setTextAlignment(TRACKLIST_ENERGYLEVEL_ROW, Qt::AlignVCenter | Qt::AlignCenter);
 	item->setText(TRACKLIST_ENERGYLEVEL_ROW, Text);
 
+	item->setTextAlignment(TRACKLIST_YEAR, Qt::AlignVCenter | Qt::AlignCenter);
 	Text.setf("%d", (int)title.ReleaseDate / 10000);
 	item->setText(TRACKLIST_YEAR, Text);
 
