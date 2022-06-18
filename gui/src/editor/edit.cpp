@@ -1783,6 +1783,13 @@ bool Edit::on_f7_DeleteTrack()
 {
 	if (Track.Track > 0) {
 		if (Track.TitleId) {
+			const DataTitle* Ti=NULL;
+			Ti=wm->GetTitle(Track.TitleId);
+			if (Ti != NULL && Ti->DeviceType == DeviceType && Ti->DeviceId == DeviceId
+				&& Ti->Page == Page) {
+				wm->Hashes.RemoveTitle(Ti->TitleId);
+				wm->TitleStore.Delete(Ti->TitleId);
+			}
 			TrackList.Delete(Track.Track);
 			UpdateTrackListing();
 			EditTrack();
