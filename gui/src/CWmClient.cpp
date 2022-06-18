@@ -1153,14 +1153,14 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 #ifdef _WIN32
 	ppl7::WideString f=Filename;
 	// Windows mag keine Vorwärts-Slashes
-	f.replace("/", "\\");
-	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %s", (const char*)f);
+	f.replace(L"/", L"\\");
+	if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %ls", (const wchar_t*)f);
 	if (Player.isEmpty()) {
 		ShellExecuteW(NULL, L"open", (const wchar_t*)f,
 			L"", L"", SW_SHOWNORMAL);
 	} else {
-		f="\"" + f;
-		f+="\"";
+		f=L"\"" + f;
+		f+=L"\"";
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
