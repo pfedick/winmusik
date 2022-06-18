@@ -118,18 +118,20 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
 	// MusicKey
 	switch (c->musicKeyDisplay) {
 	case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(2); break;
-	default: ui.displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
+	default: ui.displayMusicKey->setCurrentIndex(2); break;
 
 	}
 
 	switch (c->musicKeyTag) {
 	case musicKeyTypeNone: ui.saveMusicKey->setCurrentIndex(0); break;
 	case musicKeyTypeMusicalSharps: ui.saveMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeOpenKey: ui.saveMusicKey->setCurrentIndex(2); break;
-	case musicKeyTypeCustom: ui.saveMusicKey->setCurrentIndex(3); break;
-	default: ui.saveMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeMusicalFlats: ui.saveMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeOpenKey: ui.saveMusicKey->setCurrentIndex(3); break;
+	case musicKeyTypeCustom: ui.saveMusicKey->setCurrentIndex(4); break;
+	default: ui.saveMusicKey->setCurrentIndex(3); break;
 	}
 	ui.customMusicKeyName->setText(c->customMusicKeyName);
 	ui.customMusicalKey_1->setText(c->customMusicKey[1]);
@@ -394,15 +396,17 @@ int Properties::Save()
 	// MusicKey
 	switch (ui.displayMusicKey->currentIndex()) {
 	case 0: c->musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: c->musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 2: c->musicKeyDisplay=musicKeyTypeCustom; break;
+	case 1: c->musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+	case 2: c->musicKeyDisplay=musicKeyTypeOpenKey; break;
+	case 3: c->musicKeyDisplay=musicKeyTypeCustom; break;
 	default: c->musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	switch (ui.saveMusicKey->currentIndex()) {
 	case 0: c->musicKeyTag=musicKeyTypeNone; break;
 	case 1: c->musicKeyTag=musicKeyTypeMusicalSharps; break;
-	case 2: c->musicKeyTag=musicKeyTypeOpenKey; break;
-	case 3: c->musicKeyTag=musicKeyTypeCustom; break;
+	case 2: c->musicKeyTag=musicKeyTypeMusicalFlats; break;
+	case 3: c->musicKeyTag=musicKeyTypeOpenKey; break;
+	case 4: c->musicKeyTag=musicKeyTypeCustom; break;
 	default: c->musicKeyTag=musicKeyTypeOpenKey; break;
 	}
 	c->customMusicKeyName=ui.customMusicKeyName->text();
