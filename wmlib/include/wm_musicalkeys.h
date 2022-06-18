@@ -35,6 +35,7 @@ enum MusicKeyType
 	musicKeyTypeNone=0,
 	musicKeyTypeMusicalSharps,
 	musicKeyTypeOpenKey,
+	musicKeyTypeMusicalFlats,
 	musicKeyTypeCustom=99
 };
 
@@ -53,6 +54,7 @@ public:
 	int keyId(const ppl7::String& name) const;
 
 	static ppl7::String sharpName(int id);
+	static ppl7::String flatName(int id);
 	static ppl7::String openKeyName(int id);
 };
 

@@ -1821,6 +1821,11 @@
        </item>
        <item>
         <property name="text">
+         <string>musical flats</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>open key</string>
         </property>
        </item>

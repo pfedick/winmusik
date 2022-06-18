@@ -55,6 +55,38 @@ static inline ppl7::String keyNameSharps(int id)
 	}
 }
 
+static inline ppl7::String keyNameFlats(int id)
+{
+	switch (id) {
+	case 1: return "A♭";
+	case 2: return "B";
+	case 3: return "E♭";
+	case 4: return "G♭";
+	case 5: return "B♭";
+	case 6: return "D♭";
+	case 7: return "Fm";
+	case 8: return "A♭";
+	case 9: return "Cm";
+	case 10: return "E♭";
+	case 11: return "Gm";
+	case 12: return "B♭";
+	case 13: return "Dm";
+	case 14: return "F";
+	case 15: return "Am";
+	case 16: return "C";
+	case 17: return "Em";
+	case 18: return "G";
+	case 19: return "Bm";
+	case 20: return "D";
+	case 21: return "G♭";
+	case 22: return "A";
+	case 23: return "D♭";
+	case 24: return "E";
+	case 25: return "none";
+	default: return "";
+	}
+}
+
 static inline ppl7::String keyNameOpenKey(int id)
 {
 	switch (id) {
@@ -106,6 +138,7 @@ void MusicalKeys::setCustomKeyName(int key, const ppl7::String& name)
 ppl7::String MusicalKeys::keyName(int id, MusicKeyType type) const
 {
 	if (type == musicKeyTypeMusicalSharps) return keyNameSharps(id);
+	else if (type == musicKeyTypeMusicalFlats) return keyNameFlats(id);
 	else if (type == musicKeyTypeOpenKey) return keyNameOpenKey(id);
 	else if (type == musicKeyTypeCustom) {
 		if (id < 1 || id>25) return "";
@@ -117,6 +150,11 @@ ppl7::String MusicalKeys::keyName(int id, MusicKeyType type) const
 ppl7::String MusicalKeys::sharpName(int id)
 {
 	return keyNameSharps(id);
+}
+
+ppl7::String MusicalKeys::flatName(int id)
+{
+	return keyNameFlats(id);
 }
 
 ppl7::String MusicalKeys::openKeyName(int id)

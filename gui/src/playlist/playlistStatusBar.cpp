@@ -75,6 +75,7 @@ void PlaylistStatusBar::setupUi()
 	layout->addWidget(musicKeyLabel);
 	displayMusicKey=new QComboBox();
 	displayMusicKey->addItem(tr("musical sharps"));
+	displayMusicKey->addItem(tr("musical flats"));
 	displayMusicKey->addItem(tr("open key"));
 	displayMusicKey->addItem(wm_main->conf.customMusicKeyName);
 	layout->addWidget(displayMusicKey);
@@ -85,9 +86,10 @@ void PlaylistStatusBar::setupUi()
 	musicKeyDisplay=wm_main->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
 	case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(2); break;
-	default: displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeMusicalFlats: displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(3); break;
+	default: displayMusicKey->setCurrentIndex(2); break;
 	}
 
 	// Selection
@@ -237,8 +239,9 @@ void PlaylistStatusBar::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (displayMusicKey->currentIndex()) {
 	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 2: musicKeyDisplay=musicKeyTypeCustom; break;
+	case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+	case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
+	case 3: musicKeyDisplay=musicKeyTypeCustom; break;
 	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	emit musicKeySelectionChanged(musicKeyDisplay);

@@ -280,11 +280,12 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 	musicKeyDisplay=wm->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
 	case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
+	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
+	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
 	default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
-	ui.displayMusicKey->setItemText(2, wm->conf.customMusicKeyName);
+	ui.displayMusicKey->setItemText(3, wm->conf.customMusicKeyName);
 
 
 	uint32_t highest=wm->GetHighestDeviceId(typ);
@@ -2738,8 +2739,9 @@ void Edit::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (ui.displayMusicKey->currentIndex()) {
 	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 2: musicKeyDisplay=musicKeyTypeCustom; break;
+	case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+	case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
+	case 3: musicKeyDisplay=musicKeyTypeCustom; break;
 	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	UpdateTrackListing();
