@@ -492,6 +492,17 @@ bool CWmClient::IsCoverViewerVisible() const
 
 int CWmClient::LoadDatabase()
 {
+	if (!Storage.DatabaseExists()) {
+		if (QMessageBox::Yes == QMessageBox::question(NULL, tr("WinMusik"),
+			tr("Database file does not exist or is empty.\n\nShould I create a new Database?"),
+			QMessageBox::Yes | QMessageBox::No, QMessageBox::No)) {
+
+			CreateInitialDatabase();
+		} else {
+			return 0;
+		}
+	}
+
 	SplashScreen* splash=NULL;
 	if (conf.bShowSplashScreen) {
 		splash=new SplashScreen();
@@ -1153,7 +1164,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-	}
+}
 #else
 	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),

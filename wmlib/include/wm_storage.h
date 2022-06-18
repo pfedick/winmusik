@@ -97,6 +97,7 @@ public:
 	CStorageBase& GetStorageClass(const char* name);
 	void Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin);
 	void Delete(CStorageBase* type, CStorageItem* item);
+	bool DatabaseExists() const;
 
 	void LoadDatabase(CProgressUpdate* progressCallback=NULL);
 	void DeleteDatabase();

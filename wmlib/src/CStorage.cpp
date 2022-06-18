@@ -254,6 +254,13 @@ void CStorage::Delete(CStorageBase* type, CStorageItem* item)
 	item->version=0;
 }
 
+bool CStorage::DatabaseExists() const
+{
+	if (DataPath.size() == 0) return false;
+	ppl7::String File=DataPath + "/" + DatabaseFile;
+	return ppl7::File::exists(File);
+}
+
 void CStorage::LoadDatabase(CProgressUpdate* progressCallback)
 /*!\brief Datenbank laden
  *
