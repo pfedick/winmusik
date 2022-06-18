@@ -26,18 +26,18 @@ namespace winmusik {
 static inline ppl7::String keyNameSharps(int id)
 {
 	switch (id) {
-	case 1: return "G#m";
+	case 1: return "G♯m";
 	case 2: return "B";
-	case 3: return "D#m";
-	case 4: return "F#";
-	case 5: return "A#m";
-	case 6: return "C#";
+	case 3: return "D♯m";
+	case 4: return "F♯";
+	case 5: return "A♯m";
+	case 6: return "C♯";
 	case 7: return "Fm";
-	case 8: return "G#";
+	case 8: return "G♯";
 	case 9: return "Cm";
-	case 10: return "D#";
+	case 10: return "D♯";
 	case 11: return "Gm";
-	case 12: return "A#";
+	case 12: return "A♯";
 	case 13: return "Dm";
 	case 14: return "F";
 	case 15: return "Am";
@@ -46,9 +46,9 @@ static inline ppl7::String keyNameSharps(int id)
 	case 18: return "G";
 	case 19: return "Bm";
 	case 20: return "D";
-	case 21: return "F#m";
+	case 21: return "F♯m";
 	case 22: return "A";
-	case 23: return "C#m";
+	case 23: return "C♯m";
 	case 24: return "E";
 	case 25: return "none";
 	default: return "";
