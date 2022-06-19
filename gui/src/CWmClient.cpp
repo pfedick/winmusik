@@ -970,7 +970,7 @@ int CWmClient::SaveID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, 
 	Job.set("artist", (const char*)Ti.Artist);
 	if (ppl7::LowerCase(version) != "single")	Job.setf("title", "%s (%s)", (const char*)Ti.Title, (const char*)version);
 	else Job.setf("title", "%s", (const char*)Ti.Title);
-	Job.set("album", (const char*)Ti.Album);
+	Job.set("album", Ti.Album);
 	comment=Ti.Remarks;
 	//if (comment.Len()>0) comment+=" - ";
 	//comment+=version;
@@ -982,7 +982,7 @@ int CWmClient::SaveID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, 
 	Job.setf("track", "%u", Track);
 	if (Ti.EnergyLevel > 0) Job.setf("EnergyLevel", "%d", Ti.EnergyLevel);
 	if (Ti.BPM > 0) Job.setf("bpm", "%u", Ti.BPM);
-	else Job.setf("bpm", "");
+	else Job.set("bpm", "");
 	if (conf.musicKeyTag != musicKeyTypeNone) Job.set("key", MusicKeys.keyName(Ti.Key, conf.musicKeyTag));
 	Job.set("genre", GetGenreText(Ti.GenreId));
 	Job.set("publisher", GetLabelText(Ti.LabelId));
