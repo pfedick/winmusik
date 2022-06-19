@@ -24,7 +24,8 @@
 ###############################################################################
 ### Global Options
 ###############################################################################
-VERSION ?= "3.7.0"
+VERSION ?= 3.7.0
+BUILD_NUMBER := $(shell git rev-list --all --count)
 
 PREFIX		?= @prefix@
 CC		= @CC@
@@ -64,10 +65,18 @@ gui: release
 
 mingw:
 	VERSION=${VERSION} ./update_version.sh
-	mingw32-make -j8 release
+	mingw32-make -j8 ppl7_release
+	mingw32-make -j8 wmlib_release
+	mingw32-make -j8 gui_release
 	cd gui && lupdate WinMusik.pro
 	rm -rf release/deploy
 	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
+	cat Package/setup64.iss | sed "s/^AppVersion=.*/AppVersion=${VERSION}.${BUILD_NUMBER}/"  \
+		| sed "s/^AppVerName=.*/AppVerName=WinMusik ${VERSION}/"  \
+		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
+		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=WinMusik-${VERSION}-Setup-64bit/"  \
+		> setup.iss
+
 ###########################################################################
 ### RELEASE
 ###########################################################################

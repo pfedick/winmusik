@@ -59,3 +59,4 @@
 wmlib/tests/tmp/
 wmlib/tests/src/tmp/
 valgrind.log
+/setup.iss
