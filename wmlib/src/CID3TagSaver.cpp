@@ -145,75 +145,98 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem& item)
 		Tag.load(item.Filename);
 	} catch (...) {}
 	bool changes=false;
+	ppl7::Array changelist;
 	if (item.cleartag) {
 		// Cover retten, falls vorhanden
 		ppl7::ByteArray Cover;
 		Tag.getPicture(3, Cover);
 		Tag.clearTags();
 		if (Cover.size() > 0) Tag.setPicture(3, Cover, "image/jpeg");
+		changelist.add("clear tags");
 		changes=true;
 	}
 	ppl7::String empty;
 	if (item.Tags.getString("artist", empty) != Tag.getArtist()) {
 		Tag.setArtist(item.Tags.getString("artist", empty));
 		changes=true;
+		changelist.add("artist");
 	}
 	if (Tag.getTitle() != item.Tags.getString("title", empty)) {
 		Tag.setTitle(item.Tags.getString("title", empty));
 		changes=true;
+		changelist.add("title");
 	}
 	if (Tag.getRemixer() != item.Tags.getString("version", empty)) {
 		Tag.setRemixer(item.Tags.getString("version", empty));
 		changes=true;
+		changelist.add("version");
 	}
 	if (Tag.getYear() != item.Tags.getString("year", empty)) {
 		Tag.setYear(item.Tags.getString("year", empty));
 		changes=true;
+		changelist.add("year");
 	}
 	if (Tag.getTrack() != item.Tags.getString("track", empty)) {
 		Tag.setTrack(item.Tags.getString("track", empty));
 		changes=true;
+		changelist.add("track");
 	}
 	if (Tag.getGenre() != item.Tags.getString("genre", empty)) {
 		Tag.setGenre(item.Tags.getString("genre", empty));
 		changes=true;
+		changelist.add("genre");
 	}
 	if (Tag.getComment() != item.Tags.getString("comment", empty)) {
 		Tag.setComment(item.Tags.getString("comment", empty));
 		changes=true;
+		changelist.add("comment");
 	}
 	if (Tag.getAlbum() != item.Tags.getString("album", empty)) {
 		Tag.setAlbum(item.Tags.getString("album", empty));
 		changes=true;
+		changelist.add("album");
 	}
 	if (Tag.getLabel() != item.Tags.getString("publisher", empty)) {
 		Tag.setLabel(item.Tags.getString("publisher", empty));
 		changes=true;
+		changelist.add("publisher");
 	}
 	if (Tag.getBPM() != item.Tags.getString("bpm", empty)) {
 		Tag.setBPM(item.Tags.getString("bpm", empty));
 		changes=true;
+		changelist.add("bpm");
 	}
 	if (Tag.getEnergyLevel() != item.Tags.getString("EnergyLevel", empty)) {
 		Tag.setEnergyLevel(item.Tags.getString("EnergyLevel", empty));
 		changes=true;
+		changelist.add("energylevel");
 	}
-	if (Tag.getKey() != item.Tags.getString("key", empty)) {
-		Tag.setKey(item.Tags.getString("key", empty));
+	ppl7::String key=item.Tags.getString("key", empty);
+	key.replace("♯", "#");
+	key.replace("♭", "b");
+	if (Tag.getKey() != key) {
+		changelist.addf("key %s=>%s", (const char*)Tag.getKey(), (const char*)key );
+		Tag.setKey(key);
 		changes=true;
+		
 	}
 	empty.set("0");
 	if (Tag.getPopularimeter() != item.Tags.getString("rating", empty).toInt()) {
 		Tag.removePopularimeter();
 		Tag.setPopularimeter("winmusik@pfp.de", item.Tags.getString("rating", empty).toInt());
 		changes=true;
+		if (logger) logger->print(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"changes: popularimeter");
 	}
 
 	if (changes == false) {
 		if (logger) logger->printf(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, no changes: %s", (const char*)item.Filename);
 		return;
 	}
-	if (logger) logger->printf(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, write changes: %s", (const char*)item.Filename);
+	if (logger) {
+		ppl7::String Tmp=changelist.implode(", ");
+		logger->printf(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, write changes: %s [%s]",
+			(const char*)item.Filename, (const char*)Tmp);
+	}
 	Tag.save();
 }
 
