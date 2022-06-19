@@ -43,6 +43,7 @@ private:
 	};
 	ppl7::Mutex Mutex;
 	std::list<WorkItem> Queue;
+	ppl7::Logger *logger;
 	int PaddingSize;
 	int RetryIntervall;
 	void UpdateNow(CID3TagSaver::WorkItem& item);
@@ -51,6 +52,7 @@ private:
 public:
 	CID3TagSaver();
 	~CID3TagSaver();
+	void SetLogger(ppl7::Logger *logger);
 
 	void SetPaddingSize(int bytes);
 	void SetRetryIntervall(int seconds);

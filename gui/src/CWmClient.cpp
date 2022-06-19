@@ -167,16 +167,12 @@ void CWmClient::InitLogging()
 		wmlog->printf(ppl7::Logger::DEBUG, 1, "CWmClient", "InitLogging", __FILE__, __LINE__,
 			"Logfile initialized, Debuglevel: %i, Maxsize: %i MB, Generations: %i",
 			conf.Debuglevel, conf.LogfileSize, conf.LogfileGenerations);
-
-		/*
-		wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "initFilenameLetterReplacements", __FILE__, __LINE__, "Letter Replacements for Filenames:");
-		std::map<wchar_t, wchar_t>::const_iterator it;
-		for (it=filenameLetterReplacements.begin();it != filenameLetterReplacements.end();it++) {
-			wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "initFilenameLetterReplacements", __FILE__, __LINE__, "%d => %d (\"%lc\" => \"%lc\")", it->first, it->second, it->first, it->second);
-		}
-		*/
+		ID3TagSaver.SetLogger(wmlog);
 	} else {
-		if (wmlog) wmlog->terminate();
+		if (wmlog) {
+			wmlog->terminate();
+			ID3TagSaver.SetLogger(NULL);
+		}
 	}
 	Mutex.unlock();
 
