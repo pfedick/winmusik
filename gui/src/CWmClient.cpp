@@ -813,7 +813,6 @@ ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, 
 	ppl7::String Pattern;
 	ppl7::String Path=GetAudioPath(DeviceType, DeviceId, Page);
 	if (Path.isEmpty()) return Path;
-	Pattern.setf("%03u-*.(mp3|aiff|aif)", Track);
 	ppl7::Dir Dir;
 	try {
 		Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE);
@@ -822,24 +821,25 @@ ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, 
 		Path.clear();
 		return Path;
 	}
+	Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i", Track);
 	ppl7::Dir::Iterator it;
 	try {
-		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern, true);
+		const ppl7::DirEntry& de=Dir.getFirstRegExp(it, Pattern);
 		Path=de.File;
 		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return Path;
 	} catch (...) {}
 
-	Pattern.setf("/^%03u\\.(mp3|aiff|aif)$/i8", Track);
+	Pattern.setf("/^%03u\\.(mp3|aiff|aif)$/i", Track);
 	try {
-		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern);
+		const ppl7::DirEntry& de=Dir.getFirstRegExp(it, Pattern);
 		Path=de.File;
 		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return Path;
 	} catch (...) {}
-	Pattern.setf("/^%03u\\-.*\\.(mp3|aiff|aif)$/i8", Track);
+	Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i8", Track);
 	try {
-		const ppl7::DirEntry& de=Dir.getFirstPattern(it, Pattern);
+		const ppl7::DirEntry& de=Dir.getFirstRegExp(it, Pattern);
 		Path=de.File;
 		if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s", (const char*)Path);
 		return Path;
