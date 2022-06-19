@@ -1,13 +1,7 @@
 ;/*
 ; * This file is part of WinMusik 3.0 by Patrick Fedick
 ; *
-; * $Author: pafe $
-; * $Revision: 1.7 $
-; * $Date: 2012/01/09 21:00:00 $
-; * $Id: setup.iss,v 1.7 2012/01/09 21:00:00 pafe Exp $
-; *
-; *
-; * Copyright (c) 2009 Patrick Fedick
+; * Copyright (c) 2022 Patrick Fedick
 ; *
 ; * This program is free software: you can redistribute it and/or modify
 ; * it under the terms of the GNU General Public License as published by

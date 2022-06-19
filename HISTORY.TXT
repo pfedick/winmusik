@@ -10,7 +10,7 @@ Version 3.7.0
       - ID3TagSaver
       - Storage and in memory database
     - completely refactored in memory database
-    - speed up loading time of database a bit
+    - speed up loading time of database a bit by removing unnecessary locks
     - removed import from WinMusik 2.x.
     - refactored configure and Makefile
     - removed storing of original ID3-Tags on file import
