@@ -5229,7 +5229,7 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="src/main.cpp" line="112"/>
+        <location filename="src/main.cpp" line="119"/>
         <source>Could not initialize WinMusik</source>
         <translation type="unfinished"></translation>
     </message>

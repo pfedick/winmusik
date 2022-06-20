@@ -45,6 +45,20 @@ void help()
 }
 
 
+int main2(int argc, char* argv[])
+{
+    printf ("main\n");
+    ppl7::WideString w1(L"Hällo Wörld!");
+    ppl7::String s1=w1;
+    //s1.set(L"Hällo Wörld!");
+    s1.hexDump();
+    ppl7::WideString w2=s1;
+    w2.hexDump();
+    printf ("finished\n");
+    return 0;
+
+}
+
 int main(int argc, char* argv[])
 {
     if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
@@ -99,12 +113,7 @@ int main(int argc, char* argv[])
         printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
         throw std::exception();
     }
-    //printf ("Locale: %s\n",setlocale(LC_CTYPE,NULL));
-#ifdef HAVE_PYTHON
-    Py_InitializeEx(0);
-#endif
-
-
+   
     CWmClient Client;
     try {
         Client.Init(argc, argv, &a);
