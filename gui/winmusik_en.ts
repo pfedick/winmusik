@@ -35,7 +35,7 @@ You should have received a copy of the GNU General Public License along with thi
     <message>
         <location filename="src/about/about.cpp" line="52"/>
         <source>Some graphics and icons are made with Lightwave 3D from NewTek and Paint Shop Pro from Jasc Software. </source>
-        <translation type="unfinished"></translation>
+        <translation>Some graphics and icons are made with Lightwave 3D from NewTek and Paint Shop Pro from Jasc Software. </translation>
     </message>
     <message>
         <source>Some graphics and icons are made with Lightwave 3D 9.6 from NewTek and Paint Shop Pro 7.0 from Jasc Software. </source>
@@ -229,7 +229,7 @@ Do you really want to append the tracks?</translation>
     <message>
         <location filename="src/editor/cddbimport.cpp" line="402"/>
         <source>could not save device</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save device</translation>
     </message>
     <message>
         <location filename="src/editor/cddbimport.cpp" line="415"/>
@@ -307,12 +307,12 @@ Do you really want to append the tracks?</translation>
     <message>
         <location filename="src/CTableControl.cpp" line="218"/>
         <source>Could not save data</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save data</translation>
     </message>
     <message>
         <location filename="src/CTableControl.cpp" line="270"/>
         <source>could not save data</source>
-        <translation type="unfinished"></translation>
+        <translation>could not save data</translation>
     </message>
 </context>
 <context>
@@ -359,7 +359,7 @@ you are running the latest version.</translation>
     <message>
         <location filename="src/CWmClient.cpp" line="514"/>
         <source>Could not load database</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not load database</translation>
     </message>
     <message>
         <location filename="src/CWmClient.cpp" line="546"/>
@@ -426,7 +426,7 @@ Please go to preferences and open the MP3 page. You can specify your favorite pl
     <message>
         <location filename="src/CWmClient.cpp" line="1276"/>
         <source>WinMusik %v%</source>
-        <translation type="unfinished"></translation>
+        <translation>WinMusik %v%</translation>
     </message>
     <message>
         <source>There is no MP3 player specified.
@@ -487,14 +487,16 @@ Please go to preferences and open the MP3 page. There you can specify your favor
     <message>
         <location filename="src/CWmClient.cpp" line="123"/>
         <source>could not load configuration file</source>
-        <translation type="unfinished"></translation>
+        <translation>could not load configuration file</translation>
     </message>
     <message>
         <location filename="src/CWmClient.cpp" line="493"/>
         <source>Database file does not exist or is empty.
 
 Should I create a new Database?</source>
-        <translation type="unfinished"></translation>
+        <translation>Database file does not exist or is empty.
+
+Should I create a new Database?</translation>
     </message>
     <message>
         <location filename="src/CWmClient.cpp" line="628"/>
@@ -574,13 +576,13 @@ Should I create a new Database?</source>
     <message>
         <location filename="src/Print.cpp" line="53"/>
         <source>Coverdruck steht für diese Tonträgerart nicht zur Verfügung</source>
-        <translation type="unfinished"></translation>
+        <translation>Printing of cover is not available for this device</translation>
     </message>
     <message>
         <location filename="src/Print.cpp" line="116"/>
         <location filename="src/Print.cpp" line="487"/>
         <source>Druckvorgang kann nicht gestartet werden</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not start printing</translation>
     </message>
     <message>
         <location filename="src/Print.cpp" line="171"/>
@@ -656,22 +658,22 @@ Should I create a new Database?</source>
     <message>
         <location filename="src/config.cpp" line="117"/>
         <source>alternative configuration file (Parameter -c) is not a regular file! [%s]</source>
-        <translation type="unfinished"></translation>
+        <translation>alternative configuration file (Parameter -c) is not a regular file! [%s]</translation>
     </message>
     <message>
         <location filename="src/config.cpp" line="122"/>
         <source>alternative configuration file (Parameter -c) not found! [%s]</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternative configuration file (Parameter -c) not found! [%s]</translation>
     </message>
     <message>
         <location filename="src/config.cpp" line="125"/>
         <source>Path of configuration file does not exist! [%s]</source>
-        <translation type="unfinished"></translation>
+        <translation>Path of configuration file does not exist! [%s]</translation>
     </message>
     <message>
         <location filename="src/config.cpp" line="129"/>
         <source>Path of configuration file is not a valid directory! [%s]</source>
-        <translation type="unfinished"></translation>
+        <translation>Path of configuration file is not a valid directory! [%s]</translation>
     </message>
 </context>
 <context>
@@ -1222,7 +1224,7 @@ p, li { white-space: pre-wrap; }
         <location filename="src/editor/edit.cpp" line="323"/>
         <source>Bitrate</source>
         <comment>trackList</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="src/editor/edit.cpp" line="703"/>
@@ -1667,22 +1669,22 @@ Do you realy want to save this track?</translation>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="950"/>
         <source>could not create device directory in filesystem</source>
-        <translation type="unfinished"></translation>
+        <translation>could not create device directory in filesystem</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="974"/>
         <source>could not rename audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>could not rename audio file</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="992"/>
         <source>could not renumber Device</source>
-        <translation type="unfinished"></translation>
+        <translation>could not renumber Device</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="1020"/>
         <source>could not remove cover picture from audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>could not remove cover picture from audio file</translation>
     </message>
     <message>
         <location filename="src/editor/edit-functions.cpp" line="896"/>
@@ -1879,7 +1881,7 @@ Do you realy want to save this track?</translation>
     <message>
         <location filename="src/editor/edit.ui" line="525"/>
         <source>musical flats</source>
-        <translation type="unfinished"></translation>
+        <translation>musical flats</translation>
     </message>
     <message>
         <location filename="src/editor/edit.ui" line="530"/>
@@ -2211,7 +2213,7 @@ Do you realy want to save this track?</translation>
     <message>
         <location filename="src/editor/editdevice.cpp" line="232"/>
         <source>Could not save device in DeviceStore</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save device in DeviceStore</translation>
     </message>
 </context>
 <context>
@@ -2906,7 +2908,7 @@ Do you realy want to save this track?</translation>
         <location filename="src/firststart/firststart.cpp" line="144"/>
         <location filename="src/firststart/firststart.cpp" line="155"/>
         <source>Configuration could not be saved!</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration could not be saved!</translation>
     </message>
     <message>
         <location filename="src/firststart/firststart.cpp" line="105"/>
@@ -3732,7 +3734,7 @@ Do you want to save your changes?</translation>
     <message>
         <location filename="src/playlist/playlist.cpp" line="604"/>
         <source>TC</source>
-        <translation type="unfinished"></translation>
+        <translation>TC</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="608"/>
@@ -3757,12 +3759,12 @@ Do you want to save your changes?</translation>
         <location filename="src/playlist/playlist.cpp" line="598"/>
         <location filename="src/playlist/playlist.cpp" line="619"/>
         <source>Bitrate</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="603"/>
         <source>#</source>
-        <translation type="unfinished"></translation>
+        <translation>#</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="610"/>
@@ -3823,7 +3825,7 @@ Do you want to save your changes?</translation>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1080"/>
         <source>Could not create target directory!</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not create target directory!</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1209"/>
@@ -4000,7 +4002,7 @@ Do you want to save your changes?</translation>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1744"/>
         <source>Could not copy file</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not copy file</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1766"/>
@@ -4008,7 +4010,7 @@ Do you want to save your changes?</translation>
         <location filename="src/playlist/playlist.cpp" line="1825"/>
         <location filename="src/playlist/playlist.cpp" line="1865"/>
         <source>could not save playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>could not save playlist</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1803"/>
@@ -4298,7 +4300,7 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
     <message>
         <location filename="src/playlist/playlistStatusBar.cpp" line="78"/>
         <source>musical flats</source>
-        <translation type="unfinished"></translation>
+        <translation>musical flats</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistStatusBar.cpp" line="79"/>
@@ -4464,7 +4466,7 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
     <message>
         <location filename="src/properties/properties.cpp" line="459"/>
         <source>Could not save configuration!</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save configuration!</translation>
     </message>
     <message>
         <location filename="src/properties/properties.cpp" line="501"/>
@@ -4722,7 +4724,7 @@ Attention: Changing this directory can result in loss of data!</translation>
         <location filename="src/properties/properties.ui" line="996"/>
         <location filename="src/properties/properties.ui" line="1032"/>
         <source>musical flats</source>
-        <translation type="unfinished"></translation>
+        <translation>musical flats</translation>
     </message>
     <message>
         <location filename="src/properties/properties.ui" line="1001"/>
@@ -5227,9 +5229,9 @@ Attention: Changing this directory can result in loss of data!</translation>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="src/main.cpp" line="119"/>
+        <location filename="src/main.cpp" line="121"/>
         <source>Could not initialize WinMusik</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not initialize WinMusik</translation>
     </message>
 </context>
 <context>
@@ -5237,43 +5239,43 @@ Attention: Changing this directory can result in loss of data!</translation>
     <message>
         <location filename="src/functions.cpp" line="446"/>
         <source>Could not save cover!</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save cover!</translation>
     </message>
     <message>
         <location filename="src/functions.cpp" line="529"/>
         <source>Exception:</source>
-        <translation type="unfinished"></translation>
+        <translation>Exception:</translation>
     </message>
     <message>
         <location filename="src/functions.cpp" line="533"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Description:</translation>
     </message>
     <message>
         <location filename="src/functions.cpp" line="536"/>
         <location filename="src/functions.cpp" line="549"/>
         <source>WinMusik Error</source>
-        <translation type="unfinished">WinMusik Error</translation>
+        <translation>WinMusik Error</translation>
     </message>
     <message>
         <location filename="src/functions.cpp" line="547"/>
         <source>an error occured</source>
-        <translation type="unfinished"></translation>
+        <translation>an error occured</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1536"/>
         <source>Could not load ID3-Tags from File</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not load ID3-Tags from File</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistprint.cpp" line="314"/>
         <source>could not start printing</source>
-        <translation type="unfinished"></translation>
+        <translation>could not start printing</translation>
     </message>
     <message>
         <location filename="src/playlist/playlisttracks.cpp" line="632"/>
         <source>could not save playlist</source>
-        <translation type="unfinished"></translation>
+        <translation>could not save playlist</translation>
     </message>
 </context>
 <context>
@@ -5800,7 +5802,7 @@ p, li { white-space: pre-wrap; }
         <location filename="src/search/search.cpp" line="284"/>
         <source>KBit</source>
         <comment>trackList</comment>
-        <translation type="unfinished">KBit</translation>
+        <translation>KBit</translation>
     </message>
     <message>
         <location filename="src/search/search.cpp" line="784"/>
@@ -6128,7 +6130,7 @@ Are you sure, you want to delete them?</translation>
     <message>
         <location filename="src/searchlists/searchlistdialog.cpp" line="574"/>
         <source>Could not save searchlist!</source>
-        <translation type="unfinished"></translation>
+        <translation>Could not save searchlist!</translation>
     </message>
 </context>
 <context>
@@ -6651,7 +6653,9 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
         <source>An error occured, when loading the file.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>An error occured, when loading the file.
+
+</translation>
     </message>
 </context>
 <context>
@@ -6927,67 +6931,67 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
     <message>
         <location filename="src/player/player.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished">Form</translation>
+        <translation>Form</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="200"/>
         <source>Length:</source>
-        <translation type="unfinished">Length:</translation>
+        <translation>Length:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="213"/>
         <source>00:00</source>
-        <translation type="unfinished">00:00</translation>
+        <translation>00:00</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="235"/>
         <source>KBps:</source>
-        <translation type="unfinished"></translation>
+        <translation>KBps:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="248"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="290"/>
         <source>Artist:</source>
-        <translation type="unfinished">Artist:</translation>
+        <translation>Artist:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="303"/>
         <source>Artist</source>
-        <translation type="unfinished">Artist</translation>
+        <translation>Artist</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="315"/>
         <source>Title:</source>
-        <translation type="unfinished">Title:</translation>
+        <translation>Title:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="328"/>
         <source>Title</source>
-        <translation type="unfinished">Title</translation>
+        <translation>Title</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="340"/>
         <source>Version:</source>
-        <translation type="unfinished">Version:</translation>
+        <translation>Version:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="353"/>
         <source>Version</source>
-        <translation type="unfinished">Version</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="537"/>
         <source>Pos:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pos:</translation>
     </message>
     <message>
         <location filename="src/player/player.ui" line="558"/>
         <source>Vol:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vol:</translation>
     </message>
 </context>
 <context>
@@ -7715,7 +7719,7 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
     <message>
         <location filename="src/search/search.ui" line="1824"/>
         <source>musical flats</source>
-        <translation type="unfinished"></translation>
+        <translation>musical flats</translation>
     </message>
     <message>
         <location filename="src/search/search.ui" line="1829"/>
