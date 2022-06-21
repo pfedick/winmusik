@@ -1448,7 +1448,7 @@ void Search::handleDropEvent(QDropEvent* event)
 	QList<QUrl>	list=mime->urls();
 	if (list.size() == 0) return;
 	QUrl url=list[0];
-	QString file=url.toLocalFile();
+	QString file=url.toString();
 	TrackInfo info;
 	if (!getTrackInfoFromFile(info, file)) {
 		return;
