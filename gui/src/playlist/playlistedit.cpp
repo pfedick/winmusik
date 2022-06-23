@@ -297,7 +297,7 @@ void PlaylistEdit::storeFileds(PlaylistItem* item)
 float PlaylistEdit::getSecondsFromLine(QLineEdit* line)
 {
 	ppl7::Array Token(line->text(), ":");
-	if (Token.size() > 2) {
+	if (Token.size() > 1) {
 		float seconds=(float)Token.get(0).toInt() * 60.0f + (float)Token.get(1).toInt();
 		ppl7::Array Token2(Token.get(1), ".");
 		if (Token2.size() > 1) seconds+=(float)Token2.get(1).toInt() / 1000.0f;
