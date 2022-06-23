@@ -427,7 +427,7 @@ void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertIte
 	if (isFilterEnabled()) return;
 	for (int i=0;i < list.size();i++) {
 		QUrl url=list[i];
-		QString file=url.toString();
+		QString file=url.toLocalFile();
 		PlaylistItem* item=new PlaylistItem;
 		item->File=file;
 		uint32_t titleId=findTitleIdByFilename(file);
@@ -1900,7 +1900,7 @@ void Playlist::handleFilterDropEvent(QDropEvent* event)
 	QList<QUrl>	list=mime->urls();
 	if (list.size() == 0) return;
 	QUrl url=list[0];
-	QString file=url.toString();
+	QString file=url.toLocalFile();
 
 
 	TrackInfo info;

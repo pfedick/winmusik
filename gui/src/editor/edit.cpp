@@ -989,7 +989,7 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	QList<QUrl>	list=mime->urls();
 	QUrl url=list.first();
 
-	QString file=url.toString();
+	QString file=url.toLocalFile();
 	ppl7::String f=file;
 	ppl7::DirEntry de;
 	if (!ppl7::File::tryStatFile(f, de)) return;
@@ -1174,7 +1174,7 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 	if (position < 3) return;
 	std::list<ppl7::String> fileList, filteredFileList;
 	foreach(QUrl url, urlList) {
-		ppl7::String filename=url.toString();
+		ppl7::String filename=url.toLocalFile();
 		ppl7::DirEntry file;
 		if (ppl7::File::tryStatFile(filename, file)) {
 			if (file.isDir()) {
