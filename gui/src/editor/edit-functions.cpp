@@ -621,9 +621,28 @@ void Edit::SaveEditorTrack()
 
 	// Cover
 	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-	ppl7::DirEntry de;
-	if (ppl7::File::tryStatFile(Path, de)) {
-		Ti.Size=de.Size;
+	TrackInfo tinfo;
+	if (getTrackInfoFromFile(tinfo,Path)) {
+		Ti.Bitrate=tinfo.Ti.Bitrate;
+		Ti.Size=tinfo.Ti.Size;
+		if (tinfo.Ti.Key != Ti.Key && (Ti.Flags & 16) == 0) {
+			Ti.Key=tinfo.Ti.Key;
+		}
+		if (tinfo.Ti.Rating > Ti.Rating) {
+			Ti.Rating=tinfo.Ti.Rating;
+		}
+		if (tinfo.Ti.EnergyLevel > 0 && Ti.EnergyLevel != tinfo.Ti.EnergyLevel) {
+			Ti.EnergyLevel=tinfo.Ti.EnergyLevel;
+		}
+		if (tinfo.Ti.BPM > 0 && Ti.BPM != tinfo.Ti.BPM) {
+			Ti.BPM=tinfo.Ti.BPM;
+		}
+		if (tinfo.Ti.Bitrate > 0 && tinfo.Ti.Bitrate != Ti.Bitrate) {
+			Ti.Bitrate=tinfo.Ti.Bitrate;
+		}
+		if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
+			Ti.Length=tinfo.Ti.Length;
+		}
 		if (Cover.isNull()) {
 			Ti.CoverPreview.clear();
 		} else {
@@ -702,13 +721,13 @@ void Edit::UpdateCompleters()
 	Artists.clear();
 	Titles.clear();
 	Albums.clear();
+	
 	std::map<ppl7::String, uint32_t>::const_iterator it;
-	for (it=wm->TitleStore.Artists.begin();it != wm->TitleStore.Artists.begin();++it) {
+	for (it=wm->TitleStore.Artists.begin();it != wm->TitleStore.Artists.end();++it) {
 		Artists.append((*it).first);
 	}
 	std::set<ppl7::String>TmpTitles;
 	std::set<ppl7::String>TmpAlbums;
-
 
 	// Höchste Tracknummer
 	int max=TrackList.GetMax();
