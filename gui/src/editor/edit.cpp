@@ -1367,6 +1367,10 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
 	} else if (key == Qt::Key_A && modifier == Qt::AltModifier && position > 3) {
 		ui.album->setFocus();
 		return true;
+		// *************************************************************************** Alt & q
+	} else if (key == Qt::Key_Q && modifier == Qt::AltModifier && position > 3) {
+		ui.recordSourceId->setFocus();
+		return true;
 		// *************************************************************************** Alt & d
 	} else if (key == Qt::Key_D && modifier == Qt::AltModifier && position > 3) {
 		ui.recordDate->setFocus();
