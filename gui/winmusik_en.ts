@@ -1295,87 +1295,87 @@ You have to configure a path for this device in the settings.</translation>
         <translation>Copy Files into WinMusik directory...</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1739"/>
+        <location filename="src/editor/edit.cpp" line="1743"/>
         <source>There are no further titles without an index in the directory of this device</source>
         <oldsource>Es sind keine weiteren Titel ohne Index im Verzeichnis
 des Tonträgers vorhanden</oldsource>
         <translation>There are no further titles without an index in the directory of this device</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1845"/>
+        <location filename="src/editor/edit.cpp" line="1849"/>
         <source>Could not create playlists</source>
         <translation>Could not create playlists</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2072"/>
+        <location filename="src/editor/edit.cpp" line="2076"/>
         <source>WinMusik: update all ID3-Tags</source>
         <translation>WinMusik: update all ID3-Tags</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2073"/>
+        <location filename="src/editor/edit.cpp" line="2077"/>
         <source>Update ID3-Tags of all tracks?</source>
         <translation>Update ID3-Tags of all tracks?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2078"/>
+        <location filename="src/editor/edit.cpp" line="2082"/>
         <source>Update of ID3-Tags on all tracks has been started</source>
         <translation>Update of ID3-Tags on all tracks has been started</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2081"/>
+        <location filename="src/editor/edit.cpp" line="2085"/>
         <source>Update of ID3-Tags failed</source>
         <translation>Update of ID3-Tags failed</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2274"/>
+        <location filename="src/editor/edit.cpp" line="2278"/>
         <source>Synchronize Keys, BPM and Energy with ID3-Tag</source>
         <comment>trackList Context Menue</comment>
         <translation>Synchronize Keys, BPM and Energy with ID3-Tag</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2281"/>
+        <location filename="src/editor/edit.cpp" line="2285"/>
         <source>Show cover</source>
         <comment>trackList Context Menue</comment>
         <translation>Show cover</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2282"/>
+        <location filename="src/editor/edit.cpp" line="2286"/>
         <source>Load Cover for all Tracks</source>
         <comment>trackList Context Menue</comment>
         <translation>Load Cover for all Tracks</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2293"/>
+        <location filename="src/editor/edit.cpp" line="2297"/>
         <source>Copy Cover</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy Cover</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2299"/>
+        <location filename="src/editor/edit.cpp" line="2303"/>
         <source>Read BPM and Key from ID3-Tag</source>
         <comment>trackList Context Menue</comment>
         <translation>Read BPM and Key from ID3-Tag</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2275"/>
+        <location filename="src/editor/edit.cpp" line="2279"/>
         <source>Set Music-Key</source>
         <comment>trackList Context Menue</comment>
         <translation>Set Music-Key</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2277"/>
+        <location filename="src/editor/edit.cpp" line="2281"/>
         <source>Music Key is verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Music Key is verified</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2278"/>
+        <location filename="src/editor/edit.cpp" line="2282"/>
         <source>Music Key is not verified</source>
         <comment>trackList Context Menue</comment>
         <translation>Music Key is not verified</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2308"/>
+        <location filename="src/editor/edit.cpp" line="2312"/>
         <source>unknown</source>
         <comment>trackList Context Menue</comment>
         <translation>unknown</translation>
@@ -1501,34 +1501,34 @@ des Tonträgers vorhanden</oldsource>
         <translation type="obsolete">Gm</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2375"/>
-        <location filename="src/editor/edit.cpp" line="2377"/>
+        <location filename="src/editor/edit.cpp" line="2379"/>
+        <location filename="src/editor/edit.cpp" line="2381"/>
         <source>Reading ID3-Tags from Files...</source>
         <translation>Reading ID3-Tags from Files...</translation>
     </message>
     <message>
         <location filename="src/editor/edit.cpp" line="1204"/>
-        <location filename="src/editor/edit.cpp" line="2375"/>
+        <location filename="src/editor/edit.cpp" line="2379"/>
         <source>Abort</source>
         <translation>Abort</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2473"/>
+        <location filename="src/editor/edit.cpp" line="2477"/>
         <source>Select cover image</source>
         <translation>Select cover image</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2475"/>
+        <location filename="src/editor/edit.cpp" line="2479"/>
         <source>Images (*.png *.bmp *.jpg)</source>
         <translation>Images (*.png *.bmp *.jpg)</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2486"/>
+        <location filename="src/editor/edit.cpp" line="2490"/>
         <source>Error: could not load Cover</source>
         <translation>Error: could not load Cover</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2487"/>
+        <location filename="src/editor/edit.cpp" line="2491"/>
         <source>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</source>
         <oldsource>The soecified file could not be loaded.
@@ -1585,9 +1585,9 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
         <translation type="obsolete">autoimport</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="693"/>
-        <location filename="src/editor/edit.cpp" line="2145"/>
-        <location filename="src/editor/edit.cpp" line="2450"/>
+        <location filename="src/editor/edit-functions.cpp" line="713"/>
+        <location filename="src/editor/edit.cpp" line="2149"/>
+        <location filename="src/editor/edit.cpp" line="2454"/>
         <source>Could not save ID3 Tags</source>
         <translation>Could not save ID3 Tags</translation>
     </message>
@@ -1622,15 +1622,15 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
         <translation>Length</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1738"/>
-        <location filename="src/editor/edit.cpp" line="1841"/>
-        <location filename="src/editor/edit.cpp" line="2077"/>
+        <location filename="src/editor/edit.cpp" line="1742"/>
+        <location filename="src/editor/edit.cpp" line="1845"/>
+        <location filename="src/editor/edit.cpp" line="2081"/>
         <source>WinMusik: Notice</source>
         <oldsource>WinMusik: Hinweis</oldsource>
         <translation>WinMusik: Notice</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="1842"/>
+        <location filename="src/editor/edit.cpp" line="1846"/>
         <source>Playlists wurden erfolgreich erstellt</source>
         <translation>Playlists have been successfully created</translation>
     </message>
@@ -1652,122 +1652,122 @@ Do you realy want to save this track?</source>
 Do you realy want to save this track?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="867"/>
+        <location filename="src/editor/edit-functions.cpp" line="887"/>
         <source>Reading and querying cd in internet database, please wait.</source>
         <translation>Reading and querying cd in internet database, please wait.</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="890"/>
+        <location filename="src/editor/edit-functions.cpp" line="910"/>
         <source>An error occured, when trying to access the audio cd or querying the internet database</source>
         <translation>An error occured, when trying to access the audio cd or querying the internet database</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="934"/>
+        <location filename="src/editor/edit-functions.cpp" line="954"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="950"/>
+        <location filename="src/editor/edit-functions.cpp" line="970"/>
         <source>could not create device directory in filesystem</source>
         <translation>could not create device directory in filesystem</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="974"/>
+        <location filename="src/editor/edit-functions.cpp" line="994"/>
         <source>could not rename audio file</source>
         <translation>could not rename audio file</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="992"/>
+        <location filename="src/editor/edit-functions.cpp" line="1012"/>
         <source>could not renumber Device</source>
         <translation>could not renumber Device</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="1020"/>
+        <location filename="src/editor/edit-functions.cpp" line="1040"/>
         <source>could not remove cover picture from audio file</source>
         <translation>could not remove cover picture from audio file</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="896"/>
+        <location filename="src/editor/edit-functions.cpp" line="916"/>
         <source>audio cd not found</source>
         <translation>audio cd not found</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="897"/>
+        <location filename="src/editor/edit-functions.cpp" line="917"/>
         <source>The audio cd was not found in the internet cd database</source>
         <translation>The audio cd was not found in the internet cd database</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="935"/>
+        <location filename="src/editor/edit-functions.cpp" line="955"/>
         <source>Invalid number</source>
         <translation>Invalid number</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2285"/>
+        <location filename="src/editor/edit.cpp" line="2289"/>
         <source>Find other versions</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other versions</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2286"/>
+        <location filename="src/editor/edit.cpp" line="2290"/>
         <source>Find more of artist</source>
         <comment>trackList Context Menue</comment>
         <translation>Find more of artist</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2289"/>
+        <location filename="src/editor/edit.cpp" line="2293"/>
         <source>Play Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Play Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2290"/>
+        <location filename="src/editor/edit.cpp" line="2294"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Edit Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2291"/>
+        <location filename="src/editor/edit.cpp" line="2295"/>
         <source>Copy Artist and Title</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy Artist and Title</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2292"/>
+        <location filename="src/editor/edit.cpp" line="2296"/>
         <source>Copy MP3-File</source>
         <comment>trackList Context Menue</comment>
         <translation>Copy MP3-File</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2295"/>
+        <location filename="src/editor/edit.cpp" line="2299"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Delete Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2296"/>
+        <location filename="src/editor/edit.cpp" line="2300"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Insert Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="665"/>
-        <location filename="src/editor/edit.cpp" line="2131"/>
-        <location filename="src/editor/edit.cpp" line="2346"/>
-        <location filename="src/editor/edit.cpp" line="2362"/>
-        <location filename="src/editor/edit.cpp" line="2444"/>
-        <location filename="src/editor/edit.cpp" line="2511"/>
+        <location filename="src/editor/edit-functions.cpp" line="685"/>
+        <location filename="src/editor/edit.cpp" line="2135"/>
+        <location filename="src/editor/edit.cpp" line="2350"/>
+        <location filename="src/editor/edit.cpp" line="2366"/>
+        <location filename="src/editor/edit.cpp" line="2448"/>
+        <location filename="src/editor/edit.cpp" line="2515"/>
         <source>Could not save Title in TitleStore</source>
         <oldsource>Konnte Titel nicht in TitleStore speichern</oldsource>
         <translation>Could not save Title in TitleStore</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="679"/>
+        <location filename="src/editor/edit-functions.cpp" line="699"/>
         <source>Could not save Track in TrackList</source>
         <oldsource>Konnte Track nicht in TrackList speichern</oldsource>
         <translation>Could not save Track in TrackList</translation>
     </message>
     <message>
-        <location filename="src/editor/edit.cpp" line="2287"/>
+        <location filename="src/editor/edit.cpp" line="2291"/>
         <source>Find other artists of this title</source>
         <comment>trackList Context Menue</comment>
         <translation>Find other artists of this title</translation>
