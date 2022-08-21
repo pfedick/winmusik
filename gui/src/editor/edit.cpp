@@ -1226,7 +1226,8 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 				ppl7::File::move((*it), NewFile);
 			else
 				ppl7::File::copy((*it), NewFile);
-		} catch (...) {}
+		}
+		catch (...) {}
 	}
 	QApplication::restoreOverrideCursor();
 	progress.close();
@@ -1241,7 +1242,8 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 	FinalFile.setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)ppl7::File::getFilename(NewFile));
 	try {
 		ppl7::File::rename(NewFile, FinalFile);
-	} catch (...) {}
+	}
+	catch (...) {}
 	Tmp.setf("%u", TrackNum);
 	ui.track->setFocus();
 	ui.track->setText(Tmp);
@@ -2115,7 +2117,7 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 			Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
 		} else {
 			Text.setf("%s - %s (%s, %0i:%02i min, %s)", (const char*)t->Artist, (const char*)t->Title,
-				wm->GetVersionText(t->VersionId), t->Length / 60, t->Length % 60, wm->GetGenreText(t->GenreId));
+				(const char*)wm->GetVersionText(t->VersionId), t->Length / 60, t->Length % 60, (const char*)wm->GetGenreText(t->GenreId));
 			Text.appendf(" [%s %u %c-%i]", (const char*)wm->GetDeviceNameShort(t->DeviceType),
 				t->DeviceId, (t->Page + 'A' - 1), t->Track);
 		}
@@ -2131,7 +2133,8 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 				tUpdate.Rating=r;
 				try {
 					wm->TitleStore.Put(tUpdate);
-				} catch (const ppl7::Exception& exp) {
+				}
+				catch (const ppl7::Exception& exp) {
 					ShowException(exp, tr("Could not save Title in TitleStore"));
 					return;
 				}
@@ -2346,7 +2349,8 @@ void Edit::on_contextMusicKeyVerified_triggered()
 	else tUpdate.Flags|=16;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -2362,7 +2366,8 @@ void Edit::on_contextSetMusicKey(int k)
 	tUpdate.Key=k;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -2444,7 +2449,8 @@ void Edit::on_contextSynchronizeKeys_triggered()
 					if (modified) {
 						try {
 							wm->TitleStore.Put(Ti);
-						} catch (const ppl7::Exception& exp) {
+						}
+						catch (const ppl7::Exception& exp) {
 							ShowException(exp, tr("Could not save Title in TitleStore"));
 							break;
 						}
@@ -2511,7 +2517,8 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
 				Title.CoverPreview.copy(bytes.data(), bytes.size());
 				try {
 					wm->TitleStore.Put(Title);
-				} catch (const ppl7::Exception& exp) {
+				}
+				catch (const ppl7::Exception& exp) {
 					ShowException(exp, tr("Could not save Title in TitleStore"));
 					return;
 				}
