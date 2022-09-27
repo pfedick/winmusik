@@ -120,7 +120,7 @@ private:
     void exportM3U();
     void exportPLS();
     void exportXSPF();
-    void exportTXT();
+    void exportTXT(bool withStartTimes);
     ppl7::String getExportFilename(int track, const ppl7::String& SourceFile);
 
     // Aktionen

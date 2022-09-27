@@ -922,7 +922,8 @@ void Playlist::saveTitle(PlaylistItem* item)
 		if (Ti.TitleId > 0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
 		try {
 			wm_main->TitleStore.Put(Ti);
-		} catch (const ppl7::Exception& exp) {
+		}
+		catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not save Title in TitleStore"));
 			if (Ti.TitleId > 0) wm_main->Hashes.AddTitle(Ti.TitleId);
 		}
@@ -1076,7 +1077,8 @@ void Playlist::on_menuExport_triggered()
 		clearDir(wm->conf.playlist_export.TargetPath);
 		try {
 			ppl7::Dir::mkDir(wm->conf.playlist_export.TargetPath);
-		} catch (const ppl7::Exception& exp) {
+		}
+		catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not create target directory!"));
 			return;
 		}
@@ -1093,7 +1095,7 @@ void Playlist::on_menuExport_triggered()
 		if (wm->conf.playlist_export.export_m3u) exportM3U();
 		if (wm->conf.playlist_export.export_pls) exportPLS();
 		if (wm->conf.playlist_export.export_xspf) exportXSPF();
-		if (wm->conf.playlist_export.export_txt) exportTXT();
+		if (wm->conf.playlist_export.export_txt) exportTXT(wm->conf.playlist_export.with_start_times);
 	}
 }
 
@@ -1295,7 +1297,8 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 		currentTreeItem->keyVerified=(tUpdate.Flags & 16) >> 4;
 		try {
 			wm->TitleStore.Put(tUpdate);
-		} catch (const ppl7::Exception& exp) {
+		}
+		catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not save Title in TitleStore"));
 			return;
 		}
@@ -1318,7 +1321,8 @@ void Playlist::on_contextSetMusicKey(int k)
 	tUpdate.Key=k;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1341,7 +1345,8 @@ void Playlist::on_contextSetEnergyLevel(int v)
 	tUpdate.EnergyLevel=v;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1362,7 +1367,8 @@ void Playlist::rateCurrentTrack(int value)
 	tUpdate.Rating=value;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1425,7 +1431,8 @@ void Playlist::on_contextPasteCover_triggered()
 	// Titel speichern
 	try {
 		wm_main->TitleStore.Put(Ti);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		QApplication::restoreOverrideCursor();
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 	}
@@ -1532,7 +1539,8 @@ static void updateInAndOut(PlaylistItem* item)
 	std::list <TraktorTagCue>::const_iterator it;
 	try {
 		getTraktorCuesFromFile(cuelist, item->File);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("Could not load ID3-Tags from File"));
 		return;
 	}
@@ -1740,7 +1748,8 @@ void Playlist::exportFile(PlaylistExport& dialog, int track, const ppl7::String&
 	ppl7::String TargetFile=wm->conf.playlist_export.TargetPath + "/" + Tmp;
 	try {
 		ppl7::File::copy(SourceFile, TargetFile);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not copy file"));
 	}
 }
@@ -1762,7 +1771,8 @@ void Playlist::exportM3U()
 			m3u.putsf("%s\n", (const char*)getExportFilename(i + 1, item->File));
 		}
 		m3u.close();
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
@@ -1787,7 +1797,8 @@ void Playlist::exportPLS()
 		}
 		pls.putsf("NumberOfEntries=%i\nVersion=2\n", ui.tracks->topLevelItemCount());
 		pls.close();
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
@@ -1821,12 +1832,13 @@ void Playlist::exportXSPF()
 		}
 		xspf.putsf("</trackList>\n</playlist>\n");
 		xspf.close();
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
 
-void Playlist::exportTXT()
+void Playlist::exportTXT(bool withStartTimes)
 {
 	ppl7::File txt;
 	ppl7::String Tmp;
@@ -1846,22 +1858,24 @@ void Playlist::exportTXT()
 			txt.puts("\r\n");
 		}
 		txt.puts("\r\n");
+		float totalLength=0.0f;
 		for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
 			PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
-			Tmp=item->Artist + " - " + item->Title;
-			Tmp+=" (";
-			Tmp+=item->Version;
-			Tmp+=")";
-			ppl7::String TmpTxt=Tmp;
-			TmpTxt.chop(1);
-			txt.putsf("%3u. %s, %0i:%02i %s)\r\n", i + 1, static_cast<const char*>(TmpTxt),
-				static_cast<int>(item->trackLength / 60), item->trackLength % 60,
-				static_cast<const char*>(Minuten));
+			Tmp.clear();
+			if (withStartTimes) {
+				Tmp+=getReadableTimeFromSeconds(totalLength) + " ";
+			}
+			Tmp+=item->Artist + " - " + item->Title;
+			Tmp+=" (" + item->Version + ")";
 
+
+			txt.putsf("%3u. %s\r\n", i + 1, static_cast<const char*>(Tmp));
+			totalLength+=item->mixLength;
 		}
 		txt.puts("\r\n");
 		txt.close();
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }

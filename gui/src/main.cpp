@@ -47,14 +47,14 @@ void help()
 
 int main2(int argc, char* argv[])
 {
-    printf ("main\n");
+    printf("main\n");
     ppl7::WideString w1(L"Hällo Wörld!");
     ppl7::String s1=w1;
     //s1.set(L"Hällo Wörld!");
     s1.hexDump();
     ppl7::WideString w2=s1;
     w2.hexDump();
-    printf ("finished\n");
+    printf("finished\n");
     return 0;
 
 }
@@ -103,7 +103,9 @@ int main(int argc, char* argv[])
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
+#ifdef WIN32
     ppl7::String::setGlobalEncoding("UTF-8");
+#endif
 
     if (setlocale(LC_CTYPE, "") == NULL) {
         printf("setlocale fehlgeschlagen\n");
@@ -113,11 +115,12 @@ int main(int argc, char* argv[])
         printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
         throw std::exception();
     }
-   
+
     CWmClient Client;
     try {
         Client.Init(argc, argv, &a);
-    } catch (const ppl7::Exception& exp) {
+    }
+    catch (const ppl7::Exception& exp) {
         ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
         return 1;
     }
