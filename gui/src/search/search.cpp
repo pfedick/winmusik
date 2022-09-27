@@ -847,7 +847,8 @@ void Search::on_contextMusicKeyVerified_triggered()
 	else tUpdate.Flags|=16;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -865,7 +866,8 @@ void Search::on_contextSetMusicKey(int k)
 	tUpdate.Key=k;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -884,10 +886,12 @@ void Search::on_trackList_itemClicked(QTreeWidgetItem* item, int)
 		if (key & (Qt::AltModifier)) {
 			Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
 		} else {
+
 			Text.setf("%s - %s (%s, %0i:%02i min, %s)", (const char*)t->Artist, (const char*)t->Title,
-				wm->GetVersionText(t->VersionId), t->Length / 60, t->Length % 60, wm->GetGenreText(t->GenreId));
+				(const char*)wm->GetVersionText(t->VersionId), t->Length / 60, t->Length % 60, (const char*)wm->GetGenreText(t->GenreId));
 			Text.appendf(" [%s %u %c-%i]", (const char*)wm->GetDeviceNameShort(t->DeviceType),
 				t->DeviceId, (t->Page + 'A' - 1), t->Track);
+			//printf("Text=%s\n", (const char*)Text);
 		}
 		LastClipboardString=Text;
 		clipboard->setText(Text, QClipboard::Clipboard);
@@ -1034,7 +1038,8 @@ void Search::rateCurrentTrack(int value)
 	tUpdate.Rating=value;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1267,7 +1272,8 @@ void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 	//const char* tmp;
 	try {
 		Dir.open(dir, ppl7::Dir::SORT_NONE);
-	} catch (...) {
+	}
+	catch (...) {
 		return;
 	}
 	ppl7::Dir::Iterator it;
