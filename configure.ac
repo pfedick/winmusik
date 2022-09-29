@@ -95,10 +95,13 @@ AX_CXX_COMPILE_STDCXX(11)
 
 AX_CHECK_COMPILE_FLAG([-no-pie],
     LDFLAGS="-no-pie $LDFLAGS"
+	CFLAGS="$CFLAGS -fPIE "
+	CXXFLAGS="$CXXFLAGS -fPIE "
     NOPIE="-no-pie",
     NOPIE=""
 )
 AC_SUBST(NOPIE)
+
 
 
 

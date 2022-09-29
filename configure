@@ -7467,11 +7467,14 @@ printf "%s\n" "$ax_cv_check_cxxflags___no_pie" >&6; }
 if test "x$ax_cv_check_cxxflags___no_pie" = xyes
 then :
   LDFLAGS="-no-pie $LDFLAGS"
+	CFLAGS="$CFLAGS -fPIE "
+	CXXFLAGS="$CXXFLAGS -fPIE "
     NOPIE="-no-pie"
 else $as_nop
   NOPIE=""
 
 fi
+
 
 
 
