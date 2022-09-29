@@ -36,10 +36,10 @@ class PlaylistItem
 {
 public:
 	uint32_t		titleId;
-	int				startPositionSec;
-	int				endPositionSec;
-	int				cutStartPosition[5];
-	int				cutEndPosition[5];
+	float			startPositionSec;
+	float			endPositionSec;
+	float			cutStartPosition[5];
+	float			cutEndPosition[5];
 	ppl7::String	Artist;
 	ppl7::String	Title;
 	ppl7::String	Version;
@@ -49,18 +49,21 @@ public:
 	ppl7::String	File;
 	ppl7::String	Remarks;
 	ppl7::ByteArray	CoverPreview;
-	int				musicKey;
-	int				bpm;
-	int				bpmPlayed;
-	int				rating;
-	int				trackLength;
-	int				mixLength;
-	int				energyLevel;
+	uint8_t			musicKey;
+	uint32_t		bpm;
+	uint32_t		bpmPlayed;
+	uint8_t			rating;
+	uint32_t		trackLength;
+	float			mixLength;
+	uint8_t			energyLevel;
 	bool			keyVerified;
+	int8_t          keyModification;
+	uint16_t		bitrate;
+
 	uint32_t		DeviceId;
 	uint16_t		DeviceTrack;
-	uint8_t		DeviceType;
-	uint8_t		DevicePage;
+	uint8_t			DeviceType;
+	uint8_t			DevicePage;
 
 	PlaylistItem();
 	void clear();
@@ -69,7 +72,6 @@ public:
 	ppl7::String getExistingFilename() const;
 	void importFromXML(const ppl7::String& xml);
 	void loadCoverPreview();
-
 	float calcMixLength() const;
 };
 

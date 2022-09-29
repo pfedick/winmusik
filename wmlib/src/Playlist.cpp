@@ -27,20 +27,22 @@ namespace winmusik {
 PlaylistItem::PlaylistItem()
 {
 	titleId=0;
-	startPositionSec=0;
-	endPositionSec=0;
+	startPositionSec=0.0f;
+	endPositionSec=0.0f;
 	musicKey=0;
 	energyLevel=0;
 	bpm=0;
 	bpmPlayed=0;
 	rating=0;
 	trackLength=0;
-	mixLength=0;
+	bitrate=0;
+	mixLength=0.0f;
 	for (int z=0;z < 5;z++) {
-		cutStartPosition[z]=0;
-		cutEndPosition[z]=0;
+		cutStartPosition[z]=0.0f;
+		cutEndPosition[z]=0.0f;
 	}
 	keyVerified=false;
+	keyModification=0;
 	DeviceId=0;
 	DeviceTrack=0;
 	DeviceType=0;
@@ -54,12 +56,12 @@ ppl7::String PlaylistItem::exportAsXML(int indention) const
 	ret=Indent + "<item>\n";
 	ret+=Indent + "   <widgetId>" + ppl7::ToString("%tu", (ptrdiff_t)this) + "</widgetId>\n";
 	ret+=Indent + "   <titleId>" + ppl7::ToString("%u", titleId) + "</titleId>\n";
-	ret+=Indent + "   <startPositionSec>" + ppl7::ToString("%u", startPositionSec) + "</startPositionSec>\n";
-	ret+=Indent + "   <endPositionSec>" + ppl7::ToString("%u", endPositionSec) + "</endPositionSec>\n";
+	ret+=Indent + "   <startPositionSec>" + ppl7::ToString("%0.3f", startPositionSec) + "</startPositionSec>\n";
+	ret+=Indent + "   <endPositionSec>" + ppl7::ToString("%0.3f", endPositionSec) + "</endPositionSec>\n";
 	ret+=Indent + "   <cuts>\n";
 	for (int i=0;i < 5;i++) {
-		ret+=Indent + "      <cut><start>" + ppl7::ToString("%u", cutStartPosition[i]) + "</start>";
-		ret+="<end>" + ppl7::ToString("%u", cutEndPosition[i]) + "</end></cut>\n";
+		ret+=Indent + "      <cut><start>" + ppl7::ToString("%0.3f", cutStartPosition[i]) + "</start>";
+		ret+="<end>" + ppl7::ToString("%0.3f", cutEndPosition[i]) + "</end></cut>\n";
 	}
 	ret+=Indent + "   </cuts>\n";
 	ret+=Indent + "   <Artist>" + ppl7::EscapeHTMLTags(Artist) + "</Artist>\n";
@@ -75,10 +77,11 @@ ppl7::String PlaylistItem::exportAsXML(int indention) const
 	ret+="\">" + ppl7::EscapeHTMLTags(MusicalKeys::sharpName(musicKey)) + "</musicKey>\n";
 	ret+=Indent + "   <energyLevel>" + ppl7::ToString("%u", energyLevel) + "</energyLevel>\n";
 	ret+=Indent + "   <bpm>" + ppl7::ToString("%u", bpm) + "</bpm>\n";
+	ret+=Indent + "   <bitrate>" + ppl7::ToString("%u", bpm) + "</bitrate>\n";
 	ret+=Indent + "   <bpmPlayed>" + ppl7::ToString("%u", bpmPlayed) + "</bpmPlayed>\n";
 	ret+=Indent + "   <rating>" + ppl7::ToString("%u", rating) + "</rating>\n";
 	ret+=Indent + "   <trackLength>" + ppl7::ToString("%u", trackLength) + "</trackLength>\n";
-	ret+=Indent + "   <mixLength>" + ppl7::ToString("%u", mixLength) + "</mixLength>\n";
+	ret+=Indent + "   <mixLength>" + ppl7::ToString("%0.3f", mixLength) + "</mixLength>\n";
 	ret+=Indent + "</item>\n";
 	return ret;
 }
@@ -87,8 +90,8 @@ void PlaylistItem::importFromXML(const ppl7::String& xml)
 {
 	ppl7::Array Matches;
 	if (xml.pregMatch("/\\<titleId\\>(.*)\\<\\/titleId\\>/s", Matches)) titleId=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<startPositionSec\\>(.*)\\<\\/startPositionSec\\>/s", Matches)) startPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<endPositionSec\\>(.*)\\<\\/endPositionSec\\>/s", Matches)) endPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (xml.pregMatch("/\\<startPositionSec\\>(.*)\\<\\/startPositionSec\\>/s", Matches)) startPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+	if (xml.pregMatch("/\\<endPositionSec\\>(.*)\\<\\/endPositionSec\\>/s", Matches)) endPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
 
 	if (xml.pregMatch("/<cuts>(.*?)<\\/cuts>/s", Matches)) {
 		ppl7::Array cuts(Matches[1], "</cut>");
@@ -97,8 +100,8 @@ void PlaylistItem::importFromXML(const ppl7::String& xml)
 		for (size_t i=0;i < rows;i++) {
 			ppl7::String cut=cuts[i];
 			//printf ("cut=>>%s<<\n",(const char*)cut);
-			if (cut.pregMatch("/<start>(.*?)<\\/start>/s", Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-			if (cut.pregMatch("/<end>(.*?)<\\/end>/s", Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+			if (cut.pregMatch("/<start>(.*?)<\\/start>/s", Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+			if (cut.pregMatch("/<end>(.*?)<\\/end>/s", Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
 		}
 	}
 
@@ -119,7 +122,13 @@ void PlaylistItem::importFromXML(const ppl7::String& xml)
 	if (xml.pregMatch("/\\<bpmPlayed\\>(.*)\\<\\/bpmPlayed\\>/s", Matches)) bpmPlayed=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 	if (xml.pregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s", Matches)) rating=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 	if (xml.pregMatch("/\\<trackLength\\>(.*)\\<\\/trackLength\\>/s", Matches)) trackLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<mixLength\\>(.*)\\<\\/mixLength\\>/s", Matches)) mixLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (xml.pregMatch("/\\<mixLength\\>(.*)\\<\\/mixLength\\>/s", Matches)) {
+		printf("found: %s\n", (const char*)Matches[1]);
+		mixLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+	} else printf("no match in %s\n\n", (const char*)xml);
+
+	if (xml.pregMatch("/\\<keyModification.*?\\>(.*)\\<\\/keyModification\\>/s", Matches)) keyModification=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (xml.pregMatch("/\\<bitrate.*?\\>(.*)\\<\\/bitrate\\>/s", Matches)) bitrate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 }
 
 Playlist::Playlist()
