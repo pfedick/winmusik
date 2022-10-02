@@ -589,6 +589,17 @@ void Playlist::recreatePlaylist()
 		columnBitrate=6;
 		columnSource=7;
 
+		columnComment=-1;
+		columnBpm=-1;
+		columnBpmPlayed=-1;
+		columnMusicKey=-1;
+		columnEnergyLevel=-1;
+		columnStart=-1;
+		columnEnd=-1;
+		columnCuts=-1;
+		columnTotalLength=-1;
+		columnTimeCode=-1;
+
 		item->setText(columnTrack, tr("Track"));
 		item->setText(columnCover, tr("Cover"));
 		item->setText(columnTitle, tr("Artist - Title (Version)"));
@@ -1217,6 +1228,9 @@ void Playlist::on_tracks_customContextMenuRequested(const QPoint& pos)
 		createSetEnergyLevelContextMenu(m);
 	} else if (column == columnBpmPlayed) {
 		a=m->addAction(QIcon(""), tr("Set BPM played", "trackList Context Menue"), this, SLOT(on_contextSetBPMPlayed_triggered()));
+	} else if (column == columnSource && columnSource > 0) {
+		a=m->addAction(QIcon(":/icons/resources/edit.png"), tr("Open Track in Editor", "trackList Context Menue"), this, SLOT(on_contextOpenTrackInEditor_triggered()));
+
 	} else if (column == columnComment) {
 		a=m->addAction(QIcon(""), tr("Edit Comment", "trackList Context Menue"), this, SLOT(on_contextEditComment_triggered()));
 	} else if (column == columnLength || (playlistView == playlistViewDJ && (column == columnTimeCode || column == columnStart || column == columnEnd || column == columnCuts || column == columnTotalLength))) {
@@ -1226,6 +1240,7 @@ void Playlist::on_tracks_customContextMenuRequested(const QPoint& pos)
 		a=m->addAction(QIcon(":/icons/resources/copytrack.png"), tr("Paste Cover", "trackList Context Menue"), this, SLOT(on_contextPasteCover_triggered()));
 	} else {
 		a=m->addAction(QIcon(":/icons/resources/edit.png"), tr("Edit Track", "trackList Context Menue"), this, SLOT(on_contextEditTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/edit.png"), tr("Open Track in Editor", "trackList Context Menue"), this, SLOT(on_contextOpenTrackInEditor_triggered()));
 		m->addAction(QIcon(":/icons/resources/copytrack.png"), tr("Copy", "trackList Context Menue"), this, SLOT(on_contextCopyTrack_triggered()));
 		m->addAction(QIcon(":/icons/resources/insert-track.png"), tr("Paste", "trackList Context Menue"), this, SLOT(on_contextPasteTrack_triggered()));
 		m->addAction(QIcon(":/icons/resources/delete-track.png"), tr("Delete", "trackList Context Menue"), this, SLOT(on_contextDeleteTrack_triggered()));
@@ -1446,6 +1461,15 @@ void Playlist::on_contextEditTrack_triggered()
 	if (!currentTreeItem) return;
 	editTrack(currentTreeItem);
 }
+
+void Playlist::on_contextOpenTrackInEditor_triggered()
+{
+	if (!currentTreeItem) return;
+	const DataTitle* t=wm->GetTitle(currentTreeItem->titleId);
+	if (!t) return;
+	wm->OpenEditor(t->DeviceType, t->DeviceId, t->Page, t->Track);
+}
+
 
 void Playlist::on_contextCopyTrack_triggered()
 {

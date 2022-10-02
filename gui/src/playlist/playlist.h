@@ -196,6 +196,7 @@ public slots:
     void on_issueDate_dateChanged(const QDate& date);
 
     void on_contextEditTrack_triggered();
+    void on_contextOpenTrackInEditor_triggered();
     void on_contextCopyTrack_triggered();
     void on_contextPasteTrack_triggered();
     void on_contextDeleteTrack_triggered();
