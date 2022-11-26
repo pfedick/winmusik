@@ -70,13 +70,13 @@ CID3TagSaver::~CID3TagSaver()
  * Aufträge in der Queue sind, werden diese nicht mehr abgearbeitet.
  */
 {
-	if (logger) logger->printf(ppl7::Logger::DEBUG,1,"CID3TagSaver","~CID3TagSaver",__FILE__,__LINE__,"Stoppe Thread");
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 1, "CID3TagSaver", "~CID3TagSaver", __FILE__, __LINE__, "Stoppe Thread");
 	threadSignalStop();
 	threadStop();
-	if (logger) logger->printf(ppl7::Logger::DEBUG,1,"CID3TagSaver","~CID3TagSaver",__FILE__,__LINE__,"done");
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 1, "CID3TagSaver", "~CID3TagSaver", __FILE__, __LINE__, "done");
 }
 
-void CID3TagSaver::SetLogger(ppl7::Logger *logger)
+void CID3TagSaver::SetLogger(ppl7::Logger* logger)
 {
 	this->logger=logger;
 }
@@ -109,7 +109,7 @@ void CID3TagSaver::Add(const ppl7::String& filename, const ppl7::AssocArray& Tag
 	Mutex.lock();
 	Queue.push_back(item);
 	Mutex.unlock();
-	if (logger) logger->printf(ppl7::Logger::DEBUG,2,"CID3TagSaver","Add",__FILE__,__LINE__,"Adding File %s", (const char*)item.Filename);
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CID3TagSaver", "Add", __FILE__, __LINE__, "Adding File %s", (const char*)item.Filename);
 	if (!this->threadIsRunning()) {
 		this->threadStart();
 	}
@@ -132,18 +132,19 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem& item)
 	Tag.setPaddingSize(PaddingSize);
 	Tag.setMaxPaddingSpace(PaddingSize);
 	if (item.Tags.exists("renamefile") == true && item.Tags.getString("renamefile") != item.Filename) {
-		if (logger) logger->printf(ppl7::Logger::DEBUG,9,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, rename: %s => %s",
+		if (logger) logger->printf(ppl7::Logger::DEBUG, 9, "CID3TagSaver", "run", __FILE__, __LINE__, "UpdateNow, rename: %s => %s",
 			(const char*)item.Filename, (const char*)item.Tags.getString("renamefile"));
 		ppl7::File::rename(item.Filename, item.Tags.getString("renamefile"));
 		item.Filename=item.Tags.getString("renamefile");
 		item.Tags.remove("renamefile");
 	}
-	if (logger) logger->printf(ppl7::Logger::DEBUG,9,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, tagging: %s", (const char*)item.Filename);
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 9, "CID3TagSaver", "run", __FILE__, __LINE__, "UpdateNow, tagging: %s", (const char*)item.Filename);
 
 	try {
 		//could fail, if file does not exist or contains usupported ID3Tags
 		Tag.load(item.Filename);
-	} catch (...) {}
+	}
+	catch (...) {}
 	bool changes=false;
 	ppl7::Array changelist;
 	if (item.cleartag) {
@@ -215,26 +216,26 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem& item)
 	key.replace("♯", "#");
 	key.replace("♭", "b");
 	if (Tag.getKey() != key) {
-		changelist.addf("key %s=>%s", (const char*)Tag.getKey(), (const char*)key );
+		changelist.addf("key %s=>%s", (const char*)Tag.getKey(), (const char*)key);
 		Tag.setKey(key);
 		changes=true;
-		
+
 	}
 	empty.set("0");
 	if (Tag.getPopularimeter() != item.Tags.getString("rating", empty).toInt()) {
 		Tag.removePopularimeter();
 		Tag.setPopularimeter("winmusik@pfp.de", item.Tags.getString("rating", empty).toInt());
 		changes=true;
-		if (logger) logger->print(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"changes: popularimeter");
+		if (logger) logger->print(ppl7::Logger::DEBUG, 10, "CID3TagSaver", "run", __FILE__, __LINE__, "changes: popularimeter");
 	}
 
 	if (changes == false) {
-		if (logger) logger->printf(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, no changes: %s", (const char*)item.Filename);
+		if (logger) logger->printf(ppl7::Logger::DEBUG, 10, "CID3TagSaver", "run", __FILE__, __LINE__, "UpdateNow, no changes: %s", (const char*)item.Filename);
 		return;
 	}
 	if (logger) {
 		ppl7::String Tmp=changelist.implode(", ");
-		logger->printf(ppl7::Logger::DEBUG,10,"CID3TagSaver","run",__FILE__,__LINE__,"UpdateNow, write changes: %s [%s]",
+		logger->printf(ppl7::Logger::DEBUG, 10, "CID3TagSaver", "run", __FILE__, __LINE__, "UpdateNow, write changes: %s [%s]",
 			(const char*)item.Filename, (const char*)Tmp);
 	}
 	Tag.save();
@@ -267,7 +268,8 @@ void CID3TagSaver::IterateQueue()
 			try {
 				UpdateNow(item);
 				return;
-			} catch (...) {
+			}
+			catch (...) {
 				if (item.retry_counter < 5) {
 					item.retry=ppl7::GetTime() + 5;
 					item.retry_counter++;
@@ -277,6 +279,7 @@ void CID3TagSaver::IterateQueue()
 					return;
 				}
 			}
+			return;
 		}
 	}
 	Mutex.unlock();
@@ -286,23 +289,23 @@ void CID3TagSaver::IterateQueue()
 
 void CID3TagSaver::run()
 {
-	if (logger) logger->printf(ppl7::Logger::DEBUG,1,"CID3TagSaver","run",__FILE__,__LINE__,"Thread started");
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 1, "CID3TagSaver", "run", __FILE__, __LINE__, "Thread started");
 	int idlecount=0;
 	while (!this->threadShouldStop()) {
 		Mutex.lock();
 		if (Queue.empty()) {
-			if (logger!=NULL && idlecount==0) logger->printf(ppl7::Logger::DEBUG,5,"CID3TagSaver","run",__FILE__,__LINE__,"Queue is empty");
+			if (logger != NULL && idlecount == 0) logger->printf(ppl7::Logger::DEBUG, 5, "CID3TagSaver", "run", __FILE__, __LINE__, "Queue is empty");
 			Mutex.unlock();
 			idlecount++;
 			if (idlecount > 20) break;	// terminate thread, because we have nothing to do
 			ppl7::MSleep(200); // Queue is empty, let's wait a bit
 		} else {
-			if (logger) logger->printf(ppl7::Logger::DEBUG,5,"CID3TagSaver","run",__FILE__,__LINE__,"Jobs in queue: %zd",Queue.size());
+			if (logger) logger->printf(ppl7::Logger::DEBUG, 5, "CID3TagSaver", "run", __FILE__, __LINE__, "Jobs in queue: %zd", Queue.size());
 			idlecount=0;
 			IterateQueue();
 		}
 	}
-	if (logger) logger->printf(ppl7::Logger::DEBUG,1,"CID3TagSaver","run",__FILE__,__LINE__,"Thread ended");
+	if (logger) logger->printf(ppl7::Logger::DEBUG, 1, "CID3TagSaver", "run", __FILE__, __LINE__, "Thread ended");
 }
 
 
