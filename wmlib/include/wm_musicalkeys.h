@@ -56,6 +56,9 @@ public:
 	static ppl7::String sharpName(int id);
 	static ppl7::String flatName(int id);
 	static ppl7::String openKeyName(int id);
+
+	static ppl7::String ID3TagTkeyNameSharp(int id);
+	static ppl7::String ID3TagTkeyNameFlat(int id);
 };
 
 

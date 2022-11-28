@@ -147,9 +147,8 @@ public:
 	ppl7::String	Label;
 	ppl7::String	RecordingSource;
 	ppl7::String	RecordingDevice;
+	ppl7::String	KeyText;			// only used when reading from idv3-tag
 	ppl7::ByteArray	Cover;
-
-	void clear();
 
 };
 

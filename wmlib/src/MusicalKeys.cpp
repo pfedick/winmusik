@@ -162,12 +162,34 @@ ppl7::String MusicalKeys::openKeyName(int id)
 	return keyNameOpenKey(id);
 }
 
+ppl7::String MusicalKeys::ID3TagTkeyNameSharp(int id)
+{
+	ppl7::String k=keyNameSharps(id);
+	k.replace("♯", "#");
+	k.replace("♭", "b");
+	k.replace("none", "o");
+	k.trim();
+	return k;
+}
+
+ppl7::String MusicalKeys::ID3TagTkeyNameFlat(int id)
+{
+	ppl7::String k=keyNameFlats(id);
+	k.replace("♯", "#");
+	k.replace("♭", "b");
+	k.replace("none", "o");
+	k.trim();
+	return k;
+}
+
 int MusicalKeys::keyId(const ppl7::String& name) const
 {
 	// TODO: can be improved and speed up by using a map for all keynames
-	ppl7::String k=ppl7::LowerCase(ppl7::Trim(name));
+	ppl7::String k=name;
 	k.replace("♯", "#");
 	k.replace("♭", "b");
+	k.trim();
+	k.lowerCase();
 	if (k.isEmpty()) return 0;
 
 	for (int i=1;i < 26;i++) {

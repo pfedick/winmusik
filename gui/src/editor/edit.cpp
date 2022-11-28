@@ -2414,6 +2414,15 @@ void Edit::on_contextSynchronizeKeys_triggered()
 						Ti.Key=tinfo.Ti.Key;
 						modified=true;
 					}
+					ppl7::String MyKeyText= wm->MusicKeys.keyName(tinfo.Ti.Key, wm->conf.musicKeyTag);
+					MyKeyText.replace("♯", "#");
+					MyKeyText.replace("♭", "b");
+					MyKeyText.replace("none", "o");
+					MyKeyText.trim();
+					if (tinfo.Ti.Key > 0 && tinfo.KeyText != MyKeyText) {
+						if (wmlog) wmlog->printf("Key mismatch: File=%s, Wanted=%s", (const char*)tinfo.KeyText, (const char*)MyKeyText);
+						modifyid3=true;
+					}
 					if (tinfo.Ti.Rating != Ti.Rating && Ti.Rating != 0) {
 						//tinfo.Ti.Rating=Ti.Rating;
 						//printf ("Rating will be saved: %d\n",track->Track);
