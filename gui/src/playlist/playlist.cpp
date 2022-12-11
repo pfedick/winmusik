@@ -693,6 +693,7 @@ void Playlist::renderTrack(PlaylistItem* item)
 	QColor color(0, 0, 0);
 	QBrush b=item->background(0);
 	item->setBackground(columnMusicKey, b);
+	item->setBackground(columnLength, b);
 	for (int i=1;i < item->columnCount();i++) {
 		item->setText(i, "");
 		item->setIcon(i, QIcon());
@@ -817,7 +818,14 @@ void Playlist::renderTrackViewDJ(PlaylistItem* item)
 	Tmp.setf("%02i:%02i", (int)(item->endPositionSec / 60), (int)item->endPositionSec % 60);
 	item->setText(columnEnd, Tmp);
 	Tmp.setf("%02i:%02i", (int)(item->mixLength / 60), (int)item->mixLength % 60);
+	if (!item->cueConsistency) {
+		item->setBackground(columnLength, colorscheme.cueConsistencyError);
+		Tmp+="!!!";
+	}
+
 	item->setText(columnLength, Tmp);
+
+
 
 	int cuts=0;
 	for (int i=0;i < 5;i++) {
@@ -1568,19 +1576,33 @@ static void updateInAndOut(PlaylistItem* item)
 		ShowException(exp, QObject::tr("Could not load ID3-Tags from File"));
 		return;
 	}
+	item->cueConsistency=true;
 	if (cuelist.size() == 0) return;
 	float traktorIn=-1;
 	float traktorOut=-1;
+	int countIn=0, countOut=0;
 	for (it=cuelist.begin();it != cuelist.end();it++) {
 		float sec=(float)(it->start / 1000.0);
-		if (it->type == TraktorTagCue::IN) traktorIn=sec;
-		if (it->type == TraktorTagCue::OUT) traktorOut=sec;
+		if (it->type == TraktorTagCue::IN) {
+			traktorIn=sec;
+			countIn+=1;
+		}
+		if (it->type == TraktorTagCue::OUT) {
+			traktorOut=sec;
+			countOut+=1;
+		}
 	}
 	item->startPositionSec=0;
 	item->endPositionSec=item->trackLength;
 
 	if (traktorIn >= 0.0f) item->startPositionSec=traktorIn;
 	if (traktorOut >= 0.0f) item->endPositionSec=traktorOut;
+	//printf("UpdateCues: %d, %d\n", countIn, countOut);
+	if (countIn != 1 || countOut != 1 || traktorOut < traktorIn) {
+		//printf("Mismatch\n");
+		item->cueConsistency=false;
+	}
+	fflush(stdout);
 }
 
 

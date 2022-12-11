@@ -49,6 +49,7 @@ PlaylistItem::PlaylistItem()
 		cutEndPosition[z]=0.0f;
 	}
 	keyVerified=false;
+	cueConsistency=true;
 	keyModification=0;
 	DeviceId=0;
 	DeviceTrack=0;
@@ -95,6 +96,9 @@ ppl7::String PlaylistItem::exportAsXML(int indention) const
 	ret+=Indent + "   <rating>" + ppl7::ToString("%u", rating) + "</rating>\n";
 	ret+=Indent + "   <trackLength>" + ppl7::ToString("%u", trackLength) + "</trackLength>\n";
 	ret+=Indent + "   <mixLength>" + ppl7::ToString("%0.3f", mixLength) + "</mixLength>\n";
+	ret+=Indent + "   <cueConsistency>";
+	if (cueConsistency) ret+="true"; else ret+="false";
+	ret+= "</cueConsistency>\n";
 	ret+=Indent + "</item>\n";
 	return ret;
 }
@@ -208,7 +212,10 @@ void PlaylistItem::importFromXML(QDomElement& e)
 		bitrate=node.toElement().text().toUInt();
 	}
 
-
+	node =e.namedItem("cueConsistency");
+	if (node.isNull() == false && node.isElement() == true) {
+		cueConsistency=ppl7::IsTrue(node.toElement().text());
+	}
 	node =e.namedItem("rating");
 	if (node.isNull() == false && node.isElement() == true) {
 		rating=static_cast<uint8_t>(node.toElement().text().toUInt());
@@ -316,7 +323,8 @@ void PlaylistItem::useTraktorCues(const ppl7::String& file)
 	try {
 		Tag.load(file);
 		useTraktorCues(Tag);
-	} catch (...) {}
+	}
+	catch (...) {}
 }
 
 void PlaylistItem::useTraktorCues(const ppl7::ID3Tag& Tag)
@@ -628,7 +636,8 @@ bool PlaylistTracks::saveWMP(const ppl7::String& Filename)
 		ff.write(xml);
 		ff.close();
 		return true;
-	} catch (const ppl7::Exception& exp) {
+	}
+	catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("could not save playlist"));
 	}
 	return false;

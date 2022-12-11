@@ -42,6 +42,7 @@ public:
     QBrush alternateBoostKey;
     QBrush boostKey2;
     QBrush alternateBoostKey2;
+    QBrush cueConsistencyError;
 };
 
 

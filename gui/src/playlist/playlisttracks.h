@@ -54,6 +54,7 @@ public:
 	float			mixLength;
 	uint8_t			energyLevel;
 	bool			keyVerified;
+	bool			cueConsistency;
 	int8_t          keyModification;
 	uint16_t		bitrate;
 

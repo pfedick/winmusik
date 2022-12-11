@@ -39,6 +39,7 @@ void ColorScheme::init()
     alternateBoostKey=alternateBase;
     boostKey2=base;
     alternateBoostKey2=alternateBase;
+    cueConsistencyError=base;
 
     sameKey.setStyle(Qt::SolidPattern);
     sameKey.setStyle(Qt::SolidPattern);
@@ -48,7 +49,7 @@ void ColorScheme::init()
     alternateBoostKey.setStyle(Qt::SolidPattern);
     boostKey2.setStyle(Qt::SolidPattern);
     alternateBoostKey2.setStyle(Qt::SolidPattern);
-
+    cueConsistencyError.setStyle(Qt::SolidPattern);
 
     if (base.color().lightness() < 127) {
         initDark();
@@ -71,6 +72,7 @@ void ColorScheme::initDark()
     alternateBoostKey.setColor(QColor(128, bgca.lightness(), bgca.lightness()));
     boostKey2.setColor(QColor(200, bgc.lightness(), bgc.lightness()));
     alternateBoostKey2.setColor(QColor(200, bgca.lightness(), bgca.lightness()));
+    cueConsistencyError.setColor(QColor(128, 0, 0));
 }
 
 void ColorScheme::initLight()
@@ -83,5 +85,6 @@ void ColorScheme::initLight()
     alternateBoostKey.setColor(QColor(220, 192, 192));
     boostKey2.setColor(QColor(255, 192, 192));
     alternateBoostKey2.setColor(QColor(255, 192, 192));
+    cueConsistencyError.setColor(QColor(255, 128, 128));
 
 }
