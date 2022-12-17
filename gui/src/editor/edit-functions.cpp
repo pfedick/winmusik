@@ -622,10 +622,10 @@ void Edit::SaveEditorTrack()
 	// Cover
 	ppl7::String Path=wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
 	TrackInfo tinfo;
-	if (getTrackInfoFromFile(tinfo,Path)) {
+	if (getTrackInfoFromFile(tinfo, Path)) {
 		Ti.Bitrate=tinfo.Ti.Bitrate;
 		Ti.Size=tinfo.Ti.Size;
-		if (tinfo.Ti.Key != Ti.Key && (Ti.Flags & 16) == 0 && tinfo.Ti.Key>0) {
+		if (tinfo.Ti.Key != Ti.Key && (Ti.Flags & 16) == 0 && tinfo.Ti.Key > 0) {
 			//printf ("Key in File: %d\n",tinfo.Ti.Key);
 			Ti.Key=tinfo.Ti.Key;
 		}
@@ -722,7 +722,7 @@ void Edit::UpdateCompleters()
 	Artists.clear();
 	Titles.clear();
 	Albums.clear();
-	
+
 	std::map<ppl7::String, uint32_t>::const_iterator it;
 	for (it=wm->TitleStore.Artists.begin();it != wm->TitleStore.Artists.end();++it) {
 		Artists.append((*it).first);
