@@ -338,9 +338,8 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
 				info.Version=matches.get(2);
 				info.Version.trim();
 			} else {
-				Tmp=matches.get(2);
-				Tmp.trim();
-				info.Ti.SetTitle(Tmp);
+				Title.trim();
+				info.Ti.SetTitle(Title);
 			}
 		}
 	}
