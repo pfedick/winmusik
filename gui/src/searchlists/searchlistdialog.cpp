@@ -504,6 +504,7 @@ void SearchlistDialog::addTrack(const SearchlistItem& track)
 	ui.trackList->addTopLevelItem(item);
 	ui.trackList->scrollToItem(item);
 	ui.trackList->setCurrentItem(item);
+	on_trackList_itemClicked(item, 0);
 	save();
 	updateStatusBar();
 }
