@@ -360,7 +360,8 @@ static bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& matc
 	int found=0;
 	if (html.pregMatch("/<p class=\"buk-track-artists\".*?>(.*?)<\\/p>/i", matches)) {
 		ppl7::String todo=matches[1];
-		while (todo.pregMatch("/^(.*?)<a href=.*?>(.*?)<\\/a>(.*?)$/i", matches)) {
+		//printf("We found artists: %s\n", (const char*)todo); fflush(stdout);
+		while (todo.pregMatch("/^(.*?)<a .*?href=.*?>(.*?)<\\/a>(.*?)$/i", matches)) {
 			todo=matches[1] + matches[3];
 			Artist=Artist + ", " + matches[2];
 		}
@@ -382,7 +383,7 @@ static bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& matc
 		ppl7::String todo=matches[1];
 		//printf ("Match1\n");
 		//todo.printnl();
-		if (todo.pregMatch("/<a href=.*?>(.*?)<\\/a>/i", matches)) {
+		if (todo.pregMatch("/<a .*?href=.*?>(.*?)<\\/a>/i", matches)) {
 			Genre=matches[1];
 		}
 		found++;
@@ -395,7 +396,7 @@ static bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& matc
 	}
 	if (html.pregMatch("/<p class=\"buk-track-labels\".*?>(.*?)<\\/p>/i", matches)) {
 		ppl7::String todo=matches[1];
-		if (todo.pregMatch("/<a href=.*?>(.*?)<\\/a>/i", matches)) {
+		if (todo.pregMatch("/<a .*?href=.*?>(.*?)<\\/a>/i", matches)) {
 			Label=matches[1];
 		}
 		found++;
