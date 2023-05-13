@@ -374,6 +374,9 @@ static ppl7::String BeatportGetGenreFromId(int id)
 	case 247: return ppl7::String("Future House");
 	case 252: return ppl7::String("Future Rave");
 	case 257: return ppl7::String("Latin Tech");
+	case 264: return ppl7::String("Raw Trance");
+	case 265: return ppl7::String("Deep Trance");
+	case 266: return ppl7::String("Hypnotic Trance");
 
 
 	}
@@ -408,10 +411,11 @@ static bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& matc
 	}
 	if (html.pregMatch("/<p class=\"buk-track-genre\".*?>(.*?)<\\/p>/i", matches)) {
 		ppl7::String todo=matches[1];
-		printf("Match1\n");
-		todo.printnl(); fflush(stdout);
+		//printf("Match1\n");	todo.printnl(); fflush(stdout);
 		Genre.clear();
 		if (todo.pregMatch("/<a .*?href=.*?data-subgenre=\"(.*?)\".*?<\\/a>/i", matches)) {
+			Genre=BeatportGetGenreFromId(matches[1].toInt());
+		} else if (todo.pregMatch("/<a .*?href=.*?data-genre=\"(.*?)\".*?<\\/a>/i", matches)) {
 			Genre=BeatportGetGenreFromId(matches[1].toInt());
 		}
 		if (Genre.isEmpty() && todo.pregMatch("/<a .*?href=.*?>(.*?)<\\/a>/i", matches)) {
