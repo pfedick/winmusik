@@ -119,15 +119,19 @@ int main(int argc, char* argv[])
     CWmClient Client;
     try {
         Client.Init(argc, argv, &a);
-    }
-    catch (const ppl7::Exception& exp) {
+    } catch (const ppl7::Exception& exp) {
         ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
         return 1;
     }
-    if (!Client.Start()) {
+    try {
+        if (!Client.Start()) {
+            return 1;
+        }
+        a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
+        int ret=a.exec();
+        return ret;
+    } catch (const ppl7::Exception& exp) {
+        ShowException(exp, QApplication::tr("Could not run WinMusik"));
         return 1;
     }
-    a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
-    int ret=a.exec();
-    return ret;
 }
