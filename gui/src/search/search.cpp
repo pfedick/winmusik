@@ -847,8 +847,7 @@ void Search::on_contextMusicKeyVerified_triggered()
 	else tUpdate.Flags|=16;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -866,8 +865,7 @@ void Search::on_contextSetMusicKey(int k)
 	tUpdate.Key=k;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1038,8 +1036,7 @@ void Search::rateCurrentTrack(int value)
 	tUpdate.Rating=value;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1189,7 +1186,7 @@ void Search::on_watchClipboardHarddisk_toggled(bool checked)
 void Search::on_ClipBoardTimer_update()
 {
 	RegExpClipboard clip;
-	clip.copyFromClipboard();
+	copyFromClipboard(clip);
 	if (clip.PlainText == LastClipboardString) return;
 	LastClipboardString=clip.PlainText;
 	if (LastClipboardString.isEmpty()) return;
@@ -1272,8 +1269,7 @@ void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 	//const char* tmp;
 	try {
 		Dir.open(dir, ppl7::Dir::SORT_NONE);
-	}
-	catch (...) {
+	} catch (...) {
 		return;
 	}
 	ppl7::Dir::Iterator it;

@@ -635,7 +635,7 @@ static int matchWords(const ppl7::Array& needle, const ppl7::Array& stack)
 void SearchlistDialog::on_ClipBoardTimer_update()
 {
 	RegExpClipboard clip;
-	clip.copyFromClipboard();
+	copyFromClipboard(clip);
 	if (clip.PlainText == LastClipboardString) return;
 	LastClipboardString=clip.PlainText;
 	RegExpMatch match;

@@ -82,7 +82,7 @@ void SearchlistTrackDialog::setFromClipboard()
 {
 	RegExpMatch match;
 	RegExpClipboard clip;
-	clip.copyFromClipboard();
+	copyFromClipboard(clip);
 	if (wm_main->RegExpCapture.match(clip, match)) {
 		ui.artistEdit->setText(match.Artist);
 		ui.titleEdit->setText(match.Title);

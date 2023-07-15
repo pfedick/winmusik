@@ -121,8 +121,7 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 	const char* buffer=NULL;
 	try {
 		buffer=File.map(File.size() - 128, 128);
-	}
-	catch (...) {
+	} catch (...) {
 		return CopyFromFilename(info, Filename);
 	}
 	if (buffer[0] == 'T' && buffer[1] == 'A' && buffer[2] == 'G') {
@@ -174,8 +173,7 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 	ppl7::String Title, Version, Genre, Comment, Artist;
 	try {
 		Tag.load(File);
-	}
-	catch (...) {
+	} catch (...) {
 		return CopyFromFilename(info, Filename);
 	}
 	Title=Tag.getTitle();
@@ -362,8 +360,7 @@ bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int pre
 	ppl7::File File;
 	try {
 		File.open(Filename);
-	}
-	catch (...) {
+	} catch (...) {
 		return false;
 	}
 	ppl7::AudioInfo ai;
@@ -431,10 +428,11 @@ void saveCover(const ppl7::String& filename, const QPixmap& Cover)
 	if (filename.isEmpty()) return;
 	if (Cover.isNull()) return;
 	ppl7::ID3Tag Tag;
+	printf("Loading Tag\n");
 	try {
 		Tag.load(filename);
-	}
-	catch (...) {
+		Tag.listFrames();
+	} catch (...) {
 	 // Fehler beim Laden wird ignoriert, es koennte eine Datei ohne ID3-Tags sein
 	}
 	QByteArray bytes;
@@ -446,10 +444,10 @@ void saveCover(const ppl7::String& filename, const QPixmap& Cover)
 	Tag.setPicture(3, bin, "image/jpeg");
 	try {
 		Tag.save();
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("Could not save cover!"));
 	}
+	fflush(stdout);
 }
 
 void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover)
@@ -478,8 +476,7 @@ void loadCoverToClipboard(const ppl7::String& Filename)
 				clipboard->setPixmap(pix);
 			}
 		}
-	}
-	catch (...) {
+	} catch (...) {
 
 	}
 }

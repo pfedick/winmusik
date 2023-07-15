@@ -23,6 +23,8 @@ OBJS_RELEASE =	\
 	release/StorageSimpleTable.o \
 	release/StorageTitle.o \
 	release/StorageTrack.o \
+	release/beatport.o \
+	release/regexpcapture.o \
 
 
 
@@ -44,6 +46,8 @@ OBJS_DEBUG =	\
 	debug/StorageSimpleTable.o \
 	debug/StorageTitle.o \
 	debug/StorageTrack.o \
+	debug/beatport.o \
+	debug/regexpcapture.o \
 
 
 
@@ -136,6 +140,14 @@ release/CTrackList.o: src/CTrackList.cpp include/libwinmusik3.h Makefile include
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/CTrackList.o -c src/CTrackList.cpp
 
+release/beatport.o: src/beatport.cpp include/libwinmusik3.h Makefile include/wm_regexpcapture.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/beatport.o -c src/beatport.cpp
+
+release/regexpcapture.o: src/regexpcapture.cpp include/libwinmusik3.h Makefile include/wm_regexpcapture.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/regexpcapture.o -c src/regexpcapture.cpp
+
 
 
 debug/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile include/wm_storage.h
@@ -201,3 +213,11 @@ debug/CID3TagSaver.o: src/CID3TagSaver.cpp include/wm_id3tagsaver.h Makefile
 debug/CTrackList.o: src/CTrackList.cpp include/libwinmusik3.h Makefile include/wm_tracklist.h
 	-mkdir -p debug
 	$(CXX) $(CXXDEBUGFLAGS) -o debug/CTrackList.o -c src/CTrackList.cpp
+
+debug/beatport.o: src/beatport.cpp include/libwinmusik3.h Makefile include/wm_regexpcapture.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o debug/beatport.o -c src/beatport.cpp
+
+debug/regexpcapture.o: src/regexpcapture.cpp include/libwinmusik3.h Makefile include/wm_regexpcapture.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o debug/regexpcapture.o -c src/regexpcapture.cpp

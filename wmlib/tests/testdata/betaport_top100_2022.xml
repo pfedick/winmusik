@@ -1,0 +1,44 @@
+<html>
+    <body>
+        <!--StartFragment-->
+        <div class="buk-track-meta-parent" style="..">
+            <p class="buk-track-title" style="..">
+                <a href="https://www.beatport.com/track/coronado/17490309" style="..">
+                    <span class="buk-track-primary-title" title="Coronado" style="..">Coronado</span>
+                    <span></span>
+                    <span class="buk-track-remixed" style="..">Extended Mix</span>
+                </a>
+            </p>
+            <p class="buk-track-artists" style="..">
+                <a class="" href="https://www.beatport.com/artist/niko-zografos/321771" data-artist="321771" style="..">Niko Zografos</a>
+            </p>
+            <p class="buk-track-remixers" style=".."></p>
+            <p class="buk-track-labels" style="..">
+                <a class="" href="https://www.beatport.com/label/subculture/30737" data-label="30737" style="..">Subculture</a>
+            </p>
+            <p class="buk-track-genre" style="..">
+                <a class="" href="https://www.beatport.com/sub-genre/uplifting/128" data-subgenre="128" style="..">Uplifting</a>
+            </p>
+            <p class="buk-track-released" style="..">2023-03-31</p>
+        </div>
+        <div class="track-actions-parent" style="..">
+            <div class="track-actions" style="..">
+                <div class="track-play-queue" style="..">
+                    <button href="#" class="playable-play track-play" data-type="track" data-id="17490309" style="..">
+                        <svg viewBox="0 0 100 100" class="replay-icon">
+                            <use xlink:href="/static/4fef40cebd6b915bcbe9695d5d543a01.svg#icon-replay"></use>
+                        </svg>
+                    </button>
+                    <button class="playable-queue track-queue tooltip-secondary" data-type="track" data-id="17490309" style="..">
+                        <svg viewBox="0 0 16 11" class="queue-icon">
+                            <use xlink:href="/static/4fef40cebd6b915bcbe9695d5d543a01.svg#icon-add-queue"></use>
+                        </svg>
+                        <span class="tooltiptext" style=".."></span>
+                    </button>
+                    <div class="equalizer-container" style=".."></div>
+                </div>
+                <div class="buy-button track-buy-button
+" data-track="17490309" data-price="€1.99" style="..">
+                    <br class="Apple-interchange-newline">                        <!--EndFragment-->
+                    </body>
+                </html>
