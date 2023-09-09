@@ -117,10 +117,12 @@ private:
 
     // Export Playlist
     void exportFile(PlaylistExport& dialog, int track, const ppl7::String& SourceFile);
+    void exportCoverIcon(const ppl7::String& TargetFile, const ppl7::String& SourceFile);
     void exportM3U();
     void exportPLS();
     void exportXSPF();
     void exportTXT(bool withStartTimes);
+    void exportJSON();
     ppl7::String getExportFilename(int track, const ppl7::String& SourceFile);
 
     // Aktionen

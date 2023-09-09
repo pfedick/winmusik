@@ -37,6 +37,8 @@ PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm) :
     ui->export_xspf->setChecked(wm->conf.playlist_export.export_xspf);
     ui->export_txt->setChecked(wm->conf.playlist_export.export_txt);
     ui->withStartTimesCheckBox->setChecked(wm->conf.playlist_export.with_start_times);
+    ui->export_json->setChecked(wm->conf.playlist_export.export_json);
+    ui->withCoverIconsCheckBox->setChecked(wm->conf.playlist_export.with_cover_icons);
 
 }
 
@@ -55,6 +57,9 @@ void PlaylistExport::on_okButton_clicked()
     wm->conf.playlist_export.export_xspf=ui->export_xspf->isChecked();
     wm->conf.playlist_export.export_txt=ui->export_txt->isChecked();
     wm->conf.playlist_export.with_start_times=ui->withStartTimesCheckBox->isChecked();
+    wm->conf.playlist_export.export_json=ui->export_json->isChecked();
+    wm->conf.playlist_export.with_cover_icons=ui->withCoverIconsCheckBox->isChecked();
+
     wm->conf.trySave();
     done(1);
 }

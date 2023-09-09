@@ -941,8 +941,7 @@ void Playlist::saveTitle(PlaylistItem* item)
 		if (Ti.TitleId > 0) wm_main->Hashes.RemoveTitle(Ti.TitleId);
 		try {
 			wm_main->TitleStore.Put(Ti);
-		}
-		catch (const ppl7::Exception& exp) {
+		} catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not save Title in TitleStore"));
 			if (Ti.TitleId > 0) wm_main->Hashes.AddTitle(Ti.TitleId);
 		}
@@ -1096,8 +1095,7 @@ void Playlist::on_menuExport_triggered()
 		clearDir(wm->conf.playlist_export.TargetPath);
 		try {
 			ppl7::Dir::mkDir(wm->conf.playlist_export.TargetPath);
-		}
-		catch (const ppl7::Exception& exp) {
+		} catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not create target directory!"));
 			return;
 		}
@@ -1115,6 +1113,7 @@ void Playlist::on_menuExport_triggered()
 		if (wm->conf.playlist_export.export_pls) exportPLS();
 		if (wm->conf.playlist_export.export_xspf) exportXSPF();
 		if (wm->conf.playlist_export.export_txt) exportTXT(wm->conf.playlist_export.with_start_times);
+		if (wm->conf.playlist_export.export_json) exportJSON();
 	}
 }
 
@@ -1320,8 +1319,7 @@ void Playlist::on_contextMusicKeyVerified_triggered()
 		currentTreeItem->keyVerified=(tUpdate.Flags & 16) >> 4;
 		try {
 			wm->TitleStore.Put(tUpdate);
-		}
-		catch (const ppl7::Exception& exp) {
+		} catch (const ppl7::Exception& exp) {
 			ShowException(exp, tr("Could not save Title in TitleStore"));
 			return;
 		}
@@ -1344,8 +1342,7 @@ void Playlist::on_contextSetMusicKey(int k)
 	tUpdate.Key=k;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1368,8 +1365,7 @@ void Playlist::on_contextSetEnergyLevel(int v)
 	tUpdate.EnergyLevel=v;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1390,8 +1386,7 @@ void Playlist::rateCurrentTrack(int value)
 	tUpdate.Rating=value;
 	try {
 		wm->TitleStore.Put(tUpdate);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 		return;
 	}
@@ -1454,8 +1449,7 @@ void Playlist::on_contextPasteCover_triggered()
 	// Titel speichern
 	try {
 		wm_main->TitleStore.Put(Ti);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		QApplication::restoreOverrideCursor();
 		ShowException(exp, tr("Could not save Title in TitleStore"));
 	}
@@ -1571,8 +1565,7 @@ static void updateInAndOut(PlaylistItem* item)
 	std::list <TraktorTagCue>::const_iterator it;
 	try {
 		getTraktorCuesFromFile(cuelist, item->File);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("Could not load ID3-Tags from File"));
 		return;
 	}
@@ -1794,10 +1787,33 @@ void Playlist::exportFile(PlaylistExport& dialog, int track, const ppl7::String&
 	ppl7::String TargetFile=wm->conf.playlist_export.TargetPath + "/" + Tmp;
 	try {
 		ppl7::File::copy(SourceFile, TargetFile);
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("Could not copy file"));
 	}
+}
+
+void Playlist::exportCoverIcon(const ppl7::String& TargetFile, const ppl7::String& SourceFile)
+{
+	ppl7::ID3Tag Tag;
+	try {
+		Tag.load(SourceFile);
+		ppl7::ByteArray cover;
+		QPixmap pix, icon;
+		if (Tag.getPicture(3, cover)) {
+			pix.loadFromData((const uchar*)cover.ptr(), cover.size());
+			icon=pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			QByteArray bytes;
+			QBuffer buffer(&bytes);
+			buffer.open(QIODevice::WriteOnly);
+			icon.save(&buffer, "JPEG", 90);
+			ppl7::File file;
+			file.open(TargetFile, ppl7::File::WRITE);
+			file.write(bytes.data(), bytes.size());
+		}
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("Could not copy file"));
+	}
+
 }
 
 void Playlist::exportM3U()
@@ -1817,8 +1833,7 @@ void Playlist::exportM3U()
 			m3u.putsf("%s\n", (const char*)getExportFilename(i + 1, item->File));
 		}
 		m3u.close();
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
@@ -1843,8 +1858,7 @@ void Playlist::exportPLS()
 		}
 		pls.putsf("NumberOfEntries=%i\nVersion=2\n", ui.tracks->topLevelItemCount());
 		pls.close();
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
@@ -1878,8 +1892,7 @@ void Playlist::exportXSPF()
 		}
 		xspf.putsf("</trackList>\n</playlist>\n");
 		xspf.close();
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
@@ -1920,11 +1933,76 @@ void Playlist::exportTXT(bool withStartTimes)
 		}
 		txt.puts("\r\n");
 		txt.close();
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, tr("could not save playlist"));
 	}
 }
+
+void Playlist::exportJSON()
+{
+	float totalLength=0.0f;
+	ppl7::AssocArray total;
+	ppl7::String Tmp;
+	Tmp=ui.tracks->getName();
+	if (Tmp.isEmpty()) {
+		Tmp=tr("Playlist");
+	}
+	total.set("Name", Tmp);
+	Tmp=ui.tracks->getSubName();
+	if (Tmp.notEmpty()) {
+		total.set("SubName", Tmp);
+	}
+	total.setf("mixNumber", "%d", ui.issueNumber->value());
+	Tmp=ui.issueDate->date().toString();
+	total.set("mixDate", Tmp);
+
+	int count=0;
+
+	for (int i=0;i < ui.tracks->topLevelItemCount();i++) {
+		PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
+		ppl7::AssocArray a;
+		a.setf("titleId", "%u", item->titleId);
+		a.setf("trackNo", "%d", count + 1);
+		a.set("Artist", item->Artist);
+		a.set("Title", item->Title);
+		a.set("Version", item->Version);
+		a.set("Genre", item->Genre);
+		a.set("Label", item->Label);
+		a.set("Album", item->Album);
+		a.set("File", item->File);
+		a.set("Remarks", item->Remarks);
+		a.set("musicKey", MusicalKeys::sharpName(item->musicKey));
+		a.setf("bpm", "%d", item->bpm);
+		a.setf("bpmPlayed", "%d", item->bpmPlayed);
+		a.setf("trackLength", "%d", item->trackLength);
+		a.setf("mixLength", "%0.3f", item->mixLength);
+		a.setf("startTime", "%0.3f", totalLength);
+		a.set("startTimeReadable", getReadableTimeFromSeconds(totalLength));
+		a.setf("endTime", "%0.3f", totalLength + item->mixLength);
+
+		if (wm->conf.playlist_export.with_cover_icons) {
+			Tmp.setf("%03d_cover_icon.jpg", count + 1);
+			a.set("CoverIcon", Tmp);
+			Tmp=wm->conf.playlist_export.TargetPath + "/" + Tmp;
+			exportCoverIcon(Tmp, item->File);
+		}
+
+		total.set("tracks/[]", a);
+		totalLength+=item->mixLength;
+		count++;
+
+	}
+	total.setf("mixLength", "%0.3f", totalLength);
+	total.setf("trackCount", "%d", count);
+	ppl7::File file;
+	try {
+		file.open(ppl7::ToString("%s/000index.json", (const char*)wm->conf.playlist_export.TargetPath), ppl7::File::WRITE);
+		ppl7::Json::dump(file, total);
+	} catch (const ppl7::Exception& exp) {
+		ShowException(exp, tr("could not save playlist"));
+	}
+}
+
 
 void Playlist::on_viewFilter_triggered()
 {

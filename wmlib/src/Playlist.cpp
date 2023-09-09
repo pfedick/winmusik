@@ -86,6 +86,28 @@ ppl7::String PlaylistItem::exportAsXML(int indention) const
 	return ret;
 }
 
+/*
+void PlaylistItem::exportToArray(ppl7::AssocArray& a) const
+{
+	a.setf("titleId", "%u", titleId);
+	a.set("Artist", Artist);
+	a.set("Title", Title);
+	a.set("Version", Version);
+	a.set("Genre", Genre);
+	a.set("Label", Label);
+	a.set("Album", Album);
+	a.set("File", File);
+	a.set("Remarks", Remarks);
+	a.set("musicKey", MusicalKeys::sharpName(musicKey));
+	a.setf("bpm", "%d", bpm);
+	a.setf("bpmPlayed", "%d", bpmPlayed);
+	a.setf("trackLength", "%d", trackLength);
+	a.setf("mixLength", "%0.3f", mixLength);
+	a.setf("startPositionSec", "%0.3f", startPositionSec);
+	a.setf("endPositionSec", "%0.3f", endPositionSec);
+}
+*/
+
 void PlaylistItem::importFromXML(const ppl7::String& xml)
 {
 	ppl7::Array Matches;

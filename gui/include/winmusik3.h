@@ -265,6 +265,9 @@ public:
 		bool export_xspf;
 		bool export_txt;
 		bool with_start_times;
+		bool export_json;
+		bool with_cover_icons;
+
 	};
 	PlaylistExport playlist_export;
 

@@ -106,6 +106,9 @@ Config::PlaylistExport::PlaylistExport()
 	export_xspf=true;
 	export_txt=true;
 	with_start_times=true;
+	export_json=false;
+	with_cover_icons=false;
+
 }
 
 
@@ -137,8 +140,7 @@ void Config::trySave()
 {
 	try {
 		save();
-	}
-	catch (...) {}
+	} catch (...) {}
 }
 
 void Config::save()
@@ -256,6 +258,8 @@ void Config::save()
 	c.add("playlistExport", "export_xspf", playlist_export.export_xspf);
 	c.add("playlistExport", "export_txt", playlist_export.export_txt);
 	c.add("playlistExport", "with_start_times", playlist_export.with_start_times);
+	c.add("playlistExport", "export_json", playlist_export.export_json);
+	c.add("playlistExport", "with_cover_icons", playlist_export.with_cover_icons);
 
 	ppl7::String Path=ppl7::File::getPath(ConfigFile);
 
@@ -398,4 +402,7 @@ void Config::load()
 	playlist_export.export_xspf=c.getBoolFromSection("playlistExport", "export_xspf", true);
 	playlist_export.export_txt=c.getBoolFromSection("playlistExport", "export_txt", true);
 	playlist_export.with_start_times=c.getBoolFromSection("playlistExport", "with_start_times", true);
+	playlist_export.export_json=c.getBoolFromSection("playlistExport", "export_json", false);
+	playlist_export.with_cover_icons=c.getBoolFromSection("playlistExport", "with_cover_icons", false);
+
 }
