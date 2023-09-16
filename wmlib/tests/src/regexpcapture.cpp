@@ -81,4 +81,20 @@ TEST_F(RegExpCaptureTest, Beatport2023MultipleArtists) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2023RemixWithArtist) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2023_remix.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Saltwater"), match.Title);
+    ASSERT_EQ(ppl7::String("Ilan Bluestone Extended Remix"), match.Version);
+    ASSERT_EQ(ppl7::String("Chicane feat. Moya Brennan"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Armada Music"), match.Label);
+    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
+    ASSERT_EQ(ppl7::String("2023-09-01"), match.ReleaseDate);
+
+}
+
 }

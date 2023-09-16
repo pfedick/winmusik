@@ -211,15 +211,36 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
         }
         found++;
     }
-    ppl7::Array links(html, "</a>");
     ppl7::Array artists;
+    bool have_artist=false;
+
+    if (html.pregMatch("/(<div class=.*?cell title.*?<div class=.*?cell label)/is", matches)) {
+        ppl7::String Block=matches[1];
+        ppl7::Array links(Block, "</a>");
+        for (size_t i=0;i < links.size();i++) {
+            ppl7::String row=links[i] + "</a>";
+            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/artist\\/.*?>(.*?)</a>/is", matches)) {
+                //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
+                artists.add(matches[1].trimmed());
+                have_artist=true;
+            }
+        }
+
+    }
+
+
+    ppl7::Array links(html, "</a>");
     for (size_t i=0;i < links.size();i++) {
         ppl7::String row=links[i] + "</a>";
         //printf("row:>>%s<<\n\n", (const char*)row);
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/artist\\/.*?>(.*?)</a>/is", matches)) {
-            //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
-            artists.add(matches[1].trimmed());
+        /*
+        if (!have_artist) {
+            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/artist\\/.*?>(.*?)</a>/is", matches)) {
+                            //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
+                artists.add(matches[1].trimmed());
+            }
         }
+        */
         if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/label\\/.*?>(.*?)</a>/is", matches)) {
             Label=matches[1].trimmed();
         }
