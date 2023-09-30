@@ -97,4 +97,24 @@ TEST_F(RegExpCaptureTest, Beatport2023RemixWithArtist) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2023_2) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2023_2.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Somebody That I Used To Know"), match.Title);
+    ASSERT_EQ(ppl7::String("Extended Mix"), match.Version);
+    ASSERT_EQ(ppl7::String("Kevin McKay, James Cole"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Glasgow Underground"), match.Label);
+    ASSERT_EQ(ppl7::String("Deep House"), match.Genre);
+    ASSERT_EQ(ppl7::String("2023-08-04"), match.ReleaseDate);
+
+
+
+}
+
+
+
 }

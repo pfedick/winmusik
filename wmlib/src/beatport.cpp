@@ -26,6 +26,8 @@ namespace winmusik {
 namespace repexpmatch {
 
 
+#ifdef OLD
+
 static bool matchBeatPortPro100_getArtist(const ppl7::String& html, RegExpMatch& match)
 {
     ppl7::Array Lines, List, matches;
@@ -76,6 +78,7 @@ static bool matchBeatPortPro100_getGenres(const ppl7::String& html, RegExpMatch&
     match.Genre=ppl7::UnescapeHTMLTags(List.implode(", "));
     return true;
 }
+#endif
 
 
 
@@ -108,6 +111,8 @@ static ppl7::String BeatportGetGenreFromId(int id)
     }
     return ppl7::String();
 }
+
+#ifdef OLD
 
 bool matchBeatPortPro100(const ppl7::String& html, RegExpMatch& match)
 {
@@ -195,13 +200,14 @@ bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& match)
     if (found > 1) return true;
     return false;
 }
+#endif
 
 bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
 {
     ppl7::Array matches;
     ppl7::String Artist, Title, Version, Genre, Released, Label;
     int found=0;
-    if (html.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/track\\/.*?>(.*?)<\\/a>/is", matches)) {
+    if (html.pregMatch("/<a title=.*?href=.*?www.beatport.com.*?\\/track\\/.*?>(.*?)<\\/a>/is", matches)) {
         ppl7::String todo=matches[1];
         //printf("We found track: %s\n", (const char*)todo); fflush(stdout);
         if (todo.pregMatch("/<span .*?>(.*?)<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
@@ -219,7 +225,7 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
         ppl7::Array links(Block, "</a>");
         for (size_t i=0;i < links.size();i++) {
             ppl7::String row=links[i] + "</a>";
-            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/artist\\/.*?>(.*?)</a>/is", matches)) {
+            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?artist\\/.*?>(.*?)</a>/is", matches)) {
                 //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
                 artists.add(matches[1].trimmed());
                 have_artist=true;
@@ -241,10 +247,10 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
             }
         }
         */
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/label\\/.*?>(.*?)</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", matches)) {
             Label=matches[1].trimmed();
         }
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty()) Genre=matches[2].trimmed();
         }
@@ -277,8 +283,8 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
 bool matchBeatPort(const ppl7::String& html, RegExpMatch& match)
 {
     if (matchBeatPort2023(html, match)) return true;
-    if (matchBeatPortProReleases(html, match)) return true;
-    if (matchBeatPortPro100(html, match)) return true;
+    //if (matchBeatPortProReleases(html, match)) return true;
+    //if (matchBeatPortPro100(html, match)) return true;
     return false;
 
 }
