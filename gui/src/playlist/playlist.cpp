@@ -1925,7 +1925,9 @@ void Playlist::exportTXT(bool withStartTimes)
 				Tmp+=getReadableTimeFromSeconds(totalLength) + " ";
 			}
 			Tmp+=item->Artist + " - " + item->Title;
-			Tmp+=" (" + item->Version + ")";
+			Tmp+=" (" + item->Version + ") ";
+			Tmp+=" [" + item->Label + "]";
+
 
 
 			txt.putsf("%3u. %s\r\n", i + 1, static_cast<const char*>(Tmp));
