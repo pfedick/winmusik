@@ -1925,8 +1925,10 @@ void Playlist::exportTXT(bool withStartTimes)
 				Tmp+=getReadableTimeFromSeconds(totalLength) + " ";
 			}
 			Tmp+=item->Artist + " - " + item->Title;
-			Tmp+=" (" + item->Version + ") ";
-			Tmp+=" [" + item->Label + "]";
+			if (item->Version.notEmpty() && item->Version != "Single")
+				Tmp+=" (" + item->Version + ") ";
+			if (item->Label.notEmpty())
+				Tmp+=" [" + item->Label + "]";
 
 
 
