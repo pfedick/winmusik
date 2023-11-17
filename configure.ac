@@ -58,7 +58,7 @@ sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
 sinclude(pplib/autoconf/ax_gcc_archflag.m4)
 sinclude(pplib/autoconf/lib-link.m4)
 sinclude(pplib/autoconf/ax_check_openssl.m4)
-sinclude(pplib/autoconf/libcurl.m4)
+#sinclude(pplib/autoconf/libcurl.m4)
 sinclude(pplib/autoconf/iconv.m4)
 sinclude(pplib/autoconf/bzip2.m4)
 sinclude(pplib/autoconf/ax_check_zlib.m4)
@@ -401,14 +401,6 @@ AX_CHECK_OPENSSL(
 
 	, :)
 
-report_have_curl="no"
-LIBCURL_CHECK_CONFIG([yes],[7.30.0],
-	#LIBS="$LIBS $LIBCURL"
-	#CFLAGS="$CFLAGS $LIBCURL_CPPFLAGS "
-	AC_SUBST(LIBCURL)
-	AC_SUBST(LIBCURL_CPPFLAGS)
-	report_have_curl="yes",:)
-
 report_have_libcdio="no"
 AX_CHECK_LIBCDIO(
         report_have_libcdio="yes",
@@ -493,7 +485,7 @@ AC_SUBST(report_have_openssl)
 AC_SUBST(report_have_pcre)
 AC_SUBST(report_have_iconv)
 AC_SUBST(report_have_pthreads)
-AC_SUBST(report_have_curl)
+#AC_SUBST(report_have_curl)
 AC_SUBST(report_have_libcdio)
 
 ###
@@ -506,6 +498,8 @@ LIBMICROHTTPD_CFLAGS=""
 LIBCDIO_CFLAGS=""
 LIBIDN_CFLAGS=""
 LIBLDNS_CFLAGS=""
+LIBCURL_CFLAGS=""
+LIBCURL_CPPFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
 HAVE_X86_ASSEMBLER=""
@@ -517,6 +511,7 @@ MYSQL_LDFLAGS=""
 POSTGRESQL_LDFLAGS=""
 SQLITE3_LDFLAGS=""
 LAME_LIBS=""
+LIBCURL=""
 LIBLDNS_LIBS=""
 MPG123_LIBS=""
 SDL2_LIBS=""
@@ -536,6 +531,8 @@ AC_SUBST(LIBCDIO_CFLAGS)
 AC_SUBST(LIBIDN_CFLAGS)
 AC_SUBST(LIBLDNS_CFLAGS)
 AC_SUBST(IMLIB_CFLAGS)
+AC_SUBST(LIBCURL_CFLAGS)
+AC_SUBST(LIBCURL_CPPFLAGS)
 AC_SUBST(FT2_CFLAGS)
 AC_SUBST(HAVE_X86_ASSEMBLER)
 AC_SUBST(MPG123_CFLAGS)
@@ -551,6 +548,7 @@ AC_SUBST(MPG123_LIBS)
 AC_SUBST(SDL2_LIBS)
 AC_SUBST(LIBMICROHTTPD_LIBS)
 AC_SUBST(LIBIDN_LIBS)
+AC_SUBST(LIBCURL)
 AC_SUBST(ASM)
 AC_SUBST(ASMFLAGS)
 AC_SUBST(ASMDEBUGFLAGS)
@@ -590,7 +588,6 @@ AC_MSG_RESULT([
 **   OpenSSL:              $report_have_openssl
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**   Curl library:         $report_have_curl
 **   CDIO library:         $report_have_libcdio
 **
 ** Testing:

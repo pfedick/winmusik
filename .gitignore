@@ -61,3 +61,6 @@ wmlib/tests/src/tmp/
 valgrind.log
 /setup.iss
 wmlib/tests/testsuite.exe
+autoconf/*.m4~
+autoconf/autom4te.cache
+configure~

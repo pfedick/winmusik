@@ -659,6 +659,7 @@ LTLIBOBJS
 ASMDEBUGFLAGS
 ASMFLAGS
 ASM
+LIBCURL
 LIBIDN_LIBS
 LIBMICROHTTPD_LIBS
 SDL2_LIBS
@@ -674,6 +675,8 @@ SDL2_CFLAGS
 MPG123_CFLAGS
 HAVE_X86_ASSEMBLER
 FT2_CFLAGS
+LIBCURL_CPPFLAGS
+LIBCURL_CFLAGS
 IMLIB_CFLAGS
 LIBLDNS_CFLAGS
 LIBIDN_CFLAGS
@@ -684,7 +687,6 @@ POSTGRESQL_CFLAGS
 MYSQL_CFLAGS
 JPEG_CFLAGS
 report_have_libcdio
-report_have_curl
 report_have_pthreads
 report_have_iconv
 report_have_pcre
@@ -700,9 +702,6 @@ LIBCDIO_LDFLAGS
 LIBCDIO_CFLAGS
 libcdio_LIBS
 libcdio_CFLAGS
-_libcurl_config
-LIBCURL_CPPFLAGS
-LIBCURL
 OPENSSL_LDFLAGS
 OPENSSL_LIBS
 OPENSSL_INCLUDES
@@ -856,7 +855,6 @@ with_bzip2
 with_zlib
 with_pcre
 with_openssl
-with_libcurl
 with_libcdio
 with_qmake
 '
@@ -1536,8 +1534,6 @@ Optional Packages:
   --without-zlib          to disable zlib usage completely
   --with-pcre[=prefix]    compile xmlpcre part (via libpcre check)
   --with-openssl=DIR      root of the OpenSSL directory
-  --with-libcurl=PREFIX   look for the curl library in PREFIX/lib and headers
-                          in PREFIX/include
   --with-libcdio[=PATH]   support accesing audio cds (optional)
   --with-qmake=PATH       Path and name of the qmake program (optional)
 
@@ -4024,65 +4020,7 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 
-#***************************************************************************
-#                                  _   _ ____  _
-#  Project                     ___| | | |  _ \| |
-#                             / __| | | | |_) | |
-#                            | (__| |_| |  _ <| |___
-#                             \___|\___/|_| \_\_____|
-#
-# Copyright (C) 2006, David Shaw <dshaw@jabberwocky.com>
-#
-# This software is licensed as described in the file COPYING, which
-# you should have received as part of this distribution. The terms
-# are also available at http://curl.haxx.se/docs/copyright.html.
-#
-# You may opt to use, copy, modify, merge, publish, distribute and/or sell
-# copies of the Software, and permit persons to whom the Software is
-# furnished to do so, under the terms of the COPYING file.
-#
-# This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
-# KIND, either express or implied.
-#
-###########################################################################
-# LIBCURL_CHECK_CONFIG ([DEFAULT-ACTION], [MINIMUM-VERSION],
-#                       [ACTION-IF-YES], [ACTION-IF-NO])
-# ----------------------------------------------------------
-#      David Shaw <dshaw@jabberwocky.com>   May-09-2006
-#
-# Checks for libcurl.  DEFAULT-ACTION is the string yes or no to
-# specify whether to default to --with-libcurl or --without-libcurl.
-# If not supplied, DEFAULT-ACTION is yes.  MINIMUM-VERSION is the
-# minimum version of libcurl to accept.  Pass the version as a regular
-# version number like 7.10.1. If not supplied, any version is
-# accepted.  ACTION-IF-YES is a list of shell commands to run if
-# libcurl was successfully found and passed the various tests.
-# ACTION-IF-NO is a list of shell commands that are run otherwise.
-# Note that using --without-libcurl does run ACTION-IF-NO.
-#
-# This macro #defines HAVE_LIBCURL if a working libcurl setup is
-# found, and sets @LIBCURL@ and @LIBCURL_CPPFLAGS@ to the necessary
-# values.  Other useful defines are LIBCURL_FEATURE_xxx where xxx are
-# the various features supported by libcurl, and LIBCURL_PROTOCOL_yyy
-# where yyy are the various protocols supported by libcurl.  Both xxx
-# and yyy are capitalized.  See the list of AH_TEMPLATEs at the top of
-# the macro for the complete list of possible defines.  Shell
-# variables $libcurl_feature_xxx and $libcurl_protocol_yyy are also
-# defined to 'yes' for those features and protocols that were found.
-# Note that xxx and yyy keep the same capitalization as in the
-# curl-config list (e.g. it's "HTTP" and not "http").
-#
-# Users may override the detected values by doing something like:
-# LIBCURL="-lcurl" LIBCURL_CPPFLAGS="-I/usr/myinclude" ./configure
-#
-# For the sake of sanity, this macro assumes that any libcurl that is
-# found is after version 7.7.2, the first version that included the
-# curl-config script.  Note that it is very important for people
-# packaging binary versions of libcurl to include this script!
-# Without curl-config, we can only guess what protocols are available,
-# or use curl_version_info to figure it out at runtime.
-
-
+#sinclude(pplib/autoconf/libcurl.m4)
 # iconv.m4 serial AM7 (gettext-0.18)
 
 
@@ -6512,11 +6450,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++11 features" >&5
 printf %s "checking for $CXX option to enable C++11 features... " >&6; }
-if test ${ac_cv_prog_cxx_11+y}
+if test ${ac_cv_prog_cxx_cxx11+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_11=no
+  ac_cv_prog_cxx_cxx11=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -6558,11 +6496,11 @@ if test x$ac_prog_cxx_stdcxx = xno
 then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++98 features" >&5
 printf %s "checking for $CXX option to enable C++98 features... " >&6; }
-if test ${ac_cv_prog_cxx_98+y}
+if test ${ac_cv_prog_cxx_cxx98+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  ac_cv_prog_cxx_98=no
+  ac_cv_prog_cxx_cxx98=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -12923,7 +12861,7 @@ else $as_nop
       *-*-aix*)
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#if defined __powerpc64__ || defined _ARCH_PPC64
+#if defined __powerpc64__ || defined __LP64__
                 int ok;
                #else
                 error fail
@@ -13213,7 +13151,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
            # be generating 64-bit code.
            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#if defined __powerpc64__ || defined _ARCH_PPC64
+#if defined __powerpc64__ || defined __LP64__
                    int ok;
                   #else
                    error fail
@@ -13320,7 +13258,7 @@ then :
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#ifdef __ELF__
+#if defined __ELF__ || (defined __linux__ && defined __EDG__)
         Extensible Linking Format
         #endif
 
@@ -13338,7 +13276,7 @@ rm -rf conftest*
 fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gl_cv_elf" >&5
 printf "%s\n" "$gl_cv_elf" >&6; }
-  if test $gl_cv_elf; then
+  if test $gl_cv_elf = yes; then
     # Extract the ELF class of a file (5th byte) in decimal.
     # Cf. https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#File_header
     if od -A x < /dev/null >/dev/null 2>/dev/null; then
@@ -13355,19 +13293,22 @@ printf "%s\n" "$gl_cv_elf" >&6; }
         echo
       }
     fi
+    # Use 'expr', not 'test', to compare the values of func_elfclass, because on
+    # Solaris 11 OpenIndiana and Solaris 11 OmniOS, the result is 001 or 002,
+    # not 1 or 2.
     case $HOST_CPU_C_ABI_32BIT in
       yes)
         # 32-bit ABI.
         acl_is_expected_elfclass ()
         {
-          test "`func_elfclass | sed -e 's/[ 	]//g'`" = 1
+          expr "`func_elfclass | sed -e 's/[ 	]//g'`" = 1 > /dev/null
         }
         ;;
       no)
         # 64-bit ABI.
         acl_is_expected_elfclass ()
         {
-          test "`func_elfclass | sed -e 's/[ 	]//g'`" = 2
+          expr "`func_elfclass | sed -e 's/[ 	]//g'`" = 2 > /dev/null
         }
         ;;
       *)
@@ -15055,417 +14996,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
 
 
-report_have_curl="no"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Check whether --with-libcurl was given.
-if test ${with_libcurl+y}
-then :
-  withval=$with_libcurl; _libcurl_with=$withval
-else $as_nop
-  _libcurl_with=yes
-fi
-
-
-  if test "$_libcurl_with" != "no" ; then
-
-     for ac_prog in gawk mawk nawk awk
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_prog_AWK+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  if test -n "$AWK"; then
-  ac_cv_prog_AWK="$AWK" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_prog_AWK="$ac_prog"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-AWK=$ac_cv_prog_AWK
-if test -n "$AWK"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $AWK" >&5
-printf "%s\n" "$AWK" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-  test -n "$AWK" && break
-done
-
-
-     _libcurl_version_parse="eval $AWK '{split(\$NF,A,\".\"); X=256*256*A[1]+256*A[2]+A[3]; print X;}'"
-
-     _libcurl_try_link=yes
-
-     if test -d "$_libcurl_with" ; then
-        LIBCURL_CPPFLAGS="-I$withval/include"
-        _libcurl_ldflags="-L$withval/lib"
-        # Extract the first word of "curl-config", so it can be a program name with args.
-set dummy curl-config; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_path__libcurl_config+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  case $_libcurl_config in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path__libcurl_config="$_libcurl_config" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in "$withval/bin"
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_path__libcurl_config="$as_dir$ac_word$ac_exec_ext"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-_libcurl_config=$ac_cv_path__libcurl_config
-if test -n "$_libcurl_config"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $_libcurl_config" >&5
-printf "%s\n" "$_libcurl_config" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-     else
-        # Extract the first word of "curl-config", so it can be a program name with args.
-set dummy curl-config; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_path__libcurl_config+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  case $_libcurl_config in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path__libcurl_config="$_libcurl_config" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_path__libcurl_config="$as_dir$ac_word$ac_exec_ext"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-_libcurl_config=$ac_cv_path__libcurl_config
-if test -n "$_libcurl_config"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $_libcurl_config" >&5
-printf "%s\n" "$_libcurl_config" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-     fi
-
-     if test x$_libcurl_config != "x" ; then
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the version of libcurl" >&5
-printf %s "checking for the version of libcurl... " >&6; }
-if test ${libcurl_cv_lib_curl_version+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  libcurl_cv_lib_curl_version=`$_libcurl_config --version | $AWK '{print $2}'`
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_curl_version" >&5
-printf "%s\n" "$libcurl_cv_lib_curl_version" >&6; }
-
-        _libcurl_version=`echo $libcurl_cv_lib_curl_version | $_libcurl_version_parse`
-        _libcurl_wanted=`echo 7.30.0 | $_libcurl_version_parse`
-
-        if test $_libcurl_wanted -gt 0 ; then
-           { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libcurl >= version 7.30.0" >&5
-printf %s "checking for libcurl >= version 7.30.0... " >&6; }
-if test ${libcurl_cv_lib_version_ok+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-
-              if test $_libcurl_version -ge $_libcurl_wanted ; then
-                 libcurl_cv_lib_version_ok=yes
-              else
-                 libcurl_cv_lib_version_ok=no
-              fi
-
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_version_ok" >&5
-printf "%s\n" "$libcurl_cv_lib_version_ok" >&6; }
-        fi
-
-        if test $_libcurl_wanted -eq 0 || test x$libcurl_cv_lib_version_ok = xyes ; then
-           if test x"$LIBCURL_CPPFLAGS" = "x" ; then
-              LIBCURL_CPPFLAGS=`$_libcurl_config --cflags`
-           fi
-           if test x"$LIBCURL" = "x" ; then
-              LIBCURL=`$_libcurl_config --libs`
-
-              # This is so silly, but Apple actually has a bug in their
-              # curl-config script.  Fixed in Tiger, but there are still
-              # lots of Panther installs around.
-              case "${host}" in
-                 powerpc-apple-darwin7*)
-                    LIBCURL=`echo $LIBCURL | sed -e 's|-arch i386||g'`
-                 ;;
-              esac
-           fi
-
-           # All curl-config scripts support --feature
-           _libcurl_features=`$_libcurl_config --feature`
-
-           # Is it modern enough to have --protocols? (7.12.4)
-           if test $_libcurl_version -ge 461828 ; then
-              _libcurl_protocols=`$_libcurl_config --protocols`
-           fi
-        else
-           _libcurl_try_link=no
-        fi
-
-        unset _libcurl_wanted
-     fi
-
-     if test $_libcurl_try_link = yes ; then
-
-        # we didn't find curl-config, so let's see if the user-supplied
-        # link line (or failing that, "-lcurl") is enough.
-        LIBCURL=${LIBCURL-"$_libcurl_ldflags -lcurl"}
-
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether libcurl is usable" >&5
-printf %s "checking whether libcurl is usable... " >&6; }
-if test ${libcurl_cv_lib_curl_usable+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-
-           _libcurl_save_cppflags=$CPPFLAGS
-           CPPFLAGS="$LIBCURL_CPPFLAGS $CPPFLAGS"
-           _libcurl_save_libs=$LIBS
-           LIBS="$LIBCURL $LIBS"
-
-           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <curl/curl.h>
-int
-main (void)
-{
-
-/* Try and use a few common options to force a failure if we are
-   missing symbols or can't link. */
-int x;
-curl_easy_setopt(NULL,CURLOPT_URL,NULL);
-x=CURL_ERROR_SIZE;
-x=CURLOPT_WRITEFUNCTION;
-x=CURLOPT_WRITEDATA;
-x=CURLOPT_ERRORBUFFER;
-x=CURLOPT_STDERR;
-x=CURLOPT_VERBOSE;
-if (x) ;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"
-then :
-  libcurl_cv_lib_curl_usable=yes
-else $as_nop
-  libcurl_cv_lib_curl_usable=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-
-           CPPFLAGS=$_libcurl_save_cppflags
-           LIBS=$_libcurl_save_libs
-           unset _libcurl_save_cppflags
-           unset _libcurl_save_libs
-
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_curl_usable" >&5
-printf "%s\n" "$libcurl_cv_lib_curl_usable" >&6; }
-
-        if test $libcurl_cv_lib_curl_usable = yes ; then
-
-           # Does curl_free() exist in this version of libcurl?
-           # If not, fake it with free()
-
-           _libcurl_save_cppflags=$CPPFLAGS
-           CPPFLAGS="$CPPFLAGS $LIBCURL_CPPFLAGS"
-           _libcurl_save_libs=$LIBS
-           LIBS="$LIBS $LIBCURL"
-
-           ac_fn_cxx_check_func "$LINENO" "curl_free" "ac_cv_func_curl_free"
-if test "x$ac_cv_func_curl_free" = xyes
-then :
-
-else $as_nop
-
-printf "%s\n" "#define curl_free free" >>confdefs.h
-
-fi
-
-
-           CPPFLAGS=$_libcurl_save_cppflags
-           LIBS=$_libcurl_save_libs
-           unset _libcurl_save_cppflags
-           unset _libcurl_save_libs
-
-
-printf "%s\n" "#define HAVE_LIBCURL 1" >>confdefs.h
-
-
-
-
-           for _libcurl_feature in $_libcurl_features ; do
-              cat >>confdefs.h <<_ACEOF
-#define `printf "%s\n" "libcurl_feature_$_libcurl_feature" | $as_tr_cpp` 1
-_ACEOF
-
-              eval `printf "%s\n" "libcurl_feature_$_libcurl_feature" | $as_tr_sh`=yes
-           done
-
-           if test "x$_libcurl_protocols" = "x" ; then
-
-              # We don't have --protocols, so just assume that all
-              # protocols are available
-              _libcurl_protocols="HTTP FTP FILE TELNET LDAP DICT TFTP"
-
-              if test x$libcurl_feature_SSL = xyes ; then
-                 _libcurl_protocols="$_libcurl_protocols HTTPS"
-
-                 # FTPS wasn't standards-compliant until version
-                 # 7.11.0 (0x070b00 == 461568)
-                 if test $_libcurl_version -ge 461568; then
-                    _libcurl_protocols="$_libcurl_protocols FTPS"
-                 fi
-              fi
-
-              # RTSP, IMAP, POP3 and SMTP were added in
-              # 7.20.0 (0x071400 == 463872)
-              if test $_libcurl_version -ge 463872; then
-                 _libcurl_protocols="$_libcurl_protocols RTSP IMAP POP3 SMTP"
-              fi
-           fi
-
-           for _libcurl_protocol in $_libcurl_protocols ; do
-              cat >>confdefs.h <<_ACEOF
-#define `printf "%s\n" "libcurl_protocol_$_libcurl_protocol" | $as_tr_cpp` 1
-_ACEOF
-
-              eval `printf "%s\n" "libcurl_protocol_$_libcurl_protocol" | $as_tr_sh`=yes
-           done
-        else
-           unset LIBCURL
-           unset LIBCURL_CPPFLAGS
-        fi
-     fi
-
-     unset _libcurl_try_link
-     unset _libcurl_version_parse
-     unset _libcurl_config
-     unset _libcurl_feature
-     unset _libcurl_features
-     unset _libcurl_protocol
-     unset _libcurl_protocols
-     unset _libcurl_version
-     unset _libcurl_ldflags
-  fi
-
-  if test x$_libcurl_with = xno || test x$libcurl_cv_lib_curl_usable != xyes ; then
-     # This is the IF-NO path
-     :
-  else
-     # This is the IF-YES path
-     #LIBS="$LIBS $LIBCURL"
-	#CFLAGS="$CFLAGS $LIBCURL_CPPFLAGS "
-
-
-	report_have_curl="yes"
-  fi
-
-  unset _libcurl_with
-
-
 report_have_libcdio="no"
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use libcdio" >&5
@@ -15591,7 +15121,7 @@ fi
 
 
 if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
@@ -15600,26 +15130,26 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        libcdio_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcdio" 2>&1`
+                libcdio_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcdio" 2>&1`
         else
-	        libcdio_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcdio" 2>&1`
+                libcdio_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcdio" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$libcdio_PKG_ERRORS" >&5
+        # Put the nasty error message in config.log where it belongs
+        echo "$libcdio_PKG_ERRORS" >&5
 
-	LIBCDIO_LDFLAGS="-lcdio "
+        LIBCDIO_LDFLAGS="-lcdio "
 
 elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	LIBCDIO_LDFLAGS="-lcdio "
+        LIBCDIO_LDFLAGS="-lcdio "
 
 else
-	libcdio_CFLAGS=$pkg_cv_libcdio_CFLAGS
-	libcdio_LIBS=$pkg_cv_libcdio_LIBS
+        libcdio_CFLAGS=$pkg_cv_libcdio_CFLAGS
+        libcdio_LIBS=$pkg_cv_libcdio_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-	LIBCDIO_CFLAGS=$libcdio_CFLAGS
+        LIBCDIO_CFLAGS=$libcdio_CFLAGS
 					LIBCDIO_LDFLAGS=$libcdio_LIBS
 
 fi
@@ -15979,7 +15509,7 @@ esac;
 
 
 
-
+#AC_SUBST(report_have_curl)
 
 
 ###
@@ -15992,6 +15522,8 @@ LIBMICROHTTPD_CFLAGS=""
 LIBCDIO_CFLAGS=""
 LIBIDN_CFLAGS=""
 LIBLDNS_CFLAGS=""
+LIBCURL_CFLAGS=""
+LIBCURL_CPPFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
 HAVE_X86_ASSEMBLER=""
@@ -16003,6 +15535,7 @@ MYSQL_LDFLAGS=""
 POSTGRESQL_LDFLAGS=""
 SQLITE3_LDFLAGS=""
 LAME_LIBS=""
+LIBCURL=""
 LIBLDNS_LIBS=""
 MPG123_LIBS=""
 SDL2_LIBS=""
@@ -16011,6 +15544,9 @@ LIBIDN_LIBS=""
 ASM=""
 ASMFLAGS=""
 ASMDEBUGFLAGS=""
+
+
+
 
 
 
@@ -17539,7 +17075,6 @@ fi
 **   OpenSSL:              $report_have_openssl
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**   Curl library:         $report_have_curl
 **   CDIO library:         $report_have_libcdio
 **
 ** Testing:
@@ -17569,7 +17104,6 @@ printf "%s\n" "
 **   OpenSSL:              $report_have_openssl
 **   PCRE:                 $report_have_pcre
 **   ICONV:                $report_have_iconv
-**   Curl library:         $report_have_curl
 **   CDIO library:         $report_have_libcdio
 **
 ** Testing:

@@ -48,17 +48,15 @@ AC_ARG_WITH([libcdio],
 		CFLAGS="$CFLAGS $LIBCDIO_CFLAGS"
 		LDFLAGS="$LDFLAGS $LIBCDIO_LDFLAGS"
 		AC_MSG_CHECKING(if we can link against libcdio)
-		AC_TRY_LINK([
+		AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 			#include <stdio.h>
 			#include <cdio/cdio.h>
-			],[
+			]], [[
 				CdIo_t *p_cdio = cdio_open (NULL, DRIVER_DEVICE);
-			],
-				AC_MSG_RESULT(yes)
+			]])],[AC_MSG_RESULT(yes)
 				have_libcdio="yes"
-			,
-				AC_MSG_RESULT(no)
-			)
+			],[AC_MSG_RESULT(no)
+			])
 				
 			
 		CPPFLAGS=$am_save_CPPFLAGS
