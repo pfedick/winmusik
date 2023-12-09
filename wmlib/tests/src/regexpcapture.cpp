@@ -115,6 +115,23 @@ TEST_F(RegExpCaptureTest, Beatport2023_2) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2023_3) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2023_3.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Delta"), match.Title);
+    ASSERT_EQ(ppl7::String("Original Mix"), match.Version);
+    ASSERT_EQ(ppl7::String("Deepcry"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Pure Progressive"), match.Label);
+    ASSERT_EQ(ppl7::String("Trance (Raw / Deep / Hypnotic)"), match.Genre);
+    ASSERT_EQ(ppl7::String("2023-12-08"), match.ReleaseDate);
+
+
+
+}
 
 
 }

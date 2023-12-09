@@ -210,15 +210,22 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
     if (html.pregMatch("/<a title=.*?href=.*?www.beatport.com.*?\\/track\\/.*?>(.*?)<\\/a>/is", matches)) {
         ppl7::String todo=matches[1];
         //printf("We found track: %s\n", (const char*)todo); fflush(stdout);
-        if (todo.pregMatch("/<span .*?>(.*?)<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
+        if (todo.pregMatch("/<span .*?>(.*?)<span>.*?<\\/span>.*?<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
+            // Beatport 2023 3
             Title=matches[1].trimmed();
             Version=matches[2].trimmed();
             //printf("Match Title: >>%s<<, >>%s<<!\n", (const char*)Title, (const char*)Version);
+            found++;
+        } else if (todo.pregMatch("/<span .*?>(.*?)<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
+            Title=matches[1].trimmed();
+            Version=matches[2].trimmed();
+            //printf("Match Title: >>%s<<, >>%s<<!\n", (const char*)Title, (const char*)Version);
+            found++;
         }
-        found++;
+
     }
     ppl7::Array artists;
-    bool have_artist=false;
+    //bool have_artist=false;
 
     if (html.pregMatch("/(<div class=.*?cell title.*?<div class=.*?cell label)/is", matches)) {
         ppl7::String Block=matches[1];
@@ -228,7 +235,7 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
             if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?artist\\/.*?>(.*?)</a>/is", matches)) {
                 //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
                 artists.add(matches[1].trimmed());
-                have_artist=true;
+                //have_artist=true;
             }
         }
 
@@ -247,10 +254,17 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
             }
         }
         */
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+            // Beatport 2023 3
+            Label=matches[1].trimmed();
+        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", matches)) {
             Label=matches[1].trimmed();
         }
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+            // Beatport 2023 3
+            Genre=BeatportGetGenreFromId(matches[1].toInt());
+            if (Genre.isEmpty()) Genre=matches[2].trimmed();
+        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty()) Genre=matches[2].trimmed();
         }
