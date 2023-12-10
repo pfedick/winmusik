@@ -2,5 +2,4 @@
 #define VERSION_H_
 #define WM_VERSION	"3.7.0"
 #define WM_REVISION	"971"
-#define WM_RELEASEDATE	20231209
 #endif /* VERSION_H_ */

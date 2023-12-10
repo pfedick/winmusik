@@ -51,7 +51,7 @@
 #   special exception to the GPL to apply to your modified version as well.
 
 AC_DEFUN([AX_CHECK_COMPILER_FLAGS],
-[AC_PREREQ(2.59) dnl for _AC_LANG_PREFIX
+[AC_PREREQ([2.71]) dnl for _AC_LANG_PREFIX
 AC_MSG_CHECKING([whether _AC_LANG compiler accepts $1])
 dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname:
 AS_LITERAL_IF([$1],
