@@ -1922,8 +1922,9 @@ void Playlist::exportTXT(bool withStartTimes)
 			PlaylistItem* item=static_cast<PlaylistItem*>(ui.tracks->topLevelItem(i));
 			Tmp.clear();
 			if (withStartTimes) {
-				Tmp+=getReadableTimeFromSeconds(totalLength) + " ";
+				Tmp+="[" + getReadableTimeFromSeconds(totalLength) + "] ";
 			}
+			Tmp.appendf("%3u. ", i + 1);
 			Tmp+=item->Artist + " - " + item->Title;
 			if (item->Version.notEmpty() && item->Version != "Single")
 				Tmp+=" (" + item->Version + ") ";
@@ -1932,7 +1933,7 @@ void Playlist::exportTXT(bool withStartTimes)
 
 
 
-			txt.putsf("%3u. %s\r\n", i + 1, static_cast<const char*>(Tmp));
+			txt.putsf("%s\r\n", static_cast<const char*>(Tmp));
 			totalLength+=item->mixLength;
 		}
 		txt.puts("\r\n");
