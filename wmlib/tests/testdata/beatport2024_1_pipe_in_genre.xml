@@ -1,0 +1,43 @@
+<html>
+    <body>
+        <!--StartFragment-->
+        <div class="Table-style__TableCell-sc-fdd08fbd-0 pNxBT cell title" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 554.006px; min-width: 120px; overflow: hidden; -webkit-box-flex: 1; flex-grow: 1; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <div class="container" style="box-sizing: border-box; border: 0px solid; overflow: hidden;">
+                <a title="Attack" href="https://www.beatport.com/de/track/attack/18457555" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
+                    <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-49fed717-1 geYceN" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 538.011px; white-space: nowrap;">
+                        <p class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px 16px 0px 0px; text-overflow: ellipsis; overflow: hidden; width: fit-content; display: inline-block; white-space: nowrap;">
+                            <span class="TracksTable-style__ReleaseName-sc-b5e9d68e-4 eHtSTc" style="box-sizing: border-box; border: 0px solid; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 700; font-size: 11px; line-height: 16px; letter-spacing: 0.005em; color: rgb(255, 255, 255);">Attack<span></span>
+                                <span style="box-sizing: border-box; border: 0px solid; font-weight: 400;">Extended Mix</span>
+                            </span>
+                        </p>
+                    </div>
+                </a>
+                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-49fed717-1 geYceN" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 538.011px; white-space: nowrap; -webkit-box-flex: 1; flex-grow: 1;">
+                    <p class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px 16px 0px 0px; text-overflow: ellipsis; overflow: hidden; width: fit-content; display: inline-block; white-space: nowrap;">
+                        <div class="ArtistNames-sc-dff2fb58-0 demTCQ" style="box-sizing: border-box; border: 0px solid; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 500; font-size: 11px; line-height: 16px; letter-spacing: 0.005em; color: rgb(57, 192, 222);">
+                            <a title="Paul Sawyer" href="https://www.beatport.com/de/artist/paul-sawyer/348231" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Paul Sawyer</a>,                            <a title="Fra.Gile" href="https://www.beatport.com/de/artist/fragile/713118" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Fra.Gile</a>,                            <a title="Deestopia" href="https://www.beatport.com/de/artist/deestopia/1061232" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Deestopia</a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="Table-style__TableCell-sc-fdd08fbd-0 pNxBT cell label" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 120px; min-width: 120px; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <a title="Krafted Underground" href="https://www.beatport.com/de/label/krafted-underground/31827" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
+                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-49fed717-1 cjlugR" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 104.006px; white-space: nowrap;">
+                    <p class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px 16px 0px 0px; text-overflow: ellipsis; overflow: hidden; width: fit-content; display: inline-block; white-space: nowrap;">Krafted Underground</p>
+                    <p data-testid="marquee-pseudo" class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px; text-overflow: ellipsis; overflow: hidden; width: auto; display: inline-block; white-space: nowrap; visibility: hidden;"></p>
+                </div>
+            </a>
+        </div>
+        <div class="Table-style__TableCell-sc-fdd08fbd-0 pNxBT cell bpm" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 150px; min-width: 150px; display: block; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <a title="Trance (Raw / Deep / Hypnotic)" href="https://www.beatport.com/de/genre/trance-raw-deep-hypnotic/99" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit; white-space: nowrap; overflow: hidden; display: block; text-overflow: ellipsis;">
+                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-49fed717-1 mwxwT" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 134.006px; white-space: nowrap;">
+                    <p class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px 16px 0px 0px; text-overflow: ellipsis; overflow: hidden; width: fit-content; display: inline-block; white-space: nowrap;">Trance (Raw / Deep / Hypnotic)<span></span>|                        <span></span>Deep Trance</p>
+                    <p data-testid="marquee-pseudo" class="Marquee-style__MarqueeElement-sc-49fed717-0 bpPZBk" style="box-sizing: border-box; border: 0px solid; margin: 0px; text-overflow: ellipsis; overflow: hidden; width: auto; display: inline-block; white-space: nowrap; visibility: hidden;"></p>
+                </div>
+            </a>
+            <div style="box-sizing: border-box; border: 0px solid; -webkit-box-flex: 1; flex-grow: 1;">124<span></span>BPM<span></span>- G Major</div>
+        </div>
+        <div class="Table-style__TableCell-sc-fdd08fbd-0 pNxBT cell date" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: __aeonikFont_55bd0e, __aeonikFont_Fallback_55bd0e; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 120px; min-width: 120px; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">2024-02-09</div>        <!--EndFragment-->
+    </body>
+</html>

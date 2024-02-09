@@ -133,5 +133,23 @@ TEST_F(RegExpCaptureTest, Beatport2023_3) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2024_1_pipe_in_genre) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2024_1_pipe_in_genre.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Attack"), match.Title);
+    ASSERT_EQ(ppl7::String("Extended Mix"), match.Version);
+    ASSERT_EQ(ppl7::String("Paul Sawyer, Fra.Gile, Deestopia"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Krafted Underground"), match.Label);
+    ASSERT_EQ(ppl7::String("Deep Trance"), match.Genre);
+    ASSERT_EQ(ppl7::String("2024-02-09"), match.ReleaseDate);
+
+
+
+}
+
 
 }

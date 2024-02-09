@@ -95,6 +95,7 @@ static ppl7::String BeatportGetGenreFromId(int id)
     case 90: return ppl7::String("Melodic House & Techno");
     case 91: return ppl7::String("Bass House");
     case 96: return ppl7::String("Main Stage");
+    //case 99: return ppl7::String("Deep Trance");
 
     case 128: return ppl7::String("Uplifting Trance");
     case 129: return ppl7::String("Vocal Trance");
@@ -263,11 +264,16 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
         if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
             // Beatport 2023 3
             Genre=BeatportGetGenreFromId(matches[1].toInt());
-            if (Genre.isEmpty()) Genre=matches[2].trimmed();
+            if (Genre.isEmpty() || Genre == "Trance") Genre=matches[2].trimmed();
         } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty()) Genre=matches[2].trimmed();
         }
+    }
+    if (Genre.pregMatch("/.*\\|.*<span>.*</span>(.*)$/", matches)) {
+        Genre=matches[1].trimmed();
+    } else {
+        Genre.replace("Trance (Main Floor)", "Trance");
     }
     if (artists.size()) {
         Artist=artists.implode(", ");
