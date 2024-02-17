@@ -237,7 +237,9 @@ void CSimpleTable::Import(const ppl7::ByteArrayPtr& bin, int version)
 	Clear();
 	Id=ppl7::Peek32(a);
 	References=ppl7::Peek32(a + 4);
-	if (ppl7::Peek8(a + 8) != 0) Value.set(a + 8, size - 8);
+	if (ppl7::Peek8(a + 8) != 0) {
+		Value.set(a + 8);
+	}
 }
 
 
