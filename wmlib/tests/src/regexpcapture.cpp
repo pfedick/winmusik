@@ -151,5 +151,22 @@ TEST_F(RegExpCaptureTest, Beatport2024_1_pipe_in_genre) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2024_2) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2024_2.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Mechanismus"), match.Title);
+    ASSERT_EQ(ppl7::String("Original Mix"), match.Version);
+    ASSERT_EQ(ppl7::String("Tobi Tobermann, Dennis Nocken"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Volume Berlin Records"), match.Label);
+    ASSERT_EQ(ppl7::String("Raw Trance"), match.Genre);
+    ASSERT_EQ(ppl7::String("2024-04-05"), match.ReleaseDate);
+
+
+
+}
 
 }

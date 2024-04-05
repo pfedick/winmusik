@@ -85,28 +85,28 @@ static bool matchBeatPortPro100_getGenres(const ppl7::String& html, RegExpMatch&
 static ppl7::String BeatportGetGenreFromId(int id)
 {
     switch (id) {
-    case 2: return ppl7::String("Hard Techno");
-    case 5: return ppl7::String("House");
-    case 6: return ppl7::String("Techno (Peak Time / Driving)");
-    case 7: return ppl7::String("Trance");
-    case 11: return ppl7::String("Tech House");
-    case 29: return ppl7::String("Tech Trance");
-    case 39: return ppl7::String("Dance / Electro Pop");
-    case 90: return ppl7::String("Melodic House & Techno");
-    case 91: return ppl7::String("Bass House");
-    case 96: return ppl7::String("Main Stage");
-    //case 99: return ppl7::String("Deep Trance");
+        case 2: return ppl7::String("Hard Techno");
+        case 5: return ppl7::String("House");
+        case 6: return ppl7::String("Techno (Peak Time / Driving)");
+        case 7: return ppl7::String("Trance");
+        case 11: return ppl7::String("Tech House");
+        case 29: return ppl7::String("Tech Trance");
+        case 39: return ppl7::String("Dance / Electro Pop");
+        case 90: return ppl7::String("Melodic House & Techno");
+        case 91: return ppl7::String("Bass House");
+        case 96: return ppl7::String("Main Stage");
+        //case 99: return ppl7::String("Deep Trance");
 
-    case 128: return ppl7::String("Uplifting Trance");
-    case 129: return ppl7::String("Vocal Trance");
-    case 245: return ppl7::String("Big Room");
-    case 246: return ppl7::String("Electro House");
-    case 247: return ppl7::String("Future House");
-    case 252: return ppl7::String("Future Rave");
-    case 257: return ppl7::String("Latin Tech");
-    case 264: return ppl7::String("Raw Trance");
-    case 265: return ppl7::String("Deep Trance");
-    case 266: return ppl7::String("Hypnotic Trance");
+        case 128: return ppl7::String("Uplifting Trance");
+        case 129: return ppl7::String("Vocal Trance");
+        case 245: return ppl7::String("Big Room");
+        case 246: return ppl7::String("Electro House");
+        case 247: return ppl7::String("Future House");
+        case 252: return ppl7::String("Future Rave");
+        case 257: return ppl7::String("Latin Tech");
+        case 264: return ppl7::String("Raw Trance");
+        case 265: return ppl7::String("Deep Trance");
+        case 266: return ppl7::String("Hypnotic Trance");
 
 
     }
@@ -255,13 +255,20 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
             }
         }
         */
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<div class.*?>(.*?)</div>.*?</a>/is", matches)) {
+            // Beatport 2024_2
+            Label=matches[1].trimmed();
+        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
             // Beatport 2023 3
             Label=matches[1].trimmed();
         } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", matches)) {
             Label=matches[1].trimmed();
         }
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<div class.*?>(.*?)</div>.*?</a>/is", matches)) {
+            // Beatport 2024_2
+            Genre=BeatportGetGenreFromId(matches[1].toInt());
+            if (Genre.isEmpty() || Genre == "Trance") Genre=matches[2].trimmed();
+        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
             // Beatport 2023 3
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty() || Genre == "Trance") Genre=matches[2].trimmed();
