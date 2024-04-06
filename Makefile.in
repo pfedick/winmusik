@@ -25,7 +25,11 @@
 ### Global Options
 ###############################################################################
 VERSION ?= 3.7.0
+PREVIOUS_TAG = 3.6.0
 BUILD_NUMBER := $(shell git rev-list --all --count)
+BUILDDATE := $(shell date '+%Y%m%d')
+
+
 
 PREFIX		?= @prefix@
 CC		= @CC@
@@ -63,19 +67,38 @@ wmlib: wmlib_release wmlib_debug
 
 gui: release
 
-mingw:
-	VERSION=${VERSION} ./update_version.sh
+update_version:
+	@mkdir -p tmp
+	@echo "#ifndef VERSION_H_" > tmp/version.h
+	@echo "#define VERSION_H_" >> tmp/version.h
+	@echo "#define WM_VERSION \"$(VERSION)\"" >> tmp/version.h
+	@echo "#define WM_REVISION \"$(BUILD_NUMBER)\"" >> tmp/version.h
+	@echo "#define WM_RELEASEDATE $(BUILDDATE)" >> tmp/version.h
+	@echo "#endif" >> tmp/version.h
+	@diff tmp/version.h gui/include/version.h > /dev/null 2>&1; if [ $$? -ne 0 ] ; then cp tmp/version.h gui/include/version.h; fi
+
+mingw: update_version
 	mingw32-make -j8 ppl7_release
 	mingw32-make -j8 wmlib_release
 	mingw32-make -j8 gui_release
 	cd gui && lupdate WinMusik.pro
 	rm -rf release/deploy
 	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
+	ldd release/WinMusik.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
+	ldd release/WinMusik.exe  | grep -v WINDOWS | grep mingw64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
+	cp release/WinMusik.exe release/deploy
+	strip release/deploy/WinMusik.exe
+
 	cat Package/setup64.iss | sed "s/^AppVersion=.*/AppVersion=${VERSION}.${BUILD_NUMBER}/"  \
 		| sed "s/^AppVerName=.*/AppVerName=WinMusik ${VERSION}/"  \
 		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
 		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=WinMusik-${VERSION}-Setup-64bit/"  \
 		> setup.iss
+
+setup: mingw
+	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
+
+
 
 ###########################################################################
 ### RELEASE
@@ -87,8 +110,7 @@ ppl7_release:
 wmlib_release:
 	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
-gui_release: gui/Makefile
-	VERSION=${VERSION} ./update_version.sh
+gui_release: gui/Makefile update_version
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
 	$(MAKE) --directory=gui release
@@ -106,8 +128,7 @@ ppl7_debug:
 wmlib_debug:
 	$(MAKE) --directory=wmlib debug/libwinmusik3.a
 
-gui_debug: gui/Makefile
-	VERSION=${VERSION} ./update_version.sh
+gui_debug: gui/Makefile update_version
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
 	$(MAKE) --directory=gui debug

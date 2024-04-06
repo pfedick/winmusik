@@ -4017,8 +4017,8 @@ Wollen Sie die Änderungen speichern?</translation>
         <location filename="src/playlist/playlist.cpp" line="1837"/>
         <location filename="src/playlist/playlist.cpp" line="1862"/>
         <location filename="src/playlist/playlist.cpp" line="1896"/>
-        <location filename="src/playlist/playlist.cpp" line="1937"/>
-        <location filename="src/playlist/playlist.cpp" line="2002"/>
+        <location filename="src/playlist/playlist.cpp" line="1942"/>
+        <location filename="src/playlist/playlist.cpp" line="2007"/>
         <source>could not save playlist</source>
         <translation>Konnte Playlist nicht speichern</translation>
     </message>
@@ -4035,7 +4035,7 @@ Wollen Sie die Änderungen speichern?</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1909"/>
-        <location filename="src/playlist/playlist.cpp" line="1948"/>
+        <location filename="src/playlist/playlist.cpp" line="1953"/>
         <source>Playlist</source>
         <translation>Playliste</translation>
     </message>

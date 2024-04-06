@@ -65,55 +65,17 @@ Source: "Package/README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Langu
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
-Source: "C:/msys64/mingw64/bin/libbrotlicommon.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libbz2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libcrypto-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libcurl-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libdouble-conversion.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libgcc_s_seh-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libglib-2.0-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libgraphite2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libharfbuzz-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicudt69.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuin69.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libicuuc69.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libidn2-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libintl-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libmd4c.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libnghttp2-14.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libpsl-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libssh2-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libunistring-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/libzstd.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:/msys64/mingw64/bin/zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
-Source: "C:\msys64\mingw64\bin\libjpeg-8.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libjasper-4.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libmng-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libtiff-5.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libwebp-7.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\bin\libwebpdemux-2.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
-; Qt specific
-Source: "release\deploy\*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 ; Qt Plugins
+Source: "release\deploy\bearer\*"; DestDir: "{app}\bearer"; Flags: ignoreversion;
 Source: "release\deploy\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion;
-Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
+;Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
 Source: "release\deploy\imageformats\*"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
 Source: "release\deploy\printsupport\*"; DestDir: "{app}\printsupport"; Flags: ignoreversion;
 Source: "release\deploy\styles\*"; DestDir: "{app}\styles"; Flags: ignoreversion;
 Source: "release\deploy\translations\*"; DestDir: "{app}\translations"; Flags: ignoreversion;
-Source: "C:\msys64\mingw64\share\qt5\plugins\audio\qtaudio_windows.dll"; DestDir: "{app}\audio"; Flags: ignoreversion;
+;Source: "C:\msys64\mingw64\share\qt5\plugins\audio\qtaudio_windows.dll"; DestDir: "{app}\audio"; Flags: ignoreversion;
 
 [Icons]
 Name: "{group}\WinMusik 3"; WorkingDir: "{app}"; Filename: "{app}\WinMusik.exe"
@@ -129,5 +91,3 @@ Name: "{commondesktop}\WinMusik 3"; Filename: "{app}\WinMusik.exe"; Tasks: deskt
 
 [Run]
 Filename: "{app}\WinMusik.exe"; Description: "{cm:LaunchProgram,WinMusik 3}"; Flags: 64bit nowait postinstall skipifsilent;
-
-
