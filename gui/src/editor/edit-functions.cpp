@@ -159,7 +159,7 @@ void Edit::ClearEditFields()
 	ui.musickey->clear();
 	ui.energyLevel->setValue(0);
 	ui.remarks->clear();
-	//ui.tags->clear();
+	ui.tags->clear();
 	ui.album->clear();
 	ui.filename->clear();
 	ui.filesize->clear();
@@ -427,27 +427,27 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 
 	// Rating
 	switch (title.Rating) {
-	case 0: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-0.png"));
-		item->setText(TRACKLIST_RATING_ROW, "0");
-		break;
-	case 1: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-1.png"));
-		item->setText(TRACKLIST_RATING_ROW, "1");
-		break;
-	case 2: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-2.png"));
-		item->setText(TRACKLIST_RATING_ROW, "2");
-		break;
-	case 3: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-3.png"));
-		item->setText(TRACKLIST_RATING_ROW, "3");
-		break;
-	case 4: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-4.png"));
-		item->setText(TRACKLIST_RATING_ROW, "4");
-		break;
-	case 5: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-5.png"));
-		item->setText(TRACKLIST_RATING_ROW, "5");
-		break;
-	case 6: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-6.png"));
-		item->setText(TRACKLIST_RATING_ROW, "6");
-		break;
+		case 0: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-0.png"));
+			item->setText(TRACKLIST_RATING_ROW, "0");
+			break;
+		case 1: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-1.png"));
+			item->setText(TRACKLIST_RATING_ROW, "1");
+			break;
+		case 2: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-2.png"));
+			item->setText(TRACKLIST_RATING_ROW, "2");
+			break;
+		case 3: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-3.png"));
+			item->setText(TRACKLIST_RATING_ROW, "3");
+			break;
+		case 4: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-4.png"));
+			item->setText(TRACKLIST_RATING_ROW, "4");
+			break;
+		case 5: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-5.png"));
+			item->setText(TRACKLIST_RATING_ROW, "5");
+			break;
+		case 6: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-6.png"));
+			item->setText(TRACKLIST_RATING_ROW, "6");
+			break;
 	}
 
 	if (title.Size == 0) {
