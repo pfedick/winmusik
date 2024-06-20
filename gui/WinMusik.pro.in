@@ -115,7 +115,7 @@ SOURCES += src/about/about.cpp \
     src/firststart/firststart.cpp \
     src/firststart/InitialDatabase.cpp \
     src/firststart/langselect.cpp \
-    src/functions.cpp \
+    src/wmfunctions.cpp \
     src/main.cpp \
     src/menue/menue.cpp \
     src/musickey.cpp \

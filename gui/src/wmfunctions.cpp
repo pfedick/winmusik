@@ -428,21 +428,22 @@ void saveCover(const ppl7::String& filename, const QPixmap& Cover)
 	if (filename.isEmpty()) return;
 	if (Cover.isNull()) return;
 	ppl7::ID3Tag Tag;
-	printf("Loading Tag\n");
+	//ppl7::PrintDebug("saveCover, Loading Tag\n");
 	try {
 		Tag.load(filename);
-		Tag.listFrames();
+		//Tag.listFrames();
 	} catch (...) {
 	 // Fehler beim Laden wird ignoriert, es koennte eine Datei ohne ID3-Tags sein
 	}
-	QByteArray bytes;
-	QBuffer buffer(&bytes);
-	buffer.open(QIODevice::WriteOnly);
-	Cover.save(&buffer, "JPEG", wm_main->conf.JpegQualityCover);
-	ppl7::ByteArray bin;
-	bin.copy(bytes.data(), bytes.size());
-	Tag.setPicture(3, bin, "image/jpeg");
 	try {
+		QByteArray bytes;
+		QBuffer buffer(&bytes);
+		buffer.open(QIODevice::WriteOnly);
+		Cover.save(&buffer, "JPEG", wm_main->conf.JpegQualityCover);
+		ppl7::ByteArray bin;
+		bin.copy(bytes.data(), bytes.size());
+		Tag.setPicture(3, bin, "image/jpeg");
+
 		Tag.save();
 	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("Could not save cover!"));
