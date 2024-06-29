@@ -5267,28 +5267,28 @@ Attention: Changing this directory can result in loss of data!</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="src/functions.cpp" line="448"/>
+        <location filename="src/wmfunctions.cpp" line="449"/>
         <source>Could not save cover!</source>
         <translation>Could not save cover!</translation>
     </message>
     <message>
-        <location filename="src/functions.cpp" line="532"/>
+        <location filename="src/wmfunctions.cpp" line="533"/>
         <source>Exception:</source>
         <translation>Exception:</translation>
     </message>
     <message>
-        <location filename="src/functions.cpp" line="536"/>
+        <location filename="src/wmfunctions.cpp" line="537"/>
         <source>Description:</source>
         <translation>Description:</translation>
     </message>
     <message>
-        <location filename="src/functions.cpp" line="539"/>
-        <location filename="src/functions.cpp" line="552"/>
+        <location filename="src/wmfunctions.cpp" line="540"/>
+        <location filename="src/wmfunctions.cpp" line="553"/>
         <source>WinMusik Error</source>
         <translation>WinMusik Error</translation>
     </message>
     <message>
-        <location filename="src/functions.cpp" line="550"/>
+        <location filename="src/wmfunctions.cpp" line="551"/>
         <source>an error occured</source>
         <translation>an error occured</translation>
     </message>

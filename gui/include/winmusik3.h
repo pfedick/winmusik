@@ -52,7 +52,7 @@
 using namespace de::pfp::winmusik;
 
 
-#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2022"
+#define WM_COPYRIGHT	"(c) Copyright by Patrick Fedick in 2024"
  // Die folgenden Werte werden für die Registry bzw. Ermitteln des Application Data
  // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
