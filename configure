@@ -716,6 +716,7 @@ ICONV_LIBS
 ICONV_CFLAGS
 LTLIBICONV
 LIBICONV
+ASAN_FLAGS
 LIBOBJS
 HAVE_GTEST
 GTEST_PREFIX
@@ -848,6 +849,7 @@ enable_dependency_tracking
 enable_largefile
 with_x
 enable_gtest
+with_asan
 with_gnu_ld
 enable_rpath
 with_libiconv_prefix
@@ -1525,6 +1527,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-x                use the X Window System
+  --with-asan             Build with address sanitizer checking
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-libiconv-prefix[=DIR]  search for libiconv in DIR/include and DIR/lib
   --without-libiconv-prefix     don't search for libiconv in includedir and libdir
@@ -13756,6 +13759,43 @@ if test $ac_cv_struct_sa_len = yes; then
 
 fi
 
+report_use_address_sanitizer="no"
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if address sanitizer (asan) is wanted" >&5
+printf %s "checking if address sanitizer (asan) is wanted... " >&6; }
+
+# Check whether --with-asan was given.
+if test ${with_asan+y}
+then :
+  withval=$with_asan; with_asan=${withval}
+else $as_nop
+  with_asan=no
+fi
+
+if test "x$with_asan" = "xno"
+then :
+  ASAN_FLAGS=""
+	   CXXFLAGS="${CXXFLAGS} -O2 "
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+elif test "x$with_asan" = "xyes"
+then :
+  ASAN_FLAGS=" -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   report_use_address_sanitizer="yes"
+	   CXXFLAGS="${CXXFLAGS} -O1 -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+
+else $as_nop
+  ASAN_FLAGS="$with_asan"
+	  CXXFLAGS="${CXXFLAGS} -O1 $with_asan "
+	   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+
+fi
+
+
+
 
 
       if test "X$prefix" = "XNONE"; then
@@ -15195,7 +15235,7 @@ report_have_bzip2="no"
          #include <bzlib.h>
          int main()
          {
-            char* source = "Hello World";
+            char* source;
             char* dest;
             unsigned int destLen = 1000;
             unsigned int sourceLen = 1000;
@@ -18091,6 +18131,7 @@ fi
 **
 ** Threads:                $report_have_pthreads
 ** Qt:                     $report_have_qt
+** Address Sanitizer:      $report_use_address_sanitizer
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib
@@ -18120,6 +18161,7 @@ printf "%s\n" "
 **
 ** Threads:                $report_have_pthreads
 ** Qt:                     $report_have_qt
+** Address Sanitizer:      $report_use_address_sanitizer
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib

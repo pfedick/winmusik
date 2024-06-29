@@ -342,6 +342,31 @@ if test $ac_cv_struct_sa_len = yes; then
   AC_DEFINE(HAVE_SOCKADDR_SA_LEN)
 fi
 
+report_use_address_sanitizer="no"
+AC_MSG_CHECKING(if address sanitizer (asan) is wanted)
+AC_ARG_WITH([asan],
+			[AS_HELP_STRING([--with-asan],
+                            [Build with address sanitizer checking])],
+            [with_asan=${withval}],
+            [with_asan=no])
+AS_IF([test "x$with_asan" = "xno"],
+      [ASAN_FLAGS=""
+	   CXXFLAGS="${CXXFLAGS} -O2 "
+	   AC_MSG_RESULT(no)],
+      [test "x$with_asan" = "xyes"],
+      [ASAN_FLAGS=" -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+	   report_use_address_sanitizer="yes"
+	   CXXFLAGS="${CXXFLAGS} -O1 -fsanitize=address -fsanitize-recover=address -fno-omit-frame-pointer "
+
+	   AC_MSG_RESULT(yes)
+	  ],
+      [ASAN_FLAGS="$with_asan"
+	  CXXFLAGS="${CXXFLAGS} -O1 $with_asan "
+	   AC_MSG_RESULT(yes)
+	  ])
+
+AC_SUBST(ASAN_FLAGS)
+
 
 AM_ICONV
 if test "$am_cv_func_iconv_works" = "yes"
@@ -581,6 +606,7 @@ AC_MSG_RESULT([
 **
 ** Threads:                $report_have_pthreads
 ** Qt:                     $report_have_qt
+** Address Sanitizer:      $report_use_address_sanitizer
 **
 ** Libs:
 **   ZLIB library:         $report_have_zlib

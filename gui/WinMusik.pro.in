@@ -71,8 +71,8 @@ CONFIG(debug, debug|release) {
 	LIBS += ../wmlib/release/libwinmusik3.a
 	LIBS += ../pplib/release/libpplib.a
 }
-LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
-LIBS += @BZ2_LIBS@ @PCRE_LIBS@ -liconv
+LIBS += @LIBS@ @ASAN_FLAGS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
+LIBS += @BZ2_LIBS@ @PCRE_LIBS@ -l iconv
 LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
 LIBS += @LIBCDIO_LDFLAGS@
 
@@ -115,7 +115,6 @@ SOURCES += src/about/about.cpp \
     src/firststart/firststart.cpp \
     src/firststart/InitialDatabase.cpp \
     src/firststart/langselect.cpp \
-    src/wmfunctions.cpp \
     src/main.cpp \
     src/menue/menue.cpp \
     src/musickey.cpp \
@@ -140,12 +139,13 @@ SOURCES += src/about/about.cpp \
     src/searchlists/searchlisttrackdialog.cpp \
     src/searchlists/searchlisttracks.cpp \
     src/splashscreen/splashscreen.cpp \
+    src/wmfunctions.cpp \
     widgets/edittrack.cpp \
     widgets/fkeys.cpp \
     widgets/KeyWheel.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/wmtoolbutton.cpp \
-
+    
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
@@ -195,7 +195,7 @@ HEADERS += widgets/edittrack.h \
     include/tablecontrol.h \
     include/version.h \
     include/winmusik3.h \
-
+    
 
 FORMS += widgets/edittrack.ui \
     widgets/fkeys.ui \
@@ -232,3 +232,4 @@ FORMS += widgets/edittrack.ui \
     src/searchlists/searchlists.ui \
     src/searchlists/searchlisttrackdialog.ui \
     src/splashscreen/splashscreen.ui \
+    

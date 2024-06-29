@@ -71,7 +71,7 @@ CONFIG(debug, debug|release) {
 	LIBS += ../wmlib/release/libwinmusik3.a
 	LIBS += ../pplib/release/libpplib.a
 }
-LIBS += @LIBS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
+LIBS += @LIBS@ @ASAN_FLAGS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
 LIBS += @BZ2_LIBS@ @PCRE_LIBS@ -l iconv
 LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
 LIBS += @LIBCDIO_LDFLAGS@
