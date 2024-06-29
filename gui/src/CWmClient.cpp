@@ -40,7 +40,6 @@
 #include "src/coverviewer/coverviewer.h"
 #include <QMessageBox>
 #include <QLocale>
-#include <QDesktopWidget>
 #include <QMenu>
 
 CWmClient* wm_main=NULL;
@@ -543,24 +542,24 @@ ppl7::String CWmClient::GetDeviceName(int DeviceType)
 {
 	ppl7::String s;
 	switch (DeviceType) {
-	case 1: s=tr("Music Cassette");
-		break;
-	case 2: s=tr("Audio CD");
-		break;
-	case 3: s=tr("Data Storage");
-		break;
-	case 4: s=tr("Record");
-		break;
-	case 5: s=tr("VHS-Tape");
-		break;
-	case 6: s=tr("Other");
-		break;
-	case 7: s=tr("MP3-CD");
-		break;
-	case 8: s=tr("Tape");
-		break;
-	case 9: s=tr("Audio DVD");
-		break;
+		case 1: s=tr("Music Cassette");
+			break;
+		case 2: s=tr("Audio CD");
+			break;
+		case 3: s=tr("Data Storage");
+			break;
+		case 4: s=tr("Record");
+			break;
+		case 5: s=tr("VHS-Tape");
+			break;
+		case 6: s=tr("Other");
+			break;
+		case 7: s=tr("MP3-CD");
+			break;
+		case 8: s=tr("Tape");
+			break;
+		case 9: s=tr("Audio DVD");
+			break;
 	}
 
 	return s;
@@ -570,24 +569,24 @@ QPixmap CWmClient::GetDevicePixmap(int DeviceType)
 {
 	QPixmap pix;
 	switch (DeviceType) {
-	case 1: pix.load(":/devices48/resources/tr48x48-0001.png");
-		break;
-	case 2: pix.load(":/devices48/resources/tr48x48-0002.png");
-		break;
-	case 3: pix.load(":/devices48/resources/tr48x48-0003.png");
-		break;
-	case 4: pix.load(":/devices48/resources/tr48x48-0004.png");
-		break;
-	case 5: pix.load(":/devices48/resources/tr48x48-0005.png");
-		break;
-	case 6: pix.load(":/devices48/resources/tr48x48-0006.png");
-		break;
-	case 7: pix.load(":/devices48/resources/tr48x48-0007.png");
-		break;
-	case 8: pix.load(":/devices48/resources/tr48x48-0008.png");
-		break;
-	case 9: pix.load(":/devices48/resources/tr48x48-0009.png");
-		break;
+		case 1: pix.load(":/devices48/resources/tr48x48-0001.png");
+			break;
+		case 2: pix.load(":/devices48/resources/tr48x48-0002.png");
+			break;
+		case 3: pix.load(":/devices48/resources/tr48x48-0003.png");
+			break;
+		case 4: pix.load(":/devices48/resources/tr48x48-0004.png");
+			break;
+		case 5: pix.load(":/devices48/resources/tr48x48-0005.png");
+			break;
+		case 6: pix.load(":/devices48/resources/tr48x48-0006.png");
+			break;
+		case 7: pix.load(":/devices48/resources/tr48x48-0007.png");
+			break;
+		case 8: pix.load(":/devices48/resources/tr48x48-0008.png");
+			break;
+		case 9: pix.load(":/devices48/resources/tr48x48-0009.png");
+			break;
 	}
 
 	return pix;
@@ -597,24 +596,24 @@ QIcon CWmClient::GetDeviceIcon(int DeviceType)
 {
 	QIcon pix;
 	switch (DeviceType) {
-	case 1: pix.addFile(":/devices48/resources/tr48x48-0001.png");
-		break;
-	case 2: pix.addFile(":/devices48/resources/tr48x48-0002.png");
-		break;
-	case 3: pix.addFile(":/devices48/resources/tr48x48-0003.png");
-		break;
-	case 4: pix.addFile(":/devices48/resources/tr48x48-0004.png");
-		break;
-	case 5: pix.addFile(":/devices48/resources/tr48x48-0005.png");
-		break;
-	case 6: pix.addFile(":/devices48/resources/tr48x48-0006.png");
-		break;
-	case 7: pix.addFile(":/devices48/resources/tr48x48-0007.png");
-		break;
-	case 8: pix.addFile(":/devices48/resources/tr48x48-0008.png");
-		break;
-	case 9: pix.addFile(":/devices48/resources/tr48x48-0009.png");
-		break;
+		case 1: pix.addFile(":/devices48/resources/tr48x48-0001.png");
+			break;
+		case 2: pix.addFile(":/devices48/resources/tr48x48-0002.png");
+			break;
+		case 3: pix.addFile(":/devices48/resources/tr48x48-0003.png");
+			break;
+		case 4: pix.addFile(":/devices48/resources/tr48x48-0004.png");
+			break;
+		case 5: pix.addFile(":/devices48/resources/tr48x48-0005.png");
+			break;
+		case 6: pix.addFile(":/devices48/resources/tr48x48-0006.png");
+			break;
+		case 7: pix.addFile(":/devices48/resources/tr48x48-0007.png");
+			break;
+		case 8: pix.addFile(":/devices48/resources/tr48x48-0008.png");
+			break;
+		case 9: pix.addFile(":/devices48/resources/tr48x48-0009.png");
+			break;
 	}
 	return pix;
 }
@@ -623,26 +622,26 @@ ppl7::String CWmClient::GetDeviceNameShort(uint8_t DeviceType)
 {
 	ppl7::String s;
 	switch (DeviceType) {
-	case 1: s=tr("CAS");
-		break;
-	case 2: s=tr("CD");
-		break;
-	case 3: s=tr("DATA");
-		break;
-	case 4: s=tr("RECORD");
-		break;
-	case 5: s=tr("VHS");
-		break;
-	case 6: s=tr("OTHER");
-		break;
-	case 7: s=tr("MP3");
-		break;
-	case 8: s=tr("TAPE");
-		break;
-	case 9: s=tr("DVD");
-		break;
-	default: s="";
-		break;
+		case 1: s=tr("CAS");
+			break;
+		case 2: s=tr("CD");
+			break;
+		case 3: s=tr("DATA");
+			break;
+		case 4: s=tr("RECORD");
+			break;
+		case 5: s=tr("VHS");
+			break;
+		case 6: s=tr("OTHER");
+			break;
+		case 7: s=tr("MP3");
+			break;
+		case 8: s=tr("TAPE");
+			break;
+		case 9: s=tr("DVD");
+			break;
+		default: s="";
+			break;
 	}
 	return s;
 }
@@ -1160,7 +1159,7 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 		ppl7::WideString prog=Player;
 		ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f,
 			L"", SW_SHOWNORMAL);
-}
+	}
 #else
 	if (Player.isEmpty()) {
 		QMessageBox::warning(NULL, tr("WinMusik: Attention"),

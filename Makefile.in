@@ -81,9 +81,9 @@ mingw: update_version
 	mingw32-make -j8 ppl7_release
 	mingw32-make -j8 wmlib_release
 	mingw32-make -j8 gui_release
-	cd gui && lupdate WinMusik.pro
+	cd gui && lupdate-qt6.exe WinMusik.pro
 	rm -rf release/deploy
-	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
+	windeployqt-qt6.exe --dir release/deploy --translations de,en release/WinMusik.exe
 	ldd release/WinMusik.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
 	ldd release/WinMusik.exe  | grep -v WINDOWS | grep mingw64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
 	cp release/WinMusik.exe release/deploy

@@ -41,6 +41,7 @@
 #include <queue>
 
 #define WITH_QT		// Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#define PPL_WITH_QT6
 #define PPL_QT_STRING_UTF8
 
 #include "ppl7.h"

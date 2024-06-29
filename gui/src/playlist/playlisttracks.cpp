@@ -323,8 +323,7 @@ void PlaylistItem::useTraktorCues(const ppl7::String& file)
 	try {
 		Tag.load(file);
 		useTraktorCues(Tag);
-	}
-	catch (...) {}
+	} catch (...) {}
 }
 
 void PlaylistItem::useTraktorCues(const ppl7::ID3Tag& Tag)
@@ -424,7 +423,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent* e)
 	e->accept();
 	//QTreeWidget::dragMoveEvent(e);
 	//return;
-	PlaylistItem* item = static_cast<PlaylistItem*>(itemAt(e->pos()));
+	PlaylistItem* item = static_cast<PlaylistItem*>(itemAt(e->position().toPoint()));
 	if (item) {
 		if (item != lastmoveitem) {
 			unselectItems();
@@ -486,7 +485,7 @@ void PlaylistTracks::deleteSourceItems(QDropEvent* event)
 	if (xml.left(18) != "<winmusikTracklist") return;
 	//printf ("winmusikTracklist\n");
 	QDomDocument doc("winmusikTracklist");
-	if (doc.setContent(xml)) {
+	if (doc.setContent(QString(xml))) {
 		QDomElement root=doc.documentElement();
 		if (root.tagName() == "winmusikTracklist") {
 			QDomNode tracks=root.namedItem("tracks");
@@ -636,8 +635,7 @@ bool PlaylistTracks::saveWMP(const ppl7::String& Filename)
 		ff.write(xml);
 		ff.close();
 		return true;
-	}
-	catch (const ppl7::Exception& exp) {
+	} catch (const ppl7::Exception& exp) {
 		ShowException(exp, QObject::tr("could not save playlist"));
 	}
 	return false;

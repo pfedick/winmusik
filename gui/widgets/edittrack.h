@@ -23,7 +23,6 @@
 #include <QWidget>
 #include "ui_edittrack.h"
 #include "winmusik3.h"
-#include <QRegExpValidator>
 #include <QKeyEvent>
 #include "tablecontrol.h"
 

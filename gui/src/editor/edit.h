@@ -24,7 +24,6 @@
 #include "winmusik3.h"
 #include "tablecontrol.h"
 #include <QDialog>
-#include <QRegExpValidator>
 #include <QKeyEvent>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

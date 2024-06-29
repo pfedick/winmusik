@@ -44,33 +44,33 @@ DeviceList::DeviceList(QWidget* parent, CWmClient* wm, int typ)
 
 
 	switch (typ) {
-	case 1:	// Cassette
-		setWindowTitle(tr("List of Music Cassettes"));
-		break;
-	case 2:	// CD
-		setWindowTitle(tr("List of Audio CDs"));
-		break;
-	case 3:	// Data CD
-		setWindowTitle(tr("List of Data CDs"));
-		break;
-	case 4:	// Vinyl Record
-		setWindowTitle(tr("List of Vinyl Records"));
-		break;
-	case 5:	// VHS
-		setWindowTitle(tr("List of Video Tapes"));
-		break;
-	case 6:	// Other
-		setWindowTitle(tr("List of Other Media Types"));
-		break;
-	case 7:	// MP3
-		setWindowTitle(tr("List of MP3 CDs"));
-		break;
-	case 8:	// Tape
-		setWindowTitle(tr("List of Music Tapes"));
-		break;
-	case 9:	// DVD
-		setWindowTitle(tr("List of Audio DVDs"));
-		break;
+		case 1:	// Cassette
+			setWindowTitle(tr("List of Music Cassettes"));
+			break;
+		case 2:	// CD
+			setWindowTitle(tr("List of Audio CDs"));
+			break;
+		case 3:	// Data CD
+			setWindowTitle(tr("List of Data CDs"));
+			break;
+		case 4:	// Vinyl Record
+			setWindowTitle(tr("List of Vinyl Records"));
+			break;
+		case 5:	// VHS
+			setWindowTitle(tr("List of Video Tapes"));
+			break;
+		case 6:	// Other
+			setWindowTitle(tr("List of Other Media Types"));
+			break;
+		case 7:	// MP3
+			setWindowTitle(tr("List of MP3 CDs"));
+			break;
+		case 8:	// Tape
+			setWindowTitle(tr("List of Music Tapes"));
+			break;
+		case 9:	// DVD
+			setWindowTitle(tr("List of Audio DVDs"));
+			break;
 	}
 	ppl7::String Tmp;
 	ui.deviceName->setText(windowTitle());

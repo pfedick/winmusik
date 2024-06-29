@@ -23,9 +23,6 @@
 #include <QClipboard>
 #include <exception>
 #include <stdexcept>
-#ifdef HAVE_PYTHON
-#include <Python.h>
-#endif
 
 #include "ppl7.h"
 #include "ppl7-types.h"
@@ -58,7 +55,7 @@ void RegularExpressionCapture::load()
 	ppl7::String Group;
 	while (1) {
 		Group.setf("%i", (int)pos);
-		settings.beginGroup(Group);
+		settings.beginGroup(QString(Group));
 		RegExpPattern p;
 		p.Name=settings.value("Name").toString();
 		if (p.Name.isEmpty()) break;
@@ -111,7 +108,7 @@ void RegularExpressionCapture::save()
 	ppl7::String Group;
 	for (it = patterns.begin(); it != patterns.end(); ++it) {
 		Group.setf("%i", (int)pos);
-		settings.beginGroup(Group);
+		settings.beginGroup(QString(Group));
 		settings.setValue("Name", (*it).Name);
 		settings.setValue("Pattern", (*it).Pattern);
 		settings.setValue("artist", (*it).artist);
