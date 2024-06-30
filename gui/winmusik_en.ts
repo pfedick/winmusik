@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en" sourcelanguage="de_DE">
+<TS version="2.1" language="en_US" sourcelanguage="de_DE">
 <context>
     <name>About</name>
     <message>
@@ -973,7 +973,7 @@ p, li { white-space: pre-wrap; }
         <location filename="src/coverprinter/coverprinter.ui" line="1088"/>
         <source>Written and Copyright (c) 2024 by Patrick Fedick</source>
         <oldsource>Written and Copyright (c) 2010 by Patrick Fedick</oldsource>
-        <translation type="unfinished">Written and Copyright (c) 2010 by Patrick Fedick</translation>
+        <translation>Written and Copyright (c) 2024 by Patrick Fedick</translation>
     </message>
 </context>
 <context>
@@ -3861,7 +3861,7 @@ Do you want to save your changes?</translation>
         <location filename="src/playlist/playlist.cpp" line="1250"/>
         <source>Open Track in Editor</source>
         <comment>trackList Context Menue</comment>
-        <translation type="unfinished"></translation>
+        <translation>Open Track in Editor</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1242"/>
@@ -4267,17 +4267,17 @@ Please also check the file extension. WinMusik only supports .png, .jpg and .bmp
     <message>
         <location filename="src/playlist/playlistexport.ui" line="128"/>
         <source>with start-times</source>
-        <translation type="unfinished"></translation>
+        <translation>with start-times</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="148"/>
         <source>.json</source>
-        <translation type="unfinished"></translation>
+        <translation>.json</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="158"/>
         <source>with cover icons</source>
-        <translation type="unfinished"></translation>
+        <translation>with cover icons</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="178"/>
@@ -5261,7 +5261,7 @@ Attention: Changing this directory can result in loss of data!</translation>
     <message>
         <location filename="src/main.cpp" line="134"/>
         <source>Could not run WinMusik</source>
-        <translation type="unfinished"></translation>
+        <translation>An unexpected error occured</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.1" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>About</name>
     <message>
@@ -973,7 +973,7 @@ p, li { white-space: pre-wrap; }
         <location filename="src/coverprinter/coverprinter.ui" line="1088"/>
         <source>Written and Copyright (c) 2024 by Patrick Fedick</source>
         <oldsource>Written and Copyright (c) 2010 by Patrick Fedick</oldsource>
-        <translation type="unfinished">Written and Copyright (c) 2010 by Patrick Fedick</translation>
+        <translation>Written and Copyright (c) 2024 by Patrick Fedick</translation>
     </message>
 </context>
 <context>
@@ -3862,7 +3862,7 @@ Wollen Sie die Änderungen speichern?</translation>
         <location filename="src/playlist/playlist.cpp" line="1250"/>
         <source>Open Track in Editor</source>
         <comment>trackList Context Menue</comment>
-        <translation type="unfinished"></translation>
+        <translation>Titel im Editor öffnen</translation>
     </message>
     <message>
         <location filename="src/playlist/playlist.cpp" line="1242"/>
@@ -4268,17 +4268,17 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
     <message>
         <location filename="src/playlist/playlistexport.ui" line="128"/>
         <source>with start-times</source>
-        <translation type="unfinished"></translation>
+        <translation>mit Startzeiten</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="148"/>
         <source>.json</source>
-        <translation type="unfinished"></translation>
+        <translation>.json</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="158"/>
         <source>with cover icons</source>
-        <translation type="unfinished"></translation>
+        <translation>mit Cover Icons</translation>
     </message>
     <message>
         <location filename="src/playlist/playlistexport.ui" line="178"/>
@@ -5263,7 +5263,7 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
     <message>
         <location filename="src/main.cpp" line="134"/>
         <source>Could not run WinMusik</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein unerwarteter Fehler ist aufgetreten</translation>
     </message>
 </context>
 <context>
