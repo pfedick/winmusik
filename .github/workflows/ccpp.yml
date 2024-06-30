@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v2
@@ -13,7 +13,7 @@ jobs:
           submodules: 'true'
           #fetch-depth: 0
       - name: Install Dependencies
-        run: sudo apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
+        run: sudo apt install -y qtbase6-dev qtchooser qt6-qmake qtbase6-dev-tools dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
       - name: configure
         run: ./configure
       - name: make
