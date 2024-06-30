@@ -31,6 +31,7 @@
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
+
 SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::String& Filename)
 	: QWidget(parent)
 {
@@ -341,11 +342,11 @@ void SearchlistDialog::on_trackList_customContextMenuRequested(const QPoint& pos
 		m->addAction(QIcon(":/bewertung/resources/rating-5.png"), "5", this, SLOT(on_contextRate5_clicked()));
 		m->addAction(QIcon(":/bewertung/resources/rating-6.png"), "6", this, SLOT(on_contextRate6_clicked()));
 	} else {
-		a=m->addAction(QIcon(":/icons/resources/edit.png"), tr("Edit Track", "trackList Context Menue"), this, SLOT(on_contextEditTrack_triggered()), tr("Return"));
-		m->addAction(QIcon(":/icons/resources/delete-track.png"), tr("Delete Track", "trackList Context Menue"), this, SLOT(on_contextDeleteTrack_triggered()), tr("Del"));
-		m->addAction(QIcon(":/icons/resources/insert-track.png"), tr("Insert Track", "trackList Context Menue"), this, SLOT(on_contextInsertTrack_triggered()), tr("Ctrl+N"));
+		a=m->addAction(QIcon(":/icons/resources/edit.png"), tr("Edit Track", "trackList Context Menue"), tr("Return"), this, SLOT(on_contextEditTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/delete-track.png"), tr("Delete Track", "trackList Context Menue"), tr("Del"), this, SLOT(on_contextDeleteTrack_triggered()));
+		m->addAction(QIcon(":/icons/resources/insert-track.png"), tr("Insert Track", "trackList Context Menue"), tr("Ctrl+N"), this, SLOT(on_contextInsertTrack_triggered()));
 		m->addSeparator();
-		m->addAction(QIcon(":/icons/resources/findmore.png"), tr("Search track in Database", "trackList Context Menue"), this, SLOT(on_contextFind_triggered()), tr("F4"));
+		m->addAction(QIcon(":/icons/resources/findmore.png"), tr("Search track in Database", "trackList Context Menue"), tr("F4"), this, SLOT(on_contextFind_triggered()));
 	}
 	m->popup(p, a);
 

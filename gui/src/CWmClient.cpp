@@ -250,13 +250,14 @@ int CWmClient::LoadTranslation()
 		setlocale(LC_CTYPE, "en_US.UTF-8");
 	}
 	filename=":/translation/qt_" + conf.Locale;
-	qtTranslator.load(filename);
-	app->installTranslator(&qtTranslator);
-	filename=":/translation/winmusik_" + conf.Locale;
-	if (!wmTranslator.load(filename)) {
-		//printf ("Übersetzung nicht geladen!\n");
+	if (qtTranslator.load(filename)) {
+		app->installTranslator(&qtTranslator);
 	}
-	app->installTranslator(&wmTranslator);
+	filename=":/translation/winmusik_" + conf.Locale;
+	if (wmTranslator.load(filename)) {
+		//printf ("Übersetzung nicht geladen!\n");
+		app->installTranslator(&wmTranslator);
+	}
 
 	Str_Unknown=tr("unknown");
 	return 1;

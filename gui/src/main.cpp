@@ -45,20 +45,6 @@ void help()
 }
 
 
-int main2(int argc, char* argv[])
-{
-    printf("main\n");
-    ppl7::WideString w1(L"Hällo Wörld!");
-    ppl7::String s1=w1;
-    //s1.set(L"Hällo Wörld!");
-    s1.hexDump();
-    ppl7::WideString w2=s1;
-    w2.hexDump();
-    printf("finished\n");
-    return 0;
-
-}
-
 int main(int argc, char* argv[])
 {
     if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
@@ -134,4 +120,4 @@ int main(int argc, char* argv[])
         ShowException(exp, QApplication::tr("Could not run WinMusik"));
         return 1;
     }
-}
+    }

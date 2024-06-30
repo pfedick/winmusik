@@ -28,6 +28,7 @@
 #include "csearchlist.h"
 #include "regexpcapture.h"
 
+
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
 	: QDialog(parent)
 {

@@ -27,6 +27,7 @@
 #include "searchlists.h"
 #include "csearchlist.h"
 
+
 Searchlists::Searchlists(QWidget* parent, CWmClient* wm)
 	: QWidget(parent)
 {
