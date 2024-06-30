@@ -971,9 +971,9 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="src/coverprinter/coverprinter.ui" line="1088"/>
-        <source>Written and Copyright (c) 2010 by Patrick Fedick</source>
-        <oldsource>Written and Copyright (c) 2009 by Patrick Fedick</oldsource>
-        <translation>Written and Copyright (c) 2010 by Patrick Fedick</translation>
+        <source>Written and Copyright (c) 2024 by Patrick Fedick</source>
+        <oldsource>Written and Copyright (c) 2010 by Patrick Fedick</oldsource>
+        <translation type="unfinished">Written and Copyright (c) 2010 by Patrick Fedick</translation>
     </message>
 </context>
 <context>
