@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,15 @@ class WMToolButton : public QToolButton
 {
 	Q_OBJECT
 
-	public:
-		WMToolButton(QWidget *parent = 0);
-		~WMToolButton();
+public:
+	WMToolButton(QWidget* parent = 0);
+	~WMToolButton();
 
-	protected:
-		void mousePressEvent ( QMouseEvent * event );
+protected:
+	void mousePressEvent(QMouseEvent* event);
 
-	signals:
-		void controlClicked();
+signals:
+	void controlClicked();
 
 };
 

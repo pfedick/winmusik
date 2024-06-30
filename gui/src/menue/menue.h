@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,19 +29,19 @@ class Menue : public QWidget
     Q_OBJECT
 
 public:
-    Menue(QWidget *parent = nullptr, CWmClient *client=nullptr);
+    Menue(QWidget* parent = nullptr, CWmClient* client=nullptr);
     ~Menue();
 
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent* event);
     void ReloadTranslation();
     void UpdateMenue();
 
 
 private:
     Ui::MenueClass ui;
-    CWmClient *wm;
-    QWidget *searchWindow;
+    CWmClient* wm;
+    QWidget* searchWindow;
 
     bool UpdateInformed;
 
@@ -55,35 +55,35 @@ private:
     void OpenSearchlistDialog();
 
 private slots:
-    void on_toolButton_1_clicked() {OpenEditDialog(1);}
-    void on_toolButton_2_clicked() {OpenEditDialog(2);}
-    void on_toolButton_3_clicked() {OpenEditDialog(3);}
-    void on_toolButton_4_clicked() {OpenEditDialog(4);}
-    void on_toolButton_5_clicked() {OpenEditDialog(5);}
-    void on_toolButton_6_clicked() {OpenEditDialog(6);}
-    void on_toolButton_7_clicked() {OpenEditDialog(7);}
-    void on_toolButton_8_clicked() {OpenEditDialog(8);}
-    void on_toolButton_9_clicked() {OpenEditDialog(9);}
+    void on_toolButton_1_clicked() { OpenEditDialog(1); }
+    void on_toolButton_2_clicked() { OpenEditDialog(2); }
+    void on_toolButton_3_clicked() { OpenEditDialog(3); }
+    void on_toolButton_4_clicked() { OpenEditDialog(4); }
+    void on_toolButton_5_clicked() { OpenEditDialog(5); }
+    void on_toolButton_6_clicked() { OpenEditDialog(6); }
+    void on_toolButton_7_clicked() { OpenEditDialog(7); }
+    void on_toolButton_8_clicked() { OpenEditDialog(8); }
+    void on_toolButton_9_clicked() { OpenEditDialog(9); }
 
-    void on_toolButton_1_controlClicked() {OpenDeviceList(1);}
-    void on_toolButton_2_controlClicked() {OpenDeviceList(2);}
-    void on_toolButton_3_controlClicked() {OpenDeviceList(3);}
-    void on_toolButton_4_controlClicked() {OpenDeviceList(4);}
-    void on_toolButton_5_controlClicked() {OpenDeviceList(5);}
-    void on_toolButton_6_controlClicked() {OpenDeviceList(6);}
-    void on_toolButton_7_controlClicked() {OpenDeviceList(7);}
-    void on_toolButton_8_controlClicked() {OpenDeviceList(8);}
-    void on_toolButton_9_controlClicked() {OpenDeviceList(9);}
+    void on_toolButton_1_controlClicked() { OpenDeviceList(1); }
+    void on_toolButton_2_controlClicked() { OpenDeviceList(2); }
+    void on_toolButton_3_controlClicked() { OpenDeviceList(3); }
+    void on_toolButton_4_controlClicked() { OpenDeviceList(4); }
+    void on_toolButton_5_controlClicked() { OpenDeviceList(5); }
+    void on_toolButton_6_controlClicked() { OpenDeviceList(6); }
+    void on_toolButton_7_controlClicked() { OpenDeviceList(7); }
+    void on_toolButton_8_controlClicked() { OpenDeviceList(8); }
+    void on_toolButton_9_controlClicked() { OpenDeviceList(9); }
 
 
-    void on_searchButton_clicked() {OpenSearchDialog();}
-    void on_propertiesButton_clicked() {OpenPropertiesDialog();}
-    void on_aboutButton_clicked() {OpenAboutDialog();}
-    void on_coverButton_clicked() {OpenCoverPrinterDialog();}
-    void on_playlistButton_clicked() {OpenPlaylistDialog();}
-    void on_searchlistButton_clicked() {OpenSearchlistDialog();}
+    void on_searchButton_clicked() { OpenSearchDialog(); }
+    void on_propertiesButton_clicked() { OpenPropertiesDialog(); }
+    void on_aboutButton_clicked() { OpenAboutDialog(); }
+    void on_coverButton_clicked() { OpenCoverPrinterDialog(); }
+    void on_playlistButton_clicked() { OpenPlaylistDialog(); }
+    void on_searchlistButton_clicked() { OpenSearchlistDialog(); }
 
-	void on_searchEdit_returnPressed();
+    void on_searchEdit_returnPressed();
 
 
 };

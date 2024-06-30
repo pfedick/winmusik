@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,8 +143,7 @@ void CID3TagSaver::UpdateNow(CID3TagSaver::WorkItem& item)
 	try {
 		//could fail, if file does not exist or contains usupported ID3Tags
 		Tag.load(item.Filename);
-	}
-	catch (...) {}
+	} catch (...) {}
 	bool changes=false;
 	ppl7::Array changelist;
 	if (item.cleartag) {
@@ -268,8 +267,7 @@ void CID3TagSaver::IterateQueue()
 			try {
 				UpdateNow(item);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				if (item.retry_counter < 5) {
 					item.retry=ppl7::GetTime() + 5;
 					item.retry_counter++;

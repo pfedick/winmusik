@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class LangSelect : public QDialog
     Q_OBJECT
 
 public:
-    LangSelect(QWidget *parent = 0);
+    LangSelect(QWidget* parent = 0);
     ~LangSelect();
     void Select(QString lang);
     QString GetSelected();

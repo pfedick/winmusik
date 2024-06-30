@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -552,36 +552,36 @@ void EditTrack::UpdateFkeys()
 		t[18]=tr("mass import");
 
 		switch (position) {
-		case 4:		// Interpret
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-1005.png", t[11]);
-			break;
-		case 5:		// Titel
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 6:		// VersionId
-			break;
-		case 7:		// Version
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 9:		// Genre
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 14:		// Album
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 16:		// Label
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 18:		// Aufnahmequelle
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 20:		// Aufnahmegerät
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
-		case 21:		// Bemerkung
-			fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-			break;
+			case 4:		// Interpret
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-1005.png", t[11]);
+				break;
+			case 5:		// Titel
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 6:		// VersionId
+				break;
+			case 7:		// Version
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 9:		// Genre
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 14:		// Album
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 16:		// Label
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 18:		// Aufnahmequelle
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 20:		// Aufnahmegerät
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
+			case 21:		// Bemerkung
+				fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+				break;
 		}
 		if (position > 1) {
 			fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-2000.png", t[2]);
@@ -766,35 +766,35 @@ void EditTrack::MoveToNextWidget()
  */
 {
 	switch (position) {
-	case 3: ui.artist->setFocus(); break;
-	case 4: ui.title->setFocus(); break;
-	case 5: ui.versionId->setFocus(); break;
-	case 6: ui.version->setFocus(); break;
-	case 7: ui.genreId->setFocus(); break;
-	case 8: ui.genre->setFocus(); break;
-	case 9: ui.length->setFocus(); break;
-	case 10: ui.bpm->setFocus(); break;
-	case 11: ui.musickey->setFocus(); break;
-	case 30: ui.bitrate->setFocus(); break;
-	case 29: ui.releaseDate->setFocus(); break;
-	case 12: ui.recordDate->setFocus(); break;
-	case 13: ui.album->setFocus(); break;
-	case 14: ui.labelId->setFocus(); break;
-	case 15: ui.labelName->setFocus(); break;
-	case 16: ui.recordSourceId->setFocus(); break;
-	case 17: ui.recordSource->setFocus(); break;
-	case 18: ui.recordDeviceId->setFocus(); break;
-	case 19: ui.recordDevice->setFocus(); break;
-	case 20: ui.remarks->setFocus(); break;
-	case 21: ui.tags->setFocus(); break;
-	case 22: ui.artist->setFocus(); break;
-	//case 21: ui.complete->setFocus(); break;
-	case 24: ui.realTitle->setFocus(); break;
-	case 25: ui.interrupted->setFocus(); break;
-	case 26: ui.channels->setFocus(); break;
-	case 27: ui.quality->setFocus(); break;
-	case 28: ui.rating->setFocus(); break;
-	case 31: ui.artist->setFocus(); break;
+		case 3: ui.artist->setFocus(); break;
+		case 4: ui.title->setFocus(); break;
+		case 5: ui.versionId->setFocus(); break;
+		case 6: ui.version->setFocus(); break;
+		case 7: ui.genreId->setFocus(); break;
+		case 8: ui.genre->setFocus(); break;
+		case 9: ui.length->setFocus(); break;
+		case 10: ui.bpm->setFocus(); break;
+		case 11: ui.musickey->setFocus(); break;
+		case 30: ui.bitrate->setFocus(); break;
+		case 29: ui.releaseDate->setFocus(); break;
+		case 12: ui.recordDate->setFocus(); break;
+		case 13: ui.album->setFocus(); break;
+		case 14: ui.labelId->setFocus(); break;
+		case 15: ui.labelName->setFocus(); break;
+		case 16: ui.recordSourceId->setFocus(); break;
+		case 17: ui.recordSource->setFocus(); break;
+		case 18: ui.recordDeviceId->setFocus(); break;
+		case 19: ui.recordDevice->setFocus(); break;
+		case 20: ui.remarks->setFocus(); break;
+		case 21: ui.tags->setFocus(); break;
+		case 22: ui.artist->setFocus(); break;
+		//case 21: ui.complete->setFocus(); break;
+		case 24: ui.realTitle->setFocus(); break;
+		case 25: ui.interrupted->setFocus(); break;
+		case 26: ui.channels->setFocus(); break;
+		case 27: ui.quality->setFocus(); break;
+		case 28: ui.rating->setFocus(); break;
+		case 31: ui.artist->setFocus(); break;
 	};
 }
 

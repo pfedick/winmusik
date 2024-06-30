@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,14 +32,14 @@ class EditString : public QDialog
     Q_OBJECT
 
 public:
-    explicit EditString(QWidget *parent = nullptr);
+    explicit EditString(QWidget* parent = nullptr);
     ~EditString();
-    void setTitle(const QString &title);
-    void setString(const QString &str);
+    void setTitle(const QString& title);
+    void setString(const QString& str);
     QString getString() const;
 
 private:
-    Ui::EditString *ui;
+    Ui::EditString* ui;
 
 public slots:
     void on_okButton_clicked();

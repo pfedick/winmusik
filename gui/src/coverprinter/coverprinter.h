@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,19 +40,19 @@
 
 class CoverPrinter : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    CoverPrinter(QWidget *parent = 0, CWmClient *wm=NULL);
-    ~CoverPrinter();
+	CoverPrinter(QWidget* parent = 0, CWmClient* wm=NULL);
+	~CoverPrinter();
 
-    void ReloadTranslation();
+	void ReloadTranslation();
 
 private:
-	QPrinter *Printer;
-    Ui::CoverPrinterClass ui;
-    QPixmap pix;
-    CWmClient *wm;
+	QPrinter* Printer;
+	Ui::CoverPrinterClass ui;
+	QPixmap pix;
+	CWmClient* wm;
 
 private slots:
 	void on_printOptions_clicked();

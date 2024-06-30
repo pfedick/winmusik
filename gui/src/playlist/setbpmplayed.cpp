@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 #include "winmusik3.h"
 
 
-SetBPMPlayed::SetBPMPlayed(QWidget *parent)
-:QDialog(parent)
+SetBPMPlayed::SetBPMPlayed(QWidget* parent)
+	:QDialog(parent)
 {
 	ui.setupUi(this);
 }

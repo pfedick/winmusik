@@ -4,7 +4,7 @@
 # Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2022, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2024, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -145,7 +145,7 @@ SOURCES += src/about/about.cpp \
     widgets/KeyWheel.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/wmtoolbutton.cpp \
-    
+
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
@@ -195,7 +195,7 @@ HEADERS += widgets/edittrack.h \
     include/tablecontrol.h \
     include/version.h \
     include/winmusik3.h \
-    
+
 
 FORMS += widgets/edittrack.ui \
     widgets/fkeys.ui \
@@ -232,4 +232,3 @@ FORMS += widgets/edittrack.ui \
     src/searchlists/searchlists.ui \
     src/searchlists/searchlisttrackdialog.ui \
     src/splashscreen/splashscreen.ui \
-    

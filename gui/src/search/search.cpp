@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,11 +60,11 @@ Search::Search(QWidget* parent, CWmClient* wm)
 	}
 	musicKeyDisplay=wm->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
-	case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
-	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
-	default: ui.displayMusicKey->setCurrentIndex(3); break;
+		case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
+		default: ui.displayMusicKey->setCurrentIndex(3); break;
 	}
 	ui.displayMusicKey->setItemText(3, wm->conf.customMusicKeyName);
 	for (int i=1;i <= 25;i++) {
@@ -543,27 +543,27 @@ void Search::renderTrack(WMTreeItem* item, const DataTitle* ti)
 
 	// Bewertung
 	switch (ti->Rating) {
-	case 0: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-0.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "0");
-		break;
-	case 1: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-1.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "1");
-		break;
-	case 2: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-2.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "2");
-		break;
-	case 3: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-3.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "3");
-		break;
-	case 4: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-4.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "4");
-		break;
-	case 5: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-5.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "5");
-		break;
-	case 6: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-6.png"));
-		item->setText(SEARCH_TRACKLIST_RATING_ROW, "6");
-		break;
+		case 0: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-0.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "0");
+			break;
+		case 1: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-1.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "1");
+			break;
+		case 2: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-2.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "2");
+			break;
+		case 3: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-3.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "3");
+			break;
+		case 4: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-4.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "4");
+			break;
+		case 5: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-5.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "5");
+			break;
+		case 6: item->setIcon(SEARCH_TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/rating-6.png"));
+			item->setText(SEARCH_TRACKLIST_RATING_ROW, "6");
+			break;
 	}
 }
 
@@ -1309,11 +1309,11 @@ void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
 void Search::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (ui.displayMusicKey->currentIndex()) {
-	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
-	case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 3: musicKeyDisplay=musicKeyTypeCustom; break;
-	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+		case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+		case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 3: musicKeyDisplay=musicKeyTypeCustom; break;
+		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	updateTrackListing();
 	for (int i=1;i <= 24;i++) {

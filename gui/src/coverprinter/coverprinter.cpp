@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,30 +215,30 @@ void CoverPrinter::on_printOptions_clicked()
 
 		QPixmap Type;
 		switch (ui.type->currentIndex()) {
-		case 0:
-			Type.load(":/cover/resources/coverdruck/print-vcd.png");
-			break;
-		case 1:
-			Type.load(":/cover/resources/coverdruck/print-dvd.png");
-			break;
-		case 2:
-			Type.load(":/cover/resources/coverdruck/print-dvd-5.1.png");
-			break;
-		case 3:
-			Type.load(":/cover/resources/coverdruck/print-blueray.png");
-			break;
-		case 4:
-			Type.load(":/cover/resources/coverdruck/print-divx.png");
-			break;
-		case 5:
-			Type.load(":/cover/resources/coverdruck/print-xvid.png");
-			break;
-		case 6:
-			Type.load(":/cover/resources/coverdruck/print-dvd2.png");
-			break;
-		case 7:
-			Type.load(":/cover/resources/coverdruck/print-cd.png");
-			break;
+			case 0:
+				Type.load(":/cover/resources/coverdruck/print-vcd.png");
+				break;
+			case 1:
+				Type.load(":/cover/resources/coverdruck/print-dvd.png");
+				break;
+			case 2:
+				Type.load(":/cover/resources/coverdruck/print-dvd-5.1.png");
+				break;
+			case 3:
+				Type.load(":/cover/resources/coverdruck/print-blueray.png");
+				break;
+			case 4:
+				Type.load(":/cover/resources/coverdruck/print-divx.png");
+				break;
+			case 5:
+				Type.load(":/cover/resources/coverdruck/print-xvid.png");
+				break;
+			case 6:
+				Type.load(":/cover/resources/coverdruck/print-dvd2.png");
+				break;
+			case 7:
+				Type.load(":/cover/resources/coverdruck/print-cd.png");
+				break;
 		}
 		painter.restore();
 		if (Type.width() > 0) {

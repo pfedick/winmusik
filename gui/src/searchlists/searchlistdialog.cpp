@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -253,27 +253,27 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
 
 	// Rating
 	switch (item->Track.Rating) {
-	case 0: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-0.png"));
-		item->setText(SL_COLUMN_RATING, "0");
-		break;
-	case 1: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-1.png"));
-		item->setText(SL_COLUMN_RATING, "1");
-		break;
-	case 2: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-2.png"));
-		item->setText(SL_COLUMN_RATING, "2");
-		break;
-	case 3: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-3.png"));
-		item->setText(SL_COLUMN_RATING, "3");
-		break;
-	case 4: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-4.png"));
-		item->setText(SL_COLUMN_RATING, "4");
-		break;
-	case 5: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-5.png"));
-		item->setText(SL_COLUMN_RATING, "5");
-		break;
-	case 6: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-6.png"));
-		item->setText(SL_COLUMN_RATING, "6");
-		break;
+		case 0: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-0.png"));
+			item->setText(SL_COLUMN_RATING, "0");
+			break;
+		case 1: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-1.png"));
+			item->setText(SL_COLUMN_RATING, "1");
+			break;
+		case 2: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-2.png"));
+			item->setText(SL_COLUMN_RATING, "2");
+			break;
+		case 3: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-3.png"));
+			item->setText(SL_COLUMN_RATING, "3");
+			break;
+		case 4: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-4.png"));
+			item->setText(SL_COLUMN_RATING, "4");
+			break;
+		case 5: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-5.png"));
+			item->setText(SL_COLUMN_RATING, "5");
+			break;
+		case 6: item->setIcon(SL_COLUMN_RATING, QIcon(":/bewertung/resources/rating-6.png"));
+			item->setText(SL_COLUMN_RATING, "6");
+			break;
 	}
 
 

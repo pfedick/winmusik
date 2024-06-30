@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,11 +85,11 @@ void PlaylistStatusBar::setupUi()
 
 	musicKeyDisplay=wm_main->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
-	case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeMusicalFlats: displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(2); break;
-	case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(3); break;
-	default: displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeMusicalSharps: displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeMusicalFlats: displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeOpenKey: displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeCustom: displayMusicKey->setCurrentIndex(3); break;
+		default: displayMusicKey->setCurrentIndex(2); break;
 	}
 
 	// Selection
@@ -238,11 +238,11 @@ void PlaylistStatusBar::setSelectedMixLength(int sec)
 void PlaylistStatusBar::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (displayMusicKey->currentIndex()) {
-	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
-	case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 3: musicKeyDisplay=musicKeyTypeCustom; break;
-	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+		case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+		case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 3: musicKeyDisplay=musicKeyTypeCustom; break;
+		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	emit musicKeySelectionChanged(musicKeyDisplay);
 }

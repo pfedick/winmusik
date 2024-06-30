@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@ class SearchlistTrackDialog : public QDialog
     Q_OBJECT
 
 public:
-    SearchlistTrackDialog(QWidget *parent = 0);
+    SearchlistTrackDialog(QWidget* parent = 0);
     ~SearchlistTrackDialog();
 
-    void set(const SearchlistItem &track);
+    void set(const SearchlistItem& track);
     void setFromClipboard();
     SearchlistItem get() const;
 
@@ -44,16 +44,16 @@ public:
 private:
     SearchlistItem Track;
     Ui::SearchlistTrackDialogClass ui;
-    void resizeEvent(QResizeEvent * event);
-    void showEvent(QShowEvent * event);
-    void closeEvent(QCloseEvent *event);
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
+    void closeEvent(QCloseEvent* event);
     void Resize();
 
 
 
 public slots:
-	void on_saveButton_clicked();
-	void on_cancelButton_clicked();
+    void on_saveButton_clicked();
+    void on_cancelButton_clicked();
 
 };
 

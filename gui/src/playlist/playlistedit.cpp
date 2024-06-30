@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -428,11 +428,11 @@ void PlaylistEdit::cue2CutStart(int cut)
 	if (!item) return;
 	QString Tmp=item->text(2);
 	switch (cut) {
-	case 0: ui.cutStart0->setText(Tmp); break;
-	case 1: ui.cutStart1->setText(Tmp); break;
-	case 2: ui.cutStart2->setText(Tmp); break;
-	case 3: ui.cutStart3->setText(Tmp); break;
-	case 4: ui.cutStart4->setText(Tmp); break;
+		case 0: ui.cutStart0->setText(Tmp); break;
+		case 1: ui.cutStart1->setText(Tmp); break;
+		case 2: ui.cutStart2->setText(Tmp); break;
+		case 3: ui.cutStart3->setText(Tmp); break;
+		case 4: ui.cutStart4->setText(Tmp); break;
 	}
 	updateTotalTime();
 }
@@ -443,11 +443,11 @@ void PlaylistEdit::cue2CutEnd(int cut)
 	if (!item) return;
 	QString Tmp=item->text(2);
 	switch (cut) {
-	case 0: ui.cutEnd0->setText(Tmp); break;
-	case 1: ui.cutEnd1->setText(Tmp); break;
-	case 2: ui.cutEnd2->setText(Tmp); break;
-	case 3: ui.cutEnd3->setText(Tmp); break;
-	case 4: ui.cutEnd4->setText(Tmp); break;
+		case 0: ui.cutEnd0->setText(Tmp); break;
+		case 1: ui.cutEnd1->setText(Tmp); break;
+		case 2: ui.cutEnd2->setText(Tmp); break;
+		case 3: ui.cutEnd3->setText(Tmp); break;
+		case 4: ui.cutEnd4->setText(Tmp); break;
 	}
 	updateTotalTime();
 }
@@ -455,21 +455,21 @@ void PlaylistEdit::cue2CutEnd(int cut)
 void PlaylistEdit::cutDelete(int cut)
 {
 	switch (cut) {
-	case 0: ui.cutStart0->setText("0:00.000");
-		ui.cutEnd0->setText("0:00.000");
-		break;
-	case 1: ui.cutStart1->setText("0:00.000");
-		ui.cutEnd1->setText("0:00.000");
-		break;
-	case 2: ui.cutStart2->setText("0:00.000");
-		ui.cutEnd2->setText("0:00.000");
-		break;
-	case 3: ui.cutStart3->setText("0:00.000");
-		ui.cutEnd3->setText("0:00.000");
-		break;
-	case 4: ui.cutStart4->setText("0:00.000");
-		ui.cutEnd4->setText("0:00.000");
-		break;
+		case 0: ui.cutStart0->setText("0:00.000");
+			ui.cutEnd0->setText("0:00.000");
+			break;
+		case 1: ui.cutStart1->setText("0:00.000");
+			ui.cutEnd1->setText("0:00.000");
+			break;
+		case 2: ui.cutStart2->setText("0:00.000");
+			ui.cutEnd2->setText("0:00.000");
+			break;
+		case 3: ui.cutStart3->setText("0:00.000");
+			ui.cutEnd3->setText("0:00.000");
+			break;
+		case 4: ui.cutStart4->setText("0:00.000");
+			ui.cutEnd4->setText("0:00.000");
+			break;
 
 	}
 	updateTotalTime();

@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,34 +146,34 @@ int KeyWheel::getKeyFromClickPosition(const QPoint& p)
 
 	if (radius < 43) {
 		switch (slice) {
-		case 0: return 15;
-		case 1: return 17;
-		case 2: return 19;
-		case 3: return 21;
-		case 4: return 23;
-		case 5: return 1;
-		case 6: return 3;
-		case 7: return 5;
-		case 8: return 7;
-		case 9: return 9;
-		case 10: return 11;
-		case 11: return 13;
+			case 0: return 15;
+			case 1: return 17;
+			case 2: return 19;
+			case 3: return 21;
+			case 4: return 23;
+			case 5: return 1;
+			case 6: return 3;
+			case 7: return 5;
+			case 8: return 7;
+			case 9: return 9;
+			case 10: return 11;
+			case 11: return 13;
 
 		}
 	} else if (radius < 62) {
 		switch (slice) {
-		case 0: return 16;
-		case 1: return 18;
-		case 2: return 20;
-		case 3: return 22;
-		case 4: return 24;
-		case 5: return 2;
-		case 6: return 4;
-		case 7: return 6;
-		case 8: return 8;
-		case 9: return 10;
-		case 10: return 12;
-		case 11: return 14;
+			case 0: return 16;
+			case 1: return 18;
+			case 2: return 20;
+			case 3: return 22;
+			case 4: return 24;
+			case 5: return 2;
+			case 6: return 4;
+			case 7: return 6;
+			case 8: return 8;
+			case 9: return 10;
+			case 10: return 12;
+			case 11: return 14;
 
 		}
 	}
@@ -184,32 +184,32 @@ void KeyWheel::setCurrentKey(int key)
 {
 	this->key=key;
 	switch (key) {
-	case 0: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0000.png")); break;
-	case 1: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0012.png")); break;
-	case 2: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0011.png")); break;
-	case 3: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0014.png")); break;
-	case 4: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0013.png")); break;
-	case 5: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0016.png")); break;
-	case 6: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0015.png")); break;
-	case 7: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0018.png")); break;
-	case 8: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0017.png")); break;
-	case 9: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0020.png")); break;
-	case 10: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0019.png")); break;
-	case 11: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0022.png")); break;
-	case 12: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0021.png")); break;
-	case 13: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0024.png")); break;
-	case 14: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0023.png")); break;
-	case 15: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0002.png")); break;
-	case 16: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0001.png")); break;
-	case 17: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0004.png")); break;
-	case 18: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0003.png")); break;
-	case 19: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0006.png")); break;
-	case 20: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0005.png")); break;
-	case 21: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0008.png")); break;
-	case 22: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0007.png")); break;
-	case 23: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0010.png")); break;
-	case 24: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0009.png")); break;
-	default: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0000.png")); break;
+		case 0: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0000.png")); break;
+		case 1: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0012.png")); break;
+		case 2: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0011.png")); break;
+		case 3: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0014.png")); break;
+		case 4: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0013.png")); break;
+		case 5: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0016.png")); break;
+		case 6: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0015.png")); break;
+		case 7: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0018.png")); break;
+		case 8: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0017.png")); break;
+		case 9: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0020.png")); break;
+		case 10: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0019.png")); break;
+		case 11: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0022.png")); break;
+		case 12: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0021.png")); break;
+		case 13: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0024.png")); break;
+		case 14: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0023.png")); break;
+		case 15: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0002.png")); break;
+		case 16: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0001.png")); break;
+		case 17: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0004.png")); break;
+		case 18: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0003.png")); break;
+		case 19: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0006.png")); break;
+		case 20: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0005.png")); break;
+		case 21: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0008.png")); break;
+		case 22: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0007.png")); break;
+		case 23: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0010.png")); break;
+		case 24: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0009.png")); break;
+		default: this->setPixmap(QPixmap(":/openkey/resources/keywheel/key0000.png")); break;
 	}
 }
 

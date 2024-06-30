@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,12 +47,12 @@ void TraktorTagCue::print() const
 ppl7::String TraktorTagCue::typeName() const
 {
 	switch (type) {
-	case CUE: return "CUE";
-	case IN: return "IN";
-	case OUT: return "OUT";
-	case LOAD: return "LOAD";
-	case GRID: return "GRID";
-	case LOOP: return "LOOP";
+		case CUE: return "CUE";
+		case IN: return "IN";
+		case OUT: return "OUT";
+		case LOAD: return "LOAD";
+		case GRID: return "GRID";
+		case LOOP: return "LOOP";
 	}
 	return "";
 }

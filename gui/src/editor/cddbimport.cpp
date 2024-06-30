@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -273,38 +273,38 @@ void CDDBImport::MoveToNextWidget()
  */
 {
 	switch (position) {
-	case 1: ui.album->setFocus(); break;
-	case 2: ui.releaseDate->setFocus(); break;
-	case 3: ui.recordDate->setFocus(); break;
-	case 4: ui.genreId->setFocus(); break;
-	case 5: ui.genre->setFocus(); break;
-	case 6: ui.labelId->setFocus(); break;
-	case 7: ui.labelName->setFocus(); break;
-	case 8: ui.recordSourceId->setFocus(); break;
-	case 9: ui.recordSource->setFocus(); break;
-	case 10: ui.recordDeviceId->setFocus(); break;
-	case 11: ui.recordDevice->setFocus(); break;
-	case 12: ui.tags->setFocus(); break;
-	case 13: ui.okButton->setFocus(); break;
+		case 1: ui.album->setFocus(); break;
+		case 2: ui.releaseDate->setFocus(); break;
+		case 3: ui.recordDate->setFocus(); break;
+		case 4: ui.genreId->setFocus(); break;
+		case 5: ui.genre->setFocus(); break;
+		case 6: ui.labelId->setFocus(); break;
+		case 7: ui.labelName->setFocus(); break;
+		case 8: ui.recordSourceId->setFocus(); break;
+		case 9: ui.recordSource->setFocus(); break;
+		case 10: ui.recordDeviceId->setFocus(); break;
+		case 11: ui.recordDevice->setFocus(); break;
+		case 12: ui.tags->setFocus(); break;
+		case 13: ui.okButton->setFocus(); break;
 	};
 }
 
 QWidget* CDDBImport::GetWidgetFromPosition(int position)
 {
 	switch (position) {
-	case 1: return ui.artist;
-	case 2: return ui.album;
-	case 3: return ui.releaseDate;
-	case 4: return ui.recordDate;
-	case 5: return ui.genreId;
-	case 6: return ui.genre;
-	case 7: return ui.labelId;
-	case 8: return ui.labelName;
-	case 9: return ui.recordSourceId;
-	case 10: return ui.recordSource;
-	case 11: return ui.recordDeviceId;
-	case 12: return ui.recordDevice;
-	case 13: return ui.tags;
+		case 1: return ui.artist;
+		case 2: return ui.album;
+		case 3: return ui.releaseDate;
+		case 4: return ui.recordDate;
+		case 5: return ui.genreId;
+		case 6: return ui.genre;
+		case 7: return ui.labelId;
+		case 8: return ui.labelName;
+		case 9: return ui.recordSourceId;
+		case 10: return ui.recordSource;
+		case 11: return ui.recordDeviceId;
+		case 12: return ui.recordDevice;
+		case 13: return ui.tags;
 	}
 	return NULL;
 }

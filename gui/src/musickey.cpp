@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,64 +133,64 @@ int getMusicKeyId(const ppl7::String& name)
 ppl7::String keyNameSharps(int id)
 {
     switch (id) {
-    case 1: return "G#m";
-    case 2: return "B";
-    case 3: return "D#m";
-    case 4: return "F#";
-    case 5: return "A#m";
-    case 6: return "C#";
-    case 7: return "Fm";
-    case 8: return "G#";
-    case 9: return "Cm";
-    case 10: return "D#";
-    case 11: return "Gm";
-    case 12: return "A#";
-    case 13: return "Dm";
-    case 14: return "F";
-    case 15: return "Am";
-    case 16: return "C";
-    case 17: return "Em";
-    case 18: return "G";
-    case 19: return "Bm";
-    case 20: return "D";
-    case 21: return "F#m";
-    case 22: return "A";
-    case 23: return "C#m";
-    case 24: return "E";
-    case 25: return "none";
-    default: return "";
+        case 1: return "G#m";
+        case 2: return "B";
+        case 3: return "D#m";
+        case 4: return "F#";
+        case 5: return "A#m";
+        case 6: return "C#";
+        case 7: return "Fm";
+        case 8: return "G#";
+        case 9: return "Cm";
+        case 10: return "D#";
+        case 11: return "Gm";
+        case 12: return "A#";
+        case 13: return "Dm";
+        case 14: return "F";
+        case 15: return "Am";
+        case 16: return "C";
+        case 17: return "Em";
+        case 18: return "G";
+        case 19: return "Bm";
+        case 20: return "D";
+        case 21: return "F#m";
+        case 22: return "A";
+        case 23: return "C#m";
+        case 24: return "E";
+        case 25: return "none";
+        default: return "";
     }
 }
 
 ppl7::String keyNameOpenKey(int id)
 {
     switch (id) {
-    case 1: return " 6m";	// G#m
-    case 2: return " 6d";	// B
-    case 3: return " 7m";	// D#m
-    case 4: return " 7d";	// F#
-    case 5: return " 8m";	// A#m
-    case 6: return " 8d";	// C#
-    case 7: return " 9m";	// Fm
-    case 8: return " 9d";	// G#
-    case 9: return "10m";	// Cm
-    case 10: return "10d";	// D#
-    case 11: return "11m";	// Gm
-    case 12: return "11d";	// A#
-    case 13: return "12m";	// Dm
-    case 14: return "12d";	// F
-    case 15: return " 1m";	// Am
-    case 16: return " 1d";	// C
-    case 17: return " 2m";	// Em
-    case 18: return " 2d";	// G
-    case 19: return " 3m";	// Bm
-    case 20: return " 3d";	// D
-    case 21: return " 4m";	// F#m
-    case 22: return " 4d";	// A
-    case 23: return " 5m";	// C#m
-    case 24: return " 5d";	// E
-    case 25: return "none";	// E
-    default: return "";		// ""
+        case 1: return " 6m";	// G#m
+        case 2: return " 6d";	// B
+        case 3: return " 7m";	// D#m
+        case 4: return " 7d";	// F#
+        case 5: return " 8m";	// A#m
+        case 6: return " 8d";	// C#
+        case 7: return " 9m";	// Fm
+        case 8: return " 9d";	// G#
+        case 9: return "10m";	// Cm
+        case 10: return "10d";	// D#
+        case 11: return "11m";	// Gm
+        case 12: return "11d";	// A#
+        case 13: return "12m";	// Dm
+        case 14: return "12d";	// F
+        case 15: return " 1m";	// Am
+        case 16: return " 1d";	// C
+        case 17: return " 2m";	// Em
+        case 18: return " 2d";	// G
+        case 19: return " 3m";	// Bm
+        case 20: return " 3d";	// D
+        case 21: return " 4m";	// F#m
+        case 22: return " 4d";	// A
+        case 23: return " 5m";	// C#m
+        case 24: return " 5d";	// E
+        case 25: return "none";	// E
+        default: return "";		// ""
     }
 }
 
@@ -231,32 +231,32 @@ void MusicKey::setKey(int wm_keyid)
     wmid=wm_keyid;
     type=unknown;
     switch (wm_keyid) {
-    case 1: ok=6; type=minor; break;	// G#m
-    case 2: ok=6; type=major; break;    // B
-    case 3: ok=7; type=minor; break; 	// D#m
-    case 4: ok=7; type=major; break;	// F#
-    case 5: ok=8; type=minor; break;	// A#m
-    case 6: ok=8; type=major; break;	// C#
-    case 7: ok=9; type=minor; break;	// Fm
-    case 8: ok=9; type=major; break;    // G#
-    case 9: ok=10; type=minor; break;	// Cm
-    case 10: ok=10; type=major; break;	// D#
-    case 11: ok=11; type=minor; break;	// Gm
-    case 12: ok=11; type=major; break;  // A#
-    case 13: ok=12; type=minor; break;	// Dm
-    case 14: ok=12; type=major; break;	// F
-    case 15: ok=1; type=minor; break;	// Am
-    case 16: ok=1; type=major; break; 	// C
-    case 17: ok=2; type=minor; break;	// Em
-    case 18: ok=2; type=major; break;   // G
-    case 19: ok=3; type=minor; break;	// Bm
-    case 20: ok=3; type=major; break;	// D
-    case 21: ok=4; type=minor; break;	// F#m
-    case 22: ok=4; type=major; break;	// A
-    case 23: ok=5; type=minor; break;	// C#m
-    case 24: ok=5; type=major; break;	// E
-    case 25: ok=0; type=unknown; break;	// NONE
-    default: ok=0; type=unknown; break; // ""
+        case 1: ok=6; type=minor; break;	// G#m
+        case 2: ok=6; type=major; break;    // B
+        case 3: ok=7; type=minor; break; 	// D#m
+        case 4: ok=7; type=major; break;	// F#
+        case 5: ok=8; type=minor; break;	// A#m
+        case 6: ok=8; type=major; break;	// C#
+        case 7: ok=9; type=minor; break;	// Fm
+        case 8: ok=9; type=major; break;    // G#
+        case 9: ok=10; type=minor; break;	// Cm
+        case 10: ok=10; type=major; break;	// D#
+        case 11: ok=11; type=minor; break;	// Gm
+        case 12: ok=11; type=major; break;  // A#
+        case 13: ok=12; type=minor; break;	// Dm
+        case 14: ok=12; type=major; break;	// F
+        case 15: ok=1; type=minor; break;	// Am
+        case 16: ok=1; type=major; break; 	// C
+        case 17: ok=2; type=minor; break;	// Em
+        case 18: ok=2; type=major; break;   // G
+        case 19: ok=3; type=minor; break;	// Bm
+        case 20: ok=3; type=major; break;	// D
+        case 21: ok=4; type=minor; break;	// F#m
+        case 22: ok=4; type=major; break;	// A
+        case 23: ok=5; type=minor; break;	// C#m
+        case 24: ok=5; type=major; break;	// E
+        case 25: ok=0; type=unknown; break;	// NONE
+        default: ok=0; type=unknown; break; // ""
     }
 }
 
@@ -267,18 +267,18 @@ void MusicKey::setKey(int openkeyId, KeyType type)
     this->type=type;
     if (openkeyId < 1 || openkeyId>12 || type == unknown) return;
     switch (openkeyId) {
-    case 1: wmid=15; break;
-    case 2: wmid=17; break;
-    case 3: wmid=19; break;
-    case 4: wmid=21; break;
-    case 5: wmid=23; break;
-    case 6: wmid=1; break;
-    case 7: wmid=3; break;
-    case 8: wmid=5; break;
-    case 9: wmid=7; break;
-    case 10: wmid=9; break;
-    case 11: wmid=11; break;
-    case 12: wmid=13; break;
+        case 1: wmid=15; break;
+        case 2: wmid=17; break;
+        case 3: wmid=19; break;
+        case 4: wmid=21; break;
+        case 5: wmid=23; break;
+        case 6: wmid=1; break;
+        case 7: wmid=3; break;
+        case 8: wmid=5; break;
+        case 9: wmid=7; break;
+        case 10: wmid=9; break;
+        case 11: wmid=11; break;
+        case 12: wmid=13; break;
     }
     if (type == major) wmid++;
 }

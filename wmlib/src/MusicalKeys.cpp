@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,96 +26,96 @@ namespace winmusik {
 static inline ppl7::String keyNameSharps(int id)
 {
 	switch (id) {
-	case 1: return "G♯m";
-	case 2: return "B";
-	case 3: return "D♯m";
-	case 4: return "F♯";
-	case 5: return "A♯m";
-	case 6: return "C♯";
-	case 7: return "Fm";
-	case 8: return "G♯";
-	case 9: return "Cm";
-	case 10: return "D♯";
-	case 11: return "Gm";
-	case 12: return "A♯";
-	case 13: return "Dm";
-	case 14: return "F";
-	case 15: return "Am";
-	case 16: return "C";
-	case 17: return "Em";
-	case 18: return "G";
-	case 19: return "Bm";
-	case 20: return "D";
-	case 21: return "F♯m";
-	case 22: return "A";
-	case 23: return "C♯m";
-	case 24: return "E";
-	case 25: return "none";
-	default: return "";
+		case 1: return "G♯m";
+		case 2: return "B";
+		case 3: return "D♯m";
+		case 4: return "F♯";
+		case 5: return "A♯m";
+		case 6: return "C♯";
+		case 7: return "Fm";
+		case 8: return "G♯";
+		case 9: return "Cm";
+		case 10: return "D♯";
+		case 11: return "Gm";
+		case 12: return "A♯";
+		case 13: return "Dm";
+		case 14: return "F";
+		case 15: return "Am";
+		case 16: return "C";
+		case 17: return "Em";
+		case 18: return "G";
+		case 19: return "Bm";
+		case 20: return "D";
+		case 21: return "F♯m";
+		case 22: return "A";
+		case 23: return "C♯m";
+		case 24: return "E";
+		case 25: return "none";
+		default: return "";
 	}
 }
 
 static inline ppl7::String keyNameFlats(int id)
 {
 	switch (id) {
-	case 1: return "A♭";
-	case 2: return "B";
-	case 3: return "E♭";
-	case 4: return "G♭";
-	case 5: return "B♭";
-	case 6: return "D♭";
-	case 7: return "Fm";
-	case 8: return "A♭";
-	case 9: return "Cm";
-	case 10: return "E♭";
-	case 11: return "Gm";
-	case 12: return "B♭";
-	case 13: return "Dm";
-	case 14: return "F";
-	case 15: return "Am";
-	case 16: return "C";
-	case 17: return "Em";
-	case 18: return "G";
-	case 19: return "Bm";
-	case 20: return "D";
-	case 21: return "G♭";
-	case 22: return "A";
-	case 23: return "D♭";
-	case 24: return "E";
-	case 25: return "none";
-	default: return "";
+		case 1: return "A♭";
+		case 2: return "B";
+		case 3: return "E♭";
+		case 4: return "G♭";
+		case 5: return "B♭";
+		case 6: return "D♭";
+		case 7: return "Fm";
+		case 8: return "A♭";
+		case 9: return "Cm";
+		case 10: return "E♭";
+		case 11: return "Gm";
+		case 12: return "B♭";
+		case 13: return "Dm";
+		case 14: return "F";
+		case 15: return "Am";
+		case 16: return "C";
+		case 17: return "Em";
+		case 18: return "G";
+		case 19: return "Bm";
+		case 20: return "D";
+		case 21: return "G♭";
+		case 22: return "A";
+		case 23: return "D♭";
+		case 24: return "E";
+		case 25: return "none";
+		default: return "";
 	}
 }
 
 static inline ppl7::String keyNameOpenKey(int id)
 {
 	switch (id) {
-	case 1: return " 6m";	// G#m
-	case 2: return " 6d";	// B
-	case 3: return " 7m";	// D#m
-	case 4: return " 7d";	// F#
-	case 5: return " 8m";	// A#m
-	case 6: return " 8d";	// C#
-	case 7: return " 9m";	// Fm
-	case 8: return " 9d";	// G#
-	case 9: return "10m";	// Cm
-	case 10: return "10d";	// D#
-	case 11: return "11m";	// Gm
-	case 12: return "11d";	// A#
-	case 13: return "12m";	// Dm
-	case 14: return "12d";	// F
-	case 15: return " 1m";	// Am
-	case 16: return " 1d";	// C
-	case 17: return " 2m";	// Em
-	case 18: return " 2d";	// G
-	case 19: return " 3m";	// Bm
-	case 20: return " 3d";	// D
-	case 21: return " 4m";	// F#m
-	case 22: return " 4d";	// A
-	case 23: return " 5m";	// C#m
-	case 24: return " 5d";	// E
-	case 25: return "none";	// E
-	default: return "";		// ""
+		case 1: return " 6m";	// G#m
+		case 2: return " 6d";	// B
+		case 3: return " 7m";	// D#m
+		case 4: return " 7d";	// F#
+		case 5: return " 8m";	// A#m
+		case 6: return " 8d";	// C#
+		case 7: return " 9m";	// Fm
+		case 8: return " 9d";	// G#
+		case 9: return "10m";	// Cm
+		case 10: return "10d";	// D#
+		case 11: return "11m";	// Gm
+		case 12: return "11d";	// A#
+		case 13: return "12m";	// Dm
+		case 14: return "12d";	// F
+		case 15: return " 1m";	// Am
+		case 16: return " 1d";	// C
+		case 17: return " 2m";	// Em
+		case 18: return " 2d";	// G
+		case 19: return " 3m";	// Bm
+		case 20: return " 3d";	// D
+		case 21: return " 4m";	// F#m
+		case 22: return " 4d";	// A
+		case 23: return " 5m";	// C#m
+		case 24: return " 5d";	// E
+		case 25: return "none";	// E
+		default: return "";		// ""
 	}
 }
 

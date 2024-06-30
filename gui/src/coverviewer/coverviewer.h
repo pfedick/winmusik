@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,17 +29,17 @@ class CoverViewer : public QWidget
     Q_OBJECT
 
 public:
-    CoverViewer(QWidget *parent = 0, CWmClient *wm=NULL);
+    CoverViewer(QWidget* parent = 0, CWmClient* wm=NULL);
     ~CoverViewer();
 
-    void setCover(const QPixmap &pix);
+    void setCover(const QPixmap& pix);
 
 
 private:
-    CWmClient *wm;
+    CWmClient* wm;
     Ui::CoverViewerClass ui;
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent* event);
 };
 
 #endif // COVERVIEWER_H

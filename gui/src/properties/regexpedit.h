@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ class RegExpEdit : public QDialog
     Q_OBJECT
 
 public:
-    RegExpEdit(QWidget *parent = 0);
+    RegExpEdit(QWidget* parent = 0);
     ~RegExpEdit();
-    void setPattern(const RegExpPattern &pat);
+    void setPattern(const RegExpPattern& pat);
     RegExpPattern getPattern() const;
 
 private:
@@ -51,18 +51,18 @@ private slots:
     void on_copyPlaintext_clicked();
     void on_copyHTML_clicked();
 
-    void on_capture_artist_valueChanged() {on_teststring_textChanged();};
-    void on_capture_title_valueChanged() {on_teststring_textChanged();};
-    void on_capture_version_valueChanged() {on_teststring_textChanged();};
-    void on_capture_genre_valueChanged() {on_teststring_textChanged();};
-    void on_capture_label_valueChanged() {on_teststring_textChanged();};
-    void on_capture_bpm_valueChanged() {on_teststring_textChanged();};
-    void on_capture_album_valueChanged() {on_teststring_textChanged();};
-    void on_capture_hours_valueChanged() {on_teststring_textChanged();};
-    void on_capture_minutes_valueChanged() {on_teststring_textChanged();};
-    void on_capture_seconds_valueChanged() {on_teststring_textChanged();};
-    void on_capture_releasedate_valueChanged() {on_teststring_textChanged();};
-    void on_isHtmlCheckBox_toggled() {on_teststring_textChanged();};
+    void on_capture_artist_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_title_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_version_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_genre_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_label_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_bpm_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_album_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_hours_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_minutes_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_seconds_valueChanged() { on_teststring_textChanged(); };
+    void on_capture_releasedate_valueChanged() { on_teststring_textChanged(); };
+    void on_isHtmlCheckBox_toggled() { on_teststring_textChanged(); };
 
 
 };

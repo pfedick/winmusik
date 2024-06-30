@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,36 +28,36 @@ class SearchlistItem;
 
 class SearchlistTracks : public QTreeWidget
 {
-		Q_OBJECT
-	private:
-		//void mouseMoveEvent ( QMouseEvent * event );
-		//void mousePressEvent ( QMouseEvent * event );
-		//void mouseReleaseEvent ( QMouseEvent * event );
-		QMimeData *mimeData(const QList<QTreeWidgetItem *> items) const;
-		void dragEnterEvent ( QDragEnterEvent * event);
-		void dragMoveEvent(QDragMoveEvent *e);
-		//bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
-		void dropEvent ( QDropEvent * event );
-		void deleteSourceItems(QDropEvent * event);
+	Q_OBJECT
+private:
+	//void mouseMoveEvent ( QMouseEvent * event );
+	//void mousePressEvent ( QMouseEvent * event );
+	//void mouseReleaseEvent ( QMouseEvent * event );
+	QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+	void dragEnterEvent(QDragEnterEvent* event);
+	void dragMoveEvent(QDragMoveEvent* e);
+	//bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
+	void dropEvent(QDropEvent* event);
+	void deleteSourceItems(QDropEvent* event);
 
-		QTreeWidgetItem *lastmoveitem;
+	QTreeWidgetItem* lastmoveitem;
 
-	public:
-		SearchlistTracks(QWidget * parent = 0);
-		~SearchlistTracks();
-		void deleteSelectedTracks();
+public:
+	SearchlistTracks(QWidget* parent = 0);
+	~SearchlistTracks();
+	void deleteSelectedTracks();
 
 
-	signals:
-		void itemDropped(SearchlistItem *item);
-		void changed();
+signals:
+	void itemDropped(SearchlistItem* item);
+	void changed();
 
-		/*
-		void unselectItems();
-		void deleteSelectedItems();
-		void deleteItems(QList<QTreeWidgetItem *>items);
-		void selectItems(QList<QTreeWidgetItem *>items);
-		*/
+	/*
+	void unselectItems();
+	void deleteSelectedItems();
+	void deleteItems(QList<QTreeWidgetItem *>items);
+	void selectItems(QList<QTreeWidgetItem *>items);
+	*/
 };
 
 

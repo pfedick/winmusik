@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ private:
 	};
 	ppl7::Mutex Mutex;
 	std::list<WorkItem> Queue;
-	ppl7::Logger *logger;
+	ppl7::Logger* logger;
 	int PaddingSize;
 	int RetryIntervall;
 	void UpdateNow(CID3TagSaver::WorkItem& item);
@@ -52,7 +52,7 @@ private:
 public:
 	CID3TagSaver();
 	~CID3TagSaver();
-	void SetLogger(ppl7::Logger *logger);
+	void SetLogger(ppl7::Logger* logger);
 
 	void SetPaddingSize(int bytes);
 	void SetRetryIntervall(int seconds);

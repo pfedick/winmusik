@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include "editstring.h"
 #include "ui_editstring.h"
 
-EditString::EditString(QWidget *parent) :
+EditString::EditString(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::EditString)
 {
@@ -32,12 +32,12 @@ EditString::~EditString()
     delete ui;
 }
 
-void EditString::setTitle(const QString &title)
+void EditString::setTitle(const QString& title)
 {
     this->setWindowTitle(title);
 }
 
-void EditString::setString(const QString &str)
+void EditString::setString(const QString& str)
 {
     ui->lineEdit->setText(str);
 }

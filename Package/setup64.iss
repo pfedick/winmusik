@@ -1,7 +1,7 @@
 ;/*
 ; * This file is part of WinMusik 3.0 by Patrick Fedick
 ; *
-; * Copyright (c) 2022 Patrick Fedick
+; * Copyright (c) 2024, Patrick Fedick
 ; *
 ; * This program is free software: you can redistribute it and/or modify
 ; * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 AppId={{611E500A-4D60-400C-9829-0114ADE682D5}}
 AppName=WinMusik
 AppVerName=WinMusik 3.7.0
-AppCopyright=Copyright (C) 2022 Patrick Fedick
+AppCopyright=Copyright (c) 2024, Patrick Fedick
 AppVersion=3.7.0.0
 VersionInfoVersion=3.7.0
 AppPublisher=Patrick F.-Productions

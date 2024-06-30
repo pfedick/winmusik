@@ -1,7 +1,7 @@
 /*
  * This file is part of WinMusik 3 by Patrick Fedick
  *
- * Copyright (c) 2022 Patrick Fedick
+ * Copyright (c) 2024, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -247,43 +247,43 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 
 	QString WmTitle=wm->GetWmVersion() + " - ";
 	switch (typ) {
-	case 1:	// Cassette
-		setWindowTitle(WmTitle + tr("Edit Music Cassette"));
-		break;
-	case 2:	// CD
-		setWindowTitle(WmTitle + tr("Edit Audio CD"));
-		break;
-	case 3:	// Data CD
-		setWindowTitle(WmTitle + tr("Edit Data CD"));
-		break;
-	case 4:	// Vinyl Record
-		setWindowTitle(WmTitle + tr("Edit Vinyl Record"));
-		break;
-	case 5:	// VHS
-		setWindowTitle(WmTitle + tr("Edit Video Tape"));
-		break;
-	case 6:	// Other
-		setWindowTitle(WmTitle + tr("Edit Other Media Type"));
-		break;
-	case 7:	// MP3
-		setWindowTitle(WmTitle + tr("Edit MP3 CD"));
-		break;
-	case 8:	// Tape
-		setWindowTitle(WmTitle + tr("Edit Music Tape"));
-		break;
-	case 9:	// DVD
-		setWindowTitle(WmTitle + tr("Edit Audio DVD"));
-		break;
+		case 1:	// Cassette
+			setWindowTitle(WmTitle + tr("Edit Music Cassette"));
+			break;
+		case 2:	// CD
+			setWindowTitle(WmTitle + tr("Edit Audio CD"));
+			break;
+		case 3:	// Data CD
+			setWindowTitle(WmTitle + tr("Edit Data CD"));
+			break;
+		case 4:	// Vinyl Record
+			setWindowTitle(WmTitle + tr("Edit Vinyl Record"));
+			break;
+		case 5:	// VHS
+			setWindowTitle(WmTitle + tr("Edit Video Tape"));
+			break;
+		case 6:	// Other
+			setWindowTitle(WmTitle + tr("Edit Other Media Type"));
+			break;
+		case 7:	// MP3
+			setWindowTitle(WmTitle + tr("Edit MP3 CD"));
+			break;
+		case 8:	// Tape
+			setWindowTitle(WmTitle + tr("Edit Music Tape"));
+			break;
+		case 9:	// DVD
+			setWindowTitle(WmTitle + tr("Edit Audio DVD"));
+			break;
 	}
 
 	// MusicKey
 	musicKeyDisplay=wm->conf.musicKeyDisplay;
 	switch (musicKeyDisplay) {
-	case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
-	case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
-	case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
-	case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
-	default: ui.displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeMusicalSharps: ui.displayMusicKey->setCurrentIndex(0); break;
+		case musicKeyTypeMusicalFlats: ui.displayMusicKey->setCurrentIndex(1); break;
+		case musicKeyTypeOpenKey: ui.displayMusicKey->setCurrentIndex(2); break;
+		case musicKeyTypeCustom: ui.displayMusicKey->setCurrentIndex(3); break;
+		default: ui.displayMusicKey->setCurrentIndex(1); break;
 	}
 	ui.displayMusicKey->setItemText(3, wm->conf.customMusicKeyName);
 
@@ -713,55 +713,55 @@ void Edit::UpdateFkeys()
 	t[13]=tr("dupes?");
 
 	switch (position) {
-	case 1:		// Device Index
-		ui.fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-1000.png", t[0]);
-		ui.fkeys->setFkey(2, ":/fkeys/resources/fkeys/f-key-1002.png", t[1]);
-		ui.fkeys->setFkey(4, ":/fkeys/resources/fkeys/f-key-2004.png", tr("list devices"));
-		break;
-	case 2:		// Device Page
-		break;
-	case 3:		// Device Track
-		if (wm->conf.DevicePath[DeviceType].notEmpty() == true) {
-			ui.fkeys->setFkey(7, ":/fkeys/resources/fkeys/f-key-2007.png", tr("synchronize Tag"));
-			ui.fkeys->setFkey(8, ":/fkeys/resources/fkeys/f-key-2008.png", tr("import cover"));
-			ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-2009.png", tr("save all ID3"));
-			ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-3006.png", tr("mass import"));
-		}
-		if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
-			ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-4005.png", tr("cddb import"));
-		}
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-2003.png", tr("renumber"));
-		break;
-	case 4:		// Interpret
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-1005.png", t[11]);
-		break;
-	case 5:		// Titel
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 6:		// VersionId
-		break;
-	case 7:		// Version
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 9:		// Genre
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 14:		// Album
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 16:		// Label
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 18:		// Aufnahmequelle
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 20:		// Aufnahmegerät
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
-	case 21:		// Bemerkung
-		ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
-		break;
+		case 1:		// Device Index
+			ui.fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-1000.png", t[0]);
+			ui.fkeys->setFkey(2, ":/fkeys/resources/fkeys/f-key-1002.png", t[1]);
+			ui.fkeys->setFkey(4, ":/fkeys/resources/fkeys/f-key-2004.png", tr("list devices"));
+			break;
+		case 2:		// Device Page
+			break;
+		case 3:		// Device Track
+			if (wm->conf.DevicePath[DeviceType].notEmpty() == true) {
+				ui.fkeys->setFkey(7, ":/fkeys/resources/fkeys/f-key-2007.png", tr("synchronize Tag"));
+				ui.fkeys->setFkey(8, ":/fkeys/resources/fkeys/f-key-2008.png", tr("import cover"));
+				ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-2009.png", tr("save all ID3"));
+				ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-3006.png", tr("mass import"));
+			}
+			if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
+				ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-4005.png", tr("cddb import"));
+			}
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-2003.png", tr("renumber"));
+			break;
+		case 4:		// Interpret
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-1005.png", t[11]);
+			break;
+		case 5:		// Titel
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 6:		// VersionId
+			break;
+		case 7:		// Version
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 9:		// Genre
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 14:		// Album
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 16:		// Label
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 18:		// Aufnahmequelle
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 20:		// Aufnahmegerät
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
+		case 21:		// Bemerkung
+			ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-1003.png", t[9]);
+			break;
 	}
 	if (position > 1) {
 		ui.fkeys->setFkey(0, ":/fkeys/resources/fkeys/f-key-2000.png", t[2]);
@@ -801,74 +801,74 @@ void Edit::MoveToNextWidget()
  */
 {
 	switch (position) {
-	case 1: ui.page->setFocus(); break;
-	case 2: ui.track->setFocus(); break;
-	case 3: ui.artist->setFocus(); break;
-	case 4: ui.title->setFocus(); break;
-	case 5: ui.versionId->setFocus(); break;
-	case 6: ui.version->setFocus(); break;
-	case 7: ui.genreId->setFocus(); break;
-	case 8: ui.genre->setFocus(); break;
-	case 9: ui.length->setFocus(); break;
-	case 10: ui.bpm->setFocus(); break;
-	case 11: ui.musickey->setFocus(); break;
-	case 30: ui.energyLevel->setFocus(); break;
-	case 31: ui.bitrate->setFocus(); break;
-	case 29: ui.releaseDate->setFocus(); break;
-	case 12: ui.recordDate->setFocus(); break;
-	case 13: ui.album->setFocus(); break;
-	case 14: ui.labelId->setFocus(); break;
-	case 15: ui.labelName->setFocus(); break;
-	case 16: ui.recordSourceId->setFocus(); break;
-	case 17: ui.recordSource->setFocus(); break;
-	case 18: ui.recordDeviceId->setFocus(); break;
-	case 19: ui.recordDevice->setFocus(); break;
-	case 20: ui.remarks->setFocus(); break;
-	case 21: ui.tags->setFocus(); break;
-	case 22: ui.artist->setFocus(); break;
-	case 23: ui.realTitle->setFocus(); break;
-	case 24: ui.interrupted->setFocus(); break;
-	case 25: ui.channels->setFocus(); break;
-	case 26: ui.quality->setFocus(); break;
-	case 27: ui.rating->setFocus(); break;
-	case 28: ui.artist->setFocus(); break;
+		case 1: ui.page->setFocus(); break;
+		case 2: ui.track->setFocus(); break;
+		case 3: ui.artist->setFocus(); break;
+		case 4: ui.title->setFocus(); break;
+		case 5: ui.versionId->setFocus(); break;
+		case 6: ui.version->setFocus(); break;
+		case 7: ui.genreId->setFocus(); break;
+		case 8: ui.genre->setFocus(); break;
+		case 9: ui.length->setFocus(); break;
+		case 10: ui.bpm->setFocus(); break;
+		case 11: ui.musickey->setFocus(); break;
+		case 30: ui.energyLevel->setFocus(); break;
+		case 31: ui.bitrate->setFocus(); break;
+		case 29: ui.releaseDate->setFocus(); break;
+		case 12: ui.recordDate->setFocus(); break;
+		case 13: ui.album->setFocus(); break;
+		case 14: ui.labelId->setFocus(); break;
+		case 15: ui.labelName->setFocus(); break;
+		case 16: ui.recordSourceId->setFocus(); break;
+		case 17: ui.recordSource->setFocus(); break;
+		case 18: ui.recordDeviceId->setFocus(); break;
+		case 19: ui.recordDevice->setFocus(); break;
+		case 20: ui.remarks->setFocus(); break;
+		case 21: ui.tags->setFocus(); break;
+		case 22: ui.artist->setFocus(); break;
+		case 23: ui.realTitle->setFocus(); break;
+		case 24: ui.interrupted->setFocus(); break;
+		case 25: ui.channels->setFocus(); break;
+		case 26: ui.quality->setFocus(); break;
+		case 27: ui.rating->setFocus(); break;
+		case 28: ui.artist->setFocus(); break;
 	};
 }
 
 QWidget* Edit::GetWidgetFromPosition(int position)
 {
 	switch (position) {
-	case 1: return ui.index;
-	case 2: return ui.page;
-	case 3: return ui.track;
-	case 4: return ui.artist;
-	case 5: return ui.title;
-	case 6: return ui.versionId;
-	case 7: return ui.version;
-	case 8: return ui.genreId;
-	case 9: return ui.genre;
-	case 10: return ui.length;
-	case 11: return ui.bpm;
-	case 12: return ui.releaseDate;
-	case 13: return ui.recordDate;
-	case 14: return ui.album;
-	case 15: return ui.labelId;
-	case 16: return ui.labelName;
-	case 17: return ui.recordSourceId;
-	case 18: return ui.recordSource;
-	case 19: return ui.recordDeviceId;
-	case 20: return ui.recordDevice;
-	case 21: return ui.remarks;
-	case 22: return ui.tags;
-	case 23: return ui.complete;
-	case 24: return ui.realTitle;
-	case 25: return ui.interrupted;
-	case 26: return ui.channels;
-	case 27: return ui.quality;
-	case 28: return ui.rating;
-	case 29: return ui.bitrate;
-	case 30: return ui.musickey;
-	case 31: return ui.energyLevel;
+		case 1: return ui.index;
+		case 2: return ui.page;
+		case 3: return ui.track;
+		case 4: return ui.artist;
+		case 5: return ui.title;
+		case 6: return ui.versionId;
+		case 7: return ui.version;
+		case 8: return ui.genreId;
+		case 9: return ui.genre;
+		case 10: return ui.length;
+		case 11: return ui.bpm;
+		case 12: return ui.releaseDate;
+		case 13: return ui.recordDate;
+		case 14: return ui.album;
+		case 15: return ui.labelId;
+		case 16: return ui.labelName;
+		case 17: return ui.recordSourceId;
+		case 18: return ui.recordSource;
+		case 19: return ui.recordDeviceId;
+		case 20: return ui.recordDevice;
+		case 21: return ui.remarks;
+		case 22: return ui.tags;
+		case 23: return ui.complete;
+		case 24: return ui.realTitle;
+		case 25: return ui.interrupted;
+		case 26: return ui.channels;
+		case 27: return ui.quality;
+		case 28: return ui.rating;
+		case 29: return ui.bitrate;
+		case 30: return ui.musickey;
+		case 31: return ui.energyLevel;
 	}
 	return NULL;
 }
@@ -1854,32 +1854,32 @@ bool Edit::on_f10_WritePlaylist()
 void Edit::on_fkeys_clicked(int num)
 {
 	switch (num) {
-	case 0: on_esc_clicked();
-		break;
-	case 1: on_f1_clicked();
-		break;
-	case 2: on_f2_clicked();
-		break;
-	case 3: on_f3_clicked();
-		break;
-	case 4: on_f4_clicked();
-		break;
-	case 5: on_f5_clicked();
-		break;
-	case 6: on_f6_clicked();
-		break;
-	case 7: on_f7_clicked();
-		break;
-	case 8: on_f8_clicked();
-		break;
-	case 9: on_f9_clicked();
-		break;
-	case 10: on_f10_clicked();
-		break;
-	case 11: on_f11_clicked();
-		break;
-	case 12: on_f12_clicked();
-		break;
+		case 0: on_esc_clicked();
+			break;
+		case 1: on_f1_clicked();
+			break;
+		case 2: on_f2_clicked();
+			break;
+		case 3: on_f3_clicked();
+			break;
+		case 4: on_f4_clicked();
+			break;
+		case 5: on_f5_clicked();
+			break;
+		case 6: on_f6_clicked();
+			break;
+		case 7: on_f7_clicked();
+			break;
+		case 8: on_f8_clicked();
+			break;
+		case 9: on_f9_clicked();
+			break;
+		case 10: on_f10_clicked();
+			break;
+		case 11: on_f11_clicked();
+			break;
+		case 12: on_f12_clicked();
+			break;
 	}
 }
 
@@ -2151,27 +2151,27 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 					}
 				}
 				switch (r) {
-				case 0: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-0.png"));
-					item->setText(TRACKLIST_RATING_ROW, "0");
-					break;
-				case 1: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-1.png"));
-					item->setText(TRACKLIST_RATING_ROW, "1");
-					break;
-				case 2: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-2.png"));
-					item->setText(TRACKLIST_RATING_ROW, "2");
-					break;
-				case 3: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-3.png"));
-					item->setText(TRACKLIST_RATING_ROW, "3");
-					break;
-				case 4: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-4.png"));
-					item->setText(TRACKLIST_RATING_ROW, "4");
-					break;
-				case 5: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-5.png"));
-					item->setText(TRACKLIST_RATING_ROW, "5");
-					break;
-				case 6: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-6.png"));
-					item->setText(TRACKLIST_RATING_ROW, "6");
-					break;
+					case 0: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-0.png"));
+						item->setText(TRACKLIST_RATING_ROW, "0");
+						break;
+					case 1: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-1.png"));
+						item->setText(TRACKLIST_RATING_ROW, "1");
+						break;
+					case 2: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-2.png"));
+						item->setText(TRACKLIST_RATING_ROW, "2");
+						break;
+					case 3: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-3.png"));
+						item->setText(TRACKLIST_RATING_ROW, "3");
+						break;
+					case 4: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-4.png"));
+						item->setText(TRACKLIST_RATING_ROW, "4");
+						break;
+					case 5: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-5.png"));
+						item->setText(TRACKLIST_RATING_ROW, "5");
+						break;
+					case 6: item->setIcon(TRACKLIST_RATING_ROW, QIcon(":/bewertung/resources/sterne64x16-6.png"));
+						item->setText(TRACKLIST_RATING_ROW, "6");
+						break;
 				}
 			}
 			//printf ("Rating: %i, %i\n",ratePos.x(),x);
@@ -2207,16 +2207,16 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
 							it=harmonics.find(title->Key);
 							if (it != harmonics.end()) {
 								switch (it->second) {
-								case harmonicSemitoneUp:
-								case harmonicTwoSemitoneUp:
-									item->setBackground(TRACKLIST_KEY_ROW, colorscheme.boostKey);
-									break;
-								case harmonicAvbBoost:
-									item->setBackground(TRACKLIST_KEY_ROW, colorscheme.boostKey2);
-									break;
-								default:
-									item->setBackground(TRACKLIST_KEY_ROW, colorscheme.relatedKey);
-									break;
+									case harmonicSemitoneUp:
+									case harmonicTwoSemitoneUp:
+										item->setBackground(TRACKLIST_KEY_ROW, colorscheme.boostKey);
+										break;
+									case harmonicAvbBoost:
+										item->setBackground(TRACKLIST_KEY_ROW, colorscheme.boostKey2);
+										break;
+									default:
+										item->setBackground(TRACKLIST_KEY_ROW, colorscheme.relatedKey);
+										break;
 								}
 							}
 						}
@@ -2751,11 +2751,11 @@ void Edit::on_deviceIcon_clicked()
 void Edit::on_displayMusicKey_currentIndexChanged(int)
 {
 	switch (ui.displayMusicKey->currentIndex()) {
-	case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
-	case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
-	case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
-	case 3: musicKeyDisplay=musicKeyTypeCustom; break;
-	default: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 0: musicKeyDisplay=musicKeyTypeMusicalSharps; break;
+		case 1: musicKeyDisplay=musicKeyTypeMusicalFlats; break;
+		case 2: musicKeyDisplay=musicKeyTypeOpenKey; break;
+		case 3: musicKeyDisplay=musicKeyTypeCustom; break;
+		default: musicKeyDisplay=musicKeyTypeOpenKey; break;
 	}
 	UpdateTrackListing();
 	FixFocus();
