@@ -967,7 +967,7 @@ void Edit::handleDropEvent(QDropEvent* event)
 		OpenTrack(myDeviceId, 0, myTrack);
 		QApplication::processEvents();
 		ui.artist->setFocus();
-		QApplication::setActiveWindow(this);
+		this->activateWindow();
 		QApplication::processEvents();
 		position=4;
 		FixFocus();
@@ -1106,7 +1106,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
 
 	QApplication::processEvents();
 	ui.artist->setFocus();
-	QApplication::setActiveWindow(this);
+	this->activateWindow();
 	QApplication::processEvents();
 	position=4;
 	FixFocus();
@@ -1771,7 +1771,7 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 			CopyFromTrackInfo(tinfo);
 			searchWindow=wm->OpenOrReuseSearch(searchWindow, tinfo.Ti.Artist, tinfo.Ti.Title);
 			qApp->processEvents();
-			qApp->setActiveWindow(this);
+			this->activateWindow();
 			this->setFocus();
 			FixFocus();
 
