@@ -5,6 +5,8 @@
 Version 3.7.0
     - pplib (ppl7) is now included as git submodule
     - upgraded code from ppl6 to ppl7 and removed ppl6
+    - upgraded to Qt6
+    - updated windows build to latest mingw64
     - moved some componentes from gui to library:
       - traktor tag-reader
       - ID3TagSaver
@@ -15,19 +17,43 @@ Version 3.7.0
     - refactored configure and Makefile
     - removed storing of original ID3-Tags on file import
       (wmoimp.dat is not used anymore)
+    - updated Beatport track capture and added detection for subgenres
+    - lot's of code refactorings
+    - updated to c++17 and ucrt64 on windows
+    - fixed crash when rotating logfiles
+    - added music key format musical flats
+    - Show flat and sharp character instead of b and #
+    - added selection of musical flats in properties
+
+    - Editor:
+      - Added Bitrate-column in editor
+      - Added Shortcut Alt&Q in editor to jump to recordsource
+      - when reading TKEY convert sharps and flats to "#" and "b"
+
+    - Search:
+      - Added Bitrate-column in search result
+      - show bitrate of tracks
+      - implemented drag'n'drop of files into search
+      - implemented drag'n'drop of files into search
+      - tracks added to searchlist are automatically copied to clipboard
+
+    - Playlist:
+      - key modification is stored as value and show in playlist
+      - show bitrate of tracks
+      - added timecode row in playlist
+      - added indicator for bpm change in playlist
+      - runtime of playlist is show as hh:mm:ss instead of mmmm:ss for better readability
+      - Added optional flag to write start timestamps in txt file of playlist export
+      - added consistency check for in and out cuepoints
+      - export playlist as json and export cover icons
+      - prevent empty version or lable strings
+      - changed format of text playlist
+
+
 
     Known issues:
       - import from Audio-CD crashes
 
-Version 3.6.1
-	- Added Bitrate-row in search result
-	- Added Bitrate-row in editor
-	- added timecode row in playlist
-	- added indicator for bpm change in playlist
-	- show bitrate of tracks in playlist and search result
-    - implemented drag'n'drop of files into search
-    - Playlist: key modification is stored as value and show in playlist
-    - runtime of playlist is show as hh:mm:ss instead of mmmm:ss for better readability
 
 Version 3.6.0, Releasedate: 02.08.2020 (Tag: REL_3_6_0)
     - Merged sourcecode from pplib 6 into WinMusik
