@@ -24,8 +24,8 @@
 ###############################################################################
 ### Global Options
 ###############################################################################
-VERSION ?= 3.7.1
-PREVIOUS_TAG = REL_3_6_0
+VERSION ?= 3.7.2
+PREVIOUS_TAG = REL_3_7_1
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
