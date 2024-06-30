@@ -65,17 +65,19 @@ Source: "Package/README_en.TXT"; DestDir: "{app}"; DestName: "README.TXT"; Langu
 Source: "docs/Userguide_de.pdf"; DestDir: "{app}"; DestName: "Userguide_de.pdf"; Flags: ignoreversion;
 Source: "gui\resources\uninstall.ico"; DestDir: "{app}"; Flags: ignoreversion;
 
+; Shared Libraries
 Source: "release/deploy/*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 
 ; Qt Plugins
-Source: "release\deploy\bearer\*"; DestDir: "{app}\bearer"; Flags: ignoreversion;
-Source: "release\deploy\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion;
-;Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
+Source: "release\deploy\generic\*"; DestDir: "{app}\generic"; Flags: ignoreversion;
+Source: "release\deploy\iconengines\*"; DestDir: "{app}\iconengines"; Flags: ignoreversion;
 Source: "release\deploy\imageformats\*"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: "release\deploy\printsupport\*"; DestDir: "{app}\printsupport"; Flags: ignoreversion;
+Source: "release\deploy\networkinformation\*"; DestDir: "{app}\networkinformation"; Flags: ignoreversion;
+Source: "release\deploy\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion;
 Source: "release\deploy\styles\*"; DestDir: "{app}\styles"; Flags: ignoreversion;
+Source: "release\deploy\tls\*"; DestDir: "{app}\tls"; Flags: ignoreversion;
 Source: "release\deploy\translations\*"; DestDir: "{app}\translations"; Flags: ignoreversion;
-;Source: "C:\msys64\mingw64\share\qt5\plugins\audio\qtaudio_windows.dll"; DestDir: "{app}\audio"; Flags: ignoreversion;
+
 
 [Icons]
 Name: "{group}\WinMusik 3"; WorkingDir: "{app}"; Filename: "{app}\WinMusik.exe"
