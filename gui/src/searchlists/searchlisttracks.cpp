@@ -63,7 +63,7 @@ void SearchlistTracks::mouseReleaseEvent ( QMouseEvent * event )
 */
 
 
-QMimeData* SearchlistTracks::mimeData(const QList<QTreeWidgetItem*> items) const
+QMimeData* SearchlistTracks::mimeData(const QList<QTreeWidgetItem*>& items) const
 {
 	//printf("SearchlistTracks::mimeData\n");
 	QList<QUrl> list;

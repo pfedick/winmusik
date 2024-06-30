@@ -360,23 +360,24 @@ void PlaylistTracks::mouseMoveEvent(QMouseEvent* event)
 void PlaylistTracks::mousePressEvent(QMouseEvent* event)
 {
 	playlist->on_tracks_MouseButtonPress(event);
-	//printf ("PlaylistTracks::mousePressEvent\n");
+	//ppl7::PrintDebug("PlaylistTracks::mousePressEvent\n");
 	QTreeWidget::mousePressEvent(event);
 }
 
 void PlaylistTracks::mouseReleaseEvent(QMouseEvent* event)
 {
 	playlist->on_tracks_MouseButtonRelease(event);
-	//printf ("PlaylistTracks::mouseReleaseEvent\n");
+	//ppl7::PrintDebug("PlaylistTracks::mouseReleaseEvent\n");
 	QTreeWidget::mouseReleaseEvent(event);
 }
 
 
-QMimeData* PlaylistTracks::mimeData(const QList<QTreeWidgetItem*>) const
+QMimeData* PlaylistTracks::mimeData(const QList<QTreeWidgetItem*>&) const
 {
 	QList<QUrl> list;
 	QPixmap Icon;
 	ppl7::String xml;
+	//ppl7::PrintDebug("PlaylistTracks::mimeData\n");
 	xml="<winmusikTracklist>\n";
 	xml+="<tracks>\n";
 	/* Order of items in the list to this function is not always identical to the order in
@@ -444,7 +445,7 @@ void PlaylistTracks::dragMoveEvent(QDragMoveEvent* e)
 
 bool PlaylistTracks::dropMimeData(QTreeWidgetItem* parent, int, const QMimeData* data, Qt::DropAction)
 {
-	//printf ("PlaylistTracks::dropMimeData\n");
+	//ppl7::PrintDebug("PlaylistTracks::dropMimeData\n");
 	ppl7::String Tmp;
 	playlist->handleDropEvent(data, parent);
 	lastmoveitem=nullptr;
@@ -453,7 +454,7 @@ bool PlaylistTracks::dropMimeData(QTreeWidgetItem* parent, int, const QMimeData*
 
 void PlaylistTracks::dropEvent(QDropEvent* event)
 {
-	//printf ("PlaylistTracks::dropEvent, action: %i\n",event->dropAction());
+	//ppl7::PrintDebug("PlaylistTracks::dropEvent, action: %i\n", event->dropAction());
 	if (lastmoveitem) {
 		lastmoveitem->setSelected(false);
 		lastmoveitem=nullptr;

@@ -322,15 +322,15 @@ bool Playlist::consumeEvent(QObject* target, QEvent* event)
 
 bool Playlist::on_tracks_MouseButtonPress(QMouseEvent* event)
 {
-	//printf ("on_tracks_MouseButtonPress\n");
-	if (event->buttons() == Qt::LeftButton) startPos=event->pos();
-	ratePos=event->pos();
+	//ppl7::PrintDebug("on_tracks_MouseButtonPress\n");
+	if (event->buttons() == Qt::LeftButton) startPos=event->position().toPoint();
+	ratePos=event->position().toPoint();
 	return false;
 }
 
 bool Playlist::on_tracks_MouseButtonRelease(QMouseEvent*)
 {
-	//printf ("on_tracks_MouseButtonRelease\n");
+	//ppl7::PrintDebug("on_tracks_MouseButtonRelease\n");
 	startPos.setX(0);
 	startPos.setY(0);
 	return false;
@@ -347,7 +347,7 @@ void Playlist::handleDropEvent(QDropEvent* event)
 		event->ignore();
 		return;
 	}
-	//printf("Playlist::handleDropEvent\n");
+	//ppl7::PrintDebug("Playlist::handleDropEvent\n");
 	event->accept();
 	ui.tracks->unselectItems();
 	//if (event->source()==this) printf ("Quelle identisch\n"); else printf ("Fremdquelle\n");
@@ -355,7 +355,7 @@ void Playlist::handleDropEvent(QDropEvent* event)
 	if (!mime) return;
 	// QList<QTreeWidgetItem *>selected=ui.tracks->selectedItems();
 	//QPoint p=(static_cast<QDragMoveEvent *>(event))->pos()-ui.tracks->geometry().topLeft();
-	QPoint p=(static_cast<QDragMoveEvent*>(event))->pos();
+	QPoint p=(static_cast<QDragMoveEvent*>(event))->position().toPoint();
 	QTreeWidgetItem* insertItem=ui.tracks->itemAt(p);
 	handleDropEvent(mime, insertItem);
 	/*
@@ -377,7 +377,7 @@ void Playlist::handleDropEvent(const QMimeData* mime, QTreeWidgetItem* insertIte
 		ppl7::String xml;
 		xml.set(ba.constData(), ba.size());
 		if (xml.left(18) == "<winmusikTracklist") {
-			//printf ("XML-Drop\n");
+			//ppl7::PrintDebug("XML-Drop\n");
 			handleXMLDrop(xml, insertItem);
 		} else {
 			QList<QUrl>	list=mime->urls();
@@ -395,7 +395,7 @@ void Playlist::handleDropEvent(const QMimeData* mime, QTreeWidgetItem* insertIte
 
 void Playlist::handleXMLDrop(const ppl7::String& xml, QTreeWidgetItem* insertItem)
 {
-	//	printf ("Playlist::handleXMLDrop\n");
+	//ppl7::PrintDebug("Playlist::handleXMLDrop\n");
 		//xml.Print(true);
 	if (isFilterEnabled()) return;
 	QDomDocument doc("winmusikTracklist");
@@ -423,7 +423,7 @@ void Playlist::handleXMLDrop(const ppl7::String& xml, QTreeWidgetItem* insertIte
 
 void Playlist::handleURLDrop(const QList<QUrl>& list, QTreeWidgetItem* insertItem)
 {
-	//printf ("Playlist::handleURLDrop\n");
+	//ppl7::PrintDebug("Playlist::handleURLDrop\n");
 	if (isFilterEnabled()) return;
 	for (int i=0;i < list.size();i++) {
 		QUrl url=list[i];

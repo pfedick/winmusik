@@ -85,7 +85,7 @@ private:
 	void mouseMoveEvent(QMouseEvent* event);
 	void mousePressEvent(QMouseEvent* event);
 	void mouseReleaseEvent(QMouseEvent* event);
-	QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const;
+	QMimeData* mimeData(const QList<QTreeWidgetItem*>& items) const;
 	void dragEnterEvent(QDragEnterEvent* event);
 	void dragMoveEvent(QDragMoveEvent* e);
 	bool dropMimeData(QTreeWidgetItem* parent, int index, const QMimeData* data, Qt::DropAction action);
