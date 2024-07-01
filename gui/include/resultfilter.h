@@ -78,6 +78,8 @@ public:
 	void setTracksWithCoverOnly(bool enabled);
 	bool pass(const DataTitle& ti) const;
 	bool pass(uint32_t titleId) const;
+
+	bool allowSearchWithoutQuery() const;
 };
 
 

@@ -605,7 +605,7 @@ void Search::PresentResults()
 
 void Search::configureFilter(ResultFilter& filter)
 {
-	if (ui.useFilter->isChecked() != true) return;
+	if (!ui.useFilter->isChecked()) return;
 
 	if (ui.enableGenreSearch->isChecked())
 		filter.setGenres(true, ui.qs_genre->text());
@@ -645,8 +645,18 @@ void Search::on_searchButton_clicked()
 
 void Search::on_quicksearchButton_clicked()
 {
+	ppl7::String Query=ui.query->text();
+	Query.trim();
+	ui.query->setFocus();
+
+
 	ResultFilter filter;
 	configureFilter(filter);
+
+	if (Query.isEmpty()) {
+		if (!ui.useFilter->isChecked()) return;
+		if (!filter.allowSearchWithoutQuery()) return;
+	}
 
 	ui.numTracks->setText("");
 	currentTrackListItem=NULL;
@@ -656,8 +666,10 @@ void Search::on_quicksearchButton_clicked()
 	Results.clear();
 	CheckAllowedDevices();
 	ppl7::String Tmp;
-	ppl7::String Query=ui.query->text();
 	ui.progressBar->setValue(0);
+
+
+
 
 	CHashes::TitleTree res;
 	int flags=0;
@@ -1157,7 +1169,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
 	startPos.setY(0);
 
 	return false;
-	}
+}
 
 
 void Search::on_watchClipboard_toggled(bool checked)

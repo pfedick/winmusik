@@ -53,6 +53,18 @@ void ResultFilter::disableAll()
 	energyEnd=10;
 }
 
+bool ResultFilter::allowSearchWithoutQuery() const
+{
+	if (musicKey != 0) return true;
+	if (genresEnabled == true && (genreSet.size() > 0 || unwantedGenreSet.size() > 0)) return true;
+	if (bpmEnabled == true && bpmStart > 0 && bpmEnd < 999) return true;
+	if (ratingEnabled == true && (ratingStart > 0 || ratingEnd < 6)) return true;
+	if (yearEnabled == true && (yearStart > 0 || yearEnd < 9999)) return true;
+	if (lengthEnabled == true && (lengthStart > 0 || lengthEnd < 9999)) return true;
+	if (energyEnabled == true && (energyStart > 0 || energyEnd < 10)) return true;
+	return false;
+}
+
 void ResultFilter::setBpmRange(bool enabled, int start, int end)
 {
 	bpmEnabled=enabled;
