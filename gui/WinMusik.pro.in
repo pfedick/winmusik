@@ -72,7 +72,7 @@ CONFIG(debug, debug|release) {
 	LIBS += ../pplib/release/libpplib.a
 }
 LIBS += @LIBS@ @ASAN_FLAGS@ @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @ZLIB_LIBS@
-LIBS += @BZ2_LIBS@ @PCRE_LIBS@ -l iconv
+LIBS += @BZ2_LIBS@ @PCRE_LIBS@ @ICONV_LIBS@
 LIBS += @OPENSSL_LDFLAGS@ @OPENSSL_LIBS@ @LIBCURL@
 LIBS += @LIBCDIO_LDFLAGS@
 
@@ -90,17 +90,19 @@ TRANSLATIONS = winmusik_de.ts \
 #    HISTORY.TXT \
 #    build_mingw64.sh
 
-SOURCES += src/about/about.cpp \
-    src/asynchronousMessage/asynchronousMessage.cpp \
-    src/CHashes.cpp \
-    src/colorscheme.cpp \
-    src/config.cpp \
-    src/coverprinter/coverprinter.cpp \
+SOURCES += src/asynchronousMessage/asynchronousMessage.cpp \
+    src/searchlists/dupecheckthread.cpp \
+    src/searchlists/searchlistdialog.cpp \
+    src/searchlists/searchlists.cpp \
+    src/searchlists/searchlisttrackdialog.cpp \
+    src/searchlists/searchlisttracks.cpp \
+    src/menue/menue.cpp \
+    src/search/search.cpp \
+    src/properties/properties.cpp \
+    src/properties/regexpedit.cpp \
+    src/splashscreen/splashscreen.cpp \
     src/coverviewer/coverviewer.cpp \
-    src/CSearchlist.cpp \
-    src/CTableControl.cpp \
-    src/CWmClient.cpp \
-    src/devicelist/devicelist.cpp \
+    src/coverprinter/coverprinter.cpp \
     src/editor/cddbimport.cpp \
     src/editor/cddbselect.cpp \
     src/editor/edit-functions.cpp \
@@ -111,52 +113,58 @@ SOURCES += src/about/about.cpp \
     src/editor/renumberdialog.cpp \
     src/editor/shortcutdialog.cpp \
     src/editor/tablesearch.cpp \
-    src/errors.cpp \
-    src/firststart/firststart.cpp \
     src/firststart/InitialDatabase.cpp \
+    src/firststart/firststart.cpp \
     src/firststart/langselect.cpp \
-    src/main.cpp \
-    src/menue/menue.cpp \
-    src/musickey.cpp \
+    src/devicelist/devicelist.cpp \
+    src/about/about.cpp \
     src/playlist/editstring.cpp \
     src/playlist/playlist.cpp \
+    src/playlist/playlistStatusBar.cpp \
     src/playlist/playlistedit.cpp \
     src/playlist/playlistexport.cpp \
     src/playlist/playlistprint.cpp \
-    src/playlist/playlistStatusBar.cpp \
     src/playlist/playlisttracks.cpp \
     src/playlist/setbpmplayed.cpp \
-    src/Print.cpp \
     src/printdevicedialog/printdevicedialog.cpp \
-    src/properties/properties.cpp \
-    src/properties/regexpedit.cpp \
+    src/CHashes.cpp \
+    src/CSearchlist.cpp \
+    src/CTableControl.cpp \
+    src/CWmClient.cpp \
+    src/Print.cpp \
+    src/colorscheme.cpp \
+    src/config.cpp \
+    src/errors.cpp \
+    src/main.cpp \
+    src/musickey.cpp \
     src/regexpcapture.cpp \
     src/resultfilter.cpp \
-    src/search/search.cpp \
-    src/searchlists/dupecheckthread.cpp \
-    src/searchlists/searchlistdialog.cpp \
-    src/searchlists/searchlists.cpp \
-    src/searchlists/searchlisttrackdialog.cpp \
-    src/searchlists/searchlisttracks.cpp \
-    src/splashscreen/splashscreen.cpp \
     src/wmfunctions.cpp \
+    widgets/KeyWheel.cpp \
     widgets/edittrack.cpp \
     widgets/fkeys.cpp \
-    widgets/KeyWheel.cpp \
     widgets/wmcoverwidget.cpp \
     widgets/wmtoolbutton.cpp \
-
+    
 
 HEADERS += widgets/edittrack.h \
     widgets/fkeys.h \
     widgets/keywheel.h \
     widgets/wmcoverwidget.h \
     widgets/wmtoolbutton.h \
-    src/about/about.h \
     src/asynchronousMessage/asynchronousMessage.h \
-    src/coverprinter/coverprinter.h \
+    src/searchlists/searchlistdialog.h \
+    src/searchlists/searchlists.h \
+    src/searchlists/searchlisttrackdialog.h \
+    src/searchlists/searchlisttracks.h \
+    src/menue/menue.h \
+    src/search/search.h \
+    src/properties/properties.h \
+    src/properties/regexpedit.h \
+    src/splashscreen/splashscreen.h \
+    src/player/player.h \
     src/coverviewer/coverviewer.h \
-    src/devicelist/devicelist.h \
+    src/coverprinter/coverprinter.h \
     src/editor/cddbimport.h \
     src/editor/cddbselect.h \
     src/editor/edit.h \
@@ -168,24 +176,16 @@ HEADERS += widgets/edittrack.h \
     src/editor/tablesearch.h \
     src/firststart/firststart.h \
     src/firststart/langselect.h \
-    src/menue/menue.h \
-    src/player/player.h \
+    src/devicelist/devicelist.h \
+    src/about/about.h \
     src/playlist/editstring.h \
     src/playlist/playlist.h \
+    src/playlist/playlistStatusBar.h \
     src/playlist/playlistedit.h \
     src/playlist/playlistexport.h \
-    src/playlist/playlistStatusBar.h \
     src/playlist/playlisttracks.h \
     src/playlist/setbpmplayed.h \
     src/printdevicedialog/printdevicedialog.h \
-    src/properties/properties.h \
-    src/properties/regexpedit.h \
-    src/search/search.h \
-    src/searchlists/searchlistdialog.h \
-    src/searchlists/searchlists.h \
-    src/searchlists/searchlisttrackdialog.h \
-    src/searchlists/searchlisttracks.h \
-    src/splashscreen/splashscreen.h \
     include/colorscheme.h \
     include/csearchlist.h \
     include/exceptions.h \
@@ -195,40 +195,41 @@ HEADERS += widgets/edittrack.h \
     include/tablecontrol.h \
     include/version.h \
     include/winmusik3.h \
+    
 
-
-FORMS += widgets/edittrack.ui \
+FORMS += widgets/wmcoverwidget.ui \
+    widgets/edittrack.ui \
     widgets/fkeys.ui \
-    widgets/wmcoverwidget.ui \
-    src/about/about.ui \
     src/asynchronousMessage/asynchronousMessage.ui \
-    src/coverprinter/coverprinter.ui \
-    src/coverviewer/coverviewer.ui \
-    src/devicelist/devicelist.ui \
-    src/editor/cddbimport.ui \
-    src/editor/cddbselect.ui \
-    src/editor/edit.ui \
-    src/editor/editdevice.ui \
-    src/editor/edittrackdialog.ui \
-    src/editor/massimport.ui \
-    src/editor/renumberdialog.ui \
-    src/editor/shortcutdialog.ui \
-    src/editor/tablesearch.ui \
-    src/exporttracks/exporttracks.ui \
-    src/firststart/firststart.ui \
-    src/firststart/langselect.ui \
-    src/menue/menue.ui \
-    src/player/player.ui \
-    src/playlist/editstring.ui \
-    src/playlist/playlist.ui \
-    src/playlist/playlistedit.ui \
-    src/playlist/playlistexport.ui \
-    src/playlist/setbpmplayed.ui \
-    src/printdevicedialog/printdevicedialog.ui \
-    src/properties/properties.ui \
-    src/properties/regexpedit.ui \
-    src/search/search.ui \
-    src/searchlists/searchlistdialog.ui \
     src/searchlists/searchlists.ui \
     src/searchlists/searchlisttrackdialog.ui \
+    src/searchlists/searchlistdialog.ui \
+    src/menue/menue.ui \
+    src/search/search.ui \
+    src/properties/properties.ui \
+    src/properties/regexpedit.ui \
     src/splashscreen/splashscreen.ui \
+    src/player/player.ui \
+    src/coverviewer/coverviewer.ui \
+    src/coverprinter/coverprinter.ui \
+    src/editor/cddbimport.ui \
+    src/editor/renumberdialog.ui \
+    src/editor/massimport.ui \
+    src/editor/editdevice.ui \
+    src/editor/edittrackdialog.ui \
+    src/editor/shortcutdialog.ui \
+    src/editor/cddbselect.ui \
+    src/editor/edit.ui \
+    src/editor/tablesearch.ui \
+    src/firststart/firststart.ui \
+    src/firststart/langselect.ui \
+    src/devicelist/devicelist.ui \
+    src/exporttracks/exporttracks.ui \
+    src/about/about.ui \
+    src/playlist/editstring.ui \
+    src/playlist/playlistexport.ui \
+    src/playlist/playlistedit.ui \
+    src/playlist/setbpmplayed.ui \
+    src/playlist/playlist.ui \
+    src/printdevicedialog/printdevicedialog.ui \
+    
