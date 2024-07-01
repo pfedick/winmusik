@@ -56,11 +56,14 @@ You have to install the following packages:
 
 ### Windows 10 with Msys/mingw
 
-For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/)
+For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/).
+I use the ucrt libraries in this example:
 
-    pacman -S git make mingw-w64-x86_64-gcc mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv \
-         mingw-w64-x86_64-bzip2 \
-         mingw-w64-x86_64-pcre mingw-w64-x86_64-libpng mingw-w64-x86_64-qt5
+    pacman -S git mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-libiconv \
+        mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-bzip2 \
+        mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-pcre \
+        mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-qt6
+
 
 Configure and compile
 ---------------------
