@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>951</width>
+    <width>1035</width>
     <height>625</height>
    </rect>
   </property>
   <property name="focusPolicy">
-   <enum>Qt::NoFocus</enum>
+   <enum>Qt::FocusPolicy::NoFocus</enum>
   </property>
   <property name="windowTitle">
    <string>WinMusik Searchlist</string>
@@ -163,7 +163,7 @@
        <item>
         <widget class="SearchlistTracks" name="trackList">
          <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
          </property>
          <property name="showDropIndicator" stdset="0">
           <bool>false</bool>
@@ -172,7 +172,7 @@
           <bool>true</bool>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
          </property>
          <property name="rootIsDecorated">
           <bool>false</bool>
@@ -199,6 +199,11 @@
          <column>
           <property name="text">
            <string>Genre</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Label</string>
           </property>
          </column>
          <column>
@@ -260,7 +265,7 @@
          <item>
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
