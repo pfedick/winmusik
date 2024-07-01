@@ -154,6 +154,7 @@ void Menue::on_searchEdit_returnPressed()
 {
 	ppl7::String words=ui.searchEdit->text();
 	words.trim();
+	if (words.isEmpty()) return;
 	searchWindow=wm->OpenOrReuseSearch(searchWindow);
 	Search* win=(Search*)searchWindow;
 	win->FastSearch(words);
