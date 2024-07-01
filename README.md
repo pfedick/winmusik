@@ -34,13 +34,11 @@ Prerequirements
 
 You have to install the following packages:
   - C++ compiler with c++11 support (gcc or clang)
-  - QT, version 5.x or higher
+  - QT, version 6.x or higher
   - zlib (developer package)
   - bzip2 (developer package)
   - pcre (developer package)
   - openssl (developer package)
-  - libcurl (developer package)
-  - iconv (only if you have to import files from old WinMusik version 2.x)
   - libcdio (developer package)
 
 ### Fedora 39/40
@@ -62,7 +60,22 @@ I use the ucrt libraries in this example:
     pacman -S git mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-libiconv \
         mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-bzip2 \
         mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-pcre \
-        mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-qt6
+        mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-qt6 \
+        mingw-w64-ucrt-x86_64-openssl mingw-w64-ucrt-x86_64-make
+
+
+Fetch the code
+--------------
+```bash
+git clone --recurse-submodules https://github.com/pfedick/winmusik.git
+cd winmusik
+```
+
+If you already cloned the project and want to update to the newest version:
+```bash
+git pull
+git submodule update --init --recursive
+```
 
 
 Configure and compile
