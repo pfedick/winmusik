@@ -96,10 +96,7 @@ Search::Search(QWidget* parent, CWmClient* wm)
 
 	//update();
 	connect(&ClipBoardTimer, SIGNAL(timeout()), this, SLOT(on_ClipBoardTimer_update()));
-	QWidget::show();
-	QCoreApplication::processEvents();
-	this->setFocus();
-	ui.query->setFocus();
+
 }
 
 Search::~Search()
@@ -169,6 +166,7 @@ void Search::Resize()
 void Search::showEvent(QShowEvent* event)
 {
 	Resize();
+	ui.query->setFocus();
 	QWidget::showEvent(event);
 }
 void Search::resizeEvent(QResizeEvent* event)
@@ -1159,7 +1157,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
 	startPos.setY(0);
 
 	return false;
-}
+	}
 
 
 void Search::on_watchClipboard_toggled(bool checked)
