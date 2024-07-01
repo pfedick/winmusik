@@ -227,6 +227,7 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
 	Tmp=item->Track.Artist + " - " + item->Track.Title;
 	item->setText(SL_COLUMN_ARTIST, Tmp);
 	item->setText(SL_COLUMN_VERSION, item->Track.Version);
+	item->setText(SL_COLUMN_LABEL, item->Track.Comment);
 	item->setText(SL_COLUMN_GENRE, item->Track.Genre);
 	item->setTextAlignment(SL_COLUMN_LENGTH, Qt::AlignRight);
 	if (item->Track.Length > 0) {
@@ -288,12 +289,12 @@ void SearchlistDialog::Resize()
 	ui.trackList->setColumnWidth(SL_COLUMN_EXISTING, 60);
 	ui.trackList->setColumnWidth(SL_COLUMN_DATERELEASE, 90);
 	ui.trackList->setColumnWidth(SL_COLUMN_DATEADDED, 90);
-	ui.trackList->setColumnWidth(SL_COLUMN_LENGTH, 70);
+	ui.trackList->setColumnWidth(SL_COLUMN_LENGTH, 50);
 	ui.trackList->setColumnWidth(SL_COLUMN_GENRE, 100);
-
+	ui.trackList->setColumnWidth(SL_COLUMN_LABEL, 100);
 	ui.trackList->setColumnWidth(SL_COLUMN_RATING, 64);
 
-	s=s - 62 - 62 - 92 - 72 - 108 - 66 - 62 - 92;
+	s=s - 62 - 62 - 92 - 52 - 108 - 66 - 62 - 92 - 108;
 	if (s < 300) s=300;
 	ui.trackList->setColumnWidth(SL_COLUMN_VERSION, s * 30 / 100);
 	ui.trackList->setColumnWidth(SL_COLUMN_ARTIST, s * 70 / 100);

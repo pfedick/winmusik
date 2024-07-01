@@ -31,13 +31,14 @@
 #define SL_COLUMN_ARTIST		0
 #define SL_COLUMN_VERSION		1
 #define SL_COLUMN_GENRE			2
-#define SL_COLUMN_LENGTH		3
-#define SL_COLUMN_RATING		4
-#define SL_COLUMN_DATEADDED		5
-#define SL_COLUMN_DATERELEASE	6
-#define SL_COLUMN_EXISTING		7
-#define SL_COLUMN_SELECTED		8
-#define SL_COLUMN_DONE			9
+#define SL_COLUMN_LABEL			3
+#define SL_COLUMN_LENGTH		4
+#define SL_COLUMN_RATING		5
+#define SL_COLUMN_DATEADDED		6
+#define SL_COLUMN_DATERELEASE	7
+#define SL_COLUMN_EXISTING		8
+#define SL_COLUMN_SELECTED		9
+#define SL_COLUMN_DONE			10
 
 
 class DupeCheckThread : public QThread
