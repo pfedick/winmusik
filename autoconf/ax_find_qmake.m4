@@ -16,7 +16,7 @@ if test "$QMAKE" = "yes"; then
 	elif test -x "/usr/lib/qt5/bin/qmake" ; then
 		QMAKE=/usr/lib/qt5/bin/qmake
 	else
-		AC_PATH_PROGS(qmake,[qmake-qt6 qmake-qt5 qmake],no)
+		AC_PATH_PROGS(qmake,[qmake-qt6 qmake6 qmake-qt6.sh],no)
 		if test "$qmake" = "no" ; then
 			AC_MSG_ERROR(qmake not found)
 		fi

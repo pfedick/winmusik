@@ -43,9 +43,9 @@ You have to install the following packages:
   - iconv (only if you have to import files from old WinMusik version 2.x)
   - libcdio (developer package)
 
-### Fedora 39
+### Fedora 39/40
 
-    sudo dnf install gcc gcc-c++ qt5-qtbase-devel libcdio-devel zlib-devel \
+    sudo dnf install gcc gcc-c++ qt6-qtbase-devel libcdio-devel zlib-devel \
         bzip2-devel libpng-devel pcre-devel
 
 
