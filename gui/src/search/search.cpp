@@ -1198,6 +1198,7 @@ void Search::on_ClipBoardTimer_update()
 	RegExpClipboard clip;
 	copyFromClipboard(clip);
 	if (clip.PlainText == LastClipboardString) return;
+
 	LastClipboardString=clip.PlainText;
 	if (LastClipboardString.isEmpty()) return;
 	RegExpMatch match;
@@ -1209,8 +1210,11 @@ void Search::on_ClipBoardTimer_update()
 		s=clip.PlainText;
 		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
 		if (s.instr("\n") >= 0) return;
+		if (s.instrCase("https://") >= 0) return;
 		s.replace("\t", " ");
 		s.pregReplace("/\\(.*?\\)/", "");
+		s.trim();
+		if (s.isEmpty() || s.size() > 1024) return;
 		//printf ("NO RegExpMatch: %s\n",(const char*)s);
 	}
 	wm->normalizer.NormalizeTerm(s);
