@@ -58,7 +58,6 @@ using namespace de::pfp::winmusik;
  // Verzeichnisses verwendet:
 #define WM_ORGANISATION	"Patrick F.-Productions"
 #define WM_APPNAME		"WinMusik3"
-#define WM_REGISTRATION_URL	"https://www.pfp.de/winmusik/interface.html"
 #define MAX_DEVICE_TYPES	10
 
 
