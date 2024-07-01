@@ -343,7 +343,7 @@ Sie arbeiten bereits mit der aktuellsten Version.</translation>
 <context>
     <name>CWmClient</name>
     <message>
-        <location filename="src/CWmClient.cpp" line="301"/>
+        <location filename="src/CWmClient.cpp" line="302"/>
         <source>Could not load the WinMusik configuration!</source>
         <translation>WinMusik Konfiguration konnte nicht geladen werden!</translation>
     </message>
@@ -352,79 +352,79 @@ Sie arbeiten bereits mit der aktuellsten Version.</translation>
         <translation type="vanished">WinMusik - Fehler</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="508"/>
+        <location filename="src/CWmClient.cpp" line="509"/>
         <source>Loading Database...</source>
         <translation>Lade Datenbank...</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="513"/>
+        <location filename="src/CWmClient.cpp" line="514"/>
         <source>Could not load database</source>
         <translation>Konnte Datenbank nicht laden</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="545"/>
+        <location filename="src/CWmClient.cpp" line="546"/>
         <source>Music Cassette</source>
         <translation>Musikkassette</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="547"/>
+        <location filename="src/CWmClient.cpp" line="548"/>
         <source>Audio CD</source>
         <translation>Musik CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="549"/>
+        <location filename="src/CWmClient.cpp" line="550"/>
         <source>Data Storage</source>
         <translation>Datenträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="551"/>
+        <location filename="src/CWmClient.cpp" line="552"/>
         <source>Record</source>
         <translation>Schallplatte</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="553"/>
+        <location filename="src/CWmClient.cpp" line="554"/>
         <source>VHS-Tape</source>
         <translation>Videoband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="555"/>
+        <location filename="src/CWmClient.cpp" line="556"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="557"/>
+        <location filename="src/CWmClient.cpp" line="558"/>
         <source>MP3-CD</source>
         <translation>MP3-CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="559"/>
+        <location filename="src/CWmClient.cpp" line="560"/>
         <source>Tape</source>
         <translation>Tonband</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="561"/>
+        <location filename="src/CWmClient.cpp" line="562"/>
         <source>Audio DVD</source>
         <translation>Musik DVD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="941"/>
+        <location filename="src/CWmClient.cpp" line="942"/>
         <source>Track: %i</source>
         <translation>Track: %i</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1165"/>
+        <location filename="src/CWmClient.cpp" line="1166"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Achtung</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1166"/>
+        <location filename="src/CWmClient.cpp" line="1167"/>
         <source>There is no Audio player specified.
 Please go to preferences and open the MP3 page. You can specify your favorite player there.</source>
         <translation>Es ist kein Audio-Player definiert.
 Bitte öffnen sie die Einstellungen auf der Seite &quot;MP3/AIFF&quot; und geben dort den gewünschten Player an.</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1275"/>
+        <location filename="src/CWmClient.cpp" line="1276"/>
         <source>WinMusik %v%</source>
         <translation>WinMusik %v%</translation>
     </message>
@@ -435,7 +435,7 @@ Please go to preferences and open the MP3 page. There you can specify your favor
 Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können Sie Ihren Lieblingsplayer angeben.</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="261"/>
+        <location filename="src/CWmClient.cpp" line="262"/>
         <source>unknown</source>
         <translation>Unbekannt</translation>
     </message>
@@ -458,29 +458,29 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
     </message>
     <message>
         <location filename="src/CWmClient.cpp" line="103"/>
-        <location filename="src/CWmClient.cpp" line="491"/>
+        <location filename="src/CWmClient.cpp" line="492"/>
         <source>WinMusik</source>
         <translation>WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1010"/>
+        <location filename="src/CWmClient.cpp" line="1011"/>
         <source>min</source>
         <comment>Minutes in Tracklisting of Playlist</comment>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1028"/>
+        <location filename="src/CWmClient.cpp" line="1029"/>
         <source>Tracklisting MP3-Medium</source>
         <comment>Subject of Playlist</comment>
         <translation>Trackliste MP3-Tonträger</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="1041"/>
+        <location filename="src/CWmClient.cpp" line="1042"/>
         <source>Playlist created by WinMusik</source>
         <translation>Playlist erstellt mit WinMusik</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="625"/>
+        <location filename="src/CWmClient.cpp" line="626"/>
         <source>CAS</source>
         <translation>KAS</translation>
     </message>
@@ -490,7 +490,7 @@ Bitte gehen Sie in die Einstellungen und öffnen Sie die MP3-Seite. Dort können
         <translation>Konnte Konfigurationsdatei nicht laden</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="492"/>
+        <location filename="src/CWmClient.cpp" line="493"/>
         <source>Database file does not exist or is empty.
 
 Should I create a new Database?</source>
@@ -499,42 +499,42 @@ Should I create a new Database?</source>
 Soll eine neue Datenbank angelegt werden?</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="627"/>
+        <location filename="src/CWmClient.cpp" line="628"/>
         <source>CD</source>
         <translation>CD</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="629"/>
+        <location filename="src/CWmClient.cpp" line="630"/>
         <source>DATA</source>
         <translation>DATA</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="631"/>
+        <location filename="src/CWmClient.cpp" line="632"/>
         <source>RECORD</source>
         <translation>PLATTE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="633"/>
+        <location filename="src/CWmClient.cpp" line="634"/>
         <source>VHS</source>
         <translation>VHS</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="635"/>
+        <location filename="src/CWmClient.cpp" line="636"/>
         <source>OTHER</source>
         <translation>SONST</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="637"/>
+        <location filename="src/CWmClient.cpp" line="638"/>
         <source>MP3</source>
         <translation>MP3</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="639"/>
+        <location filename="src/CWmClient.cpp" line="640"/>
         <source>TAPE</source>
         <translation>TAPE</translation>
     </message>
     <message>
-        <location filename="src/CWmClient.cpp" line="641"/>
+        <location filename="src/CWmClient.cpp" line="642"/>
         <source>DVD</source>
         <translation>DVD</translation>
     </message>
@@ -4169,23 +4169,23 @@ Wollen Sie die Änderungen speichern?</translation>
 <context>
     <name>PlaylistEdit</name>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="377"/>
+        <location filename="src/playlist/playlistedit.cpp" line="376"/>
         <source>Select cover image</source>
         <translation>Cover-Bild auswählen</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="379"/>
-        <location filename="src/playlist/playlistedit.cpp" line="406"/>
+        <location filename="src/playlist/playlistedit.cpp" line="378"/>
+        <location filename="src/playlist/playlistedit.cpp" line="405"/>
         <source>Images (*.png *.bmp *.jpg)</source>
         <translation>Bilddateien (*.png *.bmp *.jpg)</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="387"/>
+        <location filename="src/playlist/playlistedit.cpp" line="386"/>
         <source>Error: could not load Cover</source>
         <translation>Fehler: Konnte Cover nicht laden</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="388"/>
+        <location filename="src/playlist/playlistedit.cpp" line="387"/>
         <source>The specified file could not be loaded.
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</source>
         <oldsource>The soecified file could not be loaded.
@@ -4194,17 +4194,17 @@ Please check if the file exists, is readable and contains an image format, which
 Bitte prüfen Sie, ob die Datei vorhanden und lesbar ist und ein Bildformat enthält, das von WinMusik unterstützt wird (.png, .jpg, .bmp)</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="404"/>
+        <location filename="src/playlist/playlistedit.cpp" line="403"/>
         <source>Save cover to file</source>
         <translation>Cover in Datei speichern</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="417"/>
+        <location filename="src/playlist/playlistedit.cpp" line="416"/>
         <source>Error: could not save Cover</source>
         <translation>Fehler: Konnte Cover nicht speichern</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlistedit.cpp" line="418"/>
+        <location filename="src/playlist/playlistedit.cpp" line="417"/>
         <source>The cover of this track could not be saved.
 Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</source>
@@ -4364,16 +4364,16 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
 <context>
     <name>PlaylistTracks</name>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="597"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="598"/>
         <source>Unknown playlist format:</source>
         <translation>Unbekanntes Format der Playlist:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="599"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="651"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="665"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="675"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="684"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="600"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="652"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="666"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="676"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="685"/>
         <source>WinMusik Error</source>
         <translation>WinMusik Fehler</translation>
     </message>
@@ -4382,49 +4382,49 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
         <translation type="vanished">Konnte Datei nicht öffnen</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="649"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="650"/>
         <source>Could not open file:</source>
         <translation>Konnte Datei nicht öffnen:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="660"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="661"/>
         <source>Could not read playlist, invalid XML-format:</source>
         <translation>Konnte Playlist nicht lesen, ungültiges XML-Format:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="661"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="674"/>
-        <location filename="src/playlist/playlisttracks.cpp" line="682"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="662"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="675"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="683"/>
         <source>Filename:</source>
         <translation>Dateiname:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="662"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="663"/>
         <source>Error:</source>
         <translation>Fehler:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="663"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="664"/>
         <source>Line:</source>
         <translation>Zeile:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="664"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="665"/>
         <source>Column:</source>
         <translation>Spalte:</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="672"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="673"/>
         <source>File is not a WinMusik playlist</source>
         <translation>Datei ist keine gültige WinMusik Playlist</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="680"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="681"/>
         <source>Unknown or unsupported version of WinMusik playlist</source>
         <translation>Unbekannte oder nicht unterstützte Version der WinMusik Playlist</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="683"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="684"/>
         <source>Version:</source>
         <translation>Version:</translation>
     </message>
@@ -5256,12 +5256,12 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="src/main.cpp" line="123"/>
+        <location filename="src/main.cpp" line="109"/>
         <source>Could not initialize WinMusik</source>
         <translation>Konnte WinMusik nicht initialisieren</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="134"/>
+        <location filename="src/main.cpp" line="120"/>
         <source>Could not run WinMusik</source>
         <translation>Ein unerwarteter Fehler ist aufgetreten</translation>
     </message>
@@ -5305,7 +5305,7 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
         <translation>Konnte Druckvorgang nicht starten</translation>
     </message>
     <message>
-        <location filename="src/playlist/playlisttracks.cpp" line="639"/>
+        <location filename="src/playlist/playlisttracks.cpp" line="640"/>
         <source>could not save playlist</source>
         <translation>Konnte Playlist nicht speichern</translation>
     </message>
@@ -6057,95 +6057,95 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SearchlistDialog</name>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="119"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="120"/>
         <source>Tracks:</source>
         <translation>Tracks:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="126"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="127"/>
         <source>Selected:</source>
         <translation>Ausgewählt:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="133"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="134"/>
         <source>Pre-selected:</source>
         <translation>Vorauswahl:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="140"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="141"/>
         <source>Done:</source>
         <translation>Erledigt:</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="240"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="248"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="242"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="250"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="243"/>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="251"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="245"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="253"/>
         <source>no</source>
         <translation>nein</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="344"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
         <source>Edit Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track editieren</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="344"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
         <source>Return</source>
         <translation>Return</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="345"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="347"/>
         <source>Delete Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="345"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="347"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
         <source>Insert Track</source>
         <comment>trackList Context Menue</comment>
         <translation>Track einfügen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="346"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="350"/>
         <source>Search track in Database</source>
         <comment>trackList Context Menue</comment>
         <translation>Titel in Datenbank suchen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="348"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="350"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="532"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="534"/>
         <source>delete tracks</source>
         <translation>Tracks löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="533"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="535"/>
         <source>You have selected more than one track.
 Are you sure, you want to delete them?</source>
         <translation>Sie haben mehr als einen Track ausgewählt.
 Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.cpp" line="575"/>
+        <location filename="src/searchlists/searchlistdialog.cpp" line="577"/>
         <source>Could not save searchlist!</source>
         <translation>Konnte Suchliste nicht speichern!</translation>
     </message>
@@ -6198,36 +6198,41 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
     </message>
     <message>
         <location filename="src/searchlists/searchlistdialog.ui" line="206"/>
+        <source>Label</source>
+        <translation type="unfinished">Label</translation>
+    </message>
+    <message>
+        <location filename="src/searchlists/searchlistdialog.ui" line="211"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="211"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="216"/>
         <source>Rating</source>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="216"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="221"/>
         <source>Added</source>
         <translation>Hinzugefügt</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="221"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="226"/>
         <source>Released</source>
         <translation>Veröffentlicht</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="226"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="231"/>
         <source>Existing</source>
         <translation>Vorhanden</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="231"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="236"/>
         <source>Selected</source>
         <translation>Auswahl</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="236"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="241"/>
         <source>Done</source>
         <translation>Erledigt</translation>
     </message>
@@ -6245,7 +6250,7 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="246"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="251"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
@@ -6263,7 +6268,7 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
         <translation>Neuer Track</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlistdialog.ui" line="276"/>
+        <location filename="src/searchlists/searchlistdialog.ui" line="281"/>
         <source>Delete Track</source>
         <translation>Track löschen</translation>
     </message>
@@ -6339,12 +6344,12 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
 <context>
     <name>Searchlists</name>
     <message>
-        <location filename="src/searchlists/searchlists.cpp" line="158"/>
+        <location filename="src/searchlists/searchlists.cpp" line="159"/>
         <source>WinMusik: Delete searchlist</source>
         <translation>WinMusik: Suchliste löschen</translation>
     </message>
     <message>
-        <location filename="src/searchlists/searchlists.cpp" line="159"/>
+        <location filename="src/searchlists/searchlists.cpp" line="160"/>
         <source>Are you sure you want to delete this searchlist?</source>
         <translation>Sind Sie sicher, dass Sie diese Suchliste löschen wollen?</translation>
     </message>
