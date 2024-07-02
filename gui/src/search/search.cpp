@@ -138,7 +138,7 @@ void Search::Resize()
 	int w=trackList->width();
 	trackList->setColumnWidth(SEARCH_TRACKLIST_POS_ROW, 40);
 	if (resultmode == 0) {
-		trackList->setColumnWidth(SEARCH_TRACKLIST_GENRE_ROW, 50);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_LENGTH_ROW, 50);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_BPM_ROW, 40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_KEY_ROW, 40);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_ENERGYLEVEL_ROW, 30);
@@ -152,7 +152,7 @@ void Search::Resize()
 		trackList->setColumnWidth(SEARCH_TRACKLIST_ARTIST_ROW, w * 35 / 100);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_TITLE_ROW, w * 30 / 100);
 		trackList->setColumnWidth(SEARCH_TRACKLIST_VERSION_ROW, w * 25 / 100);
-		trackList->setColumnWidth(SEARCH_TRACKLIST_LENGTH_ROW, w * 10 / 100);
+		trackList->setColumnWidth(SEARCH_TRACKLIST_GENRE_ROW, w * 10 / 100);
 
 
 	} else {
