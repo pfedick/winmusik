@@ -250,6 +250,7 @@ public slots:
     void on_contextInsertTrack_triggered();
     void on_contextSynchronizeKeys_triggered();
     void on_contextMusicKeyVerified_triggered();
+    void on_contextDeleteID3Tags_triggered();
 
     void on_contextShowCover_triggered();
     void on_contextLoadCoverAllTracks_triggered();

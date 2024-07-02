@@ -2302,6 +2302,7 @@ void Edit::on_trackList_customContextMenuRequested(const QPoint& pos)
 			m->addSeparator();
 			m->addAction(QIcon(":/icons/resources/edit.png"), tr("Read BPM and Key from ID3-Tag", "trackList Context Menue"), this, SLOT(on_contextReadBpmAndKey_triggered()));
 		}
+		m->addAction(QIcon(":/icons/resources/eraser.png"), tr("Delete ID3-Tags from file", "trackList Context Menue"), this, SLOT(on_contextDeleteID3Tags_triggered()));
 	}
 	m->popup(p, a);
 	//FixFocus();
@@ -2767,4 +2768,31 @@ void Edit::on_displayMusicKey_currentIndexChanged(int)
 	}
 	UpdateTrackListing();
 	FixFocus();
+}
+
+void Edit::on_contextDeleteID3Tags_triggered()
+{
+	QList<QTreeWidgetItem*> Items=trackList->selectedItems();
+	if (Items.count() < 1) return;
+	//ppl7::PrintDebug("Edit::on_contextDeleteID3Tags_triggered\n");
+	if (QMessageBox::question(this, tr("WinMusik: delete ID3-Tags"),
+		tr("Do you want to delete all ID3-Tags from the selected files?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No)
+		== QMessageBox::No) return;
+	for (int i=0;i < Items.size();i++) {
+		WMTreeItem* item=(WMTreeItem*)Items[i];
+		ppl7::String Filename=wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
+		if (Filename.notEmpty()) {
+			//ppl7::PrintDebug("File: %s\n", (const char*)Filename);
+			ppl7::ID3Tag Tag;
+			try {
+				Tag.load(Filename);
+				Tag.clearTags();
+				Tag.save();
+
+			} catch (...) {
+
+			}
+		}
+	}
+
 }
