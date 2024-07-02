@@ -820,31 +820,38 @@ void Search::createSetMusicKeyContextMenu(QMenu* m)
 {
 	de::pfp::winmusik::MusicalKeys& keys=wm_main->MusicKeys;
 	m->addAction(tr("unknown", "trackList Context Menue"), this, SLOT(on_contextMusicKey0_triggered()));
-	m->addAction(keys.keyName(22, musicKeyDisplay), this, SLOT(on_contextMusicKey22_triggered()));
-	m->addAction(keys.keyName(12, musicKeyDisplay), this, SLOT(on_contextMusicKey12_triggered()));
-	m->addAction(keys.keyName(5, musicKeyDisplay), this, SLOT(on_contextMusicKey5_triggered()));
-	m->addAction(keys.keyName(15, musicKeyDisplay), this, SLOT(on_contextMusicKey15_triggered()));
-	m->addAction(keys.keyName(2, musicKeyDisplay), this, SLOT(on_contextMusicKey2_triggered()));
-	m->addAction(keys.keyName(19, musicKeyDisplay), this, SLOT(on_contextMusicKey19_triggered()));
-	m->addAction(keys.keyName(16, musicKeyDisplay), this, SLOT(on_contextMusicKey16_triggered()));
-	m->addAction(keys.keyName(6, musicKeyDisplay), this, SLOT(on_contextMusicKey6_triggered()));
-	m->addAction(keys.keyName(23, musicKeyDisplay), this, SLOT(on_contextMusicKey23_triggered()));
-	m->addAction(keys.keyName(9, musicKeyDisplay), this, SLOT(on_contextMusicKey9_triggered()));
-	m->addAction(keys.keyName(20, musicKeyDisplay), this, SLOT(on_contextMusicKey20_triggered()));
-	m->addAction(keys.keyName(10, musicKeyDisplay), this, SLOT(on_contextMusicKey10_triggered()));
-	m->addAction(keys.keyName(3, musicKeyDisplay), this, SLOT(on_contextMusicKey3_triggered()));
-	m->addAction(keys.keyName(13, musicKeyDisplay), this, SLOT(on_contextMusicKey13_triggered()));
-	m->addAction(keys.keyName(24, musicKeyDisplay), this, SLOT(on_contextMusicKey24_triggered()));
-	m->addAction(keys.keyName(17, musicKeyDisplay), this, SLOT(on_contextMusicKey17_triggered()));
-	m->addAction(keys.keyName(14, musicKeyDisplay), this, SLOT(on_contextMusicKey14_triggered()));
-	m->addAction(keys.keyName(4, musicKeyDisplay), this, SLOT(on_contextMusicKey4_triggered()));
-	m->addAction(keys.keyName(21, musicKeyDisplay), this, SLOT(on_contextMusicKey21_triggered()));
-	m->addAction(keys.keyName(7, musicKeyDisplay), this, SLOT(on_contextMusicKey7_triggered()));
-	m->addAction(keys.keyName(18, musicKeyDisplay), this, SLOT(on_contextMusicKey18_triggered()));
-	m->addAction(keys.keyName(8, musicKeyDisplay), this, SLOT(on_contextMusicKey8_triggered()));
-	m->addAction(keys.keyName(1, musicKeyDisplay), this, SLOT(on_contextMusicKey1_triggered()));
-	m->addAction(keys.keyName(11, musicKeyDisplay), this, SLOT(on_contextMusicKey11_triggered()));
-	m->addAction(keys.keyName(25, musicKeyDisplay), this, SLOT(on_contextMusicKey25_triggered()));
+	std::map<QString, const char*> sortedkeys;
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(1, musicKeyDisplay), SLOT(on_contextMusicKey1_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(2, musicKeyDisplay), SLOT(on_contextMusicKey2_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(3, musicKeyDisplay), SLOT(on_contextMusicKey3_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(4, musicKeyDisplay), SLOT(on_contextMusicKey4_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(5, musicKeyDisplay), SLOT(on_contextMusicKey5_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(6, musicKeyDisplay), SLOT(on_contextMusicKey6_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(7, musicKeyDisplay), SLOT(on_contextMusicKey7_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(8, musicKeyDisplay), SLOT(on_contextMusicKey8_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(9, musicKeyDisplay), SLOT(on_contextMusicKey9_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(10, musicKeyDisplay), SLOT(on_contextMusicKey10_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(11, musicKeyDisplay), SLOT(on_contextMusicKey11_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(12, musicKeyDisplay), SLOT(on_contextMusicKey12_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(13, musicKeyDisplay), SLOT(on_contextMusicKey13_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(14, musicKeyDisplay), SLOT(on_contextMusicKey14_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(15, musicKeyDisplay), SLOT(on_contextMusicKey15_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(16, musicKeyDisplay), SLOT(on_contextMusicKey16_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(17, musicKeyDisplay), SLOT(on_contextMusicKey17_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(18, musicKeyDisplay), SLOT(on_contextMusicKey18_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(19, musicKeyDisplay), SLOT(on_contextMusicKey19_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(20, musicKeyDisplay), SLOT(on_contextMusicKey20_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(21, musicKeyDisplay), SLOT(on_contextMusicKey21_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(22, musicKeyDisplay), SLOT(on_contextMusicKey22_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(23, musicKeyDisplay), SLOT(on_contextMusicKey23_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(24, musicKeyDisplay), SLOT(on_contextMusicKey24_triggered())));
+	sortedkeys.insert(std::pair<QString, const char*>(keys.keyName(25, musicKeyDisplay), SLOT(on_contextMusicKey25_triggered())));
+
+	std::map<QString, const char*>::const_iterator it;
+	for (it=sortedkeys.begin();it != sortedkeys.end();++it) {
+		m->addAction(it->first, this, it->second);
+	}
+
 }
 
 
