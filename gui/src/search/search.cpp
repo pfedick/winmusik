@@ -518,8 +518,16 @@ void Search::renderTrack(WMTreeItem* item, const DataTitle* ti)
 	item->setText(SEARCH_TRACKLIST_BPM_ROW, Tmp);
 	item->setText(SEARCH_TRACKLIST_KEY_ROW, wm_main->MusicKeys.keyName(ti->Key, musicKeyDisplay));
 
-	if ((ti->Flags & 16)) item->setForeground(SEARCH_TRACKLIST_KEY_ROW, QColor(0, 0, 0));
-	else item->setForeground(SEARCH_TRACKLIST_KEY_ROW, QColor(192, 192, 192));
+	QFont f=item->font(SEARCH_TRACKLIST_KEY_ROW);
+	if ((ti->Flags & 16)) {
+		f.setBold(true);
+		f.setWeight(QFont::Black);
+	} else {
+		f.setBold(false);
+		f.setWeight(QFont::ExtraLight);
+	}
+	item->setFont(SEARCH_TRACKLIST_KEY_ROW, f);
+
 	Tmp.setf("%d", (int)ti->EnergyLevel);
 	item->setText(SEARCH_TRACKLIST_ENERGYLEVEL_ROW, Tmp);
 
