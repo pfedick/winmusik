@@ -656,6 +656,8 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 	if (!wm->normalizer.GetWords(s, searchwords)) return;
 
 	ClipBoardTimer.stop();
+	ui.trackList->clearSelection();
+	currentTrackListItem=NULL;
 	SearchlistTreeItem* item;
 	for (int i=0;i < ui.trackList->topLevelItemCount();i++) {
 		item=(SearchlistTreeItem*)ui.trackList->topLevelItem(i);
