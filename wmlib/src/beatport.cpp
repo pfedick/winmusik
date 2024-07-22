@@ -26,62 +26,6 @@ namespace winmusik {
 namespace repexpmatch {
 
 
-#ifdef OLD
-
-static bool matchBeatPortPro100_getArtist(const ppl7::String& html, RegExpMatch& match)
-{
-    ppl7::Array Lines, List, matches;
-    if (!html.pregMatch("/<p class=\"buk-track-artists\".*?>(.*?)<\\/p>/is", matches)) return false;
-    Lines.explode(matches.get(1), "\n");
-    List.clear();
-    for (size_t i=0;i < Lines.size();i++) {
-        ppl7::String Line=Lines.get(i);
-        if (Line.pregMatch("/<a href=\".*?\" data-artist=\"[0-9]+\".*?>(.*?)<\\/a>/is", matches)) {
-            List.add(matches.get(1));
-        }
-    }
-    if (List.size() == 0) return false;
-    match.Artist=ppl7::UnescapeHTMLTags(List.implode(", "));
-    return true;
-}
-
-static bool matchBeatPortPro100_getLabels(const ppl7::String& html, RegExpMatch& match)
-{
-    ppl7::Array Lines, List, matches;
-    if (!html.pregMatch("/<p class=\"buk-track-labels\".*?>(.*?)<\\/p>/is", matches)) return false;
-    Lines.explode(matches.get(1), "\n");
-    List.clear();
-    for (size_t i=0;i < Lines.size();i++) {
-        ppl7::String Line=Lines.get(i);
-        if (Line.pregMatch("/<a href=\".*?\" data-label=\"[0-9]+\".*?>(.*?)<\\/a>/is", matches)) {
-            List.add(matches.get(1));
-        }
-    }
-    if (List.size() == 0) return false;
-    match.Label=ppl7::UnescapeHTMLTags(List.implode(", "));
-    return true;
-}
-
-static bool matchBeatPortPro100_getGenres(const ppl7::String& html, RegExpMatch& match)
-{
-    ppl7::Array Lines, List, matches;
-    if (!html.pregMatch("/<p class=\"buk-track-genre\".*?>(.*?)<\\/p>/is", matches)) return false;
-    Lines.explode(matches.get(1), "\n");
-    List.clear();
-    for (size_t i=0;i < Lines.size();i++) {
-        ppl7::String Line=Lines.get(i);
-        if (Line.pregMatch("/<a href=\".*?\" data-genre=\"[0-9]+\".*?>(.*?)<\\/a>/is", matches)) {
-            List.add(matches.get(1));
-        }
-    }
-    if (List.size() == 0) return false;
-    match.Genre=ppl7::UnescapeHTMLTags(List.implode(", "));
-    return true;
-}
-#endif
-
-
-
 static ppl7::String BeatportGetGenreFromId(int id)
 {
     switch (id) {
@@ -112,96 +56,6 @@ static ppl7::String BeatportGetGenreFromId(int id)
     }
     return ppl7::String();
 }
-
-#ifdef OLD
-
-bool matchBeatPortPro100(const ppl7::String& html, RegExpMatch& match)
-{
-    ppl7::Array matches;
-    //printf("Try match: %s\n\n", (const char*)html);
-    //<span class="buk-track-primary-title">Access</span>
-    if (!html.pregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/is", matches)) return false;
-    //printf("ok\n");
-    match.Title=ppl7::UnescapeHTMLTags(matches.get(1));
-    if (!html.pregMatch("/<span class=\"buk-track-remixed\".*?>(.*?)<\\/span>/is", matches)) return false;
-    match.Version=ppl7::UnescapeHTMLTags(matches.get(1));
-    if (html.pregMatch("/<p class=\"buk-track-released\".*?>([0-9\\-]+)<\\/p>/is", matches))
-        match.ReleaseDate=ppl7::UnescapeHTMLTags(matches.get(1));
-    if (!matchBeatPortPro100_getArtist(html, match)) return false;
-    matchBeatPortPro100_getLabels(html, match);
-    matchBeatPortPro100_getGenres(html, match);
-    fixIt(match);
-    return true;
-}
-
-
-bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& match)
-{
-    ppl7::Array matches;
-    ppl7::String Artist, Title, Version, Genre, Released, Label;
-    int found=0;
-    if (html.pregMatch("/<p class=\"buk-track-artists\".*?>(.*?)<\\/p>/i", matches)) {
-        ppl7::String todo=matches[1];
-        //printf("We found artists: %s\n", (const char*)todo); fflush(stdout);
-        while (todo.pregMatch("/^(.*?)<a .*?href=.*?>(.*?)<\\/a>(.*?)$/i", matches)) {
-            todo=matches[1] + matches[3];
-            Artist=Artist + ", " + matches[2];
-        }
-        Artist.trim(" ,");
-        found++;
-    }
-    if (html.pregMatch("/<p class=\"buk-track-title\".*?>(.*?)<\\/p>/i", matches)) {
-        ppl7::String todo=matches[1];
-        if (todo.pregMatch("/<span class=\"buk-track-primary-title\".*?>(.*?)<\\/span>/i", matches)) {
-            Title=matches[1];
-        }
-        if (todo.pregMatch("/<span class=\"buk-track-remixed\".*?>(.*?)<\\/span>/i", matches)) {
-            Version=matches[1];
-        }
-        found++;
-
-    }
-    if (html.pregMatch("/<p class=\"buk-track-genre\".*?>(.*?)<\\/p>/i", matches)) {
-        ppl7::String todo=matches[1];
-        //printf("Match1\n");	todo.printnl(); fflush(stdout);
-        Genre.clear();
-        if (todo.pregMatch("/<a .*?href=.*?data-subgenre=\"(.*?)\".*?<\\/a>/i", matches)) {
-            Genre=BeatportGetGenreFromId(matches[1].toInt());
-        } else if (todo.pregMatch("/<a .*?href=.*?data-genre=\"(.*?)\".*?<\\/a>/i", matches)) {
-            Genre=BeatportGetGenreFromId(matches[1].toInt());
-        }
-        if (Genre.isEmpty() && todo.pregMatch("/<a .*?href=.*?>(.*?)<\\/a>/i", matches)) {
-            Genre=matches[1];
-        }
-        found++;
-
-    }
-    if (html.pregMatch("/<p class=\"buk-track-released\".*?>(.*?)<\\/p>/i", matches)) {
-        ppl7::String todo=matches[1];
-        Released=matches[1];
-        found++;
-    }
-    if (html.pregMatch("/<p class=\"buk-track-labels\".*?>(.*?)<\\/p>/i", matches)) {
-        ppl7::String todo=matches[1];
-        if (todo.pregMatch("/<a .*?href=.*?>(.*?)<\\/a>/i", matches)) {
-            Label=matches[1];
-        }
-        found++;
-
-    }
-    match.Artist=Artist;
-    match.Title=Title;
-    match.Genre=Genre;
-    match.Label=Label;
-    match.ReleaseDate=Released;
-    match.Version=Version;
-    fixHTML(match);
-    fixIt(match);
-    //printf ("matches: %d\n",found);
-    if (found > 1) return true;
-    return false;
-}
-#endif
 
 bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
 {
@@ -246,15 +100,6 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
     ppl7::Array links(html, "</a>");
     for (size_t i=0;i < links.size();i++) {
         ppl7::String row=links[i] + "</a>";
-        //printf("row:>>%s<<\n\n", (const char*)row);
-        /*
-        if (!have_artist) {
-            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/artist\\/.*?>(.*?)</a>/is", matches)) {
-                            //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
-                artists.add(matches[1].trimmed());
-            }
-        }
-        */
         if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<div class.*?>(.*?)</div>.*?</a>/is", matches)) {
             // Beatport 2024_2
             Label=matches[1].trimmed();
@@ -310,8 +155,6 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
 bool matchBeatPort(const ppl7::String& html, RegExpMatch& match)
 {
     if (matchBeatPort2023(html, match)) return true;
-    //if (matchBeatPortProReleases(html, match)) return true;
-    //if (matchBeatPortPro100(html, match)) return true;
     return false;
 
 }
