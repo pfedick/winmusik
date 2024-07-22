@@ -157,6 +157,7 @@ void WMNormalizer::NormalizeTerm(ppl7::String& term) const
 	ReplaceIfExists(s, L" and ", replace);
 	ReplaceIfExists(s, L" - ", replace);
 	ReplaceIfExists(s, L" x ", replace);
+	ReplaceIfExists(s, L" | ", replace);
 	ReplaceIfExists(s, L" with ", replace);
 	ReplaceIfExists(s, L" /\\ ", replace);
 	ReplaceIfExists(s, L"DJ ", replace);
