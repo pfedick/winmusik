@@ -63,7 +63,7 @@ sinclude(pplib/autoconf/iconv.m4)
 sinclude(pplib/autoconf/bzip2.m4)
 sinclude(pplib/autoconf/ax_check_zlib.m4)
 sinclude(pplib/autoconf/ax_lib_crypto.m4)
-sinclude(pplib/autoconf/gtest.m4)
+sinclude(autoconf/gtest.m4)
 
 sinclude(autoconf/libcdio.m4)
 sinclude(autoconf/ax_find_qmake.m4)
@@ -264,17 +264,6 @@ AC_CHECK_HEADERS([sys/file.h])
 AC_CHECK_HEADERS([time.h])
 AC_CHECK_HEADERS([sys/time.h])
 AC_CHECK_HEADERS([sys/types.h])
-AC_CHECK_HEADERS([sys/socket.h])
-AC_CHECK_HEADERS([sys/poll.h])
-AC_CHECK_HEADERS([netinet/in.h])
-AC_CHECK_HEADERS([arpa/nameser.h])
-AC_CHECK_HEADERS([resolv.h],,,[
-	#include <sys/types.h>
-	#include <netinet/in.h>
-	#include <arpa/nameser.h>
-])
-AC_CHECK_HEADERS([netdb.h])
-AC_CHECK_HEADERS([arpa/inet.h])
 AC_CHECK_HEADERS([strings.h])
 AC_CHECK_HEADERS([errno.h])
 AC_CHECK_HEADERS([signal.h])
@@ -289,7 +278,6 @@ AC_CHECK_HEADERS([wchar.h])
 AC_CHECK_HEADERS([widec.h])
 AC_CHECK_HEADERS([syslog.h])
 AC_CHECK_HEADERS([sys/mman.h])
-AC_CHECK_HEADERS([valgrind/helgrind.h])
 
 AC_FUNC_MKTIME
 AC_CHECK_TYPE(size_t, unsigned)
@@ -304,8 +292,8 @@ AC_FUNC_STAT
 AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([strtolower strtoupper])
-AC_CHECK_FUNCS([bzero bcopy gethostbyname gettimeofday inet_ntoa memmove memset mkdir socket __mingw_vasprintf vasprintf asprintf])
-AC_CHECK_FUNCS([gethostname sethostname getdomainname setdomainname uname])
+AC_CHECK_FUNCS([bzero bcopy gethostbyname gettimeofday memmove memset mkdir __mingw_vasprintf vasprintf asprintf])
+AC_CHECK_FUNCS([uname])
 AC_CHECK_FUNCS([strcasecmp strlen strnlen strdup strerror strncasecmp strndup strstr strcasestr strcmp strncmp])
 AC_CHECK_FUNCS([strncpy strlcpy strncat strlcat])
 AC_CHECK_FUNCS([strtok strtok_r])
@@ -325,7 +313,6 @@ AC_CHECK_FUNCS([wstol wstoll watoi watoll wstod watof])
 AC_CHECK_FUNCS([poll select pselect])
 AC_CHECK_FUNCS([opendir closedir readdir readdir_r stat])
 AC_CHECK_FUNCS([clock_gettime])
-AC_CHECK_FUNCS([inet_ntop inet_pton inet_aton inet_ntoa inet_ntoa_r inet_addr inet_network inet_makeaddr])
 
 AC_CHECK_LIB(pthread, pthread_set_name_np,
 	AC_DEFINE(HAVE_PTHREAD_SET_NAME_NP,1),,)
@@ -335,12 +322,6 @@ AC_CHECK_LIB(pthread, pthread_setname_np,
 AC_CHECK_FUNCS([sched_yield pthread_yield])
 
 
-AC_CACHE_CHECK([for sa_len in struct sockaddr], ac_cv_struct_sa_len,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>
-#include <sys/socket.h>]], [[struct sockaddr s; s.sa_len;]])],[ac_cv_struct_sa_len=yes],[ac_cv_struct_sa_len=no])])
-if test $ac_cv_struct_sa_len = yes; then
-  AC_DEFINE(HAVE_SOCKADDR_SA_LEN)
-fi
 
 report_use_address_sanitizer="no"
 AC_MSG_CHECKING(if address sanitizer (asan) is wanted)
