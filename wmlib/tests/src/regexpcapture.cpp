@@ -169,4 +169,22 @@ TEST_F(RegExpCaptureTest, Beatport2024_2) {
 
 }
 
+TEST_F(RegExpCaptureTest, Beatport2024_NestedBrackets) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2024_brackets.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Lost In Dreams (UnKonscious 2024 Anthem)"), match.Title);
+    ASSERT_EQ(ppl7::String("Classix Extended Mix"), match.Version);
+    ASSERT_EQ(ppl7::String("Ferry Tayle, Tonks, Mirage"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("FSOE"), match.Label);
+    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
+    ASSERT_EQ(ppl7::String("2024-01-26"), match.ReleaseDate);
+
+
+}
+
+
 }
