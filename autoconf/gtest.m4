@@ -1,7 +1,7 @@
 dnl AC_CHECK_GTEST([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 
 AC_DEFUN([AC_CHECK_GTEST],[
-AC_MSG_CHECKING(if googletest 111 should be used for unittesting)
+AC_MSG_CHECKING(if googletest should be used for unittesting)
 
 AC_ARG_ENABLE([gtest],[
 AS_HELP_STRING([--enable-gtest=PATH],
