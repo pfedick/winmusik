@@ -354,6 +354,11 @@ if test "$am_cv_func_iconv_works" = "yes"
 then
 	report_have_iconv="yes"
 	ICONV_CFLAGS=$INCICONV
+	case "$LIBICONV" in
+		*libiconv.dll.a*)
+			LIBICONV="-liconv"
+			;;
+	esac
 	ICONV_LIBS=$LIBICONV
 	AC_SUBST(ICONV_CFLAGS)
 	AC_SUBST(ICONV_LIBS)
