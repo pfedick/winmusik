@@ -228,9 +228,9 @@ int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16
 		while ((Dir.getNextPattern(entry, it, Pattern, true))) {
 			Filename=entry.Filename;
 			// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
-			if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
+			if (!ppl7::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
 				// Muss aber mit .mp3 enden
-				if (Filename.pregMatch("/^.*\\.mp3$/i")) {
+				if (ppl7::RegEx::match("/^.*\\.mp3$/i", Filename)) {
 					//printf ("%s\n",(const char*)Filename);
 					addTrack(entry.File);
 					count++;

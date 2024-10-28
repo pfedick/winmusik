@@ -137,8 +137,8 @@ void Searchlists::on_newSearchlistButton_clicked()
 		Dir.reset(dirit);
 		ppl7::DirEntry entry;
 		while (Dir.getNextRegExp(entry, dirit, "/^searchlist[0-9]+\\.xml$/")) {
-			ppl7::Array Matches;
-			if (entry.Filename.pregMatch("/searchlist([0-9]+)\\.xml$/", Matches)) {
+			std::vector<ppl7::String> Matches;
+			if (ppl7::RegEx::capture("/searchlist([0-9]+)\\.xml$/", entry.Filename, Matches)) {
 				id=Matches[1].toInt();
 				if (id > highest) highest=id;
 			}

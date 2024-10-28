@@ -48,38 +48,38 @@ SearchlistItem::SearchlistItem(const ppl7::String& Misc)
 	}
 
 
-	ppl7::Array Matches;
-	if (Misc.pregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Matches)) {
+	std::vector<ppl7::String> Matches;
+	if (ppl7::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Misc, Matches)) {
 		//printf ("Match ASOT\n");
 		Artist=ppl7::Trim(Matches[1]);
 		Title=ppl7::Trim(Matches[2]);
 		Version=ppl7::Trim(Matches[3]);
-	} else if (Misc.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Misc, Matches)) {
 		Artist=ppl7::Trim(Matches[3]);
 		Title=ppl7::Trim(Matches[1]);
 		Version=ppl7::Trim(Matches[2]);
-	} else if (Misc.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Misc, Matches)) {
 		Artist=ppl7::Trim(Matches[3]);
 		Title=ppl7::Trim(Matches[1]);
 		Version=ppl7::Trim(Matches[2]);
-	} else if (Misc.pregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Misc, Matches)) {
 		Artist=ppl7::Trim(Matches[1]);
 		Title=ppl7::Trim(Matches[2]);
 		Version=ppl7::Trim(Matches[3]);
-	} else if (Misc.pregMatch("/^(.*?)\\-(.*?)$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)$/", Misc, Matches)) {
 		Artist=ppl7::Trim(Matches[1]);
 		Title=ppl7::Trim(Matches[2]);
 	}
-	if (Title.pregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
+	if (ppl7::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", Title, Matches)) {
 		Title=Matches[1];
 		Artist+=Matches[2];
-	} else if (Title.pregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", Title, Matches)) {
 		Title=Matches[1];
 		Artist+=Matches[2];
-	} else if (Title.pregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\spres\\..*)$/i", Title, Matches)) {
 		Title=Matches[1];
 		Artist+=Matches[2];
-	} else if (Title.pregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\spresents.*)$/i", Title, Matches)) {
 		Title=Matches[1];
 		Artist+=Matches[2];
 	}
@@ -110,26 +110,26 @@ void SearchlistItem::clear()
 
 void SearchlistItem::importXML(const ppl7::String& xml)
 {
-	ppl7::Array Matches;
-	if (xml.pregMatch("/\\<artist\\>(.*)\\<\\/artist\\>/s", Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<title\\>(.*)\\<\\/title\\>/s", Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<version\\>(.*)\\<\\/version\\>/s", Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<genre\\>(.*)\\<\\/genre\\>/s", Matches)) Genre=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<comment\\>(.*)\\<\\/comment\\>/s", Matches)) Comment=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	std::vector<ppl7::String> Matches;
+	if (ppl7::RegEx::capture("/\\<artist\\>(.*)\\<\\/artist\\>/s", xml, Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<title\\>(.*)\\<\\/title\\>/s", xml, Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<version\\>(.*)\\<\\/version\\>/s", xml, Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<genre\\>(.*)\\<\\/genre\\>/s", xml, Matches)) Genre=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<comment\\>(.*)\\<\\/comment\\>/s", xml, Matches)) Comment=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	try {
-		if (xml.pregMatch("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s", Matches)) ReleaseDate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+		if (ppl7::RegEx::capture("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s", xml, Matches)) ReleaseDate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	} catch (...) {
 		ReleaseDate.clear();
 	}
 	try {
-		if (xml.pregMatch("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s", Matches)) DateAdded=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+		if (ppl7::RegEx::capture("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s", xml, Matches)) DateAdded=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	} catch (...) {
 		DateAdded.clear();
 	}
-	if (xml.pregMatch("/\\<length\\>(.*)\\<\\/length\\>/s", Matches)) Length=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
-	if (xml.pregMatch("/\\<found\\>(.*)\\<\\/found\\>/s", Matches)) found=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
-	if (xml.pregMatch("/\\<selected\\>(.*)\\<\\/selected\\>/s", Matches)) selected=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
-	if (xml.pregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s", Matches)) Rating=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
+	if (ppl7::RegEx::capture("/\\<length\\>(.*)\\<\\/length\\>/s", xml, Matches)) Length=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
+	if (ppl7::RegEx::capture("/\\<found\\>(.*)\\<\\/found\\>/s", xml, Matches)) found=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+	if (ppl7::RegEx::capture("/\\<selected\\>(.*)\\<\\/selected\\>/s", xml, Matches)) selected=ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+	if (ppl7::RegEx::capture("/\\<rating\\>(.*)\\<\\/rating\\>/s", xml, Matches)) Rating=ppl7::UnescapeHTMLTags(Matches[1]).toInt();
 }
 
 ppl7::String SearchlistItem::exportXML() const
@@ -289,13 +289,13 @@ void CSearchlist::load(const ppl7::String& filename, bool headerOnly)
 	clear();
 	ppl7::String content;
 	ppl7::File::load(content, filename);
-	ppl7::Array matches;
+	std::vector<ppl7::String> matches;
 
-	if (content.pregMatch("/\\<header\\>(.*?)\\<\\/header\\>/s", matches)) {
-		ppl7::String header=matches.get(1);
-		if (header.pregMatch("/\\<name\\>(.*)\\<\\/name\\>/s", matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
-		if (header.pregMatch("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s", matches)) DateCreated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
-		if (header.pregMatch("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s", matches)) DateUpdated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.get(1)));
+	if (ppl7::RegEx::capture("/\\<header\\>(.*?)\\<\\/header\\>/s", content, matches)) {
+		ppl7::String header=matches.at(1);
+		if (ppl7::RegEx::capture("/\\<name\\>(.*)\\<\\/name\\>/s", header, matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
+		if (ppl7::RegEx::capture("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s", header, matches)) DateCreated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
+		if (ppl7::RegEx::capture("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s", header, matches)) DateUpdated=ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
 
 	}
 	if (headerOnly) return;

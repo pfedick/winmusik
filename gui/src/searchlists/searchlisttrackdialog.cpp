@@ -111,9 +111,9 @@ SearchlistItem SearchlistTrackDialog::get() const
 	}
 	track.Rating=ui.rating->currentIndex();
 	ppl7::String Tmp=ppl7::Trim(ppl7::String(ui.lengthEdit->text()));
-	ppl7::Array matches;
-	if (Tmp.pregMatch("/^([0-9]+):([0-9]{2})$/", matches)) {
-		track.Length=matches.get(1).toInt() * 60 + matches.get(2).toInt();
+	std::vector<ppl7::String> matches;
+	if (ppl7::RegEx::capture("/^([0-9]+):([0-9]{2})$/", Tmp, matches)) {
+		track.Length=matches.at(1).toInt() * 60 + matches.at(2).toInt();
 	} else {
 		track.Length=0;
 	}

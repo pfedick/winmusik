@@ -1223,11 +1223,11 @@ void Search::on_ClipBoardTimer_update()
 		//printf ("RegExpMatch: %s\n",(const char*)s);
 	} else {
 		s=clip.PlainText;
-		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (ppl7::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/",s)) return;
 		if (s.instr("\n") >= 0) return;
 		if (s.instrCase("https://") >= 0) return;
 		s.replace("\t", " ");
-		s.pregReplace("/\\(.*?\\)/", "");
+		s=ppl7::RegEx::replace("/\\(.*?\\)/", s, "");
 		s.trim();
 		if (s.isEmpty() || s.size() > 1024) return;
 		//printf ("NO RegExpMatch: %s\n",(const char*)s);

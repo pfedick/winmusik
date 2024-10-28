@@ -865,10 +865,10 @@ ppl7::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uin
 				const ppl7::DirEntry& entry=Dir.getNext(it);
 				Filename=entry.Filename;
 				// Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
-				if (!Filename.pregMatch("/^[0-9]{3}\\-.*/")) {
+				if (!ppl7::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
 					// Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als Platzhalter angelegt)
 					if (entry.Size > 256) {
-						if (Filename.pregMatch("/^.*\\.(mp3|aiff|aif|wav)$/i") == true) {
+						if (ppl7::RegEx::match("/^.*\\.(mp3|aiff|aif|wav)$/i", Filename) == true) {
 							// Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
 							if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Datei passt auf Pattern: %s", (const char*)Filename);
 							ppl7::String newFilename;
@@ -950,9 +950,9 @@ int CWmClient::SaveID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, 
 		// Unter Windows würde ein rename an dieser Stelle fehlschlagen, wenn die Datei
 		// bereits geöffnet ist (z.B. im MP3-Player). Daher geben wir die Aufgabe an den
 		// TagSaver
-		ppl7::Array matches;
-		if (InternalFilename.pregMatch("/.*\\.(.*?)$/", matches)) {
-			Tmp=NormalizeFilename(DeviceType, DeviceId, Page, Track, Ti, matches.get(1));
+		std::vector<ppl7::String> matches;
+		if (ppl7::RegEx::capture("/.*\\.(.*?)$/", InternalFilename, matches)) {
+			Tmp=NormalizeFilename(DeviceType, DeviceId, Page, Track, Ti, matches.at(1));
 			Job.set("renamefile", Tmp);
 		}
 	}
@@ -1142,8 +1142,8 @@ int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 int CWmClient::PlayFile(const ppl7::String& Filename)
 {
 	ppl7::String Player=conf.MP3Player;
-	ppl7::Array matches;
-	if (Filename.pregMatch("/\\.aif[f]{0,2}$/i", matches)) Player=conf.AIFFPlayer;
+	std::vector<ppl7::String> matches;
+	if (ppl7::RegEx::capture("/\\.aif[f]{0,2}$/i", Filename, matches)) Player=conf.AIFFPlayer;
 	if (Player.isEmpty()) Player=conf.MP3Player;
 
 #ifdef _WIN32

@@ -407,8 +407,8 @@ void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_
 ppl7::String CDDBImport::getVersionFromTitle(ppl7::String& Title, int length)
 {
 	ppl7::String Version="";
-	ppl7::Array matches;
-	if (Title.pregMatch("/^(.*)\\((.*?)\\)$", matches)) {
+	std::vector<ppl7::String> matches;
+	if (ppl7::RegEx::capture("/^(.*)\\((.*?)\\)$", Title, matches)) {
 		Title=ppl7::Trim(matches[1]);
 		Version=ppl7::Trim(matches[2]);
 	} else {

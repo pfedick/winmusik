@@ -86,18 +86,18 @@ void NormalizeImportString(ppl7::String& Buffer)
 static void fixArtistAndTitle(const ppl7::String& prefix, TrackInfo& info, const ppl7::String prefix_replace)
 {
 	ppl7::String regex="/(.*?)\\s" + prefix + "\\s+(.*)$/i";
-	ppl7::Array Matches;
+	std::vector<ppl7::String> Matches;
 	ppl7::String Title=info.Ti.Title;
 	ppl7::String Artist=info.Ti.Artist;
-	if (Title.pregMatch(regex, Matches)) {
-		ppl7::String feat=Matches.get(2);
+	if (ppl7::RegEx::capture(regex, Title, Matches)) {
+		ppl7::String feat=Matches.at(2);
 		feat.trim();
 		Title=Matches[1];
 		Artist.replace(feat, "");
 		Artist.trim();
 		Artist.trim(",");
 		Artist.replace(",,", ",");
-		Artist+=" " + prefix_replace + " " + Matches.get(2);
+		Artist+=" " + prefix_replace + " " + Matches.at(2);
 		info.Ti.SetArtist((const char*)Artist);
 		info.Ti.SetTitle((const char*)Title);
 	}
@@ -134,18 +134,18 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 		Tmp.set(id3.SongName, 30);
 		NormalizeImportString(Tmp);
 		// Sind Klammern enthalten?
-		ppl7::Array matches;
-		if (Tmp.pregMatch("/^(.*)\\((.*)\\).*$/", matches)) {
-			Title=matches.get(1);
+		std::vector<ppl7::String> matches;
+		if (ppl7::RegEx::capture("/^(.*)\\((.*)\\).*$/", Tmp, matches)) {
+			Title=matches.at(1);
 			Title.trim();
 			info.Ti.SetTitle(Title);
-			info.Version=matches.get(2);
+			info.Version=matches.at(2);
 			info.Version.trim();
-		} else if (Tmp.pregMatch("/^(.*)\\[(.*)\\].*$/", matches)) {
-			Title=matches.get(1);
+		} else if (ppl7::RegEx::capture("/^(.*)\\[(.*)\\].*$/", Tmp, matches)) {
+			Title=matches.at(1);
 			Title.trim();
 			info.Ti.SetTitle(Title);
-			info.Version=matches.get(2);
+			info.Version=matches.at(2);
 			info.Version.trim();
 		} else {
 			info.Ti.SetTitle(Tmp);
@@ -222,22 +222,22 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 	}
 
 	// Remixer
-	ppl7::Array matches;
-	if (Title.pregMatch("/^(.*?)\\s*\\((.*?)\\)\\s*\\((.*?)\\).*$/", matches)) {
+	std::vector<ppl7::String> matches;
+	if (ppl7::RegEx::capture("/^(.*?)\\s*\\((.*?)\\)\\s*\\((.*?)\\).*$/", Title, matches)) {
 		//printf ("Match 0\n");
-		ppl7::String Tmp1=matches.get(2);
-		ppl7::String Tmp2=matches.get(3);
-		Title=matches.get(1);
+		ppl7::String Tmp1=matches.at(2);
+		ppl7::String Tmp2=matches.at(3);
+		Title=matches.at(1);
 		Tmp1.trim();
 		Tmp2.trim();
 		Title.trim();
 		//printf ("Tmp1=%s, Tmp2=%s\n",(const char*)Tmp1,(const char*)Tmp2);
-		if (Tmp1.pregMatch("/feat\\.\\s+/i")) {
+		if (ppl7::RegEx::match("/feat\\.\\s+/i", Tmp1)) {
 			//printf ("xxx 1\n");
 			Tmp=Tmp2;
 			Artist+=" " + Tmp1;
 			info.Ti.SetArtist(Artist);
-		} else if (Tmp2.pregMatch("/feat\\.\\s+/i")) {
+		} else if (ppl7::RegEx::match("/feat\\.\\s+/i", Tmp2)) {
 			//printf ("xxx 2\n");
 			Tmp=Tmp1;
 			Artist+=" " + Tmp2;
@@ -247,16 +247,16 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 			Title+=" (" + Tmp1 + ")";
 			Tmp=Tmp2;
 		}
-	} else if (Title.pregMatch("/^(.*)\\((.*?)\\).*$/", matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*)\\((.*?)\\).*$/", Title, matches)) {
 		//printf ("Match 1\n");
-		Tmp=matches.get(2);
-		Title=matches.get(1);
+		Tmp=matches.at(2);
+		Title=matches.at(1);
 		Tmp.trim();
 		Title.trim();
-	} else if (Title.pregMatch("/^(.*)\\[(.*?)\\].*$/", matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*)\\[(.*?)\\].*$/", Title, matches)) {
 		//printf ("Match 2\n");
-		Tmp=matches.get(2);
-		Title=matches.get(1);
+		Tmp=matches.at(2);
+		Title=matches.at(1);
 		Tmp.trim();
 		Title.trim();
 	} else {
@@ -264,7 +264,7 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
 		Tmp=Tag.getRemixer();
 		NormalizeImportString(Tmp);
 	}
-	Tmp.pregReplace("/\\brmx\\b/i", " Remix");
+	Tmp=ppl7::RegEx::replace("/\\brmx\\b/i", Tmp, " Remix");
 	Tmp.trim();
 	Version=Tmp;
 	info.Version=Version;
@@ -310,30 +310,30 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
 	ppl7::String Tmp;
 	ppl7::String Title, Version;
 	NormalizeImportString(Name);
-	Name.pregReplace("/.mp3$/i", "");
-	Name.pregReplace("/.wav$/i", "");
-	Name.pregReplace("/.aif$/i", "");
-	Name.pregReplace("/.aiff$/i", "");
-	if (Name.pregMatch("/^[0-9]{3}-/")) {
-		ppl7::Array matches;
+	Name=ppl7::RegEx::replace("/.mp3$/i", Name, "");
+	Name=ppl7::RegEx::replace("/.wav$/i", Name, "");
+	Name=ppl7::RegEx::replace("/.aif$/i", Name, "");
+	Name=ppl7::RegEx::replace("/.aiff$/i", Name, "");
+	if (ppl7::RegEx::match("/^[0-9]{3}-/", Name)) {
+		std::vector<ppl7::String> matches;
 		Name.shl(0, 4);
-		if (Name.pregMatch("/^(.*)-(.*)$/u", matches)) {
-			Tmp=matches.get(1);
+		if (ppl7::RegEx::capture("/^(.*)-(.*)$/u", Name, matches)) {
+			Tmp=matches.at(1);
 			Tmp.trim();
 			info.Ti.SetArtist(Tmp);
-			Title=matches.get(2);
+			Title=matches.at(2);
 			// Hier könnte die Version drinstehen
-			if (Title.pregMatch("/^(.*)\\((.*)\\)", matches)) {
-				Tmp=matches.get(1);
+			if (ppl7::RegEx::capture("/^(.*)\\((.*)\\)", Title, matches)) {
+				Tmp=matches.at(1);
 				Tmp.trim();
 				info.Ti.SetTitle(Tmp);
-				info.Version=matches.get(2);
+				info.Version=matches.at(2);
 				info.Version.trim();
-			} else if (Title.pregMatch("/^(.*)\\[(.*)\\]", matches)) {
-				Tmp=matches.get(1);
+			} else if (ppl7::RegEx::capture("/^(.*)\\[(.*)\\]", Title, matches)) {
+				Tmp=matches.at(1);
 				Tmp.trim();
 				info.Ti.SetTitle(Tmp);
-				info.Version=matches.get(2);
+				info.Version=matches.at(2);
 				info.Version.trim();
 			} else {
 				Title.trim();
@@ -396,19 +396,19 @@ uint32_t findTitleIdByFilename(const ppl7::String& Filename)
 				ppl7::String f=Filename.mid(p);
 				f.replace(path, "");
 				//printf ("versuche match: %s\n",(const char*)f);
-				ppl7::Array matches;
-				if (f.pregMatch("/\\/([0-9]{3})\\/([0-9]+)\\/([0-9]{3})[^0-9]+.*$/", matches)) {
-					int myDeviceId=matches.get(1).toInt();
-					int myPage=matches.get(2).toInt();
-					int myTrack=matches.get(3).toInt();
+				std::vector<ppl7::String> matches;
+				if (ppl7::RegEx::capture("/\\/([0-9]{3})\\/([0-9]+)\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
+					int myDeviceId=matches.at(1).toInt();
+					int myPage=matches.at(2).toInt();
+					int myTrack=matches.at(3).toInt();
 					//printf ("myDeviceId=%i, myPage=%i, myTrack=%i\n",myDeviceId,myPage,myTrack);
 					const DataTrack* tr=wm_main->GetTrack(DeviceType, myDeviceId, myPage, myTrack);
 					if (tr) {
 						return tr->TitleId;
 					}
-				} else if (f.pregMatch("/\\/([0-9]{3})\\/([0-9]{3})[^0-9]+.*$/", matches)) {
-					int myDeviceId=matches.get(1).toInt();
-					int myTrack=matches.get(2).toInt();
+				} else if (ppl7::RegEx::capture("/\\/([0-9]{3})\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
+					int myDeviceId=matches.at(1).toInt();
+					int myTrack=matches.at(2).toInt();
 					//printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
 					const DataTrack* tr=wm_main->GetTrack(DeviceType, myDeviceId, 1, myTrack);
 					if (tr) {

@@ -136,7 +136,7 @@ void CHashes::FindWords(const WordTree& Tree, const ppl7::Array& words, TitleTre
 			bool found=false;
 			WordTree::const_iterator it;
 			for (it=Tree.begin();it != Tree.end();it++) {
-				if (ppl7::PregMatch(expression, it->first)) {
+				if (ppl7::RegEx::match(expression, it->first)) {
 					found=true;
 					if (!wordnum) Copy(Result, it->second);
 					else Add(Result, it->second);
@@ -178,7 +178,7 @@ void CHashes::FindSingleWord(const WordTree& Tree, const ppl7::String& Word, Tit
 		bool found=false;
 		WordTree::const_iterator it;
 		for (it=Tree.begin();it != Tree.end();it++) {
-			if (ppl7::PregMatch(expression, it->first)) {
+			if (ppl7::RegEx::match(expression, it->first)) {
 				if (Add(Result, it->second, filter)) found=true;
 			}
 		}

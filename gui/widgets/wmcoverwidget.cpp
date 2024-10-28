@@ -356,8 +356,8 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
             }
         } catch (...) {}
         try {
-            ppl7::Array matches;
-            if (ppl7::PregMatch("/^(https://www\\.amazon\\..*?)/.*&asin=(.*)$/", text, matches)) {
+            std::vector<ppl7::String> matches;
+            if (ppl7::RegEx::capture("/^(https://www\\.amazon\\..*?)/.*&asin=(.*)$/", text, matches)) {
                 ppl7::String amazon=matches[1] + "/dp/" + matches[2];
                 loadImageFromUri(amazon);
                 /*
@@ -391,10 +391,10 @@ void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
     ppl7::String url=pReply->request().url().url();
     m_DownloadedData = pReply->readAll();
     pReply->deleteLater();
-    if (ppl7::PregMatch("/^https://www.amazon.*?/dp/.*$/", url)) {
+    if (ppl7::RegEx::match("/^https://www.amazon.*?/dp/.*$/", url)) {
         ppl7::String page(m_DownloadedData.constData(), m_DownloadedData.size());
-        ppl7::Array matches;
-        if (ppl7::PregMatch("/<img alt=\".*\" src=\"(https://m\\.media-amazon\\.com/images.*\\.jpg)\">/", page, matches)) {
+        std::vector<ppl7::String> matches;
+        if (ppl7::RegEx::capture("/<img alt=\".*\" src=\"(https://m\\.media-amazon\\.com/images.*\\.jpg)\">/", page, matches)) {
             matches[1].printnl();
             QString qurl=matches[1];
             QNetworkRequest request2(qurl);

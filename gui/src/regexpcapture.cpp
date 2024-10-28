@@ -183,7 +183,7 @@ size_t RegularExpressionCapture::size() const
 	return patterns.size();
 }
 
-void RegularExpressionCapture::copyToMatch(const RegExpPattern& p, const ppl7::Array& res, RegExpMatch& match) const
+void RegularExpressionCapture::copyToMatch(const RegExpPattern& p, const std::vector<ppl7::String>& res, RegExpMatch& match) const
 {
 	if (p.artist) match.Artist=ppl7::Trim(res[p.artist]);
 	if (p.title) match.Title=ppl7::Trim(res[p.title]);
@@ -192,9 +192,9 @@ void RegularExpressionCapture::copyToMatch(const RegExpPattern& p, const ppl7::A
 	if (p.label) match.Label=ppl7::Trim(res[p.label]);
 	if (p.bpm) match.Bpm=ppl7::Trim(res[p.bpm]);
 	if (p.album) match.Album=ppl7::Trim(res[p.album]);
-	if (p.hours) match.Length+=res.get(p.hours).toInt() * 60 * 60;
-	if (p.minutes) match.Length+=res.get(p.minutes).toInt() * 60;
-	if (p.seconds) match.Length+=res.get(p.seconds).toInt();
+	if (p.hours) match.Length+=res.at(p.hours).toInt() * 60 * 60;
+	if (p.minutes) match.Length+=res.at(p.minutes).toInt() * 60;
+	if (p.seconds) match.Length+=res.at(p.seconds).toInt();
 	if (p.releasedate) match.ReleaseDate=ppl7::Trim(res[p.releasedate]);
 }
 
@@ -247,9 +247,9 @@ bool RegularExpressionCapture::match(const ppl7::String& data, RegExpMatch& matc
 bool RegularExpressionCapture::testMatch(const ppl7::String& data, RegExpMatch& match, const RegExpPattern& pattern) const
 {
 	ppl7::String Pattern;
-	ppl7::Array res;
+	std::vector<ppl7::String> res;
 	Pattern="/" + pattern.Pattern + "/ism";
-	if (data.pregMatch(Pattern, res)) {
+	if (ppl7::RegEx::capture(Pattern, data, res)) {
 		copyToMatch(pattern, res, match);
 		return true;
 	}

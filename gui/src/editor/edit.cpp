@@ -960,8 +960,8 @@ void Edit::handleDropEvent(QDropEvent* event)
 	if (p < 0) return;
 	f=f.mid(p);
 	f.replace(path, "");
-	ppl7::Array matches;
-	if (f.pregMatch("/\\/([0-9]+)\\/([0-9]{3})-.*$/", matches)) {
+	std::vector<ppl7::String> matches;
+	if (ppl7::RegEx::capture("/\\/([0-9]+)\\/([0-9]{3})-.*$/", f, matches)) {
 		int myDeviceId=matches[1].toInt();
 		int myTrack=matches[2].toInt();
 		OpenTrack(myDeviceId, 0, myTrack);
@@ -1013,7 +1013,7 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 	}
 	path.appendf("/%03d-", ui.track->text().toInt());
 	f=ppl7::File::getFilename(f);
-	if (f.pregMatch("/^[0-9]{3}-/")) {
+	if (ppl7::RegEx::match("/^[0-9]{3}-/",f)) {
 		f=f.mid(4);
 	}
 	path+=ppl7::File::getFilename(f);
@@ -1154,13 +1154,13 @@ static int getHighestIdOfDirectory(const ppl7::String& path)
 	int max=0;
 	ppl7::Dir dir;
 	if (dir.tryOpen(path, ppl7::Dir::SORT_FILENAME)) {
-		ppl7::Array matches;
+		std::vector<ppl7::String> matches;
 		ppl7::Dir::Iterator it;
 		dir.reset(it);
 		ppl7::DirEntry entry;
 		while ((dir.getNext(entry, it))) {
-			if (entry.Filename.pregMatch("/^([0-9]{3}_.*$", matches)) {
-				int v=matches.get(1).toInt();
+			if (ppl7::RegEx::capture("/^([0-9]{3}_.*$", entry.Filename, matches)) {
+				int v=matches.at(1).toInt();
 				if (v > max) max=v;
 				//printf("match: %d\n", v);
 			}
@@ -1755,11 +1755,11 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
 	} else {
 		ui.filesize->setText("");
 	}
-	Songname.pregReplace("/\\.mp3$/i", "");
-	Songname.pregReplace("/\\.aiff$/i", "");
-	Songname.pregReplace("/\\.aif$/i", "");
-	Songname.pregReplace("/\\.wav$/i", "");
-	Songname.pregReplace("/^[0-9]+-/", "");
+	Songname=ppl7::RegEx::replace("/\\.mp3$/i", Songname, "");
+	Songname=ppl7::RegEx::replace("/\\.aiff$/i", Songname, "");
+	Songname=ppl7::RegEx::replace("/\\.aif$/i", Songname, "");
+	Songname=ppl7::RegEx::replace("/\\.wav$/i", Songname, "");
+	Songname=ppl7::RegEx::replace("/^[0-9]+-/", Songname, "");
 	Songname.replace("_", " ");
 	Songname.replace("\t", " ");
 	QClipboard* clipboard = QApplication::clipboard();

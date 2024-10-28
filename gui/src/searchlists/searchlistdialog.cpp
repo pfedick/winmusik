@@ -646,10 +646,10 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 		s=match.Artist + " " + match.Title;
 	} else {
 		s=clip.PlainText;
-		if (s.pregMatch("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/")) return;
+		if (ppl7::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/",s)) return;
 		if (s.instr("\n") >= 0) return;
 		s.replace("\t", " ");
-		s.pregReplace("/\\(.*?\\)/", "");
+		s=ppl7::RegEx::replace("/\\(.*?\\)/", s, "");
 	}
 	s.lowerCase();
 	ppl7::Array searchwords;

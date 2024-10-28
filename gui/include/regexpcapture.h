@@ -32,7 +32,7 @@ class RegularExpressionCapture
 {
 private:
 	std::vector<de::pfp::winmusik::RegExpPattern> patterns;
-	void copyToMatch(const de::pfp::winmusik::RegExpPattern& p, const ppl7::Array& res, de::pfp::winmusik::RegExpMatch& match) const;
+	void copyToMatch(const de::pfp::winmusik::RegExpPattern& p, const std::vector<ppl7::String>& res, de::pfp::winmusik::RegExpMatch& match) const;
 	void addDefaultPatterns();
 
 public:

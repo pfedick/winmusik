@@ -253,7 +253,7 @@ void PlayListPrintDJ::printLine(PlaylistItem* item)
     }
     lastbpm=bpm;
     MusicKey key((int)item->musicKey);
-    ppl7::Array res;
+    std::vector<ppl7::String> res;
     if (item->keyModification > 0) {
         Font.setBold(true);
         painter.setFont(Font);
@@ -272,7 +272,7 @@ void PlayListPrintDJ::printLine(PlaylistItem* item)
             item->keyModification));
         Font.setBold(false);
         painter.setFont(Font);
-    } else if (item->Remarks.pregMatch("key\\s*[+]([1234])", res)) {
+    } else if (ppl7::RegEx::capture("key\\s*[+]([1234])", item->Remarks, res)) {
         Font.setBold(true);
         painter.setFont(Font);
         highlightRect(COL_KEY);
@@ -280,7 +280,7 @@ void PlayListPrintDJ::printLine(PlaylistItem* item)
         printRect(COL_KEY, ppl7::ToString("%s ▲+%s", (const char*)key.name(), res[1]));
         Font.setBold(false);
         painter.setFont(Font);
-    } else if (item->Remarks.pregMatch("key\\s*[-]([1234])", res)) {
+    } else if (ppl7::RegEx::capture("key\\s*[-]([1234])", item->Remarks, res)) {
         Font.setBold(true);
         painter.setFont(Font);
         highlightRect(COL_KEY);

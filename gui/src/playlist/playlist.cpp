@@ -1780,7 +1780,7 @@ ppl7::String Playlist::getExportFilename(int track, const ppl7::String& SourceFi
 		Tmp.appendf("%03d-", track);
 	}
 	ppl7::String Filename=ppl7::File::getFilename(SourceFile);
-	if (Filename.pregMatch("/^[0-9]{3}-/")) {
+	if (ppl7::RegEx::match("/^[0-9]{3}-/",Filename)) {
 		Filename=Filename.mid(4);
 	}
 	Tmp+=Filename;
