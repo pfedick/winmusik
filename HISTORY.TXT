@@ -2,6 +2,9 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 3.8.0,
+    - Updated pplib and replaced old pcre library by pcre2
+
 Version 3.7.2, Releasedate: 05.07.2024 (Tag: REL_3_7_2)
     - fixed drag and drop in playlist and searchresult
     - fixed deprecated call to Application::setActiveWindow
