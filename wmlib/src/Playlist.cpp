@@ -110,47 +110,46 @@ void PlaylistItem::exportToArray(ppl7::AssocArray& a) const
 
 void PlaylistItem::importFromXML(const ppl7::String& xml)
 {
-	ppl7::Array Matches;
-	if (xml.pregMatch("/\\<titleId\\>(.*)\\<\\/titleId\\>/s", Matches)) titleId=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<startPositionSec\\>(.*)\\<\\/startPositionSec\\>/s", Matches)) startPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
-	if (xml.pregMatch("/\\<endPositionSec\\>(.*)\\<\\/endPositionSec\\>/s", Matches)) endPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+	std::vector<ppl7::String> Matches;
+	if (ppl7::RegEx::capture("/\\<titleId\\>(.*)\\<\\/titleId\\>/s", xml, Matches)) titleId=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<startPositionSec\\>(.*)\\<\\/startPositionSec\\>/s", xml, Matches)) startPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+	if (ppl7::RegEx::capture("/\\<endPositionSec\\>(.*)\\<\\/endPositionSec\\>/s", xml, Matches)) endPositionSec=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
 
-	if (xml.pregMatch("/<cuts>(.*?)<\\/cuts>/s", Matches)) {
+	if (ppl7::RegEx::capture("/<cuts>(.*?)<\\/cuts>/s", xml, Matches)) {
 		ppl7::Array cuts(Matches[1], "</cut>");
 		size_t rows=cuts.size();
 		if (rows > 5) rows=5;
 		for (size_t i=0;i < rows;i++) {
 			ppl7::String cut=cuts[i];
 			//printf ("cut=>>%s<<\n",(const char*)cut);
-			if (cut.pregMatch("/<start>(.*?)<\\/start>/s", Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
-			if (cut.pregMatch("/<end>(.*?)<\\/end>/s", Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+			if (ppl7::RegEx::capture("/<start>(.*?)<\\/start>/s", cut, Matches)) cutStartPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
+			if (ppl7::RegEx::capture("/<end>(.*?)<\\/end>/s", cut, Matches)) cutEndPosition[i]=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
 		}
 	}
 
-	if (xml.pregMatch("/\\<Artist\\>(.*)\\<\\/Artist\\>/s", Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Title\\>(.*)\\<\\/Title\\>/s", Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Version\\>(.*)\\<\\/Version\\>/s", Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Genre\\>(.*)\\<\\/Genre\\>/s", Matches)) Genre=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Label\\>(.*)\\<\\/Label\\>/s", Matches)) Label=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Album\\>(.*)\\<\\/Album\\>/s", Matches)) Album=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<Remarks\\>(.*)\\<\\/Remarks\\>/s", Matches)) Remarks=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/\\<File\\>(.*)\\<\\/File\\>/s", Matches)) File=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Artist\\>(.*)\\<\\/Artist\\>/s", xml, Matches)) Artist=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Title\\>(.*)\\<\\/Title\\>/s", xml, Matches)) Title=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Version\\>(.*)\\<\\/Version\\>/s", xml, Matches)) Version=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Genre\\>(.*)\\<\\/Genre\\>/s", xml, Matches)) Genre=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Label\\>(.*)\\<\\/Label\\>/s", xml, Matches)) Label=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Album\\>(.*)\\<\\/Album\\>/s", xml, Matches)) Album=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<Remarks\\>(.*)\\<\\/Remarks\\>/s", xml, Matches)) Remarks=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/\\<File\\>(.*)\\<\\/File\\>/s", xml, Matches)) File=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
 	keyVerified=false;
-	if (xml.pregMatch("/\\<musicKey verified=\"true\"\\>/s", Matches)) keyVerified=true;
-
-	if (xml.pregMatch("/\\<musicKey.*?\\>(.*)\\<\\/musicKey\\>/s", Matches)) musicKey=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<energyLevel\\>(.*)\\<\\/energyLevel\\>/s", Matches)) energyLevel=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<bpm\\>(.*)\\<\\/bpm\\>/s", Matches)) bpm=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<bpmPlayed\\>(.*)\\<\\/bpmPlayed\\>/s", Matches)) bpmPlayed=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<rating\\>(.*)\\<\\/rating\\>/s", Matches)) rating=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<trackLength\\>(.*)\\<\\/trackLength\\>/s", Matches)) trackLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<mixLength\\>(.*)\\<\\/mixLength\\>/s", Matches)) {
+	if (ppl7::RegEx::capture("/\\<musicKey verified=\"true\"\\>/s", xml, Matches)) keyVerified=true;
+	if (ppl7::RegEx::capture("/\\<musicKey.*?\\>(.*)\\<\\/musicKey\\>/s", xml, Matches)) musicKey=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<energyLevel\\>(.*)\\<\\/energyLevel\\>/s", xml, Matches)) energyLevel=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<bpm\\>(.*)\\<\\/bpm\\>/s", xml, Matches)) bpm=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<bpmPlayed\\>(.*)\\<\\/bpmPlayed\\>/s", xml, Matches)) bpmPlayed=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<rating\\>(.*)\\<\\/rating\\>/s", xml, Matches)) rating=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<trackLength\\>(.*)\\<\\/trackLength\\>/s", xml, Matches)) trackLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<mixLength\\>(.*)\\<\\/mixLength\\>/s", xml, Matches)) {
 		printf("found: %s\n", (const char*)Matches[1]);
 		mixLength=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toFloat();
 	} else printf("no match in %s\n\n", (const char*)xml);
 
-	if (xml.pregMatch("/\\<keyModification.*?\\>(.*)\\<\\/keyModification\\>/s", Matches)) keyModification=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/\\<bitrate.*?\\>(.*)\\<\\/bitrate\\>/s", Matches)) bitrate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<keyModification.*?\\>(.*)\\<\\/keyModification\\>/s", xml, Matches)) keyModification=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/\\<bitrate.*?\\>(.*)\\<\\/bitrate\\>/s", xml, Matches)) bitrate=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
 }
 
 Playlist::Playlist()
@@ -179,15 +178,15 @@ void Playlist::load(const ppl7::String& filename)
 	ppl7::File::load(xml, filename);
 	if (!xml.has("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")) throw InvalidXMLFileException(filename);
 	if (!xml.has("<WinMusikPlaylist version=\"1\">")) throw InvalidPlaylistException(filename);
-	ppl7::Array Matches;
-	if (!xml.pregMatch("/<WinMusikPlaylist.*?>(.*?)<tracks>/s", Matches)) throw InvalidPlaylistException(filename);
+	std::vector<ppl7::String> Matches;
+	if (!ppl7::RegEx::capture("/<WinMusikPlaylist.*?>(.*?)<tracks>/s", xml, Matches)) throw InvalidPlaylistException(filename);
 	ppl7::String header=Matches[1];
-	if (xml.pregMatch("/<name>(.*?)<\\/name>/s", Matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/<subname>(.*?)<\\/subname>/s", Matches)) SubName=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-	if (xml.pregMatch("/<issue>(.*?)<\\/issue>/s", Matches)) IssueNumber=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
-	if (xml.pregMatch("/<date>(.*?)<\\/date>/s", Matches)) IssueDate.set(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
+	if (ppl7::RegEx::capture("/<name>(.*?)<\\/name>/s", xml, Matches)) Name=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/<subname>(.*?)<\\/subname>/s", xml, Matches)) SubName=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+	if (ppl7::RegEx::capture("/<issue>(.*?)<\\/issue>/s", xml, Matches)) IssueNumber=ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])).toInt();
+	if (ppl7::RegEx::capture("/<date>(.*?)<\\/date>/s", xml, Matches)) IssueDate.set(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
 
-	if (!xml.pregMatch("/<tracks>(.*?)<\\/tracks>/s", Matches)) return;
+	if (!ppl7::RegEx::capture("/<tracks>(.*?)<\\/tracks>/s", xml, Matches)) return;
 	ppl7::Array tracks(Matches[1], "</item>");
 	for (size_t i=0;i < tracks.size();i++) {
 		xml=tracks[i].trimmed();

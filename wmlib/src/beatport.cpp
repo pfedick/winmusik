@@ -205,19 +205,19 @@ bool matchBeatPortProReleases(const ppl7::String& html, RegExpMatch& match)
 
 bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
 {
-    ppl7::Array matches;
+    std::vector<ppl7::String> matches;
     ppl7::String Artist, Title, Version, Genre, Released, Label;
     int found=0;
-    if (html.pregMatch("/<a title=.*?href=.*?www.beatport.com.*?\\/track\\/.*?>(.*?)<\\/a>/is", matches)) {
+    if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com.*?\\/track\\/.*?>(.*?)<\\/a>/is", html, matches)) {
         ppl7::String todo=matches[1];
         //printf("We found track: %s\n", (const char*)todo); fflush(stdout);
-        if (todo.pregMatch("/<span .*?>(.*?)<span>.*?<\\/span>.*?<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
+        if (ppl7::RegEx::capture("/<span .*?>(.*?)<span>.*?<\\/span>.*?<span .*?>(.*?)<\\/span>.*?<\\/span>/is", todo, matches)) {
             // Beatport 2023 3
             Title=matches[1].trimmed();
             Version=matches[2].trimmed();
             //printf("Match Title: >>%s<<, >>%s<<!\n", (const char*)Title, (const char*)Version);
             found++;
-        } else if (todo.pregMatch("/<span .*?>(.*?)<span .*?>(.*?)<\\/span>.*?<\\/span>/is", matches)) {
+        } else if (ppl7::RegEx::capture("/<span .*?>(.*?)<span .*?>(.*?)<\\/span>.*?<\\/span>/is", todo, matches)) {
             Title=matches[1].trimmed();
             Version=matches[2].trimmed();
             //printf("Match Title: >>%s<<, >>%s<<!\n", (const char*)Title, (const char*)Version);
@@ -228,12 +228,12 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
     ppl7::Array artists;
     //bool have_artist=false;
 
-    if (html.pregMatch("/(<div class=.*?cell title.*?<div class=.*?cell label)/is", matches)) {
+    if (ppl7::RegEx::capture("/(<div class=.*?cell title.*?<div class=.*?cell label)/is", html, matches)) {
         ppl7::String Block=matches[1];
         ppl7::Array links(Block, "</a>");
         for (size_t i=0;i < links.size();i++) {
             ppl7::String row=links[i] + "</a>";
-            if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?artist\\/.*?>(.*?)</a>/is", matches)) {
+            if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?artist\\/.*?>(.*?)</a>/is", row, matches)) {
                 //printf("MATCH! >>%s<<\n", (const char*)matches[1]);
                 artists.add(matches[1].trimmed());
                 //have_artist=true;
@@ -255,29 +255,29 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
             }
         }
         */
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<div class.*?>(.*?)</div>.*?</a>/is", matches)) {
+        if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<div class.*?>(.*?)</div>.*?</a>/is", row, matches)) {
             // Beatport 2024_2
             Label=matches[1].trimmed();
-        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+        } else if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?<p class.*?>(.*?)</p>.*?</a>/is", row, matches)) {
             // Beatport 2023 3
             Label=matches[1].trimmed();
-        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", matches)) {
+        } else if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", row, matches)) {
             Label=matches[1].trimmed();
         }
-        if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<div class.*?>(.*?)</div>.*?</a>/is", matches)) {
+        if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<div class.*?>(.*?)</div>.*?</a>/is", row, matches)) {
             // Beatport 2024_2
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty() || Genre == "Trance") Genre=matches[2].trimmed();
-        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", matches)) {
+        } else if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>.*?<p class.*?>(.*?)</p>.*?</a>/is", row, matches)) {
             // Beatport 2023 3
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty() || Genre == "Trance") Genre=matches[2].trimmed();
-        } else if (row.pregMatch("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", matches)) {
+        } else if (ppl7::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", row, matches)) {
             Genre=BeatportGetGenreFromId(matches[1].toInt());
             if (Genre.isEmpty()) Genre=matches[2].trimmed();
         }
     }
-    if (Genre.pregMatch("/.*\\|.*<span>.*</span>(.*)$/", matches)) {
+    if (ppl7::RegEx::capture("/.*\\|.*<span>.*</span>(.*)$/", Genre, matches)) {
         Genre=matches[1].trimmed();
     } else {
         Genre.replace("Trance (Main Floor)", "Trance");
@@ -286,7 +286,7 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
         Artist=artists.implode(", ");
         found++;
     }
-    if (html.pregMatch("/<div class.*?date.*?>([0-9\\-]+)</div>/is", matches)) {
+    if (ppl7::RegEx::capture("/<div class.*?date.*?>([0-9\\-]+)</div>/is", html, matches)) {
         Released=matches[1].trimmed();
     }
 

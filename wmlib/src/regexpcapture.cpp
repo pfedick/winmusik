@@ -66,16 +66,16 @@ static void fixArtistAndTitle(const ppl7::String& prefix, RegExpMatch& match, co
 {
 	ppl7::String regex1="/(.*?)\\s" + prefix + "\\s+(.*)$/i";
 	ppl7::String regex2="/(.*?)\\(" + prefix + "\\s+(.*)\\)$/i";
-	ppl7::Array Matches;
-	if (match.Title.pregMatch(regex1, Matches) > 0 || match.Title.pregMatch(regex2, Matches) > 0) {
-		ppl7::String feat=Matches.get(2);
+	std::vector<ppl7::String> Matches;
+	if (ppl7::RegEx::capture(regex1, match.Title, Matches) > 0 || ppl7::RegEx::capture(regex2, match.Title, Matches) > 0) {
+		ppl7::String feat=Matches.at(2);
 		feat.trim();
 		match.Title=Matches[1];
 		match.Artist.replace(feat, "");
 		match.Artist.trim();
 		match.Artist.trim(",");
 		match.Artist.replace(",,", ",");
-		match.Artist+=" " + prefix_replace + " " + Matches.get(2);
+		match.Artist+=" " + prefix_replace + " " + Matches.at(2);
 	}
 }
 
@@ -109,40 +109,40 @@ void fixHTML(RegExpMatch& match)
 
 bool buildinMatch(const ppl7::String& data, RegExpMatch& match)
 {
-	ppl7::Array Matches;
-	if (data.pregMatch("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Matches)) {
+	std::vector<ppl7::String> Matches;
+	if (ppl7::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", data, Matches)) {
 		//printf ("Match ASOT\n");
 		match.Artist=ppl7::Trim(Matches[1]);
 		match.Title=ppl7::Trim(Matches[2]);
 		match.Version=ppl7::Trim(Matches[3]);
-	} else if (data.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", data, Matches)) {
 		match.Artist=ppl7::Trim(Matches[3]);
 		match.Title=ppl7::Trim(Matches[1]);
 		match.Version=ppl7::Trim(Matches[2]);
-	} else if (data.pregMatch("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", data, Matches)) {
 		match.Artist=ppl7::Trim(Matches[3]);
 		match.Title=ppl7::Trim(Matches[1]);
 		match.Version=ppl7::Trim(Matches[2]);
-	} else if (data.pregMatch("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", data, Matches)) {
 		match.Artist=ppl7::Trim(Matches[1]);
 		match.Title=ppl7::Trim(Matches[2]);
 		match.Version=ppl7::Trim(Matches[3]);
-	} else if (data.pregMatch("/^(.*?)\\-(.*?)$/", Matches)) {
+	} else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)$/", data, Matches)) {
 		match.Artist=ppl7::Trim(Matches[1]);
 		match.Title=ppl7::Trim(Matches[2]);
 	} else {
 		return false;
 	}
-	if (match.Title.pregMatch("/(.*?)(\\sfeat\\..*)$/i", Matches)) {
+	if (ppl7::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", match.Title, Matches)) {
 		match.Title=Matches[1].trimmed();
 		match.Artist+=Matches[2].trimmed();
-	} else if (match.Title.pregMatch("/(.*?)(\\sfeaturing.*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", match.Title, Matches)) {
 		match.Title=Matches[1].trimmed();
 		match.Artist+=Matches[2].trimmed();
-	} else if (match.Title.pregMatch("/(.*?)(\\spres\\..*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\spres\\..*)$/i", match.Title, Matches)) {
 		match.Title=Matches[1].trimmed();
 		match.Artist+=Matches[2].trimmed();
-	} else if (match.Title.pregMatch("/(.*?)(\\spresents.*)$/i", Matches)) {
+	} else if (ppl7::RegEx::capture("/(.*?)(\\spresents.*)$/i", match.Title, Matches)) {
 		match.Title=Matches[1].trimmed();
 		match.Artist+=Matches[2].trimmed();
 	}
