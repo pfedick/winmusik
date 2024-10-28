@@ -1219,6 +1219,7 @@ void Search::on_ClipBoardTimer_update()
 	RegExpMatch match;
 	ppl7::String s;
 	if (wm->RegExpCapture.match(clip, match)) {
+		match.Artist.pregReplace("/\\(.{2,3}?\\)/is", "");  // Filter out county code additions in artist ?
 		s=match.Artist + " " + match.Title;
 		//printf ("RegExpMatch: %s\n",(const char*)s);
 	} else {

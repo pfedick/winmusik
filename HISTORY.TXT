@@ -2,7 +2,27 @@
 
 \section WM3History_ WinMusik 3 Historie
 
-Version 3.7.0
+Version 3.7.2, Releasedate: 05.07.2024 (Tag: REL_3_7_2)
+    - fixed drag and drop in playlist and searchresult
+    - fixed deprecated call to Application::setActiveWindow
+    - fixed deprecations and compiler warnings
+    - fixed issue with hardcoded libiconv
+    - removed detection of Qt5 from configre
+    - removed WM_REGISTRATION_URL define, as it is not used anymore
+    - removed errors.cpp as it is not used anymore
+    - updated dependencies for mingw in readme
+    - added column for lable on searchlist
+    - added column for label in searchlist
+    - fixed focus in quicksearch
+    - don't open search from main menue, when search string is empty
+    - prevent search from starting, when no keyword is given and no filter used
+    - prevent searching for garbage when clipboard is watched
+    - fixed column size of genre and length in search result
+    - sort music keys by name in all context menues
+    - make verified key readable in search result when using dark mode
+    - added method to delete ID3-Tags from selected files in editor, when using the context menu
+
+Version 3.7.1, Releasedate: 30.06.2024 (Tag: REL_3_7_1)
     - pplib (ppl7) is now included as git submodule
     - upgraded code from ppl6 to ppl7 and removed ppl6
     - upgraded to Qt6

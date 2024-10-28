@@ -11646,14 +11646,12 @@ fi
 
 
 HAVE_GTEST="no"
-pplibgtest="googletest-release-1.12.1"
-pplibtestgtest="tests/$pplibgtest"
 
 if test "$enable_gtest" != "no"
 then
 	if test "$enable_gtest" = "yes"
 	then
-		enable_gtest=$pplibtestgtest
+		enable_gtest="wmlib/tests/googletest-release-1.10.0"
 	fi
 
 	if test -d "$enable_gtest"
@@ -11663,24 +11661,14 @@ then
 			if test -d "$enable_gtest/include/gtest"
 			then
 				HAVE_GTEST="yes"
-				if test "$enable_gtest" = "$pplibtestgtest"
-				then
-					GTEST_PREFIX="$pplibgtest"
-				else
-					GTEST_PREFIX="$enable_gtest"
-				fi
+				GTEST_PREFIX="$enable_gtest"
 
 			fi
 		fi
 		if test -f "$enable_gtest/googletest/src/gtest-all.cc"
 		then
 			HAVE_GTEST="yes"
-			if test "$enable_gtest" = "$pplibtestgtest"
-			then
-				GTEST_PREFIX="$pplibgtest/googletest"
-			else
-				GTEST_PREFIX="$enable_gtest/googletest"
-			fi
+			GTEST_PREFIX="$enable_gtest/googletest"
 
 		fi
 	fi
@@ -11800,60 +11788,6 @@ then :
 
 fi
 
-ac_fn_cxx_check_header_compile "$LINENO" "sys/socket.h" "ac_cv_header_sys_socket_h" "$ac_includes_default"
-if test "x$ac_cv_header_sys_socket_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_SYS_SOCKET_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "sys/poll.h" "ac_cv_header_sys_poll_h" "$ac_includes_default"
-if test "x$ac_cv_header_sys_poll_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_SYS_POLL_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "netinet/in.h" "ac_cv_header_netinet_in_h" "$ac_includes_default"
-if test "x$ac_cv_header_netinet_in_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_NETINET_IN_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "arpa/nameser.h" "ac_cv_header_arpa_nameser_h" "$ac_includes_default"
-if test "x$ac_cv_header_arpa_nameser_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_ARPA_NAMESER_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "resolv.h" "ac_cv_header_resolv_h" "
-	#include <sys/types.h>
-	#include <netinet/in.h>
-	#include <arpa/nameser.h>
-
-"
-if test "x$ac_cv_header_resolv_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_RESOLV_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "netdb.h" "ac_cv_header_netdb_h" "$ac_includes_default"
-if test "x$ac_cv_header_netdb_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_NETDB_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "arpa/inet.h" "ac_cv_header_arpa_inet_h" "$ac_includes_default"
-if test "x$ac_cv_header_arpa_inet_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_ARPA_INET_H 1" >>confdefs.h
-
-fi
-
 ac_fn_cxx_check_header_compile "$LINENO" "strings.h" "ac_cv_header_strings_h" "$ac_includes_default"
 if test "x$ac_cv_header_strings_h" = xyes
 then :
@@ -11949,13 +11883,6 @@ ac_fn_cxx_check_header_compile "$LINENO" "sys/mman.h" "ac_cv_header_sys_mman_h" 
 if test "x$ac_cv_header_sys_mman_h" = xyes
 then :
   printf "%s\n" "#define HAVE_SYS_MMAN_H 1" >>confdefs.h
-
-fi
-
-ac_fn_cxx_check_header_compile "$LINENO" "valgrind/helgrind.h" "ac_cv_header_valgrind_helgrind_h" "$ac_includes_default"
-if test "x$ac_cv_header_valgrind_helgrind_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_VALGRIND_HELGRIND_H 1" >>confdefs.h
 
 fi
 
@@ -12857,12 +12784,6 @@ then :
   printf "%s\n" "#define HAVE_GETTIMEOFDAY 1" >>confdefs.h
 
 fi
-ac_fn_cxx_check_func "$LINENO" "inet_ntoa" "ac_cv_func_inet_ntoa"
-if test "x$ac_cv_func_inet_ntoa" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_NTOA 1" >>confdefs.h
-
-fi
 ac_fn_cxx_check_func "$LINENO" "memmove" "ac_cv_func_memmove"
 if test "x$ac_cv_func_memmove" = xyes
 then :
@@ -12879,12 +12800,6 @@ ac_fn_cxx_check_func "$LINENO" "mkdir" "ac_cv_func_mkdir"
 if test "x$ac_cv_func_mkdir" = xyes
 then :
   printf "%s\n" "#define HAVE_MKDIR 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "socket" "ac_cv_func_socket"
-if test "x$ac_cv_func_socket" = xyes
-then :
-  printf "%s\n" "#define HAVE_SOCKET 1" >>confdefs.h
 
 fi
 ac_fn_cxx_check_func "$LINENO" "__mingw_vasprintf" "ac_cv_func___mingw_vasprintf"
@@ -12906,30 +12821,6 @@ then :
 
 fi
 
-ac_fn_cxx_check_func "$LINENO" "gethostname" "ac_cv_func_gethostname"
-if test "x$ac_cv_func_gethostname" = xyes
-then :
-  printf "%s\n" "#define HAVE_GETHOSTNAME 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "sethostname" "ac_cv_func_sethostname"
-if test "x$ac_cv_func_sethostname" = xyes
-then :
-  printf "%s\n" "#define HAVE_SETHOSTNAME 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "getdomainname" "ac_cv_func_getdomainname"
-if test "x$ac_cv_func_getdomainname" = xyes
-then :
-  printf "%s\n" "#define HAVE_GETDOMAINNAME 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "setdomainname" "ac_cv_func_setdomainname"
-if test "x$ac_cv_func_setdomainname" = xyes
-then :
-  printf "%s\n" "#define HAVE_SETDOMAINNAME 1" >>confdefs.h
-
-fi
 ac_fn_cxx_check_func "$LINENO" "uname" "ac_cv_func_uname"
 if test "x$ac_cv_func_uname" = xyes
 then :
@@ -13556,55 +13447,6 @@ then :
 
 fi
 
-ac_fn_cxx_check_func "$LINENO" "inet_ntop" "ac_cv_func_inet_ntop"
-if test "x$ac_cv_func_inet_ntop" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_NTOP 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_pton" "ac_cv_func_inet_pton"
-if test "x$ac_cv_func_inet_pton" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_PTON 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_aton" "ac_cv_func_inet_aton"
-if test "x$ac_cv_func_inet_aton" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_ATON 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_ntoa" "ac_cv_func_inet_ntoa"
-if test "x$ac_cv_func_inet_ntoa" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_NTOA 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_ntoa_r" "ac_cv_func_inet_ntoa_r"
-if test "x$ac_cv_func_inet_ntoa_r" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_NTOA_R 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_addr" "ac_cv_func_inet_addr"
-if test "x$ac_cv_func_inet_addr" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_ADDR 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_network" "ac_cv_func_inet_network"
-if test "x$ac_cv_func_inet_network" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_NETWORK 1" >>confdefs.h
-
-fi
-ac_fn_cxx_check_func "$LINENO" "inet_makeaddr" "ac_cv_func_inet_makeaddr"
-if test "x$ac_cv_func_inet_makeaddr" = xyes
-then :
-  printf "%s\n" "#define HAVE_INET_MAKEADDR 1" >>confdefs.h
-
-fi
-
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pthread_set_name_np in -lpthread" >&5
 printf %s "checking for pthread_set_name_np in -lpthread... " >&6; }
@@ -13702,38 +13544,6 @@ fi
 
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for sa_len in struct sockaddr" >&5
-printf %s "checking for sa_len in struct sockaddr... " >&6; }
-if test ${ac_cv_struct_sa_len+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <sys/types.h>
-#include <sys/socket.h>
-int
-main (void)
-{
-struct sockaddr s; s.sa_len;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"
-then :
-  ac_cv_struct_sa_len=yes
-else $as_nop
-  ac_cv_struct_sa_len=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_struct_sa_len" >&5
-printf "%s\n" "$ac_cv_struct_sa_len" >&6; }
-if test $ac_cv_struct_sa_len = yes; then
-  printf "%s\n" "#define HAVE_SOCKADDR_SA_LEN 1" >>confdefs.h
-
-fi
 
 report_use_address_sanitizer="no"
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if address sanitizer (asan) is wanted" >&5
@@ -15031,6 +14841,11 @@ if test "$am_cv_func_iconv_works" = "yes"
 then
 	report_have_iconv="yes"
 	ICONV_CFLAGS=$INCICONV
+	case "$LIBICONV" in
+		*libiconv.dll.a*)
+			LIBICONV="-liconv"
+			;;
+	esac
 	ICONV_LIBS=$LIBICONV
 
 

@@ -6067,17 +6067,17 @@ p, li { white-space: pre-wrap; }
         <translation>Could not save Title in TitleStore</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1263"/>
+        <location filename="src/search/search.cpp" line="1264"/>
         <source>Pos</source>
         <translation>Pos</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1264"/>
+        <location filename="src/search/search.cpp" line="1265"/>
         <source>Filename</source>
         <translation>Filename</translation>
     </message>
     <message>
-        <location filename="src/search/search.cpp" line="1265"/>
+        <location filename="src/search/search.cpp" line="1266"/>
         <source>Size</source>
         <translation>Size</translation>
     </message>
