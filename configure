@@ -663,6 +663,7 @@ LIBCURL
 LIBIDN_LIBS
 LIBMICROHTTPD_LIBS
 SDL2_LIBS
+PCRE_LIBS
 MPG123_LIBS
 LIBLDNS_LIBS
 LAME_LIBS
@@ -685,11 +686,12 @@ LAME_CFLAGS
 SQLITE3_CFLAGS
 POSTGRESQL_CFLAGS
 MYSQL_CFLAGS
+PCRE_CFLAGS
 JPEG_CFLAGS
 report_have_libcdio
 report_have_pthreads
 report_have_iconv
-report_have_pcre
+report_have_pcre2
 report_have_openssl
 report_have_bzip2
 report_have_zlib
@@ -702,12 +704,19 @@ LIBCDIO_LDFLAGS
 LIBCDIO_CFLAGS
 libcdio_LIBS
 libcdio_CFLAGS
+PKGCONFIG
 OPENSSL_LDFLAGS
 OPENSSL_LIBS
 OPENSSL_INCLUDES
-PCRE_CFLAGS
-PCRE_LIBS
-PKGCONFIG
+PCRE2_CFLAGS
+PCRE2_LIBS
+PCRE2_WIDE32_LIBS
+PCRE2_WIDE32_CFLAGS
+PCRE2_WIDE16_LIBS
+PCRE2_WIDE16_CFLAGS
+PCRE2_8_LIBS
+PCRE2_8_CFLAGS
+pcre2config
 ZLIB_LIBS
 ZLIB_CFLAGS
 BZ2_LIBS
@@ -855,7 +864,7 @@ enable_rpath
 with_libiconv_prefix
 with_bzip2
 with_zlib
-with_pcre
+with_pcre2
 with_openssl
 with_libcdio
 with_qmake
@@ -876,6 +885,12 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 CXXCPP
 XMKMF
+PCRE2_8_CFLAGS
+PCRE2_8_LIBS
+PCRE2_WIDE16_CFLAGS
+PCRE2_WIDE16_LIBS
+PCRE2_WIDE32_CFLAGS
+PCRE2_WIDE32_LIBS
 libcdio_CFLAGS
 libcdio_LIBS'
 
@@ -1535,7 +1550,7 @@ Optional Packages:
   --with-zlib=DIR         root directory path of zlib installation [defaults to
                           /usr/local or /usr if not found in /usr/local]
   --without-zlib          to disable zlib usage completely
-  --with-pcre[=prefix]    compile xmlpcre part (via libpcre check)
+  --with-pcre2[=PATH]     Prefix where libpcre2 is installed (optional)
   --with-openssl=DIR      root of the OpenSSL directory
   --with-libcdio[=PATH]   support accesing audio cds (optional)
   --with-qmake=PATH       Path and name of the qmake program (optional)
@@ -1557,6 +1572,18 @@ Some influential environment variables:
               path overriding pkg-config's built-in search path
   CXXCPP      C++ preprocessor
   XMKMF       Path to xmkmf, Makefile generator for X Window System
+  PCRE2_8_CFLAGS
+              C compiler flags for PCRE2_8, overriding pkg-config
+  PCRE2_8_LIBS
+              linker flags for PCRE2_8, overriding pkg-config
+  PCRE2_WIDE16_CFLAGS
+              C compiler flags for PCRE2_WIDE16, overriding pkg-config
+  PCRE2_WIDE16_LIBS
+              linker flags for PCRE2_WIDE16, overriding pkg-config
+  PCRE2_WIDE32_CFLAGS
+              C compiler flags for PCRE2_WIDE32, overriding pkg-config
+  PCRE2_WIDE32_LIBS
+              linker flags for PCRE2_WIDE32, overriding pkg-config
   libcdio_CFLAGS
               C compiler flags for libcdio, overriding pkg-config
   libcdio_LIBS
@@ -3557,56 +3584,9 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 
-# ===========================================================================
-#     http://www.gnu.org/software/autoconf-archive/ax_path_lib_pcre.html
-# ===========================================================================
-#
-# SYNOPSIS
-#
-#   AX_PATH_LIB_PCRE [(A/NA)]
-#
-# DESCRIPTION
-#
-#   check for pcre lib and set PCRE_LIBS and PCRE_CFLAGS accordingly.
-#
-#   also provide --with-pcre option that may point to the $prefix of the
-#   pcre installation - the macro will check $pcre/include and $pcre/lib to
-#   contain the necessary files.
-#
-#   the usual two ACTION-IF-FOUND / ACTION-IF-NOT-FOUND are supported and
-#   they can take advantage of the LIBS/CFLAGS additions.
-#
-# LICENSE
-#
-#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-#
-#   This program is free software; you can redistribute it and/or modify it
-#   under the terms of the GNU General Public License as published by the
-#   Free Software Foundation; either version 3 of the License, or (at your
-#   option) any later version.
-#
-#   This program is distributed in the hope that it will be useful, but
-#   WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-#   Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License along
-#   with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-#   As a special exception, the respective Autoconf Macro's copyright owner
-#   gives unlimited permission to copy, distribute and modify the configure
-#   scripts that are the output of Autoconf when processing the Macro. You
-#   need not follow the terms of the GNU General Public License when using
-#   or distributing such scripts, even though portions of the text of the
-#   Macro appear in them. The GNU General Public License (GPL) does govern
-#   all other use of the material that constitutes the Autoconf Macro.
-#
-#   This special exception to the GPL applies to versions of the Autoconf
-#   Macro released by the Autoconf Archive. When you make and distribute a
-#   modified version of the Autoconf Macro, you may extend this special
-#   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+
+
 
 
 
@@ -4024,7 +4004,8 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 #sinclude(pplib/autoconf/libcurl.m4)
-# iconv.m4 serial AM7 (gettext-0.18)
+# iconv.m4 serial 19 (gettext-0.18.2)
+
 
 
 
@@ -4183,7 +4164,7 @@ report_have_pthreads="no"
 report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
-report_have_pcre="no"
+report_have_pcre2="no"
 report_have_openssl="no"
 
 
@@ -11660,13 +11641,20 @@ if test ${enable_gtest+y}
 then :
   enableval=$enable_gtest;
 else $as_nop
-  enable_gtest=
+  enable_gtest="yes"
 fi
 
 
 HAVE_GTEST="no"
+pplibgtest="googletest-release-1.12.1"
+pplibtestgtest="tests/$pplibgtest"
+
 if test "$enable_gtest" != "no"
 then
+	if test "$enable_gtest" = "yes"
+	then
+		enable_gtest=$pplibtestgtest
+	fi
 
 	if test -d "$enable_gtest"
 	then
@@ -11675,44 +11663,39 @@ then
 			if test -d "$enable_gtest/include/gtest"
 			then
 				HAVE_GTEST="yes"
-				GTEST_PREFIX="$enable_gtest"
+				if test "$enable_gtest" = "$pplibtestgtest"
+				then
+					GTEST_PREFIX="$pplibgtest"
+				else
+					GTEST_PREFIX="$enable_gtest"
+				fi
 
 			fi
 		fi
 		if test -f "$enable_gtest/googletest/src/gtest-all.cc"
 		then
 			HAVE_GTEST="yes"
-			GTEST_PREFIX="$enable_gtest/googletest"
-
-		fi
-		if test -f "$enable_gtest/include/gtest/gtest.h"
-		then
-			HAVE_GTEST="yes"
-			GTEST_PREFIX="$enable_gtest"
-
-		fi
-	fi
-	if test "$HAVE_GTEST" = "no"
-	then
-		if test -f "/usr/include/gtest/gtest.h"
-		then
-			HAVE_GTEST="yes"
-			GTEST_PREFIX="/usr"
+			if test "$enable_gtest" = "$pplibtestgtest"
+			then
+				GTEST_PREFIX="$pplibgtest/googletest"
+			else
+				GTEST_PREFIX="$enable_gtest/googletest"
+			fi
 
 		fi
 	fi
 	if test "$HAVE_GTEST" = "yes"
 	then
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yesi" >&5
-printf "%s\n" "yesi" >&6; }
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
 
 	else
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no: not found" >&5
+printf "%s\n" "no: not found" >&6; }
 	fi
 else
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no: disabled by user" >&5
+printf "%s\n" "no: disabled by user" >&6; }
 fi
 
 if test $HAVE_GTEST = "yes"
@@ -14768,14 +14751,16 @@ else $as_nop
     am_cv_lib_iconv=no
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #include <stdlib.h>
 #include <iconv.h>
+
 int
 main (void)
 {
 iconv_t cd = iconv_open("","");
-       iconv(cd,NULL,NULL,NULL,NULL);
-       iconv_close(cd);
+           iconv(cd,NULL,NULL,NULL,NULL);
+           iconv_close(cd);
   ;
   return 0;
 }
@@ -14791,14 +14776,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
       LIBS="$LIBS $LIBICONV"
       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
 #include <stdlib.h>
 #include <iconv.h>
+
 int
 main (void)
 {
 iconv_t cd = iconv_open("","");
-         iconv(cd,NULL,NULL,NULL,NULL);
-         iconv_close(cd);
+             iconv(cd,NULL,NULL,NULL,NULL);
+             iconv_close(cd);
   ;
   return 0;
 }
@@ -14824,41 +14811,90 @@ then :
   printf %s "(cached) " >&6
 else $as_nop
 
-            am_save_LIBS="$LIBS"
+                  am_save_LIBS="$LIBS"
       if test $am_cv_lib_iconv = yes; then
         LIBS="$LIBS $LIBICONV"
       fi
-      if test "$cross_compiling" = yes
+      am_cv_func_iconv_works=no
+      for ac_iconv_const in '' 'const'; do
+        if test "$cross_compiling" = yes
 then :
   case "$host_os" in
-           aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
-           *)            am_cv_func_iconv_works="guessing yes" ;;
-         esac
+             aix* | hpux*) am_cv_func_iconv_works="guessing no" ;;
+             *)            am_cv_func_iconv_works="guessing yes" ;;
+           esac
 else $as_nop
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #include <iconv.h>
 #include <string.h>
-int main ()
+
+#ifndef ICONV_CONST
+# define ICONV_CONST $ac_iconv_const
+#endif
+
+int
+main (void)
 {
+int result = 0;
   /* Test against AIX 5.1 bug: Failures are not distinguishable from successful
      returns.  */
   {
     iconv_t cd_utf8_to_88591 = iconv_open ("ISO8859-1", "UTF-8");
     if (cd_utf8_to_88591 != (iconv_t)(-1))
       {
-        static const char input[] = "\342\202\254"; /* EURO SIGN */
+        static ICONV_CONST char input[] = "\342\202\254"; /* EURO SIGN */
         char buf[10];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_utf8_to_88591,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if (res == 0)
-          return 1;
+          result |= 1;
+        iconv_close (cd_utf8_to_88591);
+      }
+  }
+  /* Test against Solaris 10 bug: Failures are not distinguishable from
+     successful returns.  */
+  {
+    iconv_t cd_ascii_to_88591 = iconv_open ("ISO8859-1", "646");
+    if (cd_ascii_to_88591 != (iconv_t)(-1))
+      {
+        static ICONV_CONST char input[] = "\263";
+        char buf[10];
+        ICONV_CONST char *inptr = input;
+        size_t inbytesleft = strlen (input);
+        char *outptr = buf;
+        size_t outbytesleft = sizeof (buf);
+        size_t res = iconv (cd_ascii_to_88591,
+                            &inptr, &inbytesleft,
+                            &outptr, &outbytesleft);
+        if (res == 0)
+          result |= 2;
+        iconv_close (cd_ascii_to_88591);
+      }
+  }
+  /* Test against AIX 6.1..7.1 bug: Buffer overrun.  */
+  {
+    iconv_t cd_88591_to_utf8 = iconv_open ("UTF-8", "ISO-8859-1");
+    if (cd_88591_to_utf8 != (iconv_t)(-1))
+      {
+        static ICONV_CONST char input[] = "\304";
+        static char buf[2] = { (char)0xDE, (char)0xAD };
+        ICONV_CONST char *inptr = input;
+        size_t inbytesleft = 1;
+        char *outptr = buf;
+        size_t outbytesleft = 1;
+        size_t res = iconv (cd_88591_to_utf8,
+                            &inptr, &inbytesleft,
+                            &outptr, &outbytesleft);
+        if (res != (size_t)(-1) || outptr - buf > 1 || buf[1] != (char)0xAD)
+          result |= 4;
+        iconv_close (cd_88591_to_utf8);
       }
   }
 #if 0 /* This bug could be worked around by the caller.  */
@@ -14867,17 +14903,18 @@ int main ()
     iconv_t cd_88591_to_utf8 = iconv_open ("utf8", "iso88591");
     if (cd_88591_to_utf8 != (iconv_t)(-1))
       {
-        static const char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
+        static ICONV_CONST char input[] = "\304rger mit b\366sen B\374bchen ohne Augenma\337";
         char buf[50];
-        const char *inptr = input;
+        ICONV_CONST char *inptr = input;
         size_t inbytesleft = strlen (input);
         char *outptr = buf;
         size_t outbytesleft = sizeof (buf);
         size_t res = iconv (cd_88591_to_utf8,
-                            (char **) &inptr, &inbytesleft,
+                            &inptr, &inbytesleft,
                             &outptr, &outbytesleft);
         if ((int)res > 0)
-          return 1;
+          result |= 8;
+        iconv_close (cd_88591_to_utf8);
       }
   }
 #endif
@@ -14891,20 +14928,23 @@ int main ()
       && iconv_open ("UTF-8", "IBM-eucJP") == (iconv_t)(-1)
       /* Try HP-UX names.  */
       && iconv_open ("utf8", "eucJP") == (iconv_t)(-1))
-    return 1;
+    result |= 16;
+  return result;
+
+  ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_run "$LINENO"
 then :
   am_cv_func_iconv_works=yes
-else $as_nop
-  am_cv_func_iconv_works=no
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
+        test "$am_cv_func_iconv_works" = no || break
+      done
       LIBS="$am_save_LIBS"
 
 fi
@@ -14952,7 +14992,7 @@ extern
 #ifdef __cplusplus
 "C"
 #endif
-#if defined(__STDC__) || defined(__cplusplus)
+#if defined(__STDC__) || defined(_MSC_VER) || defined(__cplusplus)
 size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
 #else
 size_t iconv();
@@ -14977,12 +15017,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
     am_cv_proto_iconv=`echo "$am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${ac_t:-
-         }$am_cv_proto_iconv" >&5
-printf "%s\n" "${ac_t:-
-         }$am_cv_proto_iconv" >&6; }
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result:
+         $am_cv_proto_iconv" >&5
+printf "%s\n" "
+         $am_cv_proto_iconv" >&6; }
 
 printf "%s\n" "#define ICONV_CONST $am_cv_proto_iconv_arg1" >>confdefs.h
+
 
   fi
 
@@ -15272,150 +15313,44 @@ fi
 fi
 
 
-# PCRE vorhanden?
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
+# PCRE2 vorhanden?
 
-# Check whether --with-pcre was given.
-if test ${with_pcre+y}
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
+printf %s "checking if we should use pcre2... " >&6; }
+
+
+# Check whether --with-pcre2 was given.
+if test ${with_pcre2+y}
 then :
-  withval=$with_pcre;
+  withval=$with_pcre2; libpcre2_prefix="$withval"
 else $as_nop
-  with_pcre="yes"
+  libpcre2_prefix="auto"
 fi
 
-if test ".$with_pcre" = ".no" ; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: disabled" >&5
-printf "%s\n" "disabled" >&6; }
 
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: (testing)" >&5
-printf "%s\n" "(testing)" >&6; }
-  OLDLIBS="$LIBS"
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_study in -lpcre" >&5
-printf %s "checking for pcre_study in -lpcre... " >&6; }
-if test ${ac_cv_lib_pcre_pcre_study+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+	if test "$libpcre2_prefix" != "no"
+	then
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+		am_save_CFLAGS="$CFLAGS"
+		am_save_CPPFLAGS="$CPPFLAGS"
+		am_save_LIBS="$LIBS"
+		am_save_LDFLAGS="$LDFLAGS"
 
-namespace conftest {
-  extern "C" int pcre_study ();
-}
-int
-main (void)
-{
-return conftest::pcre_study ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"
-then :
-  ac_cv_lib_pcre_pcre_study=yes
-else $as_nop
-  ac_cv_lib_pcre_pcre_study=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pcre_pcre_study" >&5
-printf "%s\n" "$ac_cv_lib_pcre_pcre_study" >&6; }
-if test "x$ac_cv_lib_pcre_pcre_study" = xyes
-then :
-  printf "%s\n" "#define HAVE_LIBPCRE 1" >>confdefs.h
 
-  LIBS="-lpcre $LIBS"
-
-fi
-
-  if test "$ac_cv_lib_pcre_pcre_study" = "yes" ; then
-     PCRE_LIBS="-lpcre"
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PCRE_LIBS" >&5
-printf "%s\n" "$PCRE_LIBS" >&6; }
-     printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
-
-            report_have_pcre="yes"
-
-  else
-     OLDLDFLAGS="$LDFLAGS" ; LDFLAGS="$LDFLAGS -L$with_pcre/lib"
-     OLDCPPFLAGS="$CPPFLAGS" ; CPPFLAGS="$CPPFLAGS -I$with_pcre/include"
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_compile in -lpcre" >&5
-printf %s "checking for pcre_compile in -lpcre... " >&6; }
-if test ${ac_cv_lib_pcre_pcre_compile+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-namespace conftest {
-  extern "C" int pcre_compile ();
-}
-int
-main (void)
-{
-return conftest::pcre_compile ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"
-then :
-  ac_cv_lib_pcre_pcre_compile=yes
-else $as_nop
-  ac_cv_lib_pcre_pcre_compile=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pcre_pcre_compile" >&5
-printf "%s\n" "$ac_cv_lib_pcre_pcre_compile" >&6; }
-if test "x$ac_cv_lib_pcre_pcre_compile" = xyes
-then :
-  printf "%s\n" "#define HAVE_LIBPCRE 1" >>confdefs.h
-
-  LIBS="-lpcre $LIBS"
-
-fi
-
-     CPPFLAGS="$OLDCPPFLAGS"
-     LDFLAGS="$OLDLDFLAGS"
-     if test "$ac_cv_lib_pcre_pcre_compile" = "yes" ; then
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: .setting PCRE_LIBS -L$with_pcre/lib -lpcre" >&5
-printf "%s\n" ".setting PCRE_LIBS -L$with_pcre/lib -lpcre" >&6; }
-        PCRE_LIBS="-L$with_pcre/lib -lpcre"
-        test -d "$with_pcre/include" && PCRE_CFLAGS="-I$with_pcre/include"
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre" >&5
-printf %s "checking lib pcre... " >&6; }
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PCRE_LIBS" >&5
-printf "%s\n" "$PCRE_LIBS" >&6; }
-        printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
-
-            report_have_pcre="yes"
-
-     else
-        # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
+		if test "$libpcre2_prefix" = "yes" -o "$libpcre2_prefix" = "auto"
+		then
+			# Extract the first word of "pcre2-config", so it can be a program name with args.
+set dummy pcre2-config; ac_word=$2
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_path_PKGCONFIG+y}
+if test ${ac_cv_path_pcre2config+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
-  case $PKGCONFIG in
+  case $pcre2config in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKGCONFIG="$PKGCONFIG" # Let the user override the test with a path.
+  ac_cv_path_pcre2config="$pcre2config" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -15429,7 +15364,7 @@ do
   esac
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKGCONFIG="$as_dir$ac_word$ac_exec_ext"
+    ac_cv_path_pcre2config="$as_dir$ac_word$ac_exec_ext"
     printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -15437,41 +15372,338 @@ done
   done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_PKGCONFIG" && ac_cv_path_PKGCONFIG="no"
   ;;
 esac
 fi
-PKGCONFIG=$ac_cv_path_PKGCONFIG
-if test -n "$PKGCONFIG"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PKGCONFIG" >&5
-printf "%s\n" "$PKGCONFIG" >&6; }
+pcre2config=$ac_cv_path_pcre2config
+if test -n "$pcre2config"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $pcre2config" >&5
+printf "%s\n" "$pcre2config" >&6; }
 else
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 fi
 
 
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking lib pcre found with $PKGCONFIG" >&5
-printf %s "checking lib pcre found with $PKGCONFIG... " >&6; }
-        if test "$PKGCONFIG" != "no" && `$PKGCONFIG --exists libpcre`
-        then
-          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-          PCRE_LIBS=`$PKGCONFIG --libs libpcre`
-          PCRE_CFLAGS=`$PKGCONFIG --cflags libpcre`
-          printf "%s\n" "#define HAVE_PCRE 1" >>confdefs.h
 
-            report_have_pcre="yes"
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-8" >&5
+printf %s "checking for libpcre2-8... " >&6; }
 
-        else
-          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+if test -n "$PCRE2_8_CFLAGS"; then
+    pkg_cv_PCRE2_8_CFLAGS="$PCRE2_8_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_8_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-8" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_8_LIBS"; then
+    pkg_cv_PCRE2_8_LIBS="$PCRE2_8_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-8\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-8") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_8_LIBS=`$PKG_CONFIG --libs "libpcre2-8" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 
-        fi
-     fi
-  fi
-  LIBS="$OLDLIBS"
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
 fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_8_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-8" 2>&1`
+        else
+                PCRE2_8_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-8" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_8_PKG_ERRORS" >&5
+
+        have_libpcre2="no"
+				PCRE2_LIBS=""
+				PCRE2_CFLAGS=""
+
+				if test  -x "$pcre2config"
+				then
+					have_libpng="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        have_libpcre2="no"
+				PCRE2_LIBS=""
+				PCRE2_CFLAGS=""
+
+				if test  -x "$pcre2config"
+				then
+					have_libpng="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+
+else
+        PCRE2_8_CFLAGS=$pkg_cv_PCRE2_8_CFLAGS
+        PCRE2_8_LIBS=$pkg_cv_PCRE2_8_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        have_libpcre2="yes"
+				PCRE2_LIBS="$PCRE2_8_LIBS"
+				PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
+				printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+
+fi
+			if test ${ac_cv_sizeof_wchar_t} -eq 2
+			then
+
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-16" >&5
+printf %s "checking for libpcre2-16... " >&6; }
+
+if test -n "$PCRE2_WIDE16_CFLAGS"; then
+    pkg_cv_PCRE2_WIDE16_CFLAGS="$PCRE2_WIDE16_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-16\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-16") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE16_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-16" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_WIDE16_LIBS"; then
+    pkg_cv_PCRE2_WIDE16_LIBS="$PCRE2_WIDE16_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-16\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-16") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE16_LIBS=`$PKG_CONFIG --libs "libpcre2-16" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_WIDE16_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-16" 2>&1`
+        else
+                PCRE2_WIDE16_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-16" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_WIDE16_PKG_ERRORS" >&5
+
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs16`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+
+else
+        PCRE2_WIDE16_CFLAGS=$pkg_cv_PCRE2_WIDE16_CFLAGS
+        PCRE2_WIDE16_LIBS=$pkg_cv_PCRE2_WIDE16_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE16_LIBS"
+					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+
+fi
+			fi
+			if test ${ac_cv_sizeof_wchar_t} -eq 4
+			then
+
+pkg_failed=no
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-32" >&5
+printf %s "checking for libpcre2-32... " >&6; }
+
+if test -n "$PCRE2_WIDE32_CFLAGS"; then
+    pkg_cv_PCRE2_WIDE32_CFLAGS="$PCRE2_WIDE32_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-32\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-32") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE32_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-32" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$PCRE2_WIDE32_LIBS"; then
+    pkg_cv_PCRE2_WIDE32_LIBS="$PCRE2_WIDE32_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-32\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpcre2-32") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_PCRE2_WIDE32_LIBS=`$PKG_CONFIG --libs "libpcre2-32" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+                PCRE2_WIDE32_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-32" 2>&1`
+        else
+                PCRE2_WIDE32_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-32" 2>&1`
+        fi
+        # Put the nasty error message in config.log where it belongs
+        echo "$PCRE2_WIDE32_PKG_ERRORS" >&5
+
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+
+
+elif test $pkg_failed = untried; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        if test  -x "$pcre2config"
+					then
+						have_libpng="yes"
+						PCRE2_LIBS=`$PCRE2_LIBS $pcre2config --libs32`
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+
+
+else
+        PCRE2_WIDE32_CFLAGS=$pkg_cv_PCRE2_WIDE32_CFLAGS
+        PCRE2_WIDE32_LIBS=$pkg_cv_PCRE2_WIDE32_LIBS
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE32_LIBS"
+					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+
+fi
+			fi
+		else
+			LIBS="-L$libpng_prefix/lib"
+			CFLAGS="-I$libpng_prefix/include"
+			CPPFLAGS="-I$libpng_prefix/include"
+			LDFLAGS="-L$libpng_prefix/lib"
+			PCRE2_LIBS="-L$libpcre2_prefix/lib -lpcre2-8"
+			PCRE2_CFLAGS="-I$libpcre2_prefix/include"
+			printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+		fi
+
+
+		LIBS="$am_save_LIBS"
+		LDFLAGS="$am_save_LDFLAGS"
+		CFLAGS="$am_save_CFLAGS"
+		CPPFLAGS="$am_save_CPPFLAGS"
+	else
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+	fi
+	if test $have_libpcre2 = "yes"
+	then
+
+printf "%s\n" "#define HAVE_PCRE2 1" >>confdefs.h
+
+            report_have_pcre2="yes"
+
+	else
+		PCRE2_LIBS=""
+		PCRE2_CFLAGS=""
+		:
+	fi
+
 
 
 
@@ -16373,6 +16605,7 @@ esac;
 
 ###
 JPEG_CFLAGS=""
+PCRE_CFLAGS=""
 MYSQL_CFLAGS=""
 POSTGRESQL_CFLAGS=""
 SQLITE3_CFLAGS=""
@@ -16398,11 +16631,14 @@ LIBCURL=""
 LIBLDNS_LIBS=""
 MPG123_LIBS=""
 SDL2_LIBS=""
+PCRE_LIBS=""
 LIBMICROHTTPD_LIBS=""
 LIBIDN_LIBS=""
 ASM=""
 ASMFLAGS=""
 ASMDEBUGFLAGS=""
+
+
 
 
 
@@ -17933,7 +18169,7 @@ fi
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   OpenSSL:              $report_have_openssl
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   CDIO library:         $report_have_libcdio
 **
@@ -17963,7 +18199,7 @@ printf "%s\n" "
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   OpenSSL:              $report_have_openssl
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   CDIO library:         $report_have_libcdio
 **
@@ -17987,17 +18223,10 @@ printf "%s\n" "ERROR: Qt not found" >&6; }
 	ERR=1
 fi
 
-if test "$report_have_pcre" = "no"
+if test "$report_have_pcre2" != "yes"
 then
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ERROR: pcre library not found" >&5
-printf "%s\n" "ERROR: pcre library not found" >&6; }
-	ERR=1
-fi
-
-if test "$report_have_pcre" = "no"
-then
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ERROR: pcre library not found" >&5
-printf "%s\n" "ERROR: pcre library not found" >&6; }
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ERROR: pcre2 library not found" >&5
+printf "%s\n" "ERROR: pcre2 library not found" >&6; }
 	ERR=1
 fi
 

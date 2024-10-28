@@ -49,7 +49,7 @@ AC_CONFIG_FILES([Package/WinMusik.desktop])
 ###############################################################################
 
 sinclude(pplib/autoconf/ax_cxx_compile_stdcxx.m4)
-sinclude(pplib/autoconf/ax_path_lib_pcre.m4)
+sinclude(pplib/autoconf/pcre2.m4)
 sinclude(pplib/autoconf/ax_pthread.m4)
 sinclude(pplib/autoconf/checkfuncs.m4)
 sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
@@ -75,7 +75,7 @@ report_have_pthreads="no"
 report_have_iconv="no"
 report_have_bzip2="no"
 report_have_zlib="no"
-report_have_pcre="no"
+report_have_pcre2="no"
 report_have_openssl="no"
 
 AC_CANONICAL_TARGET
@@ -393,10 +393,9 @@ AX_CHECK_ZLIB(report_have_zlib="yes"
 dnl do we need to specify -lm explicitly?
 AC_CHECK_FUNC(sin,,[AC_CHECK_LIB(m,sin)])
 
-# PCRE vorhanden?
-AX_PATH_LIB_PCRE(
-            AC_DEFINE(HAVE_PCRE, 1, [ Define if you have pcre. ])
-            report_have_pcre="yes"
+# PCRE2 vorhanden?
+AC_CHECK_PCRE2(AC_DEFINE(HAVE_PCRE2, 1, [ Define if you have pcre2. ])
+            report_have_pcre2="yes"
             ,
             )
 
@@ -507,7 +506,7 @@ esac;
 AC_SUBST(report_have_zlib)
 AC_SUBST(report_have_bzip2)
 AC_SUBST(report_have_openssl)
-AC_SUBST(report_have_pcre)
+AC_SUBST(report_have_pcre2)
 AC_SUBST(report_have_iconv)
 AC_SUBST(report_have_pthreads)
 #AC_SUBST(report_have_curl)
@@ -515,6 +514,7 @@ AC_SUBST(report_have_libcdio)
 
 ###
 JPEG_CFLAGS=""
+PCRE_CFLAGS=""
 MYSQL_CFLAGS=""
 POSTGRESQL_CFLAGS=""
 SQLITE3_CFLAGS=""
@@ -540,6 +540,7 @@ LIBCURL=""
 LIBLDNS_LIBS=""
 MPG123_LIBS=""
 SDL2_LIBS=""
+PCRE_LIBS=""
 LIBMICROHTTPD_LIBS=""
 LIBIDN_LIBS=""
 ASM=""
@@ -547,6 +548,7 @@ ASMFLAGS=""
 ASMDEBUGFLAGS=""
 
 AC_SUBST(JPEG_CFLAGS)
+AC_SUBST(PCRE_CFLAGS)
 AC_SUBST(MYSQL_CFLAGS)
 AC_SUBST(POSTGRESQL_CFLAGS)
 AC_SUBST(SQLITE3_CFLAGS)
@@ -570,6 +572,7 @@ AC_SUBST(SQLITE3_LDFLAGS)
 AC_SUBST(LAME_LIBS)
 AC_SUBST(LIBLDNS_LIBS)
 AC_SUBST(MPG123_LIBS)
+AC_SUBST(PCRE_LIBS)
 AC_SUBST(SDL2_LIBS)
 AC_SUBST(LIBMICROHTTPD_LIBS)
 AC_SUBST(LIBIDN_LIBS)
@@ -612,7 +615,7 @@ AC_MSG_RESULT([
 **   ZLIB library:         $report_have_zlib
 **   BZIP2 library:        $report_have_bzip2
 **   OpenSSL:              $report_have_openssl
-**   PCRE:                 $report_have_pcre
+**   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   CDIO library:         $report_have_libcdio
 **
@@ -634,15 +637,9 @@ then
 	ERR=1
 fi
 
-if test "$report_have_pcre" = "no"
+if test "$report_have_pcre2" != "yes"
 then
-	AC_MSG_RESULT([ERROR: pcre library not found])
-	ERR=1
-fi
-
-if test "$report_have_pcre" = "no"
-then
-	AC_MSG_RESULT([ERROR: pcre library not found])
+	AC_MSG_RESULT([ERROR: pcre2 library not found])
 	ERR=1
 fi
 
