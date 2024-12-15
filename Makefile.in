@@ -80,6 +80,7 @@ update_version:
 mingw: update_version
 	mingw32-make -j8 ppl7_release
 	mingw32-make -j8 wmlib_release
+	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 	mingw32-make -j8 gui_release
 	cd gui && lupdate-qt6.exe WinMusik.pro
 	rm -rf release/deploy
@@ -113,6 +114,7 @@ wmlib_release:
 gui_release: gui/Makefile update_version
 	mkdir -p gui/release
 	rm -rf gui/release/WinMusik
+	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 	$(MAKE) --directory=gui release
 	mkdir -p release
 	cp gui/release/WinMusik release/WinMusik
@@ -131,6 +133,7 @@ wmlib_debug:
 gui_debug: gui/Makefile update_version
 	mkdir -p gui/debug
 	rm -rf gui/debug/WinMusik
+	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 	$(MAKE) --directory=gui debug
 	mkdir -p debug
 	cp gui/debug/WinMusik debug/WinMusik
