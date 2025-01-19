@@ -61,7 +61,8 @@ I use the ucrt libraries in this example:
         mingw-w64-ucrt-x86_64-libjpeg-turbo mingw-w64-ucrt-x86_64-bzip2 \
         mingw-w64-ucrt-x86_64-zlib mingw-w64-ucrt-x86_64-pcre \
         mingw-w64-ucrt-x86_64-libpng mingw-w64-ucrt-x86_64-qt6 \
-        mingw-w64-ucrt-x86_64-openssl mingw-w64-ucrt-x86_64-make
+        mingw-w64-ucrt-x86_64-openssl mingw-w64-ucrt-x86_64-make \
+        mingw-w64-ucrt-x86_64-llvm-libs pkgconf mingw-w64-ucrt-x86_64-clang-libs
 
 
 Fetch the code
