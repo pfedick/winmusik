@@ -177,7 +177,7 @@ TEST_F(RegExpCaptureTest, Beatport2024_NestedBrackets) {
 
     ASSERT_EQ(ppl7::String("Lost In Dreams (UnKonscious 2024 Anthem)"), match.Title);
     ASSERT_EQ(ppl7::String("Classix Extended Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Ferry Tayle, Tonks, Mirage"), match.Artist);
+    ASSERT_EQ(ppl7::String("Ferry Tayle, Tonks, Mirage (Fr)"), match.Artist);
 
     ASSERT_EQ(ppl7::String("FSOE"), match.Label);
     ASSERT_EQ(ppl7::String("Trance"), match.Genre);
@@ -185,6 +185,38 @@ TEST_F(RegExpCaptureTest, Beatport2024_NestedBrackets) {
 
 
 }
+
+TEST_F(RegExpCaptureTest, Beatport2025_1) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2025_1.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("What's a Girl to Do in '25 (Extended)"), match.Title);
+    ASSERT_EQ(ppl7::String("Extended"), match.Version);
+    ASSERT_EQ(ppl7::String("KI/KI"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Disorder"), match.Label);
+    ASSERT_EQ(ppl7::String(""), match.Genre);
+    ASSERT_EQ(ppl7::String("2025-09-12"), match.ReleaseDate);
+}
+
+
+TEST_F(RegExpCaptureTest, Beatport2025_2) {
+    ppl7::String html;
+    ppl7::File::load(html, "testdata/beatport2025_2.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    ASSERT_EQ(ppl7::String("Mind Body Soul"), match.Title);
+    ASSERT_EQ(ppl7::String("Eric Sneo Remix"), match.Version);
+    ASSERT_EQ(ppl7::String("Tom Wax"), match.Artist);
+
+    ASSERT_EQ(ppl7::String("Phuture Wax Records"), match.Label);
+    ASSERT_EQ(ppl7::String("Techno (Raw / Deep / Hypnotic)"), match.Genre);
+    ASSERT_EQ(ppl7::String("2025-07-25"), match.ReleaseDate);
+}
+
 
 
 }
