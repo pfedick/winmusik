@@ -28,7 +28,8 @@ OBJECTS = compile/main.o \
 	compile/storage_simple_table.o \
 	compile/storage_title.o \
 	compile/storage_track.o \
-	compile/regexpcapture.o
+	compile/regexpcapture.o \
+	compile/coverdownload.o
 
 $(PROGNAME): compile/libgtest.a $(OBJECTS) wmlib-tests.h ../debug/libwinmusik3.a
 	$(CXX) -O -ggdb -o $(PROGNAME) $(CFLAGS) $(OBJECTS) compile/libgtest.a $(LIBS)
@@ -125,3 +126,7 @@ compile/storage_track.o: src/storage_track.cpp Makefile wmlib-tests.h
 compile/regexpcapture.o: src/regexpcapture.cpp Makefile wmlib-tests.h
 	mkdir -p compile
 	$(CXX) $(CFLAGS) -o compile/regexpcapture.o -c src/regexpcapture.cpp
+
+compile/coverdownload.o: src/test_coverdownload.cpp Makefile wmlib-tests.h
+	mkdir -p compile
+	$(CXX) $(CFLAGS) -o compile/coverdownload.o -c src/test_coverdownload.cpp

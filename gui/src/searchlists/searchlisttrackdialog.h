@@ -17,16 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef SEARCHLISTTRACKDIALOG_H
 #define SEARCHLISTTRACKDIALOG_H
 
 #include <QWidget>
 #include <QTimer>
+#include <QPixmap>
 #include "ui_searchlisttrackdialog.h"
 #include "winmusik3.h"
 #include "csearchlist.h"
-
 
 class SearchlistTrackDialog : public QDialog
 {
@@ -40,7 +39,6 @@ public:
     void setFromClipboard();
     SearchlistItem get() const;
 
-
 private:
     SearchlistItem Track;
     Ui::SearchlistTrackDialogClass ui;
@@ -49,13 +47,12 @@ private:
     void closeEvent(QCloseEvent* event);
     void Resize();
 
-
-
 public slots:
     void on_saveButton_clicked();
     void on_cancelButton_clicked();
 
+    void on_coverwidget_imageChanged(const QPixmap& NewCover);
+    void on_coverwidget_imageDeleted();
 };
-
 
 #endif // SEARCHLISTTRACKDIALOG_H

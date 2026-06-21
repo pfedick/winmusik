@@ -18,6 +18,7 @@
  */
 
 #include <ppl7.h>
+#include <ppl7-inet.h>
 #include "wm_regexpcapture.h"
 
 namespace de

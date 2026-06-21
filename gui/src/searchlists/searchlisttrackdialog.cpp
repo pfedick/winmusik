@@ -72,7 +72,6 @@ void SearchlistTrackDialog::set(const SearchlistItem& track)
     ui.shopURLEdit->setText(track.ShopURL);
     ui.tagsEdit->setText(track.Tags);
     ui.commentEdit->setText(track.Comment);
-    ui.commentEdit->setText(track.Comment);
 
     ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
     if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
@@ -139,4 +138,36 @@ void SearchlistTrackDialog::on_saveButton_clicked()
 void SearchlistTrackDialog::on_cancelButton_clicked()
 {
     done(0);
+}
+
+void SearchlistTrackDialog::on_coverwidget_imageChanged(const QPixmap& NewCover)
+{
+    ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageChanged\n");
+    /*
+    Cover = NewCover;
+    UpdateCover();
+    */
+}
+
+void SearchlistTrackDialog::on_coverwidget_imageDeleted()
+{
+    ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageDeleted\n");
+    /*
+    Cover = QPixmap();
+    wm->UpdateCoverViewer(Cover);
+    if (wm_main->conf.bWriteID3Tags == true) {
+        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+        if (Path.notEmpty()) {
+            try {
+                ppl7::ID3Tag Tag;
+                Tag.load(Path);
+                Tag.removePicture(3);
+                Tag.save();
+            }
+            catch (const ppl7::Exception& exp) {
+                ShowException(exp, tr("could not remove cover picture from audio file"));
+            }
+        }
+    }
+        */
 }

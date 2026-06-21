@@ -653,7 +653,6 @@ LTLIBOBJS
 ASMDEBUGFLAGS
 ASMFLAGS
 ASM
-LIBCURL
 LIBIDN_LIBS
 LIBMICROHTTPD_LIBS
 SDL2_LIBS
@@ -669,7 +668,6 @@ SDL2_CFLAGS
 MPG123_CFLAGS
 HAVE_X86_ASSEMBLER
 FT2_CFLAGS
-LIBCURL_CPPFLAGS
 LIBCURL_CFLAGS
 IMLIB_CFLAGS
 LIBLDNS_CFLAGS
@@ -681,6 +679,7 @@ POSTGRESQL_CFLAGS
 MYSQL_CFLAGS
 JPEG_CFLAGS
 report_have_libcdio
+report_have_curl
 report_have_pthreads
 report_have_iconv
 report_have_pcre2
@@ -696,7 +695,9 @@ LIBCDIO_LDFLAGS
 LIBCDIO_CFLAGS
 libcdio_LIBS
 libcdio_CFLAGS
-PKGCONFIG
+_libcurl_config
+LIBCURL_CPPFLAGS
+LIBCURL
 OPENSSL_LDFLAGS
 OPENSSL_LIBS
 OPENSSL_INCLUDES
@@ -709,6 +710,7 @@ PCRE2_WIDE16_CFLAGS
 PCRE2_8_LIBS
 PCRE2_8_CFLAGS
 pcre2config
+PKGCONFIG
 ZLIB_LIBS
 ZLIB_CFLAGS
 BZ2_LIBS
@@ -856,6 +858,7 @@ with_bzip2
 with_zlib
 with_pcre2
 with_openssl
+with_libcurl
 with_libcdio
 with_qmake
 enable_year2038
@@ -1544,6 +1547,8 @@ Optional Packages:
   --without-zlib          to disable zlib usage completely
   --with-pcre2[=PATH]     Prefix where libpcre2 is installed (optional)
   --with-openssl=DIR      root of the OpenSSL directory
+  --with-libcurl=PREFIX   look for the curl library in PREFIX/lib and headers
+                          in PREFIX/include
   --with-libcdio[=PATH]   support accesing audio cds (optional)
   --with-qmake=PATH       Path and name of the qmake program (optional)
 
@@ -3565,13 +3570,13 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 #
 #   Check for baseline language coverage in the compiler for the specified
 #   version of the C++ standard.  If necessary, add switches to CXX and
-#   CXXCPP to enable support.  VERSION may be '11' (for the C++11 standard)
-#   or '14' (for the C++14 standard).
+#   CXXCPP to enable support.  VERSION may be '11', '14', '17', '20', or
+#   '23' for the respective C++ standard version.
 #
 #   The second argument, if specified, indicates whether you insist on an
 #   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
 #   -std=c++11).  If neither is specified, you get whatever works, with
-#   preference for an extended mode.
+#   preference for no added switch, and then for an extended mode.
 #
 #   The third argument, if specified 'mandatory' or if left unspecified,
 #   indicates that baseline support for the specified C++ standard is
@@ -3590,13 +3595,31 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 #   Copyright (c) 2015 Moritz Klammler <moritz@klammler.eu>
 #   Copyright (c) 2016, 2018 Krzesimir Nowak <qdlacz@gmail.com>
 #   Copyright (c) 2019 Enji Cooper <yaneurabeya@gmail.com>
+#   Copyright (c) 2020 Jason Merrill <jason@redhat.com>
+#   Copyright (c) 2021, 2024 JÃ¶rn Heusipp <osmanx@problemloesungsmaschine.de>
+#   Copyright (c) 2015, 2022, 2023, 2024 Olly Betts
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved.  This file is offered as-is, without any
 #   warranty.
 
-#serial 11
+#serial 25
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4037,7 +4060,65 @@ ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 
-#sinclude(pplib/autoconf/libcurl.m4)
+#***************************************************************************
+#                                  _   _ ____  _
+#  Project                     ___| | | |  _ \| |
+#                             / __| | | | |_) | |
+#                            | (__| |_| |  _ <| |___
+#                             \___|\___/|_| \_\_____|
+#
+# Copyright (C) 2006, David Shaw <dshaw@jabberwocky.com>
+#
+# This software is licensed as described in the file COPYING, which
+# you should have received as part of this distribution. The terms
+# are also available at http://curl.haxx.se/docs/copyright.html.
+#
+# You may opt to use, copy, modify, merge, publish, distribute and/or sell
+# copies of the Software, and permit persons to whom the Software is
+# furnished to do so, under the terms of the COPYING file.
+#
+# This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+# KIND, either express or implied.
+#
+###########################################################################
+# LIBCURL_CHECK_CONFIG ([DEFAULT-ACTION], [MINIMUM-VERSION],
+#                       [ACTION-IF-YES], [ACTION-IF-NO])
+# ----------------------------------------------------------
+#      David Shaw <dshaw@jabberwocky.com>   May-09-2006
+#
+# Checks for libcurl.  DEFAULT-ACTION is the string yes or no to
+# specify whether to default to --with-libcurl or --without-libcurl.
+# If not supplied, DEFAULT-ACTION is yes.  MINIMUM-VERSION is the
+# minimum version of libcurl to accept.  Pass the version as a regular
+# version number like 7.10.1. If not supplied, any version is
+# accepted.  ACTION-IF-YES is a list of shell commands to run if
+# libcurl was successfully found and passed the various tests.
+# ACTION-IF-NO is a list of shell commands that are run otherwise.
+# Note that using --without-libcurl does run ACTION-IF-NO.
+#
+# This macro #defines HAVE_LIBCURL if a working libcurl setup is
+# found, and sets @LIBCURL@ and @LIBCURL_CPPFLAGS@ to the necessary
+# values.  Other useful defines are LIBCURL_FEATURE_xxx where xxx are
+# the various features supported by libcurl, and LIBCURL_PROTOCOL_yyy
+# where yyy are the various protocols supported by libcurl.  Both xxx
+# and yyy are capitalized.  See the list of AH_TEMPLATEs at the top of
+# the macro for the complete list of possible defines.  Shell
+# variables $libcurl_feature_xxx and $libcurl_protocol_yyy are also
+# defined to 'yes' for those features and protocols that were found.
+# Note that xxx and yyy keep the same capitalization as in the
+# curl-config list (e.g. it's "HTTP" and not "http").
+#
+# Users may override the detected values by doing something like:
+# LIBCURL="-lcurl" LIBCURL_CPPFLAGS="-I/usr/myinclude" ./configure
+#
+# For the sake of sanity, this macro assumes that any libcurl that is
+# found is after version 7.7.2, the first version that included the
+# curl-config script.  Note that it is very important for people
+# packaging binary versions of libcurl to include this script!
+# Without curl-config, we can only guess what protocols are available,
+# or use curl_version_info to figure it out at runtime.
+
+
 # iconv.m4 serial 19 (gettext-0.18.2)
 
 
@@ -6763,19 +6844,13 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
   ac_success=no
 
-    if test x$ac_success = xno; then
-    for alternative in ${ax_cxx_compile_alternatives}; do
-      switch="-std=gnu++${alternative}"
-      cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
-printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
-if eval test \${$cachevar+y}
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features by default" >&5
+printf %s "checking whether $CXX supports C++17 features by default... " >&6; }
+if test ${ax_cv_cxx_compile_cxx17+y}
 then :
   printf %s "(cached) " >&6
 else case e in #(
-  e) ac_save_CXX="$CXX"
-         CXX="$CXX $switch"
-         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
@@ -6786,7 +6861,21 @@ else case e in #(
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201103L
+// MSVC always sets __cplusplus to 199711L in older versions; newer versions
+// only set it correctly if /Zc:__cplusplus is specified as well as a
+// /std:c++NN switch:
+//
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+//
+// The value __cplusplus ought to have is available in _MSVC_LANG since
+// Visual Studio 2015 Update 3:
+//
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros
+//
+// This was also the first MSVC version to support C++14 so we can't use the
+// value of either __cplusplus or _MSVC_LANG to quickly rule out MSVC having
+// C++11 or C++14 support, but we can check _MSVC_LANG for C++17 and later.
+#elif __cplusplus < 201103L && !defined _MSC_VER
 
 #error "This is not a C++11 compiler"
 
@@ -7073,7 +7162,7 @@ namespace cxx11
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201402L
+#elif __cplusplus < 201402L && !defined _MSC_VER
 
 #error "This is not a C++14 compiler"
 
@@ -7193,7 +7282,7 @@ namespace cxx14
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201703L
+#elif (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 #error "This is not a C++17 compiler"
 
@@ -7559,7 +7648,838 @@ namespace cxx17
 
 }  // namespace cxx17
 
-#endif  // __cplusplus < 201703L
+#endif  // (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
+
+
+
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+  ax_cv_cxx_compile_cxx17=yes
+else case e in #(
+  e) ax_cv_cxx_compile_cxx17=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ax_cv_cxx_compile_cxx17" >&5
+printf "%s\n" "$ax_cv_cxx_compile_cxx17" >&6; }
+    if test x$ax_cv_cxx_compile_cxx17 = xyes; then
+      ac_success=yes
+    fi
+
+    if test x$ac_success = xno; then
+    for alternative in ${ax_cxx_compile_alternatives}; do
+      switch="-std=gnu++${alternative}"
+      cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
+printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
+if eval test \${$cachevar+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) ac_save_CXX="$CXX"
+         CXX="$CXX $switch"
+         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+// If the compiler admits that it is not ready for C++11, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+// MSVC always sets __cplusplus to 199711L in older versions; newer versions
+// only set it correctly if /Zc:__cplusplus is specified as well as a
+// /std:c++NN switch:
+//
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+//
+// The value __cplusplus ought to have is available in _MSVC_LANG since
+// Visual Studio 2015 Update 3:
+//
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros
+//
+// This was also the first MSVC version to support C++14 so we can't use the
+// value of either __cplusplus or _MSVC_LANG to quickly rule out MSVC having
+// C++11 or C++14 support, but we can check _MSVC_LANG for C++17 and later.
+#elif __cplusplus < 201103L && !defined _MSC_VER
+
+#error "This is not a C++11 compiler"
+
+#else
+
+namespace cxx11
+{
+
+  namespace test_static_assert
+  {
+
+    template <typename T>
+    struct check
+    {
+      static_assert(sizeof(int) <= sizeof(T), "not big enough");
+    };
+
+  }
+
+  namespace test_final_override
+  {
+
+    struct Base
+    {
+      virtual ~Base() {}
+      virtual void f() {}
+    };
+
+    struct Derived : public Base
+    {
+      virtual ~Derived() override {}
+      virtual void f() override {}
+    };
+
+  }
+
+  namespace test_double_right_angle_brackets
+  {
+
+    template < typename T >
+    struct check {};
+
+    typedef check<void> single_type;
+    typedef check<check<void>> double_type;
+    typedef check<check<check<void>>> triple_type;
+    typedef check<check<check<check<void>>>> quadruple_type;
+
+  }
+
+  namespace test_decltype
+  {
+
+    int
+    f()
+    {
+      int a = 1;
+      decltype(a) b = 2;
+      return a + b;
+    }
+
+  }
+
+  namespace test_type_deduction
+  {
+
+    template < typename T1, typename T2 >
+    struct is_same
+    {
+      static const bool value = false;
+    };
+
+    template < typename T >
+    struct is_same<T, T>
+    {
+      static const bool value = true;
+    };
+
+    template < typename T1, typename T2 >
+    auto
+    add(T1 a1, T2 a2) -> decltype(a1 + a2)
+    {
+      return a1 + a2;
+    }
+
+    int
+    test(const int c, volatile int v)
+    {
+      static_assert(is_same<int, decltype(0)>::value == true, "");
+      static_assert(is_same<int, decltype(c)>::value == false, "");
+      static_assert(is_same<int, decltype(v)>::value == false, "");
+      auto ac = c;
+      auto av = v;
+      auto sumi = ac + av + 'x';
+      auto sumf = ac + av + 1.0;
+      static_assert(is_same<int, decltype(ac)>::value == true, "");
+      static_assert(is_same<int, decltype(av)>::value == true, "");
+      static_assert(is_same<int, decltype(sumi)>::value == true, "");
+      static_assert(is_same<int, decltype(sumf)>::value == false, "");
+      static_assert(is_same<int, decltype(add(c, v))>::value == true, "");
+      return (sumf > 0.0) ? sumi : add(c, v);
+    }
+
+  }
+
+  namespace test_noexcept
+  {
+
+    int f() { return 0; }
+    int g() noexcept { return 0; }
+
+    static_assert(noexcept(f()) == false, "");
+    static_assert(noexcept(g()) == true, "");
+
+  }
+
+  namespace test_constexpr
+  {
+
+    template < typename CharT >
+    unsigned long constexpr
+    strlen_c_r(const CharT *const s, const unsigned long acc) noexcept
+    {
+      return *s ? strlen_c_r(s + 1, acc + 1) : acc;
+    }
+
+    template < typename CharT >
+    unsigned long constexpr
+    strlen_c(const CharT *const s) noexcept
+    {
+      return strlen_c_r(s, 0UL);
+    }
+
+    static_assert(strlen_c("") == 0UL, "");
+    static_assert(strlen_c("1") == 1UL, "");
+    static_assert(strlen_c("example") == 7UL, "");
+    static_assert(strlen_c("another\0example") == 7UL, "");
+
+  }
+
+  namespace test_rvalue_references
+  {
+
+    template < int N >
+    struct answer
+    {
+      static constexpr int value = N;
+    };
+
+    answer<1> f(int&)       { return answer<1>(); }
+    answer<2> f(const int&) { return answer<2>(); }
+    answer<3> f(int&&)      { return answer<3>(); }
+
+    void
+    test()
+    {
+      int i = 0;
+      const int c = 0;
+      static_assert(decltype(f(i))::value == 1, "");
+      static_assert(decltype(f(c))::value == 2, "");
+      static_assert(decltype(f(0))::value == 3, "");
+    }
+
+  }
+
+  namespace test_uniform_initialization
+  {
+
+    struct test
+    {
+      static const int zero {};
+      static const int one {1};
+    };
+
+    static_assert(test::zero == 0, "");
+    static_assert(test::one == 1, "");
+
+  }
+
+  namespace test_lambdas
+  {
+
+    void
+    test1()
+    {
+      auto lambda1 = [](){};
+      auto lambda2 = lambda1;
+      lambda1();
+      lambda2();
+    }
+
+    int
+    test2()
+    {
+      auto a = [](int i, int j){ return i + j; }(1, 2);
+      auto b = []() -> int { return '0'; }();
+      auto c = [=](){ return a + b; }();
+      auto d = [&](){ return c; }();
+      auto e = [a, &b](int x) mutable {
+        const auto identity = [](int y){ return y; };
+        for (auto i = 0; i < a; ++i)
+          a += b--;
+        return x + identity(a + b);
+      }(0);
+      return a + b + c + d + e;
+    }
+
+    int
+    test3()
+    {
+      const auto nullary = [](){ return 0; };
+      const auto unary = [](int x){ return x; };
+      using nullary_t = decltype(nullary);
+      using unary_t = decltype(unary);
+      const auto higher1st = [](nullary_t f){ return f(); };
+      const auto higher2nd = [unary](nullary_t f1){
+        return [unary, f1](unary_t f2){ return f2(unary(f1())); };
+      };
+      return higher1st(nullary) + higher2nd(nullary)(unary);
+    }
+
+  }
+
+  namespace test_variadic_templates
+  {
+
+    template <int...>
+    struct sum;
+
+    template <int N0, int... N1toN>
+    struct sum<N0, N1toN...>
+    {
+      static constexpr auto value = N0 + sum<N1toN...>::value;
+    };
+
+    template <>
+    struct sum<>
+    {
+      static constexpr auto value = 0;
+    };
+
+    static_assert(sum<>::value == 0, "");
+    static_assert(sum<1>::value == 1, "");
+    static_assert(sum<23>::value == 23, "");
+    static_assert(sum<1, 2>::value == 3, "");
+    static_assert(sum<5, 5, 11>::value == 21, "");
+    static_assert(sum<2, 3, 5, 7, 11, 13>::value == 41, "");
+
+  }
+
+  // http://stackoverflow.com/questions/13728184/template-aliases-and-sfinae
+  // Clang 3.1 fails with headers of libstd++ 4.8.3 when using std::function
+  // because of this.
+  namespace test_template_alias_sfinae
+  {
+
+    struct foo {};
+
+    template<typename T>
+    using member = typename T::member_type;
+
+    template<typename T>
+    void func(...) {}
+
+    template<typename T>
+    void func(member<T>*) {}
+
+    void test();
+
+    void test() { func<foo>(0); }
+
+  }
+
+}  // namespace cxx11
+
+#endif  // __cplusplus >= 201103L
+
+
+
+
+// If the compiler admits that it is not ready for C++14, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+#elif __cplusplus < 201402L && !defined _MSC_VER
+
+#error "This is not a C++14 compiler"
+
+#else
+
+namespace cxx14
+{
+
+  namespace test_polymorphic_lambdas
+  {
+
+    int
+    test()
+    {
+      const auto lambda = [](auto&&... args){
+        const auto istiny = [](auto x){
+          return (sizeof(x) == 1UL) ? 1 : 0;
+        };
+        const int aretiny[] = { istiny(args)... };
+        return aretiny[0];
+      };
+      return lambda(1, 1L, 1.0f, '1');
+    }
+
+  }
+
+  namespace test_binary_literals
+  {
+
+    constexpr auto ivii = 0b0000000000101010;
+    static_assert(ivii == 42, "wrong value");
+
+  }
+
+  namespace test_generalized_constexpr
+  {
+
+    template < typename CharT >
+    constexpr unsigned long
+    strlen_c(const CharT *const s) noexcept
+    {
+      auto length = 0UL;
+      for (auto p = s; *p; ++p)
+        ++length;
+      return length;
+    }
+
+    static_assert(strlen_c("") == 0UL, "");
+    static_assert(strlen_c("x") == 1UL, "");
+    static_assert(strlen_c("test") == 4UL, "");
+    static_assert(strlen_c("another\0test") == 7UL, "");
+
+  }
+
+  namespace test_lambda_init_capture
+  {
+
+    int
+    test()
+    {
+      auto x = 0;
+      const auto lambda1 = [a = x](int b){ return a + b; };
+      const auto lambda2 = [a = lambda1(x)](){ return a; };
+      return lambda2();
+    }
+
+  }
+
+  namespace test_digit_separators
+  {
+
+    constexpr auto ten_million = 100'000'000;
+    static_assert(ten_million == 100000000, "");
+
+  }
+
+  namespace test_return_type_deduction
+  {
+
+    auto f(int& x) { return x; }
+    decltype(auto) g(int& x) { return x; }
+
+    template < typename T1, typename T2 >
+    struct is_same
+    {
+      static constexpr auto value = false;
+    };
+
+    template < typename T >
+    struct is_same<T, T>
+    {
+      static constexpr auto value = true;
+    };
+
+    int
+    test()
+    {
+      auto x = 0;
+      static_assert(is_same<int, decltype(f(x))>::value, "");
+      static_assert(is_same<int&, decltype(g(x))>::value, "");
+      return x;
+    }
+
+  }
+
+}  // namespace cxx14
+
+#endif  // __cplusplus >= 201402L
+
+
+
+
+// If the compiler admits that it is not ready for C++17, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+#elif (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
+
+#error "This is not a C++17 compiler"
+
+#else
+
+#include <initializer_list>
+#include <utility>
+#include <type_traits>
+
+namespace cxx17
+{
+
+  namespace test_constexpr_lambdas
+  {
+
+    constexpr int foo = [](){return 42;}();
+
+  }
+
+  namespace test::nested_namespace::definitions
+  {
+
+  }
+
+  namespace test_fold_expression
+  {
+
+    template<typename... Args>
+    int multiply(Args... args)
+    {
+      return (args * ... * 1);
+    }
+
+    template<typename... Args>
+    bool all(Args... args)
+    {
+      return (args && ...);
+    }
+
+  }
+
+  namespace test_extended_static_assert
+  {
+
+    static_assert (true);
+
+  }
+
+  namespace test_auto_brace_init_list
+  {
+
+    auto foo = {5};
+    auto bar {5};
+
+    static_assert(std::is_same<std::initializer_list<int>, decltype(foo)>::value);
+    static_assert(std::is_same<int, decltype(bar)>::value);
+  }
+
+  namespace test_typename_in_template_template_parameter
+  {
+
+    template<template<typename> typename X> struct D;
+
+  }
+
+  namespace test_fallthrough_nodiscard_maybe_unused_attributes
+  {
+
+    int f1()
+    {
+      return 42;
+    }
+
+    [[nodiscard]] int f2()
+    {
+      [[maybe_unused]] auto unused = f1();
+
+      switch (f1())
+      {
+      case 17:
+        f1();
+        [[fallthrough]];
+      case 42:
+        f1();
+      }
+      return f1();
+    }
+
+  }
+
+  namespace test_extended_aggregate_initialization
+  {
+
+    struct base1
+    {
+      int b1, b2 = 42;
+    };
+
+    struct base2
+    {
+      base2() {
+        b3 = 42;
+      }
+      int b3;
+    };
+
+    struct derived : base1, base2
+    {
+        int d;
+    };
+
+    derived d1 {{1, 2}, {}, 4};  // full initialization
+    derived d2 {{}, {}, 4};      // value-initialized bases
+
+  }
+
+  namespace test_general_range_based_for_loop
+  {
+
+    struct iter
+    {
+      int i;
+
+      int& operator* ()
+      {
+        return i;
+      }
+
+      const int& operator* () const
+      {
+        return i;
+      }
+
+      iter& operator++()
+      {
+        ++i;
+        return *this;
+      }
+    };
+
+    struct sentinel
+    {
+      int i;
+    };
+
+    bool operator== (const iter& i, const sentinel& s)
+    {
+      return i.i == s.i;
+    }
+
+    bool operator!= (const iter& i, const sentinel& s)
+    {
+      return !(i == s);
+    }
+
+    struct range
+    {
+      iter begin() const
+      {
+        return {0};
+      }
+
+      sentinel end() const
+      {
+        return {5};
+      }
+    };
+
+    void f()
+    {
+      range r {};
+
+      for (auto i : r)
+      {
+        [[maybe_unused]] auto v = i;
+      }
+    }
+
+  }
+
+  namespace test_lambda_capture_asterisk_this_by_value
+  {
+
+    struct t
+    {
+      int i;
+      int foo()
+      {
+        return [*this]()
+        {
+          return i;
+        }();
+      }
+    };
+
+  }
+
+  namespace test_enum_class_construction
+  {
+
+    enum class byte : unsigned char
+    {};
+
+    byte foo {42};
+
+  }
+
+  namespace test_constexpr_if
+  {
+
+    template <bool cond>
+    int f ()
+    {
+      if constexpr(cond)
+      {
+        return 13;
+      }
+      else
+      {
+        return 42;
+      }
+    }
+
+  }
+
+  namespace test_selection_statement_with_initializer
+  {
+
+    int f()
+    {
+      return 13;
+    }
+
+    int f2()
+    {
+      if (auto i = f(); i > 0)
+      {
+        return 3;
+      }
+
+      switch (auto i = f(); i + 4)
+      {
+      case 17:
+        return 2;
+
+      default:
+        return 1;
+      }
+    }
+
+  }
+
+  namespace test_template_argument_deduction_for_class_templates
+  {
+
+    template <typename T1, typename T2>
+    struct pair
+    {
+      pair (T1 p1, T2 p2)
+        : m1 {p1},
+          m2 {p2}
+      {}
+
+      T1 m1;
+      T2 m2;
+    };
+
+    void f()
+    {
+      [[maybe_unused]] auto p = pair{13, 42u};
+    }
+
+  }
+
+  namespace test_non_type_auto_template_parameters
+  {
+
+    template <auto n>
+    struct B
+    {};
+
+    B<5> b1;
+    B<'a'> b2;
+
+  }
+
+  namespace test_structured_bindings
+  {
+
+    int arr[2] = { 1, 2 };
+    std::pair<int, int> pr = { 1, 2 };
+
+    auto f1() -> int(&)[2]
+    {
+      return arr;
+    }
+
+    auto f2() -> std::pair<int, int>&
+    {
+      return pr;
+    }
+
+    struct S
+    {
+      int x1 : 2;
+      volatile double y1;
+    };
+
+    S f3()
+    {
+      return {};
+    }
+
+    auto [ x1, y1 ] = f1();
+    auto& [ xr1, yr1 ] = f1();
+    auto [ x2, y2 ] = f2();
+    auto& [ xr2, yr2 ] = f2();
+    const auto [ x3, y3 ] = f3();
+
+  }
+
+  namespace test_exception_spec_type_system
+  {
+
+    struct Good {};
+    struct Bad {};
+
+    void g1() noexcept;
+    void g2();
+
+    template<typename T>
+    Bad
+    f(T*, T*);
+
+    template<typename T1, typename T2>
+    Good
+    f(T1*, T2*);
+
+    static_assert (std::is_same_v<Good, decltype(f(g1, g2))>);
+
+  }
+
+  namespace test_inline_variables
+  {
+
+    template<class T> void f(T)
+    {}
+
+    template<class T> inline T g(T)
+    {
+      return T{};
+    }
+
+    template<> inline void f<>(int)
+    {}
+
+    template<> int g<>(int)
+    {
+      return 5;
+    }
+
+  }
+
+}  // namespace cxx17
+
+#endif  // (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 
 
@@ -7590,9 +8510,14 @@ printf "%s\n" "$ac_res" >&6; }
   fi
 
     if test x$ac_success = xno; then
-                for alternative in ${ax_cxx_compile_alternatives}; do
-      for switch in -std=c++${alternative} +std=c++${alternative} "-h std=c++${alternative}"; do
-        cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
+                    for alternative in ${ax_cxx_compile_alternatives}; do
+      for switch in -std=c++${alternative} +std=c++${alternative} "-h std=c++${alternative}" MSVC; do
+        if test x"$switch" = xMSVC; then
+                                        switch=-std:c++${alternative}
+          cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_${switch}_MSVC" | sed "$as_sed_sh"`
+        else
+          cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
+        fi
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
 printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
 if eval test \${$cachevar+y}
@@ -7612,7 +8537,21 @@ else case e in #(
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201103L
+// MSVC always sets __cplusplus to 199711L in older versions; newer versions
+// only set it correctly if /Zc:__cplusplus is specified as well as a
+// /std:c++NN switch:
+//
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+//
+// The value __cplusplus ought to have is available in _MSVC_LANG since
+// Visual Studio 2015 Update 3:
+//
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros
+//
+// This was also the first MSVC version to support C++14 so we can't use the
+// value of either __cplusplus or _MSVC_LANG to quickly rule out MSVC having
+// C++11 or C++14 support, but we can check _MSVC_LANG for C++17 and later.
+#elif __cplusplus < 201103L && !defined _MSC_VER
 
 #error "This is not a C++11 compiler"
 
@@ -7899,7 +8838,7 @@ namespace cxx11
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201402L
+#elif __cplusplus < 201402L && !defined _MSC_VER
 
 #error "This is not a C++14 compiler"
 
@@ -8019,7 +8958,7 @@ namespace cxx14
 
 #error "This is not a C++ compiler"
 
-#elif __cplusplus < 201703L
+#elif (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 #error "This is not a C++17 compiler"
 
@@ -8385,7 +9324,7 @@ namespace cxx17
 
 }  // namespace cxx17
 
-#endif  // __cplusplus < 201703L
+#endif  // (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
 
 
 
@@ -15373,7 +16312,7 @@ fi
 
 # PCRE2 vorhanden?
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if we should use pcre2" >&5
 printf %s "checking if we should use pcre2... " >&6; }
 
 
@@ -15387,6 +16326,10 @@ esac
 fi
 
 
+	have_libpcre2="no"
+	PCRE2_LIBS=""
+	PCRE2_CFLAGS=""
+
 	if test "$libpcre2_prefix" != "no"
 	then
 		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -15395,6 +16338,53 @@ printf "%s\n" "yes" >&6; }
 		am_save_CPPFLAGS="$CPPFLAGS"
 		am_save_LIBS="$LIBS"
 		am_save_LDFLAGS="$LDFLAGS"
+		# Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_path_PKGCONFIG+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) case $PKGCONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKGCONFIG="$PKGCONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKGCONFIG="$as_dir$ac_word$ac_exec_ext"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKGCONFIG" && ac_cv_path_PKGCONFIG="no"
+  ;;
+esac ;;
+esac
+fi
+PKGCONFIG=$ac_cv_path_PKGCONFIG
+if test -n "$PKGCONFIG"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PKGCONFIG" >&5
+printf "%s\n" "$PKGCONFIG" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
 
 
 		if test "$libpcre2_prefix" = "yes" -o "$libpcre2_prefix" = "auto"
@@ -15445,6 +16435,8 @@ printf "%s\n" "no" >&6; }
 fi
 
 
+			if test "$PKGCONFIG" != "no"
+			then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-8" >&5
@@ -15504,49 +16496,57 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_8_PKG_ERRORS" >&5
 
-        have_libpcre2="no"
-				PCRE2_LIBS=""
-				PCRE2_CFLAGS=""
+        as_fn_error $? "Package requirements (libpcre2-8) were not met:
 
-				if test  -x "$pcre2config"
-				then
-					have_libpcre2="yes"
-					PCRE2_LIBS=`$pcre2config --libs8`
-					PCRE2_CFLAGS=`$pcre2config --cflags`
-					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+$PCRE2_8_PKG_ERRORS
 
-				fi
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
+Alternatively, you may set the environment variables PCRE2_8_CFLAGS
+and PCRE2_8_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        have_libpcre2="no"
-				PCRE2_LIBS=""
-				PCRE2_CFLAGS=""
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-				if test  -x "$pcre2config"
-				then
-					have_libpcre2="yes"
-					PCRE2_LIBS=`$pcre2config --libs8`
-					PCRE2_CFLAGS=`$pcre2config --cflags`
-					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+Alternatively, you may set the environment variables PCRE2_8_CFLAGS
+and PCRE2_8_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-				fi
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_8_CFLAGS=$pkg_cv_PCRE2_8_CFLAGS
         PCRE2_8_LIBS=$pkg_cv_PCRE2_8_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         have_libpcre2="yes"
-				PCRE2_LIBS="$PCRE2_8_LIBS"
-				PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
-				printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+					PCRE2_LIBS="$PCRE2_8_LIBS"
+					PCRE2_CFLAGS="$PCRE2_8_CFLAGS"
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
 
 
 fi
+			else
+				if test  -x "$pcre2config"
+				then
+					have_libpcre2="yes"
+					PCRE2_LIBS=`$pcre2config --libs8`
+					PCRE2_CFLAGS=`$pcre2config --cflags`
+					printf "%s\n" "#define HAVE_PCRE2_BITS_8 1" >>confdefs.h
+
+				fi
+			fi
 			if test ${ac_cv_sizeof_wchar_t} -eq 2
 			then
+				if test "$PKGCONFIG" != "no"
+				then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-16" >&5
@@ -15606,41 +16606,57 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_WIDE16_PKG_ERRORS" >&5
 
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs16=`$pcre2config --libs16`
-						PCRE2_LIBS="$PCRE2_LIBS $libs16"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+        as_fn_error $? "Package requirements (libpcre2-16) were not met:
 
-					fi
+$PCRE2_WIDE16_PKG_ERRORS
 
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables PCRE2_WIDE16_CFLAGS
+and PCRE2_WIDE16_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs16=`$pcre2config --libs16`
-						PCRE2_LIBS="$PCRE2_LIBS $libs16"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-					fi
+Alternatively, you may set the environment variables PCRE2_WIDE16_CFLAGS
+and PCRE2_WIDE16_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_WIDE16_CFLAGS=$pkg_cv_PCRE2_WIDE16_CFLAGS
         PCRE2_WIDE16_LIBS=$pkg_cv_PCRE2_WIDE16_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE16_LIBS"
-					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
-					printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+						PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE16_CFLAGS"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
 
 
 fi
+				else
+					if test  -x "$pcre2config"
+					then
+						have_libpcre2="yes"
+						libs16=`$pcre2config --libs16`
+						PCRE2_LIBS="$PCRE2_LIBS $libs16"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_16 1" >>confdefs.h
+
+					fi
+				fi
 			fi
 			if test ${ac_cv_sizeof_wchar_t} -eq 4
 			then
+				if test "$PKGCONFIG" != "no"
+				then
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libpcre2-32" >&5
@@ -15700,40 +16716,52 @@ fi
         # Put the nasty error message in config.log where it belongs
         echo "$PCRE2_WIDE32_PKG_ERRORS" >&5
 
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs32=`$pcre2config --libs32`
-						PCRE2_LIBS="$PCRE2_LIBS $libs32"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+        as_fn_error $? "Package requirements (libpcre2-32) were not met:
 
-					fi
+$PCRE2_WIDE32_PKG_ERRORS
 
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
+Alternatively, you may set the environment variables PCRE2_WIDE32_CFLAGS
+and PCRE2_WIDE32_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-        if test  -x "$pcre2config"
-					then
-						have_libpcre2="yes"
-						libs32=`$pcre2config --libs32`
-						PCRE2_LIBS="$PCRE2_LIBS $libs32"
-						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+        { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in '$ac_pwd':" >&5
+printf "%s\n" "$as_me: error: in '$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
 
-					fi
+Alternatively, you may set the environment variables PCRE2_WIDE32_CFLAGS
+and PCRE2_WIDE32_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See 'config.log' for more details" "$LINENO" 5; }
 else
         PCRE2_WIDE32_CFLAGS=$pkg_cv_PCRE2_WIDE32_CFLAGS
         PCRE2_WIDE32_LIBS=$pkg_cv_PCRE2_WIDE32_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
         PCRE2_LIBS="$PCRE2_LIBS $PCRE2_WIDE32_LIBS"
-					PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
-					printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+						PCRE2_CFLAGS="$PCRE2_CFLAGS $PCRE2_WIDE32_CFLAGS"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
 
 
 fi
+				else
+					if test  -x "$pcre2config"
+					then
+						have_libpcre2="yes"
+						libs32=`$pcre2config --libs32`
+						PCRE2_LIBS="$PCRE2_LIBS $libs32"
+						printf "%s\n" "#define HAVE_PCRE2_BITS_32 1" >>confdefs.h
+
+					fi
+				fi
 			fi
 		else
 			LIBS="-L$libpng_prefix/lib"
@@ -16154,6 +17182,427 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
 
 
+
+
+
+report_have_curl="no"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Check whether --with-libcurl was given.
+if test ${with_libcurl+y}
+then :
+  withval=$with_libcurl; _libcurl_with=$withval
+else case e in #(
+  e) _libcurl_with=yes ;;
+esac
+fi
+
+
+  if test "$_libcurl_with" != "no" ; then
+
+     for ac_prog in gawk mawk nawk awk
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_AWK+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) if test -n "$AWK"; then
+  ac_cv_prog_AWK="$AWK" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_AWK="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi ;;
+esac
+fi
+AWK=$ac_cv_prog_AWK
+if test -n "$AWK"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $AWK" >&5
+printf "%s\n" "$AWK" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$AWK" && break
+done
+
+
+     _libcurl_version_parse="eval $AWK '{split(\$NF,A,\".\"); X=256*256*A[1]+256*A[2]+A[3]; print X;}'"
+
+     _libcurl_try_link=yes
+
+     if test -d "$_libcurl_with" ; then
+        LIBCURL_CPPFLAGS="-I$withval/include"
+        _libcurl_ldflags="-L$withval/lib"
+        # Extract the first word of "curl-config", so it can be a program name with args.
+set dummy curl-config; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_path__libcurl_config+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) case $_libcurl_config in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path__libcurl_config="$_libcurl_config" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in "$withval/bin"
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_path__libcurl_config="$as_dir$ac_word$ac_exec_ext"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac ;;
+esac
+fi
+_libcurl_config=$ac_cv_path__libcurl_config
+if test -n "$_libcurl_config"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $_libcurl_config" >&5
+printf "%s\n" "$_libcurl_config" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+     else
+        # Extract the first word of "curl-config", so it can be a program name with args.
+set dummy curl-config; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_path__libcurl_config+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) case $_libcurl_config in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path__libcurl_config="$_libcurl_config" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_path__libcurl_config="$as_dir$ac_word$ac_exec_ext"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac ;;
+esac
+fi
+_libcurl_config=$ac_cv_path__libcurl_config
+if test -n "$_libcurl_config"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $_libcurl_config" >&5
+printf "%s\n" "$_libcurl_config" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+     fi
+
+     if test x$_libcurl_config != "x" ; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for the version of libcurl" >&5
+printf %s "checking for the version of libcurl... " >&6; }
+if test ${libcurl_cv_lib_curl_version+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e) libcurl_cv_lib_curl_version=`$_libcurl_config --version | $AWK '{print $2}'` ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_curl_version" >&5
+printf "%s\n" "$libcurl_cv_lib_curl_version" >&6; }
+
+        _libcurl_version=`echo $libcurl_cv_lib_curl_version | $_libcurl_version_parse`
+        _libcurl_wanted=`echo 7.30.0 | $_libcurl_version_parse`
+
+        if test $_libcurl_wanted -gt 0 ; then
+           { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libcurl >= version 7.30.0" >&5
+printf %s "checking for libcurl >= version 7.30.0... " >&6; }
+if test ${libcurl_cv_lib_version_ok+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e)
+              if test $_libcurl_version -ge $_libcurl_wanted ; then
+                 libcurl_cv_lib_version_ok=yes
+              else
+                 libcurl_cv_lib_version_ok=no
+              fi
+               ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_version_ok" >&5
+printf "%s\n" "$libcurl_cv_lib_version_ok" >&6; }
+        fi
+
+        if test $_libcurl_wanted -eq 0 || test x$libcurl_cv_lib_version_ok = xyes ; then
+           if test x"$LIBCURL_CPPFLAGS" = "x" ; then
+              LIBCURL_CPPFLAGS=`$_libcurl_config --cflags`
+           fi
+           if test x"$LIBCURL" = "x" ; then
+              LIBCURL=`$_libcurl_config --libs`
+
+              # This is so silly, but Apple actually has a bug in their
+              # curl-config script.  Fixed in Tiger, but there are still
+              # lots of Panther installs around.
+              case "${host}" in
+                 powerpc-apple-darwin7*)
+                    LIBCURL=`echo $LIBCURL | sed -e 's|-arch i386||g'`
+                 ;;
+              esac
+           fi
+
+           # All curl-config scripts support --feature
+           _libcurl_features=`$_libcurl_config --feature`
+
+           # Is it modern enough to have --protocols? (7.12.4)
+           if test $_libcurl_version -ge 461828 ; then
+              _libcurl_protocols=`$_libcurl_config --protocols`
+           fi
+        else
+           _libcurl_try_link=no
+        fi
+
+        unset _libcurl_wanted
+     fi
+
+     if test $_libcurl_try_link = yes ; then
+
+        # we didn't find curl-config, so let's see if the user-supplied
+        # link line (or failing that, "-lcurl") is enough.
+        LIBCURL=${LIBCURL-"$_libcurl_ldflags -lcurl"}
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether libcurl is usable" >&5
+printf %s "checking whether libcurl is usable... " >&6; }
+if test ${libcurl_cv_lib_curl_usable+y}
+then :
+  printf %s "(cached) " >&6
+else case e in #(
+  e)
+           _libcurl_save_cppflags=$CPPFLAGS
+           CPPFLAGS="$LIBCURL_CPPFLAGS $CPPFLAGS"
+           _libcurl_save_libs=$LIBS
+           LIBS="$LIBCURL $LIBS"
+
+           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <curl/curl.h>
+int
+main (void)
+{
+
+/* Try and use a few common options to force a failure if we are
+   missing symbols or can't link. */
+int x;
+curl_easy_setopt(NULL,CURLOPT_URL,NULL);
+x=CURL_ERROR_SIZE;
+x=CURLOPT_WRITEFUNCTION;
+x=CURLOPT_WRITEDATA;
+x=CURLOPT_ERRORBUFFER;
+x=CURLOPT_STDERR;
+x=CURLOPT_VERBOSE;
+if (x) ;
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+  libcurl_cv_lib_curl_usable=yes
+else case e in #(
+  e) libcurl_cv_lib_curl_usable=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+
+           CPPFLAGS=$_libcurl_save_cppflags
+           LIBS=$_libcurl_save_libs
+           unset _libcurl_save_cppflags
+           unset _libcurl_save_libs
+            ;;
+esac
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $libcurl_cv_lib_curl_usable" >&5
+printf "%s\n" "$libcurl_cv_lib_curl_usable" >&6; }
+
+        if test $libcurl_cv_lib_curl_usable = yes ; then
+
+           # Does curl_free() exist in this version of libcurl?
+           # If not, fake it with free()
+
+           _libcurl_save_cppflags=$CPPFLAGS
+           CPPFLAGS="$CPPFLAGS $LIBCURL_CPPFLAGS"
+           _libcurl_save_libs=$LIBS
+           LIBS="$LIBS $LIBCURL"
+
+           ac_fn_cxx_check_func "$LINENO" "curl_free" "ac_cv_func_curl_free"
+if test "x$ac_cv_func_curl_free" = xyes
+then :
+
+else case e in #(
+  e)
+printf "%s\n" "#define curl_free free" >>confdefs.h
+ ;;
+esac
+fi
+
+
+           CPPFLAGS=$_libcurl_save_cppflags
+           LIBS=$_libcurl_save_libs
+           unset _libcurl_save_cppflags
+           unset _libcurl_save_libs
+
+
+printf "%s\n" "#define HAVE_LIBCURL 1" >>confdefs.h
+
+
+
+
+           for _libcurl_feature in $_libcurl_features ; do
+              cat >>confdefs.h <<_ACEOF
+#define `printf "%s\n" "libcurl_feature_$_libcurl_feature" | sed "$as_sed_cpp"` 1
+_ACEOF
+
+              eval `printf "%s\n" "libcurl_feature_$_libcurl_feature" | sed "$as_sed_sh"`=yes
+           done
+
+           if test "x$_libcurl_protocols" = "x" ; then
+
+              # We don't have --protocols, so just assume that all
+              # protocols are available
+              _libcurl_protocols="HTTP FTP FILE TELNET LDAP DICT TFTP"
+
+              if test x$libcurl_feature_SSL = xyes ; then
+                 _libcurl_protocols="$_libcurl_protocols HTTPS"
+
+                 # FTPS wasn't standards-compliant until version
+                 # 7.11.0 (0x070b00 == 461568)
+                 if test $_libcurl_version -ge 461568; then
+                    _libcurl_protocols="$_libcurl_protocols FTPS"
+                 fi
+              fi
+
+              # RTSP, IMAP, POP3 and SMTP were added in
+              # 7.20.0 (0x071400 == 463872)
+              if test $_libcurl_version -ge 463872; then
+                 _libcurl_protocols="$_libcurl_protocols RTSP IMAP POP3 SMTP"
+              fi
+           fi
+
+           for _libcurl_protocol in $_libcurl_protocols ; do
+              cat >>confdefs.h <<_ACEOF
+#define `printf "%s\n" "libcurl_protocol_$_libcurl_protocol" | sed "$as_sed_cpp"` 1
+_ACEOF
+
+              eval `printf "%s\n" "libcurl_protocol_$_libcurl_protocol" | sed "$as_sed_sh"`=yes
+           done
+        else
+           unset LIBCURL
+           unset LIBCURL_CPPFLAGS
+        fi
+     fi
+
+     unset _libcurl_try_link
+     unset _libcurl_version_parse
+     unset _libcurl_config
+     unset _libcurl_feature
+     unset _libcurl_features
+     unset _libcurl_protocol
+     unset _libcurl_protocols
+     unset _libcurl_version
+     unset _libcurl_ldflags
+  fi
+
+  if test x$_libcurl_with = xno || test x$libcurl_cv_lib_curl_usable != xyes ; then
+     # This is the IF-NO path
+     :
+  else
+     # This is the IF-YES path
+     #LIBS="$LIBS $LIBCURL"
+	#CFLAGS="$CFLAGS $LIBCURL_CPPFLAGS "
+
+
+	report_have_curl="yes"
+  fi
+
+  unset _libcurl_with
 
 
 
@@ -16680,7 +18129,7 @@ esac;
 
 
 
-#AC_SUBST(report_have_curl)
+
 
 
 ###
@@ -16693,8 +18142,6 @@ LIBMICROHTTPD_CFLAGS=""
 LIBCDIO_CFLAGS=""
 LIBIDN_CFLAGS=""
 LIBLDNS_CFLAGS=""
-LIBCURL_CFLAGS=""
-LIBCURL_CPPFLAGS=""
 IMLIB_CFLAGS=""
 FT2_CFLAGS=""
 HAVE_X86_ASSEMBLER=""
@@ -16706,7 +18153,6 @@ MYSQL_LDFLAGS=""
 POSTGRESQL_LDFLAGS=""
 SQLITE3_LDFLAGS=""
 LAME_LIBS=""
-LIBCURL=""
 LIBLDNS_LIBS=""
 MPG123_LIBS=""
 SDL2_LIBS=""
@@ -18257,6 +19703,7 @@ fi
 **   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   CDIO library:         $report_have_libcdio
+**   Curl:                 $report_have_curl
 **
 ** Testing:
 **   Unittests:            $report_have_gtest
@@ -18287,6 +19734,7 @@ printf "%s\n" "
 **   PCRE2:                $report_have_pcre2
 **   ICONV:                $report_have_iconv
 **   CDIO library:         $report_have_libcdio
+**   Curl:                 $report_have_curl
 **
 ** Testing:
 **   Unittests:            $report_have_gtest

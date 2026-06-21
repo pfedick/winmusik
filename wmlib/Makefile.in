@@ -25,6 +25,7 @@ OBJS_RELEASE =	\
 	release/StorageTrack.o \
 	release/beatport.o \
 	release/regexpcapture.o \
+	release/coverdownload.o \
 
 
 
@@ -48,6 +49,7 @@ OBJS_DEBUG =	\
 	debug/StorageTrack.o \
 	debug/beatport.o \
 	debug/regexpcapture.o \
+	debug/coverdownload.o \
 
 
 
@@ -65,7 +67,7 @@ release/libwinmusik3.a: $(OBJS_RELEASE) $(LIBDEP)
 
 
 debug/libwinmusik3.a: $(OBJS_DEBUG) $(LIBDEP)
-	ar -r debug/libwinmusik3.a $(OBJS_RELEASE)
+	ar -r debug/libwinmusik3.a $(OBJS_DEBUG)
 
 clean:
 	-@rm -rf compile release debug $(TARGET) > /dev/null 2>&1
@@ -148,6 +150,11 @@ release/regexpcapture.o: src/regexpcapture.cpp include/libwinmusik3.h Makefile i
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o release/regexpcapture.o -c src/regexpcapture.cpp
 
+release/coverdownload.o: src/coverdownload.cpp include/libwinmusik3.h Makefile include/wm_coverdownload.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o release/coverdownload.o -c src/coverdownload.cpp
+
+
 
 
 debug/CStorage.o: src/CStorage.cpp include/libwinmusik3.h Makefile include/wm_storage.h
@@ -221,3 +228,7 @@ debug/beatport.o: src/beatport.cpp include/libwinmusik3.h Makefile include/wm_re
 debug/regexpcapture.o: src/regexpcapture.cpp include/libwinmusik3.h Makefile include/wm_regexpcapture.h
 	-mkdir -p release
 	$(CXX) $(CXXFLAGS) -o debug/regexpcapture.o -c src/regexpcapture.cpp
+
+debug/coverdownload.o: src/coverdownload.cpp include/libwinmusik3.h Makefile include/wm_coverdownload.h
+	-mkdir -p release
+	$(CXX) $(CXXFLAGS) -o debug/coverdownload.o -c src/coverdownload.cpp
