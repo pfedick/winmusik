@@ -21,11 +21,13 @@
 #include <QMenu>
 #include <QList>
 #include <QUrl>
+#include <QUuid>
 #include <QMimeData>
 #include <QMouseEvent>
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 #include "regexpcapture.h"
+#include "wm_coverdownload.h"
 
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
     : QDialog(parent)
@@ -71,7 +73,11 @@ void SearchlistTrackDialog::set(const SearchlistItem& track)
     ui.labelEdit->setText(track.Label);
     ui.shopURLEdit->setText(track.ShopURL);
     ui.tagsEdit->setText(track.Tags);
-    ui.commentEdit->setText(track.Comment);
+    ui.keyEdit->setText(track.Key);
+    ui.bpmEdit->setText(track.Bpm);
+    if (Track.CoverFilename.notEmpty()) {
+        ui.coverwidget->loadFromFile(Track.CoverFilename);
+    }
 
     ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
     if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
@@ -95,6 +101,20 @@ void SearchlistTrackDialog::setFromClipboard()
         // ui.tagsEdit->setText(match.Tags);
         // ui.commentEdit->setText(match.Comment);
         if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
+
+        if (match.ShopURL.notEmpty()) {
+            ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+            MetaData meta;
+            if (CoverDownload(match.ShopURL, coverfile, meta)) {
+                ui.lengthEdit->setText(ppl7::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
+                Track.CoverFilename = meta.CoverFile;
+                ui.coverwidget->loadFromFile(Track.CoverFilename);
+                if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
+                if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
+                if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
+            }
+        }
     }
 }
 
@@ -113,6 +133,8 @@ SearchlistItem SearchlistTrackDialog::get() const
     track.Label = ppl7::Trim(ppl7::String(ui.labelEdit->text()));
     track.ShopURL = ppl7::Trim(ppl7::String(ui.shopURLEdit->text()));
     track.Tags = ppl7::Trim(ppl7::String(ui.tagsEdit->text()));
+    track.Key = ppl7::Trim(ppl7::String(ui.keyEdit->text()));
+    track.Bpm = ppl7::Trim(ppl7::String(ui.bpmEdit->text()));
     try {
         track.ReleaseDate.set(ppl7::Trim(ppl7::String(ui.releaseDateEdit->text())));
     }

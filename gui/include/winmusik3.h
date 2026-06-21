@@ -183,6 +183,7 @@ public:
     ppl7::String LastPlaylists[WM_NUM_LASTPLAYLISTS];
 
     ppl7::String DevicePath[MAX_DEVICE_TYPES]; // Muss erweitert werden, wenn neue Device-Typen hinzukommen!
+    ppl7::String SearchListCoverPath;
 
     std::list<ppl7::String> DirectorySearch;
     int LogfileSize;

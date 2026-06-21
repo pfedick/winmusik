@@ -155,7 +155,7 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
             ff.write(coverResponse.body);
             ff.close();
             meta.CoverFile = targetfile;
-            meta.print();
+            // meta.print();
             return true;
         } else {
             ppl7::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);

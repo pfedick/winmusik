@@ -3,7 +3,7 @@
  <class>PropertiesClass</class>
  <widget class="QDialog" name="PropertiesClass">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
@@ -30,13 +30,13 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="tabPosition">
-      <enum>QTabWidget::North</enum>
+      <enum>QTabWidget::TabPosition::North</enum>
      </property>
      <property name="tabShape">
-      <enum>QTabWidget::Rounded</enum>
+      <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -52,16 +52,6 @@
          <property name="verticalSpacing">
           <number>0</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>WinMusik data path:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="wmDataPath"/>
-         </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="wmDataPathButton">
            <property name="text">
@@ -79,6 +69,33 @@
            </property>
           </widget>
          </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="tmpPath"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="tmpPathButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources.qrc">
+             <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>WinMusik data path:</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_7">
            <property name="text">
@@ -86,11 +103,21 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="tmpPath"/>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="wmDataPath"/>
          </item>
-         <item row="1" column="2">
-          <widget class="QPushButton" name="tmpPathButton">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_25">
+           <property name="text">
+            <string>Serachlist cover path:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="SearchListCoverPath"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QPushButton" name="SearchListCoverPathButton">
            <property name="text">
             <string/>
            </property>
@@ -156,7 +183,7 @@
               <item>
                <widget class="QFontComboBox" name="font">
                 <property name="fontFilters">
-                 <set>QFontComboBox::ScalableFonts</set>
+                 <set>QFontComboBox::FontFilter::ScalableFonts</set>
                 </property>
                </widget>
               </item>
@@ -183,7 +210,7 @@
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -207,10 +234,10 @@
        <item>
         <widget class="QScrollArea" name="scrollArea">
          <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+          <enum>QFrame::Shape::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
+          <enum>QFrame::Shadow::Sunken</enum>
          </property>
          <property name="lineWidth">
           <number>0</number>
@@ -219,7 +246,7 @@
           <number>0</number>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+          <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -229,8 +256,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>742</width>
-            <height>434</height>
+            <width>741</width>
+            <height>390</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -363,10 +390,10 @@
                 <item>
                  <spacer name="horizontalSpacer_16">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -407,10 +434,10 @@
                    <number>80</number>
                   </property>
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="tickPosition">
-                   <enum>QSlider::TicksBelow</enum>
+                   <enum>QSlider::TickPosition::TicksBelow</enum>
                   </property>
                   <property name="tickInterval">
                    <number>10</number>
@@ -439,10 +466,10 @@
                    </size>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
+                   <enum>QFrame::Shape::StyledPanel</enum>
                   </property>
                   <property name="frameShadow">
-                   <enum>QFrame::Sunken</enum>
+                   <enum>QFrame::Shadow::Sunken</enum>
                   </property>
                   <property name="text">
                    <string>80</string>
@@ -452,7 +479,7 @@
                 <item>
                  <spacer name="horizontalSpacer_15">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -533,7 +560,7 @@
                   <item>
                    <spacer name="horizontalSpacer_11">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -584,7 +611,7 @@
                   <item>
                    <spacer name="horizontalSpacer_4">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -628,7 +655,7 @@
                   <item>
                    <spacer name="horizontalSpacer_10">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -658,7 +685,6 @@
                  <widget class="QLabel" name="label_57">
                   <property name="font">
                    <font>
-                    <weight>75</weight>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -717,10 +743,10 @@
                      <number>80</number>
                     </property>
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="tickPosition">
-                     <enum>QSlider::TicksBelow</enum>
+                     <enum>QSlider::TickPosition::TicksBelow</enum>
                     </property>
                     <property name="tickInterval">
                      <number>10</number>
@@ -749,10 +775,10 @@
                      </size>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::StyledPanel</enum>
+                     <enum>QFrame::Shape::StyledPanel</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
+                     <enum>QFrame::Shadow::Sunken</enum>
                     </property>
                     <property name="text">
                      <string>80</string>
@@ -762,7 +788,7 @@
                   <item>
                    <spacer name="horizontalSpacer_14">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -797,10 +823,10 @@
        <item>
         <layout class="QFormLayout" name="formLayout_4">
          <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
          </property>
          <property name="labelAlignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="label_65">
@@ -817,7 +843,7 @@
            <item>
             <spacer name="horizontalSpacer_17">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -975,7 +1001,7 @@
        <item>
         <layout class="QFormLayout" name="formLayout_3">
          <property name="labelAlignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="label_12">
@@ -1103,7 +1129,7 @@
            <item row="0" column="8">
             <spacer name="horizontalSpacer_13">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -1333,7 +1359,7 @@
        <item>
         <spacer name="verticalSpacer_8">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1382,7 +1408,7 @@
            <item>
             <spacer name="horizontalSpacer_5">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -1429,7 +1455,7 @@
            <item>
             <spacer name="horizontalSpacer_6">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -1453,7 +1479,7 @@
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1536,7 +1562,7 @@
             <item>
              <spacer name="horizontalSpacer_7">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1570,10 +1596,10 @@
             <item>
              <spacer name="horizontalSpacer_9">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::MinimumExpanding</enum>
+               <enum>QSizePolicy::Policy::MinimumExpanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1603,7 +1629,7 @@
             <item>
              <spacer name="horizontalSpacer_8">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1621,7 +1647,7 @@
        <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -2068,7 +2094,7 @@
        <item>
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -2174,7 +2200,7 @@
            <item>
             <spacer name="verticalSpacer_9">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2284,7 +2310,7 @@
            <item>
             <spacer name="verticalSpacer_6">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2324,7 +2350,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -2348,7 +2374,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

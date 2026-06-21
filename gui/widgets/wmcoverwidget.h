@@ -29,7 +29,8 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-namespace Ui {
+namespace Ui
+{
 class WMCoverWidget;
 }
 
@@ -45,11 +46,13 @@ public:
     void clear();
     const QPixmap& getPixmap() const;
 
+    void loadFromFile(const QString& filename);
+
 private:
     Ui::WMCoverWidget* ui;
-    QPixmap			Cover;
-    QPixmap         previousCover;
-    QString         LastFilename;
+    QPixmap Cover;
+    QPixmap previousCover;
+    QString LastFilename;
     QNetworkAccessManager m_WebCtrl;
     QByteArray m_DownloadedData;
 

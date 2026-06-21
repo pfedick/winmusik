@@ -107,10 +107,13 @@ void SearchlistItem::clear()
     Comment.clear();
     ReleaseDate.clear();
     DateAdded.clear();
+    Key.clear();
     Length = 0;
     Label.clear();
     ShopURL.clear();
+    CoverFilename.clear();
     Tags.clear();
+    Bpm.clear();
     Rating = 0;
 }
 
@@ -125,6 +128,9 @@ void SearchlistItem::importXML(const ppl7::String& xml)
     if (ppl7::RegEx::capture("/\\<label\\>(.*)\\<\\/label\\>/s", xml, Matches)) Label = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
     if (ppl7::RegEx::capture("/\\<shopurl\\>(.*)\\<\\/shopurl\\>/s", xml, Matches))
         ShopURL = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+    if (ppl7::RegEx::capture("/\\<key\\>(.*)\\<\\/key\\>/s", xml, Matches)) Key = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+    if (ppl7::RegEx::capture("/\\<bpm\\>(.*)\\<\\/bpm\\>/s", xml, Matches)) Bpm = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+
     if (ppl7::RegEx::capture("/\\<tags\\>(.*)\\<\\/tags\\>/s", xml, Matches)) Tags = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
     if (ppl7::RegEx::capture("/\\<comment\\>(.*)\\<\\/comment\\>/s", xml, Matches))
         Comment = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
@@ -172,6 +178,8 @@ ppl7::String SearchlistItem::exportXML() const
         "	<comment>" +
         ppl7::EscapeHTMLTags(Comment) + "</comment>\n";
     s += "	<label>" + ppl7::EscapeHTMLTags(Label) + "</label>\n";
+    s += "	<key>" + ppl7::EscapeHTMLTags(Key) + "</key>\n";
+    s += "	<bpm>" + ppl7::EscapeHTMLTags(Bpm) + "</bpm>\n";
     s += "	<shopurl>" + ppl7::EscapeHTMLTags(ShopURL) + "</shopurl>\n";
     s += "	<tags>" + ppl7::EscapeHTMLTags(Tags) + "</tags>\n";
     s += "	<coverfilename>" + ppl7::EscapeHTMLTags(CoverFilename) + "</coverfilename>\n";

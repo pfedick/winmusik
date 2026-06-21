@@ -44,6 +44,8 @@ public:
     ppl7::String Genre;
     ppl7::String Comment;
     ppl7::String Label;
+    ppl7::String Key;
+    ppl7::String Bpm;
     ppl7::String ShopURL;
     ppl7::String Tags;
     ppl7::String CoverFilename;
