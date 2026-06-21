@@ -1,82 +1,62 @@
 <html>
     <body>
         <!--StartFragment-->
-        <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk controls" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 8px 8px 8px 0px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); flex-shrink: 0; width: 11.125rem; min-width: 11.125rem; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-            <div class="Tables-shared-style__ArtworkAndControls-sc-d94d4af-5 bUcvyH" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 0.625rem;">
-                <div class="Tables-shared-style__TrackNo-sc-d94d4af-1 eQFRDS" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 1.125rem; line-height: 1rem; text-align: center; width: 2.25rem; min-width: 2.25rem; flex-grow: 1;">
-                    <br class="Apple-interchange-newline">1</div>
-                    <span style="box-sizing: border-box; border: 0px solid;">
-                        <button data-testid="play-button" class="Play-style__Control-sc-6d5ab96d-0 eRmGVK" style="box-sizing: border-box; border: 0px solid; font-family: inherit; font-size: 12px; font-weight: inherit; line-height: inherit; color: rgb(179, 179, 179); margin: 0px; padding: 0px; text-transform: none; appearance: button; background-color: transparent; background-image: none; cursor: pointer; display: flex; align-items: center; position: relative;">
-                            <svg role="img" fill="#8C8C8C" width="16" height="16" data-testid="inline-button-play_track" focusable="false" desc="Play button" style="min-height: 16px; min-width: 16px;">
-                                <use href="/icons/sprite.svg#track-play-inline"></use>
-                            </svg>
-                        </button>
-                    </span>
-                    <span style="box-sizing: border-box; border: 0px solid;">
-                        <div class="Tooltip-style__Wrapper-sc-6f1e293b-1 cGfnIV" style="box-sizing: border-box; border: 0px solid; position: relative;">
-                            <button data-testid="add-to-queue-button" class="AddToQueue-style__Control-sc-1bc05ec0-0 gJtPyZ" style="box-sizing: border-box; border: 0px solid; font-family: inherit; font-size: 12px; font-weight: inherit; line-height: inherit; color: rgb(179, 179, 179); margin: 0px; padding: 0px; text-transform: none; appearance: button; background-color: transparent; background-image: none; cursor: pointer; display: flex; align-items: center; position: relative;">
-                                <svg role="img" fill="#8C8C8C" width="24" height="24" data-testid="icon-queue-add" focusable="false" style="min-height: 24px; min-width: 24px;">
-                                    <use href="/icons/sprite.svg#queue-add"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </span>
-                    <span style="box-sizing: border-box; border: 0px solid;">
-                        <div class="Tooltip-style__Wrapper-sc-6f1e293b-1 cGfnIV" style="box-sizing: border-box; border: 0px solid; position: relative;">
-                            <button data-testid="add-to-playlist-button" class="AddToPlaylist-style__Control-sc-8c3c49e4-0 khbUGB" style="box-sizing: border-box; border: 0px solid; font-family: inherit; font-size: 12px; font-weight: inherit; line-height: inherit; color: rgb(179, 179, 179); margin: 0px; padding: 0px; text-transform: none; appearance: button; background-color: transparent; background-image: none; cursor: pointer; display: flex; align-items: center; position: relative;">
-                                <svg role="img" fill="#8C8C8C" width="14" height="14" data-testid="icon-playlist-add" focusable="false" style="min-height: 14px; min-width: 14px;">
-                                    <use href="/icons/sprite.svg#playlist-add"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </span>
-                </div>
-            </div>
-            <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell title" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 394.812px; flex-grow: 1; overflow: hidden; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-                <div class="container" style="box-sizing: border-box; border: 0px solid; overflow: hidden;">
-                    <div class="Tables-shared-style__TitleRow-sc-d94d4af-3 kzsiAi" style="box-sizing: border-box; border: 0px solid; display: flex; overflow: hidden;">
-                        <a title="Beyond The Sky" href="https://www.beatport.com/de/track/beyond-the-sky/28415683" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
-                            <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 143.812px;">
-                                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 143.812px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
-                                    <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">
-                                        <span class="Tables-shared-style__ReleaseName-sc-d94d4af-4 ihMSnX" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 700; font-size: 0.688rem; line-height: 1rem; letter-spacing: 0.005em; color: rgb(255, 255, 255);">Beyond The Sky<span></span>
-                                            <span style="box-sizing: border-box; border: 0px solid; font-weight: 400;">Original Mix</span>
-                                        </span>
-                                    </div>
+        <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell title" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 455.641px; flex-grow: 1; overflow: hidden; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <div class="container" style="box-sizing: border-box; border: 0px solid; overflow: hidden;">
+                <div class="Tables-shared-style__TitleRow-sc-d94d4af-3 kzsiAi" style="box-sizing: border-box; border: 0px solid; display: flex; overflow: hidden;">
+                    <a title="Waxed Future" href="https://www.beatport.com/de/track/waxed-future/26843848" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
+                        <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 153.969px;">
+                            <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 153.969px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
+                                <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">
+                                    <span class="Tables-shared-style__ReleaseName-sc-d94d4af-4 ihMSnX" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 700; font-size: 0.688rem; line-height: 1rem; letter-spacing: 0.005em; color: rgb(255, 255, 255);">Waxed Future<span></span>
+                                        <span style="box-sizing: border-box; border: 0px solid; font-weight: 400;">Tom Wax Remix</span>
+                                    </span>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                    <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 378.812px; flex-grow: 1; overflow: hidden;">
-                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 272px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
-                            <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">
-                                <div class="ArtistNames-sc-72a97679-0 YLrWg" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 500; font-size: 11px; line-height: 16px; letter-spacing: 0.005em; color: rgb(57, 192, 222);">
-                                    <a title="Rene Ablaze" href="https://www.beatport.com/de/artist/rene-ablaze/32610" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Rene Ablaze</a>,                                    <a title="Josie Sandfeld" href="https://www.beatport.com/de/artist/josie-sandfeld/999082" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Josie Sandfeld</a>
-                                </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 439.641px; flex-grow: 1; overflow: hidden;">
+                    <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 272px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
+                        <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">
+                            <div class="ArtistNames-sc-72a97679-0 YLrWg" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 500; font-size: 11px; line-height: 16px; letter-spacing: 0.005em; color: rgb(57, 192, 222);">
+                                <a title="Sikora" href="https://www.beatport.com/de/artist/sikora/13029" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Sikora</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell label" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 7.5rem; min-width: 7.5rem; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-                <a title="Future Sequence" href="https://www.beatport.com/de/label/future-sequence/89874" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
-                    <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 104px;">
-                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 iLvFAE" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 104px; display: grid; grid-auto-flow: column; position: relative; white-space: nowrap;">
-                            <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">Future Sequence</div>
+        </div>
+        <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell label" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 7.5rem; min-width: 7.5rem; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <a title="Phuture Wax Records" href="https://www.beatport.com/de/label/phuture-wax-records/39247" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">
+                <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 104px;">
+                    <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 hlSkZa" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 104px; display: grid; grid-auto-flow: column; position: relative; white-space: nowrap;">
+                        <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">Phuture Wax Records</div>
+                        <div data-testid="marquee-pseudo" class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap; flex-grow: 1; margin-left: 16px; visibility: hidden;"></div>
+                    </div>
+                </div>
+            </a>
+            <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 104px; flex-grow: 1;">
+                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 104px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
+                    <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">
+                        <div class="ArtistNames-sc-72a97679-0 YLrWg" style="box-sizing: border-box; border: 0px solid; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 500; font-size: 11px; line-height: 16px; letter-spacing: 0.005em; color: rgb(57, 192, 222);">
+                            <a title="Tom Wax" href="https://www.beatport.com/de/artist/tom-wax/29740" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit;">Tom Wax</a>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
-            <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell bpm" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 9.375rem; min-width: 9.375rem; display: block; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
-                <a title="Trance (Main Floor)" href="https://www.beatport.com/de/genre/trance-main-floor/7" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit; white-space: nowrap; overflow: hidden; display: block; text-overflow: ellipsis;">
-                    <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 134px;">
-                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 fpbfNy" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 134px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
-                            <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">Trance (Main Floor)</div>
-                        </div>
+        </div>
+        <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell bpm" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 9.375rem; min-width: 9.375rem; display: block; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <a title="Melodic House &amp; Techno" href="https://www.beatport.com/de/genre/melodic-house-techno/90" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: inherit; white-space: nowrap; overflow: hidden; display: block; text-overflow: ellipsis;">
+                <div class="Marquee-style__MarqueeGrid-sc-b0373cc7-2 eKNIlx" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 134px;">
+                    <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-b0373cc7-1 gnoBNq" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 134px; display: grid; grid-auto-flow: column; position: relative; max-width: 17rem; white-space: nowrap;">
+                        <div class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap;">Melodic House &amp; Techno</div>
+                        <div data-testid="marquee-pseudo" class="Marquee-style__MarqueeElement-sc-b0373cc7-0 hFfLpT" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: max-content; display: inline-block; white-space: nowrap; flex-grow: 1; margin-left: 16px; visibility: hidden;"></div>
                     </div>
-                </a>
-                <div style="box-sizing: border-box; border: 0px solid; flex-grow: 1;">138<span></span>BPM<span></span>- Bb Major</div>
-            </div>
-            <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell date" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 7.5rem; min-width: 7.5rem; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">2026-05-08</div>            <!--EndFragment-->
-        </body>
-    </html>
+                </div>
+            </a>
+            <div style="box-sizing: border-box; border: 0px solid; flex-grow: 1;">138<span></span>BPM<span></span>- D Major</div>
+        </div>
+        <div class="Table-style__TableCell-sc-ef6c0b11-0 eEAAPk cell date" role="cell" style="box-sizing: border-box; border: 0px solid; padding: 0px 8px; font-family: aeonikFont, &quot;aeonikFont Fallback&quot;; font-style: normal; font-weight: 400; font-size: 12px; line-height: 14px; color: rgb(140, 140, 140); width: 7.5rem; min-width: 7.5rem; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">2026-05-29</div>        <!--EndFragment-->
+    </body>
+</html>
