@@ -96,6 +96,12 @@ mingw: update_version
 		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=WinMusik-${VERSION}-Setup-64bit/"  \
 		> setup.iss
 
+mingw_debug: update_version
+	mingw32-make -j8 ppl7_debug
+	mingw32-make -j8 wmlib_debug
+	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
+	mingw32-make -j8 gui_debug
+	
 setup: mingw
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
 

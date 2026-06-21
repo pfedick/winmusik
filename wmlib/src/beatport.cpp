@@ -88,7 +88,7 @@ bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match)
         ppl7::String todo = matches[2];
         ShopURL = matches[1].trimmed();
         // printf("We found track: %s\n", (const char*)todo); fflush(stdout);
-        ppl7::PrintDebug("We found track: %s\n", (const char*)matches[1]);
+        // ppl7::PrintDebug("We found track: %s\n", (const char*)matches[1]);
         if (ppl7::RegEx::capture("/<span .*?>(.*?)<span>.*?<\\/span>.*?<span .*?>(.*?)<\\/span>.*?<\\/span>/is", todo, matches)) {
             // Beatport 2023 3
             Title = matches[1].trimmed();

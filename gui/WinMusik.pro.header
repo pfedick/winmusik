@@ -52,6 +52,20 @@ QMAKE_CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
 LDFLAGS		= @LDFLAGS@
 
 
+CONFIG(debug, debug|release) {
+    QMAKE_CFLAGS   ~= s/-O[s0-9]//g
+    QMAKE_CXXFLAGS ~= s/-O[s0-9]//g
+    QMAKE_CFLAGS += -ggdb
+    QMAKE_CXXFLAGS	+= -ggdb
+}
+else {
+    !contains(QMAKE_CXXFLAGS, -O[s0-9]) {
+        QMAKE_CFLAGS += -O2
+        QMAKE_CXXFLAGS	+= -O2
+    }
+}
+
+
 RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include

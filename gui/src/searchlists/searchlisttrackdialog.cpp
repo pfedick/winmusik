@@ -77,6 +77,7 @@ void SearchlistTrackDialog::set(const SearchlistItem& track)
     ui.bpmEdit->setText(track.Bpm);
     if (Track.CoverFilename.notEmpty()) {
         ui.coverwidget->loadFromFile(Track.CoverFilename);
+        wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
     }
 
     ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
@@ -110,6 +111,7 @@ void SearchlistTrackDialog::setFromClipboard()
                 ui.lengthEdit->setText(ppl7::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
                 Track.CoverFilename = meta.CoverFile;
                 ui.coverwidget->loadFromFile(Track.CoverFilename);
+                wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
                 if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
                 if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
                 if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);

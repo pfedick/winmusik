@@ -116,12 +116,21 @@ bool Edit::EditTrack()
         Track.SetValue(DeviceType, DeviceId, Page, TrackNum, 0);
     }
     if (Ti.TitleId) FillEditFields();
+    {
+        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+        Path.appendf("/%d.jpg", TrackNum);
+        if (ppl7::File::exists(Path)) {
+            ui.coverwidget->loadFromFile(Path);
+        }
+    }
+
     // Dateiname
     ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
     if (Path.isEmpty()) {
         ui.filename->setText(tr("file not found"));
         ui.filename->setStyleSheet("color: red");
         ui.filesize->setText("");
+
     } else {
         ui.filename->setText(Path);
         ui.filename->setStyleSheet("");
@@ -516,13 +525,12 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
                 }
             }
         }
-    } else {
-        if (title.CoverPreview.size() > 0) {
-            QPixmap pix, icon;
-            pix.loadFromData((const uchar*)title.CoverPreview.ptr(), title.CoverPreview.size());
-            icon = pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            item->setIcon(TRACKLIST_COVER_ROW, icon.copy(0, 0, 64, 16));
-        }
+    }
+    if (title.CoverPreview.size() > 0) {
+        QPixmap pix, icon;
+        pix.loadFromData((const uchar*)title.CoverPreview.ptr(), title.CoverPreview.size());
+        icon = pix.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        item->setIcon(TRACKLIST_COVER_ROW, icon.copy(0, 0, 64, 16));
     }
 }
 
@@ -682,14 +690,15 @@ void Edit::SaveEditorTrack()
         }
         if (Cover.isNull()) {
             Ti.CoverPreview.clear();
-        } else {
-            QPixmap icon = Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            QByteArray bytes;
-            QBuffer buffer(&bytes);
-            buffer.open(QIODevice::WriteOnly);
-            icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
-            Ti.CoverPreview.copy(bytes.data(), bytes.size());
         }
+    }
+    if (!Cover.isNull()) {
+        QPixmap icon = Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QByteArray bytes;
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::WriteOnly);
+        icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
+        Ti.CoverPreview.copy(bytes.data(), bytes.size());
     }
 
     if (!SaveTrack(Ti)) return;
@@ -886,8 +895,13 @@ void Edit::UpdateCover()
     wm->UpdateCoverViewer(Cover);
     if (wm_main->conf.bWriteID3Tags == true) {
         ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-        if (Path.notEmpty()) {
+        if (Path.notEmpty() && ppl7::File::exists(Path)) {
             saveCover(Path, Cover);
+        } else {
+            Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+            ppl7::Dir::mkDir(Path, true);
+            Path.appendf("/%d.jpg", TrackNum);
+            if (!ppl7::File::exists(Path)) saveCover(Path, Cover);
         }
     }
 }

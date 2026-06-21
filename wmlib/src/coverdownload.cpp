@@ -117,6 +117,7 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
                 }
                 if (track.exists("genre/name")) {
                     meta.Genre = track.getString("genre/name");
+                    meta.Genre.replace("Trance (Main Floor)", "Trance");
                 }
                 if (track.exists("key/name")) {
                     meta.Key = track.getString("key/name");

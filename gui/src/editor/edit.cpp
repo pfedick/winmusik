@@ -1177,6 +1177,17 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
     ui.releaseDate->setDate(QDate::currentDate());
     ui.recordDate->setDate(QDate::currentDate());
 
+    if (item.Bpm.toInt() > 0) ui.bpm->setText(item.Bpm);
+    if (item.Key.notEmpty()) ui.musickey->setText(item.Key);
+    if (item.Tags.notEmpty()) ui.tags->setText(item.Tags);
+    if (item.CoverFilename.notEmpty()) {
+        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+        ppl7::Dir::mkDir(Path, true);
+        Path.appendf("/%d.jpg", TrackNum);
+        ppl7::File::copy(item.CoverFilename, Path);
+        ui.coverwidget->loadFromFile(item.CoverFilename);
+    }
+
     if (item.Length > 0) ui.length->setText(ppl7::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
 
     ppl7::DateTime date = ppl7::DateTime::currentTime();

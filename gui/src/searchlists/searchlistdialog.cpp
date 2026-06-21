@@ -547,6 +547,9 @@ void SearchlistDialog::on_deleteTrackButton_clicked()
         int index = ui.trackList->indexOfTopLevelItem(item);
         if (index >= 0) {
             item = (SearchlistTreeItem*)ui.trackList->takeTopLevelItem(index);
+            if (item->Track.CoverFilename.notEmpty()) {
+                ppl7::File::unlink(item->Track.CoverFilename);
+            }
             if (item) delete item;
         }
     }
