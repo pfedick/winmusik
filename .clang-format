@@ -1,0 +1,45 @@
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+Standard: Latest
+
+# Erhöht die maximale Zeilenlänge (z.B. auf 120 oder 140)
+ColumnLimit: 140
+# Verhindert, dass Parameter auf mehrere Zeilen verteilt werden, 
+# wenn sie nicht in eine passen. Sie landen dann entweder alle
+# in einer Zeile oder (wenn zu lang) jeweils einer pro Zeile.
+BinPackParameters: false
+
+# Steuert den Umbruch vor/nach der Klammer bei langen Listen
+AllowAllParametersOfDeclarationOnNextLine: true
+#AlignAfterOpenBracket: true
+
+
+
+# Einrückung
+IndentWidth: 4
+AccessModifierOffset: -4
+NamespaceIndentation: None
+
+# Konstruktor-Initialisierung (Deine Wunsch-Formatierung)
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+PackConstructorInitializers: Never
+
+# Pointer & Referenzen: char* variable
+PointerAlignment: Left
+
+# Zuweisungen: variable=wert (Optional, falls du das wirklich willst)
+# SpaceBeforeAssignmentOperators: false 
+
+# Klammer-Regeln
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterFunction: true
+  AfterControlStatement: Never
+  BeforeElse: false
+  AfterClass: true
+
+# Kompakter Code
+AllowShortIfStatementsOnASingleLine: true
+SortIncludes: false

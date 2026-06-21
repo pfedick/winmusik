@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QClipboard>
 #include <QMenu>
 #include <QList>
@@ -28,13 +27,12 @@
 #include "csearchlist.h"
 #include "regexpcapture.h"
 
-
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
-	this->show();
-	this->restoreGeometry(wm_main->GetGeometry("SearchlistTrackDialog"));
+    ui.setupUi(this);
+    this->show();
+    this->restoreGeometry(wm_main->GetGeometry("SearchlistTrackDialog"));
 }
 
 SearchlistTrackDialog::~SearchlistTrackDialog()
@@ -43,89 +41,102 @@ SearchlistTrackDialog::~SearchlistTrackDialog()
 
 void SearchlistTrackDialog::closeEvent(QCloseEvent* event)
 {
-	wm_main->SaveGeometry("SearchlistTrackDialog", this->saveGeometry());
-	QDialog::closeEvent(event);
+    wm_main->SaveGeometry("SearchlistTrackDialog", this->saveGeometry());
+    QDialog::closeEvent(event);
 }
-
-
 
 void SearchlistTrackDialog::Resize()
 {
-
 }
 
 void SearchlistTrackDialog::showEvent(QShowEvent* event)
 {
-	Resize();
-	QWidget::showEvent(event);
+    Resize();
+    QWidget::showEvent(event);
 }
 void SearchlistTrackDialog::resizeEvent(QResizeEvent* event)
 {
-	Resize();
-	QWidget::resizeEvent(event);
+    Resize();
+    QWidget::resizeEvent(event);
 }
-
 
 void SearchlistTrackDialog::set(const SearchlistItem& track)
 {
-	Track=track;
-	ui.artistEdit->setText(track.Artist);
-	ui.titleEdit->setText(track.Title);
-	ui.versionEdit->setText(track.Version);
-	ui.genreEdit->setText(track.Genre);
-	ui.commentEdit->setText(track.Comment);
-	ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
-	if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
-	ui.rating->setCurrentIndex(track.Rating);
+    Track = track;
+    ui.artistEdit->setText(track.Artist);
+    ui.titleEdit->setText(track.Title);
+    ui.versionEdit->setText(track.Version);
+    ui.genreEdit->setText(track.Genre);
+    ui.commentEdit->setText(track.Comment);
+    ui.labelEdit->setText(track.Label);
+    ui.shopURLEdit->setText(track.ShopURL);
+    ui.tagsEdit->setText(track.Tags);
+    ui.commentEdit->setText(track.Comment);
+    ui.commentEdit->setText(track.Comment);
+
+    ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
+    if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
+    ui.rating->setCurrentIndex(track.Rating);
 }
 
 void SearchlistTrackDialog::setFromClipboard()
 {
-	RegExpMatch match;
-	RegExpClipboard clip;
-	copyFromClipboard(clip);
-	if (wm_main->RegExpCapture.match(clip, match)) {
-		ui.artistEdit->setText(match.Artist);
-		ui.titleEdit->setText(match.Title);
-		ui.versionEdit->setText(match.Version);
-		ui.genreEdit->setText(match.Genre);
-		ui.commentEdit->setText(match.Label);
-		ui.releaseDateEdit->setText(match.ReleaseDate);
-		if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
-	}
+    RegExpMatch match;
+    RegExpClipboard clip;
+    copyFromClipboard(clip);
+    if (wm_main->RegExpCapture.match(clip, match)) {
+        ui.artistEdit->setText(match.Artist);
+        ui.titleEdit->setText(match.Title);
+        ui.versionEdit->setText(match.Version);
+        ui.genreEdit->setText(match.Genre);
+        // ui.commentEdit->setText(match.Label);
+        ui.releaseDateEdit->setText(match.ReleaseDate);
+        ui.labelEdit->setText(match.Label);
+        ui.shopURLEdit->setText(match.ShopURL);
+        // ui.tagsEdit->setText(match.Tags);
+        // ui.commentEdit->setText(match.Comment);
+        if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
+    }
 }
 
 SearchlistItem SearchlistTrackDialog::get() const
 {
-	SearchlistItem track;
-	track=Track;	// Bisherige Daten übernehmen, insbesondere Datum der Anlage
-	track.Artist=ppl7::Trim(ppl7::String(ui.artistEdit->text()));
-	track.Title=ppl7::Trim(ppl7::String(ui.titleEdit->text()));
-	track.Version=ppl7::Trim(ppl7::String(ui.versionEdit->text()));
-	track.Genre=ppl7::Trim(ppl7::String(ui.genreEdit->text()));
-	track.Comment=ppl7::Trim(ppl7::String(ui.commentEdit->text()));
-	try {
-		track.ReleaseDate.set(ppl7::Trim(ppl7::String(ui.releaseDateEdit->text())));
-	} catch (...) {
-		track.ReleaseDate.clear();
-	}
-	track.Rating=ui.rating->currentIndex();
-	ppl7::String Tmp=ppl7::Trim(ppl7::String(ui.lengthEdit->text()));
-	std::vector<ppl7::String> matches;
-	if (ppl7::RegEx::capture("/^([0-9]+):([0-9]{2})$/", Tmp, matches)) {
-		track.Length=matches.at(1).toInt() * 60 + matches.at(2).toInt();
-	} else {
-		track.Length=0;
-	}
-	return track;
+    SearchlistItem track;
+    track.CoverFilename = Track.CoverFilename;
+    track.found = Track.found;
+    track.selected = Track.selected;
+    track = Track; // Bisherige Daten übernehmen, insbesondere Datum der Anlage
+    track.Artist = ppl7::Trim(ppl7::String(ui.artistEdit->text()));
+    track.Title = ppl7::Trim(ppl7::String(ui.titleEdit->text()));
+    track.Version = ppl7::Trim(ppl7::String(ui.versionEdit->text()));
+    track.Genre = ppl7::Trim(ppl7::String(ui.genreEdit->text()));
+    track.Comment = ppl7::Trim(ppl7::String(ui.commentEdit->text()));
+    track.Label = ppl7::Trim(ppl7::String(ui.labelEdit->text()));
+    track.ShopURL = ppl7::Trim(ppl7::String(ui.shopURLEdit->text()));
+    track.Tags = ppl7::Trim(ppl7::String(ui.tagsEdit->text()));
+    try {
+        track.ReleaseDate.set(ppl7::Trim(ppl7::String(ui.releaseDateEdit->text())));
+    }
+    catch (...) {
+        track.ReleaseDate.clear();
+    }
+    track.Rating = ui.rating->currentIndex();
+    ppl7::String Tmp = ppl7::Trim(ppl7::String(ui.lengthEdit->text()));
+    std::vector<ppl7::String> matches;
+    if (ppl7::RegEx::capture("/^([0-9]+):([0-9]{2})$/", Tmp, matches)) {
+        track.Length = matches.at(1).toInt() * 60 + matches.at(2).toInt();
+    } else {
+        track.Length = 0;
+    }
+    return track;
 }
 
 void SearchlistTrackDialog::on_saveButton_clicked()
 {
-	done(1);
+    done(1);
 }
 
 void SearchlistTrackDialog::on_cancelButton_clicked()
 {
-	done(0);
+    done(0);
 }

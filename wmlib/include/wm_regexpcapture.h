@@ -17,10 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef WM_REGEXPCAPTURE_H_
 #define WM_REGEXPCAPTURE_H_
-
 
 #include <vector>
 #include <list>
@@ -31,61 +29,65 @@
 #include <ppl7.h>
 #include <ppl7-audio.h>
 
-namespace de {
-namespace pfp {
-namespace winmusik {
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 class RegExpPattern
 {
 public:
-	RegExpPattern();
+    RegExpPattern();
 
-	void copyFrom(const RegExpPattern& other);
+    void copyFrom(const RegExpPattern& other);
 
-	ppl7::String Name;
-	ppl7::String Pattern;
-	int artist;
-	int title;
-	int version;
-	int genre;
-	int label;
-	int bpm;
-	int album;
-	int hours;
-	int minutes;
-	int seconds;
-	int releasedate;
-	bool isHTML;
+    ppl7::String Name;
+    ppl7::String Pattern;
+    int artist;
+    int title;
+    int version;
+    int genre;
+    int label;
+    int bpm;
+    int album;
+    int hours;
+    int minutes;
+    int seconds;
+    int releasedate;
+    bool isHTML;
 };
 
 class RegExpMatch
 {
 public:
-	RegExpMatch() {
-		Length=0;
-	}
-	ppl7::String	Artist;
-	ppl7::String	Title;
-	ppl7::String	Version;
-	ppl7::String	Genre;
-	ppl7::String	Label;
-	ppl7::String	Bpm;
-	ppl7::String	Album;
-	ppl7::String	ReleaseDate;
-	int				Length;		// in Sekunden
-
+    RegExpMatch()
+    {
+        Length = 0;
+    }
+    ppl7::String Artist;
+    ppl7::String Title;
+    ppl7::String Version;
+    ppl7::String Genre;
+    ppl7::String Label;
+    ppl7::String Bpm;
+    ppl7::String Album;
+    ppl7::String ReleaseDate;
+    ppl7::String ShopURL;
+    int Length; // in Sekunden
 };
 
 class RegExpClipboard
 {
 public:
-	//void copyFromClipboard();
-	ppl7::String PlainText;
-	ppl7::String Html;
+    // void copyFromClipboard();
+    ppl7::String PlainText;
+    ppl7::String Html;
 };
 
-namespace repexpmatch {
+namespace repexpmatch
+{
 bool buildinMatch(const ppl7::String& data, RegExpMatch& match);
 bool matchBeatPort(const ppl7::String& html, RegExpMatch& match);
 
@@ -95,11 +97,10 @@ void fixHTML(RegExpMatch& match);
 
 // for internal use only
 bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match);
-}
+} // namespace repexpmatch
 
-} // EOF namespace winkusik
-} // EOF namespace pfp
-} // EOF namespace de
-
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 
 #endif /* WM_REGEXPCAPTURE_H_ */
