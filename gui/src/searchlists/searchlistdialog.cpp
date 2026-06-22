@@ -692,3 +692,13 @@ void SearchlistDialog::deleteSelectedTracks()
 {
     on_deleteTrackButton_clicked();
 }
+
+void SearchlistDialog::on_trackList_urlDropped(const ppl7::String& url)
+{
+    SearchlistTrackDialog dialog;
+    dialog.setFromUrl(url);
+    int ret = dialog.exec();
+    if (ret == 1) {
+        addTrack(dialog.get());
+    }
+}

@@ -28,6 +28,7 @@
 #include "csearchlist.h"
 #include "regexpcapture.h"
 #include "wm_coverdownload.h"
+#include "wm_regexpcapture.h"
 
 SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
     : QDialog(parent)
@@ -120,6 +121,46 @@ void SearchlistTrackDialog::setFromClipboard()
     }
 }
 
+void SearchlistTrackDialog::setFromUrl(const ppl7::String& url)
+{
+    ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+    MetaData meta;
+    if (CoverDownload(url, coverfile, meta)) {
+        RegExpMatch match;
+        match.Album = meta.Album;
+        match.Artist = meta.Artist;
+        match.Title = meta.Title;
+        match.Genre = meta.Genre;
+        match.Version = meta.Version;
+        match.Bpm = meta.Bpm;
+        match.Label = meta.Label;
+        match.ReleaseDate = meta.ReleaseDate;
+        match.ShopURL = meta.ShopURL;
+        match.Length = meta.Length;
+        repexpmatch::fixHTML(match);
+        repexpmatch::fixIt(match);
+        ui.artistEdit->setText(match.Artist);
+        ui.titleEdit->setText(match.Title);
+        ui.versionEdit->setText(match.Version);
+        ui.genreEdit->setText(match.Genre);
+        // ui.commentEdit->setText(match.Label);
+        ui.releaseDateEdit->setText(match.ReleaseDate);
+        ui.labelEdit->setText(match.Label);
+        ui.shopURLEdit->setText(match.ShopURL);
+        // ui.tagsEdit->setText(match.Tags);
+        // ui.commentEdit->setText(match.Comment);
+        if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
+
+        Track.CoverFilename = meta.CoverFile;
+        ui.coverwidget->loadFromFile(Track.CoverFilename);
+        wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
+        if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
+        if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
+        if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
+    }
+}
+
 SearchlistItem SearchlistTrackDialog::get() const
 {
     SearchlistItem track;
@@ -166,7 +207,7 @@ void SearchlistTrackDialog::on_cancelButton_clicked()
 
 void SearchlistTrackDialog::on_coverwidget_imageChanged(const QPixmap& NewCover)
 {
-    ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageChanged\n");
+    // ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageChanged\n");
     /*
     Cover = NewCover;
     UpdateCover();
@@ -175,7 +216,7 @@ void SearchlistTrackDialog::on_coverwidget_imageChanged(const QPixmap& NewCover)
 
 void SearchlistTrackDialog::on_coverwidget_imageDeleted()
 {
-    ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageDeleted\n");
+    // ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageDeleted\n");
     /*
     Cover = QPixmap();
     wm->UpdateCoverViewer(Cover);

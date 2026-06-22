@@ -28,37 +28,36 @@ class SearchlistItem;
 
 class SearchlistTracks : public QTreeWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 private:
-	//void mouseMoveEvent ( QMouseEvent * event );
-	//void mousePressEvent ( QMouseEvent * event );
-	//void mouseReleaseEvent ( QMouseEvent * event );
-	QMimeData* mimeData(const QList<QTreeWidgetItem*>& items) const;
-	void dragEnterEvent(QDragEnterEvent* event);
-	void dragMoveEvent(QDragMoveEvent* e);
-	//bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
-	void dropEvent(QDropEvent* event);
-	void deleteSourceItems(QDropEvent* event);
+    // void mouseMoveEvent ( QMouseEvent * event );
+    // void mousePressEvent ( QMouseEvent * event );
+    // void mouseReleaseEvent ( QMouseEvent * event );
+    QMimeData* mimeData(const QList<QTreeWidgetItem*>& items) const;
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dragMoveEvent(QDragMoveEvent* e);
+    // bool dropMimeData(QTreeWidgetItem *parent, int index, const QMimeData *data, Qt::DropAction action);
+    void dropEvent(QDropEvent* event);
+    void deleteSourceItems(QDropEvent* event);
 
-	QTreeWidgetItem* lastmoveitem;
+    QTreeWidgetItem* lastmoveitem;
 
 public:
-	SearchlistTracks(QWidget* parent = 0);
-	~SearchlistTracks();
-	void deleteSelectedTracks();
-
+    SearchlistTracks(QWidget* parent = 0);
+    ~SearchlistTracks();
+    void deleteSelectedTracks();
 
 signals:
-	void itemDropped(SearchlistItem* item);
-	void changed();
+    void itemDropped(SearchlistItem* item);
+    void urlDropped(const ppl7::String& url);
+    void changed();
 
-	/*
-	void unselectItems();
-	void deleteSelectedItems();
-	void deleteItems(QList<QTreeWidgetItem *>items);
-	void selectItems(QList<QTreeWidgetItem *>items);
-	*/
+    /*
+    void unselectItems();
+    void deleteSelectedItems();
+    void deleteItems(QList<QTreeWidgetItem *>items);
+    void selectItems(QList<QTreeWidgetItem *>items);
+    */
 };
-
 
 #endif /* SEARCHLISTTRACKS_H_ */
