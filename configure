@@ -677,6 +677,17 @@ LAME_CFLAGS
 SQLITE3_CFLAGS
 POSTGRESQL_CFLAGS
 MYSQL_CFLAGS
+VORBISENC_LIBS
+VORBISENC_CFLAGS
+VORBISFILE_LIBS
+VORBISFILE_CFLAGS
+VORBIS_LIBS
+VORBIS_CFLAGS
+TIFF_LIBS
+TIFF_CFLAGS
+PNG_LIBS
+PNG_CFLAGS
+JPEG_LIBS
 JPEG_CFLAGS
 report_have_libcdio
 report_have_curl
@@ -3535,6 +3546,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_files="$ac_config_files Makefile"
 
 ac_config_files="$ac_config_files pplib/Makefile"
+
+ac_config_files="$ac_config_files pplib/ppl7-config"
 
 ac_config_files="$ac_config_files pplib/tests/Makefile"
 
@@ -18134,6 +18147,17 @@ esac;
 
 ###
 JPEG_CFLAGS=""
+JPEG_LIBS=""
+PNG_CFLAGS=""
+PNG_LIBS=""
+TIFF_CFLAGS=""
+TIFF_LIBS=""
+VORBIS_CFLAGS=""
+VORBIS_LIBS=""
+VORBISFILE_CFLAGS=""
+VORBISFILE_LIBS=""
+VORBISENC_CFLAGS=""
+VORBISENC_LIBS=""
 MYSQL_CFLAGS=""
 POSTGRESQL_CFLAGS=""
 SQLITE3_CFLAGS=""
@@ -18161,6 +18185,18 @@ LIBIDN_LIBS=""
 ASM=""
 ASMFLAGS=""
 ASMDEBUGFLAGS=""
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18934,6 +18970,7 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "pplib/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/Makefile" ;;
+    "pplib/ppl7-config") CONFIG_FILES="$CONFIG_FILES pplib/ppl7-config" ;;
     "pplib/tests/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/tests/Makefile" ;;
     "pplib/include/ppl7-config.h") CONFIG_HEADERS="$CONFIG_HEADERS pplib/include/ppl7-config.h" ;;
     "pplib/include/config_ppl7.h") CONFIG_HEADERS="$CONFIG_HEADERS pplib/include/config_ppl7.h" ;;

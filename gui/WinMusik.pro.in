@@ -52,6 +52,20 @@ QMAKE_CXXFLAGS	= @CXXFLAGS@ @CPPFLAGS@
 LDFLAGS		= @LDFLAGS@
 
 
+CONFIG(debug, debug|release) {
+    QMAKE_CFLAGS   ~= s/-O[s0-9]//g
+    QMAKE_CXXFLAGS ~= s/-O[s0-9]//g
+    QMAKE_CFLAGS += -ggdb
+    QMAKE_CXXFLAGS	+= -ggdb
+}
+else {
+    !contains(QMAKE_CXXFLAGS, -O[s0-9]) {
+        QMAKE_CFLAGS += -O2
+        QMAKE_CXXFLAGS	+= -O2
+    }
+}
+
+
 RESOURCES += resources.qrc
 RC_FILE = resource.rc
 INCLUDEPATH += include
@@ -95,6 +109,7 @@ SOURCES += src/about/about.cpp \
     src/CHashes.cpp \
     src/colorscheme.cpp \
     src/config.cpp \
+    src/coverdownloadmanager.cpp \
     src/coverprinter/coverprinter.cpp \
     src/coverviewer/coverviewer.cpp \
     src/CSearchlist.cpp \
@@ -138,7 +153,6 @@ SOURCES += src/about/about.cpp \
     src/searchlists/searchlisttrackdialog.cpp \
     src/searchlists/searchlisttracks.cpp \
     src/splashscreen/splashscreen.cpp \
-    src/coverdownloadmanager.cpp \
     src/wmfunctions.cpp \
     widgets/edittrack.cpp \
     widgets/fkeys.cpp \
@@ -187,6 +201,7 @@ HEADERS += widgets/edittrack.h \
     src/searchlists/searchlisttracks.h \
     src/splashscreen/splashscreen.h \
     include/colorscheme.h \
+    include/coverdownloadmanager.h \
     include/csearchlist.h \
     include/exceptions.h \
     include/musickey.h \
@@ -195,7 +210,6 @@ HEADERS += widgets/edittrack.h \
     include/tablecontrol.h \
     include/version.h \
     include/winmusik3.h \
-    include/coverdownloadmanager.h \
     
 
 FORMS += widgets/edittrack.ui \
