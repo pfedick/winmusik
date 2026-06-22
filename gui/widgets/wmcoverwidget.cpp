@@ -33,8 +33,9 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QPixmap>
-
+#include <QUuid>
 #include "winmusik3.h"
+#include "wm_coverdownload.h"
 
 WMCoverWidget::WMCoverWidget(QWidget* parent)
     : QWidget(parent),
@@ -230,37 +231,6 @@ static void analyzeDragEnter(QDragEnterEvent* event)
             text.printnl();
         }
     }
-    /*
-    QStringList formats=mimedata->formats();
-    printf("\n================================\nformatss\n");
-    for (int i = 0; i < formats.size(); ++i) {
-        ppl7::String text=formats.at(i);
-        text.printnl();
-        QByteArray ba=mimedata->data(formats.at(i));
-        ppl7::HexDump(ba.constData(), ba.size());
-
-    }
-wir haben text
-https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&showHawkfireUpsell=false&id=2609137383&libraryId=2609137383&asin=B08L99DB8D
-
-================================
-wir haben html
-<html>
-<body>
-<!--StartFragment--><a data-v-3c011e4b=""
-href="https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&amp;showHawkfireUpsell=false&amp;id=2609137383&amp;libraryId=2609137383&amp;asin=B08L99DB8D"
-class="entityLink link">Crash (Extended Mix) </a><!--EndFragment-->
-</body>
-</html>
-
-================================
-wir haben urls
-https://www.amazon.de/morpho/webapp/#/album/detail/2609137383?context=prime&showHawkfireUpsell=false&id=2609137383&libraryId=2609137383&asin=B08L99DB8D
-
-
-
-
-    */
 
     fflush(stdout);
 }
@@ -289,6 +259,10 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
         catch (...) {
         }
         // text.printnl();
+    }
+    if (mimedata->hasHtml()) {
+        event->accept();
+        return true;
     }
 
     // fflush(stdout);
@@ -324,9 +298,57 @@ void WMCoverWidget::loadImageFromUri(const QString& uri)
  * kommt in der Konstellation scheinbar nur einmal vor, pattern: <img alt=".*" src="(https://m.media-amazon.com/images.*\.jpg)">
  */
 
+void WMCoverWidget::downloadFromShopUrl(const QString& url)
+{
+    ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+    MetaData meta;
+    QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    if (CoverDownload(url, coverfile)) {
+        loadFromFile(coverfile);
+        ppl7::File::unlink(coverfile);
+    }
+    QGuiApplication::restoreOverrideCursor();
+}
+
 bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
 {
     const QMimeData* mimedata = event->mimeData();
+    if (mimedata->hasText()) {
+        ppl7::String html = mimedata->html();
+        ppl7::RegEx::MatchVector matches;
+        if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
+            downloadFromShopUrl(matches[1]);
+            QWidget* top = window();
+            top->raise();
+            top->activateWindow();
+
+            event->accept();
+            return true;
+        } else if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?release\\/.*?\\/[0-9]+)\"/i", html, matches)) {
+            downloadFromShopUrl(matches[1]);
+            QWidget* top = window();
+            top->raise();
+            top->activateWindow();
+
+            event->accept();
+            return true;
+        }
+        // html.printnl();
+        // ppl7::PrintDebug("blah\n");
+    }
+    if (mimedata->hasUrls()) {
+        QList<QUrl> url_list = mimedata->urls();
+        if (url_list.size() > 0) {
+            QUrl url = url_list.first();
+            downloadFromShopUrl(url.toString());
+            QWidget* top = window();
+            top->raise();
+            top->activateWindow();
+            event->accept();
+            return true;
+        }
+    }
     if (mimedata->hasText()) {
         ppl7::String text = mimedata->text();
         // printf("URL=%s\n",(const char*)text);

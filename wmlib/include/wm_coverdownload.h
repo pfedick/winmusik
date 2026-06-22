@@ -57,8 +57,10 @@ public:
     void print() const;
 };
 
+bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile);
 bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
 
+bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile);
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
 
 } // namespace winmusik

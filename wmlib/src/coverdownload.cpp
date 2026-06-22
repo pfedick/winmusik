@@ -45,6 +45,14 @@ void MetaData::print() const
     ppl7::PrintDebug("Length:      %d sec = %0d:%02d min\n", Length, Length / 60, Length % 60);
 }
 
+bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile)
+{
+    if (url.has(".beatport.com")) {
+        return CoverDownload_Beatport(url, targetfile);
+    }
+    return false;
+}
+
 bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, MetaData& meta)
 {
     meta.ShopURL = url;
@@ -157,6 +165,54 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
             ff.close();
             meta.CoverFile = targetfile;
             // meta.print();
+            return true;
+        } else {
+            ppl7::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);
+        }
+    }
+    return false;
+}
+
+bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile)
+{
+    ppl7::HttpResponse response = ppl7::HttpClient::get(url);
+    if (response.statusCode != 200) return false;
+    ppl7::RegEx::MatchVector match;
+    ppl7::String CoverUrl;
+
+    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", response.body, match)) {
+        // ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
+        // ppl7::File ff("tmp/data.json", ppl7::File::WRITE);
+        // ff.write(match[1]);
+        // ff.close();
+        try {
+            ppl7::AssocArray data = ppl7::Json::loads(match[1]);
+            // data.list();
+            if (data.exists("props/pageProps/track")) {
+                const ppl7::AssocArray& track = data.getAssocArray("props/pageProps/track");
+                if (track.exists("release/image/uri")) {
+                    CoverUrl = track.getString("release/image/uri");
+                }
+            } else if (data.exists("props/pageProps/release")) {
+                const ppl7::AssocArray& track = data.getAssocArray("props/pageProps/release");
+                if (track.exists("image/uri")) {
+                    CoverUrl = track.getString("image/uri");
+                }
+            }
+        }
+        catch (const ppl7::Exception& e) {
+            e.print();
+            ppl7::PrintDebug("Error parsing JSON: %s\n", e.what());
+            throw;
+        }
+    }
+    if (CoverUrl.notEmpty()) {
+        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(CoverUrl);
+        if (coverResponse.statusCode == 200) {
+            // ppl7::PrintDebug("Cover download\n");
+            ppl7::File ff(targetfile, ppl7::File::WRITE);
+            ff.write(coverResponse.body);
+            ff.close();
             return true;
         } else {
             ppl7::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);

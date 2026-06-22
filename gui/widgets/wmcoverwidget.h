@@ -60,6 +60,7 @@ private:
     bool handleCoverDragEnterEvent(QDragEnterEvent* event);
     bool handleCoverDropEvent(QDropEvent* event);
     void loadImageFromUri(const QString& uri);
+    void downloadFromShopUrl(const QString& url);
 
 private slots:
     void fileDownloaded(QNetworkReply* pReply);
