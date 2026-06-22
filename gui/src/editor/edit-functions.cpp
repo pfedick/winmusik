@@ -121,6 +121,7 @@ bool Edit::EditTrack()
         Path.appendf("/%d.jpg", TrackNum);
         if (ppl7::File::exists(Path)) {
             ui.coverwidget->loadFromFile(Path);
+            wm->UpdateCoverViewer(ui.coverwidget->getPixmap());
         }
     }
 
