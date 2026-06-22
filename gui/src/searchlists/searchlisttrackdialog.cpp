@@ -36,6 +36,9 @@ SearchlistTrackDialog::SearchlistTrackDialog(QWidget* parent)
     ui.setupUi(this);
     this->show();
     this->restoreGeometry(wm_main->GetGeometry("SearchlistTrackDialog"));
+    QWidget* top = window();
+    top->raise();
+    top->activateWindow();
 }
 
 SearchlistTrackDialog::~SearchlistTrackDialog()

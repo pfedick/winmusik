@@ -118,13 +118,17 @@ void SearchlistTracks::dropEvent(QDropEvent* event)
         ppl7::String html = data->html();
         ppl7::RegEx::MatchVector matches;
         if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
-            event->ignore();
-            // ppl7::PrintDebug("URL dropped: %s\n", (const char*)matches[1]);
-            emit urlDropped(matches[1]);
+            event->accept();
+            // Den Drop sofort abschließen, damit der Browser nicht blockiert
+            ppl7::String url = matches[1];
+            QTimer::singleShot(0, this, [this, url]() {
+                emit urlDropped(url);
+                // Hier auch gleich den Fokus holen:
+                window()->raise();
+                window()->activateWindow();
+            });
             return;
         }
-        // ppl7::PrintDebug("We have HTML\n");
-        // ppl7::PrintDebug("%s\n", (const char*)data->html().toLocal8Bit());
     }
     /*
     if (data->hasText()) {

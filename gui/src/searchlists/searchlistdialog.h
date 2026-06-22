@@ -27,17 +27,18 @@
 #include "winmusik3.h"
 #include "csearchlist.h"
 
-#define SL_COLUMN_ARTIST 0
-#define SL_COLUMN_VERSION 1
-#define SL_COLUMN_GENRE 2
-#define SL_COLUMN_LABEL 3
-#define SL_COLUMN_LENGTH 4
-#define SL_COLUMN_RATING 5
-#define SL_COLUMN_DATEADDED 6
-#define SL_COLUMN_DATERELEASE 7
-#define SL_COLUMN_EXISTING 8
-#define SL_COLUMN_SELECTED 9
-#define SL_COLUMN_DONE 10
+#define SL_COLUMN_COVER 0
+#define SL_COLUMN_ARTIST 1
+#define SL_COLUMN_VERSION 2
+#define SL_COLUMN_GENRE 3
+#define SL_COLUMN_LABEL 4
+#define SL_COLUMN_LENGTH 5
+#define SL_COLUMN_RATING 6
+#define SL_COLUMN_DATEADDED 7
+#define SL_COLUMN_DATERELEASE 8
+#define SL_COLUMN_EXISTING 9
+#define SL_COLUMN_SELECTED 10
+#define SL_COLUMN_DONE 11
 
 class DupeCheckThread : public QThread
 {

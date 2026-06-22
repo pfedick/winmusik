@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <QBuffer>
 #include "searchlistdialog.h"
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
@@ -40,6 +41,7 @@ SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::S
     this->wm = wm;
     // List.setWmClient(wm);
     ui.trackList->installEventFilter(this);
+    ui.trackList->setIconSize(QSize(64, 16));
     currentTrackListItem = NULL;
     searchWindow = NULL;
     haveCopyItem = false;
@@ -58,7 +60,7 @@ SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::S
                     "color: rgb(255, 255, 255);\n"
                     "}\n"
                     "";
-    ui.trackList->setStyleSheet(Style);
+    // ui.trackList->setStyleSheet(Style);
 
     // Suchliste laden
     this->Filename = Filename;
@@ -218,6 +220,35 @@ void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem* item)
 void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
 {
     ppl7::String Tmp;
+    if (item->Track.CoverFilename.notEmpty()) {
+        QPixmap Cover;
+        ppl7::String thumb = item->Track.CoverFilename + ".thumb";
+        bool loaded = false;
+        if (ppl7::File::exists(thumb)) {
+            if (Cover.load(thumb)) {
+                item->setIcon(SL_COLUMN_COVER, Cover.copy(0, 0, 64, 16));
+                loaded = true;
+            }
+        }
+        if (!loaded) {
+            if (Cover.load(item->Track.CoverFilename)) {
+                QPixmap icon = Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                item->setIcon(SL_COLUMN_COVER, icon.copy(0, 0, 64, 16));
+                QByteArray bytes;
+                QBuffer buffer(&bytes);
+                buffer.open(QIODevice::WriteOnly);
+                icon.save(&buffer, "JPEG", wm_main->conf.JpegQualityPreview);
+                ppl7::File f;
+                try {
+                    f.open(thumb, ppl7::File::WRITE);
+                    f.write(bytes.data(), bytes.size());
+                    f.close();
+                }
+                catch (...) {
+                }
+            }
+        }
+    }
     Tmp = item->Track.Artist + " - " + item->Track.Title;
     item->setText(SL_COLUMN_ARTIST, Tmp);
     item->setText(SL_COLUMN_VERSION, item->Track.Version);
@@ -288,6 +319,7 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
 void SearchlistDialog::Resize()
 {
     int s = ui.trackList->width();
+    ui.trackList->setColumnWidth(SL_COLUMN_COVER, 64);
     ui.trackList->setColumnWidth(SL_COLUMN_DONE, 60);
     ui.trackList->setColumnWidth(SL_COLUMN_SELECTED, 60);
     ui.trackList->setColumnWidth(SL_COLUMN_EXISTING, 60);
@@ -298,7 +330,7 @@ void SearchlistDialog::Resize()
     ui.trackList->setColumnWidth(SL_COLUMN_LABEL, 100);
     ui.trackList->setColumnWidth(SL_COLUMN_RATING, 64);
 
-    s = s - 62 - 62 - 92 - 52 - 108 - 66 - 62 - 92 - 108;
+    s = s - 62 - 62 - 92 - 52 - 108 - 66 - 62 - 92 - 108 - 64;
     if (s < 300) s = 300;
     ui.trackList->setColumnWidth(SL_COLUMN_VERSION, s * 30 / 100);
     ui.trackList->setColumnWidth(SL_COLUMN_ARTIST, s * 70 / 100);
@@ -549,6 +581,7 @@ void SearchlistDialog::on_deleteTrackButton_clicked()
             item = (SearchlistTreeItem*)ui.trackList->takeTopLevelItem(index);
             if (item->Track.CoverFilename.notEmpty()) {
                 ppl7::File::unlink(item->Track.CoverFilename);
+                ppl7::File::unlink(item->Track.CoverFilename + ".thumb");
             }
             if (item) delete item;
         }
