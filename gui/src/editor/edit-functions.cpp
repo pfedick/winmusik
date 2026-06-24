@@ -759,7 +759,7 @@ bool Edit::SaveTrack(DataTitle& Ti)
             if (Tag.tryLoad(Path)) {
                 if (!Tag.hasPicture(3) && ui.coverwidget->hasCover()) {
                     // Cover speichern
-                    ppl7::PrintDebug("Saving cover to ID3 Tag\n");
+                    // ppl7::PrintDebug("Saving cover to ID3 Tag\n");
                     ppl7::ByteArray cover;
                     QPixmap pix = ui.coverwidget->getPixmap();
                     QByteArray bytes;
