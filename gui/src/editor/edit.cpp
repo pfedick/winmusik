@@ -1121,7 +1121,7 @@ void Edit::handleFileDropEvent(QDropEvent* event)
     Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
     ui.filesize->setText(Tmp);
     ppl7::ID3Tag Tag;
-    if (Tag.loaded(path)) {
+    if (Tag.tryLoad(path)) {
         // Cover?
         ppl7::ByteArray cover;
         if (Tag.getPicture(3, cover)) {
@@ -1185,7 +1185,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
         ppl7::Dir::mkDir(Path, true);
         Path.appendf("/%d.jpg", TrackNum);
         ppl7::File::copy(item.CoverFilename, Path);
-        ui.coverwidget->loadFromFile(item.CoverFilename);
+        ui.coverwidget->setPixmapFromFile(item.CoverFilename);
     }
 
     if (item.Length > 0) ui.length->setText(ppl7::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
@@ -2294,7 +2294,7 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
         } else if (column == TRACKLIST_COVER_ROW && wm->IsCoverViewerVisible() == true) {
             ppl7::ID3Tag Tag;
             ppl7::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
-            if (Tag.loaded(File)) {
+            if (Tag.tryLoad(File)) {
                 ppl7::ByteArray cover;
                 if (Tag.getPicture(3, cover)) {
                     QPixmap trackCover;
@@ -2350,7 +2350,7 @@ void Edit::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column)
     else if (column == TRACKLIST_COVER_ROW) {
         ppl7::ID3Tag Tag;
         ppl7::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
-        if (Tag.loaded(File)) {
+        if (Tag.tryLoad(File)) {
             ppl7::ByteArray cover;
             if (Tag.getPicture(3, cover)) {
                 QPixmap trackCover;

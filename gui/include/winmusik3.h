@@ -114,6 +114,8 @@ ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date);
 
 void getHarmonicKeys(std::set<int>& harmonics, int key);
 void saveCover(const ppl7::String& filename, const QPixmap& Cover);
+void saveCover(ppl7::ID3Tag& Tag, const QPixmap& Cover);
+void saveCoverToFile(const ppl7::String& filename, const QPixmap& Cover);
 void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover);
 void NormalizeImportString(ppl7::String& Buffer);
 void setReadableLength(QLabel* label, int length);

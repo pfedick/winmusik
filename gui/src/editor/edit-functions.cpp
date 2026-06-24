@@ -116,14 +116,6 @@ bool Edit::EditTrack()
         Track.SetValue(DeviceType, DeviceId, Page, TrackNum, 0);
     }
     if (Ti.TitleId) FillEditFields();
-    {
-        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
-        Path.appendf("/%d.jpg", TrackNum);
-        if (ppl7::File::exists(Path)) {
-            ui.coverwidget->loadFromFile(Path);
-            wm->UpdateCoverViewer(ui.coverwidget->getPixmap());
-        }
-    }
 
     // Dateiname
     ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
@@ -131,6 +123,12 @@ bool Edit::EditTrack()
         ui.filename->setText(tr("file not found"));
         ui.filename->setStyleSheet("color: red");
         ui.filesize->setText("");
+        // Wir versuchen das Cover aus der Cover-Datei zu laden, falls es existiert
+        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+        Path.appendf("/%d.jpg", TrackNum);
+        if (ui.coverwidget->setPixmapFromFile(Path)) {
+            Cover = ui.coverwidget->getPixmap();
+        }
 
     } else {
         ui.filename->setText(Path);
@@ -139,14 +137,15 @@ bool Edit::EditTrack()
         if (ppl7::File::tryStatFile(Path, de)) {
             Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
             ui.filesize->setText(Tmp);
-            ppl7::ID3Tag Tag;
-            if (Tag.loaded(Path)) {
-                // Cover?
-                ppl7::ByteArray cover;
-                if (Tag.getPicture(3, cover)) {
-                    Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
-                    ui.coverwidget->setPixmap(Cover);
-                    wm->UpdateCoverViewer(Cover);
+            // Wir versuchen das Cover aus der Audio-Datei zu laden, falls es existiert
+            if (ui.coverwidget->setPixmapFromAudioFile(Path)) {
+                Cover = ui.coverwidget->getPixmap();
+            } else {
+                // Wir versuchen das Cover aus der Cover-Datei zu laden, falls es existiert
+                ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+                Path.appendf("/%d.jpg", TrackNum);
+                if (ui.coverwidget->setPixmapFromFile(Path)) {
+                    Cover = ui.coverwidget->getPixmap();
                 }
             }
         }
@@ -502,7 +501,7 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
                 ti.CopyFrom(title);
                 ti.Size = de.Size;
                 ppl7::ID3Tag Tag;
-                if (Tag.loaded(Path)) {
+                if (Tag.tryLoad(Path)) {
                     // Cover?
                     ppl7::ByteArray cover;
                     QPixmap pix, icon;
@@ -753,9 +752,26 @@ bool Edit::SaveTrack(DataTitle& Ti)
 
     // ID3-Tags speichern, sofern gewünscht und eine Datei vorhanden ist
     if (wm_main->conf.bWriteID3Tags == true) {
+
         ppl7::String Path = wm->GetAudioFilename(DeviceType, Track.DeviceId, Page, Track.Track);
         if (Path.notEmpty()) {
-            if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track, Ti)) { // TODO
+            ppl7::ID3Tag Tag;
+            if (Tag.tryLoad(Path)) {
+                if (!Tag.hasPicture(3) && ui.coverwidget->hasCover()) {
+                    // Cover speichern
+                    ppl7::PrintDebug("Saving cover to ID3 Tag\n");
+                    ppl7::ByteArray cover;
+                    QPixmap pix = ui.coverwidget->getPixmap();
+                    QByteArray bytes;
+                    QBuffer buffer(&bytes);
+                    buffer.open(QIODevice::WriteOnly);
+                    pix.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
+                    cover.copy(bytes.data(), bytes.size());
+                    Tag.setPicture(3, cover, "image/jpeg");
+                    Tag.save();
+                }
+            }
+            if (!wm->SaveID3Tags(DeviceType, Track.DeviceId, Page, Track.Track, Ti)) {
                 wm->RaiseError(this, tr("Could not save ID3 Tags"));
             }
         }
@@ -902,7 +918,9 @@ void Edit::UpdateCover()
             Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
             ppl7::Dir::mkDir(Path, true);
             Path.appendf("/%d.jpg", TrackNum);
-            if (!ppl7::File::exists(Path)) saveCover(Path, Cover);
+            // TODO: Cover in Datei speichern, wenn keine Audio-Datei existiert
+            ppl7::PrintDebug("Saving cover to file %s\n", (const char*)Path);
+            saveCoverToFile(Path, Cover);
         }
     }
 }

@@ -21,6 +21,11 @@
 #define WMCOVERWIDGET_H
 
 #include <QWidget>
+#define PPL_QT_STRING_UTF8
+#define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#define PPL_WITH_QT6
+
+#include <ppl7-audio.h>
 #include <QEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -42,11 +47,19 @@ public:
     explicit WMCoverWidget(QWidget* parent = nullptr);
     ~WMCoverWidget();
 
+    // TODO: wir brauchen Methoden, über die wir von "außen" das Cover
+    // setzen und löschen können, ohne dass die Signals ausgelöst werden.
+    // Die Signals sollen nur dann ausgelöst werden, wenn der User das Cover
+    // inerhalb des Widgets ändert. Also z.B. über Drag&Drop oder über die Buttons.
+
+    // setter: QPixmap, File, ID3Frame
     void setPixmap(const QPixmap& pix);
+    bool setPixmapFromFile(const QString& filename);
+    bool setPixmapFromID3Tag(const ppl7::ID3Tag& tag);
+    bool setPixmapFromAudioFile(const ppl7::String& filename);
     void clear();
     const QPixmap& getPixmap() const;
-
-    void loadFromFile(const QString& filename);
+    bool hasCover() const;
 
 private:
     Ui::WMCoverWidget* ui;
@@ -55,17 +68,19 @@ private:
     QString LastFilename;
     QNetworkAccessManager m_WebCtrl;
     QByteArray m_DownloadedData;
+    bool bHaveCover;
 
     bool eventFilter(QObject* target, QEvent* event);
     bool handleCoverDragEnterEvent(QDragEnterEvent* event);
     bool handleCoverDropEvent(QDropEvent* event);
     void loadImageFromUri(const QString& uri);
     void downloadFromShopUrl(const QString& url);
+    void loadFromFile(const QString& filename);
 
 private slots:
     void fileDownloaded(QNetworkReply* pReply);
 
-public slots:
+    // public slots:
     void on_cover_clicked();
     void on_cover_doubleClicked();
 

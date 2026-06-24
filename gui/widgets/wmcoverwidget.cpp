@@ -19,6 +19,7 @@
 
 #define PPL_QT_STRING_UTF8
 #define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#define PPL_WITH_QT6
 #include "ppl7.h"
 #include "ppl7-inet.h"
 #include "wmcoverwidget.h"
@@ -46,6 +47,8 @@ WMCoverWidget::WMCoverWidget(QWidget* parent)
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     ui->cover->installEventFilter(this);
     connect(&m_WebCtrl, SIGNAL(finished(QNetworkReply*)), SLOT(fileDownloaded(QNetworkReply*)));
+    LastFilename = tr("cover.jpg");
+    bHaveCover = false;
 }
 
 WMCoverWidget::~WMCoverWidget()
@@ -78,15 +81,68 @@ bool WMCoverWidget::eventFilter(QObject* target, QEvent* event)
 void WMCoverWidget::clear()
 {
     Cover = QPixmap();
+    bHaveCover = false;
     QPixmap pix(":/cover/resources/cover_placeholder.png");
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    wm_main->UpdateCoverViewer(Cover);
+}
+
+bool WMCoverWidget::hasCover() const
+{
+    return bHaveCover;
 }
 
 void WMCoverWidget::setPixmap(const QPixmap& pix)
 {
+    bHaveCover = true;
     Cover = pix;
-    LastFilename = tr("cover.jpg");
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    wm_main->UpdateCoverViewer(Cover);
+}
+
+bool WMCoverWidget::setPixmapFromFile(const QString& filename)
+{
+    clear();
+    if (ppl7::File::exists(filename) == false) {
+        return false;
+    }
+    QPixmap pix;
+    if (!pix.load(filename)) {
+        return false;
+    }
+    setPixmap(pix);
+    QString fn = ppl7::File::getFilename(filename);
+    LastFilename = fn;
+    return true;
+}
+
+bool WMCoverWidget::setPixmapFromID3Tag(const ppl7::ID3Tag& tag)
+{
+    clear();
+    ppl7::ByteArray data;
+    if (tag.getPicture(3, data)) {
+        QPixmap pix;
+        pix.loadFromData((const uchar*)data.ptr(), data.size());
+        setPixmap(pix);
+        return true;
+    }
+    return false;
+}
+
+bool WMCoverWidget::setPixmapFromAudioFile(const ppl7::String& filename)
+{
+    clear();
+    ppl7::ID3Tag tag;
+    if (tag.tryLoad(filename)) {
+        ppl7::ByteArray data;
+        if (tag.getPicture(3, data)) {
+            QPixmap pix;
+            pix.loadFromData((const uchar*)data.ptr(), data.size());
+            setPixmap(pix);
+            return true;
+        }
+    }
+    return false;
 }
 
 const QPixmap& WMCoverWidget::getPixmap() const
@@ -120,8 +176,7 @@ void WMCoverWidget::on_coverInsertButton_clicked()
     if (!clipboard) return;
     if (clipboard->pixmap().isNull()) return;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Cover = clipboard->pixmap();
-    ui->cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setPixmap(clipboard->pixmap());
     QApplication::restoreOverrideCursor();
     emit imageChanged(Cover);
 }
@@ -134,7 +189,6 @@ void WMCoverWidget::on_coverDeleteButton_clicked()
                               QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
         return;
     clear();
-    wm_main->UpdateCoverViewer(Cover);
     /*
     if (wm_main->conf.bWriteID3Tags==true) {
         ppl6::CString Path=wm_main->GetAudioFilename(DeviceType,DeviceId,Page,TrackNum);
@@ -171,8 +225,7 @@ void WMCoverWidget::on_coverLoadButton_clicked()
         emit gotFocus();
         return;
     }
-    Cover = NewCover;
-    ui->cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setPixmap(NewCover);
     QApplication::restoreOverrideCursor();
     emit imageChanged(Cover);
 }
@@ -193,8 +246,8 @@ void WMCoverWidget::on_coverSaveButton_clicked()
     wm_main->conf.trySave();
     if (!Cover.save(newfile)) {
         /*
-         * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons =
-         * Ok, StandardButton defaultButton = NoButton ) [static]
+         * StandardButton QMessageBox::critical ( QWidget * parent, const QString & title, const QString & text, StandardButtons buttons
+         * = Ok, StandardButton defaultButton = NoButton ) [static]
          *
          */
         QApplication::restoreOverrideCursor();
@@ -207,6 +260,7 @@ void WMCoverWidget::on_coverSaveButton_clicked()
     QApplication::restoreOverrideCursor();
 }
 
+/*
 static void analyzeDragEnter(QDragEnterEvent* event)
 {
     const QMimeData* mimedata = event->mimeData();
@@ -234,6 +288,7 @@ static void analyzeDragEnter(QDragEnterEvent* event)
 
     fflush(stdout);
 }
+    */
 
 bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
 {
@@ -277,8 +332,6 @@ void WMCoverWidget::loadImageFromUri(const QString& uri)
     QPixmap pix(":/cover/resources/cover_loading.png");
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     QApplication::processEvents();
-    QApplication::processEvents();
-
     QNetworkRequest request(uri);
     // request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     m_WebCtrl.get(request);
@@ -418,8 +471,7 @@ void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
 
     QPixmap img;
     if (img.loadFromData(m_DownloadedData)) {
-        Cover = img;
-        ui->cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        setPixmap(img);
         emit imageChanged(Cover);
         activateWindow();
         return;
@@ -434,8 +486,7 @@ void WMCoverWidget::loadFromFile(const QString& filename)
     if (!NewCover.load(filename)) {
         return;
     }
-    Cover = NewCover;
-    ui->cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setPixmap(NewCover);
     QApplication::restoreOverrideCursor();
     emit imageChanged(Cover);
 }

@@ -3,6 +3,7 @@ CXXDEBUGFLAGS = @CXXFLAGS@ -ggdb -D_DEBUG -Wall -fmessage-length=0 -I../pplib/in
 
 CXX		= @CXX@
 LIBDEP	:= ../pplib/release/libpplib.a
+LIBDEP_DEBUG	:= ../pplib/debug/libpplib.a
 
 
 
@@ -66,7 +67,7 @@ release/libwinmusik3.a: $(OBJS_RELEASE) $(LIBDEP)
 	ar -r release/libwinmusik3.a $(OBJS_RELEASE)
 
 
-debug/libwinmusik3.a: $(OBJS_DEBUG) $(LIBDEP)
+debug/libwinmusik3.a: $(OBJS_DEBUG) $(LIBDEP_DEBUG)
 	ar -r debug/libwinmusik3.a $(OBJS_DEBUG)
 
 clean:

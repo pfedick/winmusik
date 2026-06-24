@@ -80,8 +80,7 @@ void SearchlistTrackDialog::set(const SearchlistItem& track)
     ui.keyEdit->setText(track.Key);
     ui.bpmEdit->setText(track.Bpm);
     if (Track.CoverFilename.notEmpty()) {
-        ui.coverwidget->loadFromFile(Track.CoverFilename);
-        wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
+        ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
     }
 
     ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
@@ -114,8 +113,7 @@ void SearchlistTrackDialog::setFromClipboard()
             if (CoverDownload(match.ShopURL, coverfile, meta)) {
                 ui.lengthEdit->setText(ppl7::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
                 Track.CoverFilename = meta.CoverFile;
-                ui.coverwidget->loadFromFile(Track.CoverFilename);
-                wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
+                ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
                 if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
                 if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
                 if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
@@ -156,8 +154,7 @@ void SearchlistTrackDialog::setFromUrl(const ppl7::String& url)
         if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
 
         Track.CoverFilename = meta.CoverFile;
-        ui.coverwidget->loadFromFile(Track.CoverFilename);
-        wm_main->UpdateCoverViewer(ui.coverwidget->getPixmap());
+        ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
         if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
         if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
         if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
