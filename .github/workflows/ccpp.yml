@@ -13,7 +13,7 @@ jobs:
           submodules: 'true'
           #fetch-depth: 0
       - name: Install Dependencies
-        run: sudo apt install -y qtbase6-dev qtchooser qt6-qmake qtbase6-dev-tools dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
+        run: sudo apt install -y qt6-base-dev qtchooser qmake6 qt6-base-dev-tools dpkg-dev libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev libcurl4-openssl-dev
       - name: configure
         run: ./configure
       - name: make
