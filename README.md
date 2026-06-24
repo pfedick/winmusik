@@ -6,7 +6,7 @@ audio tapes, vinyl records, harddisks and other audio devices. It has a
 smart editor and an easy to use search interface.
 
   - smart graphical user interface for editing your music titles
-  - import of MP3 files on harddisk
+  - import of MP3 files from harddisk
   - ID3v2-Tag-support including cover images, key and energy
   - extensive search functions
   - print cd cover
@@ -15,11 +15,11 @@ smart editor and an easy to use search interface.
   - "DJ-Mode" in playlists with support for Native Instrument's Traktor 3
     Cue-Points
   - open source under the GNU GENERAL PUBLIC LICENSE v3
-  - runs on Windows Vista/7/8/10, Linux, FreeBSD and other
-    unixes
+  - runs on Windows 10/11, Linux, FreeBSD and other unixes
 
-WWW: http://www.winmusik.de/
-Author: Patrick Fedick <patrick@pfp.de>, http://www.pfp.de/
+Git: https://github.com/pfedick/winmusik
+WWW: https://www.winmusik.de/
+Author: Patrick Fedick <patrick@pfp.de>
 
 
 Installation
@@ -50,9 +50,9 @@ You have to install the following packages:
 ### Ubuntu 22.04
 
     sudo apt install -y qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools dpkg-dev \
-        libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre3-dev
+        libcdio-dev zlib1g-dev libbz2-dev libpng-dev libpcre2-dev
 
-### Windows 10 with Msys/mingw
+### Windows 10/11 with Msys/mingw
 
 For installing msys2 and mingw64, please see: [https://www.msys2.org/](https://www.msys2.org/).
 I use the ucrt libraries in this example:
