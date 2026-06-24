@@ -24,10 +24,6 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QMouseEvent>
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <shlobj.h>
 #include "search.h"
 #include "resultfilter.h"
 #include <vector>
