@@ -688,17 +688,21 @@ void Edit::SaveEditorTrack()
         if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
             Ti.Length = tinfo.Ti.Length;
         }
+        /*
         if (Cover.isNull()) {
             Ti.CoverPreview.clear();
         }
+        */
     }
-    if (!Cover.isNull()) {
-        QPixmap icon = Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (ui.coverwidget->hasCover()) {
+        QPixmap icon = ui.coverwidget->getPixmap().scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         QByteArray bytes;
         QBuffer buffer(&bytes);
         buffer.open(QIODevice::WriteOnly);
         icon.save(&buffer, "JPEG", wm->conf.JpegQualityPreview);
         Ti.CoverPreview.copy(bytes.data(), bytes.size());
+    } else {
+        Ti.CoverPreview.clear();
     }
 
     if (!SaveTrack(Ti)) return;
