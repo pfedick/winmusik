@@ -60,6 +60,8 @@ public:
 bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile);
 bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
 
+void SetBeatportSession(const ppl7::String& clearance, const ppl7::String& userAgent);
+
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile);
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
 

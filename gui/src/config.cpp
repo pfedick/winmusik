@@ -262,6 +262,10 @@ void Config::save()
     c.add("playlistExport", "export_json", playlist_export.export_json);
     c.add("playlistExport", "with_cover_icons", playlist_export.with_cover_icons);
 
+    // Beatport
+    c.add("beatport", "clearance", (const char*)beatport.clearance);
+    c.add("beatport", "userAgent", (const char*)beatport.userAgent);
+
     ppl7::String Path = ppl7::File::getPath(ConfigFile);
 
     QDir dir;
@@ -406,4 +410,8 @@ void Config::load()
     playlist_export.with_start_times = c.getBoolFromSection("playlistExport", "with_start_times", true);
     playlist_export.export_json = c.getBoolFromSection("playlistExport", "export_json", false);
     playlist_export.with_cover_icons = c.getBoolFromSection("playlistExport", "with_cover_icons", false);
+
+    // Beatport
+    beatport.clearance = c.getFromSection("beatport", "clearance", "");
+    beatport.userAgent = c.getFromSection("beatport", "userAgent", "");
 }

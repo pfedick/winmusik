@@ -24,6 +24,8 @@
 #include <QTableWidgetItem>
 #include "ppl7-audio.h"
 
+#include "wm_coverdownload.h"
+
 Properties::Properties(QWidget* parent, CWmClient* wm)
     : QDialog(parent)
 {
@@ -212,6 +214,10 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     } else {
         ui.tab_cddb->setEnabled(false);
     }
+
+    // Beatport
+    ui.beatport_clearance->setPlainText(c->beatport.clearance);
+    ui.beatport_userAgent->setText(c->beatport.userAgent);
 
     // Finish
     ui.acceptButton->setEnabled(false);
@@ -503,6 +509,10 @@ int Properties::Save()
         c->cddb.useProxy = ui.cddbUseProxy->isChecked();
     }
 
+    // Beatport
+    c->beatport.clearance = ui.beatport_clearance->toPlainText();
+    c->beatport.userAgent = ui.beatport_userAgent->text();
+
     // Save
     try {
         wm->conf.save();
@@ -513,6 +523,7 @@ int Properties::Save()
     }
     wm->InitLogging();
     wm->UpdateMenue();
+    SetBeatportSession(c->beatport.clearance, c->beatport.userAgent);
     return 1;
 }
 

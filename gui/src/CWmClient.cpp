@@ -40,6 +40,7 @@
 #include <QMessageBox>
 #include <QLocale>
 #include <QMenu>
+#include "wm_coverdownload.h"
 
 CWmClient* wm_main = NULL;
 
@@ -122,6 +123,7 @@ int CWmClient::Start()
             return 0;
         }
     }
+    SetBeatportSession(conf.beatport.clearance, conf.beatport.userAgent);
     LoadTranslation();
     InitMusicKeys();
     InitLogging();

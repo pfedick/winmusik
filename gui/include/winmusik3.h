@@ -261,6 +261,14 @@ public:
         bool with_cover_icons;
     };
     PlaylistExport playlist_export;
+
+    class Beatport
+    {
+    public:
+        ppl7::String clearance;
+        ppl7::String userAgent;
+    };
+    Beatport beatport;
 };
 
 /*

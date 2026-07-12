@@ -45,6 +45,15 @@ void MetaData::print() const
     ppl7::PrintDebug("Length:      %d sec = %0d:%02d min\n", Length, Length / 60, Length % 60);
 }
 
+static ppl7::String beatport_clearance;
+static ppl7::String beatport_userAgent;
+
+void SetBeatportSession(const ppl7::String& clearance, const ppl7::String& userAgent)
+{
+    beatport_clearance = clearance;
+    beatport_userAgent = userAgent;
+}
+
 bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile)
 {
     if (url.has(".beatport.com")) {
@@ -65,8 +74,19 @@ bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, Meta
 
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& meta)
 {
-    ppl7::HttpResponse response = ppl7::HttpClient::get(url);
+    ppl7::HttpRequest req;
+    if (beatport_clearance.notEmpty()) {
+        req.cookies["cf_clearance"] = beatport_clearance;
+    }
+    if (beatport_userAgent.notEmpty()) {
+        req.userAgent = beatport_userAgent;
+    }
+
+    // ppl7::PrintDebug("Downloading Beatport cover from: %s\n", (const char*)url);
+    ppl7::HttpResponse response = ppl7::HttpClient::get(url, req);
     // ppl7::PrintDebug("HTTP-Response: %d\n", response.statusCode);
+    // ppl7::PrintDebug("HTTP-Error: %s\n", (const char*)response.error);
+    //  ppl7::PrintDebug("HTTP-Body: %s\n", (const char*)response.body);
     if (response.statusCode != 200) return false;
 
     // response.body.toString().printnl();
@@ -75,25 +95,6 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
     // ff.close();
 
     ppl7::RegEx::MatchVector match;
-    /*
-    if (ppl7::RegEx::capture(
-            "/<meta\\s+property=\"og:image\"\\s+content=\"(https:\\/\\/geo-media\\.beatport\\.com\\/image_size\\/1400x1400\\/.*?)\"/",
-            response.body, match)) {
-        ppl7::PrintDebug("Cover gefunden: %s\n", (const char*)match[1]);
-        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(match[1]);
-        if (coverResponse.statusCode == 200) {
-            ppl7::File ff(targetfile, ppl7::File::WRITE);
-            ff.write(coverResponse.body);
-            ff.close();
-            meta.CoverFile = targetfile;
-
-        } else {
-            ppl7::PrintDebug("Fehler beim Download des Covers: HTTP %d\n", coverResponse.statusCode);
-        }
-    } else {
-        ppl7::PrintDebug("Kein Cover gefunden im HTML.\n");
-    }
-    */
 
     if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", response.body, match)) {
         // ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
@@ -157,7 +158,7 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
         }
     }
     if (meta.CoverUrl.notEmpty()) {
-        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(meta.CoverUrl);
+        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(meta.CoverUrl, req);
         if (coverResponse.statusCode == 200) {
             // ppl7::PrintDebug("Cover download\n");
             ppl7::File ff(targetfile, ppl7::File::WRITE);
@@ -175,7 +176,15 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
 
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile)
 {
-    ppl7::HttpResponse response = ppl7::HttpClient::get(url);
+    ppl7::HttpRequest req;
+    if (beatport_clearance.notEmpty()) {
+        req.cookies["cf_clearance"] = beatport_clearance;
+    }
+    if (beatport_userAgent.notEmpty()) {
+        req.userAgent = beatport_userAgent;
+    }
+
+    ppl7::HttpResponse response = ppl7::HttpClient::get(url, req);
     if (response.statusCode != 200) return false;
     ppl7::RegEx::MatchVector match;
     ppl7::String CoverUrl;
@@ -207,7 +216,7 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
         }
     }
     if (CoverUrl.notEmpty()) {
-        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(CoverUrl);
+        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(CoverUrl, req);
         if (coverResponse.statusCode == 200) {
             // ppl7::PrintDebug("Cover download\n");
             ppl7::File ff(targetfile, ppl7::File::WRITE);

@@ -449,6 +449,16 @@ private slots:
         Change();
     };
     void on_cddbUseProxy_toggled(bool);
+
+    // Beatport
+    void on_beatport_clearance_plainTextChanged()
+    {
+        Change();
+    };
+    void on_beatport_userAgent_textChanged()
+    {
+        Change();
+    };
 };
 
 #endif // PROPERTIES_H
