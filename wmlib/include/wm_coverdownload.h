@@ -65,6 +65,8 @@ void SetBeatportSession(const ppl7::String& clearance, const ppl7::String& userA
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile);
 bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
 
+void getBeatportMetaData(ppl7::AssocArray& data, de::pfp::winmusik::MetaData& meta);
+
 } // namespace winmusik
 } // namespace pfp
 } // namespace de
