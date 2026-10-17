@@ -2,3 +2,8 @@
 	path = pplib
 	url = ../pplib.git
 	branch = master
+
+[submodule "pplib8"]
+	path = pplib8
+	url = https://github.com/pfedick/pplib.git
+	branch = pplib8

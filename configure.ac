@@ -24,7 +24,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.71])
-AC_INIT([winmusik],[3.7.0],[patrick@pfp.de],[winmusik-3.7.0.tar.bz2])
+AC_INIT([winmusik],[4.0.0],[patrick@pfp.de],[winmusik-4.0.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
@@ -92,7 +92,7 @@ AC_LANG(C++)
 AC_EXEEXT
 
 
-AX_CXX_COMPILE_STDCXX(17)
+AX_CXX_COMPILE_STDCXX(20)
 
 AX_CHECK_COMPILE_FLAG([-no-pie],
     LDFLAGS="-no-pie $LDFLAGS"
