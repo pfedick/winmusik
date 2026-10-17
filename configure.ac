@@ -30,16 +30,12 @@ AC_CONFIG_AUX_DIR(autoconf)
 AC_CONFIG_SRCDIR([gui/include/winmusik3.h])
 AC_CONFIG_SRCDIR([pplib/include/ppl7.h])
 AC_CONFIG_SRCDIR([pplib/include/config_ppl7.h.in])
-AC_CONFIG_SRCDIR([wmlib/include/wm_config.h.in])
 
 AC_CONFIG_FILES([pplib/Makefile])
 AC_CONFIG_FILES([pplib/ppl7-config])
 AC_CONFIG_FILES([pplib/tests/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])
-AC_CONFIG_HEADERS([wmlib/include/wm_config.h])
-AC_CONFIG_FILES([wmlib/Makefile])
-AC_CONFIG_FILES([wmlib/tests/Makefile])
 AC_CONFIG_FILES([gui/WinMusik.pro])
 
 

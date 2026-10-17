@@ -151,6 +151,20 @@ pplib8_release:
 pplib8_test: pplib8_debug
 	-build/pplib8-debug/tests/test_all$(EXE) --gtest_color=yes
 
+
+###########################################################################
+### wmlib
+###########################################################################
+
+wmlib_release: pplib8_release ppl7_release
+	cmake -S wmlib -B build/wmlib-release -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/wmlib-release -j
+
+wmlib_debug: pplib8_debug ppl7_debug
+	cmake -S wmlib -B build/wmlib-debug -DCMAKE_BUILD_TYPE=Debug
+	cmake --build build/wmlib-debug -j
+
+
 ###########################################################################
 ### RELEASE
 ###########################################################################
@@ -158,8 +172,6 @@ ppl7_release:
 	$(MAKE) --directory=pplib release/libppl7-core.a release/libppl7-crypto.a release/libppl7-inet.a release/libppl7-audio.a
 	ar -r pplib/release/libpplib.a pplib/release/*.o
 
-wmlib_release:
-	$(MAKE) --directory=wmlib release/libwinmusik3.a
 
 gui_release: gui/Makefile update_version
 	mkdir -p gui/release
@@ -175,10 +187,6 @@ gui_release: gui/Makefile update_version
 ppl7_debug:
 	$(MAKE) --directory=pplib debug/libppl7-core.a debug/libppl7-crypto.a debug/libppl7-inet.a debug/libppl7-audio.a
 	ar -r pplib/debug/libpplib.a pplib/debug/*.o
-
-
-wmlib_debug:
-	$(MAKE) --directory=wmlib debug/libwinmusik3.a
 
 gui_debug: gui/Makefile update_version
 	mkdir -p gui/debug

@@ -80,13 +80,13 @@ win32:QMAKE_LIBDIR += C:/mingw/usr/local/lib
 win32:QMAKE_LFLAGS += -static-libgcc
 
 CONFIG(debug, debug|release) {
-	LIBS += ../wmlib/debug/libwinmusik3.a
+	LIBS += ../build/wmlib-debug/libwinmusik4.a
 	LIBS += ../pplib/debug/libpplib.a
     LIBS += ../build/pplib8-debug/libpplib_audio.a
     LIBS += ../build/pplib8-debug/libpplib_internet.a
     LIBS += ../build/pplib8-debug/libpplib_core.a
 } else {
-	LIBS += ../wmlib/release/libwinmusik3.a
+	LIBS += ../build/wmlib-release/libwinmusik4.a
 	LIBS += ../pplib/release/libpplib.a
     LIBS += ../build/pplib8-release/libpplib_audio.a
     LIBS += ../build/pplib8-release/libpplib_internet.a
