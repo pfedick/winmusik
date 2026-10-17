@@ -1,8 +1,5 @@
 /debug/
 /release/
-/Makefile
-/Makefile.Debug
-/Makefile.Release
 /ui_about.h
 /ui_asynchronousMessage.h
 /ui_cddbimport.h

@@ -66,11 +66,12 @@ Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier b
 
 
 # Projektphasen
-0. Vorhandener Code muss wieder kompilieren
-1. Einbindung von pplib8 in das bestehende WinMusik-Projekt
-2. Zentrales Makefile anpassen
+
+1. Zentrales Makefile anpassen
+2. Einbindung von pplib8 in das bestehende WinMusik-Projekt
 3. wmlib auf CMake umstellen
 4. wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
 
 
-
+# Erledigt
+- Vorhandener Code muss wieder kompilieren

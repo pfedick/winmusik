@@ -1,10 +1,10 @@
 ###############################################################################
-# This file is part of WinMusik 3 by Patrick Fedick                           #
+# This file is part of WinMusik 4 by Patrick Fedick                           #
 # Web: https://www.pfp.de/winmusik/                                           #
 # Sourcecode: https://github.com/pfedick/winmusik
 ###############################################################################
 #
-# Copyright (c) 2024, Patrick Fedick <patrick@pfp.de>
+# Copyright (c) 2026, Patrick Fedick <patrick@pfp.de>
 # All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,39 +21,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
+
+
 ###############################################################################
 ### Global Options
 ###############################################################################
-VERSION ?= 3.8.0
+VERSION = 4.0.0
 PREVIOUS_TAG = REL_3_7_2
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
-
-
-
-PREFIX		?= @prefix@
-CC		= @CC@
-CXX		= @CXX@
-CFLAGS		= @CFLAGS@
-CPPFLAGS	= @CPPFLAGS@
-CXXFLAGS	= @CPPFLAGS@
-LDFLAGS		= @LDFLAGS@
-QMAKE		= @QMAKE@
-
-lib_winmusik := lib
-lib_pplib    := pplib
-libraries    := $(lib_pplib)
-gui          := gui
+QMAKE=qmake6
 
 ###########################################################################
 ### Targets
 ###########################################################################
 
-#.PHONY: all $(gui) $(libraries)
 
-
-
-.PHONY: release debug release/WinMusik debug/WinMusik
+.PHONY: gui release debug release/WinMusik debug/WinMusik
 
 release: ppl7_release wmlib_release gui_release
 
@@ -147,19 +131,6 @@ gui_debug: gui/Makefile update_version
 ###########################################################################
 ### MISC
 ###########################################################################
-
-install: release/WinMusik Makefile
-	mkdir -p $(PREFIX)/bin $(PREFIX)/share/pixmaps $(PREFIX)/share/applications $(PREFIX)/share/doc/WinMusik
-	cp release/WinMusik $(PREFIX)/bin
-	cp gui/resources/icon128.png $(PREFIX)/share/pixmaps/WinMusik.png
-	cp Package/WinMusik.desktop $(PREFIX)/share/applications
-	cp docs/Userguide_de.pdf $(PREFIX)/share/doc/WinMusik
-
-deinstall:
-	rm -rf $(PREFIX)/bin/WinMusik
-	rm -rf $(PREFIX)/share/pixmaps/WinMusik.png
-	rm -rf $(PREFIX)/share/doc/WinMusik
-	rm -rf $(PREFIX)/share/applications/WinMusik.desktop
 
 clean:
 	@rm -rf documentation release debug
