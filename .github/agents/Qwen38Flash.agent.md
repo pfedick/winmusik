@@ -1,7 +1,7 @@
 ---
 name: Qwen38Flash C++ Agent
-description: "Autonomer C++-Agent für pplib: Chargenweiser Ausbau, Invarianten extern, minimaler Kontext-Churn."
-argument-hint: Eine Programmieraufgabe, ein Refactoring-Ziel oder ein Bugfix im C++/CMake-Projekt.
+description: "Autonomer C++-Agent für WinMusik (pplib8/wmlib/gui): Chargenweiser Ausbau, Invarianten extern, minimaler Kontext-Churn."
+argument-hint: Eine Programmieraufgabe, ein Refactoring-Ziel oder ein Bugfix in WinMusik (C++20, Qt6-GUI, Autotools/qmake, pplib8 per CMake).
 tools:
   - 'read/readFile'
   - 'read/problems'
@@ -61,22 +61,36 @@ Fortschritt in der Session-DB (`todos`, `todo_deps`) oder `PROGRESS.md`. Nach je
 
 ## Build und Tests
 
-Nicht CTest und nicht die CMakeTools-Erweiterung. Gebaut wird über das `Makefile`:
+Nicht CTest und nicht die CMakeTools-Erweiterung für WinMusik. WinMusik baut über Autotools + handgeschriebenes Root-`Makefile` + qmake; nur das Submodul `pplib8` ist CMake.
 
-- `make build_tests` – baut `test_core` und `test_crypto`, startet sie nicht.
-- `make test` – baut und startet beide.
-- `make debug` / `make release` – Bibliothek.
-- `make coverage` – Coverage-Build mit `test_all`, Report in `coverage.xml` und `coverage_html/index.html`.
+WinMusik-Root (`Makefile`, vom `configure`-Skript erzeugt):
 
-Einzelne Tests: erst `make build_tests`, dann
-`cd tests && ../build/debug/tests/test_core$(EXE) --gtest_filter=DirTest*`
+- `./configure` – konfiguriert WinMusik, wmlib und das Submodul `pplib` (pplib7).
+- `make debug` / `make release` – pplib7 + wmlib + GUI in einem Durchlauf.
+- `make wmlib`, `make gui` – nur Teilbereiche; `make mingw`, `make mingw_debug` – Windows/MinGW.
+- `make clean`, `make distclean`, `make install`. Kein `test`- oder `coverage`-Target im Root.
+
+Tests der eigenen Bibliothek (`wmlib/tests/Makefile`):
+
+- `make -C wmlib/tests test` – baut und startet `wmlib/tests/testsuite`.
+- `make -C wmlib/tests coverage` – baut `testsuite_coverage` und fährt ihn an.
+- `make -C wmlib/tests xml` – Google-Test-XML; `make -C wmlib/tests memcheck` – Valgrind.
+
+Einzelne Tests: erst `make -C wmlib/tests`, dann
+`cd wmlib/tests && ./testsuite --gtest_filter=StorageTest*`
+
+pplib8 nur bei Bibliotheksarbeit am Submodul, dann dessen eigene Toolchain:
+`make -C pplib8 build_tests`, `make -C pplib8 test`, `make -C pplib8 coverage`.
+
+Achtung: GUI und wmlib-Tests linken aktuell `pplib/debug/libpplib.a` (pplib7), nicht pplib8. Jede Umstellung auf pplib8 ist ein eigener, expliziter Schritt (`gui/WinMusik.pro`, `wmlib/tests/Makefile`, `configure.ac`).
 
 ## Coding Standards
 
 - C++20, Namespace `pplib`, Stil an die vorhandene Datei angepasst.
 - Bibliothekscode hat keine statischen oder globalen mutablen Zustände. Bei Bedarf Mutexes, Locks oder atomare Operationen. Kein geteilter Zustand ohne Kontextobjekt des Aufrufers.
 - Header schlank halten; keine unnötigen Includes.
-- Interner Code nutzt `pplib::String` und `std::string_view` (kein `std::string`, vermeide Heap-Allokationen durch Substrings).
+- Interner Code in `pplib8`/`wmlib` nutzt `pplib::String` und `std::string_view` (kein `std::string`, vermeide Heap-Allokationen durch Substrings).
+- `gui/` ist Qt6-Code: dort sind `QString`, `QList`, `.ui`-Dateien und Qt-Signale normal und werden nicht gegen die Bibliotheksregeln ausgetauscht. Qt-Typen an der Grenze zu `wmlib` in `std::string_view`/`pplib::String` übersetzen.
 
 ## Tests
 
@@ -101,7 +115,7 @@ Tests nach der funktionalen Einheit, nicht vorher. Die Suite bleibt jederzeit gr
 - Bei Codereviews: ein Punkt pro Durchlauf. Beheben, Tests anpassen, Suite laufen lassen, Punkt als erledigt markieren, dann der nächste.
 
 ## Testdaten
-- Verwende vorhandene Testdaten unter `tests/testdata/` in Unit-Tests
+- Verwende vorhandene Testdaten unter `wmlib/tests/testdata/` (WinMusik) bzw. `pplib8/tests/testdata/` (Bibliothek)
 - Reichen die Testdaten für Corner-Cases nicht aus, sind sie im Unit-Test 
   durch Inline-Strings oder zusätzliche Testdateien zu ergänzen.
 
@@ -115,12 +129,14 @@ explizit aufzulisten und muss nicht krampfhaft erzwungen werden.
 
 ## Projekt-Kontext
 
-Plattformübergreifende C++-Bibliothek, getestet auf Windows MinGW/MSys, Linux, FreeBSD; soll auf Desktop und Mikrocontrollern effizient laufen. Mikrocontroller-Tauglichkeit ist eine Design-Constraint, keine nachträgige Optimierung.
+WinMusik ist eine Anwendung (Musikarchiv auf CDs, DVDs, Kassetten, Schallplatten, Festplatten) mit eigener Bibliothek `wmlib` und Qt6-Oberfläche. Ziel der laufenden Arbeit ist der Umstieg von pplib7 auf pplib8, die Modernisierung auf C++20, die Aufsplittung der >200 MB-Datenbankdatei und ein zentrales Filehandling-Modul für Audiodateien. Getestet wird auf Windows MinGW/MSys, Linux, FreeBSD. Der Code soll auf Desktop und Mikrocontrollern effizient laufen; Mikrocontroller-Tauglichkeit ist eine Design-Constraint der Bibliothek, keine nachträgliche Optimierung, und gilt nicht für die GUI.
 
 ## Verzeichnisstruktur
 
-- `src/` Quellcode, `include/` Header
-- `tests/src/` Unit-Tests, `tests/testdata/` Testdaten
-- `CMakeLists.txt`, `Makefile`
-- `codereview/todo/`, `codereview/done/`, `codereview/obsolete/`
-- `coverage.xml`, `coverage_html/index.html`
+- `pplib/` – Submodul, alte Bibliothek pplib7 (Autoconf), von GUI und wmlib-Tests noch gelinkt
+- `pplib8/` – Submodul `pfedick/pplib` (Branch `pplib8`), neue Bibliothek, CMake + eigenes `Makefile`
+- `wmlib/` – WinMusik-Bibliothek: `src/`, `include/`, `tests/src/`, `tests/testdata/`, Google Test vendored unter `tests/googletest-release-1.10.0`
+- `gui/` – Qt6-Hauptanwendung: `src/`, `widgets/`, `resources/`, `WinMusik.pro` (qmake6), generierte `ui_*.h`
+- `docs/` – Doku, insbesondere das Datenbank-Dateiformat (`fileformat.dox`, `fileformat31.dox`)
+- `configure.ac`, `Makefile` (Root), `REFACTORING.md` – Build und Refactoring-Plan
+- `codereview/todo/`, `codereview/done/`, `codereview/obsolete/` – in WinMusik noch nicht vorhanden; Vorlage liegt in `pplib8/codereview/`
