@@ -183,11 +183,12 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
 
     ppl7::RegEx::MatchVector match;
 
-    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", response.body, match)) {
+    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", ppl7::String(response.body),
+                             match)) {
         if (beatport_debug) {
             ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
             ppl7::File ff("tmp/data.json", ppl7::File::WRITE);
-            ff.write(match[1]);
+            ff.write(ppl7::ByteArrayPtr(match[1]));
             ff.close();
         }
         try {
@@ -236,7 +237,8 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
     ppl7::RegEx::MatchVector match;
     ppl7::String CoverUrl;
 
-    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", response.body, match)) {
+    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", ppl7::String(response.body),
+                             match)) {
         // ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
         // ppl7::File ff("tmp/data.json", ppl7::File::WRITE);
         // ff.write(match[1]);

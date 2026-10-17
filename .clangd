@@ -1,0 +1,21 @@
+# .clangd  (Repo-Root)
+CompileFlags:
+  Compiler: /usr/bin/g++
+  Add:
+    - -std=gnu++20
+    - -DHAVE_CONFIG_H
+    - -Ipplib/include
+    - -Iwmlib/include
+    - -Igui
+    - -Igui/include
+    - -Igui/widgets
+    - -I/usr/include/qt6
+    - -I/usr/include/qt6/QtCore
+    - -I/usr/include/qt6/QtWidgets
+    - -I/usr/include/qt6/QtGui
+    - -I/usr/include/qt6/QtXml
+    - -I/usr/include/qt6/QtNetwork
+    - -I/usr/include/qt6/QtPrintSupport
+    - -I/usr/lib64/qt6/mkspecs/linux-g++
+Diagnostics:
+  IncludeCleaner: false
