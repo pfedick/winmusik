@@ -61,5 +61,5 @@ cd ..
 
 
 $ACLOCAL
-$AUTOMAKE --add-missing --copy
+#$AUTOMAKE --add-missing --copy
 $AUTOCONF

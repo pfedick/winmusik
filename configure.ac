@@ -23,7 +23,7 @@
 ###############################################################################
 
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 AC_INIT([winmusik],[4.0.0],[patrick@pfp.de],[winmusik-4.0.0.tar.bz2])
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -57,6 +57,14 @@ sinclude(pplib/autoconf/ax_gcc_x86_cpuid.m4)
 sinclude(pplib/autoconf/ax_check_compile_flag.m4)
 sinclude(pplib/autoconf/ax_check_compiler_flags.m4)
 sinclude(pplib/autoconf/ax_gcc_archflag.m4)
+# Autoconf >= 2.72 hat die "serial"-Makros (iconv.m4, lib-link.m4, lib-prefix.m4,
+# lib-ld.m4, host-cpu-c-abi.m4) aus der Distribution entfernt. lib-link.m4 und
+# iconv.m4 liegen als Kopie in pplib/autoconf; deren Hilfs-Makros
+# (AC_LIB_PREPARE_PREFIX, AC_LIB_PREPARE_MULTILIB, AC_LIB_PROG_LD und
+# gl_HOST_CPU_C_ABI_32BIT) werden daher über die Kopien in autoconf/ bereitgestellt.
+sinclude(autoconf/host-cpu-c-abi.m4)
+sinclude(autoconf/lib-ld.m4)
+sinclude(autoconf/lib-prefix.m4)
 sinclude(pplib/autoconf/lib-link.m4)
 sinclude(pplib/autoconf/ax_check_openssl.m4)
 sinclude(pplib/autoconf/libcurl.m4)

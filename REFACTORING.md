@@ -12,7 +12,6 @@ intelligenten Editor und eine einfach zu bedienende Suchoberfläche. Jeder Audio
 - Suchlisten
 - Playlists
 - "DJ-Modus" in Playlists mit Unterstützung für Native Instrument's Traktor 3 Cue-Points
-- Open Source unter der GNU GENERAL PUBLIC LICENSE v3
 - Läuft unter Windows 10/11, Linux, FreeBSD und anderen Unixen
 
 # Ziele
@@ -67,5 +66,11 @@ Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier b
 
 
 # Projektphasen
-1. Analyse der bestehenden Codebasis und Identifikation von Refactoring-Punkten
+0. Vorhandener Code muss wieder kompilieren
+1. Einbindung von pplib8 in das bestehende WinMusik-Projekt
+2. Zentrales Makefile anpassen
+3. wmlib auf CMake umstellen
+4. wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
+
+
 
