@@ -41,7 +41,6 @@ AC_CONFIG_HEADERS([wmlib/include/wm_config.h])
 AC_CONFIG_FILES([wmlib/Makefile])
 AC_CONFIG_FILES([wmlib/tests/Makefile])
 AC_CONFIG_FILES([gui/WinMusik.pro])
-AC_CONFIG_FILES([Package/WinMusik.desktop])
 
 
 ###############################################################################

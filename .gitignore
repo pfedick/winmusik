@@ -1,5 +1,6 @@
 /debug/
 /release/
+build
 /ui_about.h
 /ui_asynchronousMessage.h
 /ui_cddbimport.h

@@ -5,6 +5,7 @@ CompileFlags:
     - -std=gnu++20
     - -DHAVE_CONFIG_H
     - -Ipplib/include
+    - -Ipplib8/include
     - -Iwmlib/include
     - -Igui
     - -Igui/include

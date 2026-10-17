@@ -30,18 +30,59 @@ VERSION = 4.0.0
 PREVIOUS_TAG = REL_3_7_2
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
-QMAKE=qmake6
+
+# Qt6-qmake finden: Name ist distroabhaengig, Version ist eindeutig
+ifeq ($(OS),Windows_NT)
+QMAKE ?= qmake6
+else
+QMAKE ?= $(shell for c in qmake6 qmake-qt6 qmake; do \
+                v=$$($$c -query QT_VERSION 2>/dev/null | cut -d. -f1); \
+                test "$$v" = 6 && { echo $$c; break; }; done)
+ifeq ($(QMAKE),)
+QMAKE = qmake6
+endif
+endif
+
+# Executable file extension based on OS
+ifeq ($(OS),Windows_NT)
+EXE = .exe
+else
+EXE =
+endif
+
+### PPLIB8 CMake Flags
+PPLIB8_CMAKE_FLAGS = \
+	-DPPLIB_ENABLE_CORE=ON \
+	-DPPLIB_ENABLE_AUDIO=ON \
+	-DPPLIB_ENABLE_INTERNET=ON \
+	-DPPLIB_ENABLE_CRYPTO=OFF \
+	-DPPLIB_ENABLE_GRAFIX=OFF \
+	-DPPLIB_ENABLE_DATABASE=OFF \
+	-DPPLIB_ENABLE_PICO=OFF \
+	-DPPLIB_BUILD_TESTS=ON
 
 ###########################################################################
 ### Targets
 ###########################################################################
 
 
-.PHONY: gui release debug release/WinMusik debug/WinMusik
+.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history qmake-info gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure
 
-release: ppl7_release wmlib_release gui_release
 
-debug: ppl7_debug wmlib_debug gui_debug
+qmake-info:
+	@echo "QMAKE = $(QMAKE)"
+	@$(QMAKE) -query QT_VERSION
+	@$(QMAKE) -query QT_INSTALL_BINS
+
+configure: autoconf_configure pplib8_configure
+
+autoconf_configure:
+	./configure --enable-gtest=`pwd`/wmlib/tests/googletest-release-1.10.0
+	#cmake -S pplib -B pplib/build -DCMAKE_BUILD_TYPE=Release
+
+release: ppl7_release pplib8_release wmlib_release gui_release
+
+debug: ppl7_debug pplib8_debug wmlib_debug gui_debug
 
 all: release debug
 
@@ -90,6 +131,25 @@ setup: mingw
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
 
 
+###########################################################################
+### PPLIB8
+###########################################################################
+pplib8_configure:
+	cmake -S pplib8 -B build/pplib8-debug   -DCMAKE_BUILD_TYPE=Debug   $(PPLIB8_CMAKE_FLAGS)
+	cmake -S pplib8 -B build/pplib8-release -DCMAKE_BUILD_TYPE=Release $(PPLIB8_CMAKE_FLAGS)
+
+pplib8: pplib8_debug pplib8_release
+
+pplib8_debug:
+	cmake -S pplib8 -B build/pplib8-debug   -DCMAKE_BUILD_TYPE=Debug   $(PPLIB8_CMAKE_FLAGS)
+	cmake --build build/pplib8-debug -j
+
+pplib8_release:
+	cmake -S pplib8 -B build/pplib8-release -DCMAKE_BUILD_TYPE=Release $(PPLIB8_CMAKE_FLAGS)
+	cmake --build build/pplib8-release -j
+
+pplib8_test: pplib8_debug
+	-build/pplib8-debug/tests/test_all$(EXE) --gtest_color=yes
 
 ###########################################################################
 ### RELEASE
@@ -133,7 +193,7 @@ gui_debug: gui/Makefile update_version
 ###########################################################################
 
 clean:
-	@rm -rf documentation release debug
+	@rm -rf documentation release debug build
 	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
 	-@ $(MAKE) --directory=gui clean > /dev/null 2>&1
 	@rm -rf gui/release gui/debug gui/Makefile* release debug pplib/debug lib/compile
@@ -147,7 +207,6 @@ distclean: clean
 	@rm -rf Package/WinMusik.desktop
 	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
 	-@ $(MAKE) --directory=wmlib distclean > /dev/null 2>&1
-	@rm -rf Makefile
 
 
 gui/Makefile: gui/WinMusik.pro

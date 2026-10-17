@@ -3545,8 +3545,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_files="$ac_config_files Makefile"
-
 ac_config_files="$ac_config_files pplib/Makefile"
 
 ac_config_files="$ac_config_files pplib/ppl7-config"
@@ -3564,8 +3562,6 @@ ac_config_files="$ac_config_files wmlib/Makefile"
 ac_config_files="$ac_config_files wmlib/tests/Makefile"
 
 ac_config_files="$ac_config_files gui/WinMusik.pro"
-
-ac_config_files="$ac_config_files Package/WinMusik.desktop"
 
 
 
@@ -19366,7 +19362,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "pplib/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/Makefile" ;;
     "pplib/ppl7-config") CONFIG_FILES="$CONFIG_FILES pplib/ppl7-config" ;;
     "pplib/tests/Makefile") CONFIG_FILES="$CONFIG_FILES pplib/tests/Makefile" ;;
@@ -19376,7 +19371,6 @@ do
     "wmlib/Makefile") CONFIG_FILES="$CONFIG_FILES wmlib/Makefile" ;;
     "wmlib/tests/Makefile") CONFIG_FILES="$CONFIG_FILES wmlib/tests/Makefile" ;;
     "gui/WinMusik.pro") CONFIG_FILES="$CONFIG_FILES gui/WinMusik.pro" ;;
-    "Package/WinMusik.desktop") CONFIG_FILES="$CONFIG_FILES Package/WinMusik.desktop" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
 
   *) as_fn_error $? "invalid argument: '$ac_config_target'" "$LINENO" 5;;
