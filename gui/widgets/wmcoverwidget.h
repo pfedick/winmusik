@@ -25,7 +25,7 @@
 #define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
 #define PPL_WITH_QT6
 
-#include <ppl7-audio.h>
+#include <pplib-audio.h>
 #include <QEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>

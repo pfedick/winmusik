@@ -25,7 +25,7 @@
 #include <stdio.h>
 
 #include <map>
-#include <ppl7.h>
+#include <pplib.h>
 
 namespace de
 {

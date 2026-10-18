@@ -27,8 +27,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <list>
-#include <ppl7.h>
-#include <ppl7-audio.h>
+#include <pplib.h>
+#include <pplib-audio.h>
 
 namespace de
 {

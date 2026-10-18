@@ -22,8 +22,8 @@
 #define WM_TRAKTOR_H_
 #include <map>
 #include <list>
-#include <ppl7.h>
-#include <ppl7-audio.h>
+#include <pplib.h>
+#include <pplib-audio.h>
 
 namespace de
 {

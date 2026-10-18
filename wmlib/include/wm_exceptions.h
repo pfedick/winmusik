@@ -21,7 +21,7 @@
 #ifndef WM_EXCEPTIONS_H
 #define WM_EXCEPTIONS_H
 
-#include <ppl7.h>
+#include <pplib.h>
 
 namespace de
 {

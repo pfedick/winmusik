@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ppl7.h>
-#include <ppl7-inet.h>
+#include <pplib.h>
+#include <pplib-inet.h>
 #include "wm_regexpcapture.h"
 
 namespace de

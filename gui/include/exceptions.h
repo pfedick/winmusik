@@ -19,7 +19,7 @@
 
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
-#include <ppl7.h>
+#include <pplib.h>
 #include <QString>
 #include <QByteArray>
 

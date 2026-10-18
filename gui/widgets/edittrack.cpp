@@ -28,7 +28,7 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QDesktopServices>
-#include <ppl7-audio.h>
+#include <pplib-audio.h>
 
 EditTrack::EditTrack(QWidget* parent)
     : QWidget(parent)

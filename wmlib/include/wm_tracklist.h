@@ -21,7 +21,7 @@
 #ifndef WM_TRACKLIST_H
 #define WM_TRACKLIST_H
 
-#include <ppl7.h>
+#include <pplib.h>
 #include <map>
 
 namespace de

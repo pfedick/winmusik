@@ -21,7 +21,7 @@
 #ifndef WM_STORAGE_H
 #define WM_STORAGE_H
 
-#include <ppl7.h>
+#include <pplib.h>
 #include "wm_cwmfile.h"
 #include "wm_tracklist.h"
 #include "wm_normalizer.h"
