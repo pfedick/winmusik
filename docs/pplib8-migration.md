@@ -331,25 +331,11 @@ Wichtige Punkte der neuen Konfiguration:
   `editor/cddbselect.{h,cpp,ui}` gelöscht, F5-Handler und zugehörige Includes in
   `editor/edit.{h,cpp}` entfernt). In pplib8 entfällt die CDDB-Klasse ebenfalls.
 
-## 9. Autoconf: Restbestand
+## 9. Autoconf und pplib7: entfallen
 
-Nach dem qmake-Entfall erzeugt `configure` ausschließlich Artefakte von pplib7:
-`pplib/Makefile`, `pplib/ppl7-config`, `pplib/tests/Makefile` sowie die Header
-`pplib/include/ppl7-config.h` und `pplib/include/config_ppl7.h`. CMake-seitig
-(`CMakeLists.txt`, `wmlib/`, `gui/`, `pplib8/`) wird keine dieser Dateien verwendet,
-und in `wmlib`/`gui` kommt `ppl7` nicht mehr vor.
-
-Was Autoconf derzeit noch am Leben hält:
-
-- `autoconf`-Aufruf selbst (eingechecktes `configure`-Skript) — das Root-`Makefile` ruft es
-  nicht mehr auf; `ppl7_release`/`ppl7_debug` und `autoconf_configure` sind entfernt
-- `wmlib/tests/Makefile.in` (Legacy, verlinkt `../../pplib/debug/libpplib.a`) — ersetzt durch
-  `wmlib/tests/CMakeLists.txt`, wird aber nicht mehr von `configure` erzeugt
-- `clean`/`distclean` mit `$(MAKE) --directory=pplib clean|distclean`, sowie der Umgebungs-Report
-  (Größen von `int`/`long`/`wchar_t`, Qt/PCRE2/pthreads-Prüfung mit Abbruch)
-
-Sobald pplib7 (Submodul `pplib`) aus dem Build genommen wird, können `configure.ac`,
-`configure`, das Verzeichnis `autoconf/` (m4-Makros), `pplib/tests/Makefile.in` und
-`wmlib/tests/Makefile.in` entfallen; übrig bleiben dann das Root-`Makefile` als Wrapper
-und CMake für alle drei Bausteine. Der Report-Teil (Compiler-Features, Bibliotheksprüfung)
-müsste dabei nach CMake wandern, falls diese Informationen weiterhin geprüft werden sollen.
+`configure.ac`, `configure`, `autoconf/` und das Submodul `pplib` (pplib7) sind entfernt.
+Gebaut wird ausschließlich über das Root-`CMakeLists.txt` (Superbuild aus `pplib8`,
+`wmlib`, `gui`) mit dem Root-`Makefile` als Wrapper. Die Umgebungsprüfung aus dem
+`configure`-Skript (Typgrößen von `int`/`long`/`wchar_t`, Qt/PCRE2/pthreads) existiert
+nicht mehr; falls diese Informationen wieder geprüft werden sollen, müssten sie nach
+CMake wandern.
