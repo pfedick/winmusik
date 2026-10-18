@@ -974,10 +974,7 @@ pplib::String CWmClient::NormalizeFilename(
     Tmp += ".";
     Tmp += Suffix;
     normalizer.NormalizeFilename(Tmp);
-    // Hinweis: pplib::String::toWideString() ist in pplib8 deklariert, aber
-    // nicht implementiert. Der explizite Konstruktor von WideString macht
-    // dasselbe.
-    pplib::WideString s(Tmp);
+    pplib::WideString s = Tmp.toWideString();
     if (s.size() > (size_t)conf.MaxFilenameLength) {
         s.cut(conf.MaxFilenameLength - Suffix.size() - 1);
         Tmp = s;

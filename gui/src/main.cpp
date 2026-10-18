@@ -29,9 +29,6 @@
 #include <QApplication>
 #include <QSettings>
 #include <QStyleFactory>
-#ifdef HAVE_PYTHON
-#include <Python.h>
-#endif
 
 pplib::Logger* wmlog = NULL;
 

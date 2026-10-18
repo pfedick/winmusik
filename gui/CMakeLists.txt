@@ -35,12 +35,9 @@ set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport)
-# LinguistTools ist optional: wird nur fuer das "translations"-Target benoetigt
-# und fehlt auf manchen Systemen (z.B. ohne Qt6-Entwicklungspakete).
+# LinguistTools ist optional: wird nur fuer das "translations"-Target benoetigt.
+# Falls das CMake-Paket fehlt, werden lupdate/lrelease spaeter direkt gesucht.
 find_package(Qt6 COMPONENTS LinguistTools QUIET)
-if(NOT TARGET Qt6::lupdate)
-    message(STATUS "Qt6 LinguistTools nicht gefunden - Target 'translations' nicht verfuegbar")
-endif()
 
 # wmlib ist im Monorepo bereits vorhanden, wenn das Projekt ueber das
 # Root-CMakeLists (WINMUSIK_BUILD_GUI=ON) konfiguriert wird. Beim direkten
@@ -119,14 +116,27 @@ set_target_properties(WinMusik PROPERTIES
 # Uebersetzungen: .qm Dateien sind eingecheckt und werden ueber
 # resources.qrc (Praefix /translation) eingebettet. Dieses Target erzeugt
 # sie bei Bedarf neu (entspricht dem bisherigen lupdate/lrelease-Ablauf).
+# Die Qt6LinguistTools-CMake-Pakete fehlen auf manchen Distributionen (z.B.
+# Fedora: qt6-linguist ohne Qt6LinguistToolsConfig.cmake). Dann die Programme
+# direkt suchen; die Pakete heissen dort oft lupdate-qt6 / lrelease-qt6.
 if(TARGET Qt6::lupdate AND TARGET Qt6::lrelease)
+    set(LUPDATE_EXECUTABLE $<TARGET_FILE:Qt6::lupdate>)
+    set(LRELEASE_EXECUTABLE $<TARGET_FILE:Qt6::lrelease>)
+else()
+    find_program(LUPDATE_EXECUTABLE NAMES lupdate-qt6 lupdate)
+    find_program(LRELEASE_EXECUTABLE NAMES lrelease-qt6 lrelease)
+endif()
+
+if(LUPDATE_EXECUTABLE AND LRELEASE_EXECUTABLE)
     add_custom_target(translations
-        COMMAND $<TARGET_FILE:Qt6::lupdate> -no-obsolete
+        COMMAND ${LUPDATE_EXECUTABLE} -no-obsolete
                 ${GUI_SOURCES} ${GUI_HEADERS}
                 -ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_de.ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_en.ts
-        COMMAND $<TARGET_FILE:Qt6::lrelease>
+        COMMAND ${LRELEASE_EXECUTABLE}
                 ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_de.ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_en.ts
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMENT "Uebersetzungen (.ts/.qm) aktualisieren"
         VERBATIM)
+else()
+    message(STATUS "lupdate/lrelease nicht gefunden - Target 'translations' nicht verfuegbar")
 endif()

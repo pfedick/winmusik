@@ -228,9 +228,9 @@ Für die erste Phase zurückgestellt. Besondere Brocken: `Dir`-Iteration (6 Date
   `Dir::Sort::Filename` / `FilenameIgnoreCase` / `None`. Betrifft in der GUI: `CWmClient.cpp`,
   `editor/edit.cpp`, `editor/massimport.cpp`, `editor/renumberdialog.cpp`, `search/search.cpp`,
   `searchlists/searchlists.cpp`.
-- `pplib::String::toWideString()` ist in pplib8 deklariert, aber nirgends implementiert →
-  Linker-Fehler. Ersatzweise `pplib::WideString s(Tmp);` verwenden (`explicit`-Konstruktor in
-  `pplib/types/widestring.h`). **Offener Punkt an die Bibliothek.**
+- `pplib::String::toWideString()` war in pplib8 deklariert, aber nicht implementiert →
+  Linker-Fehler. Inzwischen in pplib8 implementiert (`src/types/String.cpp`); die GUI nutzt
+  wieder `Tmp.toWideString()` (`src/CWmClient.cpp`).
 - `pplib::InvalidGenreException` gibt es in pplib8 nicht; `pplib::GetID3GenreName(int)` liefert
   für eine ungültige ID einen leeren String. In `firststart/InitialDatabase.cpp` ist der
   try/catch-Block deshalb entfallen, die Abbruchbedingung `genre.isEmpty()` bleibt.
@@ -257,8 +257,13 @@ Build (Root-`Makefile`):
 - `make gui_debug` → konfiguriert `build/gui-debug` mit `-DWINMUSIK_BUILD_GUI=ON`, baut
   `pplib8` + `wmlib` + `WinMusik` und kopiert nach `debug/WinMusik`
 - `make gui_release` → analog in `build/gui-release`, Kopie nach `release/WinMusik`
-- `make translations` → `lupdate`/`lrelease` über die eingecheckten `.ts`-Dateien (setzt
-  Qt6 LinguistTools voraus; ohne dieses Paket meldet CMake nur eine Statusmeldung)
+- `make translations` → `lupdate`/`lrelease` über die eingecheckten `.ts`-Dateien. Das
+  Qt6LinguistTools-CMake-Paket fehlt auf manchen Distributionen (Fedora: `qt6-linguist`
+  ohne `Qt6LinguistToolsConfig.cmake`; die CMake-Dateien stecken im `-devel`-Paket). In dem
+  Fall sucht `gui/CMakeLists.txt` die Programme direkt über `find_program` (Namen
+  `lupdate-qt6`/`lrelease-qt6`); erst wenn auch das fehlschlägt, entfällt das Target.
+  Achtung: `lupdate -no-obsolete` überschreibt die eingecheckten `.ts`/`.qm` — nach dem
+  CDDB-Rauswurf wurden dabei 771 veraltete Einträge entfernt.
 
 Wichtige Punkte der neuen Konfiguration:
 
@@ -305,3 +310,26 @@ Wichtige Punkte der neuen Konfiguration:
 - CDDB/AudioCD ist aus der GUI ausgebaut (`editor/cddbimport.{h,cpp,ui}`,
   `editor/cddbselect.{h,cpp,ui}` gelöscht, F5-Handler und zugehörige Includes in
   `editor/edit.{h,cpp}` entfernt). In pplib8 entfällt die CDDB-Klasse ebenfalls.
+
+## 9. Autoconf: Restbestand
+
+Nach dem qmake-Entfall erzeugt `configure` ausschließlich Artefakte von pplib7:
+`pplib/Makefile`, `pplib/ppl7-config`, `pplib/tests/Makefile` sowie die Header
+`pplib/include/ppl7-config.h` und `pplib/include/config_ppl7.h`. CMake-seitig
+(`CMakeLists.txt`, `wmlib/`, `gui/`, `pplib8/`) wird keine dieser Dateien verwendet,
+und in `wmlib`/`gui` kommt `ppl7` nicht mehr vor.
+
+Was Autoconf derzeit noch am Leben hält:
+
+- `ppl7_release` / `ppl7_debug` im Root-`Makefile` (hängen noch an `release` bzw. `debug`)
+- `autoconf_configure` im Target `configure`
+- `wmlib/tests/Makefile.in` (Legacy, verlinkt `../../pplib/debug/libpplib.a`) — ersetzt durch
+  `wmlib/tests/CMakeLists.txt`, wird aber nicht mehr von `configure` erzeugt
+- `distclean` mit `$(MAKE) --directory=pplib distclean`, sowie der Umgebungs-Report
+  (Größen von `int`/`long`/`wchar_t`, Qt/PCRE2/pthreads-Prüfung mit Abbruch)
+
+Sobald pplib7 (Submodul `pplib`) aus dem Build genommen wird, können `configure.ac`,
+`configure`, das Verzeichnis `autoconf/` (m4-Makros), `pplib/tests/Makefile.in` und
+`wmlib/tests/Makefile.in` entfallen; übrig bleiben dann das Root-`Makefile` als Wrapper
+und CMake für alle drei Bausteine. Der Report-Teil (Compiler-Features, Bibliotheksprüfung)
+müsste dabei nach CMake wandern, falls diese Informationen weiterhin geprüft werden sollen.
