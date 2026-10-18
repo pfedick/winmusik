@@ -64,13 +64,13 @@ void RegExpPattern::copyFrom(const RegExpPattern& other)
 namespace repexpmatch
 {
 
-static void fixArtistAndTitle(const ppl7::String& prefix, RegExpMatch& match, const ppl7::String prefix_replace)
+static void fixArtistAndTitle(const pplib::String& prefix, RegExpMatch& match, const pplib::String prefix_replace)
 {
-    ppl7::String regex1 = "/(.*?)\\s" + prefix + "\\s+(.*)$/i";
-    ppl7::String regex2 = "/(.*?)\\(" + prefix + "\\s+(.*)\\)$/i";
-    std::vector<ppl7::String> Matches;
-    if (ppl7::RegEx::capture(regex1, match.Title, Matches) > 0 || ppl7::RegEx::capture(regex2, match.Title, Matches) > 0) {
-        ppl7::String feat = Matches.at(2);
+    pplib::String regex1 = "/(.*?)\\s" + prefix + "\\s+(.*)$/i";
+    pplib::String regex2 = "/(.*?)\\(" + prefix + "\\s+(.*)\\)$/i";
+    std::vector<pplib::String> Matches;
+    if (pplib::RegEx::capture(regex1, match.Title, Matches) > 0 || pplib::RegEx::capture(regex2, match.Title, Matches) > 0) {
+        pplib::String feat = Matches.at(2);
         feat.trim();
         match.Title = Matches[1];
         match.Artist.replace(feat, "");
@@ -92,9 +92,9 @@ void fixIt(RegExpMatch& match)
     fixArtistAndTitle("presents", match, "pres.");
 }
 
-void fixHTML(ppl7::String& text)
+void fixHTML(pplib::String& text)
 {
-    text = ppl7::UnescapeHTMLTags(text);
+    text = pplib::UnescapeHTMLTags(text);
 }
 
 void fixHTML(RegExpMatch& match)
@@ -110,42 +110,42 @@ void fixHTML(RegExpMatch& match)
     fixHTML(match.ReleaseDate);
 }
 
-bool buildinMatch(const ppl7::String& data, RegExpMatch& match)
+bool buildinMatch(const pplib::String& data, RegExpMatch& match)
 {
-    std::vector<ppl7::String> Matches;
-    if (ppl7::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", data, Matches)) {
+    std::vector<pplib::String> Matches;
+    if (pplib::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", data, Matches)) {
         // printf ("Match ASOT\n");
-        match.Artist = ppl7::Trim(Matches[1]);
-        match.Title = ppl7::Trim(Matches[2]);
-        match.Version = ppl7::Trim(Matches[3]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", data, Matches)) {
-        match.Artist = ppl7::Trim(Matches[3]);
-        match.Title = ppl7::Trim(Matches[1]);
-        match.Version = ppl7::Trim(Matches[2]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", data, Matches)) {
-        match.Artist = ppl7::Trim(Matches[3]);
-        match.Title = ppl7::Trim(Matches[1]);
-        match.Version = ppl7::Trim(Matches[2]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", data, Matches)) {
-        match.Artist = ppl7::Trim(Matches[1]);
-        match.Title = ppl7::Trim(Matches[2]);
-        match.Version = ppl7::Trim(Matches[3]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)$/", data, Matches)) {
-        match.Artist = ppl7::Trim(Matches[1]);
-        match.Title = ppl7::Trim(Matches[2]);
+        match.Artist = pplib::Trim(Matches[1]);
+        match.Title = pplib::Trim(Matches[2]);
+        match.Version = pplib::Trim(Matches[3]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", data, Matches)) {
+        match.Artist = pplib::Trim(Matches[3]);
+        match.Title = pplib::Trim(Matches[1]);
+        match.Version = pplib::Trim(Matches[2]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", data, Matches)) {
+        match.Artist = pplib::Trim(Matches[3]);
+        match.Title = pplib::Trim(Matches[1]);
+        match.Version = pplib::Trim(Matches[2]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", data, Matches)) {
+        match.Artist = pplib::Trim(Matches[1]);
+        match.Title = pplib::Trim(Matches[2]);
+        match.Version = pplib::Trim(Matches[3]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)$/", data, Matches)) {
+        match.Artist = pplib::Trim(Matches[1]);
+        match.Title = pplib::Trim(Matches[2]);
     } else {
         return false;
     }
-    if (ppl7::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", match.Title, Matches)) {
+    if (pplib::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", match.Title, Matches)) {
         match.Title = Matches[1].trimmed();
         match.Artist += Matches[2].trimmed();
-    } else if (ppl7::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", match.Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", match.Title, Matches)) {
         match.Title = Matches[1].trimmed();
         match.Artist += Matches[2].trimmed();
-    } else if (ppl7::RegEx::capture("/(.*?)(\\spres\\..*)$/i", match.Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\spres\\..*)$/i", match.Title, Matches)) {
         match.Title = Matches[1].trimmed();
         match.Artist += Matches[2].trimmed();
-    } else if (ppl7::RegEx::capture("/(.*?)(\\spresents.*)$/i", match.Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\spresents.*)$/i", match.Title, Matches)) {
         match.Title = Matches[1].trimmed();
         match.Artist += Matches[2].trimmed();
     }

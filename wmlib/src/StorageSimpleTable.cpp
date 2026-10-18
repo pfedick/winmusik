@@ -22,9 +22,12 @@
 #include "wm_exceptions.h"
 #include "wm_normalizer.h"
 
-namespace de {
-namespace pfp {
-namespace winmusik {
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class DataVersion
  * \brief Datentyp für Musikversion
@@ -56,7 +59,6 @@ namespace winmusik {
  * \ingroup WM3DataTypes
  */
 
-
 /*!\class CSimpleTable
  * \brief Basisklasse für verschiedene "Index-Wert" Datentypen
  *
@@ -72,7 +74,6 @@ namespace winmusik {
  * als Wert besteht. Der Datentyp ist von ppl6::CTreeItem abgeleitet und kann somit in einem Binären Baum
  * verwaltet werden. Als Schlüssel dient dazu der Wert des Strings.
  */
-
 
 /*!\var CSimpleTable::Id
  * \brief ID des Datensatzes
@@ -92,34 +93,34 @@ CSimpleTable::CSimpleTable()
  * Konstruktor der Klasse
  */
 {
-	Id=0;
-	References=0;
-	formatversion=1;
+    Id = 0;
+    References = 0;
+    formatversion = 1;
 }
 
-CSimpleTable::CSimpleTable(uint32_t id, const ppl7::String& value, uint32_t references)
+CSimpleTable::CSimpleTable(uint32_t id, const pplib::String& value, uint32_t references)
 {
-	formatversion=1;
-	this->Id=id;
-	this->Value=value;
-	this->References=references;
+    formatversion = 1;
+    this->Id = id;
+    this->Value = value;
+    this->References = references;
 }
 
 CSimpleTable::CSimpleTable(const CSimpleTable& other)
-/*!\brief Konstruktor der Klasse
- *
- * Konstruktor der Klasse
- */
-	: CStorageItem(other)
+    /*!\brief Konstruktor der Klasse
+     *
+     * Konstruktor der Klasse
+     */
+    : CStorageItem(other)
 {
-	CopyDataFrom(other);
+    CopyDataFrom(other);
 }
 
-CSimpleTable& CSimpleTable::operator = (const CSimpleTable& other)
+CSimpleTable& CSimpleTable::operator=(const CSimpleTable& other)
 {
-	formatversion=1;
-	CopyFrom(other);
-	return *this;
+    formatversion = 1;
+    CopyFrom(other);
+    return *this;
 }
 
 CSimpleTable::~CSimpleTable()
@@ -128,9 +129,8 @@ CSimpleTable::~CSimpleTable()
  * Destruktor der Klasse. Er sorgt dafür, dass der durch den Wert allokierte Speicher wieder freigegeben wird.
  */
 {
-	Clear();
+    Clear();
 }
-
 
 void CSimpleTable::Clear()
 /*!\brief Speicher freigeben
@@ -139,11 +139,11 @@ void CSimpleTable::Clear()
  * alle internen Variablen deinitialisiert.
  */
 {
-	Id=0;
-	References=0;
-	Value.clear();
-	CStorageItem::Clear();
-	formatversion=1;
+    Id = 0;
+    References = 0;
+    Value.clear();
+    CStorageItem::Clear();
+    formatversion = 1;
 }
 
 void CSimpleTable::CopyFrom(const CSimpleTable& other)
@@ -157,20 +157,19 @@ void CSimpleTable::CopyFrom(const CSimpleTable& other)
  * \returns Konnten die Daten erfolgreich kopiert werden, liefert die Funktion 1 zurück, im Fehlerfall 0.
  */
 {
-	Clear();
-	CopyDataFrom(other);
-	CopyStorageFrom(other);
+    Clear();
+    CopyDataFrom(other);
+    CopyStorageFrom(other);
 }
 
 void CSimpleTable::CopyDataFrom(const CSimpleTable& other)
 {
-	Id=other.Id;
-	References=other.References;
-	Value=other.Value;
+    Id = other.Id;
+    References = other.References;
+    Value = other.Value;
 }
 
-
-void CSimpleTable::SetValue(const ppl7::String& value)
+void CSimpleTable::SetValue(const pplib::String& value)
 /*!\brief Wert setzen
  *
  * Mit dieser Funktion wird der Wert der Klasse verändert.
@@ -182,15 +181,15 @@ void CSimpleTable::SetValue(const ppl7::String& value)
  * da sonst die Sortierung durcheinander gerät.
  */
 {
-	this->Value=value;
+    this->Value = value;
 }
 
-const ppl7::String& CSimpleTable::GetValue() const
+const pplib::String& CSimpleTable::GetValue() const
 {
-	return Value;
+    return Value;
 }
 
-void CSimpleTable::Export(ppl7::ByteArray& bin) const
+void CSimpleTable::Export(pplib::ByteArray& bin) const
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -203,18 +202,20 @@ void CSimpleTable::Export(ppl7::ByteArray& bin) const
  * zurückgegeben.
  */
 {
-	// Zunächst den benötigten Speicher berechnen
-	int size=9;
-	int lenValue=Value.size();
-	if (lenValue) size+=lenValue;
-	char* a=(char*)bin.malloc(size);
-	ppl7::Poke32(a, Id);
-	ppl7::Poke32(a + 4, References);
-	if (lenValue) strcpy(a + 8, Value);
-	else ppl7::Poke8(a + 8, 0);
+    // Zunächst den benötigten Speicher berechnen
+    int size = 9;
+    int lenValue = Value.size();
+    if (lenValue) size += lenValue;
+    char* a = (char*)bin.malloc(size);
+    pplib::Poke32(a, Id);
+    pplib::Poke32(a + 4, References);
+    if (lenValue)
+        strcpy(a + 8, Value);
+    else
+        pplib::Poke8(a + 8, 0);
 }
 
-void CSimpleTable::Import(const ppl7::ByteArrayPtr& bin, int version)
+void CSimpleTable::Import(const pplib::ByteArrayPtr& bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -225,23 +226,22 @@ void CSimpleTable::Import(const ppl7::ByteArrayPtr& bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-	if (version < 1 || version>1) {
-		throw UnknownRecordVersionException("SimpleTable, got version %d", version);
-	}
-	int size=bin.size();
-	const char* a=(char*)bin.ptr();
-	// Die Größe muss mindestens 9 Byte betragen
-	if (size < 9 || a == NULL) {
-		throw InvalidRecordException();
-	}
-	Clear();
-	Id=ppl7::Peek32(a);
-	References=ppl7::Peek32(a + 4);
-	if (ppl7::Peek8(a + 8) != 0) {
-		Value.set(a + 8);
-	}
+    if (version < 1 || version > 1) {
+        throw UnknownRecordVersionException("SimpleTable, got version %d", version);
+    }
+    int size = bin.size();
+    const char* a = (char*)bin.ptr();
+    // Die Größe muss mindestens 9 Byte betragen
+    if (size < 9 || a == NULL) {
+        throw InvalidRecordException();
+    }
+    Clear();
+    Id = pplib::Peek32(a);
+    References = pplib::Peek32(a + 4);
+    if (pplib::Peek8(a + 8) != 0) {
+        Value.set(a + 8);
+    }
 }
-
 
 /*!\class CTableStore
  * \brief Klasse zum Verwalten von CSimpleTable Datensätzen
@@ -291,10 +291,10 @@ CTableStore::CTableStore()
  * Konstruktor der Klasse
  */
 {
-	TableIndex=NULL;
-	max=0;
-	highestId=0;
-	size=0;
+    TableIndex = NULL;
+    max = 0;
+    highestId = 0;
+    size = 0;
 }
 
 CTableStore::~CTableStore()
@@ -305,7 +305,7 @@ CTableStore::~CTableStore()
  * aufgerufen.
  */
 {
-	Clear();
+    Clear();
 }
 
 void CTableStore::Clear()
@@ -315,18 +315,18 @@ void CTableStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	if (TableIndex) {
-		for (uint32_t i=0;i < max;i++) {
-			if (TableIndex[i] != NULL) delete TableIndex[i];
-		}
-		free(TableIndex);
-	}
-	TableIndex=NULL;
-	max=0;
-	highestId=0;
-	size=0;
-	Words.clear();
-	Tree.clear();
+    if (TableIndex) {
+        for (uint32_t i = 0; i < max; i++) {
+            if (TableIndex[i] != NULL) delete TableIndex[i];
+        }
+        free(TableIndex);
+    }
+    TableIndex = NULL;
+    max = 0;
+    highestId = 0;
+    size = 0;
+    Words.clear();
+    Tree.clear();
 }
 
 const char* CTableStore::GetChunkName()
@@ -337,64 +337,63 @@ const char* CTableStore::GetChunkName()
  * \returns Pointer auf einen 4 Byte langen String mit 0-Byte terminiert.
  */
 {
-	return NULL;
+    return NULL;
 }
 
 void CTableStore::Increase(uint32_t maxid)
 {
-	uint32_t h=maxid + 10000;
-	CSimpleTable** t=(CSimpleTable**)calloc(sizeof(CSimpleTable*), h);
-	if (!t) throw ppl7::OutOfMemoryException();
-	if (TableIndex) {
-		memcpy(t, TableIndex, max * sizeof(CSimpleTable*));
-		free(TableIndex);
-	}
-	TableIndex=t;
-	max=h;
+    uint32_t h = maxid + 10000;
+    CSimpleTable** t = (CSimpleTable**)calloc(sizeof(CSimpleTable*), h);
+    if (!t) throw pplib::OutOfMemoryException();
+    if (TableIndex) {
+        memcpy(t, TableIndex, max * sizeof(CSimpleTable*));
+        free(TableIndex);
+    }
+    TableIndex = t;
+    max = h;
 }
 
 void CTableStore::SaveToStorage(CSimpleTable& t)
 {
-	CStorage& store=getStorage();
-	ppl7::ByteArray bin;
-	t.Export(bin);
-	store.Save(this, &t, bin);
+    CStorage& store = getStorage();
+    pplib::ByteArray bin;
+    t.Export(bin);
+    store.Save(this, &t, bin);
 }
-
 
 CSimpleTable* CTableStore::SaveToMemory(const CSimpleTable& t)
 {
-	uint32_t id=0;
+    uint32_t id = 0;
 
-	if (t.Id == 0) {
-		// Wir haben einen neuen Eintrag und vergeben eine Id
-		id=highestId + 1;
-	} else {
-		id=t.Id;
-	}
-	if (id >= max) {
-		Increase(id);
-	}
+    if (t.Id == 0) {
+        // Wir haben einen neuen Eintrag und vergeben eine Id
+        id = highestId + 1;
+    } else {
+        id = t.Id;
+    }
+    if (id >= max) {
+        Increase(id);
+    }
 
-	// Gibt's den Eintrag schon?
-	if (TableIndex[id]) {
-		removeFromWordTree(id);
-		removeFromTree(id);
-	} else {
-		TableIndex[id]=new CSimpleTable;
-		if (!TableIndex[id]) {
-			throw ppl7::OutOfMemoryException();
-		}
-		TableIndex[id]->CopyStorageFrom(t);
-		size++;
-	}
-	if (id > highestId) highestId=id;
-	TableIndex[id]->CopyDataFrom(t);
-	TableIndex[id]->Id=id;
-	addToWordTree(id);
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(t.Value));
-	Tree.insert(std::pair<ppl7::String, uint32_t>(search, id));
-	return TableIndex[id];
+    // Gibt's den Eintrag schon?
+    if (TableIndex[id]) {
+        removeFromWordTree(id);
+        removeFromTree(id);
+    } else {
+        TableIndex[id] = new CSimpleTable;
+        if (!TableIndex[id]) {
+            throw pplib::OutOfMemoryException();
+        }
+        TableIndex[id]->CopyStorageFrom(t);
+        size++;
+    }
+    if (id > highestId) highestId = id;
+    TableIndex[id]->CopyDataFrom(t);
+    TableIndex[id]->Id = id;
+    addToWordTree(id);
+    pplib::String search = pplib::LowerCase(pplib::Trim(t.Value));
+    Tree.insert(std::pair<pplib::String, uint32_t>(search, id));
+    return TableIndex[id];
 }
 
 const CSimpleTable& CTableStore::Put(const CSimpleTable& entry)
@@ -413,9 +412,9 @@ const CSimpleTable& CTableStore::Put(const CSimpleTable& entry)
  * Text des Elements geändert hat.
  */
 {
-	CSimpleTable* new_entry=SaveToMemory(entry);
-	SaveToStorage(*new_entry);
-	return *new_entry;
+    CSimpleTable* new_entry = SaveToMemory(entry);
+    SaveToStorage(*new_entry);
+    return *new_entry;
 }
 
 const CSimpleTable& CTableStore::Get(uint32_t id) const
@@ -428,10 +427,10 @@ const CSimpleTable& CTableStore::Get(uint32_t id) const
  * \throws RecordDoesNotExistException Wird geworfen, wenn der Datensatz nicht vorhanden ist
  */
 {
-	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
-		throw RecordDoesNotExistException();
-	}
-	return *TableIndex[id];
+    if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+        throw RecordDoesNotExistException();
+    }
+    return *TableIndex[id];
 }
 
 const CSimpleTable* CTableStore::GetPtr(uint32_t id) const
@@ -444,10 +443,10 @@ const CSimpleTable* CTableStore::GetPtr(uint32_t id) const
  * oder NULL, wenn der Datensatz nicht vorhanden ist
  */
 {
-	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
-		return NULL;
-	}
-	return TableIndex[id];
+    if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+        return NULL;
+    }
+    return TableIndex[id];
 }
 
 bool CTableStore::Exists(uint32_t id) const
@@ -460,15 +459,13 @@ bool CTableStore::Exists(uint32_t id) const
  * oder NULL, wenn der Datensatz nicht vorhanden ist
  */
 {
-	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
-		return false;
-	}
-	return true;
+    if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+        return false;
+    }
+    return true;
 }
 
-
-
-const ppl7::String& CTableStore::GetValue(uint32_t id) const
+const pplib::String& CTableStore::GetValue(uint32_t id) const
 /*!\brief Datensatz auslesen
  *
  * Mit dieser Funktion kann der zu \p id zugehörige Datensatz ausgelesen werden.
@@ -478,49 +475,46 @@ const ppl7::String& CTableStore::GetValue(uint32_t id) const
  * \throws RecordDoesNotExistException Wird geworfen, wenn der Datensatz nicht vorhanden ist
  */
 {
-	if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
-		return unknown;
-	}
-	return TableIndex[id]->Value;
+    if (id > highestId || TableIndex == NULL || TableIndex[id] == NULL) {
+        return unknown;
+    }
+    return TableIndex[id]->Value;
 }
 
 void CTableStore::Delete(uint32_t id)
 {
-	CSimpleTable* t=(CSimpleTable*)GetPtr(id);
-	if (!t) return;
-	removeFromWordTree(id);
-	removeFromTree(id);
-	TableIndex[id]=NULL;
-	getStorage().Delete(this, t);
-	size--;
-	delete t;
-	if (id != highestId) return;
-	uint32_t new_highestId=0;
-	for (uint32_t i=1;i < highestId;i++) {
-		if (TableIndex[i]) new_highestId=i;
-	}
-	highestId=new_highestId;
+    CSimpleTable* t = (CSimpleTable*)GetPtr(id);
+    if (!t) return;
+    removeFromWordTree(id);
+    removeFromTree(id);
+    TableIndex[id] = NULL;
+    getStorage().Delete(this, t);
+    size--;
+    delete t;
+    if (id != highestId) return;
+    uint32_t new_highestId = 0;
+    for (uint32_t i = 1; i < highestId; i++) {
+        if (TableIndex[i]) new_highestId = i;
+    }
+    highestId = new_highestId;
 }
-
 
 uint32_t CTableStore::MaxId() const
 {
-	return highestId;
+    return highestId;
 }
 
 uint32_t CTableStore::Capacity() const
 {
-	return max;
+    return max;
 }
 
 uint32_t CTableStore::Size() const
 {
-	return size;
+    return size;
 }
 
-
-
-const CSimpleTable* CTableStore::Find(const ppl7::String& value) const
+const CSimpleTable* CTableStore::Find(const pplib::String& value) const
 /*!\brief Datensatz finden
  *
  * Mit dieser Funktion kann ein Datensatz anhand seines Textwertes gefunden werden.
@@ -531,142 +525,139 @@ const CSimpleTable* CTableStore::Find(const ppl7::String& value) const
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	std::map<ppl7::String, uint32_t>::const_iterator it;
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(search);
-	if (it == Tree.end()) return NULL;
-	return GetPtr(it->second);
+    std::map<pplib::String, uint32_t>::const_iterator it;
+    pplib::String search = pplib::LowerCase(pplib::Trim(value));
+    it = Tree.find(search);
+    if (it == Tree.end()) return NULL;
+    return GetPtr(it->second);
 }
 
-uint32_t CTableStore::FindOrAdd(const ppl7::String& value)
+uint32_t CTableStore::FindOrAdd(const pplib::String& value)
 {
-	std::map<ppl7::String, uint32_t>::const_iterator it;
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(search);
-	if (it != Tree.end()) return it->second;
-	// Neu anlegen
-	CSimpleTable item;
-	item.Id=0;
-	item.References=1;
-	item.SetValue(value);
-	return Put(item).Id;
+    std::map<pplib::String, uint32_t>::const_iterator it;
+    pplib::String search = pplib::LowerCase(pplib::Trim(value));
+    it = Tree.find(search);
+    if (it != Tree.end()) return it->second;
+    // Neu anlegen
+    CSimpleTable item;
+    item.Id = 0;
+    item.References = 1;
+    item.SetValue(value);
+    return Put(item).Id;
 }
 
-uint32_t CTableStore::GetId(const ppl7::String& value) const
+uint32_t CTableStore::GetId(const pplib::String& value) const
 {
-	std::map<ppl7::String, uint32_t>::const_iterator it;
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	it=Tree.find(search);
-	if (it == Tree.end()) return 0;
-	return it->second;
+    std::map<pplib::String, uint32_t>::const_iterator it;
+    pplib::String search = pplib::LowerCase(pplib::Trim(value));
+    it = Tree.find(search);
+    if (it == Tree.end()) return 0;
+    return it->second;
 }
 
-size_t CTableStore::FindAll(const ppl7::String& value, IndexTree& Result)
+size_t CTableStore::FindAll(const pplib::String& value, IndexTree& Result)
 {
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(value));
-	Result.clear();
-	std::map<ppl7::String, uint32_t>::const_iterator it;
-	for (it=Tree.begin();it != Tree.end();++it) {
-		if (it->first.instr(search) >= 0) Result.insert(it->second);
-	}
-	return Result.size();
+    pplib::String search = pplib::LowerCase(pplib::Trim(value));
+    Result.clear();
+    std::map<pplib::String, uint32_t>::const_iterator it;
+    for (it = Tree.begin(); it != Tree.end(); ++it) {
+        if (it->first.instr(search) >= 0) Result.insert(it->second);
+    }
+    return Result.size();
 }
-
 
 void CTableStore::LoadChunk(const CWMFileChunk& chunk)
 {
-	CSimpleTable data;
-	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
-	data.Import(bin, chunk.GetFormatVersion());
-	data.CopyStorageFrom(chunk);
-	SaveToMemory(data);
+    CSimpleTable data;
+    pplib::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+    data.Import(bin, chunk.GetFormatVersion());
+    data.CopyStorageFrom(chunk);
+    SaveToMemory(data);
 }
-
 
 void CTableStore::removeFromTree(uint32_t id)
 {
-	const CSimpleTable* t=GetPtr(id);
-	if (!t) return;
-	ppl7::String search=ppl7::LowerCase(ppl7::Trim(TableIndex[id]->Value));
-	std::map<ppl7::String, uint32_t>::iterator it=Tree.find(search);
-	if (it != Tree.end() && it->second == id) Tree.erase(it);
+    const CSimpleTable* t = GetPtr(id);
+    if (!t) return;
+    pplib::String search = pplib::LowerCase(pplib::Trim(TableIndex[id]->Value));
+    std::map<pplib::String, uint32_t>::iterator it = Tree.find(search);
+    if (it != Tree.end() && it->second == id) Tree.erase(it);
 }
-
 
 void CTableStore::removeFromWordTree(uint32_t id)
 {
-	const CSimpleTable* t=GetPtr(id);
-	if (t == NULL || t->Value.isEmpty() == true) return;
-	ppl7::Array words;
-	if (GetNormalizer().GetWords(t->Value, words)) {
-		for (size_t i=0;i < words.size();i++) {
-			Words[words[i]].erase(id);
-		}
-	}
+    const CSimpleTable* t = GetPtr(id);
+    if (t == NULL || t->Value.isEmpty() == true) return;
+    pplib::Array words;
+    if (GetNormalizer().GetWords(t->Value, words)) {
+        for (size_t i = 0; i < words.size(); i++) {
+            Words[words[i]].erase(id);
+        }
+    }
 }
 
 void CTableStore::addToWordTree(uint32_t id)
 {
-	const CSimpleTable* t=GetPtr(id);
-	if (t == NULL || t->Value.isEmpty() == true) return;
+    const CSimpleTable* t = GetPtr(id);
+    if (t == NULL || t->Value.isEmpty() == true) return;
 
-	ppl7::Array words;
-	if (GetNormalizer().GetWords(t->Value, words)) {
-		for (size_t i=0;i < words.size();i++) {
-			Words[words[i]].insert(id);
-		}
-	}
+    pplib::Array words;
+    if (GetNormalizer().GetWords(t->Value, words)) {
+        for (size_t i = 0; i < words.size(); i++) {
+            Words[words[i]].insert(id);
+        }
+    }
 }
 
 void CTableStore::makeUnion(IndexTree& Result, const IndexTree& Tree1, const IndexTree& Tree2)
 {
-	Result.clear();
-	// Nur was in Tree1 und Tree2 vorhanden ist, wandert in Result
-	const IndexTree* small, * big;
-	if (Tree1.size() < Tree2.size()) {
-		small=&Tree1;
-		big=&Tree2;
-	} else {
-		small=&Tree2;
-		big=&Tree1;
-	}
-	IndexTree::const_iterator it;
-	for (it=small->begin();it != small->end();it++) {
-		if (big->find(*it) != big->end()) Result.insert(*it);
-	}
+    Result.clear();
+    // Nur was in Tree1 und Tree2 vorhanden ist, wandert in Result
+    const IndexTree *small, *big;
+    if (Tree1.size() < Tree2.size()) {
+        small = &Tree1;
+        big = &Tree2;
+    } else {
+        small = &Tree2;
+        big = &Tree1;
+    }
+    IndexTree::const_iterator it;
+    for (it = small->begin(); it != small->end(); it++) {
+        if (big->find(*it) != big->end()) Result.insert(*it);
+    }
 }
 
 void CTableStore::copy(IndexTree& Result, const IndexTree& src)
 {
-	Result.clear();
-	IndexTree::const_iterator it;
-	for (it=src.begin();it != src.end();it++) {
-		Result.insert(*it);
-	}
+    Result.clear();
+    IndexTree::const_iterator it;
+    for (it = src.begin(); it != src.end(); it++) {
+        Result.insert(*it);
+    }
 }
 
-size_t CTableStore::FindWords(const ppl7::String& words, IndexTree& Result)
+size_t CTableStore::FindWords(const pplib::String& words, IndexTree& Result)
 {
-	ppl7::Array w;
-	if (GetNormalizer().GetWords(words, w)) {
-		for (size_t i=0;i < w.size();i++) {
-			std::map<ppl7::String, IndexTree >::const_iterator it=Words.find(w[i]);
-			if (it != Words.end()) {
-				if (!Result.size()) copy(Result, it->second);
-				else {
-					IndexTree res2;
-					makeUnion(res2, Result, it->second);
-					copy(Result, res2);
-				}
-			} else {
-				Result.clear();
-				return 0;
-			}
-		}
-	}
-	return Result.size();
+    pplib::Array w;
+    if (GetNormalizer().GetWords(words, w)) {
+        for (size_t i = 0; i < w.size(); i++) {
+            std::map<pplib::String, IndexTree>::const_iterator it = Words.find(w[i]);
+            if (it != Words.end()) {
+                if (!Result.size())
+                    copy(Result, it->second);
+                else {
+                    IndexTree res2;
+                    makeUnion(res2, Result, it->second);
+                    copy(Result, res2);
+                }
+            } else {
+                Result.clear();
+                return 0;
+            }
+        }
+    }
+    return Result.size();
 }
-
 
 /*!\class CVersionStore
  * \ingroup WM3StorageClasses
@@ -677,7 +668,7 @@ size_t CTableStore::FindWords(const ppl7::String& words, IndexTree& Result)
 
 const char* CVersionStore::GetChunkName()
 {
-	return "VERS";
+    return "VERS";
 }
 
 /*!\class CRecordSourceStore
@@ -689,7 +680,7 @@ const char* CVersionStore::GetChunkName()
 
 const char* CRecordSourceStore::GetChunkName()
 {
-	return "RSRC";
+    return "RSRC";
 }
 
 /*!\class CLabelStore
@@ -701,7 +692,7 @@ const char* CRecordSourceStore::GetChunkName()
 
 const char* CLabelStore::GetChunkName()
 {
-	return "LABL";
+    return "LABL";
 }
 
 /*!\class CPurchaseSourceStore
@@ -713,7 +704,7 @@ const char* CLabelStore::GetChunkName()
 
 const char* CPurchaseSourceStore::GetChunkName()
 {
-	return "PCHS";
+    return "PCHS";
 }
 
 /*!\class CRecordDeviceStore
@@ -725,7 +716,7 @@ const char* CPurchaseSourceStore::GetChunkName()
 
 const char* CRecordDeviceStore::GetChunkName()
 {
-	return "RDEV";
+    return "RDEV";
 }
 
 /*!\class CGenreStore
@@ -737,10 +728,9 @@ const char* CRecordDeviceStore::GetChunkName()
 
 const char* CGenreStore::GetChunkName()
 {
-	return "GENR";
+    return "GENR";
 }
 
-
-}
-}
-}
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

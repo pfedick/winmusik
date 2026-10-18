@@ -22,10 +22,12 @@
 #include "wm_exceptions.h"
 #include "libwinmusik3.h"
 
-namespace de {
-namespace pfp {
-namespace winmusik {
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class CStorageBase
  * \ingroup WM3StorageClasses
@@ -35,7 +37,6 @@ namespace winmusik {
  *
  */
 
-
 CStorageBase::CStorageBase()
 /*!\brief Konstruktor der Klasse
  *
@@ -43,13 +44,13 @@ CStorageBase::CStorageBase()
  * auf NULL.
  */
 {
-	Storage=NULL;
+    Storage = NULL;
 }
 
 CStorage& CStorageBase::getStorage() const
 {
-	if (!Storage) throw StorageClassNotInitializedException();
-	return *Storage;
+    if (!Storage) throw StorageClassNotInitializedException();
+    return *Storage;
 }
 
 /*!\class CStorage
@@ -67,97 +68,97 @@ CStorage& CStorageBase::getStorage() const
 
 CStorage::CStorage()
 {
-	bLoadDatabaseRunning=false;
-	logger=NULL;
-	DatabaseFile="winmusik.dat";
+    bLoadDatabaseRunning = false;
+    logger = NULL;
+    DatabaseFile = "winmusik.dat";
 }
 
 CStorage::~CStorage()
 {
-	Clear();
+    Clear();
 }
 
-void CStorage::SetLogger(ppl7::Logger* logger)
+void CStorage::SetLogger(pplib::Logger* logger)
 {
-	this->logger=logger;
+    this->logger = logger;
 }
 
 void CStorage::Clear()
 {
-	Mutex.lock();
-	ClearWithoutMutex();
-	Mutex.unlock();
+    Mutex.lock();
+    ClearWithoutMutex();
+    Mutex.unlock();
 }
 
 void CStorage::ClearWithoutMutex()
 {
-	// Wir gehen alle Storage Klassen durch und übergeben ein Clear
-	std::map<uint32_t, CStorageBase*>::const_iterator it;
-	for (it=StorageClasses.begin();it != StorageClasses.end();++it) {
-		it->second->Clear();
-	}
+    // Wir gehen alle Storage Klassen durch und übergeben ein Clear
+    std::map<uint32_t, CStorageBase*>::const_iterator it;
+    for (it = StorageClasses.begin(); it != StorageClasses.end(); ++it) {
+        it->second->Clear();
+    }
 }
 
-void CStorage::Init(const ppl7::String& path, const ppl7::String& file)
+void CStorage::Init(const pplib::String& path, const pplib::String& file)
 {
-	DataPath=path;
-	DatabaseFile=file;
+    DataPath = path;
+    DatabaseFile = file;
 }
 
 void CStorage::RegisterStorageClass(CStorageBase* storageclass)
 {
-	if (!storageclass) {
-		throw InvalidStorageClassException("storage class must not be NULL");
-	}
-	const char* chunkname=storageclass->GetChunkName();
-	if (chunkname == NULL || strnlen(chunkname, 5) != 4) {
-		throw InvalidStorageClassException("storage class has invalid chunkname");
-	}
-	uint32_t chunkid=ppl7::Peek32(chunkname);
-	Mutex.lock();
-	storageclass->Storage=this;
-	// Haben wir schon so einen StorageType?
-	std::map<uint32_t, CStorageBase*>::iterator it;
-	it=StorageClasses.find(chunkid);
-	if (it != StorageClasses.end()) {
-		it->second=storageclass;
-	} else {
-		StorageClasses.insert(std::pair<uint32_t, CStorageBase*>(chunkid, storageclass));
-	}
-	Mutex.unlock();
+    if (!storageclass) {
+        throw InvalidStorageClassException("storage class must not be NULL");
+    }
+    const char* chunkname = storageclass->GetChunkName();
+    if (chunkname == NULL || strnlen(chunkname, 5) != 4) {
+        throw InvalidStorageClassException("storage class has invalid chunkname");
+    }
+    uint32_t chunkid = pplib::Peek32(chunkname);
+    Mutex.lock();
+    storageclass->Storage = this;
+    // Haben wir schon so einen StorageType?
+    std::map<uint32_t, CStorageBase*>::iterator it;
+    it = StorageClasses.find(chunkid);
+    if (it != StorageClasses.end()) {
+        it->second = storageclass;
+    } else {
+        StorageClasses.insert(std::pair<uint32_t, CStorageBase*>(chunkid, storageclass));
+    }
+    Mutex.unlock();
 }
 
 CStorageBase* CStorage::FindStorageClass(const char* name)
 {
-	if (!name) return NULL;
-	uint32_t chunkid=ppl7::Peek32(name);
-	std::map<uint32_t, CStorageBase*>::const_iterator it;
-	Mutex.lock();
-	it=StorageClasses.find(chunkid);
-	if (it == StorageClasses.end()) {
-		Mutex.unlock();
-		return NULL;
-	}
-	Mutex.unlock();
-	return it->second;
+    if (!name) return NULL;
+    uint32_t chunkid = pplib::Peek32(name);
+    std::map<uint32_t, CStorageBase*>::const_iterator it;
+    Mutex.lock();
+    it = StorageClasses.find(chunkid);
+    if (it == StorageClasses.end()) {
+        Mutex.unlock();
+        return NULL;
+    }
+    Mutex.unlock();
+    return it->second;
 }
 
 CStorageBase& CStorage::GetStorageClass(const char* name)
 {
-	if (!name) throw InvalidStorageClassException("name must not me NULL");
-	uint32_t chunkid=ppl7::Peek32(name);
-	std::map<uint32_t, CStorageBase*>::const_iterator it;
-	Mutex.lock();
-	it=StorageClasses.find(chunkid);
-	if (it == StorageClasses.end()) {
-		Mutex.unlock();
-		if (!name) throw InvalidStorageClassException("storageclass with name %s is unknown", name);
-	}
-	Mutex.unlock();
-	return *it->second;
+    if (!name) throw InvalidStorageClassException("name must not me NULL");
+    uint32_t chunkid = pplib::Peek32(name);
+    std::map<uint32_t, CStorageBase*>::const_iterator it;
+    Mutex.lock();
+    it = StorageClasses.find(chunkid);
+    if (it == StorageClasses.end()) {
+        Mutex.unlock();
+        if (!name) throw InvalidStorageClassException("storageclass with name %s is unknown", name);
+    }
+    Mutex.unlock();
+    return *it->second;
 }
 
-void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin)
+void CStorage::Save(CStorageBase* type, CStorageItem* item, const pplib::ByteArrayPtr& bin)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein von CStorageType abgeleiteter Datensatz auf der Festplatte
@@ -174,38 +175,39 @@ void CStorage::Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArra
  * Bei einem Fehler wird 0 zurückgegeben.
  */
 {
-	// Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
-	if (bLoadDatabaseRunning) return;
-	ppl7::String File;
-	if (DataPath.size() == 0) {
-		throw StorageClassNotInitializedException();
-	}
+    // Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
+    if (bLoadDatabaseRunning) return;
+    pplib::String File;
+    if (DataPath.size() == 0) {
+        throw StorageClassNotInitializedException();
+    }
 
-	const char* t=type->GetChunkName();
-	size_t size=bin.size();
-	const char* ptr=(const char*)bin.ptr();
-	CWMFile ff;
-	CWMFileChunk chunk;
-	//printf ("CStorage::Save, formatversion=%i, type: %s\n",item->formatversion,t);
-	chunk.SetChunkData(t, ptr, size, item->filepos, item->version, item->formatversion);
-	File=DataPath;
-	if (strcmp(t, "OIMP") == 0) {
-		File+="/wmoimp.dat";
-	} else {
-		File+="/" + DatabaseFile;
-	}
-	Mutex.lock();
-	try {
-		ff.Open(File);
-		ff.SaveChunk(chunk);
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
-	Mutex.unlock();
-	item->filepos=chunk.GetFilepos();
-	item->lastchange=chunk.GetTimestamp();
-	item->version=chunk.GetVersion();
+    const char* t = type->GetChunkName();
+    size_t size = bin.size();
+    const char* ptr = (const char*)bin.ptr();
+    CWMFile ff;
+    CWMFileChunk chunk;
+    // printf ("CStorage::Save, formatversion=%i, type: %s\n",item->formatversion,t);
+    chunk.SetChunkData(t, ptr, size, item->filepos, item->version, item->formatversion);
+    File = DataPath;
+    if (strcmp(t, "OIMP") == 0) {
+        File += "/wmoimp.dat";
+    } else {
+        File += "/" + DatabaseFile;
+    }
+    Mutex.lock();
+    try {
+        ff.Open(File);
+        ff.SaveChunk(chunk);
+    }
+    catch (...) {
+        Mutex.unlock();
+        throw;
+    }
+    Mutex.unlock();
+    item->filepos = chunk.GetFilepos();
+    item->lastchange = chunk.GetTimestamp();
+    item->version = chunk.GetVersion();
 }
 
 void CStorage::Delete(CStorageBase* type, CStorageItem* item)
@@ -224,41 +226,42 @@ void CStorage::Delete(CStorageBase* type, CStorageItem* item)
  * Bei einem Fehler wird 0 zurückgegeben.
  */
 {
-	// Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
-	if (bLoadDatabaseRunning) return;
-	ppl7::String File;
-	if (DataPath.size() == 0) {
-		throw StorageClassNotInitializedException();
-	}
-	const char* t=type->GetChunkName();
-	CWMFile ff;
-	CWMFileChunk chunk;
-	chunk.SetChunkData(t, NULL, 0, item->filepos, item->version, item->formatversion);
-	File=DataPath;
-	if (strcmp(t, "OIMP") == 0) {
-		File+="/wmoimp.dat";
-	} else {
-		File+="/" + DatabaseFile;
-	}
-	Mutex.lock();
-	try {
-		ff.Open(File);
-		ff.DeleteChunk(chunk);
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
-	Mutex.unlock();
-	item->filepos=0;
-	item->lastchange=0;
-	item->version=0;
+    // Falls ein Datenbank Load im Gange ist, brauchen wir nichts zu machen
+    if (bLoadDatabaseRunning) return;
+    pplib::String File;
+    if (DataPath.size() == 0) {
+        throw StorageClassNotInitializedException();
+    }
+    const char* t = type->GetChunkName();
+    CWMFile ff;
+    CWMFileChunk chunk;
+    chunk.SetChunkData(t, NULL, 0, item->filepos, item->version, item->formatversion);
+    File = DataPath;
+    if (strcmp(t, "OIMP") == 0) {
+        File += "/wmoimp.dat";
+    } else {
+        File += "/" + DatabaseFile;
+    }
+    Mutex.lock();
+    try {
+        ff.Open(File);
+        ff.DeleteChunk(chunk);
+    }
+    catch (...) {
+        Mutex.unlock();
+        throw;
+    }
+    Mutex.unlock();
+    item->filepos = 0;
+    item->lastchange = 0;
+    item->version = 0;
 }
 
 bool CStorage::DatabaseExists() const
 {
-	if (DataPath.size() == 0) return false;
-	ppl7::String File=DataPath + "/" + DatabaseFile;
-	return ppl7::File::exists(File);
+    if (DataPath.size() == 0) return false;
+    pplib::String File = DataPath + "/" + DatabaseFile;
+    return pplib::File::exists(File);
 }
 
 void CStorage::LoadDatabase(CProgressUpdate* progressCallback)
@@ -277,96 +280,99 @@ void CStorage::LoadDatabase(CProgressUpdate* progressCallback)
  * Datenbank durch Aufruf von CStorage::Clear gelöscht.
  */
 {
-	// We need to clear the database first
-	if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Start loading Database");
-	Clear();
-	if (DataPath.size() == 0) {
-		throw StorageClassNotInitializedException();
-	}
-	ppl7::String File;
-	CWMFile ff;
-	CWMFileChunk chunk;
-	File=DataPath + "/" + DatabaseFile;
-	if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading Database from File: %s", (const char*)File);
-	ff.Open(File);
-	uint32_t size=ff.GetFileSize();
-	uint32_t pos=ff.GetFilePosition();
-	Mutex.lock();
-	try {
-		// Wir müssen verhindern, dass die StorageTypen versuchen den Datensatz beim Import gleich
-		// wieder zu speichern
-		bLoadDatabaseRunning=true;
-		int progress=0;
-		if (progressCallback) progressCallback->ProgressUpdate(progress);
-		// **************************************************************************************
-		// Datenbank
-		if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading %u Bytes", size);
-		while (ff.GetNextChunk(chunk)) {
-			if (progressCallback) {
-				int newprogress=ff.GetFilePosition() * 90 / size;
-				if (newprogress != progress) {
-					progress=newprogress;
-					progressCallback->ProgressUpdate(progress);
-				}
-			}
-			uint32_t chunkid=ppl7::Peek32(chunk.GetChunkName());
-			std::map<uint32_t, CStorageBase*>::const_iterator it=StorageClasses.find(chunkid);
-			if (it != StorageClasses.end()) {
-				CStorageBase* t=it->second;
-				t->LoadChunk(chunk);
-
-			}
-			pos=ff.GetFilePosition();
-		}
-	} catch (const ppl7::Exception& exp) {
-		bLoadDatabaseRunning=false;
-		Mutex.unlock();
-		if (logger) {
-			logger->printf(ppl7::Logger::ERR, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Failed loading Chunk at Position: %u", pos);
-			logger->printException(exp);
-			chunk.HexDump(logger);
-		}
-		//exp.print();
-		//printf("Failed loading Chunk %s at Position: %u\n", chunk.GetChunkName(), pos);
-		//chunk.HexDump();
-		throw;
-	}
-	bLoadDatabaseRunning=false;
-	Mutex.unlock();
-	/*
-	uint32_t highest=0;
-	CStorageBase* t=FindStorageType("TITL");
-	if (t) highest=((CTitleStore*)t)->GetHighestImportDataId();
-	*/
-	if (logger) logger->printf(ppl7::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Done");
-	if (progressCallback) progressCallback->ProgressUpdate(100);
+    // We need to clear the database first
+    if (logger) logger->printf(pplib::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Start loading Database");
+    Clear();
+    if (DataPath.size() == 0) {
+        throw StorageClassNotInitializedException();
+    }
+    pplib::String File;
+    CWMFile ff;
+    CWMFileChunk chunk;
+    File = DataPath + "/" + DatabaseFile;
+    if (logger)
+        logger->printf(pplib::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading Database from File: %s",
+                       (const char*)File);
+    ff.Open(File);
+    uint32_t size = ff.GetFileSize();
+    uint32_t pos = ff.GetFilePosition();
+    Mutex.lock();
+    try {
+        // Wir müssen verhindern, dass die StorageTypen versuchen den Datensatz beim Import gleich
+        // wieder zu speichern
+        bLoadDatabaseRunning = true;
+        int progress = 0;
+        if (progressCallback) progressCallback->ProgressUpdate(progress);
+        // **************************************************************************************
+        // Datenbank
+        if (logger) logger->printf(pplib::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Loading %u Bytes", size);
+        while (ff.GetNextChunk(chunk)) {
+            if (progressCallback) {
+                int newprogress = ff.GetFilePosition() * 90 / size;
+                if (newprogress != progress) {
+                    progress = newprogress;
+                    progressCallback->ProgressUpdate(progress);
+                }
+            }
+            uint32_t chunkid = pplib::Peek32(chunk.GetChunkName());
+            std::map<uint32_t, CStorageBase*>::const_iterator it = StorageClasses.find(chunkid);
+            if (it != StorageClasses.end()) {
+                CStorageBase* t = it->second;
+                t->LoadChunk(chunk);
+            }
+            pos = ff.GetFilePosition();
+        }
+    }
+    catch (const pplib::Exception& exp) {
+        bLoadDatabaseRunning = false;
+        Mutex.unlock();
+        if (logger) {
+            logger->printf(pplib::Logger::ERR, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Failed loading Chunk at Position: %u",
+                           pos);
+            logger->printException(exp);
+            chunk.HexDump(logger);
+        }
+        // exp.print();
+        // printf("Failed loading Chunk %s at Position: %u\n", chunk.GetChunkName(), pos);
+        // chunk.HexDump();
+        throw;
+    }
+    bLoadDatabaseRunning = false;
+    Mutex.unlock();
+    /*
+    uint32_t highest=0;
+    CStorageBase* t=FindStorageType("TITL");
+    if (t) highest=((CTitleStore*)t)->GetHighestImportDataId();
+    */
+    if (logger) logger->printf(pplib::Logger::DEBUG, 2, "CStorage", "LoadDatabase", __FILE__, __LINE__, "Done");
+    if (progressCallback) progressCallback->ProgressUpdate(100);
 }
 
 void CStorage::DeleteDatabase()
 {
-	ppl7::String File;
-	if (DataPath.size() == 0) {
-		throw StorageClassNotInitializedException();
-	}
-	Mutex.lock();
-	ClearWithoutMutex();
-	try {
-		File=DataPath + "/" + DatabaseFile;
-		if (ppl7::File::exists(File)) {
-			ppl7::File::remove(File);
-		}
-		File=DataPath + "/wmoimp.dat";
-		if (ppl7::File::exists(File)) {
-			ppl7::File::remove(File);
-		}
-	} catch (...) {
-		Mutex.unlock();
-		throw;
-	}
-	Mutex.unlock();
+    pplib::String File;
+    if (DataPath.size() == 0) {
+        throw StorageClassNotInitializedException();
+    }
+    Mutex.lock();
+    ClearWithoutMutex();
+    try {
+        File = DataPath + "/" + DatabaseFile;
+        if (pplib::File::exists(File)) {
+            pplib::File::remove(File);
+        }
+        File = DataPath + "/wmoimp.dat";
+        if (pplib::File::exists(File)) {
+            pplib::File::remove(File);
+        }
+    }
+    catch (...) {
+        Mutex.unlock();
+        throw;
+    }
+    Mutex.unlock();
 }
 
-
-}
-}
-}	// EOF Namespace de.pfp.winmusik
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

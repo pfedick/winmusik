@@ -55,8 +55,8 @@ public:
     // setter: QPixmap, File, ID3Frame
     void setPixmap(const QPixmap& pix);
     bool setPixmapFromFile(const QString& filename);
-    bool setPixmapFromID3Tag(const ppl7::ID3Tag& tag);
-    bool setPixmapFromAudioFile(const ppl7::String& filename);
+    bool setPixmapFromID3Tag(const pplib::ID3Tag& tag);
+    bool setPixmapFromAudioFile(const pplib::String& filename);
     void clear();
     const QPixmap& getPixmap() const;
     bool hasCover() const;

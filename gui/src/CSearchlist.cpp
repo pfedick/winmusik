@@ -30,7 +30,7 @@ SearchlistItem::SearchlistItem()
     Rating = 0;
 }
 
-SearchlistItem::SearchlistItem(const ppl7::String& Misc)
+SearchlistItem::SearchlistItem(const pplib::String& Misc)
 {
     found = false;
     selected = false;
@@ -49,44 +49,44 @@ SearchlistItem::SearchlistItem(const ppl7::String& Misc)
         return;
     }
 
-    std::vector<ppl7::String> Matches;
-    if (ppl7::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Misc, Matches)) {
+    std::vector<pplib::String> Matches;
+    if (pplib::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\t(.*?)\\t.*$/", Misc, Matches)) {
         // printf ("Match ASOT\n");
-        Artist = ppl7::Trim(Matches[1]);
-        Title = ppl7::Trim(Matches[2]);
-        Version = ppl7::Trim(Matches[3]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Misc, Matches)) {
-        Artist = ppl7::Trim(Matches[3]);
-        Title = ppl7::Trim(Matches[1]);
-        Version = ppl7::Trim(Matches[2]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Misc, Matches)) {
-        Artist = ppl7::Trim(Matches[3]);
-        Title = ppl7::Trim(Matches[1]);
-        Version = ppl7::Trim(Matches[2]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Misc, Matches)) {
-        Artist = ppl7::Trim(Matches[1]);
-        Title = ppl7::Trim(Matches[2]);
-        Version = ppl7::Trim(Matches[3]);
-    } else if (ppl7::RegEx::capture("/^(.*?)\\-(.*?)$/", Misc, Matches)) {
-        Artist = ppl7::Trim(Matches[1]);
-        Title = ppl7::Trim(Matches[2]);
+        Artist = pplib::Trim(Matches[1]);
+        Title = pplib::Trim(Matches[2]);
+        Version = pplib::Trim(Matches[3]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)\\t/", Misc, Matches)) {
+        Artist = pplib::Trim(Matches[3]);
+        Title = pplib::Trim(Matches[1]);
+        Version = pplib::Trim(Matches[2]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\((.*?)\\)\\s*?\\t(.*?)$/", Misc, Matches)) {
+        Artist = pplib::Trim(Matches[3]);
+        Title = pplib::Trim(Matches[1]);
+        Version = pplib::Trim(Matches[2]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", Misc, Matches)) {
+        Artist = pplib::Trim(Matches[1]);
+        Title = pplib::Trim(Matches[2]);
+        Version = pplib::Trim(Matches[3]);
+    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)$/", Misc, Matches)) {
+        Artist = pplib::Trim(Matches[1]);
+        Title = pplib::Trim(Matches[2]);
     }
-    if (ppl7::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", Title, Matches)) {
+    if (pplib::RegEx::capture("/(.*?)(\\sfeat\\..*)$/i", Title, Matches)) {
         Title = Matches[1];
         Artist += Matches[2];
-    } else if (ppl7::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\sfeaturing.*)$/i", Title, Matches)) {
         Title = Matches[1];
         Artist += Matches[2];
-    } else if (ppl7::RegEx::capture("/(.*?)(\\spres\\..*)$/i", Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\spres\\..*)$/i", Title, Matches)) {
         Title = Matches[1];
         Artist += Matches[2];
-    } else if (ppl7::RegEx::capture("/(.*?)(\\spresents.*)$/i", Title, Matches)) {
+    } else if (pplib::RegEx::capture("/(.*?)(\\spresents.*)$/i", Title, Matches)) {
         Title = Matches[1];
         Artist += Matches[2];
     }
 }
 
-SearchlistItem::SearchlistItem(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String Version)
+SearchlistItem::SearchlistItem(const pplib::String& Artist, const pplib::String& Title, const pplib::String Version)
 {
     this->Artist = Artist;
     this->Title = Title;
@@ -117,72 +117,73 @@ void SearchlistItem::clear()
     Rating = 0;
 }
 
-void SearchlistItem::importXML(const ppl7::String& xml)
+void SearchlistItem::importXML(const pplib::String& xml)
 {
-    std::vector<ppl7::String> Matches;
-    if (ppl7::RegEx::capture("/\\<artist\\>(.*)\\<\\/artist\\>/s", xml, Matches)) Artist = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<title\\>(.*)\\<\\/title\\>/s", xml, Matches)) Title = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<version\\>(.*)\\<\\/version\\>/s", xml, Matches))
-        Version = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<genre\\>(.*)\\<\\/genre\\>/s", xml, Matches)) Genre = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<label\\>(.*)\\<\\/label\\>/s", xml, Matches)) Label = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<shopurl\\>(.*)\\<\\/shopurl\\>/s", xml, Matches))
-        ShopURL = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<key\\>(.*)\\<\\/key\\>/s", xml, Matches)) Key = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<bpm\\>(.*)\\<\\/bpm\\>/s", xml, Matches)) Bpm = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+    std::vector<pplib::String> Matches;
+    if (pplib::RegEx::capture("/\\<artist\\>(.*)\\<\\/artist\\>/s", xml, Matches))
+        Artist = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<title\\>(.*)\\<\\/title\\>/s", xml, Matches)) Title = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<version\\>(.*)\\<\\/version\\>/s", xml, Matches))
+        Version = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<genre\\>(.*)\\<\\/genre\\>/s", xml, Matches)) Genre = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<label\\>(.*)\\<\\/label\\>/s", xml, Matches)) Label = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<shopurl\\>(.*)\\<\\/shopurl\\>/s", xml, Matches))
+        ShopURL = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<key\\>(.*)\\<\\/key\\>/s", xml, Matches)) Key = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<bpm\\>(.*)\\<\\/bpm\\>/s", xml, Matches)) Bpm = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
 
-    if (ppl7::RegEx::capture("/\\<tags\\>(.*)\\<\\/tags\\>/s", xml, Matches)) Tags = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<comment\\>(.*)\\<\\/comment\\>/s", xml, Matches))
-        Comment = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
-    if (ppl7::RegEx::capture("/\\<coverfilename\\>(.*)\\<\\/coverfilename\\>/s", xml, Matches))
-        CoverFilename = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<tags\\>(.*)\\<\\/tags\\>/s", xml, Matches)) Tags = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<comment\\>(.*)\\<\\/comment\\>/s", xml, Matches))
+        Comment = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
+    if (pplib::RegEx::capture("/\\<coverfilename\\>(.*)\\<\\/coverfilename\\>/s", xml, Matches))
+        CoverFilename = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
 
     try {
-        if (ppl7::RegEx::capture("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s", xml, Matches))
-            ReleaseDate = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+        if (pplib::RegEx::capture("/\\<releasedate\\>(.*)\\<\\/releasedate\\>/s", xml, Matches))
+            ReleaseDate = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
     }
     catch (...) {
         ReleaseDate.clear();
     }
     try {
-        if (ppl7::RegEx::capture("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s", xml, Matches))
-            DateAdded = ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1]));
+        if (pplib::RegEx::capture("/\\<dateadded\\>(.*)\\<\\/dateadded\\>/s", xml, Matches))
+            DateAdded = pplib::Trim(pplib::UnescapeHTMLTags(Matches[1]));
     }
     catch (...) {
         DateAdded.clear();
     }
-    if (ppl7::RegEx::capture("/\\<length\\>(.*)\\<\\/length\\>/s", xml, Matches)) Length = ppl7::UnescapeHTMLTags(Matches[1]).toInt();
-    if (ppl7::RegEx::capture("/\\<found\\>(.*)\\<\\/found\\>/s", xml, Matches))
-        found = ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
-    if (ppl7::RegEx::capture("/\\<selected\\>(.*)\\<\\/selected\\>/s", xml, Matches))
-        selected = ppl7::IsTrue(ppl7::Trim(ppl7::UnescapeHTMLTags(Matches[1])));
-    if (ppl7::RegEx::capture("/\\<rating\\>(.*)\\<\\/rating\\>/s", xml, Matches)) Rating = ppl7::UnescapeHTMLTags(Matches[1]).toInt();
+    if (pplib::RegEx::capture("/\\<length\\>(.*)\\<\\/length\\>/s", xml, Matches)) Length = pplib::UnescapeHTMLTags(Matches[1]).toInt();
+    if (pplib::RegEx::capture("/\\<found\\>(.*)\\<\\/found\\>/s", xml, Matches))
+        found = pplib::IsTrue(pplib::Trim(pplib::UnescapeHTMLTags(Matches[1])));
+    if (pplib::RegEx::capture("/\\<selected\\>(.*)\\<\\/selected\\>/s", xml, Matches))
+        selected = pplib::IsTrue(pplib::Trim(pplib::UnescapeHTMLTags(Matches[1])));
+    if (pplib::RegEx::capture("/\\<rating\\>(.*)\\<\\/rating\\>/s", xml, Matches)) Rating = pplib::UnescapeHTMLTags(Matches[1]).toInt();
 }
 
-ppl7::String SearchlistItem::exportXML() const
+pplib::String SearchlistItem::exportXML() const
 {
-    ppl7::String s;
+    pplib::String s;
     s = "<searchlistitem>\n"
         "	<artist>" +
-        ppl7::EscapeHTMLTags(Artist) +
+        pplib::EscapeHTMLTags(Artist) +
         "</artist>\n"
         "	<title>" +
-        ppl7::EscapeHTMLTags(Title) +
+        pplib::EscapeHTMLTags(Title) +
         "</title>\n"
         "	<version>" +
-        ppl7::EscapeHTMLTags(Version) +
+        pplib::EscapeHTMLTags(Version) +
         "</version>\n"
         "	<genre>" +
-        ppl7::EscapeHTMLTags(Genre) +
+        pplib::EscapeHTMLTags(Genre) +
         "</genre>\n"
         "	<comment>" +
-        ppl7::EscapeHTMLTags(Comment) + "</comment>\n";
-    s += "	<label>" + ppl7::EscapeHTMLTags(Label) + "</label>\n";
-    s += "	<key>" + ppl7::EscapeHTMLTags(Key) + "</key>\n";
-    s += "	<bpm>" + ppl7::EscapeHTMLTags(Bpm) + "</bpm>\n";
-    s += "	<shopurl>" + ppl7::EscapeHTMLTags(ShopURL) + "</shopurl>\n";
-    s += "	<tags>" + ppl7::EscapeHTMLTags(Tags) + "</tags>\n";
-    s += "	<coverfilename>" + ppl7::EscapeHTMLTags(CoverFilename) + "</coverfilename>\n";
+        pplib::EscapeHTMLTags(Comment) + "</comment>\n";
+    s += "	<label>" + pplib::EscapeHTMLTags(Label) + "</label>\n";
+    s += "	<key>" + pplib::EscapeHTMLTags(Key) + "</key>\n";
+    s += "	<bpm>" + pplib::EscapeHTMLTags(Bpm) + "</bpm>\n";
+    s += "	<shopurl>" + pplib::EscapeHTMLTags(ShopURL) + "</shopurl>\n";
+    s += "	<tags>" + pplib::EscapeHTMLTags(Tags) + "</tags>\n";
+    s += "	<coverfilename>" + pplib::EscapeHTMLTags(CoverFilename) + "</coverfilename>\n";
     try {
         s += "	<releasedate>" + ReleaseDate.getISO8601() + "</releasedate>\n";
     }
@@ -193,7 +194,7 @@ ppl7::String SearchlistItem::exportXML() const
     }
     catch (...) {
     }
-    s += "	<length>" + ppl7::ToString("%i", Length) +
+    s += "	<length>" + pplib::ToString("%i", Length) +
          "</length>\n"
          "	<found>" +
          (found ? "true" : "false") +
@@ -202,7 +203,7 @@ ppl7::String SearchlistItem::exportXML() const
          (selected ? "true" : "false") +
          "</selected>\n"
          "	<rating>" +
-         ppl7::ToString("%i", Rating) +
+         pplib::ToString("%i", Rating) +
          "</rating>\n"
          "</searchlistitem>\n";
     return s;
@@ -218,22 +219,22 @@ CSearchlist::~CSearchlist()
 {
 }
 
-void CSearchlist::setName(const ppl7::String& name)
+void CSearchlist::setName(const pplib::String& name)
 {
     this->Name = name;
 }
 
-const ppl7::String& CSearchlist::name() const
+const pplib::String& CSearchlist::name() const
 {
     return Name;
 }
 
-const ppl7::DateTime& CSearchlist::dateCreated() const
+const pplib::DateTime& CSearchlist::dateCreated() const
 {
     return DateCreated;
 }
 
-const ppl7::DateTime& CSearchlist::dateUpdated() const
+const pplib::DateTime& CSearchlist::dateUpdated() const
 {
     return DateUpdated;
 }
@@ -305,14 +306,14 @@ SearchlistItem& CSearchlist::operator[](size_t pos)
     return list.at(pos);
 }
 
-ppl7::String CSearchlist::toXML() const
+pplib::String CSearchlist::toXML() const
 {
-    ppl7::String s;
+    pplib::String s;
     s = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
     s += "<searchlist>\n";
     s += "<header>\n";
-    s += "   <name>" + ppl7::EscapeHTMLTags(Name) + "</name>\n";
-    s += "   <tracks>" + ppl7::ToString("%zu", list.size()) + "</tracks>\n";
+    s += "   <name>" + pplib::EscapeHTMLTags(Name) + "</name>\n";
+    s += "   <tracks>" + pplib::ToString("%zu", list.size()) + "</tracks>\n";
     s += "   <dateCreated>" + DateCreated.getISO8601() + "</dateCreated>\n";
     s += "   <dateUpdated>" + DateUpdated.getISO8601() + "</dateUpdated>\n";
     s += "</header>\n";
@@ -323,31 +324,31 @@ ppl7::String CSearchlist::toXML() const
     return s;
 }
 
-void CSearchlist::save(const ppl7::String& filename) const
+void CSearchlist::save(const pplib::String& filename) const
 {
-    ppl7::File ff;
-    ff.open(filename, ppl7::File::WRITE);
+    pplib::File ff;
+    ff.open(filename, pplib::File::WRITE);
     ff.puts(toXML());
 }
 
-void CSearchlist::load(const ppl7::String& filename, bool headerOnly)
+void CSearchlist::load(const pplib::String& filename, bool headerOnly)
 {
     clear();
-    ppl7::String content;
-    ppl7::File::load(content, filename);
-    std::vector<ppl7::String> matches;
+    pplib::String content;
+    pplib::File::load(content, filename);
+    std::vector<pplib::String> matches;
 
-    if (ppl7::RegEx::capture("/\\<header\\>(.*?)\\<\\/header\\>/s", content, matches)) {
-        ppl7::String header = matches.at(1);
-        if (ppl7::RegEx::capture("/\\<name\\>(.*)\\<\\/name\\>/s", header, matches))
-            Name = ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
-        if (ppl7::RegEx::capture("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s", header, matches))
-            DateCreated = ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
-        if (ppl7::RegEx::capture("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s", header, matches))
-            DateUpdated = ppl7::Trim(ppl7::UnescapeHTMLTags(matches.at(1)));
+    if (pplib::RegEx::capture("/\\<header\\>(.*?)\\<\\/header\\>/s", content, matches)) {
+        pplib::String header = matches.at(1);
+        if (pplib::RegEx::capture("/\\<name\\>(.*)\\<\\/name\\>/s", header, matches))
+            Name = pplib::Trim(pplib::UnescapeHTMLTags(matches.at(1)));
+        if (pplib::RegEx::capture("/\\<dateCreated\\>(.*)\\<\\/dateCreated\\>/s", header, matches))
+            DateCreated = pplib::Trim(pplib::UnescapeHTMLTags(matches.at(1)));
+        if (pplib::RegEx::capture("/\\<dateUpdated\\>(.*)\\<\\/dateUpdated\\>/s", header, matches))
+            DateUpdated = pplib::Trim(pplib::UnescapeHTMLTags(matches.at(1)));
     }
     if (headerOnly) return;
-    ppl7::Array rows;
+    pplib::Array rows;
     rows.explode(content, "<searchlistitem>");
     for (size_t i = 1; i < rows.size(); i++) {
         SearchlistItem item;

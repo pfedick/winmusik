@@ -21,11 +21,12 @@
 #include "wm_storage.h"
 #include "wm_exceptions.h"
 
-namespace de {
-namespace pfp {
-namespace winmusik {
-
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class DataShortcut
  * \ingroup WM3DataTypes
@@ -42,25 +43,24 @@ namespace winmusik {
  *
  */
 
-
 DataShortcut::DataShortcut()
 {
-	formatversion=1;
+    formatversion = 1;
 }
 
 DataShortcut::DataShortcut(const DataShortcut& other)
-	: CStorageItem(other)
+    : CStorageItem(other)
 {
-	shortcut=other.shortcut;
-	artist=other.artist;
-	formatversion=1;
+    shortcut = other.shortcut;
+    artist = other.artist;
+    formatversion = 1;
 }
 
-DataShortcut::DataShortcut(const ppl7::String& shortcut, const ppl7::String& artist)
+DataShortcut::DataShortcut(const pplib::String& shortcut, const pplib::String& artist)
 {
-	formatversion=1;
-	this->shortcut=shortcut;
-	this->artist=artist;
+    formatversion = 1;
+    this->shortcut = shortcut;
+    this->artist = artist;
 }
 
 void DataShortcut::Clear()
@@ -70,78 +70,78 @@ void DataShortcut::Clear()
  * alle internen Variablen deinitialisiert.
  */
 {
-	shortcut.clear();
-	artist.clear();
-	CStorageItem::Clear();
-	formatversion=1;
+    shortcut.clear();
+    artist.clear();
+    CStorageItem::Clear();
+    formatversion = 1;
 }
 
 void DataShortcut::CopyDataFrom(const DataShortcut& other)
 {
-	shortcut=other.shortcut;
-	artist=other.artist;
-	formatversion=1;
+    shortcut = other.shortcut;
+    artist = other.artist;
+    formatversion = 1;
 }
 
 void DataShortcut::CopyFrom(const DataShortcut& other)
 {
-	CopyDataFrom(other);
-	CopyStorageFrom(other);
+    CopyDataFrom(other);
+    CopyStorageFrom(other);
 }
 
-DataShortcut& DataShortcut::operator = (const DataShortcut& other)
+DataShortcut& DataShortcut::operator=(const DataShortcut& other)
 {
-	CopyDataFrom(other);
-	CopyStorageFrom(other);
-	return *this;
+    CopyDataFrom(other);
+    CopyStorageFrom(other);
+    return *this;
 }
 
-void DataShortcut::SetValue(const ppl7::String& shortcut, const ppl7::String& artist)
+void DataShortcut::SetValue(const pplib::String& shortcut, const pplib::String& artist)
 {
-	this->shortcut=shortcut;
-	this->artist=artist;
+    this->shortcut = shortcut;
+    this->artist = artist;
 }
 
-const ppl7::String& DataShortcut::GetShortcut() const
+const pplib::String& DataShortcut::GetShortcut() const
 {
-	return shortcut;
+    return shortcut;
 }
 
-const ppl7::String& DataShortcut::GetArtist() const
+const pplib::String& DataShortcut::GetArtist() const
 {
-	return artist;
+    return artist;
 }
 
-void DataShortcut::Export(ppl7::ByteArray& bin) const
+void DataShortcut::Export(pplib::ByteArray& bin) const
 {
-	// Benötigte Bytes berechnen
-	int lenShortcut=shortcut.size();
-	int lenArtist= artist.size();
-	int size=4 + lenShortcut + lenArtist;
-	// Speicher allokieren
-	char* a=(char*)bin.malloc(size);
-	ppl7::Poke16(a, lenShortcut);
-	if (lenShortcut) strncpy(a + 2, shortcut, lenShortcut);
-	ppl7::Poke16(a + 2 + lenShortcut, lenArtist);
-	if (lenArtist) strncpy(a + 4 + lenShortcut, artist, lenArtist);
+    // Benötigte Bytes berechnen
+    int lenShortcut = shortcut.size();
+    int lenArtist = artist.size();
+    int size = 4 + lenShortcut + lenArtist;
+    // Speicher allokieren
+    char* a = (char*)bin.malloc(size);
+    pplib::Poke16(a, lenShortcut);
+    if (lenShortcut) strncpy(a + 2, shortcut, lenShortcut);
+    pplib::Poke16(a + 2 + lenShortcut, lenArtist);
+    if (lenArtist) strncpy(a + 4 + lenShortcut, artist, lenArtist);
 }
 
-void DataShortcut::Import(const ppl7::ByteArrayPtr& bin, int version)
+void DataShortcut::Import(const pplib::ByteArrayPtr& bin, int version)
 {
-	if (version < 1 || version>1) {
-		throw UnknownRecordVersionException("Shortcut %d", version);
-	}
-	size_t size=bin.size();
-	const char* a=(const char*)bin.ptr();
-	// Die Größe muss mindestens 4 Byte betragen
-	if (size < 4 || a == NULL) {
-		throw InvalidRecordException();
-	}
-	Clear();
-	int lenShortcut=ppl7::Peek16(a);
-	int lenArtist=ppl7::Peek16(a + 2 + lenShortcut);
-	if (lenShortcut) shortcut.set(a + 2, lenShortcut);
-	if (lenArtist) artist.set(a + 4 + lenShortcut, lenArtist);
+    if (version < 1 || version > 1) {
+        throw UnknownRecordVersionException("Shortcut %d", version);
+    }
+    size_t size = bin.size();
+    const char* a = (const char*)bin.ptr();
+    // Die Größe muss mindestens 4 Byte betragen
+    if (size < 4 || a == NULL) {
+        throw InvalidRecordException();
+    }
+    Clear();
+    int lenShortcut = pplib::Peek16(a);
+    int lenArtist = pplib::Peek16(a + 2 + lenShortcut);
+    if (lenShortcut) shortcut.set(a + 2, lenShortcut);
+    if (lenArtist) artist.set(a + 4 + lenShortcut, lenArtist);
 }
 
 /*!\class CShortcutStore
@@ -151,7 +151,6 @@ void DataShortcut::Import(const ppl7::ByteArrayPtr& bin, int version)
  * Klasse zum Verwalten von DataShortcut Datensätzen mit Interpreten-Abkürzungen.
  *
  */
-
 
 /*!\var CShortcutStore::Mutex
  * \brief Mutex der Klasse
@@ -181,7 +180,7 @@ CShortcutStore::~CShortcutStore()
  * aufgerufen.
  */
 {
-	Clear();
+    Clear();
 }
 
 void CShortcutStore::Clear()
@@ -191,7 +190,7 @@ void CShortcutStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	Tree.clear();
+    Tree.clear();
 }
 
 const char* CShortcutStore::GetChunkName()
@@ -202,34 +201,32 @@ const char* CShortcutStore::GetChunkName()
  * \returns Pointer auf einen 4 Byte langen String mit 0-Byte terminiert.
  */
 {
-	return "SHRT";
+    return "SHRT";
 }
 
 void CShortcutStore::SaveToStorage(DataShortcut& t)
 {
-	CStorage& store=getStorage();
-	ppl7::ByteArray bin;
-	t.Export(bin);
-	store.Save(this, &t, bin);
+    CStorage& store = getStorage();
+    pplib::ByteArray bin;
+    t.Export(bin);
+    store.Save(this, &t, bin);
 }
 
 DataShortcut* CShortcutStore::SaveToMemory(const DataShortcut& t)
 {
-	// Gibt's die Abkürzung schon?
-	ppl7::String search=ppl7::Trim(ppl7::LowerCase(t.shortcut));
-	std::map<ppl7::String, DataShortcut>::iterator it;
-	it=Tree.find(search);
-	if (it != Tree.end()) {
-		// Jepp, gibt's schon. Wir machen ein Update
-		it->second.artist=t.artist;
-		return &it->second;
-	}
-	std::pair<CShortcutStore::iterator, bool> new_it;
-	new_it=Tree.insert(std::pair<ppl7::String, DataShortcut>(search, t));
-	return &new_it.first->second;
+    // Gibt's die Abkürzung schon?
+    pplib::String search = pplib::Trim(pplib::LowerCase(t.shortcut));
+    std::map<pplib::String, DataShortcut>::iterator it;
+    it = Tree.find(search);
+    if (it != Tree.end()) {
+        // Jepp, gibt's schon. Wir machen ein Update
+        it->second.artist = t.artist;
+        return &it->second;
+    }
+    std::pair<CShortcutStore::iterator, bool> new_it;
+    new_it = Tree.insert(std::pair<pplib::String, DataShortcut>(search, t));
+    return &new_it.first->second;
 }
-
-
 
 void CShortcutStore::Put(const DataShortcut& entry)
 /*!\brief Datensatz speichern
@@ -246,77 +243,75 @@ void CShortcutStore::Put(const DataShortcut& entry)
  * Text des Elements geändert hat.
  */
 {
-	DataShortcut* t=SaveToMemory(entry);
-	SaveToStorage(*t);
+    DataShortcut* t = SaveToMemory(entry);
+    SaveToStorage(*t);
 }
 
-const DataShortcut& CShortcutStore::Get(const ppl7::String& shortcut) const
+const DataShortcut& CShortcutStore::Get(const pplib::String& shortcut) const
 {
-	// Make search string to lowercase
-	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
-	std::map<ppl7::String, DataShortcut>::const_iterator it;
-	it=Tree.find(search);
-	if (it == Tree.end())  throw RecordDoesNotExistException();
-	return it->second;
+    // Make search string to lowercase
+    pplib::String search = pplib::Trim(pplib::LowerCase(shortcut));
+    std::map<pplib::String, DataShortcut>::const_iterator it;
+    it = Tree.find(search);
+    if (it == Tree.end()) throw RecordDoesNotExistException();
+    return it->second;
 }
 
-const DataShortcut* CShortcutStore::GetPtr(const ppl7::String& shortcut) const
+const DataShortcut* CShortcutStore::GetPtr(const pplib::String& shortcut) const
 {
-	// Make search string to lowercase
-	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
-	std::map<ppl7::String, DataShortcut>::const_iterator it;
-	it=Tree.find(search);
-	if (it == Tree.end()) return NULL;
-	return &it->second;
+    // Make search string to lowercase
+    pplib::String search = pplib::Trim(pplib::LowerCase(shortcut));
+    std::map<pplib::String, DataShortcut>::const_iterator it;
+    it = Tree.find(search);
+    if (it == Tree.end()) return NULL;
+    return &it->second;
 }
 
 size_t CShortcutStore::Size() const
 {
-	return Tree.size();
+    return Tree.size();
 }
 
 void CShortcutStore::LoadChunk(const CWMFileChunk& chunk)
 {
-	DataShortcut data;
-	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
-	data.Import(bin, chunk.GetFormatVersion());
-	data.CopyStorageFrom(chunk);
-	SaveToMemory(data);
+    DataShortcut data;
+    pplib::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+    data.Import(bin, chunk.GetFormatVersion());
+    data.CopyStorageFrom(chunk);
+    SaveToMemory(data);
 }
 
-
-void CShortcutStore::Delete(const ppl7::String& shortcut)
+void CShortcutStore::Delete(const pplib::String& shortcut)
 {
-	ppl7::String search=ppl7::Trim(ppl7::LowerCase(shortcut));
-	std::map<ppl7::String, DataShortcut>::iterator it;
-	it=Tree.find(search);
-	if (it != Tree.end()) {
-		getStorage().Delete(this, &it->second);
-		Tree.erase(it);
-	}
+    pplib::String search = pplib::Trim(pplib::LowerCase(shortcut));
+    std::map<pplib::String, DataShortcut>::iterator it;
+    it = Tree.find(search);
+    if (it != Tree.end()) {
+        getStorage().Delete(this, &it->second);
+        Tree.erase(it);
+    }
 }
 
 CShortcutStore::iterator CShortcutStore::begin()
 {
-	return Tree.begin();
+    return Tree.begin();
 }
 
 CShortcutStore::iterator CShortcutStore::end()
 {
-	return Tree.end();
+    return Tree.end();
 }
 
 CShortcutStore::const_iterator CShortcutStore::begin() const
 {
-	return Tree.begin();
+    return Tree.begin();
 }
 
 CShortcutStore::const_iterator CShortcutStore::end() const
 {
-	return Tree.end();
+    return Tree.end();
 }
 
-
-}
-}
-}
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

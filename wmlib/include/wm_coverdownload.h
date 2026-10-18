@@ -40,33 +40,33 @@ namespace winmusik
 class MetaData
 {
 public:
-    ppl7::String Artist;
-    ppl7::String Title;
-    ppl7::String Version;
-    ppl7::String Genre;
-    ppl7::String Label;
-    ppl7::String Bpm;
-    ppl7::String Album;
-    ppl7::String ReleaseDate;
-    ppl7::String ShopURL;
-    ppl7::String Key;
-    ppl7::String CoverUrl;
-    ppl7::String CoverFile;
+    pplib::String Artist;
+    pplib::String Title;
+    pplib::String Version;
+    pplib::String Genre;
+    pplib::String Label;
+    pplib::String Bpm;
+    pplib::String Album;
+    pplib::String ReleaseDate;
+    pplib::String ShopURL;
+    pplib::String Key;
+    pplib::String CoverUrl;
+    pplib::String CoverFile;
 
     int Length = 0; // in Sekunden
 
     void print() const;
 };
 
-bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile);
-bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
+bool CoverDownload(const pplib::String& url, const pplib::String& targetfile);
+bool CoverDownload(const pplib::String& url, const pplib::String& targetfile, MetaData& data);
 
-void SetBeatportSession(const ppl7::String& clearance, const ppl7::String& userAgent);
+void SetBeatportSession(const pplib::String& clearance, const pplib::String& userAgent);
 
-bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile);
-bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& data);
+bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile);
+bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile, MetaData& data);
 
-void getBeatportMetaData(ppl7::AssocArray& data, de::pfp::winmusik::MetaData& meta);
+void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& meta);
 
 } // namespace winmusik
 } // namespace pfp

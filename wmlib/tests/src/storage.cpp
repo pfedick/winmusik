@@ -27,129 +27,116 @@
 #include "ppl7.h"
 #include "wmlib-tests.h"
 
-namespace {
+namespace
+{
 
 using namespace de::pfp::winmusik;
 
-
-class StorageTest : public ::testing::Test {
+class StorageTest : public ::testing::Test
+{
 protected:
-	StorageTest() {
-		if (setlocale(LC_CTYPE, DEFAULT_LOCALE) == NULL) {
-			printf("setlocale fehlgeschlagen\n");
-			throw std::exception();
-		}
-	}
-	~StorageTest()
-	{
-
-	}
+    StorageTest()
+    {
+        if (setlocale(LC_CTYPE, DEFAULT_LOCALE) == NULL) {
+            printf("setlocale fehlgeschlagen\n");
+            throw std::exception();
+        }
+    }
+    ~StorageTest()
+    {
+    }
 };
 
-TEST_F(StorageTest, ConstructorWithoutParam) {
-	ASSERT_NO_THROW({
-		CStorage storage;
-		});
+TEST_F(StorageTest, ConstructorWithoutParam)
+{
+    ASSERT_NO_THROW({ CStorage storage; });
 }
 
-TEST_F(StorageTest, loadDatabase) {
-	CTitleStore titlestore;
-	CDeviceStore devicestore;
-	CTrackStore trackstore;
-	CShortcutStore shortcutstore;
-	CVersionStore versionstore;
-	CRecordSourceStore recordsourcestore;
-	CLabelStore labelstore;
-	CPurchaseSourceStore purchasesourcestore;
-	CRecordDeviceStore recorddevicestore;
-	CGenreStore genrestore;
-	CStorage storage;
+TEST_F(StorageTest, loadDatabase)
+{
+    CTitleStore titlestore;
+    CDeviceStore devicestore;
+    CTrackStore trackstore;
+    CShortcutStore shortcutstore;
+    CVersionStore versionstore;
+    CRecordSourceStore recordsourcestore;
+    CLabelStore labelstore;
+    CPurchaseSourceStore purchasesourcestore;
+    CRecordDeviceStore recorddevicestore;
+    CGenreStore genrestore;
+    CStorage storage;
 
-	storage.RegisterStorageClass(&titlestore);
-	storage.RegisterStorageClass(&devicestore);
-	storage.RegisterStorageClass(&trackstore);
-	storage.RegisterStorageClass(&shortcutstore);
-	storage.RegisterStorageClass(&versionstore);
-	storage.RegisterStorageClass(&recordsourcestore);
-	storage.RegisterStorageClass(&labelstore);
-	storage.RegisterStorageClass(&purchasesourcestore);
-	storage.RegisterStorageClass(&recorddevicestore);
-	storage.RegisterStorageClass(&genrestore);
+    storage.RegisterStorageClass(&titlestore);
+    storage.RegisterStorageClass(&devicestore);
+    storage.RegisterStorageClass(&trackstore);
+    storage.RegisterStorageClass(&shortcutstore);
+    storage.RegisterStorageClass(&versionstore);
+    storage.RegisterStorageClass(&recordsourcestore);
+    storage.RegisterStorageClass(&labelstore);
+    storage.RegisterStorageClass(&purchasesourcestore);
+    storage.RegisterStorageClass(&recorddevicestore);
+    storage.RegisterStorageClass(&genrestore);
 
-	ppl7::File::copy("testdata/winmusik.dat", "tmp/loadtest.dat");
-	storage.Init("tmp", "loadtest.dat");
-	storage.LoadDatabase();
+    pplib::File::copy("testdata/winmusik.dat", "tmp/loadtest.dat");
+    storage.Init("tmp", "loadtest.dat");
+    storage.LoadDatabase();
 
-	ASSERT_EQ((uint32_t)22,
-		static_cast<CTitleStore&>(storage.GetStorageClass("TITL")).Size());
+    ASSERT_EQ((uint32_t)22, static_cast<CTitleStore&>(storage.GetStorageClass("TITL")).Size());
 
-	/*
-	for (uint32_t i=1;i < titlestore.MaxId();i++) {
-		const DataTitle* ti=titlestore.GetPtr(i);
-		if (ti) {
-			printf("%s - %s (%s)\n", (const char*)ti->Artist, (const char*)ti->Title,
-				(const char*)versionstore.GetValue(ti->VersionId));
-		}
-	}
-	*/
+    /*
+    for (uint32_t i=1;i < titlestore.MaxId();i++) {
+        const DataTitle* ti=titlestore.GetPtr(i);
+        if (ti) {
+            printf("%s - %s (%s)\n", (const char*)ti->Artist, (const char*)ti->Title,
+                (const char*)versionstore.GetValue(ti->VersionId));
+        }
+    }
+    */
 
-	ASSERT_EQ((uint32_t)16,
-		static_cast<CVersionStore&>(storage.GetStorageClass("VERS")).Size());
-	ASSERT_EQ((uint32_t)148,
-		static_cast<CGenreStore&>(storage.GetStorageClass("GENR")).Size());
-	ASSERT_EQ((uint32_t)0,
-		static_cast<CRecordSourceStore&>(storage.GetStorageClass("RSRC")).Size());
-	ASSERT_EQ((uint32_t)7,
-		static_cast<CLabelStore&>(storage.GetStorageClass("LABL")).Size());
-	ASSERT_EQ((uint32_t)0,
-		static_cast<CPurchaseSourceStore&>(storage.GetStorageClass("PCHS")).Size());
-	ASSERT_EQ((uint32_t)0,
-		static_cast<CRecordDeviceStore&>(storage.GetStorageClass("RDEV")).Size());
+    ASSERT_EQ((uint32_t)16, static_cast<CVersionStore&>(storage.GetStorageClass("VERS")).Size());
+    ASSERT_EQ((uint32_t)148, static_cast<CGenreStore&>(storage.GetStorageClass("GENR")).Size());
+    ASSERT_EQ((uint32_t)0, static_cast<CRecordSourceStore&>(storage.GetStorageClass("RSRC")).Size());
+    ASSERT_EQ((uint32_t)7, static_cast<CLabelStore&>(storage.GetStorageClass("LABL")).Size());
+    ASSERT_EQ((uint32_t)0, static_cast<CPurchaseSourceStore&>(storage.GetStorageClass("PCHS")).Size());
+    ASSERT_EQ((uint32_t)0, static_cast<CRecordDeviceStore&>(storage.GetStorageClass("RDEV")).Size());
 
-	ASSERT_EQ((uint32_t)2,
-		static_cast<CShortcutStore&>(storage.GetStorageClass("SHRT")).Size());
+    ASSERT_EQ((uint32_t)2, static_cast<CShortcutStore&>(storage.GetStorageClass("SHRT")).Size());
 
-	storage.DeleteDatabase();
-
-
-
+    storage.DeleteDatabase();
 }
 
-TEST_F(StorageTest, loadRealDatabase) {
-	CTitleStore titlestore;
-	CDeviceStore devicestore;
-	CTrackStore trackstore;
-	CShortcutStore shortcutstore;
-	CVersionStore versionstore;
-	CRecordSourceStore recordsourcestore;
-	CLabelStore labelstore;
-	CPurchaseSourceStore purchasesourcestore;
-	CRecordDeviceStore recorddevicestore;
-	CGenreStore genrestore;
-	CStorage storage;
+TEST_F(StorageTest, loadRealDatabase)
+{
+    CTitleStore titlestore;
+    CDeviceStore devicestore;
+    CTrackStore trackstore;
+    CShortcutStore shortcutstore;
+    CVersionStore versionstore;
+    CRecordSourceStore recordsourcestore;
+    CLabelStore labelstore;
+    CPurchaseSourceStore purchasesourcestore;
+    CRecordDeviceStore recorddevicestore;
+    CGenreStore genrestore;
+    CStorage storage;
 
-	storage.RegisterStorageClass(&titlestore);
-	storage.RegisterStorageClass(&devicestore);
-	storage.RegisterStorageClass(&trackstore);
-	storage.RegisterStorageClass(&shortcutstore);
-	storage.RegisterStorageClass(&versionstore);
-	storage.RegisterStorageClass(&recordsourcestore);
-	storage.RegisterStorageClass(&labelstore);
-	storage.RegisterStorageClass(&purchasesourcestore);
-	storage.RegisterStorageClass(&recorddevicestore);
-	storage.RegisterStorageClass(&genrestore);
+    storage.RegisterStorageClass(&titlestore);
+    storage.RegisterStorageClass(&devicestore);
+    storage.RegisterStorageClass(&trackstore);
+    storage.RegisterStorageClass(&shortcutstore);
+    storage.RegisterStorageClass(&versionstore);
+    storage.RegisterStorageClass(&recordsourcestore);
+    storage.RegisterStorageClass(&labelstore);
+    storage.RegisterStorageClass(&purchasesourcestore);
+    storage.RegisterStorageClass(&recorddevicestore);
+    storage.RegisterStorageClass(&genrestore);
 
+    if (pplib::File::exists("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat")) {
 
-	if (ppl7::File::exists("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat")) {
-
-		ppl7::File::copy("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat", "tmp/loadtest.dat");
-		storage.Init("tmp", "loadtest.dat");
-		storage.LoadDatabase();
-		storage.DeleteDatabase();
-	}
-
-
-
+        pplib::File::copy("/home/patrickf/Nextcloud/WinMusik3/winmusik.dat", "tmp/loadtest.dat");
+        storage.Init("tmp", "loadtest.dat");
+        storage.LoadDatabase();
+        storage.DeleteDatabase();
+    }
 }
 
-} // EOF namespace
+} // namespace

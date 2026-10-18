@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef PRINTDEVICEDIALOG_H
 #define PRINTDEVICEDIALOG_H
 
@@ -33,63 +32,73 @@ public:
     PrintDeviceDialog(QWidget* parent = 0);
     ~PrintDeviceDialog();
 
-    void setDeviceRange(int min, int max) {
+    void setDeviceRange(int min, int max)
+    {
         ui.fromDevice->setMinimum(min);
         ui.toDevice->setMinimum(min);
         ui.fromDevice->setMaximum(max);
         ui.toDevice->setMaximum(max);
     }
 
-    void setUseColor(bool flag) {
+    void setUseColor(bool flag)
+    {
         ui.printColors->setChecked(flag);
     }
 
-    void setFont(ppl7::String Font) {
-        int index=ui.font->findText(Font);
+    void setFont(pplib::String Font)
+    {
+        int index = ui.font->findText(Font);
         if (index >= 0) ui.font->setCurrentIndex(index);
     }
 
     void setDeviceType(int Type);
 
-    bool printCover() {
+    bool printCover()
+    {
         return ui.printCoverButton->isChecked();
     }
 
-    void setFromDevice(int id) {
+    void setFromDevice(int id)
+    {
         ui.fromDevice->setValue(id);
     }
-    void setToDevice(int id) {
+    void setToDevice(int id)
+    {
         ui.toDevice->setValue(id);
     }
 
-    int min() {
+    int min()
+    {
         return ui.fromDevice->value();
     }
 
-    int max() {
+    int max()
+    {
         return ui.toDevice->value();
     }
 
-    bool useColor() {
+    bool useColor()
+    {
         return ui.printColors->isChecked();
     }
 
-    ppl7::String font() {
+    pplib::String font()
+    {
         return ui.font->currentText();
     }
-
 
 private:
     Ui::PrintDeviceDialogClass ui;
 
 public slots:
-    void on_okButton_clicked() {
+    void on_okButton_clicked()
+    {
         done(1);
     }
-    void on_cancelButton_clicked() {
+    void on_cancelButton_clicked()
+    {
         done(0);
     }
-
 };
 
 #endif // PRINTDEVICEDIALOG_H

@@ -81,13 +81,13 @@ public:
 class CStorage
 {
 private:
-    ppl7::Mutex Mutex;
-    ppl7::String DataPath;
-    ppl7::String DatabaseFile;
+    pplib::Mutex Mutex;
+    pplib::String DataPath;
+    pplib::String DatabaseFile;
     std::map<uint32_t, CStorageBase*> StorageClasses;
     bool bLoadDatabaseRunning;
     CWMFile StorageFile;
-    ppl7::Logger* logger;
+    pplib::Logger* logger;
 
     void ClearWithoutMutex();
 
@@ -95,12 +95,12 @@ public:
     CStorage();
     virtual ~CStorage();
     void Clear();
-    void SetLogger(ppl7::Logger* logger);
-    void Init(const ppl7::String& path, const ppl7::String& file = ppl7::String("winmusik.dat"));
+    void SetLogger(pplib::Logger* logger);
+    void Init(const pplib::String& path, const pplib::String& file = pplib::String("winmusik.dat"));
     void RegisterStorageClass(CStorageBase* storageclass);
     CStorageBase* FindStorageClass(const char* name);
     CStorageBase& GetStorageClass(const char* name);
-    void Save(CStorageBase* type, CStorageItem* item, const ppl7::ByteArrayPtr& bin);
+    void Save(CStorageBase* type, CStorageItem* item, const pplib::ByteArrayPtr& bin);
     void Delete(CStorageBase* type, CStorageItem* item);
     bool DatabaseExists() const;
 
@@ -121,12 +121,12 @@ public:
 class DataTitle : public CStorageItem
 {
 public:
-    ppl7::String Artist;
-    ppl7::String Title;
-    ppl7::String Remarks;
-    ppl7::String Album;
-    ppl7::String Tags;
-    ppl7::ByteArray CoverPreview;
+    pplib::String Artist;
+    pplib::String Title;
+    pplib::String Remarks;
+    pplib::String Album;
+    pplib::String Tags;
+    pplib::ByteArray CoverPreview;
     uint32_t TitleId;
     uint32_t DeviceId;
     uint32_t Length;
@@ -158,14 +158,14 @@ public:
 
     void CopyFrom(const DataTitle& other);
     void CopyDataFrom(const DataTitle& other);
-    void SetTitle(const ppl7::String& title);
-    void SetArtist(const ppl7::String& artist);
-    void SetRemarks(const ppl7::String& remarks);
-    void SetTags(const ppl7::String& tags);
-    void SetAlbum(const ppl7::String& album);
+    void SetTitle(const pplib::String& title);
+    void SetArtist(const pplib::String& artist);
+    void SetRemarks(const pplib::String& remarks);
+    void SetTags(const pplib::String& tags);
+    void SetAlbum(const pplib::String& album);
 
-    void Export(ppl7::ByteArray& bin);
-    void Import(const ppl7::ByteArrayPtr& bin, int version);
+    void Export(pplib::ByteArray& bin);
+    void Import(const pplib::ByteArrayPtr& bin, int version);
 
     DataTitle& operator=(const DataTitle& other);
     bool operator==(const DataTitle& other) const;
@@ -183,8 +183,8 @@ private:
     void Increase(uint32_t maxid);
     void SaveToStorage(DataTitle& t);
     DataTitle* SaveToMemory(const DataTitle& t);
-    void AddArtist(const ppl7::String& artist);
-    void RemoveArtist(const ppl7::String& artist);
+    void AddArtist(const pplib::String& artist);
+    void RemoveArtist(const pplib::String& artist);
 
 public:
     CTitleStore();
@@ -193,7 +193,7 @@ public:
     virtual void Clear();
     virtual void LoadChunk(const CWMFileChunk& chunk);
 
-    std::map<ppl7::String, uint32_t> Artists;
+    std::map<pplib::String, uint32_t> Artists;
 
     const DataTitle& Put(const DataTitle& title);
     bool Exists(uint32_t id) const;
@@ -213,8 +213,8 @@ class DataDevice : public CStorageItem
 {
 private:
 public:
-    ppl7::String Title;
-    ppl7::String SubTitle;
+    pplib::String Title;
+    pplib::String SubTitle;
     uint32_t DeviceId;
     uint32_t Length;
     uint32_t Recorded;
@@ -237,13 +237,13 @@ public:
 
     void CopyFrom(const DataDevice& other);
     void CopyDataFrom(const DataDevice& other);
-    void SetTitle(const ppl7::String& title);
-    void SetSubTitle(const ppl7::String& subtitle);
-    const ppl7::String& GetTitle() const;
-    const ppl7::String& GetSubTitle() const;
+    void SetTitle(const pplib::String& title);
+    void SetSubTitle(const pplib::String& subtitle);
+    const pplib::String& GetTitle() const;
+    const pplib::String& GetSubTitle() const;
 
-    void Export(ppl7::ByteArray& bin) const;
-    void Import(const ppl7::ByteArrayPtr& bin, int version);
+    void Export(pplib::ByteArray& bin) const;
+    void Import(const pplib::ByteArrayPtr& bin, int version);
 };
 
 class CDeviceStore : public CStorageBase
@@ -292,8 +292,8 @@ public:
     void CopyFrom(const DataTrack& other);
     void CopyDataFrom(const DataTrack& other);
     void SetValue(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId);
-    void Export(ppl7::ByteArray& bin) const;
-    void Import(const ppl7::ByteArrayPtr& bin, int version);
+    void Export(pplib::ByteArray& bin) const;
+    void Import(const pplib::ByteArrayPtr& bin, int version);
 };
 
 class CTrackStore : public CStorageBase
@@ -332,34 +332,34 @@ class DataShortcut : public CStorageItem
 
 private:
 public:
-    ppl7::String shortcut;
-    ppl7::String artist;
+    pplib::String shortcut;
+    pplib::String artist;
 
     DataShortcut();
     DataShortcut(const DataShortcut& other);
-    DataShortcut(const ppl7::String& shortcut, const ppl7::String& artist);
+    DataShortcut(const pplib::String& shortcut, const pplib::String& artist);
     DataShortcut& operator=(const DataShortcut& other);
     void Clear();
     void CopyFrom(const DataShortcut& other);
     void CopyDataFrom(const DataShortcut& other);
-    void Export(ppl7::ByteArray& bin) const;
-    void Import(const ppl7::ByteArrayPtr& bin, int version);
-    void SetValue(const ppl7::String& shortcut, const ppl7::String& artist);
-    const ppl7::String& GetShortcut() const;
-    const ppl7::String& GetArtist() const;
+    void Export(pplib::ByteArray& bin) const;
+    void Import(const pplib::ByteArrayPtr& bin, int version);
+    void SetValue(const pplib::String& shortcut, const pplib::String& artist);
+    const pplib::String& GetShortcut() const;
+    const pplib::String& GetArtist() const;
 };
 
 class CShortcutStore : public CStorageBase
 {
 private:
-    std::map<ppl7::String, DataShortcut> Tree;
+    std::map<pplib::String, DataShortcut> Tree;
 
     void SaveToStorage(DataShortcut& t);
     DataShortcut* SaveToMemory(const DataShortcut& t);
 
 public:
-    typedef std::map<ppl7::String, DataShortcut>::iterator iterator;
-    typedef std::map<ppl7::String, DataShortcut>::const_iterator const_iterator;
+    typedef std::map<pplib::String, DataShortcut>::iterator iterator;
+    typedef std::map<pplib::String, DataShortcut>::const_iterator const_iterator;
 
     CShortcutStore();
     virtual ~CShortcutStore();
@@ -367,9 +367,9 @@ public:
     virtual void Clear();
     virtual void LoadChunk(const CWMFileChunk& chunk);
     void Put(const DataShortcut& entry);
-    const DataShortcut& Get(const ppl7::String& shortcut) const;
-    const DataShortcut* GetPtr(const ppl7::String& shortcut) const;
-    void Delete(const ppl7::String& shortcut);
+    const DataShortcut& Get(const pplib::String& shortcut) const;
+    const DataShortcut* GetPtr(const pplib::String& shortcut) const;
+    void Delete(const pplib::String& shortcut);
     size_t Size() const;
 
     iterator begin();
@@ -387,9 +387,9 @@ class CSimpleTable : public CStorageItem
 public:
     uint32_t Id;
     uint32_t References;
-    ppl7::String Value;
+    pplib::String Value;
     CSimpleTable();
-    CSimpleTable(uint32_t id, const ppl7::String& value, uint32_t references = 0);
+    CSimpleTable(uint32_t id, const pplib::String& value, uint32_t references = 0);
     CSimpleTable(const CSimpleTable& other);
     CSimpleTable& operator=(const CSimpleTable& other);
     virtual ~CSimpleTable();
@@ -397,10 +397,10 @@ public:
     void Clear();
     void CopyFrom(const CSimpleTable& other);
     void CopyDataFrom(const CSimpleTable& other);
-    void Export(ppl7::ByteArray& bin) const;
-    void Import(const ppl7::ByteArrayPtr& bin, int version);
-    void SetValue(const ppl7::String& value);
-    const ppl7::String& GetValue() const;
+    void Export(pplib::ByteArray& bin) const;
+    void Import(const pplib::ByteArrayPtr& bin, int version);
+    void SetValue(const pplib::String& value);
+    const pplib::String& GetValue() const;
 };
 
 class DataVersion : public CSimpleTable
@@ -428,9 +428,9 @@ public:
     typedef std::set<uint32_t> IndexTree;
 
 private:
-    ppl7::String unknown;
-    std::map<ppl7::String, IndexTree> Words;
-    std::map<ppl7::String, uint32_t> Tree;
+    pplib::String unknown;
+    std::map<pplib::String, IndexTree> Words;
+    std::map<pplib::String, uint32_t> Tree;
     CSimpleTable** TableIndex;
     uint32_t max;
     uint32_t highestId;
@@ -458,15 +458,15 @@ public:
     void Delete(uint32_t id);
     const CSimpleTable& Get(uint32_t id) const;
     const CSimpleTable* GetPtr(uint32_t id) const;
-    const ppl7::String& GetValue(uint32_t id) const;
+    const pplib::String& GetValue(uint32_t id) const;
     uint32_t MaxId() const;
     uint32_t Capacity() const;
     uint32_t Size() const;
-    const CSimpleTable* Find(const ppl7::String& value) const;
-    uint32_t GetId(const ppl7::String& value) const;
-    uint32_t FindOrAdd(const ppl7::String& value);
-    size_t FindAll(const ppl7::String& value, IndexTree& Result);
-    size_t FindWords(const ppl7::String& words, IndexTree& tree);
+    const CSimpleTable* Find(const pplib::String& value) const;
+    uint32_t GetId(const pplib::String& value) const;
+    uint32_t FindOrAdd(const pplib::String& value);
+    size_t FindAll(const pplib::String& value, IndexTree& Result);
+    size_t FindWords(const pplib::String& words, IndexTree& tree);
 };
 
 class CVersionStore : public CTableStore

@@ -17,45 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef REGEXPCAPTURE_H_
 #define REGEXPCAPTURE_H_
 
 #include <wm_regexpcapture.h>
 
-
 void copyFromClipboard(de::pfp::winmusik::RegExpClipboard& clip);
-
-
 
 class RegularExpressionCapture
 {
 private:
-	std::vector<de::pfp::winmusik::RegExpPattern> patterns;
-	void copyToMatch(const de::pfp::winmusik::RegExpPattern& p, const std::vector<ppl7::String>& res, de::pfp::winmusik::RegExpMatch& match) const;
-	void addDefaultPatterns();
+    std::vector<de::pfp::winmusik::RegExpPattern> patterns;
+    void copyToMatch(const de::pfp::winmusik::RegExpPattern& p,
+                     const std::vector<pplib::String>& res,
+                     de::pfp::winmusik::RegExpMatch& match) const;
+    void addDefaultPatterns();
 
 public:
-	RegularExpressionCapture();
-	~RegularExpressionCapture();
+    RegularExpressionCapture();
+    ~RegularExpressionCapture();
 
-	void load();
-	void save();
-	void addPattern(const de::pfp::winmusik::RegExpPattern& pattern);
-	void insertPattern(size_t pos, const de::pfp::winmusik::RegExpPattern& pattern);
-	void setPattern(size_t pos, const de::pfp::winmusik::RegExpPattern& pattern);
-	void deletePattern(size_t pos);
-	const de::pfp::winmusik::RegExpPattern& getPattern(size_t pos) const;
-	size_t size() const;
+    void load();
+    void save();
+    void addPattern(const de::pfp::winmusik::RegExpPattern& pattern);
+    void insertPattern(size_t pos, const de::pfp::winmusik::RegExpPattern& pattern);
+    void setPattern(size_t pos, const de::pfp::winmusik::RegExpPattern& pattern);
+    void deletePattern(size_t pos);
+    const de::pfp::winmusik::RegExpPattern& getPattern(size_t pos) const;
+    size_t size() const;
 
-	bool match(const ppl7::String& data, de::pfp::winmusik::RegExpMatch& match) const;
-	bool match(const de::pfp::winmusik::RegExpClipboard& data, de::pfp::winmusik::RegExpMatch& match) const;
-	bool testMatch(const ppl7::String& data, de::pfp::winmusik::RegExpMatch& match, const de::pfp::winmusik::RegExpPattern& pattern) const;
-
-
-
-
+    bool match(const pplib::String& data, de::pfp::winmusik::RegExpMatch& match) const;
+    bool match(const de::pfp::winmusik::RegExpClipboard& data, de::pfp::winmusik::RegExpMatch& match) const;
+    bool testMatch(const pplib::String& data, de::pfp::winmusik::RegExpMatch& match, const de::pfp::winmusik::RegExpPattern& pattern) const;
 };
-
 
 #endif /* REGEXPCAPTURE_H_ */

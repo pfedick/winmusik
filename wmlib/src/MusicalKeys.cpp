@@ -26,7 +26,7 @@ namespace pfp
 namespace winmusik
 {
 
-static inline ppl7::String keyNameSharps(int id)
+static inline pplib::String keyNameSharps(int id)
 {
     switch (id) {
     case 1:
@@ -84,7 +84,7 @@ static inline ppl7::String keyNameSharps(int id)
     }
 }
 
-static inline ppl7::String keyNameFlats(int id)
+static inline pplib::String keyNameFlats(int id)
 {
     switch (id) {
     case 1:
@@ -142,7 +142,7 @@ static inline ppl7::String keyNameFlats(int id)
     }
 }
 
-static inline ppl7::String keyNameOpenKey(int id)
+static inline pplib::String keyNameOpenKey(int id)
 {
     switch (id) {
     case 1:
@@ -200,23 +200,23 @@ static inline ppl7::String keyNameOpenKey(int id)
     }
 }
 
-void MusicalKeys::setCustomName(const ppl7::String& name)
+void MusicalKeys::setCustomName(const pplib::String& name)
 {
     customname.set(name);
 }
 
-const ppl7::String& MusicalKeys::customName() const
+const pplib::String& MusicalKeys::customName() const
 {
     return customname;
 }
 
-void MusicalKeys::setCustomKeyName(int key, const ppl7::String& name)
+void MusicalKeys::setCustomKeyName(int key, const pplib::String& name)
 {
     if (key < 1 || key > 25) return;
     customkey[key].set(name);
 }
 
-ppl7::String MusicalKeys::keyName(int id, MusicKeyType type) const
+pplib::String MusicalKeys::keyName(int id, MusicKeyType type) const
 {
     if (type == musicKeyTypeMusicalSharps)
         return keyNameSharps(id);
@@ -231,24 +231,24 @@ ppl7::String MusicalKeys::keyName(int id, MusicKeyType type) const
     return "";
 }
 
-ppl7::String MusicalKeys::sharpName(int id)
+pplib::String MusicalKeys::sharpName(int id)
 {
     return keyNameSharps(id);
 }
 
-ppl7::String MusicalKeys::flatName(int id)
+pplib::String MusicalKeys::flatName(int id)
 {
     return keyNameFlats(id);
 }
 
-ppl7::String MusicalKeys::openKeyName(int id)
+pplib::String MusicalKeys::openKeyName(int id)
 {
     return keyNameOpenKey(id);
 }
 
-ppl7::String MusicalKeys::ID3TagTkeyNameSharp(int id)
+pplib::String MusicalKeys::ID3TagTkeyNameSharp(int id)
 {
-    ppl7::String k = keyNameSharps(id);
+    pplib::String k = keyNameSharps(id);
     k.replace("♯", "#");
     k.replace("♭", "b");
     k.replace("none", "o");
@@ -256,9 +256,9 @@ ppl7::String MusicalKeys::ID3TagTkeyNameSharp(int id)
     return k;
 }
 
-ppl7::String MusicalKeys::ID3TagTkeyNameFlat(int id)
+pplib::String MusicalKeys::ID3TagTkeyNameFlat(int id)
 {
-    ppl7::String k = keyNameFlats(id);
+    pplib::String k = keyNameFlats(id);
     k.replace("♯", "#");
     k.replace("♭", "b");
     k.replace("none", "o");
@@ -266,10 +266,10 @@ ppl7::String MusicalKeys::ID3TagTkeyNameFlat(int id)
     return k;
 }
 
-int MusicalKeys::keyId(const ppl7::String& name) const
+int MusicalKeys::keyId(const pplib::String& name) const
 {
     // TODO: can be improved and speed up by using a map for all keynames
-    ppl7::String k = name;
+    pplib::String k = name;
     k.replace("♯", "#");
     k.replace("♭", "b");
     k.trim();
@@ -277,7 +277,7 @@ int MusicalKeys::keyId(const ppl7::String& name) const
     if (k.isEmpty()) return 0;
 
     for (int i = 1; i < 26; i++) {
-        ppl7::String tmp = ppl7::LowerCase(ppl7::Trim(customkey[i]));
+        pplib::String tmp = pplib::LowerCase(pplib::Trim(customkey[i]));
         if (tmp == k) return i;
     }
 

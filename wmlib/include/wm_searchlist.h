@@ -37,42 +37,42 @@ class SearchlistItem
 {
 private:
 public:
-    ppl7::String Artist;
-    ppl7::String Title;
-    ppl7::String Version;
-    ppl7::String Genre;
-    ppl7::String Comment;
-    ppl7::DateTime DateAdded;
-    ppl7::DateTime ReleaseDate;
+    pplib::String Artist;
+    pplib::String Title;
+    pplib::String Version;
+    pplib::String Genre;
+    pplib::String Comment;
+    pplib::DateTime DateAdded;
+    pplib::DateTime ReleaseDate;
     int Length;
     bool found;
     bool selected;
     uint8_t Rating;
 
     SearchlistItem();
-    SearchlistItem(const ppl7::String& Misc);
-    SearchlistItem(const ppl7::String& Artist, const ppl7::String& Title, const ppl7::String Version = "");
+    SearchlistItem(const pplib::String& Misc);
+    SearchlistItem(const pplib::String& Artist, const pplib::String& Title, const pplib::String Version = "");
     void clear();
-    void importXML(const ppl7::String& xml);
-    ppl7::String exportXML() const;
+    void importXML(const pplib::String& xml);
+    pplib::String exportXML() const;
 };
 
 class Searchlist
 {
 private:
     std::vector<SearchlistItem> list;
-    ppl7::String Name;
-    ppl7::DateTime DateCreated;
-    ppl7::DateTime DateUpdated;
+    pplib::String Name;
+    pplib::DateTime DateCreated;
+    pplib::DateTime DateUpdated;
 
 public:
     Searchlist();
     ~Searchlist();
 
-    void setName(const ppl7::String& name);
-    const ppl7::String& name() const;
-    const ppl7::DateTime& dateCreated() const;
-    const ppl7::DateTime& dateUpdated() const;
+    void setName(const pplib::String& name);
+    const pplib::String& name() const;
+    const pplib::DateTime& dateCreated() const;
+    const pplib::DateTime& dateUpdated() const;
     size_t size() const;
     void clear();
     void add(const SearchlistItem& item);
@@ -83,10 +83,10 @@ public:
     SearchlistItem& get(size_t pos);
     const SearchlistItem& operator[](size_t pos) const;
     SearchlistItem& operator[](size_t pos);
-    ppl7::String toXML() const;
+    pplib::String toXML() const;
 
-    int save(const ppl7::String& filename) const;
-    int load(const ppl7::String& filename, bool headerOnly = false);
+    int save(const pplib::String& filename) const;
+    int load(const pplib::String& filename, bool headerOnly = false);
 };
 
 } // namespace winmusik

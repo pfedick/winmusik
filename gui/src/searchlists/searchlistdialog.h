@@ -64,7 +64,7 @@ class SearchlistDialog : public QWidget
     Q_OBJECT
 
 public:
-    SearchlistDialog(QWidget* parent = 0, CWmClient* wm = NULL, const ppl7::String& Filename = "");
+    SearchlistDialog(QWidget* parent = 0, CWmClient* wm = NULL, const pplib::String& Filename = "");
     ~SearchlistDialog();
     void ReloadTranslation();
     void addTrack(const SearchlistItem& track);
@@ -105,11 +105,11 @@ private:
     bool haveCopyItem;
 
     CSearchlist List;
-    ppl7::String Filename;
+    pplib::String Filename;
     QWidget* searchWindow;
 
     QTimer ClipBoardTimer;
-    ppl7::String LastClipboardString;
+    pplib::String LastClipboardString;
 
     QStatusBar* statusbar;
     QLabel* statusbarTrackNumber;
@@ -123,7 +123,7 @@ public slots:
     void on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column);
     void on_trackList_itemSelectionChanged();
     void on_trackList_itemDropped(SearchlistItem* item);
-    void on_trackList_urlDropped(const ppl7::String& url);
+    void on_trackList_urlDropped(const pplib::String& url);
     void on_trackList_changed();
 
     void on_contextEditTrack_triggered();

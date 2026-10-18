@@ -28,29 +28,25 @@
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 
-namespace de {
-namespace pfp {
-namespace winmusik {
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
-
-
-
-class StorageItemTest : public ::testing::Test {
+class StorageItemTest : public ::testing::Test
+{
 protected:
-	StorageItemTest() {
-		//ppl7::Dir::mkDir("tmp/title", true);
-
-	}
-	~StorageItemTest()
-	{
-
-	}
+    StorageItemTest()
+    {
+        // pplib::Dir::mkDir("tmp/title", true);
+    }
+    ~StorageItemTest()
+    {
+    }
 };
 
-
-
-
-
-}
-}
-} // EOF namespace
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

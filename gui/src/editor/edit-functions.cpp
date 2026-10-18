@@ -49,7 +49,7 @@
 
 void Edit::UpdateDevice()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     wm->LoadDevice(DeviceType, DeviceId, &datadevice);
     Tmp.setf("%u", datadevice.Pages);
     ui.devicePages->setText(Tmp);
@@ -92,7 +92,7 @@ bool Edit::EditTrack()
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Cover = QPixmap();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     DupeCheck = false;
     DupeCheckIcon = ":/fkeys/resources/fkeys/f-key-2005.png";
     ClearEditFields();
@@ -118,13 +118,13 @@ bool Edit::EditTrack()
     if (Ti.TitleId) FillEditFields();
 
     // Dateiname
-    ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+    pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
     if (Path.isEmpty()) {
         ui.filename->setText(tr("file not found"));
         ui.filename->setStyleSheet("color: red");
         ui.filesize->setText("");
         // Wir versuchen das Cover aus der Cover-Datei zu laden, falls es existiert
-        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+        pplib::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
         Path.appendf("/%d.jpg", TrackNum);
         if (ui.coverwidget->setPixmapFromFile(Path)) {
             Cover = ui.coverwidget->getPixmap();
@@ -133,8 +133,8 @@ bool Edit::EditTrack()
     } else {
         ui.filename->setText(Path);
         ui.filename->setStyleSheet("");
-        ppl7::DirEntry de;
-        if (ppl7::File::tryStatFile(Path, de)) {
+        pplib::DirEntry de;
+        if (pplib::File::tryStatFile(Path, de)) {
             Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
             ui.filesize->setText(Tmp);
             // Wir versuchen das Cover aus der Audio-Datei zu laden, falls es existiert
@@ -142,7 +142,7 @@ bool Edit::EditTrack()
                 Cover = ui.coverwidget->getPixmap();
             } else {
                 // Wir versuchen das Cover aus der Cover-Datei zu laden, falls es existiert
-                ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+                pplib::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
                 Path.appendf("/%d.jpg", TrackNum);
                 if (ui.coverwidget->setPixmapFromFile(Path)) {
                     Cover = ui.coverwidget->getPixmap();
@@ -193,7 +193,7 @@ void Edit::ClearEditFields()
 
 void Edit::FillEditFields()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
 
     // TitleId und Version
     Tmp.setf("%u", Ti.TitleId);
@@ -236,7 +236,7 @@ void Edit::FillEditFields()
     ui.bpm->setText(Tmp);
 
     // Music Key
-    ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(Ti.Key, musicKeyDisplay)));
+    ui.musickey->setText(pplib::Trim(wm_main->MusicKeys.keyName(Ti.Key, musicKeyDisplay)));
 
     // EnergyLevel
     ui.energyLevel->setValue(Ti.EnergyLevel);
@@ -338,7 +338,7 @@ void Edit::UpdateTrackListing()
  */
 {
     QString QTmp;
-    ppl7::String Text, Tmp;
+    pplib::String Text, Tmp;
     WMTreeItem* item;
     const DataTrack* track;
     const DataTitle* title;
@@ -399,8 +399,8 @@ void Edit::UpdateTrackListing()
 void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 {
     // QString QTmp;
-    ppl7::String Text, Tmp;
-    ppl7::String Unknown = tr("unknown");
+    pplib::String Text, Tmp;
+    pplib::String Unknown = tr("unknown");
     const char* unknown = (const char*)Unknown;
     const DataVersion* version;
     const DataGenre* genre;
@@ -492,18 +492,18 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 
     if (title.Size == 0) {
         // printf ("title->Size ist Null, führe Stat durch\n");
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, title.DeviceId, title.Page, title.Track);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, title.DeviceId, title.Page, title.Track);
         if (Path.notEmpty()) {
-            ppl7::DirEntry de;
-            if (ppl7::File::tryStatFile(Path, de)) {
+            pplib::DirEntry de;
+            if (pplib::File::tryStatFile(Path, de)) {
                 // printf ("Stat erfolgreich\n");
                 DataTitle ti;
                 ti.CopyFrom(title);
                 ti.Size = de.Size;
-                ppl7::ID3Tag Tag;
+                pplib::ID3Tag Tag;
                 if (Tag.tryLoad(Path)) {
                     // Cover?
-                    ppl7::ByteArray cover;
+                    pplib::ByteArray cover;
                     QPixmap pix, icon;
                     if (Tag.getPicture(3, cover)) {
                         pix.loadFromData((const uchar*)cover.ptr(), cover.size());
@@ -536,7 +536,7 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
 
 void Edit::SaveEditorTrack()
 {
-    ppl7::String Tmp, Artist, Title;
+    pplib::String Tmp, Artist, Title;
     // Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
     if (!TCVersion.Finish()) {
         ui.versionId->setFocus();
@@ -628,7 +628,7 @@ void Edit::SaveEditorTrack()
 
     // Tags
     Tmp = ui.tags->text();
-    Tmp = ppl7::Trim(ppl7::LowerCase(Tmp));
+    Tmp = pplib::Trim(pplib::LowerCase(Tmp));
     Ti.SetTags(Tmp);
 
     // Flags
@@ -664,7 +664,7 @@ void Edit::SaveEditorTrack()
     Ti.Track = TrackNum;
 
     // Cover
-    ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+    pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
     TrackInfo tinfo;
     if (getTrackInfoFromFile(tinfo, Path)) {
         Ti.Bitrate = tinfo.Ti.Bitrate;
@@ -729,7 +729,7 @@ bool Edit::SaveTrack(DataTitle& Ti)
         try {
             Ti.TitleId = wm->TitleStore.Put(Ti).TitleId;
         }
-        catch (const ppl7::Exception& exp) {
+        catch (const pplib::Exception& exp) {
             ShowException(exp, tr("Could not save Title in TitleStore"));
             ui.artist->setFocus();
             if (Ti.TitleId > 0) wm->Hashes.AddTitle(Ti.TitleId);
@@ -744,7 +744,7 @@ bool Edit::SaveTrack(DataTitle& Ti)
         try {
             TrackList.Put(Track);
         }
-        catch (const ppl7::Exception& exp) {
+        catch (const pplib::Exception& exp) {
             ShowException(exp, tr("Could not save Track in TrackList"));
             ui.artist->setFocus();
             return false;
@@ -757,14 +757,14 @@ bool Edit::SaveTrack(DataTitle& Ti)
     // ID3-Tags speichern, sofern gewünscht und eine Datei vorhanden ist
     if (wm_main->conf.bWriteID3Tags == true) {
 
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, Track.DeviceId, Page, Track.Track);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, Track.DeviceId, Page, Track.Track);
         if (Path.notEmpty()) {
-            ppl7::ID3Tag Tag;
+            pplib::ID3Tag Tag;
             if (Tag.tryLoad(Path)) {
                 if (!Tag.hasPicture(3) && ui.coverwidget->hasCover()) {
                     // Cover speichern
-                    // ppl7::PrintDebug("Saving cover to ID3 Tag\n");
-                    ppl7::ByteArray cover;
+                    // pplib::PrintDebug("Saving cover to ID3 Tag\n");
+                    pplib::ByteArray cover;
                     QPixmap pix = ui.coverwidget->getPixmap();
                     QByteArray bytes;
                     QBuffer buffer(&bytes);
@@ -789,12 +789,12 @@ void Edit::UpdateCompleters()
     Titles.clear();
     Albums.clear();
 
-    std::map<ppl7::String, uint32_t>::const_iterator it;
+    std::map<pplib::String, uint32_t>::const_iterator it;
     for (it = wm->TitleStore.Artists.begin(); it != wm->TitleStore.Artists.end(); ++it) {
         Artists.append((*it).first);
     }
-    std::set<ppl7::String> TmpTitles;
-    std::set<ppl7::String> TmpAlbums;
+    std::set<pplib::String> TmpTitles;
+    std::set<pplib::String> TmpAlbums;
 
     // Höchste Tracknummer
     int max = TrackList.GetMax();
@@ -816,7 +816,7 @@ void Edit::UpdateCompleters()
     }
 
     {
-        std::set<ppl7::String>::const_iterator it;
+        std::set<pplib::String>::const_iterator it;
         for (it = TmpTitles.begin(); it != TmpTitles.end(); ++it) {
             Titles.append(*it);
         }
@@ -828,7 +828,7 @@ void Edit::UpdateCompleters()
 
 void Edit::CopyFromTrackInfo(TrackInfo& info)
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     ui.artist->setText(info.Ti.Artist); // Artist
     ui.title->setText(info.Ti.Title);   // Title
     ui.album->setText(info.Ti.Album);   // Album
@@ -873,7 +873,7 @@ void Edit::CopyFromTrackInfo(TrackInfo& info)
     }
 
     // Music Key
-    ui.musickey->setText(ppl7::Trim(wm_main->MusicKeys.keyName(info.Ti.Key, musicKeyDisplay)));
+    ui.musickey->setText(pplib::Trim(wm_main->MusicKeys.keyName(info.Ti.Key, musicKeyDisplay)));
 
     if (info.Version.isEmpty()) { // Version
         if (info.Ti.Length < 5 * 60) {
@@ -915,15 +915,15 @@ void Edit::UpdateCover()
 {
     wm->UpdateCoverViewer(Cover);
     if (wm_main->conf.bWriteID3Tags == true) {
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
-        if (Path.notEmpty() && ppl7::File::exists(Path)) {
+        pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+        if (Path.notEmpty() && pplib::File::exists(Path)) {
             saveCover(Path, Cover);
         } else {
             Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
-            ppl7::Dir::mkDir(Path, true);
+            pplib::Dir::mkDir(Path, true);
             Path.appendf("/%d.jpg", TrackNum);
             // TODO: Cover in Datei speichern, wenn keine Audio-Datei existiert
-            ppl7::PrintDebug("Saving cover to file %s\n", (const char*)Path);
+            pplib::PrintDebug("Saving cover to file %s\n", (const char*)Path);
             saveCoverToFile(Path, Cover);
         }
     }
@@ -952,8 +952,8 @@ void Edit::showEditorWithoutFocusChange()
 
 void Edit::importFromCddb()
 {
-    if (ppl7::AudioCD::isSupported() != true || ppl7::CDDB::isSupported() != true) return;
-    ppl7::CDDB::Matches matches;
+    if (pplib::AudioCD::isSupported() != true || pplib::CDDB::isSupported() != true) return;
+    pplib::CDDB::Matches matches;
     asynchronousMessage msg;
     msg.setMessageText(tr("Reading and querying cd in internet database, please wait."));
     msg.show();
@@ -961,7 +961,7 @@ void Edit::importFromCddb()
     QCoreApplication::sendPostedEvents();
     QCoreApplication::processEvents();
 
-    ppl7::CDDB cddb;
+    pplib::CDDB cddb;
     cddb.setHttpServer(wm->conf.cddb.server, wm->conf.cddb.port);
     cddb.setUser(wm->conf.cddb.username, wm->conf.cddb.hostname);
     cddb.setClient(WM_APPNAME, WM_VERSION);
@@ -970,14 +970,14 @@ void Edit::importFromCddb()
     }
 
     try {
-        ppl7::AudioCD cd;
+        pplib::AudioCD cd;
         QCoreApplication::processEvents();
         cd.openDevice();
         QCoreApplication::processEvents();
         cddb.query(cd, matches);
         QCoreApplication::processEvents();
     }
-    catch (const ppl7::Exception& e) {
+    catch (const pplib::Exception& e) {
         msg.setVisible(false);
         ShowException(e, tr("An error occured, when trying to access the audio cd or querying the internet database"));
         return;
@@ -989,7 +989,7 @@ void Edit::importFromCddb()
                                  QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
-    ppl7::CDDB::Disc disc;
+    pplib::CDDB::Disc disc;
     // If we have more than one result, we show a selection dialog
     if (matches.size() > 1) {
         CDDBSelect cddbselect(this, wm);
@@ -1014,7 +1014,7 @@ void Edit::importFromCddb()
 
 void Edit::renumber()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     RenumberDialog Dialog(this, wm);
     Dialog.setModal(true);
     Dialog.setOldNumber(DeviceId);
@@ -1030,12 +1030,12 @@ void Edit::renumber()
 
     // Zielverzeichnisse anlegen
     for (int i = 1; i <= datadevice.Pages; i++) {
-        ppl7::String Path = wm->GetAudioPath(DeviceType, newDeviceId, i);
+        pplib::String Path = wm->GetAudioPath(DeviceType, newDeviceId, i);
         if (Path.notEmpty()) {
             try {
-                ppl7::Dir::mkDir(Path, true);
+                pplib::Dir::mkDir(Path, true);
             }
-            catch (const ppl7::Exception& exp) {
+            catch (const pplib::Exception& exp) {
                 ShowException(exp, tr("could not create device directory in filesystem"));
             }
         }
@@ -1053,14 +1053,14 @@ void Edit::renumber()
                 wm->TrackStore.Put(track);
                 if (wm->TitleStore.Exists(track.TitleId)) {
                     DataTitle ti = wm->TitleStore.Get(track.TitleId);
-                    ppl7::String OldFile = wm->GetAudioFilename(ti.DeviceType, ti.DeviceId, ti.Page, ti.Track);
+                    pplib::String OldFile = wm->GetAudioFilename(ti.DeviceType, ti.DeviceId, ti.Page, ti.Track);
                     if (OldFile.notEmpty()) {
-                        ppl7::String NewPath = wm->GetAudioPath(DeviceType, newDeviceId, ti.Page);
+                        pplib::String NewPath = wm->GetAudioPath(DeviceType, newDeviceId, ti.Page);
                         if (NewPath.notEmpty()) {
                             try {
-                                ppl7::File::rename(OldFile, NewPath + "/" + ppl7::File::getFilename(OldFile));
+                                pplib::File::rename(OldFile, NewPath + "/" + pplib::File::getFilename(OldFile));
                             }
-                            catch (const ppl7::Exception& exp) {
+                            catch (const pplib::Exception& exp) {
                                 ShowException(exp, tr("could not rename audio file"));
                             }
                         }
@@ -1078,7 +1078,7 @@ void Edit::renumber()
         OpenTrack(newDeviceId, Page, 0);
         return;
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("could not renumber Device"));
     }
 }
@@ -1094,15 +1094,15 @@ void Edit::on_coverwidget_imageDeleted()
     Cover = QPixmap();
     wm->UpdateCoverViewer(Cover);
     if (wm_main->conf.bWriteID3Tags == true) {
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
         if (Path.notEmpty()) {
             try {
-                ppl7::ID3Tag Tag;
+                pplib::ID3Tag Tag;
                 Tag.load(Path);
                 Tag.removePicture(3);
                 Tag.save();
             }
-            catch (const ppl7::Exception& exp) {
+            catch (const pplib::Exception& exp) {
                 ShowException(exp, tr("could not remove cover picture from audio file"));
             }
         }

@@ -45,23 +45,23 @@ enum MusicKeyType
 class MusicalKeys
 {
 private:
-    ppl7::String customname;
-    ppl7::String customkey[26];
+    pplib::String customname;
+    pplib::String customkey[26];
 
 public:
-    void setCustomName(const ppl7::String& name);
-    const ppl7::String& customName() const;
-    void setCustomKeyName(int key, const ppl7::String& name);
+    void setCustomName(const pplib::String& name);
+    const pplib::String& customName() const;
+    void setCustomKeyName(int key, const pplib::String& name);
 
-    ppl7::String keyName(int id, MusicKeyType type) const;
-    int keyId(const ppl7::String& name) const;
+    pplib::String keyName(int id, MusicKeyType type) const;
+    int keyId(const pplib::String& name) const;
 
-    static ppl7::String sharpName(int id);
-    static ppl7::String flatName(int id);
-    static ppl7::String openKeyName(int id);
+    static pplib::String sharpName(int id);
+    static pplib::String flatName(int id);
+    static pplib::String openKeyName(int id);
 
-    static ppl7::String ID3TagTkeyNameSharp(int id);
-    static ppl7::String ID3TagTkeyNameFlat(int id);
+    static pplib::String ID3TagTkeyNameSharp(int id);
+    static pplib::String ID3TagTkeyNameFlat(int id);
 };
 
 } // namespace winmusik

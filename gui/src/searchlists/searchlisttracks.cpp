@@ -64,7 +64,7 @@ QMimeData* SearchlistTracks::mimeData(const QList<QTreeWidgetItem*>& items) cons
 {
     // printf("SearchlistTracks::mimeData\n");
     QList<QUrl> list;
-    ppl7::String xml;
+    pplib::String xml;
     xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     xml += "<winmusikSearchlist version=\"1\">\n";
     xml += "<tracks>\n";
@@ -111,16 +111,16 @@ void SearchlistTracks::dropEvent(QDropEvent* event)
     const QMimeData* data = event->mimeData();
     /*
     if (data->hasUrls()) {
-        ppl7::PrintDebug("We have URLs\n");
+        pplib::PrintDebug("We have URLs\n");
     }
         */
     if (data->hasHtml()) {
-        ppl7::String html = data->html();
-        ppl7::RegEx::MatchVector matches;
-        if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
+        pplib::String html = data->html();
+        pplib::RegEx::MatchVector matches;
+        if (pplib::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
             event->accept();
             // Den Drop sofort abschließen, damit der Browser nicht blockiert
-            ppl7::String url = matches[1];
+            pplib::String url = matches[1];
             QTimer::singleShot(0, this, [this, url]() {
                 emit urlDropped(url);
                 // Hier auch gleich den Fokus holen:
@@ -132,8 +132,8 @@ void SearchlistTracks::dropEvent(QDropEvent* event)
     }
     /*
     if (data->hasText()) {
-        ppl7::PrintDebug("We have Text\n");
-        ppl7::PrintDebug("%s\n", (const char*)data->text().toLocal8Bit());
+        pplib::PrintDebug("We have Text\n");
+        pplib::PrintDebug("%s\n", (const char*)data->text().toLocal8Bit());
     }
         */
 
@@ -149,7 +149,7 @@ void SearchlistTracks::dropEvent(QDropEvent* event)
         return;
     }
     event->accept();
-    ppl7::Array rows;
+    pplib::Array rows;
     rows.explode(data->text(), "<searchlistitem>");
     for (size_t i = 1; i < rows.size(); i++) {
         SearchlistItem* item = new SearchlistItem();

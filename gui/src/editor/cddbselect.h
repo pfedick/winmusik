@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef CDDBSELECT_H_
 #define CDDBSELECT_H_
 
@@ -36,15 +35,14 @@ public:
     CDDBSelect(QWidget* parent = 0, CWmClient* wm = NULL);
     ~CDDBSelect();
 
-    void setMatches(const ppl7::CDDB::Matches& matches);
-    ppl7::CDDB::Disc getSelected();
-
+    void setMatches(const pplib::CDDB::Matches& matches);
+    pplib::CDDB::Disc getSelected();
 
 private:
     class CddbItem : public QTreeWidgetItem
     {
     public:
-        ppl7::CDDB::Disc disc;
+        pplib::CDDB::Disc disc;
     };
     Ui::CDDBSelect ui;
     CWmClient* wm;
@@ -62,10 +60,5 @@ public slots:
     void on_tracklist_itemDoubleClicked(QTreeWidgetItem* item, int column);
     void on_cancelButton_clicked();
 };
-
-
-
-
-
 
 #endif /* CDDBSELECT_H_ */

@@ -28,152 +28,151 @@
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 
-namespace {
+namespace
+{
 
 using namespace de::pfp::winmusik;
 
-
-class StorageTrackTest : public ::testing::Test {
+class StorageTrackTest : public ::testing::Test
+{
 protected:
-	StorageTrackTest() {
-		ppl7::Dir::mkDir("tmp/track", true);
-
-	}
-	~StorageTrackTest()
-	{
-
-	}
+    StorageTrackTest()
+    {
+        pplib::Dir::mkDir("tmp/track", true);
+    }
+    ~StorageTrackTest()
+    {
+    }
 };
 
-TEST_F(StorageTrackTest, DataTrack_Constructor) {
-	DataTrack d1;
-	ASSERT_EQ((uint32_t)0, d1.DeviceId);
-	ASSERT_EQ((uint32_t)0, d1.TitleId);
-	ASSERT_EQ((uint16_t)0, d1.Track);
-	ASSERT_EQ((uint8_t)0, d1.Device);
-	ASSERT_EQ((uint8_t)0, d1.Page);
-
+TEST_F(StorageTrackTest, DataTrack_Constructor)
+{
+    DataTrack d1;
+    ASSERT_EQ((uint32_t)0, d1.DeviceId);
+    ASSERT_EQ((uint32_t)0, d1.TitleId);
+    ASSERT_EQ((uint16_t)0, d1.Track);
+    ASSERT_EQ((uint8_t)0, d1.Device);
+    ASSERT_EQ((uint8_t)0, d1.Page);
 }
 
-TEST_F(StorageTrackTest, DataTrack_CopyFrom) {
-	DataTrack d1;
-	d1.SetValue(1, 2, 3, 4, 1234);
+TEST_F(StorageTrackTest, DataTrack_CopyFrom)
+{
+    DataTrack d1;
+    d1.SetValue(1, 2, 3, 4, 1234);
 
-	DataTrack d2;
-	d2.CopyFrom(d1);
-	ASSERT_EQ((uint32_t)2, d2.DeviceId);
-	ASSERT_EQ((uint32_t)1234, d2.TitleId);
-	ASSERT_EQ((uint16_t)4, d2.Track);
-	ASSERT_EQ((uint8_t)1, d2.Device);
-	ASSERT_EQ((uint8_t)3, d2.Page);
+    DataTrack d2;
+    d2.CopyFrom(d1);
+    ASSERT_EQ((uint32_t)2, d2.DeviceId);
+    ASSERT_EQ((uint32_t)1234, d2.TitleId);
+    ASSERT_EQ((uint16_t)4, d2.Track);
+    ASSERT_EQ((uint8_t)1, d2.Device);
+    ASSERT_EQ((uint8_t)3, d2.Page);
 }
 
-TEST_F(StorageTrackTest, DataTrack_Clear) {
-	DataTrack d1;
-	d1.SetValue(1, 2, 3, 4, 1234);
-	d1.Clear();
-	ASSERT_EQ((uint32_t)0, d1.DeviceId);
-	ASSERT_EQ((uint32_t)0, d1.TitleId);
-	ASSERT_EQ((uint16_t)0, d1.Track);
-	ASSERT_EQ((uint8_t)0, d1.Device);
-	ASSERT_EQ((uint8_t)0, d1.Page);
+TEST_F(StorageTrackTest, DataTrack_Clear)
+{
+    DataTrack d1;
+    d1.SetValue(1, 2, 3, 4, 1234);
+    d1.Clear();
+    ASSERT_EQ((uint32_t)0, d1.DeviceId);
+    ASSERT_EQ((uint32_t)0, d1.TitleId);
+    ASSERT_EQ((uint16_t)0, d1.Track);
+    ASSERT_EQ((uint8_t)0, d1.Device);
+    ASSERT_EQ((uint8_t)0, d1.Page);
 }
 
-TEST_F(StorageTrackTest, DataTrack_ExportImport) {
-	DataTrack d1;
-	d1.SetValue(1, 2, 3, 4, 1234);
-	ppl7::ByteArray bin;
-	d1.Export(bin);
-	ASSERT_EQ((uint8_t)1, d1.GetFormatVersion());
-	DataTrack d2;
-	d2.Import(bin, d1.GetFormatVersion());
-	ASSERT_EQ((uint32_t)2, d2.DeviceId);
-	ASSERT_EQ((uint32_t)1234, d2.TitleId);
-	ASSERT_EQ((uint16_t)4, d2.Track);
-	ASSERT_EQ((uint8_t)1, d2.Device);
-	ASSERT_EQ((uint8_t)3, d2.Page);
+TEST_F(StorageTrackTest, DataTrack_ExportImport)
+{
+    DataTrack d1;
+    d1.SetValue(1, 2, 3, 4, 1234);
+    pplib::ByteArray bin;
+    d1.Export(bin);
+    ASSERT_EQ((uint8_t)1, d1.GetFormatVersion());
+    DataTrack d2;
+    d2.Import(bin, d1.GetFormatVersion());
+    ASSERT_EQ((uint32_t)2, d2.DeviceId);
+    ASSERT_EQ((uint32_t)1234, d2.TitleId);
+    ASSERT_EQ((uint16_t)4, d2.Track);
+    ASSERT_EQ((uint8_t)1, d2.Device);
+    ASSERT_EQ((uint8_t)3, d2.Page);
 }
 
+TEST_F(StorageTrackTest, PutGetExists)
+{
+    CTrackStore store;
+    CStorage storage;
+    storage.Init("tmp/track", "PutAndGet.dat");
+    storage.RegisterStorageClass(&store);
+    storage.DeleteDatabase();
 
-TEST_F(StorageTrackTest, PutGetExists) {
-	CTrackStore store;
-	CStorage storage;
-	storage.Init("tmp/track", "PutAndGet.dat");
-	storage.RegisterStorageClass(&store);
-	storage.DeleteDatabase();
+    DataTrack d1(1, 10, 2, 1, 10001);
+    {
+        const DataTrack& newd = store.Put(d1);
+        ASSERT_EQ((uint32_t)10, newd.DeviceId);
+        ASSERT_EQ((uint32_t)10001, newd.TitleId);
+        ASSERT_EQ((uint16_t)1, newd.Track);
+        ASSERT_EQ((uint8_t)1, newd.Device);
+        ASSERT_EQ((uint8_t)2, newd.Page);
+    }
+    store.Put(DataTrack(1, 10, 2, 1, 10000));
+    store.Put(DataTrack(1, 10, 2, 2, 10001));
+    store.Put(DataTrack(1, 10, 2, 3, 10002));
+    store.Put(DataTrack(1, 10, 2, 4, 10004));
 
-	DataTrack d1(1, 10, 2, 1, 10001);
-	{
-		const DataTrack& newd=store.Put(d1);
-		ASSERT_EQ((uint32_t)10, newd.DeviceId);
-		ASSERT_EQ((uint32_t)10001, newd.TitleId);
-		ASSERT_EQ((uint16_t)1, newd.Track);
-		ASSERT_EQ((uint8_t)1, newd.Device);
-		ASSERT_EQ((uint8_t)2, newd.Page);
-	}
-	store.Put(DataTrack(1, 10, 2, 1, 10000));
-	store.Put(DataTrack(1, 10, 2, 2, 10001));
-	store.Put(DataTrack(1, 10, 2, 3, 10002));
-	store.Put(DataTrack(1, 10, 2, 4, 10004));
+    ASSERT_TRUE(store.Exists(1, 10, 2));
+    ASSERT_FALSE(store.Exists(1, 10, 1));
+    ASSERT_TRUE(store.Exists(1, 10, 2, 1));
+    ASSERT_TRUE(store.Exists(1, 10, 2, 4));
+    ASSERT_FALSE(store.Exists(1, 10, 2, 5));
+    ASSERT_FALSE(store.Exists(1, 10, 2, 0));
 
-	ASSERT_TRUE(store.Exists(1, 10, 2));
-	ASSERT_FALSE(store.Exists(1, 10, 1));
-	ASSERT_TRUE(store.Exists(1, 10, 2, 1));
-	ASSERT_TRUE(store.Exists(1, 10, 2, 4));
-	ASSERT_FALSE(store.Exists(1, 10, 2, 5));
-	ASSERT_FALSE(store.Exists(1, 10, 2, 0));
+    ASSERT_EQ((uint32_t)10000, store.Get(1, 10, 2, 1).TitleId);
+    ASSERT_EQ((uint32_t)10004, store.Get(1, 10, 2, 4).TitleId);
 
-	ASSERT_EQ((uint32_t)10000, store.Get(1, 10, 2, 1).TitleId);
-	ASSERT_EQ((uint32_t)10004, store.Get(1, 10, 2, 4).TitleId);
-
-	ASSERT_THROW(store.Get(1, 10, 2, 5), RecordDoesNotExistException);
-	ASSERT_EQ(NULL, store.GetPtr(1, 10, 2, 5));
-	ASSERT_EQ((uint32_t)10002, store.GetPtr(1, 10, 2, 3)->TitleId);
-
+    ASSERT_THROW(store.Get(1, 10, 2, 5), RecordDoesNotExistException);
+    ASSERT_EQ(NULL, store.GetPtr(1, 10, 2, 5));
+    ASSERT_EQ((uint32_t)10002, store.GetPtr(1, 10, 2, 3)->TitleId);
 }
 
+TEST_F(StorageTrackTest, GetTracklist)
+{
+    CTrackStore store;
+    CStorage storage;
+    storage.Init("tmp/track", "GetTracklist.dat");
+    storage.RegisterStorageClass(&store);
+    storage.DeleteDatabase();
+    store.Put(DataTrack(1, 10, 2, 1, 10000));
+    store.Put(DataTrack(1, 10, 2, 2, 10001));
+    store.Put(DataTrack(1, 10, 2, 3, 10002));
+    store.Put(DataTrack(1, 10, 2, 4, 10004));
+    store.Put(DataTrack(1, 10, 2, 5, 10005));
 
-TEST_F(StorageTrackTest, GetTracklist) {
-	CTrackStore store;
-	CStorage storage;
-	storage.Init("tmp/track", "GetTracklist.dat");
-	storage.RegisterStorageClass(&store);
-	storage.DeleteDatabase();
-	store.Put(DataTrack(1, 10, 2, 1, 10000));
-	store.Put(DataTrack(1, 10, 2, 2, 10001));
-	store.Put(DataTrack(1, 10, 2, 3, 10002));
-	store.Put(DataTrack(1, 10, 2, 4, 10004));
-	store.Put(DataTrack(1, 10, 2, 5, 10005));
-
-	CTrackList tl=store.GetTracklist(1, 10, 2);
-	ASSERT_EQ((size_t)5, tl.Size());
-	ASSERT_EQ((uint32_t)10002, tl.Get(3).TitleId);
-
+    CTrackList tl = store.GetTracklist(1, 10, 2);
+    ASSERT_EQ((size_t)5, tl.Size());
+    ASSERT_EQ((uint32_t)10002, tl.Get(3).TitleId);
 }
 
-TEST_F(StorageTrackTest, Delete) {
-	CTrackStore store;
-	CStorage storage;
-	storage.Init("tmp/track", "Delete.dat");
-	storage.RegisterStorageClass(&store);
-	storage.DeleteDatabase();
-	store.Put(DataTrack(1, 10, 2, 1, 10000));
-	store.Put(DataTrack(1, 10, 2, 2, 10001));
-	store.Put(DataTrack(1, 10, 2, 3, 10002));
-	store.Put(DataTrack(1, 10, 2, 4, 10004));
-	store.Put(DataTrack(1, 10, 2, 5, 10005));
+TEST_F(StorageTrackTest, Delete)
+{
+    CTrackStore store;
+    CStorage storage;
+    storage.Init("tmp/track", "Delete.dat");
+    storage.RegisterStorageClass(&store);
+    storage.DeleteDatabase();
+    store.Put(DataTrack(1, 10, 2, 1, 10000));
+    store.Put(DataTrack(1, 10, 2, 2, 10001));
+    store.Put(DataTrack(1, 10, 2, 3, 10002));
+    store.Put(DataTrack(1, 10, 2, 4, 10004));
+    store.Put(DataTrack(1, 10, 2, 5, 10005));
 
-	CTrackList tl=store.GetTracklist(1, 10, 2);
-	ASSERT_EQ((size_t)5, tl.Size());
+    CTrackList tl = store.GetTracklist(1, 10, 2);
+    ASSERT_EQ((size_t)5, tl.Size());
 
-	store.Delete(DataTrack(1, 10, 2, 3, 10002));
+    store.Delete(DataTrack(1, 10, 2, 3, 10002));
 
-	tl=store.GetTracklist(1, 10, 2);
-	ASSERT_EQ((size_t)4, tl.Size());
-	ASSERT_FALSE(store.Exists(1, 10, 2, 3));
-
-
+    tl = store.GetTracklist(1, 10, 2);
+    ASSERT_EQ((size_t)4, tl.Size());
+    ASSERT_FALSE(store.Exists(1, 10, 2, 3));
 }
 
-
-} // EOF namespace
+} // namespace

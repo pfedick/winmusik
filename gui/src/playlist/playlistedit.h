@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef PLAYLISTEDIT_H
 #define PLAYLISTEDIT_H
 
@@ -29,100 +28,183 @@
 #include "ppl7-audio.h"
 #include "playlisttracks.h"
 
-
 class PlaylistEdit : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	PlaylistEdit(QWidget* parent = 0, CWmClient* wm=NULL);
-	~PlaylistEdit();
-	void ReloadTranslation();
-	void filloutFields(PlaylistItem* item);
-	void storeFileds(PlaylistItem* item);
+    PlaylistEdit(QWidget* parent = 0, CWmClient* wm = NULL);
+    ~PlaylistEdit();
+    void ReloadTranslation();
+    void filloutFields(PlaylistItem* item);
+    void storeFileds(PlaylistItem* item);
 
 private:
-	Ui::playlistEditClass ui;
-	CWmClient* wm;
-	float traktorIn, traktorOut;
-	ppl7::ByteArray CoverPreview;
-	QPixmap			Cover;
-	ppl7::String	Filename;
+    Ui::playlistEditClass ui;
+    CWmClient* wm;
+    float traktorIn, traktorOut;
+    pplib::ByteArray CoverPreview;
+    QPixmap Cover;
+    pplib::String Filename;
 
-	void closeEvent(QCloseEvent* event);
-	void updateTotalTime();
-	float getSecondsFromLine(QLineEdit* line);
-	void loadTraktorCues(const ppl7::ID3Tag& Tag);
-	void loadCover(const ppl7::ID3Tag& Tag);
-	void updateCover();
-	void updateCoverPreview();
+    void closeEvent(QCloseEvent* event);
+    void updateTotalTime();
+    float getSecondsFromLine(QLineEdit* line);
+    void loadTraktorCues(const pplib::ID3Tag& Tag);
+    void loadCover(const pplib::ID3Tag& Tag);
+    void updateCover();
+    void updateCoverPreview();
 
-	void installFilter(QObject* object, int id);
-	bool eventFilter(QObject* target, QEvent* event);
-	bool consumeEvent(QObject* target, QEvent* event);
-	void cue2CutStart(int cut);
-	void cue2CutEnd(int cut);
-	void cutDelete(int cut);
+    void installFilter(QObject* object, int id);
+    bool eventFilter(QObject* target, QEvent* event);
+    bool consumeEvent(QObject* target, QEvent* event);
+    void cue2CutStart(int cut);
+    void cue2CutEnd(int cut);
+    void cutDelete(int cut);
 
 public slots:
-	void on_okButton_clicked();
-	void on_cancelButton_clicked();
-	void on_traktorUseInOutButton_clicked();
+    void on_okButton_clicked();
+    void on_cancelButton_clicked();
+    void on_traktorUseInOutButton_clicked();
 
-	void on_trackStart_editingFinished() { updateTotalTime(); }
-	void on_trackEnd_editingFinished() { updateTotalTime(); }
-	void on_cutStart0_editingFinished() { updateTotalTime(); }
-	void on_cutStart1_editingFinished() { updateTotalTime(); }
-	void on_cutStart2_editingFinished() { updateTotalTime(); }
-	void on_cutStart3_editingFinished() { updateTotalTime(); }
-	void on_cutStart4_editingFinished() { updateTotalTime(); }
-	void on_cutEnd0_editingFinished() { updateTotalTime(); }
-	void on_cutEnd1_editingFinished() { updateTotalTime(); }
-	void on_cutEnd2_editingFinished() { updateTotalTime(); }
-	void on_cutEnd3_editingFinished() { updateTotalTime(); }
-	void on_cutEnd4_editingFinished() { updateTotalTime(); }
+    void on_trackStart_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_trackEnd_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutStart0_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutStart1_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutStart2_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutStart3_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutStart4_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutEnd0_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutEnd1_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutEnd2_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutEnd3_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_cutEnd4_editingFinished()
+    {
+        updateTotalTime();
+    }
 
-	void on_bpm_editingFinished() { updateTotalTime(); }
-	void on_bpmPlayed_editingFinished() { updateTotalTime(); }
+    void on_bpm_editingFinished()
+    {
+        updateTotalTime();
+    }
+    void on_bpmPlayed_editingFinished()
+    {
+        updateTotalTime();
+    }
 
-	void on_musicKeyModificationSpinBox_valueChanged(int value);
+    void on_musicKeyModificationSpinBox_valueChanged(int value);
 
-	void on_coverCopyButton_clicked();
-	void on_coverInsertButton_clicked();
-	void on_coverLoadButton_clicked();
-	void on_coverSaveButton_clicked();
+    void on_coverCopyButton_clicked();
+    void on_coverInsertButton_clicked();
+    void on_coverLoadButton_clicked();
+    void on_coverSaveButton_clicked();
 
-	void on_cueTrackStart_clicked();
-	void on_cueTrackEnd_clicked();
-	void on_trackStartFromBeginning_clicked();
-	void on_trackEndUntilEnd_clicked();
+    void on_cueTrackStart_clicked();
+    void on_cueTrackEnd_clicked();
+    void on_trackStartFromBeginning_clicked();
+    void on_trackEndUntilEnd_clicked();
 
-	void on_cueCutStart_0_clicked() { cue2CutStart(0); };
-	void on_cueCutStart_1_clicked() { cue2CutStart(1); };
-	void on_cueCutStart_2_clicked() { cue2CutStart(2); };
-	void on_cueCutStart_3_clicked() { cue2CutStart(3); };
-	void on_cueCutStart_4_clicked() { cue2CutStart(4); };
+    void on_cueCutStart_0_clicked()
+    {
+        cue2CutStart(0);
+    };
+    void on_cueCutStart_1_clicked()
+    {
+        cue2CutStart(1);
+    };
+    void on_cueCutStart_2_clicked()
+    {
+        cue2CutStart(2);
+    };
+    void on_cueCutStart_3_clicked()
+    {
+        cue2CutStart(3);
+    };
+    void on_cueCutStart_4_clicked()
+    {
+        cue2CutStart(4);
+    };
 
-	void on_cueCutEnd_0_clicked() { cue2CutEnd(0); };
-	void on_cueCutEnd_1_clicked() { cue2CutEnd(1); };
-	void on_cueCutEnd_2_clicked() { cue2CutEnd(2); };
-	void on_cueCutEnd_3_clicked() { cue2CutEnd(3); };
-	void on_cueCutEnd_4_clicked() { cue2CutEnd(4); };
+    void on_cueCutEnd_0_clicked()
+    {
+        cue2CutEnd(0);
+    };
+    void on_cueCutEnd_1_clicked()
+    {
+        cue2CutEnd(1);
+    };
+    void on_cueCutEnd_2_clicked()
+    {
+        cue2CutEnd(2);
+    };
+    void on_cueCutEnd_3_clicked()
+    {
+        cue2CutEnd(3);
+    };
+    void on_cueCutEnd_4_clicked()
+    {
+        cue2CutEnd(4);
+    };
 
-	void on_clearCut_0_clicked() { cutDelete(0); };
-	void on_clearCut_1_clicked() { cutDelete(1); };
-	void on_clearCut_2_clicked() { cutDelete(2); };
-	void on_clearCut_3_clicked() { cutDelete(3); };
-	void on_clearCut_4_clicked() { cutDelete(4); };
+    void on_clearCut_0_clicked()
+    {
+        cutDelete(0);
+    };
+    void on_clearCut_1_clicked()
+    {
+        cutDelete(1);
+    };
+    void on_clearCut_2_clicked()
+    {
+        cutDelete(2);
+    };
+    void on_clearCut_3_clicked()
+    {
+        cutDelete(3);
+    };
+    void on_clearCut_4_clicked()
+    {
+        cutDelete(4);
+    };
 
-	/*
-	void on_coverSearchAmazon_clicked();
-	void on_coverSearchGoogle_clicked();
-	void on_coverSearchBeatport_clicked();
-	void on_coverSearchSoundcloud_clicked();
-	*/
-
-
+    /*
+    void on_coverSearchAmazon_clicked();
+    void on_coverSearchGoogle_clicked();
+    void on_coverSearchBeatport_clicked();
+    void on_coverSearchSoundcloud_clicked();
+    */
 };
-
 
 #endif // PLAYLISTEDIT_H

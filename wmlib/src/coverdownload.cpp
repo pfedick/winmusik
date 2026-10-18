@@ -30,32 +30,32 @@ namespace winmusik
 
 void MetaData::print() const
 {
-    ppl7::PrintDebug("Artist:      %s\n", (const char*)Artist);
-    ppl7::PrintDebug("Title:       %s\n", (const char*)Title);
-    ppl7::PrintDebug("Version:     %s\n", (const char*)Version);
-    ppl7::PrintDebug("Genre:       %s\n", (const char*)Genre);
-    ppl7::PrintDebug("Label:       %s\n", (const char*)Label);
-    ppl7::PrintDebug("Bpm:         %s\n", (const char*)Bpm);
-    ppl7::PrintDebug("Album:       %s\n", (const char*)Album);
-    ppl7::PrintDebug("ReleaseDate: %s\n", (const char*)ReleaseDate);
-    ppl7::PrintDebug("ShopURL:     %s\n", (const char*)ShopURL);
-    ppl7::PrintDebug("Key:         %s\n", (const char*)Key);
-    ppl7::PrintDebug("CoverUrl:    %s\n", (const char*)CoverUrl);
-    ppl7::PrintDebug("CoverFile:   %s\n", (const char*)CoverFile);
-    ppl7::PrintDebug("Length:      %d sec = %0d:%02d min\n", Length, Length / 60, Length % 60);
+    pplib::PrintDebug("Artist:      %s\n", (const char*)Artist);
+    pplib::PrintDebug("Title:       %s\n", (const char*)Title);
+    pplib::PrintDebug("Version:     %s\n", (const char*)Version);
+    pplib::PrintDebug("Genre:       %s\n", (const char*)Genre);
+    pplib::PrintDebug("Label:       %s\n", (const char*)Label);
+    pplib::PrintDebug("Bpm:         %s\n", (const char*)Bpm);
+    pplib::PrintDebug("Album:       %s\n", (const char*)Album);
+    pplib::PrintDebug("ReleaseDate: %s\n", (const char*)ReleaseDate);
+    pplib::PrintDebug("ShopURL:     %s\n", (const char*)ShopURL);
+    pplib::PrintDebug("Key:         %s\n", (const char*)Key);
+    pplib::PrintDebug("CoverUrl:    %s\n", (const char*)CoverUrl);
+    pplib::PrintDebug("CoverFile:   %s\n", (const char*)CoverFile);
+    pplib::PrintDebug("Length:      %d sec = %0d:%02d min\n", Length, Length / 60, Length % 60);
 }
 
-static ppl7::String beatport_clearance;
-static ppl7::String beatport_userAgent;
+static pplib::String beatport_clearance;
+static pplib::String beatport_userAgent;
 static bool beatport_debug = false;
 
-void SetBeatportSession(const ppl7::String& clearance, const ppl7::String& userAgent)
+void SetBeatportSession(const pplib::String& clearance, const pplib::String& userAgent)
 {
     beatport_clearance = clearance;
     beatport_userAgent = userAgent;
 }
 
-bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile)
+bool CoverDownload(const pplib::String& url, const pplib::String& targetfile)
 {
     if (url.has(".beatport.com")) {
         return CoverDownload_Beatport(url, targetfile);
@@ -63,7 +63,7 @@ bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile)
     return false;
 }
 
-bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, MetaData& meta)
+bool CoverDownload(const pplib::String& url, const pplib::String& targetfile, MetaData& meta)
 {
     meta.ShopURL = url;
     if (url.has(".beatport.com")) {
@@ -73,13 +73,13 @@ bool CoverDownload(const ppl7::String& url, const ppl7::String& targetfile, Meta
     return false;
 }
 
-void getBeatportMetaData(ppl7::AssocArray& data, de::pfp::winmusik::MetaData& meta)
+void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& meta)
 {
     if (data.exists("props/pageProps/track")) {
         if (beatport_debug) {
-            ppl7::PrintDebug("Found track data in JSON.");
+            pplib::PrintDebug("Found track data in JSON.");
         }
-        const ppl7::AssocArray& track = data.getAssocArray("props/pageProps/track");
+        const pplib::AssocArray& track = data.getAssocArray("props/pageProps/track");
 
         // 1. Titel & Mix
         if (track.exists("track_name")) {
@@ -146,8 +146,8 @@ void getBeatportMetaData(ppl7::AssocArray& data, de::pfp::winmusik::MetaData& me
         // 9. Artists
         if (track.exists("artists")) {
             int i = 0;
-            while (track.exists(ppl7::ToString("artists/%d", i))) {
-                const ppl7::AssocArray& artist = track.getAssocArray(ppl7::ToString("artists/%d", i));
+            while (track.exists(pplib::ToString("artists/%d", i))) {
+                const pplib::AssocArray& artist = track.getAssocArray(pplib::ToString("artists/%d", i));
                 if (meta.Artist.size() > 0) meta.Artist += ", ";
                 meta.Artist.append(artist.get("name"));
                 i++;
@@ -156,9 +156,9 @@ void getBeatportMetaData(ppl7::AssocArray& data, de::pfp::winmusik::MetaData& me
     }
 }
 
-bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile, MetaData& meta)
+bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile, MetaData& meta)
 {
-    ppl7::HttpRequest req;
+    pplib::HttpRequest req;
     if (beatport_clearance.notEmpty()) {
         req.cookies["cf_clearance"] = beatport_clearance;
     }
@@ -167,64 +167,64 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
     }
 
     if (beatport_debug) {
-        ppl7::PrintDebug("Downloading Beatport cover from: %s\n", (const char*)url);
+        pplib::PrintDebug("Downloading Beatport cover from: %s\n", (const char*)url);
     }
-    ppl7::HttpResponse response = ppl7::HttpClient::get(url, req);
+    pplib::HttpResponse response = pplib::HttpClient::get(url, req);
     if (beatport_debug) {
-        ppl7::PrintDebug("HTTP-Response: %d\n", response.statusCode);
-        ppl7::PrintDebug("HTTP-Error: %s\n", (const char*)response.error);
-        // ppl7::PrintDebug("HTTP-Body: %s\n", (const char*)response.body);
+        pplib::PrintDebug("HTTP-Response: %d\n", response.statusCode);
+        pplib::PrintDebug("HTTP-Error: %s\n", (const char*)response.error);
+        // pplib::PrintDebug("HTTP-Body: %s\n", (const char*)response.body);
         response.body.toString().printnl();
-        ppl7::File ff("tmp/beatport.html", ppl7::File::WRITE);
+        pplib::File ff("tmp/beatport.html", pplib::File::WRITE);
         ff.write(response.body);
         ff.close();
     }
     if (response.statusCode != 200) return false;
 
-    ppl7::RegEx::MatchVector match;
+    pplib::RegEx::MatchVector match;
 
-    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", ppl7::String(response.body),
-                             match)) {
+    if (pplib::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", pplib::String(response.body),
+                              match)) {
         if (beatport_debug) {
-            ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
-            ppl7::File ff("tmp/data.json", ppl7::File::WRITE);
-            ff.write(ppl7::ByteArrayPtr(match[1]));
+            pplib::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
+            pplib::File ff("tmp/data.json", pplib::File::WRITE);
+            ff.write(pplib::ByteArrayPtr(match[1]));
             ff.close();
         }
         try {
-            ppl7::AssocArray data = ppl7::Json::loads(match[1]);
+            pplib::AssocArray data = pplib::Json::loads(match[1]);
             if (beatport_debug) {
-                ppl7::PrintDebug("Parsed JSON data successfully.");
+                pplib::PrintDebug("Parsed JSON data successfully.");
                 data.list();
             }
             getBeatportMetaData(data, meta);
         }
-        catch (const ppl7::Exception& e) {
+        catch (const pplib::Exception& e) {
             e.print();
-            ppl7::PrintDebug("Error parsing JSON: %s\n", e.what());
+            pplib::PrintDebug("Error parsing JSON: %s\n", e.what());
             throw;
         }
     }
     if (meta.CoverUrl.notEmpty()) {
-        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(meta.CoverUrl, req);
+        pplib::HttpResponse coverResponse = pplib::HttpClient::get(meta.CoverUrl, req);
         if (coverResponse.statusCode == 200) {
-            // ppl7::PrintDebug("Cover download\n");
-            ppl7::File ff(targetfile, ppl7::File::WRITE);
+            // pplib::PrintDebug("Cover download\n");
+            pplib::File ff(targetfile, pplib::File::WRITE);
             ff.write(coverResponse.body);
             ff.close();
             meta.CoverFile = targetfile;
             // meta.print();
             return true;
         } else {
-            ppl7::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);
+            pplib::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);
         }
     }
     return false;
 }
 
-bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetfile)
+bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile)
 {
-    ppl7::HttpRequest req;
+    pplib::HttpRequest req;
     if (beatport_clearance.notEmpty()) {
         req.cookies["cf_clearance"] = beatport_clearance;
     }
@@ -232,24 +232,24 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
         req.userAgent = beatport_userAgent;
     }
 
-    ppl7::HttpResponse response = ppl7::HttpClient::get(url, req);
+    pplib::HttpResponse response = pplib::HttpClient::get(url, req);
     if (response.statusCode != 200) return false;
-    ppl7::RegEx::MatchVector match;
-    ppl7::String CoverUrl;
+    pplib::RegEx::MatchVector match;
+    pplib::String CoverUrl;
 
-    if (ppl7::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", ppl7::String(response.body),
-                             match)) {
-        // ppl7::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
-        // ppl7::File ff("tmp/data.json", ppl7::File::WRITE);
+    if (pplib::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", pplib::String(response.body),
+                              match)) {
+        // pplib::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
+        // pplib::File ff("tmp/data.json", pplib::File::WRITE);
         // ff.write(match[1]);
         // ff.close();
         try {
-            ppl7::AssocArray data = ppl7::Json::loads(match[1]);
+            pplib::AssocArray data = pplib::Json::loads(match[1]);
             de::pfp::winmusik::MetaData meta;
             // getBeatportMetaData(data, meta);
             //  data.list();
             if (data.exists("props/pageProps/track")) {
-                const ppl7::AssocArray& track = data.getAssocArray("props/pageProps/track");
+                const pplib::AssocArray& track = data.getAssocArray("props/pageProps/track");
                 if (track.exists("release/image_url")) {
                     meta.CoverUrl = track.getString("release/image_url");
                     meta.CoverUrl.replace("{w}x{h}", "1400x1400");
@@ -258,7 +258,7 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
                 }
             } else if (data.exists("props/pageProps/release")) {
 
-                const ppl7::AssocArray& track = data.getAssocArray("props/pageProps/release");
+                const pplib::AssocArray& track = data.getAssocArray("props/pageProps/release");
 
                 if (track.exists("release/image_url")) {
                     meta.CoverUrl = track.getString("release/image_url");
@@ -268,22 +268,22 @@ bool CoverDownload_Beatport(const ppl7::String& url, const ppl7::String& targetf
                 }
             }
         }
-        catch (const ppl7::Exception& e) {
+        catch (const pplib::Exception& e) {
             e.print();
-            ppl7::PrintDebug("Error parsing JSON: %s\n", e.what());
+            pplib::PrintDebug("Error parsing JSON: %s\n", e.what());
             throw;
         }
     }
     if (CoverUrl.notEmpty()) {
-        ppl7::HttpResponse coverResponse = ppl7::HttpClient::get(CoverUrl, req);
+        pplib::HttpResponse coverResponse = pplib::HttpClient::get(CoverUrl, req);
         if (coverResponse.statusCode == 200) {
-            // ppl7::PrintDebug("Cover download\n");
-            ppl7::File ff(targetfile, ppl7::File::WRITE);
+            // pplib::PrintDebug("Cover download\n");
+            pplib::File ff(targetfile, pplib::File::WRITE);
             ff.write(coverResponse.body);
             ff.close();
             return true;
         } else {
-            ppl7::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);
+            pplib::PrintDebug("Cover download failed with: %s\n", (const char*)coverResponse.error);
         }
     }
     return false;

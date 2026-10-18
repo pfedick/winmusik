@@ -21,13 +21,13 @@
 #include "ui_playlistexport.h"
 #include <QFileDialog>
 
-PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm) :
-    QDialog(parent),
-    ui(new Ui::PlaylistExport)
+PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm)
+    : QDialog(parent),
+      ui(new Ui::PlaylistExport)
 {
-    this->wm=wm;
+    this->wm = wm;
     ui->setupUi(this);
-    abort_state=false;
+    abort_state = false;
 
     ui->target_path->setText(wm->conf.playlist_export.TargetPath);
     ui->copy_audio_files->setChecked(wm->conf.playlist_export.option_copy_files);
@@ -39,7 +39,6 @@ PlaylistExport::PlaylistExport(QWidget* parent, CWmClient* wm) :
     ui->withStartTimesCheckBox->setChecked(wm->conf.playlist_export.with_start_times);
     ui->export_json->setChecked(wm->conf.playlist_export.export_json);
     ui->withCoverIconsCheckBox->setChecked(wm->conf.playlist_export.with_cover_icons);
-
 }
 
 PlaylistExport::~PlaylistExport()
@@ -49,16 +48,16 @@ PlaylistExport::~PlaylistExport()
 
 void PlaylistExport::on_okButton_clicked()
 {
-    wm->conf.playlist_export.TargetPath=ui->target_path->text();
-    wm->conf.playlist_export.option_copy_files=ui->copy_audio_files->isChecked();
-    wm->conf.playlist_export.option_prepend_tracknumber=ui->prepend_tracknumber->isChecked();
-    wm->conf.playlist_export.export_m3u=ui->export_m3u->isChecked();
-    wm->conf.playlist_export.export_pls=ui->export_pls->isChecked();
-    wm->conf.playlist_export.export_xspf=ui->export_xspf->isChecked();
-    wm->conf.playlist_export.export_txt=ui->export_txt->isChecked();
-    wm->conf.playlist_export.with_start_times=ui->withStartTimesCheckBox->isChecked();
-    wm->conf.playlist_export.export_json=ui->export_json->isChecked();
-    wm->conf.playlist_export.with_cover_icons=ui->withCoverIconsCheckBox->isChecked();
+    wm->conf.playlist_export.TargetPath = ui->target_path->text();
+    wm->conf.playlist_export.option_copy_files = ui->copy_audio_files->isChecked();
+    wm->conf.playlist_export.option_prepend_tracknumber = ui->prepend_tracknumber->isChecked();
+    wm->conf.playlist_export.export_m3u = ui->export_m3u->isChecked();
+    wm->conf.playlist_export.export_pls = ui->export_pls->isChecked();
+    wm->conf.playlist_export.export_xspf = ui->export_xspf->isChecked();
+    wm->conf.playlist_export.export_txt = ui->export_txt->isChecked();
+    wm->conf.playlist_export.with_start_times = ui->withStartTimesCheckBox->isChecked();
+    wm->conf.playlist_export.export_json = ui->export_json->isChecked();
+    wm->conf.playlist_export.with_cover_icons = ui->withCoverIconsCheckBox->isChecked();
 
     wm->conf.trySave();
     done(1);
@@ -67,12 +66,12 @@ void PlaylistExport::on_okButton_clicked()
 void PlaylistExport::on_cancelButton_clicked()
 {
     done(0);
-    abort_state=true;
+    abort_state = true;
 }
 
 void PlaylistExport::on_selectTargetPath_clicked()
 {
-    QString pathname=QFileDialog::getExistingDirectory(NULL, tr("select target directory"), ui->target_path->text());
+    QString pathname = QFileDialog::getExistingDirectory(NULL, tr("select target directory"), ui->target_path->text());
     if (pathname.isEmpty()) return;
     ui->target_path->setText(pathname);
 }
@@ -86,7 +85,7 @@ void PlaylistExport::start(int number_of_tracks)
     ui->progress_file->setValue(0);
     ui->progress_total->setMaximum(number_of_tracks);
     ui->progress_total->setValue(0);
-    abort_state=false;
+    abort_state = false;
 }
 
 bool PlaylistExport::abortClicked() const
@@ -94,7 +93,7 @@ bool PlaylistExport::abortClicked() const
     return abort_state;
 }
 
-void PlaylistExport::setCurrentFile(const ppl7::String& filename, size_t size)
+void PlaylistExport::setCurrentFile(const pplib::String& filename, size_t size)
 {
     ui->progress_file->setMaximum((int)size);
     ui->current_file->setText(filename);

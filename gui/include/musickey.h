@@ -25,23 +25,24 @@
 #include "winmusik3.h"
 #include "ppl7.h"
 
-int getMusicKeyId(const ppl7::String& name);
-ppl7::String keyNameSharps(int id);
-ppl7::String keyNameOpenKey(int id);
-ppl7::String keyNameCustom(int id);
+int getMusicKeyId(const pplib::String& name);
+pplib::String keyNameSharps(int id);
+pplib::String keyNameOpenKey(int id);
+pplib::String keyNameCustom(int id);
 
-enum HarmonicType {
-    harmonicSameKey=0,
-    harmonicNextKey,			// +1 on wheel
-    harmonicPreviousKey,		// -1 on wheel
+enum HarmonicType
+{
+    harmonicSameKey = 0,
+    harmonicNextKey,     // +1 on wheel
+    harmonicPreviousKey, // -1 on wheel
     harmonicMinorMajorSwitch,
-    harmonicMinorMajorJump3,    // from major -3 on wheel to minor, from minor +3 on wheel to major
-    harmonicMinorMajorJump1,    // from major +1 on wheel to minor, from minor -1 on wheel to major
-    harmonicSemitoneUp,			// +7 on wheel
-    harmonicSemitoneDown,		// -7 on wheel
-    harmonicTwoSemitoneUp,		// +2 on wheel
-    harmonicTwoSemitoneDown,    // -2 on wheel
-    harmonicAvbBoost            // +4 on wheel
+    harmonicMinorMajorJump3, // from major -3 on wheel to minor, from minor +3 on wheel to major
+    harmonicMinorMajorJump1, // from major +1 on wheel to minor, from minor -1 on wheel to major
+    harmonicSemitoneUp,      // +7 on wheel
+    harmonicSemitoneDown,    // -7 on wheel
+    harmonicTwoSemitoneUp,   // +2 on wheel
+    harmonicTwoSemitoneDown, // -2 on wheel
+    harmonicAvbBoost         // +4 on wheel
 };
 
 void getHarmonicKeys(std::map<int, HarmonicType>& harmonics, int key);
@@ -49,10 +50,11 @@ void getHarmonicKeys(std::map<int, HarmonicType>& harmonics, int key);
 class MusicKey
 {
 public:
-    enum KeyType {
-        unknown=0,
-        minor=1,
-        major=2
+    enum KeyType
+    {
+        unknown = 0,
+        minor = 1,
+        major = 2
     };
 
 private:
@@ -64,11 +66,11 @@ public:
     MusicKey();
     MusicKey(int wm_keyid);
     MusicKey(int openkeyId, KeyType type);
-    MusicKey(const ppl7::String& name);
+    MusicKey(const pplib::String& name);
 
     void setKey(int wm_keyid);
     void setKey(int openkeyId, KeyType type);
-    ppl7::String name(MusicKeyType type=musicKeyTypeOpenKey) const;
+    pplib::String name(MusicKeyType type = musicKeyTypeOpenKey) const;
     int wmKeyId() const;
 
     MusicKey add(int modification) const;
@@ -92,6 +94,5 @@ class RelatedKeys
 {
 public:
 };
-
 
 #endif // MUSICKEY_H

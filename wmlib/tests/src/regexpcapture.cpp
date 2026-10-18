@@ -30,11 +30,14 @@
 
 using namespace de::pfp::winmusik;
 
-namespace {
+namespace
+{
 
-class RegExpCaptureTest : public ::testing::Test {
+class RegExpCaptureTest : public ::testing::Test
+{
 protected:
-    RegExpCaptureTest() {
+    RegExpCaptureTest()
+    {
         if (setlocale(LC_ALL, "") == NULL) {
             printf("setlocale fehlgeschlagen\n");
             throw std::exception();
@@ -42,181 +45,167 @@ protected:
     }
     ~RegExpCaptureTest()
     {
-
     }
 };
 
-
-TEST_F(RegExpCaptureTest, Beatport2023SingleArtist) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2023.xml");
+TEST_F(RegExpCaptureTest, Beatport2023SingleArtist)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2023.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Over The Moon"), match.Title);
-    ASSERT_EQ(ppl7::String("Festival Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("XiJaro & Pitch"), match.Artist);
+    ASSERT_EQ(pplib::String("Over The Moon"), match.Title);
+    ASSERT_EQ(pplib::String("Festival Mix"), match.Version);
+    ASSERT_EQ(pplib::String("XiJaro & Pitch"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Dreamstate"), match.Label);
-    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2023-07-14"), match.ReleaseDate);
-
-
-
+    ASSERT_EQ(pplib::String("Dreamstate"), match.Label);
+    ASSERT_EQ(pplib::String("Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2023-07-14"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2023MultipleArtists) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2023_multi_artists.xml");
+TEST_F(RegExpCaptureTest, Beatport2023MultipleArtists)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2023_multi_artists.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Invincible"), match.Title);
-    ASSERT_EQ(ppl7::String("Extended Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Johan Gielen, Airscape feat. Sarah Anglionin"), match.Artist);
+    ASSERT_EQ(pplib::String("Invincible"), match.Title);
+    ASSERT_EQ(pplib::String("Extended Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Johan Gielen, Airscape feat. Sarah Anglionin"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Black Hole Recordings"), match.Label);
-    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2023-07-07"), match.ReleaseDate);
-
+    ASSERT_EQ(pplib::String("Black Hole Recordings"), match.Label);
+    ASSERT_EQ(pplib::String("Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2023-07-07"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2023RemixWithArtist) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2023_remix.xml");
+TEST_F(RegExpCaptureTest, Beatport2023RemixWithArtist)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2023_remix.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Saltwater"), match.Title);
-    ASSERT_EQ(ppl7::String("Ilan Bluestone Extended Remix"), match.Version);
-    ASSERT_EQ(ppl7::String("Chicane feat. Moya Brennan"), match.Artist);
+    ASSERT_EQ(pplib::String("Saltwater"), match.Title);
+    ASSERT_EQ(pplib::String("Ilan Bluestone Extended Remix"), match.Version);
+    ASSERT_EQ(pplib::String("Chicane feat. Moya Brennan"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Armada Music"), match.Label);
-    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2023-09-01"), match.ReleaseDate);
-
+    ASSERT_EQ(pplib::String("Armada Music"), match.Label);
+    ASSERT_EQ(pplib::String("Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2023-09-01"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2023_2) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2023_2.xml");
+TEST_F(RegExpCaptureTest, Beatport2023_2)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2023_2.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Somebody That I Used To Know"), match.Title);
-    ASSERT_EQ(ppl7::String("Extended Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Kevin McKay, James Cole"), match.Artist);
+    ASSERT_EQ(pplib::String("Somebody That I Used To Know"), match.Title);
+    ASSERT_EQ(pplib::String("Extended Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Kevin McKay, James Cole"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Glasgow Underground"), match.Label);
-    ASSERT_EQ(ppl7::String("Deep House"), match.Genre);
-    ASSERT_EQ(ppl7::String("2023-08-04"), match.ReleaseDate);
-
-
-
+    ASSERT_EQ(pplib::String("Glasgow Underground"), match.Label);
+    ASSERT_EQ(pplib::String("Deep House"), match.Genre);
+    ASSERT_EQ(pplib::String("2023-08-04"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2023_3) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2023_3.xml");
+TEST_F(RegExpCaptureTest, Beatport2023_3)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2023_3.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Delta"), match.Title);
-    ASSERT_EQ(ppl7::String("Original Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Deepcry"), match.Artist);
+    ASSERT_EQ(pplib::String("Delta"), match.Title);
+    ASSERT_EQ(pplib::String("Original Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Deepcry"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Pure Progressive"), match.Label);
-    ASSERT_EQ(ppl7::String("Trance (Raw / Deep / Hypnotic)"), match.Genre);
-    ASSERT_EQ(ppl7::String("2023-12-08"), match.ReleaseDate);
-
-
-
+    ASSERT_EQ(pplib::String("Pure Progressive"), match.Label);
+    ASSERT_EQ(pplib::String("Trance (Raw / Deep / Hypnotic)"), match.Genre);
+    ASSERT_EQ(pplib::String("2023-12-08"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2024_1_pipe_in_genre) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2024_1_pipe_in_genre.xml");
+TEST_F(RegExpCaptureTest, Beatport2024_1_pipe_in_genre)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2024_1_pipe_in_genre.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Attack"), match.Title);
-    ASSERT_EQ(ppl7::String("Extended Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Paul Sawyer, Fra.Gile, Deestopia"), match.Artist);
+    ASSERT_EQ(pplib::String("Attack"), match.Title);
+    ASSERT_EQ(pplib::String("Extended Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Paul Sawyer, Fra.Gile, Deestopia"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Krafted Underground"), match.Label);
-    ASSERT_EQ(ppl7::String("Deep Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2024-02-09"), match.ReleaseDate);
-
-
-
+    ASSERT_EQ(pplib::String("Krafted Underground"), match.Label);
+    ASSERT_EQ(pplib::String("Deep Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2024-02-09"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2024_2) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2024_2.xml");
+TEST_F(RegExpCaptureTest, Beatport2024_2)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2024_2.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Mechanismus"), match.Title);
-    ASSERT_EQ(ppl7::String("Original Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Tobi Tobermann, Dennis Nocken"), match.Artist);
+    ASSERT_EQ(pplib::String("Mechanismus"), match.Title);
+    ASSERT_EQ(pplib::String("Original Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Tobi Tobermann, Dennis Nocken"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Volume Berlin Records"), match.Label);
-    ASSERT_EQ(ppl7::String("Raw Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2024-04-05"), match.ReleaseDate);
-
-
-
+    ASSERT_EQ(pplib::String("Volume Berlin Records"), match.Label);
+    ASSERT_EQ(pplib::String("Raw Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2024-04-05"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2024_NestedBrackets) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2024_brackets.xml");
+TEST_F(RegExpCaptureTest, Beatport2024_NestedBrackets)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2024_brackets.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Lost In Dreams (UnKonscious 2024 Anthem)"), match.Title);
-    ASSERT_EQ(ppl7::String("Classix Extended Mix"), match.Version);
-    ASSERT_EQ(ppl7::String("Ferry Tayle, Tonks, Mirage (Fr)"), match.Artist);
+    ASSERT_EQ(pplib::String("Lost In Dreams (UnKonscious 2024 Anthem)"), match.Title);
+    ASSERT_EQ(pplib::String("Classix Extended Mix"), match.Version);
+    ASSERT_EQ(pplib::String("Ferry Tayle, Tonks, Mirage (Fr)"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("FSOE"), match.Label);
-    ASSERT_EQ(ppl7::String("Trance"), match.Genre);
-    ASSERT_EQ(ppl7::String("2024-01-26"), match.ReleaseDate);
-
-
+    ASSERT_EQ(pplib::String("FSOE"), match.Label);
+    ASSERT_EQ(pplib::String("Trance"), match.Genre);
+    ASSERT_EQ(pplib::String("2024-01-26"), match.ReleaseDate);
 }
 
-TEST_F(RegExpCaptureTest, Beatport2025_1) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2025_1.xml");
+TEST_F(RegExpCaptureTest, Beatport2025_1)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2025_1.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("What's a Girl to Do in '25 (Extended)"), match.Title);
-    ASSERT_EQ(ppl7::String("Extended"), match.Version);
-    ASSERT_EQ(ppl7::String("KI/KI"), match.Artist);
+    ASSERT_EQ(pplib::String("What's a Girl to Do in '25 (Extended)"), match.Title);
+    ASSERT_EQ(pplib::String("Extended"), match.Version);
+    ASSERT_EQ(pplib::String("KI/KI"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Disorder"), match.Label);
-    ASSERT_EQ(ppl7::String(""), match.Genre);
-    ASSERT_EQ(ppl7::String("2025-09-12"), match.ReleaseDate);
+    ASSERT_EQ(pplib::String("Disorder"), match.Label);
+    ASSERT_EQ(pplib::String(""), match.Genre);
+    ASSERT_EQ(pplib::String("2025-09-12"), match.ReleaseDate);
 }
 
-
-TEST_F(RegExpCaptureTest, Beatport2025_2) {
-    ppl7::String html;
-    ppl7::File::load(html, "testdata/beatport2025_2.xml");
+TEST_F(RegExpCaptureTest, Beatport2025_2)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2025_2.xml");
     RegExpMatch match;
     ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
 
-    ASSERT_EQ(ppl7::String("Mind Body Soul"), match.Title);
-    ASSERT_EQ(ppl7::String("Eric Sneo Remix"), match.Version);
-    ASSERT_EQ(ppl7::String("Tom Wax"), match.Artist);
+    ASSERT_EQ(pplib::String("Mind Body Soul"), match.Title);
+    ASSERT_EQ(pplib::String("Eric Sneo Remix"), match.Version);
+    ASSERT_EQ(pplib::String("Tom Wax"), match.Artist);
 
-    ASSERT_EQ(ppl7::String("Phuture Wax Records"), match.Label);
-    ASSERT_EQ(ppl7::String("Techno (Raw / Deep / Hypnotic)"), match.Genre);
-    ASSERT_EQ(ppl7::String("2025-07-25"), match.ReleaseDate);
+    ASSERT_EQ(pplib::String("Phuture Wax Records"), match.Label);
+    ASSERT_EQ(pplib::String("Techno (Raw / Deep / Hypnotic)"), match.Genre);
+    ASSERT_EQ(pplib::String("2025-07-25"), match.ReleaseDate);
 }
 
-
-
-}
+} // namespace

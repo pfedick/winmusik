@@ -42,15 +42,15 @@ public:
     float endPositionSec;
     float cutStartPosition[5];
     float cutEndPosition[5];
-    ppl7::String Artist;
-    ppl7::String Title;
-    ppl7::String Version;
-    ppl7::String Genre;
-    ppl7::String Label;
-    ppl7::String Album;
-    ppl7::String File;
-    ppl7::String Remarks;
-    ppl7::ByteArray CoverPreview;
+    pplib::String Artist;
+    pplib::String Title;
+    pplib::String Version;
+    pplib::String Genre;
+    pplib::String Label;
+    pplib::String Album;
+    pplib::String File;
+    pplib::String Remarks;
+    pplib::ByteArray CoverPreview;
     uint8_t musicKey;
     uint32_t bpm;
     uint32_t bpmPlayed;
@@ -70,9 +70,9 @@ public:
     PlaylistItem();
     void clear();
 
-    ppl7::String exportAsXML(int indention = 3) const;
-    ppl7::String getExistingFilename() const;
-    void importFromXML(const ppl7::String& xml);
+    pplib::String exportAsXML(int indention = 3) const;
+    pplib::String getExistingFilename() const;
+    void importFromXML(const pplib::String& xml);
     void loadCoverPreview();
     float calcMixLength() const;
 };
@@ -80,31 +80,31 @@ public:
 class Playlist
 {
 private:
-    ppl7::String Name, SubName;
-    ppl7::DateTime IssueDate;
+    pplib::String Name, SubName;
+    pplib::DateTime IssueDate;
     int IssueNumber;
 
     std::list<PlaylistItem> playlist;
 
 public:
-    PPL7EXCEPTION(InvalidXMLFileException, Exception)
-    PPL7EXCEPTION(InvalidPlaylistException, Exception)
+    PPLIBEXCEPTION(InvalidXMLFileException, Exception)
+    PPLIBEXCEPTION(InvalidPlaylistException, Exception)
 
     typedef std::list<de::pfp::winmusik::PlaylistItem>::const_iterator const_iterator;
 
     Playlist();
     ~Playlist();
     void clear();
-    void load(const ppl7::String& filename);
-    void save(const ppl7::String& filename);
-    void setName(const ppl7::String& Name);
-    ppl7::String getName() const;
-    void setSubName(const ppl7::String& Name);
-    ppl7::String getSubName() const;
+    void load(const pplib::String& filename);
+    void save(const pplib::String& filename);
+    void setName(const pplib::String& Name);
+    pplib::String getName() const;
+    void setSubName(const pplib::String& Name);
+    pplib::String getSubName() const;
     void setIssueNumber(int number);
     int getIssueNumber() const;
-    void setIssueDate(const ppl7::DateTime& Date);
-    ppl7::DateTime getIssueDate() const;
+    void setIssueDate(const pplib::DateTime& Date);
+    pplib::DateTime getIssueDate() const;
     int getTotalTracks() const;
     int getTotalLength() const;
     int getTotalMixLength() const;

@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef FIRSTSTART_H
 #define FIRSTSTART_H
 
@@ -33,10 +32,10 @@ class FirstStart : public QDialog
     Q_OBJECT
 
 public:
-    FirstStart(QWidget* parent = 0, CWmClient* wm=NULL);
+    FirstStart(QWidget* parent = 0, CWmClient* wm = NULL);
     ~FirstStart();
 
-    bool UseExistingInstallation(const ppl7::String& Path);
+    bool UseExistingInstallation(const pplib::String& Path);
 
 private:
     Ui::FirstStartClass ui;
@@ -53,9 +52,6 @@ private slots:
     void on_selectrecoverpath_clicked();
     void on_selectdatapath_clicked();
     void on_localdatapath_textChanged();
-
 };
-
-
 
 #endif // FIRSTSTART_H

@@ -22,97 +22,93 @@
 #include "src/editor/tablesearch.h"
 
 EditDevice::EditDevice(QWidget* parent, CWmClient* wm, int typ, uint32_t DeviceId)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
-	this->wm=wm;
-	this->parent=parent;
-	DeviceType=typ;
-	this->DeviceId=DeviceId;
-	QDate Date;
-	ppl7::String Tmp, Subject;
+    ui.setupUi(this);
+    this->wm = wm;
+    this->parent = parent;
+    DeviceType = typ;
+    this->DeviceId = DeviceId;
+    QDate Date;
+    pplib::String Tmp, Subject;
 
-	if (Device.DeviceId) {
-		Tmp=wm->GetWmVersion() + " - " + ppl7::String(tr("Edit Device:"));
-	} else {
-		Tmp=wm->GetWmVersion() + " - " + ppl7::String(tr("New Device:"));
-	}
-	Tmp+=" ";
-	Tmp+=wm->GetDeviceName(DeviceType);
-	Subject=wm->GetDeviceName(DeviceType);
-	if (Device.DeviceId) {
-		Tmp.appendf(" %u", DeviceId);
-		Subject.appendf(" %u", DeviceId);
-	}
-	setWindowTitle(Tmp);
-	ui.Subject->setText(Subject);
-	ui.deviceIcon->setPixmap(wm->GetDevicePixmap(DeviceType));
-	setWindowIcon(wm->GetDeviceIcon(DeviceType));
-	ui.currency->setText(wm->conf.Currency);
-	ui.purchaseDate->setDate(wm->GetLatestPurchaseDate());
+    if (Device.DeviceId) {
+        Tmp = wm->GetWmVersion() + " - " + pplib::String(tr("Edit Device:"));
+    } else {
+        Tmp = wm->GetWmVersion() + " - " + pplib::String(tr("New Device:"));
+    }
+    Tmp += " ";
+    Tmp += wm->GetDeviceName(DeviceType);
+    Subject = wm->GetDeviceName(DeviceType);
+    if (Device.DeviceId) {
+        Tmp.appendf(" %u", DeviceId);
+        Subject.appendf(" %u", DeviceId);
+    }
+    setWindowTitle(Tmp);
+    ui.Subject->setText(Subject);
+    ui.deviceIcon->setPixmap(wm->GetDevicePixmap(DeviceType));
+    setWindowIcon(wm->GetDeviceIcon(DeviceType));
+    ui.currency->setText(wm->conf.Currency);
+    ui.purchaseDate->setDate(wm->GetLatestPurchaseDate());
 
-	// Bereits vorhandene Daten laden
+    // Bereits vorhandene Daten laden
 
+    // Eventfilter installieren
+    InstallFilter(ui.title, 1);
+    InstallFilter(ui.subTitle, 2);
+    InstallFilter(ui.pages, 3);
+    InstallFilter(ui.labelId, 4);
+    InstallFilter(ui.labelText, 5);
+    InstallFilter(ui.purchaseId, 6);
+    InstallFilter(ui.purchaseText, 7);
+    InstallFilter(ui.purchasePrice, 8);
+    InstallFilter(ui.purchaseDate, 9);
+    position = oldposition = 0;
 
-	// Eventfilter installieren
-	InstallFilter(ui.title, 1);
-	InstallFilter(ui.subTitle, 2);
-	InstallFilter(ui.pages, 3);
-	InstallFilter(ui.labelId, 4);
-	InstallFilter(ui.labelText, 5);
-	InstallFilter(ui.purchaseId, 6);
-	InstallFilter(ui.purchaseText, 7);
-	InstallFilter(ui.purchasePrice, 8);
-	InstallFilter(ui.purchaseDate, 9);
-	position=oldposition=0;
+    Label.Title = tr("Producer / Label");
+    Label.Init(this, wm, ui.labelId, ui.labelText, &wm->LabelStore);
+    Label.SetNextWidget(ui.purchaseId);
 
-	Label.Title=tr("Producer / Label");
-	Label.Init(this, wm, ui.labelId, ui.labelText, &wm->LabelStore);
-	Label.SetNextWidget(ui.purchaseId);
+    PurchaseSource.Title = tr("Purchase store");
+    PurchaseSource.Init(this, wm, ui.purchaseId, ui.purchaseText, &wm->PurchaseSourceStore);
+    PurchaseSource.SetNextWidget(ui.purchasePrice);
 
-	PurchaseSource.Title=tr("Purchase store");
-	PurchaseSource.Init(this, wm, ui.purchaseId, ui.purchaseText, &wm->PurchaseSourceStore);
-	PurchaseSource.SetNextWidget(ui.purchasePrice);
+    // Device laden
+    if (wm->DeviceStore.Exists(DeviceType, DeviceId)) {
+        Device = wm->DeviceStore.Get(DeviceType, DeviceId);
+        if (Device.Title.notEmpty()) ui.title->setText(Device.Title);
+        if (Device.SubTitle.notEmpty()) ui.subTitle->setText(Device.SubTitle);
+        ui.pages->setValue(Device.Pages);
+        Label.SetId(Device.LabelId);
+        PurchaseSource.SetId(Device.PurchaseId);
+        Tmp.setf("%0.2f", Device.PurchasePrice);
+        ui.purchasePrice->setText(Tmp);
+        // Aufnahmedatum
+        Tmp.setf("%u", Device.PurchaseDate);
+        Date = QDate::fromString(Tmp, "yyyyMMdd");
+        ui.purchaseDate->setDate(Date);
+        // Länge
+        Tmp = Int2Time(Device.Length);
+        ui.length->setText(Tmp);
 
-
-	// Device laden
-	if (wm->DeviceStore.Exists(DeviceType, DeviceId)) {
-		Device=wm->DeviceStore.Get(DeviceType, DeviceId);
-		if (Device.Title.notEmpty()) ui.title->setText(Device.Title);
-		if (Device.SubTitle.notEmpty()) ui.subTitle->setText(Device.SubTitle);
-		ui.pages->setValue(Device.Pages);
-		Label.SetId(Device.LabelId);
-		PurchaseSource.SetId(Device.PurchaseId);
-		Tmp.setf("%0.2f", Device.PurchasePrice);
-		ui.purchasePrice->setText(Tmp);
-		// Aufnahmedatum
-		Tmp.setf("%u", Device.PurchaseDate);
-		Date=QDate::fromString(Tmp, "yyyyMMdd");
-		ui.purchaseDate->setDate(Date);
-		// Länge
-		Tmp=Int2Time(Device.Length);
-		ui.length->setText(Tmp);
-
-
-	} else {
-		Device.DeviceId=DeviceId;
-		Device.DeviceType=DeviceType;
-		Date=QDate::currentDate();
-		ui.purchaseDate->setDate(Date);
-	}
+    } else {
+        Device.DeviceId = DeviceId;
+        Device.DeviceType = DeviceType;
+        Date = QDate::currentDate();
+        ui.purchaseDate->setDate(Date);
+    }
 }
 
 EditDevice::~EditDevice()
 {
-	if (parent) parent->setFocus();
+    if (parent) parent->setFocus();
 }
 
 void EditDevice::InstallFilter(QObject* object, int id)
 {
-	object->installEventFilter(this);
-	object->setProperty("id", id);
+    object->installEventFilter(this);
+    object->setProperty("id", id);
 }
-
 
 bool EditDevice::eventFilter(QObject* target, QEvent* event)
 /*!\brief Event Handler
@@ -128,8 +124,8 @@ bool EditDevice::eventFilter(QObject* target, QEvent* event)
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
 {
-	if (consumeEvent(target, event)) return true;
-	return QWidget::eventFilter(target, event);
+    if (consumeEvent(target, event)) return true;
+    return QWidget::eventFilter(target, event);
 }
 
 bool EditDevice::consumeEvent(QObject* target, QEvent* event)
@@ -148,107 +144,120 @@ bool EditDevice::consumeEvent(QObject* target, QEvent* event)
  * \returns Gibt \b true zurück, wenn der Event verarbeit wurde, sonst \b false
  */
 {
-	QKeyEvent* keyEvent=NULL;
-	int key=0;
-	int modifier=Qt::NoModifier;
-	// Id auslesen
-	int id=target->property("id").toInt();
-	int type=event->type();
-	if (type == QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent*>(event);
-		key=keyEvent->key();
-		modifier=keyEvent->modifiers();
-		if (modifier == Qt::NoModifier && (key == Qt::Key_Return || key == Qt::Key_Enter)) {
-			if (target != ui.okButton && target != ui.cancelButton) {
-				nextWidget(target);
-				return false;
-			}
-		} else if (modifier == Qt::NoModifier && key == Qt::Key_F12) {
-			if (Save()) done(DeviceId);
-			return true;
-		}
-	} else if (type == QEvent::FocusIn) {
-		//focusEvent=static_cast<QFocusEvent *>(event);
-		position=id;
-	} else if (type == QEvent::FocusOut) {
-		//focusEvent=static_cast<QFocusEvent *>(event);
-		oldposition=id;
-	}
-	if (target == ui.labelId || target == ui.labelText) {
-		return Label.ConsumeEvent(target, event, oldposition, position);
-	} else if (target == ui.purchaseId || target == ui.purchaseText) {
-		return PurchaseSource.ConsumeEvent(target, event, oldposition, position);
-	}
+    QKeyEvent* keyEvent = NULL;
+    int key = 0;
+    int modifier = Qt::NoModifier;
+    // Id auslesen
+    int id = target->property("id").toInt();
+    int type = event->type();
+    if (type == QEvent::KeyPress) {
+        keyEvent = static_cast<QKeyEvent*>(event);
+        key = keyEvent->key();
+        modifier = keyEvent->modifiers();
+        if (modifier == Qt::NoModifier && (key == Qt::Key_Return || key == Qt::Key_Enter)) {
+            if (target != ui.okButton && target != ui.cancelButton) {
+                nextWidget(target);
+                return false;
+            }
+        } else if (modifier == Qt::NoModifier && key == Qt::Key_F12) {
+            if (Save()) done(DeviceId);
+            return true;
+        }
+    } else if (type == QEvent::FocusIn) {
+        // focusEvent=static_cast<QFocusEvent *>(event);
+        position = id;
+    } else if (type == QEvent::FocusOut) {
+        // focusEvent=static_cast<QFocusEvent *>(event);
+        oldposition = id;
+    }
+    if (target == ui.labelId || target == ui.labelText) {
+        return Label.ConsumeEvent(target, event, oldposition, position);
+    } else if (target == ui.purchaseId || target == ui.purchaseText) {
+        return PurchaseSource.ConsumeEvent(target, event, oldposition, position);
+    }
 
-	return false;
+    return false;
 }
 
 bool EditDevice::nextWidget(QObject* object)
 {
-	if (object == ui.title) ui.subTitle->setFocus();
-	else if (object == ui.subTitle) ui.pages->setFocus();
-	else if (object == ui.pages) ui.length->setFocus();
-	else if (object == ui.length) ui.labelId->setFocus();
-	else if (object == ui.labelId) ui.labelText->setFocus();
-	else if (object == ui.labelText) ui.purchaseId->setFocus();
-	else if (object == ui.purchaseId) ui.purchaseText->setFocus();
-	else if (object == ui.purchaseText) ui.purchasePrice->setFocus();
-	else if (object == ui.purchasePrice) ui.purchaseDate->setFocus();
-	else if (object == ui.purchaseDate) ui.okButton->setFocus();
-	return false;
+    if (object == ui.title)
+        ui.subTitle->setFocus();
+    else if (object == ui.subTitle)
+        ui.pages->setFocus();
+    else if (object == ui.pages)
+        ui.length->setFocus();
+    else if (object == ui.length)
+        ui.labelId->setFocus();
+    else if (object == ui.labelId)
+        ui.labelText->setFocus();
+    else if (object == ui.labelText)
+        ui.purchaseId->setFocus();
+    else if (object == ui.purchaseId)
+        ui.purchaseText->setFocus();
+    else if (object == ui.purchaseText)
+        ui.purchasePrice->setFocus();
+    else if (object == ui.purchasePrice)
+        ui.purchaseDate->setFocus();
+    else if (object == ui.purchaseDate)
+        ui.okButton->setFocus();
+    return false;
 }
 
 bool EditDevice::Save()
 {
-	ppl7::String Tmp;
-	Tmp=ui.title->text();
-	Tmp.trim();
-	Device.SetTitle(Tmp);
-	Tmp=ui.subTitle->text();
-	Tmp.trim();
-	Device.SetSubTitle(Tmp);
-	Device.LabelId=ui.labelId->text().toInt();
-	Device.PurchaseId=ui.purchaseId->text().toInt();
-	Tmp=ui.length->text();
-	Device.Length=Time2Int(Tmp);
+    pplib::String Tmp;
+    Tmp = ui.title->text();
+    Tmp.trim();
+    Device.SetTitle(Tmp);
+    Tmp = ui.subTitle->text();
+    Tmp.trim();
+    Device.SetSubTitle(Tmp);
+    Device.LabelId = ui.labelId->text().toInt();
+    Device.PurchaseId = ui.purchaseId->text().toInt();
+    Tmp = ui.length->text();
+    Device.Length = Time2Int(Tmp);
 
-	QDate Date=ui.purchaseDate->date();
-	Tmp=Date.toString("yyyyMMdd");
-	Device.PurchaseDate=Tmp.toInt();
+    QDate Date = ui.purchaseDate->date();
+    Tmp = Date.toString("yyyyMMdd");
+    Device.PurchaseDate = Tmp.toInt();
 
-	if (!Device.DateCreated) {
-		Date=QDate::currentDate();
-		Tmp=Date.toString("yyyyMMdd");
-		Device.DateCreated=Tmp.toInt();
-	}
-	Device.DeviceId=DeviceId;
-	Device.DeviceType=DeviceType;
-	Device.Pages=ui.pages->value();
-	Device.PurchasePrice=ui.purchasePrice->text().toFloat();
+    if (!Device.DateCreated) {
+        Date = QDate::currentDate();
+        Tmp = Date.toString("yyyyMMdd");
+        Device.DateCreated = Tmp.toInt();
+    }
+    Device.DeviceId = DeviceId;
+    Device.DeviceType = DeviceType;
+    Device.Pages = ui.pages->value();
+    Device.PurchasePrice = ui.purchasePrice->text().toFloat();
 
-	try {
-		DeviceId=wm->DeviceStore.Put(Device).DeviceId;
-	} catch (const ppl7::Exception& exp) {
-		ShowException(exp, tr("Could not save device in DeviceStore"));
-		return false;
-	}
-	for (int i=1;i <= Device.Pages;i++) {
-		ppl7::String Path=wm->GetAudioPath(DeviceType, DeviceId, i);
-		if (Path.notEmpty()) {
-			try {
-				ppl7::Dir::mkDir(Path, true);
-			} catch (...) {}
-		}
-	}
-	return true;
+    try {
+        DeviceId = wm->DeviceStore.Put(Device).DeviceId;
+    }
+    catch (const pplib::Exception& exp) {
+        ShowException(exp, tr("Could not save device in DeviceStore"));
+        return false;
+    }
+    for (int i = 1; i <= Device.Pages; i++) {
+        pplib::String Path = wm->GetAudioPath(DeviceType, DeviceId, i);
+        if (Path.notEmpty()) {
+            try {
+                pplib::Dir::mkDir(Path, true);
+            }
+            catch (...) {
+            }
+        }
+    }
+    return true;
 }
 
 void EditDevice::on_okButton_clicked()
 {
-	if (Save()) done(DeviceId);
+    if (Save()) done(DeviceId);
 }
 
 void EditDevice::on_cancelButton_clicked()
 {
-	done(0);
+    done(0);
 }

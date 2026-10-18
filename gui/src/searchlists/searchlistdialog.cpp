@@ -31,7 +31,7 @@
 #include "searchlisttrackdialog.h"
 #include "csearchlist.h"
 
-SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const ppl7::String& Filename)
+SearchlistDialog::SearchlistDialog(QWidget* parent, CWmClient* wm, const pplib::String& Filename)
     : QWidget(parent)
 {
     if (wm) wm->RegisterWindow(WindowType::Searchlist, this);
@@ -147,7 +147,7 @@ void SearchlistDialog::setupStatusBar()
 
 void SearchlistDialog::updateStatusBar()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%i", ui.trackList->topLevelItemCount());
     statusbarTrackNumber->setText(Tmp);
     QList<QTreeWidgetItem*> list = ui.trackList->selectedItems();
@@ -212,19 +212,19 @@ bool SearchlistDialog::eventFilter(QObject* target, QEvent* event)
 void SearchlistDialog::dupeCheckOnTrack(SearchlistTreeItem* item)
 {
     int dupePresumption = dupeCheckThread->dupeCheckOnTrack(item);
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%3i %%", dupePresumption);
     item->setText(SL_COLUMN_EXISTING, Tmp);
 }
 
 void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     if (item->Track.CoverFilename.notEmpty()) {
         QPixmap Cover;
-        ppl7::String thumb = item->Track.CoverFilename + ".thumb";
+        pplib::String thumb = item->Track.CoverFilename + ".thumb";
         bool loaded = false;
-        if (ppl7::File::exists(thumb)) {
+        if (pplib::File::exists(thumb)) {
             if (Cover.load(thumb)) {
                 item->setIcon(SL_COLUMN_COVER, Cover.copy(0, 0, 64, 16));
                 loaded = true;
@@ -238,9 +238,9 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
                 QBuffer buffer(&bytes);
                 buffer.open(QIODevice::WriteOnly);
                 icon.save(&buffer, "JPEG", wm_main->conf.JpegQualityPreview);
-                ppl7::File f;
+                pplib::File f;
                 try {
-                    f.open(thumb, ppl7::File::WRITE);
+                    f.open(thumb, pplib::File::WRITE);
                     f.write(bytes.data(), bytes.size());
                     f.close();
                 }
@@ -396,7 +396,7 @@ void SearchlistDialog::on_trackList_itemClicked(QTreeWidgetItem* item, int colum
     if (column < SL_COLUMN_SELECTED) {
         SearchlistItem it = ((SearchlistTreeItem*)item)->Track;
         QClipboard* clipboard = QApplication::clipboard();
-        ppl7::String Text;
+        pplib::String Text;
         Text = it.Artist + " " + it.Title;
         LastClipboardString = Text; // Verhindern, dass eine Suche ausgelöst wird
         clipboard->setText(Text, QClipboard::Clipboard);
@@ -580,8 +580,8 @@ void SearchlistDialog::on_deleteTrackButton_clicked()
         if (index >= 0) {
             item = (SearchlistTreeItem*)ui.trackList->takeTopLevelItem(index);
             if (item->Track.CoverFilename.notEmpty()) {
-                ppl7::File::unlink(item->Track.CoverFilename);
-                ppl7::File::unlink(item->Track.CoverFilename + ".thumb");
+                pplib::File::unlink(item->Track.CoverFilename);
+                pplib::File::unlink(item->Track.CoverFilename + ".thumb");
             }
             if (item) delete item;
         }
@@ -611,11 +611,11 @@ void SearchlistDialog::save()
         item = (SearchlistTreeItem*)ui.trackList->topLevelItem(i);
         if (item) List.add(item->Track);
     }
-    List.setName(ppl7::Trim(ppl7::String(ui.searchlistName->text())));
+    List.setName(pplib::Trim(pplib::String(ui.searchlistName->text())));
     try {
         List.save(Filename);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save searchlist!"));
         return;
     }
@@ -631,7 +631,7 @@ void SearchlistDialog::on_contextFind_triggered()
 
 void SearchlistDialog::on_newTrackButton_clicked()
 {
-    ppl7::String Term = ui.searchTerm->text();
+    pplib::String Term = ui.searchTerm->text();
     Term.trim();
     if (Term.isEmpty()) {
         QString originalText = QApplication::clipboard()->text();
@@ -649,7 +649,7 @@ void SearchlistDialog::on_newTrackButton_clicked()
 
 void SearchlistDialog::on_searchButton_clicked()
 {
-    ppl7::String Term = ui.searchTerm->text();
+    pplib::String Term = ui.searchTerm->text();
     Term.trim();
     SearchlistItem Item(Term);
 
@@ -657,13 +657,13 @@ void SearchlistDialog::on_searchButton_clicked()
     this->setFocus();
 }
 
-static int matchWords(const ppl7::Array& needle, const ppl7::Array& stack)
+static int matchWords(const pplib::Array& needle, const pplib::Array& stack)
 {
     int matches = 0;
     for (size_t i = 0; i < needle.size(); i++) {
-        ppl7::String word = needle[i];
+        pplib::String word = needle[i];
         for (size_t z = 0; z < stack.size(); z++) {
-            ppl7::String comp = stack[z];
+            pplib::String comp = stack[z];
             if (word == comp) {
                 matches++;
                 break;
@@ -681,18 +681,18 @@ void SearchlistDialog::on_ClipBoardTimer_update()
     if (clip.PlainText == LastClipboardString) return;
     LastClipboardString = clip.PlainText;
     RegExpMatch match;
-    ppl7::String s;
+    pplib::String s;
     if (wm->RegExpCapture.match(clip, match)) {
         s = match.Artist + " " + match.Title;
     } else {
         s = clip.PlainText;
-        if (ppl7::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/", s)) return;
+        if (pplib::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/", s)) return;
         if (s.instr("\n") >= 0) return;
         s.replace("\t", " ");
-        s = ppl7::RegEx::replace("/\\(.*?\\)/", s, "");
+        s = pplib::RegEx::replace("/\\(.*?\\)/", s, "");
     }
     s.lowerCase();
-    ppl7::Array searchwords;
+    pplib::Array searchwords;
     if (!wm->normalizer.GetWords(s, searchwords)) return;
 
     ClipBoardTimer.stop();
@@ -704,7 +704,7 @@ void SearchlistDialog::on_ClipBoardTimer_update()
         if (item) {
             s = item->Track.Artist + " " + item->Track.Title;
             s.lowerCase();
-            ppl7::Array words;
+            pplib::Array words;
             if (wm->normalizer.GetWords(s, words)) {
                 if (matchWords(searchwords, words) > 70) ui.trackList->setCurrentItem(item);
             }
@@ -716,7 +716,7 @@ void SearchlistDialog::on_ClipBoardTimer_update()
 
 void SearchlistDialog::updateDupeCheckItem(QTreeWidgetItem* item, int dupePresumption)
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%3i %%", dupePresumption);
     item->setText(SL_COLUMN_EXISTING, Tmp);
 }
@@ -726,7 +726,7 @@ void SearchlistDialog::deleteSelectedTracks()
     on_deleteTrackButton_clicked();
 }
 
-void SearchlistDialog::on_trackList_urlDropped(const ppl7::String& url)
+void SearchlistDialog::on_trackList_urlDropped(const pplib::String& url)
 {
     SearchlistTrackDialog dialog;
     dialog.setFromUrl(url);

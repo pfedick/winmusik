@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "winmusik3.h"
 #include <QMenu>
 #include <QMessageBox>
@@ -25,128 +24,121 @@
 #include <QFocusEvent>
 #include "cddbimport.h"
 
-
-
-
 CDDBImport::CDDBImport(QWidget* parent, CWmClient* wm)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
-	this->wm=wm;
-	position=1;
-	oldposition=1;
+    ui.setupUi(this);
+    this->wm = wm;
+    position = 1;
+    oldposition = 1;
 
-	InstallFilter(ui.artist, 1);
-	InstallFilter(ui.album, 2);
-	InstallFilter(ui.releaseDate, 3);
-	InstallFilter(ui.recordDate, 4);
+    InstallFilter(ui.artist, 1);
+    InstallFilter(ui.album, 2);
+    InstallFilter(ui.releaseDate, 3);
+    InstallFilter(ui.recordDate, 4);
 
-	InstallFilter(ui.genreId, 5);
-	InstallFilter(ui.genre, 6);
+    InstallFilter(ui.genreId, 5);
+    InstallFilter(ui.genre, 6);
 
-	InstallFilter(ui.labelId, 7);
-	InstallFilter(ui.labelName, 8);
-	InstallFilter(ui.recordSourceId, 9);
-	InstallFilter(ui.recordSource, 10);
-	InstallFilter(ui.recordDeviceId, 11);
-	InstallFilter(ui.recordDevice, 12);
-	InstallFilter(ui.tags, 13);
+    InstallFilter(ui.labelId, 7);
+    InstallFilter(ui.labelName, 8);
+    InstallFilter(ui.recordSourceId, 9);
+    InstallFilter(ui.recordSource, 10);
+    InstallFilter(ui.recordDeviceId, 11);
+    InstallFilter(ui.recordDevice, 12);
+    InstallFilter(ui.tags, 13);
 
-	TCGenre.Title=tr("Genre");
-	TCGenre.Init(this, wm, ui.genreId, ui.genre, &wm->GenreStore);
-	TCGenre.SetNextWidget(ui.labelId);
+    TCGenre.Title = tr("Genre");
+    TCGenre.Init(this, wm, ui.genreId, ui.genre, &wm->GenreStore);
+    TCGenre.SetNextWidget(ui.labelId);
 
-	TCLabel.Title=tr("Label");
-	TCLabel.Init(this, wm, ui.labelId, ui.labelName, &wm->LabelStore);
-	TCLabel.SetNextWidget(ui.recordSourceId);
+    TCLabel.Title = tr("Label");
+    TCLabel.Init(this, wm, ui.labelId, ui.labelName, &wm->LabelStore);
+    TCLabel.SetNextWidget(ui.recordSourceId);
 
-	TCRecordSource.Title=tr("Record Source");
-	TCRecordSource.Init(this, wm, ui.recordSourceId, ui.recordSource, &wm->RecordSourceStore);
-	TCRecordSource.SetNextWidget(ui.recordDeviceId);
+    TCRecordSource.Title = tr("Record Source");
+    TCRecordSource.Init(this, wm, ui.recordSourceId, ui.recordSource, &wm->RecordSourceStore);
+    TCRecordSource.SetNextWidget(ui.recordDeviceId);
 
-	TCRecordDevice.Title=tr("Record Device");
-	TCRecordDevice.Init(this, wm, ui.recordDeviceId, ui.recordDevice, &wm->RecordDeviceStore);
-	TCRecordDevice.SetNextWidget(ui.tags);
+    TCRecordDevice.Title = tr("Record Device");
+    TCRecordDevice.Init(this, wm, ui.recordDeviceId, ui.recordDevice, &wm->RecordDeviceStore);
+    TCRecordDevice.SetNextWidget(ui.tags);
 
-	ui.artist->setFocus();
+    ui.artist->setFocus();
 }
 
 CDDBImport::~CDDBImport()
 {
-
 }
 
 void CDDBImport::InstallFilter(QObject* object, int id)
 {
-	object->installEventFilter(this);
-	object->setProperty("id", id);
+    object->installEventFilter(this);
+    object->setProperty("id", id);
 }
 
-void CDDBImport::setDisc(ppl7::CDDB::Disc& disc)
+void CDDBImport::setDisc(pplib::CDDB::Disc& disc)
 {
-	ui.artist->setText(disc.Artist);
+    ui.artist->setText(disc.Artist);
 
-	ppl7::String Tmp;
-	Tmp=disc.Artist + " - " + disc.Title;
-	ui.album->setText(Tmp);
+    pplib::String Tmp;
+    Tmp = disc.Artist + " - " + disc.Title;
+    ui.album->setText(Tmp);
 
-	if (disc.genre.notEmpty()) {
-		ui.genreId->setText("*");
-		ui.genre->setText(disc.genre);
-		int id=wm->GenreStore.GetId(disc.genre);
-		if (id > 0) {
-			Tmp.setf("%i", id);
-			ui.genreId->setText(Tmp);
-			ui.genre->setText(wm->GetGenreText(id));
-		}
-	}
+    if (disc.genre.notEmpty()) {
+        ui.genreId->setText("*");
+        ui.genre->setText(disc.genre);
+        int id = wm->GenreStore.GetId(disc.genre);
+        if (id > 0) {
+            Tmp.setf("%i", id);
+            ui.genreId->setText(Tmp);
+            ui.genre->setText(wm->GetGenreText(id));
+        }
+    }
 
+    // Releasedate
+    if (disc.year > 0) {
+        Tmp.setf("%u", disc.year * 10000);
+    } else {
+        Tmp = QDate::currentDate().toString("yyyyMMdd");
+    }
+    int year = Tmp.mid(0, 4).toInt();
+    int month = Tmp.mid(4, 2).toInt();
+    int day = Tmp.mid(6, 2).toInt();
+    if (!month) month = 1;
+    if (!day) day = 1;
+    QDate Date;
+    Date.setDate(year, month, day);
+    ui.releaseDate->setDate(Date);
 
-	// Releasedate
-	if (disc.year > 0) {
-		Tmp.setf("%u", disc.year * 10000);
-	} else {
-		Tmp=QDate::currentDate().toString("yyyyMMdd");
-	}
-	int year=Tmp.mid(0, 4).toInt();
-	int month=Tmp.mid(4, 2).toInt();
-	int day=Tmp.mid(6, 2).toInt();
-	if (!month) month=1;
-	if (!day) day=1;
-	QDate Date;
-	Date.setDate(year, month, day);
-	ui.releaseDate->setDate(Date);
+    // Aufnahmedatum
+    ui.recordDate->setDate(QDate::currentDate());
 
-	// Aufnahmedatum
-	ui.recordDate->setDate(QDate::currentDate());
-
-	updateTracklist(disc);
-
+    updateTracklist(disc);
 }
 
-void CDDBImport::updateTracklist(ppl7::CDDB::Disc& disc)
+void CDDBImport::updateTracklist(pplib::CDDB::Disc& disc)
 {
-	ppl7::String Tmp;
-	ui.tracklist->clear();
-	ui.tracklist->setWordWrap(false);
-	ui.tracklist->setSortingEnabled(false);
-	ppl7::CDDB::Disc::TrackList::const_iterator it;
-	for (it=disc.Tracks.begin();it != disc.Tracks.end();++it) {
-		QTreeWidgetItem* item=new QTreeWidgetItem;
-		Tmp.setf("%i", (*it).number);
-		item->setText(0, Tmp);
-		ppl7::String Artist=ppl7::Trim((*it).Artist);
-		ppl7::String Title=ppl7::Trim((*it).Title);
-		ppl7::String Version=getVersionFromTitle(Title, (*it).length);
+    pplib::String Tmp;
+    ui.tracklist->clear();
+    ui.tracklist->setWordWrap(false);
+    ui.tracklist->setSortingEnabled(false);
+    pplib::CDDB::Disc::TrackList::const_iterator it;
+    for (it = disc.Tracks.begin(); it != disc.Tracks.end(); ++it) {
+        QTreeWidgetItem* item = new QTreeWidgetItem;
+        Tmp.setf("%i", (*it).number);
+        item->setText(0, Tmp);
+        pplib::String Artist = pplib::Trim((*it).Artist);
+        pplib::String Title = pplib::Trim((*it).Title);
+        pplib::String Version = getVersionFromTitle(Title, (*it).length);
 
-		item->setText(1, Artist + "- " + Title);
-		item->setText(2, Version);
-		Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
-		item->setText(3, Tmp);
+        item->setText(1, Artist + "- " + Title);
+        item->setText(2, Version);
+        Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
+        item->setText(3, Tmp);
 
-		ui.tracklist->addTopLevelItem(item);
-	}
-
+        ui.tracklist->addTopLevelItem(item);
+    }
 }
 
 bool CDDBImport::eventFilter(QObject* target, QEvent* event)
@@ -163,8 +155,8 @@ bool CDDBImport::eventFilter(QObject* target, QEvent* event)
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
 {
-	if (consumeEvent(target, event)) return true;
-	return QWidget::eventFilter(target, event);
+    if (consumeEvent(target, event)) return true;
+    return QWidget::eventFilter(target, event);
 }
 
 bool CDDBImport::consumeEvent(QObject* target, QEvent* event)
@@ -183,38 +175,38 @@ bool CDDBImport::consumeEvent(QObject* target, QEvent* event)
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
 {
-	QKeyEvent* keyEvent=NULL;
-	int key=0;
-	int modifier=Qt::NoModifier;
-	//QFocusEvent *focusEvent=NULL;
+    QKeyEvent* keyEvent = NULL;
+    int key = 0;
+    int modifier = Qt::NoModifier;
+    // QFocusEvent *focusEvent=NULL;
 
-	// Id auslesen
-	int id=target->property("id").toInt();
-	int type=event->type();
-	if (type == QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent*>(event);
-		key=keyEvent->key();
-		modifier=keyEvent->modifiers();
-		if (on_KeyPress(target, key, modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
-	} else if (type == QEvent::FocusIn || type == QEvent::FocusOut) {
-		//focusEvent=static_cast<QFocusEvent *>(event);
-		if (type == QEvent::FocusIn) {
-			position=id;
-		} else if (type == QEvent::FocusOut) {
-			oldposition=id;
-		}
-	}
+    // Id auslesen
+    int id = target->property("id").toInt();
+    int type = event->type();
+    if (type == QEvent::KeyPress) {
+        keyEvent = static_cast<QKeyEvent*>(event);
+        key = keyEvent->key();
+        modifier = keyEvent->modifiers();
+        if (on_KeyPress(target, key, modifier)) return true; // Fkeys und andere Steuerkeys prüfen
+    } else if (type == QEvent::FocusIn || type == QEvent::FocusOut) {
+        // focusEvent=static_cast<QFocusEvent *>(event);
+        if (type == QEvent::FocusIn) {
+            position = id;
+        } else if (type == QEvent::FocusOut) {
+            oldposition = id;
+        }
+    }
 
-	if (target == ui.genre || target == ui.genreId) {
-		return TCGenre.ConsumeEvent(target, event, oldposition, position);
-	} else if (target == ui.labelName || target == ui.labelId) {
-		return TCLabel.ConsumeEvent(target, event, oldposition, position);
-	} else if (target == ui.recordSource || target == ui.recordSourceId) {
-		return TCRecordSource.ConsumeEvent(target, event, oldposition, position);
-	} else if (target == ui.recordDevice || target == ui.recordDeviceId) {
-		return TCRecordDevice.ConsumeEvent(target, event, oldposition, position);
-	}
-	return false;
+    if (target == ui.genre || target == ui.genreId) {
+        return TCGenre.ConsumeEvent(target, event, oldposition, position);
+    } else if (target == ui.labelName || target == ui.labelId) {
+        return TCLabel.ConsumeEvent(target, event, oldposition, position);
+    } else if (target == ui.recordSource || target == ui.recordSourceId) {
+        return TCRecordSource.ConsumeEvent(target, event, oldposition, position);
+    } else if (target == ui.recordDevice || target == ui.recordDeviceId) {
+        return TCRecordDevice.ConsumeEvent(target, event, oldposition, position);
+    }
+    return false;
 }
 
 bool CDDBImport::on_KeyPress(QObject*, int key, int modifier)
@@ -231,20 +223,20 @@ bool CDDBImport::on_KeyPress(QObject*, int key, int modifier)
  * nichts mehr machen muss, andernfalls \b false.
  */
 {
-	// ******************************************************************************* ESC
-	if (key == Qt::Key_Escape) {
-		on_cancelButton_clicked();
-		return true;
-		// *************************************************************************** Return/Enter
-	} else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
-		MoveToNextWidget();
-		return true;
-		// *************************************************************************** F12
-	} else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
-		on_okButton_clicked();
-		return true;
-	}
-	return false;
+    // ******************************************************************************* ESC
+    if (key == Qt::Key_Escape) {
+        on_cancelButton_clicked();
+        return true;
+        // *************************************************************************** Return/Enter
+    } else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
+        MoveToNextWidget();
+        return true;
+        // *************************************************************************** F12
+    } else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
+        on_okButton_clicked();
+        return true;
+    }
+    return false;
 }
 
 void CDDBImport::resizeEvent(QResizeEvent* event)
@@ -255,14 +247,14 @@ void CDDBImport::resizeEvent(QResizeEvent* event)
  * Inhalt der Trackliste ändert.
  */
 {
-	int w=ui.tracklist->width();
-	ui.tracklist->setColumnWidth(0, 60);
-	w-=64;
-	ui.tracklist->setColumnWidth(3, 60);
-	w-=64;
-	ui.tracklist->setColumnWidth(1, w * 70 / 100);
-	ui.tracklist->setColumnWidth(2, w * 30 / 100);
-	QWidget::resizeEvent(event);
+    int w = ui.tracklist->width();
+    ui.tracklist->setColumnWidth(0, 60);
+    w -= 64;
+    ui.tracklist->setColumnWidth(3, 60);
+    w -= 64;
+    ui.tracklist->setColumnWidth(1, w * 70 / 100);
+    ui.tracklist->setColumnWidth(2, w * 30 / 100);
+    QWidget::resizeEvent(event);
 }
 
 void CDDBImport::MoveToNextWidget()
@@ -272,271 +264,309 @@ void CDDBImport::MoveToNextWidget()
  * gerade befindet und setzt den Focus auf das nachfolgende Eingabefeld.
  */
 {
-	switch (position) {
-		case 1: ui.album->setFocus(); break;
-		case 2: ui.releaseDate->setFocus(); break;
-		case 3: ui.recordDate->setFocus(); break;
-		case 4: ui.genreId->setFocus(); break;
-		case 5: ui.genre->setFocus(); break;
-		case 6: ui.labelId->setFocus(); break;
-		case 7: ui.labelName->setFocus(); break;
-		case 8: ui.recordSourceId->setFocus(); break;
-		case 9: ui.recordSource->setFocus(); break;
-		case 10: ui.recordDeviceId->setFocus(); break;
-		case 11: ui.recordDevice->setFocus(); break;
-		case 12: ui.tags->setFocus(); break;
-		case 13: ui.okButton->setFocus(); break;
-	};
+    switch (position) {
+    case 1:
+        ui.album->setFocus();
+        break;
+    case 2:
+        ui.releaseDate->setFocus();
+        break;
+    case 3:
+        ui.recordDate->setFocus();
+        break;
+    case 4:
+        ui.genreId->setFocus();
+        break;
+    case 5:
+        ui.genre->setFocus();
+        break;
+    case 6:
+        ui.labelId->setFocus();
+        break;
+    case 7:
+        ui.labelName->setFocus();
+        break;
+    case 8:
+        ui.recordSourceId->setFocus();
+        break;
+    case 9:
+        ui.recordSource->setFocus();
+        break;
+    case 10:
+        ui.recordDeviceId->setFocus();
+        break;
+    case 11:
+        ui.recordDevice->setFocus();
+        break;
+    case 12:
+        ui.tags->setFocus();
+        break;
+    case 13:
+        ui.okButton->setFocus();
+        break;
+    };
 }
 
 QWidget* CDDBImport::GetWidgetFromPosition(int position)
 {
-	switch (position) {
-		case 1: return ui.artist;
-		case 2: return ui.album;
-		case 3: return ui.releaseDate;
-		case 4: return ui.recordDate;
-		case 5: return ui.genreId;
-		case 6: return ui.genre;
-		case 7: return ui.labelId;
-		case 8: return ui.labelName;
-		case 9: return ui.recordSourceId;
-		case 10: return ui.recordSource;
-		case 11: return ui.recordDeviceId;
-		case 12: return ui.recordDevice;
-		case 13: return ui.tags;
-	}
-	return NULL;
+    switch (position) {
+    case 1:
+        return ui.artist;
+    case 2:
+        return ui.album;
+    case 3:
+        return ui.releaseDate;
+    case 4:
+        return ui.recordDate;
+    case 5:
+        return ui.genreId;
+    case 6:
+        return ui.genre;
+    case 7:
+        return ui.labelId;
+    case 8:
+        return ui.labelName;
+    case 9:
+        return ui.recordSourceId;
+    case 10:
+        return ui.recordSource;
+    case 11:
+        return ui.recordDeviceId;
+    case 12:
+        return ui.recordDevice;
+    case 13:
+        return ui.tags;
+    }
+    return NULL;
 }
-
 
 void CDDBImport::FixFocus()
 {
-	QWidget* widget=this->GetWidgetFromPosition(position);
-	if (widget) widget->setFocus();
+    QWidget* widget = this->GetWidgetFromPosition(position);
+    if (widget) widget->setFocus();
 }
-
 
 void CDDBImport::on_okButton_clicked()
 {
-	// Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
-	if (!TCGenre.Finish()) {
-		ui.genreId->setFocus();
-		return;
-	}
-	if (!TCLabel.Finish()) {
-		ui.labelId->setFocus();
-		return;
-	}
-	if (!TCRecordSource.Finish()) {
-		ui.recordSourceId->setFocus();
-		return;
-	}
-	if (!TCRecordDevice.Finish()) {
-		ui.recordDeviceId->setFocus();
-		return;
-	}
-	done(1);
+    // Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
+    if (!TCGenre.Finish()) {
+        ui.genreId->setFocus();
+        return;
+    }
+    if (!TCLabel.Finish()) {
+        ui.labelId->setFocus();
+        return;
+    }
+    if (!TCRecordSource.Finish()) {
+        ui.recordSourceId->setFocus();
+        return;
+    }
+    if (!TCRecordDevice.Finish()) {
+        ui.recordDeviceId->setFocus();
+        return;
+    }
+    done(1);
 }
 
 void CDDBImport::on_cancelButton_clicked()
 {
-	done(0);
+    done(0);
 }
 
 bool CDDBImport::checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
-	CTrackList tracklist=wm->GetTracklist(devicetype, deviceid, page);
-	if (tracklist.Num() == 0) return true;
+    CTrackList tracklist = wm->GetTracklist(devicetype, deviceid, page);
+    if (tracklist.Num() == 0) return true;
 
-	int ret=QMessageBox::warning(this, tr("WinMusik: Attention"),
-		tr("This device already has tracks in the database. When you start "
-			"the import from the CDDB now, the new tracks will be appended, which is "
-			"probably not what you want.\n\n"
-			"Do you really want to append the tracks?"),
-		QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-	if (ret == QMessageBox::No) return false;
-	return true;
+    int ret = QMessageBox::warning(this, tr("WinMusik: Attention"),
+                                   tr("This device already has tracks in the database. When you start "
+                                      "the import from the CDDB now, the new tracks will be appended, which is "
+                                      "probably not what you want.\n\n"
+                                      "Do you really want to append the tracks?"),
+                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (ret == QMessageBox::No) return false;
+    return true;
 }
 
-void CDDBImport::startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page)
+void CDDBImport::startImport(pplib::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page)
 {
-	ppl7::String Tmp;
-	CTrackList tracklist=wm->GetTracklist(devicetype, deviceid, page);
-	if (!wm->DeviceStore.Exists(devicetype, deviceid)) {
-		wm->RaiseError(NULL, tr("Unexpected Error, Device does not exist"));
-		return;
-	}
-	DataDevice datadevice=wm->DeviceStore.Get(devicetype, deviceid);
-	if (datadevice.GetTitle().isEmpty()) {
-		Tmp=ui.album->text();
-		datadevice.SetTitle(Tmp);
-	}
-	if (datadevice.LabelId == 0) {
-		datadevice.LabelId=ui.labelId->text().toInt();
-	}
-	if (datadevice.PurchaseId == 0) {
-		datadevice.PurchaseId=ui.recordSourceId->text().toInt();
-	}
-	int trackNum=tracklist.GetMax() + 1;
-	ppl7::CDDB::Disc::TrackList::const_iterator it;
-	for (it=disc.Tracks.begin();it != disc.Tracks.end();++it) {
-		DataTitle Ti;
-		getTitle(Ti, *it);
-		Ti.DeviceType=devicetype;
-		Ti.DeviceId=deviceid;
-		Ti.Page=page;
-		Ti.Track=trackNum;
-		addDataFromFile(Ti);
-		if (!saveTitle(&tracklist, Ti)) {
-			it=disc.Tracks.end();
-			break;
-		}
-		trackNum++;
-	}
-	// Tonträger aktualisieren
-	try {
-		wm->DeviceStore.Put(datadevice);
-		wm->DeviceStore.Update(devicetype, deviceid);
-	} catch (const ppl7::Exception& exp) {
-		ShowException(exp, tr("could not save device"));
-	}
+    pplib::String Tmp;
+    CTrackList tracklist = wm->GetTracklist(devicetype, deviceid, page);
+    if (!wm->DeviceStore.Exists(devicetype, deviceid)) {
+        wm->RaiseError(NULL, tr("Unexpected Error, Device does not exist"));
+        return;
+    }
+    DataDevice datadevice = wm->DeviceStore.Get(devicetype, deviceid);
+    if (datadevice.GetTitle().isEmpty()) {
+        Tmp = ui.album->text();
+        datadevice.SetTitle(Tmp);
+    }
+    if (datadevice.LabelId == 0) {
+        datadevice.LabelId = ui.labelId->text().toInt();
+    }
+    if (datadevice.PurchaseId == 0) {
+        datadevice.PurchaseId = ui.recordSourceId->text().toInt();
+    }
+    int trackNum = tracklist.GetMax() + 1;
+    pplib::CDDB::Disc::TrackList::const_iterator it;
+    for (it = disc.Tracks.begin(); it != disc.Tracks.end(); ++it) {
+        DataTitle Ti;
+        getTitle(Ti, *it);
+        Ti.DeviceType = devicetype;
+        Ti.DeviceId = deviceid;
+        Ti.Page = page;
+        Ti.Track = trackNum;
+        addDataFromFile(Ti);
+        if (!saveTitle(&tracklist, Ti)) {
+            it = disc.Tracks.end();
+            break;
+        }
+        trackNum++;
+    }
+    // Tonträger aktualisieren
+    try {
+        wm->DeviceStore.Put(datadevice);
+        wm->DeviceStore.Update(devicetype, deviceid);
+    }
+    catch (const pplib::Exception& exp) {
+        ShowException(exp, tr("could not save device"));
+    }
 }
 
-
-ppl7::String CDDBImport::getVersionFromTitle(ppl7::String& Title, int length)
+pplib::String CDDBImport::getVersionFromTitle(pplib::String& Title, int length)
 {
-	ppl7::String Version="";
-	std::vector<ppl7::String> matches;
-	if (ppl7::RegEx::capture("/^(.*)\\((.*?)\\)$", Title, matches)) {
-		Title=ppl7::Trim(matches[1]);
-		Version=ppl7::Trim(matches[2]);
-	} else {
-		if (length < 300) Version=tr("Single");
-		else Version=tr("Original Version");
-	}
-	return Version;
+    pplib::String Version = "";
+    std::vector<pplib::String> matches;
+    if (pplib::RegEx::capture("/^(.*)\\((.*?)\\)$", Title, matches)) {
+        Title = pplib::Trim(matches[1]);
+        Version = pplib::Trim(matches[2]);
+    } else {
+        if (length < 300)
+            Version = tr("Single");
+        else
+            Version = tr("Original Version");
+    }
+    return Version;
 }
 
-void CDDBImport::getTitle(DataTitle& Ti, const ppl7::CDDB::Track& track)
+void CDDBImport::getTitle(DataTitle& Ti, const pplib::CDDB::Track& track)
 {
-	ppl7::String Tmp;
+    pplib::String Tmp;
 
-	Ti.SetTitle(track.Title);
-	Tmp=ppl7::Trim(track.Artist);
-	if (Tmp.isEmpty()) {
-		Tmp=ui.artist->text();
-		Tmp.trim();
-	}
-	Ti.SetArtist(Tmp);
+    Ti.SetTitle(track.Title);
+    Tmp = pplib::Trim(track.Artist);
+    if (Tmp.isEmpty()) {
+        Tmp = ui.artist->text();
+        Tmp.trim();
+    }
+    Ti.SetArtist(Tmp);
 
-	// Tags
-	Tmp=ui.tags->text();
-	Tmp=ppl7::Trim(ppl7::LowerCase(Tmp));
-	Ti.SetTags(Tmp);
+    // Tags
+    Tmp = ui.tags->text();
+    Tmp = pplib::Trim(pplib::LowerCase(Tmp));
+    Ti.SetTags(Tmp);
 
+    pplib::String Title = pplib::Trim(track.Title);
+    pplib::String Version = getVersionFromTitle(Title, track.length);
 
-	ppl7::String Title=ppl7::Trim(track.Title);
-	ppl7::String Version=getVersionFromTitle(Title, track.length);
+    Ti.SetTitle(Title);
 
-	Ti.SetTitle(Title);
+    // Version
+    Ti.VersionId = wm->VersionStore.FindOrAdd(Version);
+    // Genre
+    Ti.GenreId = ui.genreId->text().toInt();
+    // Label
+    Ti.LabelId = ui.labelId->text().toInt();
+    // Aufnahmequelle
+    Ti.RecordSourceId = ui.recordSourceId->text().toInt();
+    // Aufnahmegerät
+    Ti.RecordDeviceId = ui.recordDeviceId->text().toInt();
 
-	// Version
-	Ti.VersionId=wm->VersionStore.FindOrAdd(Version);
-	// Genre
-	Ti.GenreId=ui.genreId->text().toInt();
-	// Label
-	Ti.LabelId=ui.labelId->text().toInt();
-	// Aufnahmequelle
-	Ti.RecordSourceId=ui.recordSourceId->text().toInt();
-	// Aufnahmegerät
-	Ti.RecordDeviceId=ui.recordDeviceId->text().toInt();
+    // Länge
+    Ti.Length = track.length;
 
-	// Länge
-	Ti.Length=track.length;
+    Tmp = ui.album->text();
+    Ti.SetAlbum(Tmp);
 
-	Tmp=ui.album->text();
-	Ti.SetAlbum(Tmp);
+    // Erscheinungsjahr
+    QDate Date = ui.releaseDate->date();
+    Tmp = Date.toString("yyyyMMdd");
+    Ti.ReleaseDate = Tmp.toInt();
 
-	// Erscheinungsjahr
-	QDate Date=ui.releaseDate->date();
-	Tmp=Date.toString("yyyyMMdd");
-	Ti.ReleaseDate=Tmp.toInt();
+    // Aufnahmedatum
+    Date = ui.recordDate->date();
+    Tmp = Date.toString("yyyyMMdd");
+    // printf ("Date: %s\n",(const char*)Tmp);
+    Ti.RecordDate = Tmp.toInt();
 
-	// Aufnahmedatum
-	Date=ui.recordDate->date();
-	Tmp=Date.toString("yyyyMMdd");
-	//printf ("Date: %s\n",(const char*)Tmp);
-	Ti.RecordDate=Tmp.toInt();
+    // Ton
+    Ti.Channels = 2;
 
+    // Qualität
+    Ti.Quality = 0;
 
-	// Ton
-	Ti.Channels=2;
+    // Bewertung
+    Ti.Rating = 0;
 
-	// Qualität
-	Ti.Quality=0;
-
-	// Bewertung
-	Ti.Rating=0;
-
-	// Flags
-	Ti.Flags=3;
+    // Flags
+    Ti.Flags = 3;
 }
 
 void CDDBImport::addDataFromFile(DataTitle& Ti)
 {
-	ppl7::String Path=wm->GetAudioFilename(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track);
-	if (Path.notEmpty() == true) {
-		TrackInfo tinfo;
-		if (getTrackInfoFromFile(tinfo, Path)) {
-			if (tinfo.Ti.Key != Ti.Key) {
-				Ti.Key=tinfo.Ti.Key;
-			}
-			if (Ti.EnergyLevel == 0 && tinfo.Ti.EnergyLevel > 0) {
-				Ti.EnergyLevel=tinfo.Ti.EnergyLevel;
-			}
-			if (Ti.BPM == 0 && tinfo.Ti.BPM > 0) {
-				Ti.BPM=tinfo.Ti.BPM;
-			}
-			if (tinfo.Ti.Bitrate > 0 && tinfo.Ti.Bitrate != Ti.Bitrate) {
-				Ti.Bitrate=tinfo.Ti.Bitrate;
-			}
-			if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
-				Ti.Length=tinfo.Ti.Length;
-			}
-			if (tinfo.Ti.CoverPreview.size() > 0) {
-				Ti.CoverPreview=tinfo.Ti.CoverPreview;
-			}
-		}
-	}
-
+    pplib::String Path = wm->GetAudioFilename(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track);
+    if (Path.notEmpty() == true) {
+        TrackInfo tinfo;
+        if (getTrackInfoFromFile(tinfo, Path)) {
+            if (tinfo.Ti.Key != Ti.Key) {
+                Ti.Key = tinfo.Ti.Key;
+            }
+            if (Ti.EnergyLevel == 0 && tinfo.Ti.EnergyLevel > 0) {
+                Ti.EnergyLevel = tinfo.Ti.EnergyLevel;
+            }
+            if (Ti.BPM == 0 && tinfo.Ti.BPM > 0) {
+                Ti.BPM = tinfo.Ti.BPM;
+            }
+            if (tinfo.Ti.Bitrate > 0 && tinfo.Ti.Bitrate != Ti.Bitrate) {
+                Ti.Bitrate = tinfo.Ti.Bitrate;
+            }
+            if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
+                Ti.Length = tinfo.Ti.Length;
+            }
+            if (tinfo.Ti.CoverPreview.size() > 0) {
+                Ti.CoverPreview = tinfo.Ti.CoverPreview;
+            }
+        }
+    }
 }
 
 int CDDBImport::saveTitle(CTrackList* tracklist, DataTitle& Ti)
 {
-	// Titel speichern
-	try {
-		wm->TitleStore.Put(Ti);
-	} catch (const ppl7::Exception& exp) {
-		ShowException(exp, tr("Could not save Title in TitleStore"));
-		return 0;
-	}
-	// An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
-	// sondern den Pointer innerhalb der Datenbank
-	const DataTitle* dt=wm->TitleStore.GetPtr(Ti.TitleId);
-	if (dt) wm->Hashes.AddTitle(Ti.TitleId, dt);
-	// Track speichern
-	DataTrack Track;
-	Track.SetValue(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track, Ti.TitleId);
-	try {
-		tracklist->Put(Track);
-	} catch (const ppl7::Exception& exp) {
-		ShowException(exp, tr("Could not save Track in TrackList"));
-		return 0;
-	}
+    // Titel speichern
+    try {
+        wm->TitleStore.Put(Ti);
+    }
+    catch (const pplib::Exception& exp) {
+        ShowException(exp, tr("Could not save Title in TitleStore"));
+        return 0;
+    }
+    // An die Hashes dürfen wir natürlich nicht den Pointer auf den lokalen Titel "Ti" übergeben,
+    // sondern den Pointer innerhalb der Datenbank
+    const DataTitle* dt = wm->TitleStore.GetPtr(Ti.TitleId);
+    if (dt) wm->Hashes.AddTitle(Ti.TitleId, dt);
+    // Track speichern
+    DataTrack Track;
+    Track.SetValue(Ti.DeviceType, Ti.DeviceId, Ti.Page, Ti.Track, Ti.TitleId);
+    try {
+        tracklist->Put(Track);
+    }
+    catch (const pplib::Exception& exp) {
+        ShowException(exp, tr("Could not save Track in TrackList"));
+        return 0;
+    }
 
-	if (wm_main->conf.bWriteID3Tags == true) {
-		wm->SaveID3Tags(Track.Device, Track.DeviceId, Track.Page, Track.Track, Ti);
-	}
-	return 1;
+    if (wm_main->conf.bWriteID3Tags == true) {
+        wm->SaveID3Tags(Track.Device, Track.DeviceId, Track.Page, Track.Track, Ti);
+    }
+    return 1;
 }

@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #include "winmusik3.h"
 #include <QMenu>
 #include <QMessageBox>
@@ -26,61 +24,54 @@
 #include <QFocusEvent>
 #include "cddbselect.h"
 
-
-
-
 CDDBSelect::CDDBSelect(QWidget* parent, CWmClient* wm)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
-	this->wm=wm;
-	InstallFilter(ui.tracklist, 1);
-	ui.tracklist->setFocus();
-	selectedItem=NULL;
+    ui.setupUi(this);
+    this->wm = wm;
+    InstallFilter(ui.tracklist, 1);
+    ui.tracklist->setFocus();
+    selectedItem = NULL;
 }
 
 CDDBSelect::~CDDBSelect()
 {
-
 }
 
 void CDDBSelect::InstallFilter(QObject* object, int id)
 {
-	object->installEventFilter(this);
-	object->setProperty("id", id);
+    object->installEventFilter(this);
+    object->setProperty("id", id);
 }
 
-void CDDBSelect::setMatches(const ppl7::CDDB::Matches& matches)
+void CDDBSelect::setMatches(const pplib::CDDB::Matches& matches)
 {
-	ppl7::String Tmp;
-	ui.tracklist->clear();
-	ui.tracklist->setWordWrap(false);
-	ui.tracklist->setSortingEnabled(false);
-	ppl7::CDDB::Matches::const_iterator it;
-	for (it=matches.begin();it != matches.end();++it) {
-		CddbItem* item=new CddbItem;
-		item->disc=(*it);
-		ppl7::String Artist=(*it).Artist;
-		ppl7::String Title=(*it).Title;
-		item->setText(0, Artist + "- " + Title);
+    pplib::String Tmp;
+    ui.tracklist->clear();
+    ui.tracklist->setWordWrap(false);
+    ui.tracklist->setSortingEnabled(false);
+    pplib::CDDB::Matches::const_iterator it;
+    for (it = matches.begin(); it != matches.end(); ++it) {
+        CddbItem* item = new CddbItem;
+        item->disc = (*it);
+        pplib::String Artist = (*it).Artist;
+        pplib::String Title = (*it).Title;
+        item->setText(0, Artist + "- " + Title);
 
-		Tmp.setf("%i", (*it).year);
-		item->setText(1, Tmp);
+        Tmp.setf("%i", (*it).year);
+        item->setText(1, Tmp);
 
-		Tmp.setf("%i", (int)(*it).Tracks.size());
-		item->setText(2, Tmp);
+        Tmp.setf("%i", (int)(*it).Tracks.size());
+        item->setText(2, Tmp);
 
-		Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
-		item->setText(3, Tmp);
+        Tmp.setf("%i:%02i", (*it).length / 60, (*it).length % 60);
+        item->setText(3, Tmp);
 
-		item->setText(4, (*it).genre);
+        item->setText(4, (*it).genre);
 
-		ui.tracklist->addTopLevelItem(item);
-	}
-
+        ui.tracklist->addTopLevelItem(item);
+    }
 }
-
-
 
 bool CDDBSelect::eventFilter(QObject* target, QEvent* event)
 /*!\brief Event Handler
@@ -96,8 +87,8 @@ bool CDDBSelect::eventFilter(QObject* target, QEvent* event)
  * wird die übergeordnete Basisfunktion QWidget::eventFilter aufgerufen und deren Returncode zurückgeliefert.
  */
 {
-	if (consumeEvent(target, event)) return true;
-	return QWidget::eventFilter(target, event);
+    if (consumeEvent(target, event)) return true;
+    return QWidget::eventFilter(target, event);
 }
 
 bool CDDBSelect::consumeEvent(QObject* target, QEvent* event)
@@ -116,18 +107,18 @@ bool CDDBSelect::consumeEvent(QObject* target, QEvent* event)
  * \returns Gibt \c true zurück, wenn der Event verarbeit wurde, sonst \c false
  */
 {
-	QKeyEvent* keyEvent=NULL;
-	int key=0;
-	int modifier=Qt::NoModifier;
+    QKeyEvent* keyEvent = NULL;
+    int key = 0;
+    int modifier = Qt::NoModifier;
 
-	int type=event->type();
-	if (type == QEvent::KeyPress) {
-		keyEvent= static_cast<QKeyEvent*>(event);
-		key=keyEvent->key();
-		modifier=keyEvent->modifiers();
-		if (on_KeyPress(target, key, modifier)) return true;		// Fkeys und andere Steuerkeys prüfen
-	}
-	return false;
+    int type = event->type();
+    if (type == QEvent::KeyPress) {
+        keyEvent = static_cast<QKeyEvent*>(event);
+        key = keyEvent->key();
+        modifier = keyEvent->modifiers();
+        if (on_KeyPress(target, key, modifier)) return true; // Fkeys und andere Steuerkeys prüfen
+    }
+    return false;
 }
 
 bool CDDBSelect::on_KeyPress(QObject*, int key, int modifier)
@@ -144,20 +135,20 @@ bool CDDBSelect::on_KeyPress(QObject*, int key, int modifier)
  * nichts mehr machen muss, andernfalls \b false.
  */
 {
-	// ******************************************************************************* ESC
-	if (key == Qt::Key_Escape) {
-		on_cancelButton_clicked();
-		return true;
-		// *************************************************************************** Return/Enter
-	} else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
-		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
-		return true;
-		// *************************************************************************** F12
-	} else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
-		on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
-		return true;
-	}
-	return false;
+    // ******************************************************************************* ESC
+    if (key == Qt::Key_Escape) {
+        on_cancelButton_clicked();
+        return true;
+        // *************************************************************************** Return/Enter
+    } else if (key == Qt::Key_Return || key == Qt::Key_Enter) {
+        on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
+        return true;
+        // *************************************************************************** F12
+    } else if (key == Qt::Key_F12 && modifier == Qt::NoModifier) {
+        on_tracklist_itemDoubleClicked(ui.tracklist->currentItem(), 0);
+        return true;
+    }
+    return false;
 }
 
 void CDDBSelect::resizeEvent(QResizeEvent* event)
@@ -168,34 +159,34 @@ void CDDBSelect::resizeEvent(QResizeEvent* event)
  * Inhalt der Trackliste ändert.
  */
 {
-	int w=ui.tracklist->width();
-	ui.tracklist->setColumnWidth(1, 60);
-	w-=64;
-	ui.tracklist->setColumnWidth(2, 40);
-	w-=44;
-	ui.tracklist->setColumnWidth(3, 60);
-	w-=64;
-	ui.tracklist->setColumnWidth(4, 100);
-	w-=104;
-	ui.tracklist->setColumnWidth(0, w);
+    int w = ui.tracklist->width();
+    ui.tracklist->setColumnWidth(1, 60);
+    w -= 64;
+    ui.tracklist->setColumnWidth(2, 40);
+    w -= 44;
+    ui.tracklist->setColumnWidth(3, 60);
+    w -= 64;
+    ui.tracklist->setColumnWidth(4, 100);
+    w -= 104;
+    ui.tracklist->setColumnWidth(0, w);
 
-	QWidget::resizeEvent(event);
+    QWidget::resizeEvent(event);
 }
 
 void CDDBSelect::on_tracklist_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	if (item == NULL) return;
-	selectedItem=(CddbItem*)item;
-	done(1);
+    if (item == NULL) return;
+    selectedItem = (CddbItem*)item;
+    done(1);
 }
 
 void CDDBSelect::on_cancelButton_clicked()
 {
-	done(0);
+    done(0);
 }
 
-ppl7::CDDB::Disc CDDBSelect::getSelected()
+pplib::CDDB::Disc CDDBSelect::getSelected()
 {
-	if (selectedItem) return selectedItem->disc;
-	return ppl7::CDDB::Disc();
+    if (selectedItem) return selectedItem->disc;
+    return pplib::CDDB::Disc();
 }

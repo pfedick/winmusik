@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef CDDBIMPORT_H_
 #define CDDBIMPORT_H_
 
@@ -37,10 +35,10 @@ public:
     CDDBImport(QWidget* parent = 0, CWmClient* wm = NULL);
     ~CDDBImport();
 
-    void setDisc(ppl7::CDDB::Disc& disc);
+    void setDisc(pplib::CDDB::Disc& disc);
 
     bool checkAndConfirmOverwrite(uint8_t devicetype, uint32_t deviceid, uint8_t page);
-    void startImport(ppl7::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page);
+    void startImport(pplib::CDDB::Disc& disc, uint8_t devicetype, uint32_t deviceid, uint8_t page);
 
 private:
     Ui::CDDBImport ui;
@@ -55,7 +53,7 @@ private:
     bool eventFilter(QObject* target, QEvent* event);
     bool consumeEvent(QObject* target, QEvent* event);
     void resizeEvent(QResizeEvent* event);
-    ppl7::String getVersionFromTitle(ppl7::String& Title, int length);
+    pplib::String getVersionFromTitle(pplib::String& Title, int length);
 
     // Globale Events
     bool on_KeyPress(QObject* target, int key, int modifier);
@@ -63,8 +61,8 @@ private:
     QWidget* GetWidgetFromPosition(int position);
     void FixFocus();
 
-    void updateTracklist(ppl7::CDDB::Disc& disc);
-    void getTitle(DataTitle& Ti, const ppl7::CDDB::Track& track);
+    void updateTracklist(pplib::CDDB::Disc& disc);
+    void getTitle(DataTitle& Ti, const pplib::CDDB::Track& track);
     void addDataFromFile(DataTitle& Ti);
     int saveTitle(CTrackList* tracklist, DataTitle& Ti);
 
@@ -73,10 +71,5 @@ public slots:
     void on_okButton_clicked();
     void on_cancelButton_clicked();
 };
-
-
-
-
-
 
 #endif /* CDDBIMPORT_H_ */

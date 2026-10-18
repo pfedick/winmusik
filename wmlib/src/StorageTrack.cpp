@@ -17,18 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "wm_storage.h"
 #include "wm_tracklist.h"
 #include "wm_exceptions.h"
 #include <map>
 
-
-namespace de {
-namespace pfp {
-namespace winmusik {
-
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class DataTrack
  * \ingroup WM3DataTypes
@@ -61,7 +60,6 @@ namespace winmusik {
  * \endcode
  * Die Frage ist, ob ein 64-Bit Shift in einer 32-Bit Umgebung funktioniert?
  */
-
 
 /*!\var DataTrack::Device
  * \brief Art des Tonträgers
@@ -106,22 +104,22 @@ DataTrack::DataTrack()
  * Konstruktor der Klasse. Er setzt alle Variablen auf 0.
  */
 {
-	DeviceId=0;
-	TitleId=0;
-	Track=0;
-	Device=0;
-	Page=0;
-	formatversion=1;
+    DeviceId = 0;
+    TitleId = 0;
+    Track = 0;
+    Device = 0;
+    Page = 0;
+    formatversion = 1;
 }
 
 DataTrack::DataTrack(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId)
 {
-	formatversion=1;
-	this->DeviceId=DeviceId;
-	this->TitleId=TitleId;
-	this->Track=Track;
-	this->Device=Device;
-	this->Page=Page;
+    formatversion = 1;
+    this->DeviceId = DeviceId;
+    this->TitleId = TitleId;
+    this->Track = Track;
+    this->Device = Device;
+    this->Page = Page;
 }
 
 void DataTrack::Clear()
@@ -131,15 +129,14 @@ void DataTrack::Clear()
  * Storage-Klasse CStorageItem::Clear aufgerufen.
  */
 {
-	DeviceId=0;
-	TitleId=0;
-	Track=0;
-	Device=0;
-	Page=0;
-	CStorageItem::Clear();
-	formatversion=1;
+    DeviceId = 0;
+    TitleId = 0;
+    Track = 0;
+    Device = 0;
+    Page = 0;
+    CStorageItem::Clear();
+    formatversion = 1;
 }
-
 
 void DataTrack::CopyFrom(const DataTrack& other)
 /*!\brief Daten kopieren
@@ -155,20 +152,19 @@ void DataTrack::CopyFrom(const DataTrack& other)
  * Die Funktion ruft die Clear-Funktion auf, durch die auch die StorageDaten gelöscht werden!
  */
 {
-	Clear();
-	CopyDataFrom(other);
-	CopyStorageFrom(other);
+    Clear();
+    CopyDataFrom(other);
+    CopyStorageFrom(other);
 }
 
 void DataTrack::CopyDataFrom(const DataTrack& other)
 {
-	DeviceId=other.DeviceId;
-	TitleId=other.TitleId;
-	Track=other.Track;
-	Device=other.Device;
-	Page=other.Page;
+    DeviceId = other.DeviceId;
+    TitleId = other.TitleId;
+    Track = other.Track;
+    Device = other.Device;
+    Page = other.Page;
 }
-
 
 void DataTrack::SetValue(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track, uint32_t TitleId)
 /*!\brief Wert setzen
@@ -186,44 +182,41 @@ void DataTrack::SetValue(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16
  * da sonst die Sortierung durcheinander gerät.
  */
 {
-	this->DeviceId=DeviceId;
-	this->TitleId=TitleId;
-	this->Track=Track;
-	this->Device=Device;
-	this->Page=Page;
+    this->DeviceId = DeviceId;
+    this->TitleId = TitleId;
+    this->Track = Track;
+    this->Device = Device;
+    this->Page = Page;
 }
 
-void DataTrack::Export(ppl7::ByteArray& bin) const
+void DataTrack::Export(pplib::ByteArray& bin) const
 {
-	char* ptr=(char*)bin.malloc(12);
-	ppl7::Poke8(ptr, Device);
-	ppl7::Poke32(ptr + 1, DeviceId);
-	ppl7::Poke8(ptr + 5, Page);
-	ppl7::Poke16(ptr + 6, Track);
-	ppl7::Poke32(ptr + 8, TitleId);
+    char* ptr = (char*)bin.malloc(12);
+    pplib::Poke8(ptr, Device);
+    pplib::Poke32(ptr + 1, DeviceId);
+    pplib::Poke8(ptr + 5, Page);
+    pplib::Poke16(ptr + 6, Track);
+    pplib::Poke32(ptr + 8, TitleId);
 }
 
-
-void DataTrack::Import(const ppl7::ByteArrayPtr& bin, int version)
+void DataTrack::Import(const pplib::ByteArrayPtr& bin, int version)
 {
-	if (version < 1 || version>1) {
-		throw UnknownRecordVersionException("%d", version);
-	}
-	// Die Größe muss genau 12 Byte betragen
-	int size=(int)bin.size();
-	if (size != 12) {
-		throw InvalidRecordException("expected %d bytes, but got %d bytes", 12, size);
-	}
-	const char* ptr=(const char*)bin.ptr();
-	Clear();
-	Device=ppl7::Peek8(ptr);
-	DeviceId=ppl7::Peek32(ptr + 1);
-	Page=ppl7::Peek8(ptr + 5);
-	Track=ppl7::Peek16(ptr + 6);
-	TitleId=ppl7::Peek32(ptr + 8);
+    if (version < 1 || version > 1) {
+        throw UnknownRecordVersionException("%d", version);
+    }
+    // Die Größe muss genau 12 Byte betragen
+    int size = (int)bin.size();
+    if (size != 12) {
+        throw InvalidRecordException("expected %d bytes, but got %d bytes", 12, size);
+    }
+    const char* ptr = (const char*)bin.ptr();
+    Clear();
+    Device = pplib::Peek8(ptr);
+    DeviceId = pplib::Peek32(ptr + 1);
+    Page = pplib::Peek8(ptr + 5);
+    Track = pplib::Peek16(ptr + 6);
+    TitleId = pplib::Peek32(ptr + 8);
 }
-
-
 
 /*!\class CTrackStore
  * \ingroup WM3StorageClasses
@@ -232,7 +225,6 @@ void DataTrack::Import(const ppl7::ByteArrayPtr& bin, int version)
  * Klasse zum Verwalten von DataTrack Datensätzen
  *
  */
-
 
 /*!\var CTrackStore::Mutex
  * \brief Mutex der Klasse
@@ -256,12 +248,12 @@ CTrackStore::~CTrackStore()
  * aufgerufen.
  */
 {
-	Clear();
+    Clear();
 }
 
 inline static uint64_t getKey(uint8_t Device, uint32_t DeviceId, uint8_t Page)
 {
-	return ((uint64_t)Device << 40) + ((uint64_t)DeviceId << 8) + Page;
+    return ((uint64_t)Device << 40) + ((uint64_t)DeviceId << 8) + Page;
 }
 
 void CTrackStore::Clear()
@@ -271,9 +263,9 @@ void CTrackStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	// Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
-	// die alle Datensätze löscht.
-	Tracks.clear();
+    // Erfreulicherweise bringt die Tree-Klasse der PPL-Library schon eine Clear-Funktion mit,
+    // die alle Datensätze löscht.
+    Tracks.clear();
 }
 
 const char* CTrackStore::GetChunkName()
@@ -284,82 +276,81 @@ const char* CTrackStore::GetChunkName()
  * \returns Pointer auf einen 4 Byte langen String mit 0-Byte terminiert.
  */
 {
-	return "TRAK";
+    return "TRAK";
 }
 
 void CTrackStore::SaveToStorage(DataTrack& t)
 {
-	ppl7::ByteArray bin;
-	t.Export(bin);
-	getStorage().Save(this, &t, bin);
+    pplib::ByteArray bin;
+    t.Export(bin);
+    getStorage().Save(this, &t, bin);
 }
 
 DataTrack* CTrackStore::SaveToMemory(const DataTrack& t)
 {
-	uint64_t key=getKey(t.Device, t.DeviceId, t.Page);
-	std::map<uint64_t, DataTrackMap>::iterator it;
-	it=Tracks.find(key);
-	if (it == Tracks.end()) {
-		DataTrackMap trackmap;
-		std::pair<std::map<uint64_t, DataTrackMap>::iterator, bool>newit=Tracks.insert(std::pair<uint64_t, DataTrackMap>(key, trackmap));
-		it=newit.first;
-	}
-	DataTrackMap::iterator dtm_it=it->second.find(t.Track);
-	if (dtm_it == it->second.end()) {
-		std::pair<DataTrackMap::iterator, bool> newtrack_it;
-		newtrack_it=it->second.insert(std::pair < uint16_t, DataTrack>(t.Track, t));
-		return &newtrack_it.first->second;
-	}
-	dtm_it->second.CopyDataFrom(t);
-	return &dtm_it->second;
+    uint64_t key = getKey(t.Device, t.DeviceId, t.Page);
+    std::map<uint64_t, DataTrackMap>::iterator it;
+    it = Tracks.find(key);
+    if (it == Tracks.end()) {
+        DataTrackMap trackmap;
+        std::pair<std::map<uint64_t, DataTrackMap>::iterator, bool> newit = Tracks.insert(std::pair<uint64_t, DataTrackMap>(key, trackmap));
+        it = newit.first;
+    }
+    DataTrackMap::iterator dtm_it = it->second.find(t.Track);
+    if (dtm_it == it->second.end()) {
+        std::pair<DataTrackMap::iterator, bool> newtrack_it;
+        newtrack_it = it->second.insert(std::pair<uint16_t, DataTrack>(t.Track, t));
+        return &newtrack_it.first->second;
+    }
+    dtm_it->second.CopyDataFrom(t);
+    return &dtm_it->second;
 }
 
 bool CTrackStore::Exists(uint8_t Device, uint32_t DeviceId, uint8_t Page) const
 {
-	uint64_t key=getKey(Device, DeviceId, Page);
-	std::map<uint64_t, DataTrackMap>::const_iterator it;
-	it=Tracks.find(key);
-	if (it == Tracks.end()) return false;
-	return true;
+    uint64_t key = getKey(Device, DeviceId, Page);
+    std::map<uint64_t, DataTrackMap>::const_iterator it;
+    it = Tracks.find(key);
+    if (it == Tracks.end()) return false;
+    return true;
 }
 
 DataTrack* CTrackStore::Find(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const
 {
-	uint64_t key=getKey(Device, DeviceId, Page);
-	std::map<uint64_t, DataTrackMap>::const_iterator it;
-	it=Tracks.find(key);
-	if (it == Tracks.end()) return NULL;
-	DataTrackMap::const_iterator dtm_it=it->second.find(Track);
-	if (dtm_it == it->second.end()) return NULL;
-	return (DataTrack*)&dtm_it->second;
+    uint64_t key = getKey(Device, DeviceId, Page);
+    std::map<uint64_t, DataTrackMap>::const_iterator it;
+    it = Tracks.find(key);
+    if (it == Tracks.end()) return NULL;
+    DataTrackMap::const_iterator dtm_it = it->second.find(Track);
+    if (dtm_it == it->second.end()) return NULL;
+    return (DataTrack*)&dtm_it->second;
 }
 
 bool CTrackStore::Exists(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const
 {
-	DataTrack* track=Find(Device, DeviceId, Page, Track);
-	if (track) return true;
-	return false;
+    DataTrack* track = Find(Device, DeviceId, Page, Track);
+    if (track) return true;
+    return false;
 }
-
 
 void CTrackStore::Delete(const DataTrack& entry)
 {
-	Delete(entry.Device, entry.DeviceId, entry.Page, entry.Track);
+    Delete(entry.Device, entry.DeviceId, entry.Page, entry.Track);
 }
 
 void CTrackStore::Delete(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track)
 {
-	uint64_t key=getKey(Device, DeviceId, Page);
-	std::map<uint64_t, DataTrackMap>::iterator it;
-	it=Tracks.find(key);
-	if (it == Tracks.end()) return;
-	DataTrackMap::iterator dtm_it=it->second.find(Track);
-	if (dtm_it == it->second.end()) return;
-	getStorage().Delete(this, &dtm_it->second);
-	it->second.erase(dtm_it);
+    uint64_t key = getKey(Device, DeviceId, Page);
+    std::map<uint64_t, DataTrackMap>::iterator it;
+    it = Tracks.find(key);
+    if (it == Tracks.end()) return;
+    DataTrackMap::iterator dtm_it = it->second.find(Track);
+    if (dtm_it == it->second.end()) return;
+    getStorage().Delete(this, &dtm_it->second);
+    it->second.erase(dtm_it);
 }
 
-const  DataTrack& CTrackStore::Put(const DataTrack& entry)
+const DataTrack& CTrackStore::Put(const DataTrack& entry)
 /*!\brief Datensatz speichern
  *
  * Mit dieser Funktion wird ein veränderter oder neuer Datensatz im Speicher der Anwendung und
@@ -374,9 +365,9 @@ const  DataTrack& CTrackStore::Put(const DataTrack& entry)
  * Text des Elements geändert hat.
  */
 {
-	DataTrack* t=SaveToMemory(entry);
-	SaveToStorage(*t);
-	return *t;
+    DataTrack* t = SaveToMemory(entry);
+    SaveToStorage(*t);
+    return *t;
 }
 
 const DataTrack* CTrackStore::GetPtr(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const
@@ -393,7 +384,7 @@ const DataTrack* CTrackStore::GetPtr(uint8_t Device, uint32_t DeviceId, uint8_t 
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	return Find(Device, DeviceId, Page, Track);
+    return Find(Device, DeviceId, Page, Track);
 }
 
 const DataTrack& CTrackStore::Get(uint8_t Device, uint32_t DeviceId, uint8_t Page, uint16_t Track) const
@@ -408,12 +399,11 @@ const DataTrack& CTrackStore::Get(uint8_t Device, uint32_t DeviceId, uint8_t Pag
  * \returns TODO
  */
 {
-	const DataTrack* t=Find(Device, DeviceId, Page, Track);
-	if (!t) {
-		throw RecordDoesNotExistException("Device=%d, DeviceId=%d, Page=%d, Track=%d",
-			Device, DeviceId, Page, Track);
-	}
-	return (*t);
+    const DataTrack* t = Find(Device, DeviceId, Page, Track);
+    if (!t) {
+        throw RecordDoesNotExistException("Device=%d, DeviceId=%d, Page=%d, Track=%d", Device, DeviceId, Page, Track);
+    }
+    return (*t);
 }
 
 CTrackList CTrackStore::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t Page) const
@@ -427,34 +417,31 @@ CTrackList CTrackStore::GetTracklist(uint8_t Device, uint32_t DeviceId, uint8_t 
  * \returns TODO
  */
 {
-	CTrackList list((CTrackStore*)this);
-	list.DeviceType=Device;
-	list.DeviceId=DeviceId;
-	list.Page=Page;
-	uint64_t key=getKey(Device, DeviceId, Page);
-	std::map<uint64_t, DataTrackMap>::const_iterator it;
-	it=Tracks.find(key);
-	if (it != Tracks.end()) {
-		DataTrackMap::const_iterator dtm_it;
-		for (dtm_it=it->second.begin();dtm_it != it->second.end();++dtm_it) {
-			list.Add(dtm_it->first, dtm_it->second);
-		}
-	}
-	return list;
+    CTrackList list((CTrackStore*)this);
+    list.DeviceType = Device;
+    list.DeviceId = DeviceId;
+    list.Page = Page;
+    uint64_t key = getKey(Device, DeviceId, Page);
+    std::map<uint64_t, DataTrackMap>::const_iterator it;
+    it = Tracks.find(key);
+    if (it != Tracks.end()) {
+        DataTrackMap::const_iterator dtm_it;
+        for (dtm_it = it->second.begin(); dtm_it != it->second.end(); ++dtm_it) {
+            list.Add(dtm_it->first, dtm_it->second);
+        }
+    }
+    return list;
 }
-
 
 void CTrackStore::LoadChunk(const CWMFileChunk& chunk)
 {
-	DataTrack data;
-	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
-	data.Import(bin, chunk.GetFormatVersion());
-	data.CopyStorageFrom(chunk);
-	SaveToMemory(data);
+    DataTrack data;
+    pplib::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+    data.Import(bin, chunk.GetFormatVersion());
+    data.CopyStorageFrom(chunk);
+    SaveToMemory(data);
 }
 
-
-
-}
-}
-}
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

@@ -61,13 +61,13 @@ public:
     uint32_t GetTimestamp() const;
     uint32_t GetVersion() const;
     uint8_t GetFormatVersion() const;
-    void HexDump(ppl7::Logger* log = nullptr) const;
+    void HexDump(pplib::Logger* log = nullptr) const;
 };
 
 class CWMFile
 {
 private:
-    ppl7::File ff;
+    pplib::File ff;
     uint8_t version, subversion;
     uint32_t timestamp, lastchange;
     uint32_t pos, first, eof;

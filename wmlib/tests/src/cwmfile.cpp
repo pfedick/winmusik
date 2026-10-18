@@ -29,14 +29,16 @@
 #include <map>
 #include "ppl7.h"
 
-namespace {
+namespace
+{
 
 using namespace de::pfp::winmusik;
 
-
-class CWMFileTest : public ::testing::Test {
+class CWMFileTest : public ::testing::Test
+{
 protected:
-    CWMFileTest() {
+    CWMFileTest()
+    {
         if (setlocale(LC_ALL, "") == NULL) {
             printf("setlocale fehlgeschlagen\n");
             throw std::exception();
@@ -44,7 +46,6 @@ protected:
     }
     ~CWMFileTest()
     {
-
     }
 };
 
@@ -55,17 +56,18 @@ public:
     unsigned int size;
 };
 
-TEST_F(CWMFileTest, Parse) {
+TEST_F(CWMFileTest, Parse)
+{
     CWMFile ff;
     ff.Open("testdata/winmusik.dat");
     CWMFileChunk chunk;
-    int count=0;
-    std::map<ppl7::String, ChunkStats> stats;
+    int count = 0;
+    std::map<pplib::String, ChunkStats> stats;
     while (ff.GetNextChunk(chunk)) {
         count++;
-        ppl7::String name=chunk.GetChunkName();
+        pplib::String name = chunk.GetChunkName();
         stats[name].count++;
-        stats[name].size+=chunk.GetChunkDataSize();
+        stats[name].size += chunk.GetChunkDataSize();
         /*
         printf ("%s: %i Bytes, Timestamp: %u, Version: %u, Format: %u\n",
                 chunk.GetChunkName(),
@@ -76,19 +78,10 @@ TEST_F(CWMFileTest, Parse) {
         */
     }
     printf("Number of Chunks: %u\n", count);
-    std::map<ppl7::String, ChunkStats>::const_iterator it;
-    for (it=stats.begin();it != stats.end();++it) {
-        printf("    %s: Anzahl: %6u, Bytes: %9u\n",
-            (const char*)it->first,
-            it->second.count,
-            it->second.size);
-
+    std::map<pplib::String, ChunkStats>::const_iterator it;
+    for (it = stats.begin(); it != stats.end(); ++it) {
+        printf("    %s: Anzahl: %6u, Bytes: %9u\n", (const char*)it->first, it->second.count, it->second.size);
     }
-
 }
 
-
-
-
-
-} // EOF namespace
+} // namespace

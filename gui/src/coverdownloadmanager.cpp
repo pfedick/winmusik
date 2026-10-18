@@ -10,7 +10,7 @@ CoverDownloadManager::~CoverDownloadManager()
 {
 }
 
-void CoverDownloadManager::addDownload(const ppl7::String& uuid, const ppl7::String& url)
+void CoverDownloadManager::addDownload(const pplib::String& uuid, const pplib::String& url)
 {
     DownloadTask task;
     task.uuid = uuid;

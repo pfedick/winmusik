@@ -103,7 +103,7 @@ void WMCoverWidget::setPixmap(const QPixmap& pix)
 bool WMCoverWidget::setPixmapFromFile(const QString& filename)
 {
     clear();
-    if (ppl7::File::exists(filename) == false) {
+    if (pplib::File::exists(filename) == false) {
         return false;
     }
     QPixmap pix;
@@ -111,15 +111,15 @@ bool WMCoverWidget::setPixmapFromFile(const QString& filename)
         return false;
     }
     setPixmap(pix);
-    QString fn = ppl7::File::getFilename(filename);
+    QString fn = pplib::File::getFilename(filename);
     LastFilename = fn;
     return true;
 }
 
-bool WMCoverWidget::setPixmapFromID3Tag(const ppl7::ID3Tag& tag)
+bool WMCoverWidget::setPixmapFromID3Tag(const pplib::ID3Tag& tag)
 {
     clear();
-    ppl7::ByteArray data;
+    pplib::ByteArray data;
     if (tag.getPicture(3, data)) {
         QPixmap pix;
         pix.loadFromData((const uchar*)data.ptr(), data.size());
@@ -129,12 +129,12 @@ bool WMCoverWidget::setPixmapFromID3Tag(const ppl7::ID3Tag& tag)
     return false;
 }
 
-bool WMCoverWidget::setPixmapFromAudioFile(const ppl7::String& filename)
+bool WMCoverWidget::setPixmapFromAudioFile(const pplib::String& filename)
 {
     clear();
-    ppl7::ID3Tag tag;
+    pplib::ID3Tag tag;
     if (tag.tryLoad(filename)) {
-        ppl7::ByteArray data;
+        pplib::ByteArray data;
         if (tag.getPicture(3, data)) {
             QPixmap pix;
             pix.loadFromData((const uchar*)data.ptr(), data.size());
@@ -206,7 +206,7 @@ void WMCoverWidget::on_coverDeleteButton_clicked()
 void WMCoverWidget::on_coverLoadButton_clicked()
 {
     emit gotFocus();
-    ppl7::String Dir = wm_main->conf.LastCoverPath + "/";
+    pplib::String Dir = wm_main->conf.LastCoverPath + "/";
     if (Dir.isEmpty()) {
         Dir = QDir::homePath();
     }
@@ -214,7 +214,7 @@ void WMCoverWidget::on_coverLoadButton_clicked()
     if (newfile.isNull()) return;
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    wm_main->conf.LastCoverPath = ppl7::File::getPath(newfile);
+    wm_main->conf.LastCoverPath = pplib::File::getPath(newfile);
     wm_main->conf.trySave();
     QPixmap NewCover;
     if (!NewCover.load(newfile)) {
@@ -234,15 +234,15 @@ void WMCoverWidget::on_coverSaveButton_clicked()
 {
     emit gotFocus();
     if (Cover.isNull()) return;
-    ppl7::String Dir = wm_main->conf.LastCoverPath + "/";
+    pplib::String Dir = wm_main->conf.LastCoverPath + "/";
     Dir += LastFilename;
 
     QString newfile = QFileDialog::getSaveFileName(this, tr("Save cover to file"), Dir, tr("Images (*.png *.bmp *.jpg)"));
     if (newfile.isNull()) return;
-    QString blah = ppl7::File::getFilename(newfile);
+    QString blah = pplib::File::getFilename(newfile);
     LastFilename = blah;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    wm_main->conf.LastCoverPath = ppl7::File::getPath(newfile);
+    wm_main->conf.LastCoverPath = pplib::File::getPath(newfile);
     wm_main->conf.trySave();
     if (!Cover.save(newfile)) {
         /*
@@ -267,13 +267,13 @@ static void analyzeDragEnter(QDragEnterEvent* event)
     printf("Wir haben was bekommen, nur was?\n");
     if (mimedata->hasText()) {
         printf("\n================================\nwir haben text\n");
-        ppl7::String text = mimedata->text();
+        pplib::String text = mimedata->text();
         text.printnl();
     }
     if (mimedata->hasColor()) printf("wir haben color\n");
     if (mimedata->hasHtml()) {
         printf("\n================================\nwir haben html\n");
-        ppl7::String text = mimedata->html();
+        pplib::String text = mimedata->html();
         text.printnl();
     }
     if (mimedata->hasImage()) printf("wir haben image\n");
@@ -281,7 +281,7 @@ static void analyzeDragEnter(QDragEnterEvent* event)
         printf("\n================================\nwir haben urls\n");
         const QList<QUrl>& urllist = mimedata->urls();
         for (int i = 0; i < urllist.size(); ++i) {
-            ppl7::String text = urllist.at(i).url();
+            pplib::String text = urllist.at(i).url();
             text.printnl();
         }
     }
@@ -295,7 +295,7 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
     // analyzeDragEnter(event);
     const QMimeData* mimedata = event->mimeData();
     if (mimedata->hasText()) {
-        ppl7::String text = mimedata->text();
+        pplib::String text = mimedata->text();
         if (text.left(7) == "http://" or text.left(8) == "https://") {
             if (text.has(".png") or text.has(".jpg") or text.has(".jpeg") or text.has("amazon")) {
                 event->accept();
@@ -303,8 +303,8 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
             }
         }
         try {
-            ppl7::AssocArray data;
-            ppl7::Json::loads(data, text);
+            pplib::AssocArray data;
+            pplib::Json::loads(data, text);
             if (data.exists("containerInfo/image")) {
                 event->accept();
                 return true;
@@ -327,7 +327,7 @@ bool WMCoverWidget::handleCoverDragEnterEvent(QDragEnterEvent* event)
 
 void WMCoverWidget::loadImageFromUri(const QString& uri)
 {
-    ppl7::String tmp = uri;
+    pplib::String tmp = uri;
     previousCover = ui->cover->pixmap(Qt::ReturnByValue);
     QPixmap pix(":/cover/resources/cover_loading.png");
     ui->cover->setPixmap(pix.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -353,13 +353,13 @@ void WMCoverWidget::loadImageFromUri(const QString& uri)
 
 void WMCoverWidget::downloadFromShopUrl(const QString& url)
 {
-    ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+    pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
     MetaData meta;
     QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     if (CoverDownload(url, coverfile)) {
         loadFromFile(coverfile);
-        ppl7::File::unlink(coverfile);
+        pplib::File::unlink(coverfile);
     }
     QGuiApplication::restoreOverrideCursor();
 }
@@ -368,9 +368,9 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
 {
     const QMimeData* mimedata = event->mimeData();
     if (mimedata->hasText()) {
-        ppl7::String html = mimedata->html();
-        ppl7::RegEx::MatchVector matches;
-        if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
+        pplib::String html = mimedata->html();
+        pplib::RegEx::MatchVector matches;
+        if (pplib::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?track\\/.*?\\/[0-9]+)\"/i", html, matches)) {
             downloadFromShopUrl(matches[1]);
             QWidget* top = window();
             top->raise();
@@ -378,7 +378,7 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
 
             event->accept();
             return true;
-        } else if (ppl7::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?release\\/.*?\\/[0-9]+)\"/i", html, matches)) {
+        } else if (pplib::RegEx::capture("/\"(https:\\/\\/www\\.beatport\\.com\\/.*?release\\/.*?\\/[0-9]+)\"/i", html, matches)) {
             downloadFromShopUrl(matches[1]);
             QWidget* top = window();
             top->raise();
@@ -388,7 +388,7 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
             return true;
         }
         // html.printnl();
-        // ppl7::PrintDebug("blah\n");
+        // pplib::PrintDebug("blah\n");
     }
     if (mimedata->hasUrls()) {
         QList<QUrl> url_list = mimedata->urls();
@@ -403,12 +403,12 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
         }
     }
     if (mimedata->hasText()) {
-        ppl7::String text = mimedata->text();
+        pplib::String text = mimedata->text();
         // printf("URL=%s\n",(const char*)text);
 
         try {
-            ppl7::AssocArray data;
-            ppl7::Json::loads(data, text);
+            pplib::AssocArray data;
+            pplib::Json::loads(data, text);
             if (data.exists("containerInfo/image")) {
                 loadImageFromUri(data.getString("containerInfo/image"));
                 event->accept();
@@ -418,9 +418,9 @@ bool WMCoverWidget::handleCoverDropEvent(QDropEvent* event)
         catch (...) {
         }
         try {
-            std::vector<ppl7::String> matches;
-            if (ppl7::RegEx::capture("/^(https://www\\.amazon\\..*?)/.*&asin=(.*)$/", text, matches)) {
-                ppl7::String amazon = matches[1] + "/dp/" + matches[2];
+            std::vector<pplib::String> matches;
+            if (pplib::RegEx::capture("/^(https://www\\.amazon\\..*?)/.*&asin=(.*)$/", text, matches)) {
+                pplib::String amazon = matches[1] + "/dp/" + matches[2];
                 loadImageFromUri(amazon);
                 /*
                 printf ("match: %s\n", (const char*)matches[2]);
@@ -450,13 +450,13 @@ void WMCoverWidget::fileDownloaded(QNetworkReply* pReply)
         QMessageBox::critical(this, tr("Error: could not load Cover"), tr("An error occured, when loading the file.\n\n"));
         return;
     }
-    ppl7::String url = pReply->request().url().url();
+    pplib::String url = pReply->request().url().url();
     m_DownloadedData = pReply->readAll();
     pReply->deleteLater();
-    if (ppl7::RegEx::match("/^https://www.amazon.*?/dp/.*$/", url)) {
-        ppl7::String page(m_DownloadedData.constData(), m_DownloadedData.size());
-        std::vector<ppl7::String> matches;
-        if (ppl7::RegEx::capture("/<img alt=\".*\" src=\"(https://m\\.media-amazon\\.com/images.*\\.jpg)\">/", page, matches)) {
+    if (pplib::RegEx::match("/^https://www.amazon.*?/dp/.*$/", url)) {
+        pplib::String page(m_DownloadedData.constData(), m_DownloadedData.size());
+        std::vector<pplib::String> matches;
+        if (pplib::RegEx::capture("/<img alt=\".*\" src=\"(https://m\\.media-amazon\\.com/images.*\\.jpg)\">/", page, matches)) {
             matches[1].printnl();
             QString qurl = matches[1];
             QNetworkRequest request2(qurl);

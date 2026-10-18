@@ -29,13 +29,13 @@ namespace pfp
 namespace winmusik
 {
 
-uint8_t Peek8(const ppl7::ByteArrayPtr& buffer, size_t offset);
-uint16_t Peek16(const ppl7::ByteArrayPtr& buffer, size_t offset);
-uint32_t Peek32(const ppl7::ByteArrayPtr& buffer, size_t offset);
-uint64_t Peek64(const ppl7::ByteArrayPtr& buffer, size_t offset);
+uint8_t Peek8(const pplib::ByteArrayPtr& buffer, size_t offset);
+uint16_t Peek16(const pplib::ByteArrayPtr& buffer, size_t offset);
+uint32_t Peek32(const pplib::ByteArrayPtr& buffer, size_t offset);
+uint64_t Peek64(const pplib::ByteArrayPtr& buffer, size_t offset);
 
-ppl7::ByteArrayPtr SubBuffer(const ppl7::ByteArrayPtr& buffer, size_t offset, size_t size);
-ppl7::String PeekString(const ppl7::ByteArrayPtr& buffer, size_t offset, size_t size);
+pplib::ByteArrayPtr SubBuffer(const pplib::ByteArrayPtr& buffer, size_t offset, size_t size);
+pplib::String PeekString(const pplib::ByteArrayPtr& buffer, size_t offset, size_t size);
 
 } // namespace winmusik
 } // namespace pfp

@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef SHORTCUTDIALOG_H_
 #define SHORTCUTDIALOG_H_
 
@@ -40,7 +39,7 @@ private:
     Ui::ShortcutDialogClass ui;
     CWmClient* wm;
     void resizeEvent(QResizeEvent* event);
-    ppl7::String	SelectedArtist;
+    pplib::String SelectedArtist;
     QTreeWidgetItem* currentTreeItem;
 
 public slots:
@@ -54,10 +53,5 @@ public slots:
     void on_saveButton_clicked();
     void on_cancelButton_clicked();
 };
-
-
-
-
-
 
 #endif /* SHORTCUTDIALOG_H_ */

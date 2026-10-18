@@ -21,9 +21,12 @@
 #include "wm_storage.h"
 #include "wm_exceptions.h"
 
-namespace de {
-namespace pfp {
-namespace winmusik {
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class DataDevice
  * \ingroup WM3DataTypes
@@ -37,7 +40,6 @@ namespace winmusik {
  * Der Datentyp ist daher neben CStorageItem auch von ppl6::CTreeItem abgeleitet.
  *
  */
-
 
 /*!\var DataDevice::Title
  * \brief Haupttitel des Tonträgers
@@ -142,32 +144,31 @@ namespace winmusik {
  * bei 1 und bedeutet eine Seite. Ein Tonträger kann aus maximal 255 Seiten bestehen.
  */
 
-
 DataDevice::DataDevice()
 /*!\brief Konstruktor der Klasse
  *
  * Konstruktor der Klasse. Er setzt alle Variablen auf 0.
  */
 {
-	DeviceId=0;
-	Length=0;
-	Recorded=0;
-	PurchaseDate=0;
-	DateCreated=0;
-	FirstDate=0;
-	LastDate=0;
-	NumTracks=0;
-	PurchaseId=0;
-	DeviceType=0;
-	Pages=0;
-	PurchasePrice=0.0f;
-	formatversion=1;
+    DeviceId = 0;
+    Length = 0;
+    Recorded = 0;
+    PurchaseDate = 0;
+    DateCreated = 0;
+    FirstDate = 0;
+    LastDate = 0;
+    NumTracks = 0;
+    PurchaseId = 0;
+    DeviceType = 0;
+    Pages = 0;
+    PurchasePrice = 0.0f;
+    formatversion = 1;
 }
 
 DataDevice::DataDevice(const DataDevice& other)
 {
-	formatversion=1;
-	CopyFrom(other);
+    formatversion = 1;
+    CopyFrom(other);
 }
 
 DataDevice::~DataDevice()
@@ -177,14 +178,14 @@ DataDevice::~DataDevice()
  * wieder frei.
  */
 {
-	Clear();
+    Clear();
 }
 
 DataDevice& DataDevice::operator=(const DataDevice& other)
 {
-	formatversion=1;
-	CopyFrom(other);
-	return *this;
+    formatversion = 1;
+    CopyFrom(other);
+    return *this;
 }
 
 void DataDevice::Clear()
@@ -195,30 +196,30 @@ void DataDevice::Clear()
  * Storage-Klasse CStorageItem::Clear aufgerufen.
  */
 {
-	Title.clear();
-	SubTitle.clear();
-	DeviceId=0;
-	Length=0;
-	Recorded=0;
-	LabelId=0;
-	PurchaseDate=0;
-	DateCreated=0;
-	FirstDate=0;
-	LastDate=0;
-	NumTracks=0;
-	PurchasePrice=0.0f;
-	PurchaseId=0;
-	DeviceType=0;
-	Pages=0;
-	CStorageItem::Clear();
-	formatversion=1;
+    Title.clear();
+    SubTitle.clear();
+    DeviceId = 0;
+    Length = 0;
+    Recorded = 0;
+    LabelId = 0;
+    PurchaseDate = 0;
+    DateCreated = 0;
+    FirstDate = 0;
+    LastDate = 0;
+    NumTracks = 0;
+    PurchasePrice = 0.0f;
+    PurchaseId = 0;
+    DeviceType = 0;
+    Pages = 0;
+    CStorageItem::Clear();
+    formatversion = 1;
 }
 
 void DataDevice::CopyFrom(const DataDevice& other)
 {
-	Clear();
-	CopyDataFrom(other);
-	CopyStorageFrom(other);
+    Clear();
+    CopyDataFrom(other);
+    CopyStorageFrom(other);
 }
 
 void DataDevice::CopyDataFrom(const DataDevice& other)
@@ -236,25 +237,24 @@ void DataDevice::CopyDataFrom(const DataDevice& other)
  */
 {
 
-	Title=other.Title;
-	SubTitle=other.SubTitle;
-	DeviceId=other.DeviceId;
-	Length=other.Length;
-	Recorded=other.Recorded;
-	LabelId=other.LabelId;
-	PurchaseDate=other.PurchaseDate;
-	DateCreated=other.DateCreated;
-	FirstDate=other.FirstDate;
-	LastDate=other.LastDate;
-	NumTracks=other.NumTracks;
-	PurchasePrice=other.PurchasePrice;
-	PurchaseId=other.PurchaseId;
-	DeviceType=other.DeviceType;
-	Pages=other.Pages;
+    Title = other.Title;
+    SubTitle = other.SubTitle;
+    DeviceId = other.DeviceId;
+    Length = other.Length;
+    Recorded = other.Recorded;
+    LabelId = other.LabelId;
+    PurchaseDate = other.PurchaseDate;
+    DateCreated = other.DateCreated;
+    FirstDate = other.FirstDate;
+    LastDate = other.LastDate;
+    NumTracks = other.NumTracks;
+    PurchasePrice = other.PurchasePrice;
+    PurchaseId = other.PurchaseId;
+    DeviceType = other.DeviceType;
+    Pages = other.Pages;
 }
 
-
-void DataDevice::SetTitle(const ppl7::String& title)
+void DataDevice::SetTitle(const pplib::String& title)
 /*!\brief Haupttitel setzen
  *
  * Mit dieser Funktion wird der Titel des Tonträgers gesetzt.
@@ -263,10 +263,10 @@ void DataDevice::SetTitle(const ppl7::String& title)
  * \returns Liefert 1 zurück, wenn der Titel erfolgreich gesetzt werden konnte.
  */
 {
-	this->Title=title;
+    this->Title = title;
 }
 
-void DataDevice::SetSubTitle(const ppl7::String& subtitle)
+void DataDevice::SetSubTitle(const pplib::String& subtitle)
 /*!\brief Untertitel setzen
  *
  * Mit dieser Funktion wird der Untertitel des Tonträgers gesetzt.
@@ -275,21 +275,20 @@ void DataDevice::SetSubTitle(const ppl7::String& subtitle)
  * \returns Liefert 1 zurück, wenn der Untertitel erfolgreich gesetzt werden konnte.
  */
 {
-	this->SubTitle=subtitle;
+    this->SubTitle = subtitle;
 }
 
-const ppl7::String& DataDevice::GetTitle() const
+const pplib::String& DataDevice::GetTitle() const
 {
-	return Title;
+    return Title;
 }
 
-const ppl7::String& DataDevice::GetSubTitle() const
+const pplib::String& DataDevice::GetSubTitle() const
 {
-	return SubTitle;
+    return SubTitle;
 }
 
-
-void DataDevice::Export(ppl7::ByteArray& bin) const
+void DataDevice::Export(pplib::ByteArray& bin) const
 /*!\brief Binäre Exportfunktion
  *
  * Mit dieser Funktion werden die Daten der Klasse in binärer Form exportiert. Das Format ist
@@ -302,33 +301,33 @@ void DataDevice::Export(ppl7::ByteArray& bin) const
  * zurückgegeben.
  */
 {
-	// Benötigte Bytes berechnen
-	int size=48;
-	int lenTitle=Title.size();
-	int lenSubTitle=SubTitle.size();
-	size=size + lenTitle + lenSubTitle;
-	// Speicher allokieren
-	char* a=(char*)bin.malloc(size);
-	ppl7::Poke8(a, DeviceType);
-	ppl7::Poke32(a + 1, DeviceId);
-	ppl7::Poke8(a + 5, Pages);
-	ppl7::Poke32(a + 6, Length);
-	ppl7::Poke32(a + 10, Recorded);
-	ppl7::Poke16(a + 14, PurchaseId);
-	ppl7::Poke32(a + 16, LabelId);
-	ppl7::Poke32(a + 20, PurchaseDate);
-	ppl7::PokeFloat(a + 24, PurchasePrice);
-	ppl7::Poke32(a + 28, DateCreated);
-	ppl7::Poke32(a + 32, FirstDate);
-	ppl7::Poke32(a + 36, LastDate);
-	ppl7::Poke32(a + 40, NumTracks);
-	ppl7::Poke16(a + 44, lenTitle);
-	if (lenTitle) strncpy(a + 46, (const char*)Title, lenTitle);
-	ppl7::Poke16(a + 46 + lenTitle, lenSubTitle);
-	if (lenSubTitle) strncpy(a + 48 + lenTitle, (const char*)SubTitle, lenSubTitle);
+    // Benötigte Bytes berechnen
+    int size = 48;
+    int lenTitle = Title.size();
+    int lenSubTitle = SubTitle.size();
+    size = size + lenTitle + lenSubTitle;
+    // Speicher allokieren
+    char* a = (char*)bin.malloc(size);
+    pplib::Poke8(a, DeviceType);
+    pplib::Poke32(a + 1, DeviceId);
+    pplib::Poke8(a + 5, Pages);
+    pplib::Poke32(a + 6, Length);
+    pplib::Poke32(a + 10, Recorded);
+    pplib::Poke16(a + 14, PurchaseId);
+    pplib::Poke32(a + 16, LabelId);
+    pplib::Poke32(a + 20, PurchaseDate);
+    pplib::PokeFloat(a + 24, PurchasePrice);
+    pplib::Poke32(a + 28, DateCreated);
+    pplib::Poke32(a + 32, FirstDate);
+    pplib::Poke32(a + 36, LastDate);
+    pplib::Poke32(a + 40, NumTracks);
+    pplib::Poke16(a + 44, lenTitle);
+    if (lenTitle) strncpy(a + 46, (const char*)Title, lenTitle);
+    pplib::Poke16(a + 46 + lenTitle, lenSubTitle);
+    if (lenSubTitle) strncpy(a + 48 + lenTitle, (const char*)SubTitle, lenSubTitle);
 }
 
-void DataDevice::Import(const ppl7::ByteArrayPtr& bin, int version)
+void DataDevice::Import(const pplib::ByteArrayPtr& bin, int version)
 /*!\brief Binäre Importfunktion
  *
  * Mit dieser Funktion werden binäre gespeicherte Daten in die Klasse importiert. Eine Beschreibung des
@@ -339,35 +338,34 @@ void DataDevice::Import(const ppl7::ByteArrayPtr& bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-	if (version < 1 || version>1) {
-		throw UnknownRecordVersionException("Device %d", version);
-	}
-	size_t size=bin.size();
-	const char* a=(const char*)bin.ptr();
-	// Die Größe muss mindestens 48 Byte betragen
-	if (size < 48 || a == NULL) {
-		throw InvalidRecordException();
-	}
-	Clear();
-	DeviceType=ppl7::Peek8(a);
-	DeviceId=ppl7::Peek32(a + 1);
-	Pages=ppl7::Peek8(a + 5);
-	Length=ppl7::Peek32(a + 6);
-	Recorded=ppl7::Peek32(a + 10);
-	PurchaseId=ppl7::Peek16(a + 14);
-	LabelId=ppl7::Peek32(a + 16);
-	PurchaseDate=ppl7::Peek32(a + 20);
-	PurchasePrice=ppl7::PeekFloat(a + 24);
-	DateCreated=ppl7::Peek32(a + 28);
-	FirstDate=ppl7::Peek32(a + 32);
-	LastDate=ppl7::Peek32(a + 36);
-	NumTracks=ppl7::Peek32(a + 40);
-	int lenTitle=ppl7::Peek16(a + 44);
-	int lenSubTitle=ppl7::Peek16(a + 46 + lenTitle);
-	if (lenTitle) Title.set(a + 46, lenTitle);
-	if (lenSubTitle) SubTitle.set(a + 48 + lenTitle, lenSubTitle);
+    if (version < 1 || version > 1) {
+        throw UnknownRecordVersionException("Device %d", version);
+    }
+    size_t size = bin.size();
+    const char* a = (const char*)bin.ptr();
+    // Die Größe muss mindestens 48 Byte betragen
+    if (size < 48 || a == NULL) {
+        throw InvalidRecordException();
+    }
+    Clear();
+    DeviceType = pplib::Peek8(a);
+    DeviceId = pplib::Peek32(a + 1);
+    Pages = pplib::Peek8(a + 5);
+    Length = pplib::Peek32(a + 6);
+    Recorded = pplib::Peek32(a + 10);
+    PurchaseId = pplib::Peek16(a + 14);
+    LabelId = pplib::Peek32(a + 16);
+    PurchaseDate = pplib::Peek32(a + 20);
+    PurchasePrice = pplib::PeekFloat(a + 24);
+    DateCreated = pplib::Peek32(a + 28);
+    FirstDate = pplib::Peek32(a + 32);
+    LastDate = pplib::Peek32(a + 36);
+    NumTracks = pplib::Peek32(a + 40);
+    int lenTitle = pplib::Peek16(a + 44);
+    int lenSubTitle = pplib::Peek16(a + 46 + lenTitle);
+    if (lenTitle) Title.set(a + 46, lenTitle);
+    if (lenSubTitle) SubTitle.set(a + 48 + lenTitle, lenSubTitle);
 }
-
 
 /*!\class CDeviceStore
  * \ingroup WM3StorageClasses
@@ -376,7 +374,6 @@ void DataDevice::Import(const ppl7::ByteArrayPtr& bin, int version)
  * Klasse zum Verwalten von DataDevice Datensätzen
  *
  */
-
 
 /*!\var CDeviceStore::Mutex
  * \brief Mutex der Klasse
@@ -396,7 +393,6 @@ CDeviceStore::CDeviceStore()
  * Konstruktor der Klasse. Initialisiert die internen Variablen.
  */
 {
-
 }
 
 CDeviceStore::~CDeviceStore()
@@ -407,7 +403,7 @@ CDeviceStore::~CDeviceStore()
  * aufgerufen.
  */
 {
-	Clear();
+    Clear();
 }
 
 void CDeviceStore::Clear()
@@ -417,7 +413,7 @@ void CDeviceStore::Clear()
  * allokierter Speicher wieder freigegen werden.
  */
 {
-	Tree.clear();
+    Tree.clear();
 }
 
 const char* CDeviceStore::GetChunkName()
@@ -428,24 +424,22 @@ const char* CDeviceStore::GetChunkName()
  * \returns Pointer auf einen 4 Byte langen String mit 0-Byte terminiert.
  */
 {
-	return "DEVI";
+    return "DEVI";
 }
 
 void CDeviceStore::SaveToStorage(DataDevice& entry)
 {
-	CStorage& store=getStorage();
-	ppl7::ByteArray bin;
-	entry.Export(bin);
-	store.Save(this, &entry, bin);
+    CStorage& store = getStorage();
+    pplib::ByteArray bin;
+    entry.Export(bin);
+    store.Save(this, &entry, bin);
 }
-
-
 
 const DataDevice& CDeviceStore::Put(const DataDevice& entry)
 {
-	DataDevice* new_entry=SaveToMemory(entry);
-	SaveToStorage(*new_entry);
-	return *new_entry;
+    DataDevice* new_entry = SaveToMemory(entry);
+    SaveToStorage(*new_entry);
+    return *new_entry;
 }
 
 DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
@@ -463,26 +457,26 @@ DataDevice* CDeviceStore::SaveToMemory(const DataDevice& entry)
  * Text des Elements geändert hat.
  */
 {
-	// Gibt's den Tonträger schon?
-	uint32_t newDeviceId=entry.DeviceId;
-	if (entry.DeviceId == 0) {
-		newDeviceId=GetHighestDevice(entry.DeviceType) + 1;
-	}
-	DeviceTree& DTree=Tree[entry.DeviceType];
+    // Gibt's den Tonträger schon?
+    uint32_t newDeviceId = entry.DeviceId;
+    if (entry.DeviceId == 0) {
+        newDeviceId = GetHighestDevice(entry.DeviceType) + 1;
+    }
+    DeviceTree& DTree = Tree[entry.DeviceType];
 
-	DeviceTree::iterator dit;
-	dit=DTree.find(newDeviceId);
-	if (dit != DTree.end()) {	// Device ist schon vorhanden
-		DataDevice& device=(*dit).second;
-		device.CopyDataFrom(entry);
-		return &device;
-	} else {	// Neues Device
-		std::pair<DeviceTree::iterator, bool> new_it;
-		new_it=DTree.insert(std::pair<uint32_t, DataDevice>(newDeviceId, entry));
-		DataDevice& device=new_it.first->second;
-		device.DeviceId=newDeviceId;
-		return &device;
-	}
+    DeviceTree::iterator dit;
+    dit = DTree.find(newDeviceId);
+    if (dit != DTree.end()) { // Device ist schon vorhanden
+        DataDevice& device = (*dit).second;
+        device.CopyDataFrom(entry);
+        return &device;
+    } else { // Neues Device
+        std::pair<DeviceTree::iterator, bool> new_it;
+        new_it = DTree.insert(std::pair<uint32_t, DataDevice>(newDeviceId, entry));
+        DataDevice& device = new_it.first->second;
+        device.DeviceId = newDeviceId;
+        return &device;
+    }
 }
 
 const DataDevice& CDeviceStore::Get(uint8_t DeviceType, uint32_t DeviceId) const
@@ -497,16 +491,16 @@ const DataDevice& CDeviceStore::Get(uint8_t DeviceType, uint32_t DeviceId) const
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	// Gibt's den Tonträger schon?
-	std::map<uint8_t, DeviceTree>::const_iterator it;
-	it=Tree.find(DeviceType);
-	if (it != Tree.end() && it->second.empty() == false) {
-		const DeviceTree& DTree=it->second;
-		DeviceTree::const_iterator dit;
-		dit=DTree.find(DeviceId);
-		if (dit != DTree.end()) return (*dit).second;
-	}
-	throw RecordDoesNotExistException();
+    // Gibt's den Tonträger schon?
+    std::map<uint8_t, DeviceTree>::const_iterator it;
+    it = Tree.find(DeviceType);
+    if (it != Tree.end() && it->second.empty() == false) {
+        const DeviceTree& DTree = it->second;
+        DeviceTree::const_iterator dit;
+        dit = DTree.find(DeviceId);
+        if (dit != DTree.end()) return (*dit).second;
+    }
+    throw RecordDoesNotExistException();
 }
 
 const DataDevice* CDeviceStore::GetPtr(uint8_t DeviceType, uint32_t DeviceId) const
@@ -521,99 +515,96 @@ const DataDevice* CDeviceStore::GetPtr(uint8_t DeviceType, uint32_t DeviceId) co
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	// Gibt's den Tonträger schon?
-	std::map<uint8_t, DeviceTree>::const_iterator it;
-	it=Tree.find(DeviceType);
-	if (it != Tree.end() && it->second.empty() == false) {
-		const DeviceTree& DTree=it->second;
-		DeviceTree::const_iterator dit;
-		dit=DTree.find(DeviceId);
-		if (dit != DTree.end()) return &(*dit).second;
-	}
-	return NULL;
+    // Gibt's den Tonträger schon?
+    std::map<uint8_t, DeviceTree>::const_iterator it;
+    it = Tree.find(DeviceType);
+    if (it != Tree.end() && it->second.empty() == false) {
+        const DeviceTree& DTree = it->second;
+        DeviceTree::const_iterator dit;
+        dit = DTree.find(DeviceId);
+        if (dit != DTree.end()) return &(*dit).second;
+    }
+    return NULL;
 }
 
 bool CDeviceStore::Exists(uint8_t DeviceType, uint32_t DeviceId) const
 {
-	// Gibt's den Tonträger schon?
-	std::map<uint8_t, DeviceTree>::const_iterator it;
-	it=Tree.find(DeviceType);
-	if (it != Tree.end() && it->second.empty() == false) {
-		const DeviceTree& DTree=it->second;
-		DeviceTree::const_iterator dit;
-		dit=DTree.find(DeviceId);
-		if (dit != DTree.end()) return true;
-	}
-	return false;
+    // Gibt's den Tonträger schon?
+    std::map<uint8_t, DeviceTree>::const_iterator it;
+    it = Tree.find(DeviceType);
+    if (it != Tree.end() && it->second.empty() == false) {
+        const DeviceTree& DTree = it->second;
+        DeviceTree::const_iterator dit;
+        dit = DTree.find(DeviceId);
+        if (dit != DTree.end()) return true;
+    }
+    return false;
 }
 
 void CDeviceStore::Delete(uint8_t DeviceType, uint32_t DeviceId)
 {
-	// Gibt's den Tonträger schon?
-	std::map<uint8_t, DeviceTree>::iterator it;
-	it=Tree.find(DeviceType);
-	if (it == Tree.end() || it->second.empty() == true) return;
-	DeviceTree& DTree=it->second;
-	DeviceTree::iterator dit;
-	dit=DTree.find(DeviceId);
-	if (dit == DTree.end()) return;
-	getStorage().Delete(this, &dit->second);
-	DTree.erase(dit);
+    // Gibt's den Tonträger schon?
+    std::map<uint8_t, DeviceTree>::iterator it;
+    it = Tree.find(DeviceType);
+    if (it == Tree.end() || it->second.empty() == true) return;
+    DeviceTree& DTree = it->second;
+    DeviceTree::iterator dit;
+    dit = DTree.find(DeviceId);
+    if (dit == DTree.end()) return;
+    getStorage().Delete(this, &dit->second);
+    DTree.erase(dit);
 }
-
 
 void CDeviceStore::LoadChunk(const CWMFileChunk& chunk)
 {
-	DataDevice data;
-	ppl7::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
-	data.Import(bin, chunk.GetFormatVersion());
-	data.CopyStorageFrom(chunk);
-	SaveToMemory(data);
+    DataDevice data;
+    pplib::ByteArrayPtr bin(chunk.GetChunkData(), chunk.GetChunkDataSize());
+    data.Import(bin, chunk.GetFormatVersion());
+    data.CopyStorageFrom(chunk);
+    SaveToMemory(data);
 }
 
 void CDeviceStore::Update(uint8_t DeviceType, uint32_t DeviceId)
 {
-	std::map<uint8_t, DeviceTree>::iterator it;
-	it=Tree.find(DeviceType);
-	if (it == Tree.end() || it->second.empty() == true) return;
-	DeviceTree& DTree=it->second;
-	DeviceTree::iterator dit;
-	dit=DTree.find(DeviceId);
-	if (dit == DTree.end()) {
-		return;
-	}
-	DataDevice& t=(*dit).second;
-	CTrackStore* trackstore=static_cast<CTrackStore*>(getStorage().FindStorageClass("TRAK"));
-	const DataTitle* ti;
+    std::map<uint8_t, DeviceTree>::iterator it;
+    it = Tree.find(DeviceType);
+    if (it == Tree.end() || it->second.empty() == true) return;
+    DeviceTree& DTree = it->second;
+    DeviceTree::iterator dit;
+    dit = DTree.find(DeviceId);
+    if (dit == DTree.end()) {
+        return;
+    }
+    DataDevice& t = (*dit).second;
+    CTrackStore* trackstore = static_cast<CTrackStore*>(getStorage().FindStorageClass("TRAK"));
+    const DataTitle* ti;
 
-	DataDevice previous=t;
+    DataDevice previous = t;
 
-	t.NumTracks=0;
-	t.Recorded=0;
-	t.FirstDate=0;
-	t.LastDate=0;
-	CTitleStore* tistore=(CTitleStore*)getStorage().FindStorageClass("TITL");
-	for (uint8_t page=1;page <= t.Pages;page++) {
-		CTrackList tracks=trackstore->GetTracklist(DeviceType, DeviceId, page);
-		CTrackList::const_iterator it;
-		for (it=tracks.begin();it != tracks.end();++it) {
-			t.NumTracks++;
-			if (tistore) {
-				ti=tistore->GetPtr(it->second.TitleId);
-				t.Recorded+=ti->Length;
-				if (ti->RecordDate > 0) {
-					if (ti->RecordDate > t.LastDate) t.LastDate=ti->RecordDate;
-					if (ti->RecordDate < t.FirstDate || t.FirstDate == 0) t.FirstDate=ti->RecordDate;
-				}
-			}
-		}
-	}
-	// Save only, if something changed
-	if (previous.NumTracks != t.NumTracks ||
-		previous.Recorded != t.Recorded ||
-		previous.FirstDate != t.FirstDate ||
-		previous.LastDate != t.LastDate
-		) SaveToStorage(t);
+    t.NumTracks = 0;
+    t.Recorded = 0;
+    t.FirstDate = 0;
+    t.LastDate = 0;
+    CTitleStore* tistore = (CTitleStore*)getStorage().FindStorageClass("TITL");
+    for (uint8_t page = 1; page <= t.Pages; page++) {
+        CTrackList tracks = trackstore->GetTracklist(DeviceType, DeviceId, page);
+        CTrackList::const_iterator it;
+        for (it = tracks.begin(); it != tracks.end(); ++it) {
+            t.NumTracks++;
+            if (tistore) {
+                ti = tistore->GetPtr(it->second.TitleId);
+                t.Recorded += ti->Length;
+                if (ti->RecordDate > 0) {
+                    if (ti->RecordDate > t.LastDate) t.LastDate = ti->RecordDate;
+                    if (ti->RecordDate < t.FirstDate || t.FirstDate == 0) t.FirstDate = ti->RecordDate;
+                }
+            }
+        }
+    }
+    // Save only, if something changed
+    if (previous.NumTracks != t.NumTracks || previous.Recorded != t.Recorded || previous.FirstDate != t.FirstDate ||
+        previous.LastDate != t.LastDate)
+        SaveToStorage(t);
 }
 
 uint32_t CDeviceStore::GetHighestDevice(uint8_t DeviceType) const
@@ -627,32 +618,30 @@ uint32_t CDeviceStore::GetHighestDevice(uint8_t DeviceType) const
  * ist oder ein ungültiger \p DeviceType angegeben wurde.
  */
 {
-	std::map<uint8_t, DeviceTree>::const_iterator it;
-	it=Tree.find(DeviceType);
-	if (it == Tree.end() || it->second.empty() == true) return 0;
-	return it->second.rbegin()->first;
+    std::map<uint8_t, DeviceTree>::const_iterator it;
+    it = Tree.find(DeviceType);
+    if (it == Tree.end() || it->second.empty() == true) return 0;
+    return it->second.rbegin()->first;
 }
 
 void CDeviceStore::Renumber(uint8_t DeviceType, uint32_t oldId, uint32_t newId)
 {
-	if (newId == oldId) return;
-	// Alte ID muss vorhanden sein
-	if (!Exists(DeviceType, oldId)) {
-		throw RecordDoesNotExistException("Cannot renumber, because source device %d does not exist", oldId);
-	}
-	// Neue ID darf nicht existieren
-	if (Exists(DeviceType, newId)) {
-		throw DeviceAlreadyExistsException("Cannot renumber, because target device %d already exists", newId);
-	}
-	DataDevice d=Get(DeviceType, oldId);
-	d.DeviceId=newId;
-	DataDevice* new_entry=SaveToMemory(d);
-	SaveToStorage(*new_entry);
-	Tree[DeviceType].erase(oldId);
+    if (newId == oldId) return;
+    // Alte ID muss vorhanden sein
+    if (!Exists(DeviceType, oldId)) {
+        throw RecordDoesNotExistException("Cannot renumber, because source device %d does not exist", oldId);
+    }
+    // Neue ID darf nicht existieren
+    if (Exists(DeviceType, newId)) {
+        throw DeviceAlreadyExistsException("Cannot renumber, because target device %d already exists", newId);
+    }
+    DataDevice d = Get(DeviceType, oldId);
+    d.DeviceId = newId;
+    DataDevice* new_entry = SaveToMemory(d);
+    SaveToStorage(*new_entry);
+    Tree[DeviceType].erase(oldId);
 }
 
-
-
-}
-}
-}	// EOF Namespace de.pfp.winmusik
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

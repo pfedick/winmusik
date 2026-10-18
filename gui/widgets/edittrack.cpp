@@ -108,23 +108,23 @@ void EditTrack::setWinMusikClient(CWmClient* wm)
     TCRecordDevice.SetNextWidget(ui.remarks);
 }
 
-void EditTrack::setFilename(const ppl7::String& Filename)
+void EditTrack::setFilename(const pplib::String& Filename)
 {
     Cover = QPixmap();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     if (Filename.isEmpty()) {
         ui.filename->setText("");
         ui.filesize->setText("");
     } else {
         ui.filename->setText(Filename);
-        ppl7::DirEntry de;
-        if (ppl7::File::tryStatFile(Filename, de)) {
+        pplib::DirEntry de;
+        if (pplib::File::tryStatFile(Filename, de)) {
             Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
             ui.filesize->setText(Tmp);
-            ppl7::ID3Tag Tag;
+            pplib::ID3Tag Tag;
             if (Tag.tryLoad(Filename)) {
                 // Cover?
-                ppl7::ByteArray cover;
+                pplib::ByteArray cover;
                 if (Tag.getPicture(3, cover)) {
                     Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
                     ui.cover->setPixmap(Cover.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -137,7 +137,7 @@ void EditTrack::setFilename(const ppl7::String& Filename)
 void EditTrack::setData(const TrackInfo& data)
 {
     this->data = data;
-    ppl7::String Tmp;
+    pplib::String Tmp;
     DataTitle Ti = data.Ti;
 
     // TitleId und Version
@@ -288,7 +288,7 @@ void EditTrack::setFkeys(Fkeys* fkeys)
 
 const TrackInfo& EditTrack::getData()
 {
-    ppl7::String Tmp, Artist, Title;
+    pplib::String Tmp, Artist, Title;
     // Wir müssen sicherstellen, dass die Tabellen-Index-Felder gültige Werte enthalten
     if (!TCVersion.Finish()) {
         ui.versionId->setFocus();
@@ -383,7 +383,7 @@ const TrackInfo& EditTrack::getData()
 
     // Tags
     Tmp = ui.tags->text();
-    Tmp = ppl7::Trim(ppl7::LowerCase(Tmp));
+    Tmp = pplib::Trim(pplib::LowerCase(Tmp));
     data.Ti.SetTags(Tmp);
 
     // Flags
@@ -410,10 +410,10 @@ const TrackInfo& EditTrack::getData()
     data.Ti.Rating = ui.rating->currentIndex();
 
     // Cover
-    ppl7::String Path = wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
+    pplib::String Path = wm->GetAudioFilename(data.Ti.DeviceType, data.Ti.DeviceId, data.Ti.Page, data.Ti.Track);
     if (Path.notEmpty()) {
-        ppl7::DirEntry de;
-        if (ppl7::File::tryStatFile(Path, de)) {
+        pplib::DirEntry de;
+        if (pplib::File::tryStatFile(Path, de)) {
             data.Ti.Size = de.Size;
             if (Cover.isNull()) {
                 data.Ti.CoverPreview.clear();
@@ -627,7 +627,7 @@ void EditTrack::CheckDupes()
     DupeCheckIcon = ":/fkeys/resources/fkeys/f-key-2005.png";
     DupeCheck = true;
     TCVersion.Finish();
-    ppl7::String Tmp, Artist, Title;
+    pplib::String Tmp, Artist, Title;
     // Interpret und Titel
     Artist = ui.artist->text();
     Artist.trim();
@@ -873,7 +873,7 @@ void EditTrack::MoveToNextWidget()
 
 bool EditTrack::on_length_FocusOut()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     uint32_t l = Time2Int(Tmp = ui.length->text());
     if (l > 0)
         Tmp.setf("%0i:%02i", (int)(l / 60), l % 60);

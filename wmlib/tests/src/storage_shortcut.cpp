@@ -28,69 +28,69 @@
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 
-namespace {
+namespace
+{
 
 using namespace de::pfp::winmusik;
 
-
-class StorageShortcutTest : public ::testing::Test {
+class StorageShortcutTest : public ::testing::Test
+{
 protected:
-	StorageShortcutTest() {
-		ppl7::Dir::mkDir("tmp/shortcut", true);
-
-	}
-	~StorageShortcutTest()
-	{
-
-	}
+    StorageShortcutTest()
+    {
+        pplib::Dir::mkDir("tmp/shortcut", true);
+    }
+    ~StorageShortcutTest()
+    {
+    }
 };
 
+TEST_F(StorageShortcutTest, DataObject)
+{
+    DataShortcut t1;
+    t1.SetValue("psb", "Pet Shop Boys");
 
-TEST_F(StorageShortcutTest, DataObject) {
-	DataShortcut t1;
-	t1.SetValue("psb", "Pet Shop Boys");
+    DataShortcut t2;
+    t2 = t1;
+    pplib::ByteArray bin;
 
-	DataShortcut t2;
-	t2=t1;
-	ppl7::ByteArray bin;
+    t2.Export(bin);
+    // bin.hexDump();
+    ASSERT_EQ((size_t)20, bin.size());
 
-	t2.Export(bin);
-	//bin.hexDump();
-	ASSERT_EQ((size_t)20, bin.size());
-
-	DataShortcut t3;
-	t3.Import(bin, 1);
-	ASSERT_EQ(ppl7::String("psb"), t3.shortcut);
-	ASSERT_EQ(ppl7::String("Pet Shop Boys"), t3.artist);
+    DataShortcut t3;
+    t3.Import(bin, 1);
+    ASSERT_EQ(pplib::String("psb"), t3.shortcut);
+    ASSERT_EQ(pplib::String("Pet Shop Boys"), t3.artist);
 }
 
-TEST_F(StorageShortcutTest, PutAndGet) {
-	CShortcutStore store;
-	CStorage storage;
-	//PrepareCut(storage, store, "PutAndGet.dat");
-	storage.Init("tmp/shortcut", "PutAndGet.dat");
-	storage.RegisterStorageClass(&store);
-	storage.DeleteDatabase();
-	try {
-		store.Put(DataShortcut("psb", "Pet Shop Boys"));
-		store.Put(DataShortcut("oMd", "Orchestral Manoeuvres in the Dark"));
-		store.Put(DataShortcut("elo", "Electric Light Orchestra"));
-	} catch (const ppl7::Exception& exp) {
-		exp.print();
-		throw;
-	}
-	ASSERT_EQ((size_t)3, store.Size());
+TEST_F(StorageShortcutTest, PutAndGet)
+{
+    CShortcutStore store;
+    CStorage storage;
+    // PrepareCut(storage, store, "PutAndGet.dat");
+    storage.Init("tmp/shortcut", "PutAndGet.dat");
+    storage.RegisterStorageClass(&store);
+    storage.DeleteDatabase();
+    try {
+        store.Put(DataShortcut("psb", "Pet Shop Boys"));
+        store.Put(DataShortcut("oMd", "Orchestral Manoeuvres in the Dark"));
+        store.Put(DataShortcut("elo", "Electric Light Orchestra"));
+    }
+    catch (const pplib::Exception& exp) {
+        exp.print();
+        throw;
+    }
+    ASSERT_EQ((size_t)3, store.Size());
 
-	ASSERT_THROW(store.Get("abc"), RecordDoesNotExistException);
-	ASSERT_EQ(ppl7::String("Orchestral Manoeuvres in the Dark"), store.Get("OMD").artist);
-	ASSERT_EQ(NULL, store.GetPtr("abc"));
+    ASSERT_THROW(store.Get("abc"), RecordDoesNotExistException);
+    ASSERT_EQ(pplib::String("Orchestral Manoeuvres in the Dark"), store.Get("OMD").artist);
+    ASSERT_EQ(NULL, store.GetPtr("abc"));
 
-	// Overwrite
-	store.Put(DataShortcut("psb", "Pet Boys Shop"));
-	ASSERT_EQ((size_t)3, store.Size());
-	ASSERT_EQ(ppl7::String("Pet Boys Shop"), store.Get("psb").artist);
+    // Overwrite
+    store.Put(DataShortcut("psb", "Pet Boys Shop"));
+    ASSERT_EQ((size_t)3, store.Size());
+    ASSERT_EQ(pplib::String("Pet Boys Shop"), store.Get("psb").artist);
 }
 
-
-
-} // EOF namespace
+} // namespace

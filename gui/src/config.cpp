@@ -32,7 +32,7 @@ Config::Config()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION, WM_APPNAME);
     ConfigFile = settings.fileName();
 #ifdef _WIN32
-    DataPath = ppl7::File::getPath(ConfigFile);
+    DataPath = pplib::File::getPath(ConfigFile);
 #else
     DataPath = QDir::homePath();
 #endif
@@ -110,25 +110,25 @@ Config::PlaylistExport::PlaylistExport()
     with_cover_icons = false;
 }
 
-void Config::setConfigFile(const ppl7::String& filename)
+void Config::setConfigFile(const pplib::String& filename)
 {
-    ppl7::DirEntry res;
-    if (ppl7::File::exists(filename)) {
-        ppl7::DirEntry res = ppl7::File::statFile(filename);
+    pplib::DirEntry res;
+    if (pplib::File::exists(filename)) {
+        pplib::DirEntry res = pplib::File::statFile(filename);
         if (!res.isFile()) {
             throw InvalidConfigurationFile(
                 ToString(tr("alternative configuration file (Parameter -c) is not a regular file! [%s]"), (const char*)filename));
         }
     } else {
-        ppl7::String Path = ppl7::File::getPath(filename);
+        pplib::String Path = pplib::File::getPath(filename);
         if (Path.isEmpty()) {
             throw InvalidConfigurationFile(
                 ToString(tr("alternative configuration file (Parameter -c) not found! [%s]"), (const char*)filename));
         }
-        if (!ppl7::File::exists(Path)) {
+        if (!pplib::File::exists(Path)) {
             throw InvalidConfigurationFile(ToString(tr("Path of configuration file does not exist! [%s]"), (const char*)Path));
         }
-        ppl7::DirEntry res = ppl7::File::statFile(Path);
+        pplib::DirEntry res = pplib::File::statFile(Path);
         if (!res.isDir()) {
             throw InvalidConfigurationFile(ToString(tr("Path of configuration file is not a valid directory! [%s]"), (const char*)Path));
         }
@@ -147,7 +147,7 @@ void Config::trySave()
 
 void Config::save()
 {
-    ppl7::ConfigParser c;
+    pplib::ConfigParser c;
     // c.Load(ConfigFile);	// Bloss nicht, "Add" hängt die Werte dran, wenn der Key schon da ist!
     c.add("client", "locale", (const char*)Locale);
     c.add("client", "tmppath", (const char*)TmpPath);
@@ -188,7 +188,7 @@ void Config::save()
     c.add("mp3", "JpegQualityCover", JpegQualityCover);
     c.add("mp3", "JpegQualityPreview", JpegQualityPreview);
 
-    ppl7::String Key;
+    pplib::String Key;
     for (int i = 1; i < MAX_DEVICE_TYPES; i++) {
         Key.setf("device_%i", i);
         c.add("devicepath", Key, (const char*)DevicePath[i]);
@@ -212,7 +212,7 @@ void Config::save()
 
     // Harddisk search
     c.add("directorysearch", "cachedirectorysearch", bCacheDirectorySearch);
-    std::list<ppl7::String>::const_iterator it;
+    std::list<pplib::String>::const_iterator it;
     int i;
     for (it = DirectorySearch.begin(), i = 0; it != DirectorySearch.end(); ++it, i++) {
         Key.setf("dir_%d", i);
@@ -229,7 +229,7 @@ void Config::save()
 
     // Playlists
     for (int i = 0; i < WM_NUM_LASTPLAYLISTS; i++) {
-        c.add("playlists", ppl7::ToString("%i", i + 1), (const char*)LastPlaylists[i]);
+        c.add("playlists", pplib::ToString("%i", i + 1), (const char*)LastPlaylists[i]);
     }
 
     // MusicKey
@@ -237,7 +237,7 @@ void Config::save()
     c.add("musicKey", "musicKeyTag", musicKeyTag);
     c.add("musicKey", "customMusicKeyName", (const char*)customMusicKeyName);
     for (int i = 0; i < 26; i++)
-        c.add("musicKey", ppl7::ToString("customMusicKey[%i]", i), (const char*)customMusicKey[i]);
+        c.add("musicKey", pplib::ToString("customMusicKey[%i]", i), (const char*)customMusicKey[i]);
 
     // CDDB
     c.add("cddb", "cddevice", (const char*)cddb.cddevice);
@@ -266,7 +266,7 @@ void Config::save()
     c.add("beatport", "clearance", (const char*)beatport.clearance);
     c.add("beatport", "userAgent", (const char*)beatport.userAgent);
 
-    ppl7::String Path = ppl7::File::getPath(ConfigFile);
+    pplib::String Path = pplib::File::getPath(ConfigFile);
 
     QDir dir;
     if (!dir.exists(Path)) {
@@ -277,8 +277,8 @@ void Config::save()
 
 void Config::load()
 {
-    ppl7::String Tmp;
-    ppl7::ConfigParser c;
+    pplib::String Tmp;
+    pplib::ConfigParser c;
     c.load(ConfigFile);
     Locale = c.getFromSection("client", "locale", "en");
     Tmp = QDir::tempPath();
@@ -308,7 +308,7 @@ void Config::load()
     DefaultPrintPath = c.getFromSection("printer", "defaultprintpath", "");
     bPrintColors = c.getBoolFromSection("printer", "printcolors", true);
 
-    ppl7::String Key;
+    pplib::String Key;
     for (int i = 1; i < MAX_DEVICE_TYPES; i++) {
         Key.setf("device_%i", i);
         DevicePath[i] = c.getFromSection("devicepath", Key, "");
@@ -384,7 +384,7 @@ void Config::load()
     customMusicKeyName = c.getFromSection("musicKey", "customMusicKeyName", Tmp);
 
     for (int i = 0; i < 26; i++)
-        customMusicKey[i] = c.getFromSection("musicKey", (const char*)ppl7::ToString("customMusicKey[%i]", i),
+        customMusicKey[i] = c.getFromSection("musicKey", (const char*)pplib::ToString("customMusicKey[%i]", i),
                                              (const char*)wm_main->MusicKeys.keyName(i, musicKeyTypeMusicalSharps));
 
     // CDDB

@@ -33,21 +33,19 @@
 #include <Python.h>
 #endif
 
-ppl7::Logger* wmlog=NULL;
+pplib::Logger* wmlog = NULL;
 
 void help()
 {
     printf("%s, Version %s\n", WM_APPNAME, WM_VERSION);
     printf("\nCommandline options:\n"
-        "  -h | --help   Show this help\n"
-        "  -c FILE       Alternative configfile\n"
-    );
+           "  -h | --help   Show this help\n"
+           "  -c FILE       Alternative configfile\n");
 }
-
 
 int main(int argc, char* argv[])
 {
-    if (ppl7::HaveArgv(argc, argv, "-h") || ppl7::HaveArgv(argc, argv, "--help")) {
+    if (pplib::HaveArgv(argc, argv, "-h") || pplib::HaveArgv(argc, argv, "--help")) {
         help();
         return 0;
     }
@@ -90,7 +88,7 @@ int main(int argc, char* argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 #ifdef WIN32
-    ppl7::String::setGlobalEncoding("UTF-8");
+    pplib::String::setGlobalEncoding("UTF-8");
 #endif
 
     if (setlocale(LC_CTYPE, "") == NULL) {
@@ -105,7 +103,8 @@ int main(int argc, char* argv[])
     CWmClient Client;
     try {
         Client.Init(argc, argv, &a);
-    } catch (const ppl7::Exception& exp) {
+    }
+    catch (const pplib::Exception& exp) {
         ShowException(exp, QApplication::tr("Could not initialize WinMusik"));
         return 1;
     }
@@ -114,10 +113,11 @@ int main(int argc, char* argv[])
             return 1;
         }
         a.connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()));
-        int ret=a.exec();
+        int ret = a.exec();
         return ret;
-    } catch (const ppl7::Exception& exp) {
+    }
+    catch (const pplib::Exception& exp) {
         ShowException(exp, QApplication::tr("Could not run WinMusik"));
         return 1;
     }
-    }
+}

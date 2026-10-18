@@ -35,11 +35,11 @@ namespace winmusik
 class TraktorTagFrame
 {
 public:
-    ppl7::String name;
+    pplib::String name;
     size_t size;
     size_t numChilds;
     const char* data;
-    std::map<ppl7::String, TraktorTagFrame> childs;
+    std::map<pplib::String, TraktorTagFrame> childs;
 };
 
 /*
@@ -73,7 +73,7 @@ public:
         LOOP
     };
     int version;
-    ppl7::String name;
+    pplib::String name;
     int displ_order;
     TraktorTagType type;
     double start;
@@ -83,15 +83,15 @@ public:
 
     TraktorTagCue();
     void print() const;
-    ppl7::String typeName() const;
+    pplib::String typeName() const;
 };
 
-void getTraktorFrames(std::map<ppl7::String, TraktorTagFrame>& frames, const char* adr, size_t size);
-void getTraktorFrames(std::map<ppl7::String, TraktorTagFrame>& frames, const ppl7::ID3Tag& Tag);
+void getTraktorFrames(std::map<pplib::String, TraktorTagFrame>& frames, const char* adr, size_t size);
+void getTraktorFrames(std::map<pplib::String, TraktorTagFrame>& frames, const pplib::ID3Tag& Tag);
 
 void getTraktorCues(std::list<TraktorTagCue>& cuelist, const TraktorTagFrame& cuep);
-void getTraktorCues(std::list<TraktorTagCue>& cuelist, const ppl7::ID3Tag& Tag);
-void getTraktorCuesFromFile(std::list<TraktorTagCue>& cuelist, const ppl7::String& Filename);
+void getTraktorCues(std::list<TraktorTagCue>& cuelist, const pplib::ID3Tag& Tag);
+void getTraktorCuesFromFile(std::list<TraktorTagCue>& cuelist, const pplib::String& Filename);
 
 } // namespace winmusik
 } // namespace pfp

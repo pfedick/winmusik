@@ -73,7 +73,7 @@ public:
     uint32_t Track;
 };
 
-extern ppl7::Logger* wmlog;
+extern pplib::Logger* wmlog;
 
 /*******************************************************
  * Structures                                          *
@@ -108,23 +108,23 @@ public:
 /*******************************************************
  * Global Functions                                    *
  *******************************************************/
-uint32_t Time2Int(const ppl7::String& Time);
-ppl7::String Int2Time(uint32_t Time);
-ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date);
+uint32_t Time2Int(const pplib::String& Time);
+pplib::String Int2Time(uint32_t Time);
+pplib::String Long2Date(const pplib::String& Format, uint32_t Date);
 
 void getHarmonicKeys(std::set<int>& harmonics, int key);
-void saveCover(const ppl7::String& filename, const QPixmap& Cover);
-void saveCover(ppl7::ID3Tag& Tag, const QPixmap& Cover);
-void saveCoverToFile(const ppl7::String& filename, const QPixmap& Cover);
-void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover);
-void NormalizeImportString(ppl7::String& Buffer);
+void saveCover(const pplib::String& filename, const QPixmap& Cover);
+void saveCover(pplib::ID3Tag& Tag, const QPixmap& Cover);
+void saveCoverToFile(const pplib::String& filename, const QPixmap& Cover);
+void getIconFromCover(pplib::ByteArray& bin, const QPixmap& Cover);
+void NormalizeImportString(pplib::String& Buffer);
 void setReadableLength(QLabel* label, int length);
-void loadCoverToClipboard(const ppl7::String& Filename);
+void loadCoverToClipboard(const pplib::String& Filename);
 
-void SetWindowGeometry(QWidget* widget, const ppl7::String& name);
-void SaveWindowGeometry(QWidget* widget, const ppl7::String& name);
+void SetWindowGeometry(QWidget* widget, const pplib::String& name);
+void SaveWindowGeometry(QWidget* widget, const pplib::String& name);
 
-ppl7::String getReadableTimeFromSeconds(int seconds);
+pplib::String getReadableTimeFromSeconds(int seconds);
 
 /*******************************************************
  * Global Variablen                                    *
@@ -134,17 +134,17 @@ class TrackInfo
 {
 public:
     DataTitle Ti;
-    ppl7::String Version;
-    ppl7::String Genre;
-    ppl7::String Label;
-    ppl7::String RecordingSource;
-    ppl7::String RecordingDevice;
-    ppl7::String KeyText; // only used when reading from idv3-tag
-    ppl7::ByteArray Cover;
+    pplib::String Version;
+    pplib::String Genre;
+    pplib::String Label;
+    pplib::String RecordingSource;
+    pplib::String RecordingDevice;
+    pplib::String KeyText; // only used when reading from idv3-tag
+    pplib::ByteArray Cover;
 };
 
-bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version = 2);
-uint32_t findTitleIdByFilename(const ppl7::String& Filename);
+bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int preferedId3Version = 2);
+uint32_t findTitleIdByFilename(const pplib::String& Filename);
 
 /*******************************************************
  * Configuration Class                                 *
@@ -156,38 +156,38 @@ class Config
     Q_DECLARE_TR_FUNCTIONS(Config)
 
 private:
-    ppl7::String ConfigFile;
+    pplib::String ConfigFile;
 
 public:
     Config();
     void load();
     void save();
     void trySave();
-    void setConfigFile(const ppl7::String& filename);
+    void setConfigFile(const pplib::String& filename);
 
-    ppl7::String LastCoverPath;
-    ppl7::String DataPath;
-    ppl7::String TmpPath;
-    // ppl7::String	MP3Path;
-    ppl7::String MP3Player;
-    ppl7::String AIFFPlayer;
-    ppl7::String Locale;
-    ppl7::String UserName;
-    ppl7::String UserCompany;
-    ppl7::String Serial;
-    ppl7::String Currency;
-    ppl7::String PrinterName;
-    ppl7::String PrinterFont;
-    ppl7::String Logfile;
-    ppl7::String DefaultPrintPath;
-    ppl7::String CoverPath;
-    ppl7::String LastPlaylistPath;
-    ppl7::String LastPlaylists[WM_NUM_LASTPLAYLISTS];
+    pplib::String LastCoverPath;
+    pplib::String DataPath;
+    pplib::String TmpPath;
+    // pplib::String	MP3Path;
+    pplib::String MP3Player;
+    pplib::String AIFFPlayer;
+    pplib::String Locale;
+    pplib::String UserName;
+    pplib::String UserCompany;
+    pplib::String Serial;
+    pplib::String Currency;
+    pplib::String PrinterName;
+    pplib::String PrinterFont;
+    pplib::String Logfile;
+    pplib::String DefaultPrintPath;
+    pplib::String CoverPath;
+    pplib::String LastPlaylistPath;
+    pplib::String LastPlaylists[WM_NUM_LASTPLAYLISTS];
 
-    ppl7::String DevicePath[MAX_DEVICE_TYPES]; // Muss erweitert werden, wenn neue Device-Typen hinzukommen!
-    ppl7::String SearchListCoverPath;
+    pplib::String DevicePath[MAX_DEVICE_TYPES]; // Muss erweitert werden, wenn neue Device-Typen hinzukommen!
+    pplib::String SearchListCoverPath;
 
-    std::list<ppl7::String> DirectorySearch;
+    std::list<pplib::String> DirectorySearch;
     int LogfileSize;
     int LogfileGenerations;
     int Debuglevel;
@@ -218,13 +218,13 @@ public:
     // Server
     bool bserverEnabled;
     bool bserverEnableSSL;
-    ppl7::String serverHost;
+    pplib::String serverHost;
     int serverPort;
-    ppl7::String serverSSLKeyfile;
-    ppl7::String serverSSLPassword;
+    pplib::String serverSSLKeyfile;
+    pplib::String serverSSLPassword;
 
-    ppl7::String customMusicKey[26];
-    ppl7::String customMusicKeyName;
+    pplib::String customMusicKey[26];
+    pplib::String customMusicKeyName;
     MusicKeyType musicKeyDisplay;
     MusicKeyType musicKeyTag;
     int playlistView;
@@ -233,12 +233,12 @@ public:
     {
     public:
         CDDB();
-        ppl7::String cddevice;
-        ppl7::String server;
-        ppl7::String proxy_server;
-        ppl7::String username;
-        ppl7::String hostname;
-        ppl7::String querypath;
+        pplib::String cddevice;
+        pplib::String server;
+        pplib::String proxy_server;
+        pplib::String username;
+        pplib::String hostname;
+        pplib::String querypath;
         int proxy_port;
         int port;
         bool useProxy;
@@ -249,7 +249,7 @@ public:
     {
     public:
         PlaylistExport();
-        ppl7::String TargetPath;
+        pplib::String TargetPath;
         bool option_copy_files;
         bool option_prepend_tracknumber;
         bool export_m3u;
@@ -265,8 +265,8 @@ public:
     class Beatport
     {
     public:
-        ppl7::String clearance;
-        ppl7::String userAgent;
+        pplib::String clearance;
+        pplib::String userAgent;
     };
     Beatport beatport;
 };
@@ -275,7 +275,7 @@ public:
 class CStringCounterItem : public ppl6::CTreeItem
 {
 public:
-    ppl7::WideString	Name;
+    pplib::WideString	Name;
     uint32_t			Count;
     virtual int CompareNode(CTreeItem* item);
     virtual int CompareValue(void* value);
@@ -285,7 +285,7 @@ public:
 
 class ResultFilter;
 
-class CHashes : public ppl7::Thread
+class CHashes : public pplib::Thread
 {
     Q_DECLARE_TR_FUNCTIONS(CHashes)
 
@@ -295,9 +295,9 @@ public:
     typedef std::set<uint32_t> TitleTree;
 
 private:
-    typedef std::map<ppl7::String, TitleTree> WordTree;
+    typedef std::map<pplib::String, TitleTree> WordTree;
 
-    ppl7::Mutex Mutex;
+    pplib::Mutex Mutex;
     CWmClient* wm;
     WordTree Artist;
     WordTree Title;
@@ -309,13 +309,13 @@ private:
     WordTree Label;
     std::map<uint8_t, TitleTree> MusicKeys;
     // CWordTree		Global;
-    ppl7::Logger* log;
+    pplib::Logger* log;
 
     int AddTitleInternal(uint32_t TitleId, const DataTitle* title = nullptr);
-    void AddWords(WordTree& Tree, const ppl7::Array& words, const DataTitle* title);
-    void FindWords(const WordTree& Tree, const ppl7::Array& words, TitleTree& Result);
-    void FindSingleWord(const WordTree& Tree, const ppl7::String& Word, TitleTree& Result, const ResultFilter& filter);
-    void RemoveWords(WordTree& Tree, const ppl7::Array& words, const DataTitle* title);
+    void AddWords(WordTree& Tree, const pplib::Array& words, const DataTitle* title);
+    void FindWords(const WordTree& Tree, const pplib::Array& words, TitleTree& Result);
+    void FindSingleWord(const WordTree& Tree, const pplib::String& Word, TitleTree& Result, const ResultFilter& filter);
+    void RemoveWords(WordTree& Tree, const pplib::Array& words, const DataTitle* title);
     void Union(TitleTree& Result, const TitleTree& Tree1, const TitleTree& Tree2);
     void Copy(TitleTree& Result, const TitleTree& src);
     uint32_t Add(TitleTree& Result, const TitleTree& src, const ResultFilter& filter);
@@ -340,20 +340,20 @@ public:
     virtual void run();
 
     void Clear();
-    int GetTags(const ppl7::String& str, ppl7::Array& words);
+    int GetTags(const pplib::String& str, pplib::Array& words);
     int AddTitle(uint32_t TitleId, const DataTitle* title = nullptr);
     int RemoveTitle(uint32_t TitleId, const DataTitle* title = nullptr);
 
-    int Find(const ppl7::String& Artist, const ppl7::String& Title, TitleTree& Result);
-    int Find(const ppl7::String& Artist,
-             const ppl7::String& Title,
-             const ppl7::String& Version,
-             const ppl7::String& Genre,
-             const ppl7::String& Tags,
-             const ppl7::String& Label,
+    int Find(const pplib::String& Artist, const pplib::String& Title, TitleTree& Result);
+    int Find(const pplib::String& Artist,
+             const pplib::String& Title,
+             const pplib::String& Version,
+             const pplib::String& Genre,
+             const pplib::String& Tags,
+             const pplib::String& Label,
              TitleTree& Result);
-    int FindGlobal(const ppl7::String& Query, TitleTree& Result, int Flags, const ResultFilter& filter);
-    int CheckDupes(const ppl7::String& Artist, const ppl7::String& Title, uint32_t Version, uint32_t Ignore = 0);
+    int FindGlobal(const pplib::String& Query, TitleTree& Result, int Flags, const ResultFilter& filter);
+    int CheckDupes(const pplib::String& Artist, const pplib::String& Title, uint32_t Version, uint32_t Ignore = 0);
 };
 
 enum class WinMusikEvent
@@ -381,8 +381,8 @@ class CWmClient
     Q_DECLARE_TR_FUNCTIONS(CWmClient)
 
 private:
-    ppl7::Mutex Mutex;
-    ppl7::String Str_Unknown;
+    pplib::Mutex Mutex;
+    pplib::String Str_Unknown;
     QApplication* app;
     int argc;
     char** argv;
@@ -442,9 +442,9 @@ public:
     void InitLogging();
     void UpdateMenue();
 
-    ppl7::String GetWmVersion() const;
+    pplib::String GetWmVersion() const;
 
-    bool isValidDataPath(const ppl7::String& Path);
+    bool isValidDataPath(const pplib::String& Path);
 
     void CloseDatabase();
     int LoadDatabase();
@@ -460,7 +460,7 @@ public:
     void OpenCoverPrinter();
     void OpenPlaylistDialog();
     void OpenSearchlistOverview();
-    void OpenSearchlistDialog(const ppl7::String Filename);
+    void OpenSearchlistDialog(const pplib::String Filename);
 
     QWidget* OpenSearch(const char* artist = nullptr, const char* title = nullptr);
     QWidget* OpenOrReuseSearch(QWidget* q, const char* artist = nullptr, const char* title = nullptr);
@@ -472,8 +472,8 @@ public:
     bool IsCoverViewerVisible() const;
 
     uint32_t GetHighestDeviceId(int DeviceType);
-    ppl7::String GetDeviceName(int DeviceType);
-    ppl7::String GetDeviceNameShort(uint8_t DeviceType);
+    pplib::String GetDeviceName(int DeviceType);
+    pplib::String GetDeviceNameShort(uint8_t DeviceType);
     QPixmap GetDevicePixmap(int DeviceType);
     QIcon GetDeviceIcon(int DeviceType);
     QDate GetLatestPurchaseDate();
@@ -489,33 +489,33 @@ public:
     const DataRecordSource* GetRecordSource(uint32_t Id);
     const DataRecordDevice* GetRecordDevice(uint32_t Id);
 
-    const ppl7::String& GetVersionText(uint32_t Id);
-    const ppl7::String& GetGenreText(uint32_t Id);
-    const ppl7::String& GetLabelText(uint32_t Id);
-    const ppl7::String& GetRecordSourceText(uint32_t Id);
-    const ppl7::String& GetRecordDeviceText(uint32_t Id);
+    const pplib::String& GetVersionText(uint32_t Id);
+    const pplib::String& GetGenreText(uint32_t Id);
+    const pplib::String& GetLabelText(uint32_t Id);
+    const pplib::String& GetRecordSourceText(uint32_t Id);
+    const pplib::String& GetRecordDeviceText(uint32_t Id);
 
-    ppl7::String getXmlTitle(uint32_t TitleId);
+    pplib::String getXmlTitle(uint32_t TitleId);
 
     QByteArray GetGeometry(const char* name);
     void SaveGeometry(const char* name, QByteArray Geometry);
     void ReloadTranslation();
     QString Unknown();
-    ppl7::String GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page);
-    ppl7::String GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
+    pplib::String GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page);
+    pplib::String GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
 
     int TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
     int RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t OldTrack, uint32_t NewTrack);
-    ppl7::String NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
+    pplib::String NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
     int SaveID3Tags(
-        uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const ppl7::String& Filename = "");
-    ppl7::String NormalizeFilename(
-        uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const ppl7::String& Suffix);
+        uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const pplib::String& Filename = "");
+    pplib::String NormalizeFilename(
+        uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const pplib::String& Suffix);
 
     int WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, CTrackList* list, DataDevice* device = nullptr);
     int UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, CTrackList* list);
 
-    int PlayFile(const ppl7::String& Filename);
+    int PlayFile(const pplib::String& Filename);
 
     // Printing
     int PrintCoverDialog(QWidget* parent, int DeviceType, uint32_t DeviceId);

@@ -43,7 +43,7 @@ private:
     int CheckValues();
     int Save();
 
-    ppl7::String GetLocale();
+    pplib::String GetLocale();
 
     void SelectLanguage();
     void UpdateRegExpPatternTable();

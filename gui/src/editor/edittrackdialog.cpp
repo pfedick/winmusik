@@ -26,33 +26,31 @@
 #include "edittrackdialog.h"
 
 EditTrackDialog::EditTrackDialog(QWidget* parent, CWmClient* wm)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
-	this->wm=wm;
-	searchWindow=NULL;
-	position=oldposition=0;
-	ui.editor->setWinMusikClient(wm);
-	ui.editor->setFkeys(ui.fkeys);
-	ui.editor->setFocus();
-
+    ui.setupUi(this);
+    this->wm = wm;
+    searchWindow = NULL;
+    position = oldposition = 0;
+    ui.editor->setWinMusikClient(wm);
+    ui.editor->setFkeys(ui.fkeys);
+    ui.editor->setFocus();
 }
 
 EditTrackDialog::~EditTrackDialog()
 {
-	//printf ("EditTrackDialog::~EditTrackDialog\n");
+    // printf ("EditTrackDialog::~EditTrackDialog\n");
 }
 
 void EditTrackDialog::setSearchWindow(QWidget* widget)
 {
-	searchWindow=widget;
+    searchWindow = widget;
 }
 
 QWidget* EditTrackDialog::getSearchWindow() const
 {
-	return searchWindow;
+    return searchWindow;
 }
-
 
 void EditTrackDialog::Resize()
 {
@@ -60,44 +58,42 @@ void EditTrackDialog::Resize()
 
 void EditTrackDialog::showEvent(QShowEvent* event)
 {
-	Resize();
-	QDialog::showEvent(event);
+    Resize();
+    QDialog::showEvent(event);
 }
 
 void EditTrackDialog::resizeEvent(QResizeEvent* event)
 {
-	Resize();
-	QDialog::resizeEvent(event);
+    Resize();
+    QDialog::resizeEvent(event);
 }
-
-
 
 void EditTrackDialog::ReloadTranslation()
 {
-	ui.retranslateUi(this);
+    ui.retranslateUi(this);
 }
 
-void EditTrackDialog::setFilename(const ppl7::String& Filename)
+void EditTrackDialog::setFilename(const pplib::String& Filename)
 {
-	ui.editor->setFilename(Filename);
+    ui.editor->setFilename(Filename);
 }
 
 void EditTrackDialog::setData(const TrackInfo& data)
 {
-	ui.editor->setData(data);
+    ui.editor->setData(data);
 }
 
 const TrackInfo& EditTrackDialog::getData()
 {
-	return ui.editor->getData();
+    return ui.editor->getData();
 }
 
 void EditTrackDialog::on_editor_escPressed()
 {
-	done(0);
+    done(0);
 }
 
 void EditTrackDialog::on_editor_save()
 {
-	done(1);
+    done(1);
 }

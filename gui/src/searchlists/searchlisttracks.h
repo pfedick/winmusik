@@ -49,7 +49,7 @@ public:
 
 signals:
     void itemDropped(SearchlistItem* item);
-    void urlDropped(const ppl7::String& url);
+    void urlDropped(const pplib::String& url);
     void changed();
 
     /*

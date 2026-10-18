@@ -28,8 +28,6 @@
 
 #include "fkeys.h"
 
-
-
 class EditTrack : public QWidget
 {
     Q_OBJECT
@@ -40,22 +38,21 @@ public:
 
     void setWinMusikClient(CWmClient* wm);
     void setData(const TrackInfo& data);
-    void setFilename(const ppl7::String& Filename);
+    void setFilename(const pplib::String& Filename);
     void setFkeys(Fkeys* fkeys);
     const TrackInfo& getData();
     void setFocus();
     void setFocus(Qt::FocusReason reason);
     void ReloadTranslation();
 
-    PPL7EXCEPTION(DataIncompleteException, Exception);
-
+    PPLIBEXCEPTION(DataIncompleteException, Exception);
 
 private:
     Ui::EditTrackClass ui;
     CWmClient* wm;
     Fkeys* fkeys;
-    TrackInfo	data;
-    QPixmap			Cover;
+    TrackInfo data;
+    QPixmap Cover;
     int position, oldposition;
 
     CTableControl TCVersion;
@@ -70,13 +67,11 @@ private:
     QCompleter* artistCompleter;
     QCompleter* titleCompleter;
     QCompleter* albumCompleter;
-    bool		DupeCheck;
+    bool DupeCheck;
     QTimer* DupeTimer;
     const char* DupeCheckIcon;
     WMTreeItem* currentTrackListItem;
     QWidget* searchWindow;
-
-
 
     bool eventFilter(QObject* target, QEvent* event);
     bool consumeEvent(QObject* target, QEvent* event);
@@ -97,7 +92,6 @@ signals:
     void pageUpPressed();
     void save();
     void updateFkeys(int position);
-
 };
 
 #endif // EDITTRACK_H

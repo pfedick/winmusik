@@ -17,8 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #ifndef EDITTRACKDIALOG_H
 #define EDITTRACKDIALOG_H
 
@@ -33,14 +31,14 @@ class EditTrackDialog : public QDialog
     Q_OBJECT
 
 public:
-    EditTrackDialog(QWidget* parent = 0, CWmClient* wm=NULL);
+    EditTrackDialog(QWidget* parent = 0, CWmClient* wm = NULL);
     ~EditTrackDialog();
     void ReloadTranslation();
 
     void setSearchWindow(QWidget* widget);
     QWidget* getSearchWindow() const;
 
-    void setFilename(const ppl7::String& Filename);
+    void setFilename(const pplib::String& Filename);
     void setData(const TrackInfo& data);
     const TrackInfo& getData();
 
@@ -48,22 +46,16 @@ private:
     Ui::edittrackdialogClass ui;
     CWmClient* wm;
     QWidget* searchWindow;
-    int			position, oldposition;
+    int position, oldposition;
 
     void resizeEvent(QResizeEvent* event);
     void showEvent(QShowEvent* event);
     void Resize();
 
-
 protected:
-
-
 public slots:
     void on_editor_escPressed();
     void on_editor_save();
-
-
 };
-
 
 #endif // EDITTRACKDIALOG_H

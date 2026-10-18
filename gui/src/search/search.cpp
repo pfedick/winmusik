@@ -287,12 +287,12 @@ void Search::StartSearch(const char *artist, const char *title)
 }
 */
 
-void Search::FastSearch(const ppl7::String& Artist,
-                        const ppl7::String& Title,
-                        const ppl7::String& Version,
-                        const ppl7::String& Genre,
-                        const ppl7::String& Tags,
-                        const ppl7::String& Label)
+void Search::FastSearch(const pplib::String& Artist,
+                        const pplib::String& Title,
+                        const pplib::String& Version,
+                        const pplib::String& Genre,
+                        const pplib::String& Tags,
+                        const pplib::String& Label)
 {
     ui.artist->setText(Artist);
     ui.title->setText(Title);
@@ -309,7 +309,7 @@ void Search::FastSearch(const ppl7::String& Artist,
     Results.clear();
     CheckAllowedDevices();
 
-    ppl7::String Tmp;
+    pplib::String Tmp;
     ui.progressBar->setValue(0);
     CHashes::TitleTree res;
     if (wm->Hashes.Find(Artist, Title, Version, Genre, Tags, Label, res)) {
@@ -332,7 +332,7 @@ void Search::FastSearch(const ppl7::String& Artist,
     ui.artist->setFocus();
 }
 
-void Search::FastSearch(const ppl7::String& Words)
+void Search::FastSearch(const pplib::String& Words)
 {
     ui.tabWidget->setCurrentIndex(0);
     ui.query->setText(Words);
@@ -364,18 +364,18 @@ void Search::CheckAllowedDevices()
 
 void Search::DoSearch()
 {
-    ppl7::String Artist = ui.artist->text();
-    ppl7::String Title = ui.title->text();
-    ppl7::String Version = ui.version->text();
-    ppl7::String Genre = ui.genre->text();
-    ppl7::String Tags = ui.tags->text();
-    ppl7::String Label = ui.recordLabel->text();
-    Artist = ppl7::Trim(ppl7::LowerCase(Artist));
-    Title = ppl7::Trim(ppl7::LowerCase(Title));
-    Version = ppl7::Trim(ppl7::LowerCase(Version));
-    Genre = ppl7::Trim(ppl7::LowerCase(Genre));
-    Tags = ppl7::Trim(ppl7::LowerCase(Tags));
-    Label = ppl7::Trim(ppl7::LowerCase(Label));
+    pplib::String Artist = ui.artist->text();
+    pplib::String Title = ui.title->text();
+    pplib::String Version = ui.version->text();
+    pplib::String Genre = ui.genre->text();
+    pplib::String Tags = ui.tags->text();
+    pplib::String Label = ui.recordLabel->text();
+    Artist = pplib::Trim(pplib::LowerCase(Artist));
+    Title = pplib::Trim(pplib::LowerCase(Title));
+    Version = pplib::Trim(pplib::LowerCase(Version));
+    Genre = pplib::Trim(pplib::LowerCase(Genre));
+    Tags = pplib::Trim(pplib::LowerCase(Tags));
+    Label = pplib::Trim(pplib::LowerCase(Label));
 
     FastSearch(Artist, Title, Version, Genre, Tags, Label);
     ui.artist->setFocus();
@@ -397,13 +397,13 @@ void Search::FilterResult(const CHashes::TitleTree& in, std::list<const DataTitl
 void Search::SortResult(const std::list<const DataTitle*>& in, std::list<const DataTitle*>& out)
 {
     out.clear();
-    std::map<ppl7::String, const DataTitle*> sorter;
+    std::map<pplib::String, const DataTitle*> sorter;
     std::list<const DataTitle*>::const_iterator it;
     for (it = in.begin(); it != in.end(); ++it) {
         const DataTitle* ti = (*it);
-        sorter.insert(std::pair<ppl7::String, const DataTitle*>(ppl7::ToString("%08u:%08u", ti->ReleaseDate, ti->TitleId), ti));
+        sorter.insert(std::pair<pplib::String, const DataTitle*>(pplib::ToString("%08u:%08u", ti->ReleaseDate, ti->TitleId), ti));
     }
-    std::map<ppl7::String, const DataTitle*>::const_reverse_iterator it_sorted;
+    std::map<pplib::String, const DataTitle*>::const_reverse_iterator it_sorted;
     for (it_sorted = sorter.rbegin(); it_sorted != sorter.rend(); ++it_sorted) {
         out.push_back(it_sorted->second);
     }
@@ -423,7 +423,7 @@ void Search::RandomResult(const std::list<const DataTitle*>& in, std::list<const
         num--;
         const DataTitle* ti = NULL;
         while (!ti) {
-            r = ppl7::rand(0, list.size() - 1);
+            r = pplib::rand(0, list.size() - 1);
             ti = list[r];
             if (!ti) {
                 // vector muss aufgeräumt werden
@@ -479,7 +479,7 @@ void Search::updateTrackListing()
 void Search::renderTrack(WMTreeItem* item, const DataTitle* ti)
 {
     const char Seite[] = "?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    ppl7::String Tmp;
+    pplib::String Tmp;
     QPixmap icon;
     QBrush Brush(Qt::SolidPattern);
     Brush.setColor("red");
@@ -575,7 +575,7 @@ void Search::renderTrack(WMTreeItem* item, const DataTitle* ti)
 void Search::PresentResults()
 {
 
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%zu", Results.size());
     ui.numTracks->setText(Tmp);
     ui.totalLength->setText("");
@@ -618,7 +618,7 @@ void Search::configureFilter(ResultFilter& filter)
     }
     if (ui.enableRecordingDateSearch->isChecked()) {
         QDate Date = ui.recordDateStart->date();
-        ppl7::String Tmp = Date.toString("yyyyMMdd");
+        pplib::String Tmp = Date.toString("yyyyMMdd");
         uint32_t start = Tmp.toInt();
         Date = ui.recordDateEnd->date();
         Tmp = Date.toString("yyyyMMdd");
@@ -647,7 +647,7 @@ void Search::on_searchButton_clicked()
 
 void Search::on_quicksearchButton_clicked()
 {
-    ppl7::String Query = ui.query->text();
+    pplib::String Query = ui.query->text();
     Query.trim();
     ui.query->setFocus();
 
@@ -666,7 +666,7 @@ void Search::on_quicksearchButton_clicked()
     trackList->setSortingEnabled(false);
     Results.clear();
     CheckAllowedDevices();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     ui.progressBar->setValue(0);
 
     CHashes::TitleTree res;
@@ -878,7 +878,7 @@ void Search::on_contextMusicKeyVerified_triggered()
     try {
         wm->TitleStore.Put(tUpdate);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save Title in TitleStore"));
         return;
     }
@@ -896,7 +896,7 @@ void Search::on_contextSetMusicKey(int k)
     try {
         wm->TitleStore.Put(tUpdate);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save Title in TitleStore"));
         return;
     }
@@ -909,7 +909,7 @@ void Search::on_trackList_itemClicked(QTreeWidgetItem* item, int)
     const DataTitle* t = wm->GetTitle(((WMTreeItem*)item)->Id);
     if (t) {
         QClipboard* clipboard = QApplication::clipboard();
-        ppl7::String Text;
+        pplib::String Text;
         if (key & (Qt::AltModifier)) {
             Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
         } else {
@@ -931,7 +931,7 @@ void Search::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
     const DataTitle* t = wm->GetTitle(((WMTreeItem*)item)->Id);
     if (t != NULL) {
-        ppl7::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+        pplib::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
         if (Path.isEmpty()) return;
         // printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (char*)Path);
         wm->PlayFile(Path);
@@ -1000,7 +1000,7 @@ void Search::on_contextPlayTrack_triggered()
 {
     const DataTitle* t = wm->GetTitle(currentTrackListItem->Id);
     if (t != NULL) {
-        ppl7::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+        pplib::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
         if (Path.isEmpty()) return;
         // printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (char*)Path);
         wm->PlayFile(Path);
@@ -1027,7 +1027,7 @@ void Search::on_contextCopyFile_triggered()
 {
     const DataTitle* t = wm->GetTitle(currentTrackListItem->Id);
     if (t != NULL) {
-        ppl7::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+        pplib::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
         if (Path.isEmpty()) return;
         QClipboard* clipboard = QApplication::clipboard();
         QList<QUrl> list;
@@ -1046,7 +1046,7 @@ void Search::on_contextCopyCover_triggered()
 {
     const DataTitle* t = wm->GetTitle(currentTrackListItem->Id);
     if (t != NULL) {
-        ppl7::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+        pplib::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
         if (Path.isEmpty()) return;
         loadCoverToClipboard(Path);
     }
@@ -1063,7 +1063,7 @@ void Search::rateCurrentTrack(int value)
     try {
         wm->TitleStore.Put(tUpdate);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save Title in TitleStore"));
         return;
     }
@@ -1135,8 +1135,8 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
     if (!item) return false;
     QList<QTreeWidgetItem*> Items = trackList->selectedItems();
     QList<QUrl> list;
-    ppl7::String File;
-    ppl7::String xml;
+    pplib::String File;
+    pplib::String xml;
     xml = "<winmusikTracklist>\n";
     xml += "<tracks>\n";
     QPixmap Icon;
@@ -1155,7 +1155,7 @@ bool Search::on_trackList_MouseMove(QMouseEvent* event)
 
             File = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
             if (File.notEmpty()) {
-                xml += "<File>" + ppl7::EscapeHTMLTags(File) + "</File>";
+                xml += "<File>" + pplib::EscapeHTMLTags(File) + "</File>";
 #ifdef _WIN32
                 // if (wmlog) wmlog->Printf(ppl6::LOG::DEBUG, 10, "Search", "on_trackList_MouseMove", __FILE__, __LINE__, "Add File to Drag:
                 // %s", (const char*)File);
@@ -1218,18 +1218,18 @@ void Search::on_ClipBoardTimer_update()
     LastClipboardString = clip.PlainText;
     if (LastClipboardString.isEmpty()) return;
     RegExpMatch match;
-    ppl7::String s;
+    pplib::String s;
     if (wm->RegExpCapture.match(clip, match)) {
-        match.Artist = ppl7::RegEx::replace("/\\(.{2,3}?\\)/is", match.Artist, ""); // Filter out county code additions in artist ?
+        match.Artist = pplib::RegEx::replace("/\\(.{2,3}?\\)/is", match.Artist, ""); // Filter out county code additions in artist ?
         s = match.Artist + " " + match.Title;
         // printf ("RegExpMatch: %s\n",(const char*)s);
     } else {
         s = clip.PlainText;
-        if (ppl7::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/", s)) return;
+        if (pplib::RegEx::match("/^.*? - .*? \\(.*?,.*?,.*?\\).*$/", s)) return;
         if (s.instr("\n") >= 0) return;
         if (s.instrCase("https://") >= 0) return;
         s.replace("\t", " ");
-        s = ppl7::RegEx::replace("/\\(.*?\\)/", s, "");
+        s = pplib::RegEx::replace("/\\(.*?\\)/", s, "");
         s.trim();
         if (s.isEmpty() || s.size() > 1024) return;
         // printf ("NO RegExpMatch: %s\n",(const char*)s);
@@ -1254,7 +1254,7 @@ void Search::on_ClipBoardTimer_update()
 void Search::on_hardDiskSearchButton_clicked()
 {
     if (wm->conf.DirectorySearch.size() == 0) return;
-    ppl7::String Query = ui.query_harddisk->text();
+    pplib::String Query = ui.query_harddisk->text();
     wm->normalizer.NormalizeTerm(Query);
 
     QTreeWidgetItem* item = new QTreeWidgetItem;
@@ -1270,7 +1270,7 @@ void Search::on_hardDiskSearchButton_clicked()
     trackList->update();
 
     if (Query.isEmpty()) return;
-    ppl7::Array Words;
+    pplib::Array Words;
     Words.explode(Query, " ");
 
     ui.numTracks->setText("");
@@ -1279,7 +1279,7 @@ void Search::on_hardDiskSearchButton_clicked()
     trackList->setWordWrap(false);
     trackList->setSortingEnabled(false);
     Results.clear();
-    std::list<ppl7::String>::const_iterator it;
+    std::list<pplib::String>::const_iterator it;
     for (it = wm->conf.DirectorySearch.begin(); it != wm->conf.DirectorySearch.end(); ++it) {
         RecursiveDirSearch(Words, (*it));
     }
@@ -1290,19 +1290,19 @@ void Search::on_hardDiskSearchButton_clicked()
     ui.query_harddisk->setFocus();
 }
 
-void Search::RecursiveDirSearch(ppl7::Array& search, const ppl7::String& dir)
+void Search::RecursiveDirSearch(pplib::Array& search, const pplib::String& dir)
 {
-    ppl7::Dir Dir;
-    ppl7::String File, Tmp;
+    pplib::Dir Dir;
+    pplib::String File, Tmp;
     // const char* tmp;
     try {
-        Dir.open(dir, ppl7::Dir::SORT_NONE);
+        Dir.open(dir, pplib::Dir::SORT_NONE);
     }
     catch (...) {
         return;
     }
-    ppl7::Dir::Iterator it;
-    ppl7::DirEntry entry;
+    pplib::Dir::Iterator it;
+    pplib::DirEntry entry;
     Dir.reset(it);
     while (Dir.getNext(entry, it)) {
         if (entry.isDir()) {
@@ -1475,24 +1475,24 @@ void Search::handleDropEvent(QDropEvent* event)
     if (!mime) return;
     /*
     if (mime->hasUrls()) {
-        ppl7::PrintDebug("Wir haben URLs\n");
+        pplib::PrintDebug("Wir haben URLs\n");
     } else if (mime->hasText()) {
-        ppl7::PrintDebug("Wir haben Text\n");
+        pplib::PrintDebug("Wir haben Text\n");
     } else if (mime->hasHtml()) {
-        ppl7::PrintDebug("Wir haben HTML\n");
+        pplib::PrintDebug("Wir haben HTML\n");
     } else if (mime->hasImage()) {
-        ppl7::PrintDebug("Wir haben ein Bild\n");
+        pplib::PrintDebug("Wir haben ein Bild\n");
     } else {
-        ppl7::PrintDebug("Wir haben sonstiges\n");
+        pplib::PrintDebug("Wir haben sonstiges\n");
         for (int i = 0; i < mime->formats().size(); i++) {
-            ppl7::PrintDebug("Format: %s\n", (const char*)ppl7::String(mime->formats()[i]));
+            pplib::PrintDebug("Format: %s\n", (const char*)pplib::String(mime->formats()[i]));
         }
     }
         */
 
     if (mime->hasFormat("application/winmusik+xml")) {
         QByteArray ba = mime->data("application/winmusik+xml");
-        ppl7::String xml;
+        pplib::String xml;
         xml.set(ba.constData(), ba.size());
         if (xml.left(18) == "<winmusikTracklist") {
             // handleXMLDrop(xml,insertItem);
@@ -1503,8 +1503,8 @@ void Search::handleDropEvent(QDropEvent* event)
     if (list.size() == 0) return;
     QUrl url = list[0];
     QString file = url.toLocalFile();
-    // printf ("File is (toString):  %s\n", (const char*)ppl7::String(file));
-    // printf ("File is (toLocalFile):  %s\n", (const char*)ppl7::String(url.toLocalFile()));
+    // printf ("File is (toString):  %s\n", (const char*)pplib::String(file));
+    // printf ("File is (toLocalFile):  %s\n", (const char*)pplib::String(url.toLocalFile()));
     TrackInfo info;
     if (!getTrackInfoFromFile(info, file)) {
         return;

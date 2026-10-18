@@ -30,23 +30,23 @@ namespace pfp
 namespace winmusik
 {
 
-PPL7EXCEPTION(InvalidDatabaseFileException, Exception);
-PPL7EXCEPTION(DatabaseFileNotOpenException, Exception);
-PPL7EXCEPTION(InvalidDatabaseChunkException, Exception);
-PPL7EXCEPTION(DatabaseFileCorruptException, Exception);
-PPL7EXCEPTION(CouldNotReadDatabaseFileException, Exception);
-PPL7EXCEPTION(DatabaseModifiedException, Exception);
-PPL7EXCEPTION(StorageClassNotInitializedException, Exception);
-PPL7EXCEPTION(InvalidStorageClassException, Exception);
-PPL7EXCEPTION(UnknownRecordVersionException, Exception);
-PPL7EXCEPTION(InvalidRecordException, Exception);
-PPL7EXCEPTION(RecordDoesNotExistException, Exception);
-PPL7EXCEPTION(InvalidTrackNumberException, Exception);
-PPL7EXCEPTION(TrackDoesNotExistException, Exception);
-PPL7EXCEPTION(DeviceAlreadyExistsException, Exception);
+PPLIBEXCEPTION(InvalidDatabaseFileException, Exception);
+PPLIBEXCEPTION(DatabaseFileNotOpenException, Exception);
+PPLIBEXCEPTION(InvalidDatabaseChunkException, Exception);
+PPLIBEXCEPTION(DatabaseFileCorruptException, Exception);
+PPLIBEXCEPTION(CouldNotReadDatabaseFileException, Exception);
+PPLIBEXCEPTION(DatabaseModifiedException, Exception);
+PPLIBEXCEPTION(StorageClassNotInitializedException, Exception);
+PPLIBEXCEPTION(InvalidStorageClassException, Exception);
+PPLIBEXCEPTION(UnknownRecordVersionException, Exception);
+PPLIBEXCEPTION(InvalidRecordException, Exception);
+PPLIBEXCEPTION(RecordDoesNotExistException, Exception);
+PPLIBEXCEPTION(InvalidTrackNumberException, Exception);
+PPLIBEXCEPTION(TrackDoesNotExistException, Exception);
+PPLIBEXCEPTION(DeviceAlreadyExistsException, Exception);
 
-PPL7EXCEPTION(DatabaseRecordWasModifiedException, Exception)
-PPL7EXCEPTION(CouldNotReadDatabaseRecordException, Exception)
+PPLIBEXCEPTION(DatabaseRecordWasModifiedException, Exception)
+PPLIBEXCEPTION(CouldNotReadDatabaseRecordException, Exception)
 
 } // namespace winmusik
 } // namespace pfp

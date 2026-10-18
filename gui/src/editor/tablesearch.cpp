@@ -17,94 +17,88 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #include "winmusik3.h"
 #include "tablesearch.h"
 #include <QKeyEvent>
 
 TableSearch::TableSearch(QWidget* parent, CWmClient* client)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	wm=client;
-	ui.setupUi(this);
+    wm = client;
+    ui.setupUi(this);
 }
 
 TableSearch::~TableSearch()
 {
-
 }
 
 bool TableSearch::eventFilter(QObject* target, QEvent* event)
 {
-	int type=event->type();
-	if (target == ui.search && type == QEvent::KeyPress) {
-		QKeyEvent* keyEvent=static_cast<QKeyEvent*>(event);
-		int key=keyEvent->key();
-		Qt::KeyboardModifiers modifier=keyEvent->modifiers();
-		if (key == Qt::Key_Return && modifier == Qt::ShiftModifier) {
-			done(ui.search->text().toInt());
-			return true;
-		}
-	}
-	return QWidget::eventFilter(target, event);
+    int type = event->type();
+    if (target == ui.search && type == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        int key = keyEvent->key();
+        Qt::KeyboardModifiers modifier = keyEvent->modifiers();
+        if (key == Qt::Key_Return && modifier == Qt::ShiftModifier) {
+            done(ui.search->text().toInt());
+            return true;
+        }
+    }
+    return QWidget::eventFilter(target, event);
 }
 
-
-void TableSearch::setSearchParams(const ppl7::String& term, CTableStore* store, QString& Title)
+void TableSearch::setSearchParams(const pplib::String& term, CTableStore* store, QString& Title)
 {
-	ui.search->setText(term);
-	setWindowTitle(Title);
-	this->store=store;
-	this->setWindowModality(Qt::WindowModal);
-	ui.search->installEventFilter(this);
-	ui.search->setFocus();
-	ui.search->deselect();
-	ui.search->selectAll();
+    ui.search->setText(term);
+    setWindowTitle(Title);
+    this->store = store;
+    this->setWindowModality(Qt::WindowModal);
+    ui.search->installEventFilter(this);
+    ui.search->setFocus();
+    ui.search->deselect();
+    ui.search->selectAll();
 }
 
 void TableSearch::Search()
 {
-	ppl7::String Tmp;
-	ui.list->clear();
-	Tmp=ppl7::Trim(ui.search->text());
-	CTableStore::IndexTree Result;
-	ui.list->setWordWrap(false);
-	ui.list->setSortingEnabled(false);
-	if (store->FindAll(Tmp, Result)) {
-		ppl7::String Text;
+    pplib::String Tmp;
+    ui.list->clear();
+    Tmp = pplib::Trim(ui.search->text());
+    CTableStore::IndexTree Result;
+    ui.list->setWordWrap(false);
+    ui.list->setSortingEnabled(false);
+    if (store->FindAll(Tmp, Result)) {
+        pplib::String Text;
 
-		WMTreeItem* item;
-		CTableStore::IndexTree::const_iterator it;
-		for (it=Result.begin();it != Result.end();++it) {
-			const CSimpleTable* t=store->GetPtr(*it);
-			if (t) {
-				item=new WMTreeItem;
-				item->Id=*it;
-				Text.setf("%6i", item->Id);
-				item->setText(0, Text);
-				item->setText(1, t->Value);
-				ui.list->addTopLevelItem(item);
-			}
-		}
-	}
-	ui.list->setWordWrap(true);
-	ui.list->setSortingEnabled(true);
-	ui.list->sortByColumn(1, Qt::AscendingOrder);
-
+        WMTreeItem* item;
+        CTableStore::IndexTree::const_iterator it;
+        for (it = Result.begin(); it != Result.end(); ++it) {
+            const CSimpleTable* t = store->GetPtr(*it);
+            if (t) {
+                item = new WMTreeItem;
+                item->Id = *it;
+                Text.setf("%6i", item->Id);
+                item->setText(0, Text);
+                item->setText(1, t->Value);
+                ui.list->addTopLevelItem(item);
+            }
+        }
+    }
+    ui.list->setWordWrap(true);
+    ui.list->setSortingEnabled(true);
+    ui.list->sortByColumn(1, Qt::AscendingOrder);
 }
 
 void TableSearch::on_searchButton_clicked()
 {
-	Search();
-	ui.search->setFocus();
-	ui.search->deselect();
-	ui.search->selectAll();
-
+    Search();
+    ui.search->setFocus();
+    ui.search->deselect();
+    ui.search->selectAll();
 }
 
 void TableSearch::on_list_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
-	WMTreeItem* i=(WMTreeItem*)item;
-	done(i->Id);
+    WMTreeItem* i = (WMTreeItem*)item;
+    done(i->Id);
 }

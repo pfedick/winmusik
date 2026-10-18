@@ -30,7 +30,7 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     : QDialog(parent)
 {
     ui.setupUi(this);
-    ppl7::String Tmp;
+    pplib::String Tmp;
 
     this->wm = wm;
 
@@ -116,7 +116,7 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
 
     // Directory search
     ui.cacheDirectories->setChecked(c->bCacheDirectorySearch);
-    std::list<ppl7::String>::const_iterator it;
+    std::list<pplib::String>::const_iterator it;
     for (it = c->DirectorySearch.begin(); it != c->DirectorySearch.end(); ++it) {
         ui.directoryList->addItem((*it));
     }
@@ -188,14 +188,14 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     ui.customMusicalKey_25->setText(c->customMusicKey[25]);
 
     // CDDB
-    if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
+    if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
         ui.cddbServer->setText(c->cddb.server);
         Tmp.setf("%i", c->cddb.port);
         ui.cddbPort->setText(Tmp);
         ui.cdioDevice->clear();
-        std::list<ppl7::String> devices = ppl7::AudioCD::getDevices();
+        std::list<pplib::String> devices = pplib::AudioCD::getDevices();
         ui.cdioDevice->addItem(tr("Default"), "default");
-        std::list<ppl7::String>::const_iterator it;
+        std::list<pplib::String>::const_iterator it;
         for (it = devices.begin(); it != devices.end(); ++it) {
             ui.cdioDevice->addItem((*it), (*it));
         }
@@ -240,7 +240,7 @@ Properties::~Properties()
 
 void Properties::UpdateRegExpPatternTable()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     ui.regexpTable->clear();
     for (size_t i = 0; i < wm->RegExpCapture.size(); i++) {
         const RegExpPattern& p = wm->RegExpCapture.getPattern(i);
@@ -289,9 +289,9 @@ void Properties::SelectLanguage()
         ui.language->setCurrentIndex(1);
 }
 
-ppl7::String Properties::GetLocale()
+pplib::String Properties::GetLocale()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
 
     if (ui.language->currentIndex() == 0)
         Tmp = "de";
@@ -302,7 +302,7 @@ ppl7::String Properties::GetLocale()
 
 int Properties::CheckValues()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     /*
     Tmp=GetLocale();
     if (Tmp!=wm->conf.Locale) {
@@ -325,7 +325,7 @@ int Properties::CheckValues()
 
 int Properties::Save()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     int index;
 
     if (!wm) {
@@ -495,7 +495,7 @@ int Properties::Save()
     c->customMusicKey[25] = ui.customMusicalKey_25->text();
 
     // CDDB
-    if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
+    if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
         c->cddb.server = ui.cddbServer->text();
         c->cddb.port = ui.cddbPort->text().toInt();
         index = ui.cdioDevice->currentIndex();
@@ -517,7 +517,7 @@ int Properties::Save()
     try {
         wm->conf.save();
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save configuration!"));
         return 0;
     }
@@ -575,8 +575,8 @@ void Properties::on_devicePathButton_clicked(int device, QLineEdit* line)
     if (p.length() == 0) {
         p = QDir::homePath();
     }
-    ppl7::String q = tr("Select directory with your files for device type: %s");
-    ppl7::String Tmp;
+    pplib::String q = tr("Select directory with your files for device type: %s");
+    pplib::String Tmp;
     Tmp.setf((const char*)q, (const char*)wm->GetDeviceName(device));
 
     QString dir = QFileDialog::getExistingDirectory(this, Tmp, p, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -698,7 +698,7 @@ void Properties::on_deleteDirectory_clicked()
 
 void Properties::on_regexpAdd_clicked()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     RegExpEdit reg(this);
     int ret = reg.exec();
     if (ret == 1) {
@@ -720,7 +720,7 @@ void Properties::on_regexpAdd_clicked()
 void Properties::on_regexpEdit_clicked()
 {
     if (!current_regexp_item) return;
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp = current_regexp_item->text(0);
     size_t pos = Tmp.toInt();
     if (pos < 1) return;
@@ -746,7 +746,7 @@ void Properties::on_regexpDelete_clicked()
 void Properties::on_regexpUp_clicked()
 {
     if (!current_regexp_item) return;
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp = current_regexp_item->text(0);
     size_t pos = Tmp.toInt();
     if (pos < 2) return;
@@ -760,7 +760,7 @@ void Properties::on_regexpUp_clicked()
 void Properties::on_regexpDown_clicked()
 {
     if (!current_regexp_item) return;
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp = current_regexp_item->text(0);
     size_t pos = Tmp.toInt();
     if (pos >= wm->RegExpCapture.size()) return;
@@ -790,7 +790,7 @@ void Properties::on_regexpTable_itemDoubleClicked(QTreeWidgetItem* item, int)
 void Properties::on_JpegQualityPreview_valueChanged(int value)
 {
     Change();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%d", value);
     ui.JpegQualityPreviewValue->setText(Tmp);
 }
@@ -798,7 +798,7 @@ void Properties::on_JpegQualityPreview_valueChanged(int value)
 void Properties::on_JpegQualityCover_valueChanged(int value)
 {
     Change();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%d", value);
     ui.JpegQualityCoverValue->setText(Tmp);
 }

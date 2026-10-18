@@ -42,7 +42,7 @@ protected:
             printf("setlocale fehlgeschlagen\n");
             throw std::exception();
         }
-        ppl7::Dir::mkDir("tmp");
+        pplib::Dir::mkDir("tmp");
     }
     ~CoverDownloadTest()
     {
@@ -53,11 +53,11 @@ TEST_F(CoverDownloadTest, Beatport2026SmallCover)
 {
     //
     // https://www.beatport.com/de/track/waxed-future/26843848
-    ppl7::String targetFile = "tmp/beatport2026_cover.jpg";
-    ppl7::File::unlink(targetFile);
+    pplib::String targetFile = "tmp/beatport2026_cover.jpg";
+    pplib::File::unlink(targetFile);
     MetaData meta;
     ASSERT_TRUE(CoverDownload("https://www.beatport.com/de/track/waxed-future/26843848", targetFile, meta));
-    ASSERT_TRUE(ppl7::File::exists(targetFile));
+    ASSERT_TRUE(pplib::File::exists(targetFile));
 }
 
 } // namespace

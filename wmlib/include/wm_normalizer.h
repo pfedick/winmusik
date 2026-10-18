@@ -43,17 +43,17 @@ private:
     void initLetterReplacements();
     void initFilenameLetterReplacements();
     void addLetterReplacement(wchar_t letter, wchar_t replacement);
-    void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
-    void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
-    void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term) const;
+    void addLetterReplacement(const pplib::WideString& letters, wchar_t replacement);
+    void addFilenameLetterReplacement(const pplib::WideString& letters, wchar_t replacement);
+    void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, pplib::WideString& term) const;
 
 public:
     WMNormalizer();
 
-    void NormalizeTerm(ppl7::String& term) const;
-    void NormalizeFilename(ppl7::String& term) const;
+    void NormalizeTerm(pplib::String& term) const;
+    void NormalizeFilename(pplib::String& term) const;
 
-    size_t GetWords(const ppl7::String& str, ppl7::Array& words) const;
+    size_t GetWords(const pplib::String& str, pplib::Array& words) const;
 };
 
 const WMNormalizer& GetNormalizer();

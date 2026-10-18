@@ -44,8 +44,8 @@ public:
 
     void copyFrom(const RegExpPattern& other);
 
-    ppl7::String Name;
-    ppl7::String Pattern;
+    pplib::String Name;
+    pplib::String Pattern;
     int artist;
     int title;
     int version;
@@ -67,15 +67,15 @@ public:
     {
         Length = 0;
     }
-    ppl7::String Artist;
-    ppl7::String Title;
-    ppl7::String Version;
-    ppl7::String Genre;
-    ppl7::String Label;
-    ppl7::String Bpm;
-    ppl7::String Album;
-    ppl7::String ReleaseDate;
-    ppl7::String ShopURL;
+    pplib::String Artist;
+    pplib::String Title;
+    pplib::String Version;
+    pplib::String Genre;
+    pplib::String Label;
+    pplib::String Bpm;
+    pplib::String Album;
+    pplib::String ReleaseDate;
+    pplib::String ShopURL;
     int Length; // in Sekunden
 };
 
@@ -83,21 +83,21 @@ class RegExpClipboard
 {
 public:
     // void copyFromClipboard();
-    ppl7::String PlainText;
-    ppl7::String Html;
+    pplib::String PlainText;
+    pplib::String Html;
 };
 
 namespace repexpmatch
 {
-bool buildinMatch(const ppl7::String& data, RegExpMatch& match);
-bool matchBeatPort(const ppl7::String& html, RegExpMatch& match);
+bool buildinMatch(const pplib::String& data, RegExpMatch& match);
+bool matchBeatPort(const pplib::String& html, RegExpMatch& match);
 
 void fixIt(RegExpMatch& match);
-void fixHTML(ppl7::String& text);
+void fixHTML(pplib::String& text);
 void fixHTML(RegExpMatch& match);
 
 // for internal use only
-bool matchBeatPort2023(const ppl7::String& html, RegExpMatch& match);
+bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match);
 } // namespace repexpmatch
 
 } // namespace winmusik

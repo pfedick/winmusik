@@ -289,7 +289,7 @@ Edit::Edit(QWidget* parent, CWmClient* wm, int typ)
 
     uint32_t highest = wm->GetHighestDeviceId(typ);
     if (highest) {
-        ppl7::String Tmp;
+        pplib::String Tmp;
         Tmp.setf("%u", highest);
         ui.index->setText(Tmp);
     }
@@ -335,7 +335,7 @@ void Edit::customEvent(QEvent* event)
 
 void Edit::show()
 {
-    ppl7::String Name;
+    pplib::String Name;
     Name.setf("edit_type_%i", DeviceType);
     SetWindowGeometry(this, Name);
     QWidget::show();
@@ -354,9 +354,9 @@ void Edit::OpenTrack(uint32_t deviceId, uint8_t page, uint16_t track)
     ClearEditFields();
     DeviceId = deviceId;
     Page = page;
-    ui.index->setText(ppl7::ToString("%i", deviceId));
+    ui.index->setText(pplib::ToString("%i", deviceId));
     if (!Page) Page = 1;
-    ui.page->setText(ppl7::ToString("%i", Page));
+    ui.page->setText(pplib::ToString("%i", Page));
     wm->UpdateDevice(DeviceType, DeviceId);
     if (wm->LoadDevice(DeviceType, DeviceId, &datadevice)) {
         UpdateDevice();
@@ -369,7 +369,7 @@ void Edit::OpenTrack(uint32_t deviceId, uint8_t page, uint16_t track)
         ui.track->setFocus();
         if (track > 0 || TrackList.Num() == 0) {
             showEditor();
-            ui.track->setText(ppl7::ToString("%i", track));
+            ui.track->setText(pplib::ToString("%i", track));
             ui.artist->setFocus();
         }
     }
@@ -587,7 +587,7 @@ void Edit::CheckDupes()
     DupeCheckIcon = ":/fkeys/resources/fkeys/f-key-2005.png";
     DupeCheck = true;
     TCVersion.Finish();
-    ppl7::String Tmp, Artist, Title;
+    pplib::String Tmp, Artist, Title;
     // Interpret und Titel
     Artist = ui.artist->text();
     Artist.trim();
@@ -654,7 +654,7 @@ void Edit::resizeEvent(QResizeEvent* event)
 
 void Edit::closeEvent(QCloseEvent* event)
 {
-    ppl7::String Name;
+    pplib::String Name;
     Name.setf("edit_type_%i", DeviceType);
     if (wm) {
         wm->SaveGeometry(Name, this->saveGeometry());
@@ -721,7 +721,7 @@ void Edit::UpdateFkeys()
             ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-2009.png", tr("save all ID3"));
             ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-3006.png", tr("mass import"));
         }
-        if (ppl7::AudioCD::isSupported() == true && ppl7::CDDB::isSupported() == true) {
+        if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
             ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-4005.png", tr("cddb import"));
         }
         ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-2003.png", tr("renumber"));
@@ -1037,14 +1037,14 @@ void Edit::handleDropEvent(QDropEvent* event)
 #else
     QString file = url.encodedPath();
 #endif
-    ppl7::String f = file;
-    ppl7::String path = wm->conf.DevicePath[DeviceType];
+    pplib::String f = file;
+    pplib::String path = wm->conf.DevicePath[DeviceType];
     int p = f.instr(path);
     if (p < 0) return;
     f = f.mid(p);
     f.replace(path, "");
-    std::vector<ppl7::String> matches;
-    if (ppl7::RegEx::capture("/\\/([0-9]+)\\/([0-9]{3})-.*$/", f, matches)) {
+    std::vector<pplib::String> matches;
+    if (pplib::RegEx::capture("/\\/([0-9]+)\\/([0-9]{3})-.*$/", f, matches)) {
         int myDeviceId = matches[1].toInt();
         int myTrack = matches[2].toInt();
         OpenTrack(myDeviceId, 0, myTrack);
@@ -1063,7 +1063,7 @@ void Edit::handleDropEvent(QDropEvent* event)
 
 void Edit::handleFileDropEvent(QDropEvent* event)
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     event->accept();
     const QMimeData* mime = event->mimeData();
     if (!mime) return;
@@ -1072,19 +1072,19 @@ void Edit::handleFileDropEvent(QDropEvent* event)
     QUrl url = list.first();
 
     QString file = url.toLocalFile();
-    ppl7::String f = file;
-    ppl7::DirEntry de;
-    if (!ppl7::File::tryStatFile(f, de)) return;
+    pplib::String f = file;
+    pplib::DirEntry de;
+    if (!pplib::File::tryStatFile(f, de)) return;
 
     int tn = ui.track->text().toInt();
     if (tn < 1) return;
-    ppl7::String ExistingFile = wm->GetAudioFilename(DeviceType, DeviceId, Page, tn);
+    pplib::String ExistingFile = wm->GetAudioFilename(DeviceType, DeviceId, Page, tn);
     if (ExistingFile.notEmpty()) {
         if (QMessageBox::question(this, tr("WinMusik: overwrite existing file"), tr("Do you want to overwrite the exiting file?"),
                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
             return;
     }
-    ppl7::String path = wm->GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String path = wm->GetAudioPath(DeviceType, DeviceId, Page);
     if (path.isEmpty()) {
         QMessageBox::information(
             this, tr("WinMusik: copy file"),
@@ -1095,11 +1095,11 @@ void Edit::handleFileDropEvent(QDropEvent* event)
         QDir().mkpath(path);
     }
     path.appendf("/%03d-", ui.track->text().toInt());
-    f = ppl7::File::getFilename(f);
-    if (ppl7::RegEx::match("/^[0-9]{3}-/", f)) {
+    f = pplib::File::getFilename(f);
+    if (pplib::RegEx::match("/^[0-9]{3}-/", f)) {
         f = f.mid(4);
     }
-    path += ppl7::File::getFilename(f);
+    path += pplib::File::getFilename(f);
     if (ExistingFile.notEmpty()) {
         QFile::remove(ExistingFile);
     }
@@ -1120,10 +1120,10 @@ void Edit::handleFileDropEvent(QDropEvent* event)
 
     Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
     ui.filesize->setText(Tmp);
-    ppl7::ID3Tag Tag;
+    pplib::ID3Tag Tag;
     if (Tag.tryLoad(path)) {
         // Cover?
-        ppl7::ByteArray cover;
+        pplib::ByteArray cover;
         if (Tag.getPicture(3, cover)) {
             Cover.loadFromData((const uchar*)cover.ptr(), cover.size());
             ui.coverwidget->setPixmap(Cover);
@@ -1154,7 +1154,7 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
     if (root.tagName() != "winmusikSearchlist" || root.attribute("version") != "1") {
         return false;
     }
-    ppl7::Array rows;
+    pplib::Array rows;
     rows.explode(mime->text(), "<searchlistitem>");
     // printf ("we have winmusikSearchlist, %d rows\n",(int)rows.Size() );
     // ba = mime->text().toUtf8();
@@ -1181,16 +1181,16 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
     if (item.Key.notEmpty()) ui.musickey->setText(item.Key);
     if (item.Tags.notEmpty()) ui.tags->setText(item.Tags);
     if (item.CoverFilename.notEmpty()) {
-        ppl7::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
-        ppl7::Dir::mkDir(Path, true);
+        pplib::String Path = wm->GetAudioPath(DeviceType, DeviceId, Page) + "/cover";
+        pplib::Dir::mkDir(Path, true);
         Path.appendf("/%d.jpg", TrackNum);
-        ppl7::File::copy(item.CoverFilename, Path);
+        pplib::File::copy(item.CoverFilename, Path);
         ui.coverwidget->setPixmapFromFile(item.CoverFilename);
     }
 
-    if (item.Length > 0) ui.length->setText(ppl7::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
+    if (item.Length > 0) ui.length->setText(pplib::ToString("%0i:%02i", (int)(item.Length / 60), item.Length % 60));
 
-    ppl7::DateTime date = ppl7::DateTime::currentTime();
+    pplib::DateTime date = pplib::DateTime::currentTime();
     if (item.ReleaseDate.notEmpty()) {
         date = item.ReleaseDate;
     } else if (item.DateAdded.notEmpty()) {
@@ -1211,9 +1211,9 @@ bool Edit::handleDropFromSearchlist(QDropEvent* event)
     return true;
 }
 
-static void addFileIfSuitable(const ppl7::String& filename, std::list<ppl7::String>& fileList)
+static void addFileIfSuitable(const pplib::String& filename, std::list<pplib::String>& fileList)
 {
-    ppl7::String lowerFile = filename;
+    pplib::String lowerFile = filename;
     lowerFile.lowerCase();
     if (lowerFile.right(4) == ".mp3")
         fileList.push_back(filename);
@@ -1225,12 +1225,12 @@ static void addFileIfSuitable(const ppl7::String& filename, std::list<ppl7::Stri
         fileList.push_back(filename);
 }
 
-static void traverseDirectoryForFiles(const ppl7::String& path, std::list<ppl7::String>& fileList)
+static void traverseDirectoryForFiles(const pplib::String& path, std::list<pplib::String>& fileList)
 {
-    ppl7::Dir dir;
-    if (dir.tryOpen(path, ppl7::Dir::SORT_FILENAME)) {
-        ppl7::DirEntry entry;
-        ppl7::Dir::Iterator it;
+    pplib::Dir dir;
+    if (dir.tryOpen(path, pplib::Dir::SORT_FILENAME)) {
+        pplib::DirEntry entry;
+        pplib::Dir::Iterator it;
         dir.reset(it);
         while ((dir.getNext(entry, it))) {
             // printf ("DIREntgry: >>%s<<\n",(const char*)entry->Filename);
@@ -1244,17 +1244,17 @@ static void traverseDirectoryForFiles(const ppl7::String& path, std::list<ppl7::
     }
 }
 
-static int getHighestIdOfDirectory(const ppl7::String& path)
+static int getHighestIdOfDirectory(const pplib::String& path)
 {
     int max = 0;
-    ppl7::Dir dir;
-    if (dir.tryOpen(path, ppl7::Dir::SORT_FILENAME)) {
-        std::vector<ppl7::String> matches;
-        ppl7::Dir::Iterator it;
+    pplib::Dir dir;
+    if (dir.tryOpen(path, pplib::Dir::SORT_FILENAME)) {
+        std::vector<pplib::String> matches;
+        pplib::Dir::Iterator it;
         dir.reset(it);
-        ppl7::DirEntry entry;
+        pplib::DirEntry entry;
         while ((dir.getNext(entry, it))) {
-            if (ppl7::RegEx::capture("/^([0-9]{3}_.*$", entry.Filename, matches)) {
+            if (pplib::RegEx::capture("/^([0-9]{3}_.*$", entry.Filename, matches)) {
                 int v = matches.at(1).toInt();
                 if (v > max) max = v;
                 // printf("match: %d\n", v);
@@ -1267,11 +1267,11 @@ static int getHighestIdOfDirectory(const ppl7::String& path)
 void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
 {
     if (position < 3) return;
-    std::list<ppl7::String> fileList, filteredFileList;
+    std::list<pplib::String> fileList, filteredFileList;
     foreach (QUrl url, urlList) {
-        ppl7::String filename = url.toLocalFile();
-        ppl7::DirEntry file;
-        if (ppl7::File::tryStatFile(filename, file)) {
+        pplib::String filename = url.toLocalFile();
+        pplib::DirEntry file;
+        if (pplib::File::tryStatFile(filename, file)) {
             if (file.isDir()) {
                 traverseDirectoryForFiles(filename, fileList);
             } else if (file.isFile()) {
@@ -1280,8 +1280,8 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
         }
     }
 
-    std::list<ppl7::String>::const_iterator it;
-    ppl7::String TargetPath = wm->conf.DevicePath[DeviceType];
+    std::list<pplib::String>::const_iterator it;
+    pplib::String TargetPath = wm->conf.DevicePath[DeviceType];
     if (TargetPath.isEmpty()) return;
     TargetPath.trimRight("/");
     TargetPath.trimRight("\\");
@@ -1306,21 +1306,21 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
     QCoreApplication::processEvents();
     int i = 0;
 
-    ppl7::String NewFile;
+    pplib::String NewFile;
     for (it = filteredFileList.begin(); it != filteredFileList.end(); ++it) {
         progress.setValue(i);
         QCoreApplication::processEvents();
         if (progress.wasCanceled()) break;
         i++;
-        progress.setLabelText(ppl7::File::getFilename((*it)));
+        progress.setLabelText(pplib::File::getFilename((*it)));
         highestId++;
-        NewFile = TargetPath + ppl7::ToString("%03d_", highestId) + ppl7::File::getFilename((*it));
+        NewFile = TargetPath + pplib::ToString("%03d_", highestId) + pplib::File::getFilename((*it));
         // printf (" ==> %s\n",(const char*)NewFile);
         try {
             if (dropAction == Qt::MoveAction)
-                ppl7::File::move((*it), NewFile);
+                pplib::File::move((*it), NewFile);
             else
-                ppl7::File::copy((*it), NewFile);
+                pplib::File::copy((*it), NewFile);
         }
         catch (...) {
         }
@@ -1332,12 +1332,12 @@ void Edit::handleDropOnTracklist(const QList<QUrl>& urlList, int dropAction)
         on_f6_MassImport();
         return;
     }
-    ppl7::String Tmp, FinalFile;
+    pplib::String Tmp, FinalFile;
 
     TrackNum = TrackList.GetMax() + 1;
-    FinalFile.setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)ppl7::File::getFilename(NewFile));
+    FinalFile.setf("%s/%03u-%s", (const char*)TargetPath, TrackNum, (const char*)pplib::File::getFilename(NewFile));
     try {
-        ppl7::File::rename(NewFile, FinalFile);
+        pplib::File::rename(NewFile, FinalFile);
     }
     catch (...) {
     }
@@ -1405,7 +1405,7 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
         return true;
     } else if (key == Qt::Key_F3 && modifier == Qt::NoModifier && position > 3 && ui.fkeys->isEnabled(3) == true) {
         QLineEdit* LineEdit = (QLineEdit*)target;
-        ppl7::WideString Tmp = LineEdit->text().toLower();
+        pplib::WideString Tmp = LineEdit->text().toLower();
         Tmp.upperCaseWords();
         LineEdit->setText(Tmp);
         return true;
@@ -1536,7 +1536,7 @@ bool Edit::on_index_KeyPress(__attribute__((unused)) QKeyEvent* event, int key, 
     if (key == Qt::Key_F2 && modifier == Qt::NoModifier) {
         uint32_t ret = EditDeviceDialog(0);
         if (ret) {
-            ppl7::String Tmp;
+            pplib::String Tmp;
             Tmp.setf("%u", ret);
             ui.index->setText(Tmp);
             ui.page->setFocus();
@@ -1558,7 +1558,7 @@ bool Edit::on_page_FocusIn()
     TrackNum = 0;
     ClearEditFields();
     TrackList.Clear();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     if (oldposition < 2) {
         DeviceId = ui.index->text().toInt();
         if (ui.index->text() == "?") {
@@ -1629,7 +1629,7 @@ bool Edit::on_track_FocusIn()
         // asyncTrackUpdate.ThreadStop();
         // asyncTrackUpdate.ThreadStart();
 
-        ppl7::String a;
+        pplib::String a;
         a.setf("%u", TrackList.GetMax() + 1);
         ui.track->setText(a);
     }
@@ -1645,7 +1645,7 @@ void Edit::ReloadTracks()
 {
     TrackList = wm->GetTracklist(DeviceType, DeviceId, Page);
     UpdateTrackListing();
-    ppl7::String a;
+    pplib::String a;
     a.setf("%u", TrackList.GetMax() + 1);
     ui.track->setText(a);
     UpdateFkeys();
@@ -1750,7 +1750,7 @@ bool Edit::on_album_FocusOut()
 
 bool Edit::on_length_FocusOut()
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     uint32_t l = Time2Int(Tmp = ui.length->text());
     if (l > 0)
         Tmp.setf("%0i:%02i", (int)(l / 60), l % 60);
@@ -1771,7 +1771,7 @@ bool Edit::on_FocusIn(QLineEdit* widget)
 
 bool Edit::on_f4_Pressed(int position)
 {
-    ppl7::String Artist, Title;
+    pplib::String Artist, Title;
 
     // Interpret und Titel
     Artist = ui.artist->text();
@@ -1793,7 +1793,7 @@ bool Edit::on_f4_Pressed(int position)
 
 bool Edit::on_f5_ShortCut(int modifier)
 {
-    ppl7::String Artist;
+    pplib::String Artist;
     Artist = ui.artist->text();
     Artist.trim();
 
@@ -1815,7 +1815,7 @@ bool Edit::on_f5_ShortCut(int modifier)
 
 bool Edit::on_f5_CheckDupes(QObject* target)
 {
-    ppl7::String Artist, Title;
+    pplib::String Artist, Title;
 
     // Interpret und Titel
     Artist = ui.artist->text();
@@ -1834,8 +1834,8 @@ bool Edit::on_f5_CheckDupes(QObject* target)
 // EVENT: F6 - MP3 ID3-Tag einlesen
 bool Edit::on_f6_Pressed(QObject*, int modifier)
 {
-    ppl7::String Tmp;
-    ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+    pplib::String Tmp;
+    pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
     if (Path.isEmpty()) {
         // Vielleicht gibt es noch einen Titel ohne Index
         Path = wm->NextAudioFile(DeviceType, DeviceId, Page, TrackNum);
@@ -1847,20 +1847,20 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
     }
 
     // Den Dateinamen nehmen wir in die Zwischenablage
-    ppl7::String Songname = ppl7::File::getFilename(Path);
+    pplib::String Songname = pplib::File::getFilename(Path);
     ui.filename->setText(Songname);
-    ppl7::DirEntry de;
-    if (ppl7::File::tryStatFile(Path, de)) {
+    pplib::DirEntry de;
+    if (pplib::File::tryStatFile(Path, de)) {
         Tmp.setf("%0.1f", (double)de.Size / 1048576.0);
         ui.filesize->setText(Tmp);
     } else {
         ui.filesize->setText("");
     }
-    Songname = ppl7::RegEx::replace("/\\.mp3$/i", Songname, "");
-    Songname = ppl7::RegEx::replace("/\\.aiff$/i", Songname, "");
-    Songname = ppl7::RegEx::replace("/\\.aif$/i", Songname, "");
-    Songname = ppl7::RegEx::replace("/\\.wav$/i", Songname, "");
-    Songname = ppl7::RegEx::replace("/^[0-9]+-/", Songname, "");
+    Songname = pplib::RegEx::replace("/\\.mp3$/i", Songname, "");
+    Songname = pplib::RegEx::replace("/\\.aiff$/i", Songname, "");
+    Songname = pplib::RegEx::replace("/\\.aif$/i", Songname, "");
+    Songname = pplib::RegEx::replace("/\\.wav$/i", Songname, "");
+    Songname = pplib::RegEx::replace("/^[0-9]+-/", Songname, "");
     Songname.replace("_", " ");
     Songname.replace("\t", " ");
     QClipboard* clipboard = QApplication::clipboard();
@@ -2024,7 +2024,7 @@ void Edit::on_f2_clicked()
     } else if (position == 1) {
         uint32_t ret = EditDeviceDialog(0);
         if (ret) {
-            ppl7::String Tmp;
+            pplib::String Tmp;
             Tmp.setf("%u", ret);
             ui.index->setText(Tmp);
             ui.page->setFocus();
@@ -2043,7 +2043,7 @@ void Edit::on_f3_clicked()
         QWidget* target = GetWidgetFromPosition(position);
         if (!target) return;
         QLineEdit* LineEdit = (QLineEdit*)target;
-        ppl7::WideString Tmp = LineEdit->text().toLower();
+        pplib::WideString Tmp = LineEdit->text().toLower();
         Tmp.upperCaseWords();
         LineEdit->setText(Tmp);
     }
@@ -2139,11 +2139,11 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
     if (!item) return false;
     QList<QTreeWidgetItem*> Items = trackList->selectedItems();
     QList<QUrl> list;
-    ppl7::String File;
+    pplib::String File;
     QString qFile;
     QPixmap Icon;
 
-    ppl7::String xml;
+    pplib::String xml;
     xml = "<winmusikTracklist>\n";
     xml += "<tracks>\n";
 
@@ -2159,7 +2159,7 @@ bool Edit::on_trackList_MouseMove(QMouseEvent* event)
         xml += wm->getXmlTitle(item->Id);
         File = wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
         if (File.notEmpty()) {
-            xml += "<File>" + ppl7::EscapeHTMLTags(File) + "</File>\n";
+            xml += "<File>" + pplib::EscapeHTMLTags(File) + "</File>\n";
 
 #ifdef _WIN32
             list.append(QUrl::fromLocalFile(File));
@@ -2225,7 +2225,7 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
     const DataTitle* t = wm->GetTitle(((WMTreeItem*)item)->Id);
     if (t) {
         QClipboard* clipboard = QApplication::clipboard();
-        ppl7::String Text;
+        pplib::String Text;
         if (key & (Qt::AltModifier | Qt::MetaModifier)) {
             Text.setf("%s %s", (const char*)t->Artist, (const char*)t->Title);
         } else {
@@ -2247,12 +2247,12 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
                 try {
                     wm->TitleStore.Put(tUpdate);
                 }
-                catch (const ppl7::Exception& exp) {
+                catch (const pplib::Exception& exp) {
                     ShowException(exp, tr("Could not save Title in TitleStore"));
                     return;
                 }
                 if (wm_main->conf.bWriteID3Tags == true) {
-                    ppl7::String Path = wm->GetAudioFilename(tUpdate.DeviceType, tUpdate.DeviceId, tUpdate.Page, tUpdate.Track);
+                    pplib::String Path = wm->GetAudioFilename(tUpdate.DeviceType, tUpdate.DeviceId, tUpdate.Page, tUpdate.Track);
                     if (Path.notEmpty()) {
                         if (!wm->SaveID3Tags(tUpdate.DeviceType, tUpdate.DeviceId, tUpdate.Page, tUpdate.Track, tUpdate)) {
                             wm->RaiseError(this, tr("Could not save ID3 Tags"));
@@ -2292,10 +2292,10 @@ void Edit::on_trackList_itemClicked(QTreeWidgetItem* item, int column)
             }
             // printf ("Rating: %i, %i\n",ratePos.x(),x);
         } else if (column == TRACKLIST_COVER_ROW && wm->IsCoverViewerVisible() == true) {
-            ppl7::ID3Tag Tag;
-            ppl7::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+            pplib::ID3Tag Tag;
+            pplib::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
             if (Tag.tryLoad(File)) {
-                ppl7::ByteArray cover;
+                pplib::ByteArray cover;
                 if (Tag.getPicture(3, cover)) {
                     QPixmap trackCover;
                     trackCover.loadFromData((const uchar*)cover.ptr(), cover.size());
@@ -2348,10 +2348,10 @@ void Edit::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column)
     if (column == TRACKLIST_RATING_ROW)
         return;
     else if (column == TRACKLIST_COVER_ROW) {
-        ppl7::ID3Tag Tag;
-        ppl7::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+        pplib::ID3Tag Tag;
+        pplib::String File = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
         if (Tag.tryLoad(File)) {
-            ppl7::ByteArray cover;
+            pplib::ByteArray cover;
             if (Tag.getPicture(3, cover)) {
                 QPixmap trackCover;
                 trackCover.loadFromData((const uchar*)cover.ptr(), cover.size());
@@ -2359,7 +2359,7 @@ void Edit::on_trackList_itemDoubleClicked(QTreeWidgetItem* item, int column)
             }
         }
     } else {
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, ((WMTreeItem*)item)->Track);
         if (Path.isEmpty()) return;
         // printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
         wm->PlayFile(Path);
@@ -2491,7 +2491,7 @@ void Edit::on_contextMusicKeyVerified_triggered()
     try {
         wm->TitleStore.Put(tUpdate);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save Title in TitleStore"));
         return;
     }
@@ -2507,7 +2507,7 @@ void Edit::on_contextSetMusicKey(int k)
     try {
         wm->TitleStore.Put(tUpdate);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not save Title in TitleStore"));
         return;
     }
@@ -2536,7 +2536,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
         if (track) {
             // Titel holen
             const DataTitle* title = wm->GetTitle(track->TitleId);
-            ppl7::String Path = wm->GetAudioFilename(DeviceType, track->DeviceId, track->Page, track->Track);
+            pplib::String Path = wm->GetAudioFilename(DeviceType, track->DeviceId, track->Page, track->Track);
             if (title != NULL && Path.notEmpty() == true) {
                 // printf ("Path: %s\n",(const char*)Path);
                 progress.setLabelText(Path);
@@ -2553,7 +2553,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
                         Ti.Key = tinfo.Ti.Key;
                         modified = true;
                     }
-                    ppl7::String MyKeyText = wm->MusicKeys.keyName(tinfo.Ti.Key, wm->conf.musicKeyTag);
+                    pplib::String MyKeyText = wm->MusicKeys.keyName(tinfo.Ti.Key, wm->conf.musicKeyTag);
                     MyKeyText.replace("♯", "#");
                     MyKeyText.replace("♭", "b");
                     MyKeyText.replace("none", "o");
@@ -2597,7 +2597,7 @@ void Edit::on_contextSynchronizeKeys_triggered()
                         try {
                             wm->TitleStore.Put(Ti);
                         }
-                        catch (const ppl7::Exception& exp) {
+                        catch (const pplib::Exception& exp) {
                             ShowException(exp, tr("Could not save Title in TitleStore"));
                             break;
                         }
@@ -2623,7 +2623,7 @@ void Edit::on_contextShowCover_triggered()
 
 void Edit::on_contextLoadCoverAllTracks_triggered()
 {
-    ppl7::String Dir = wm->conf.LastCoverPath + "/";
+    pplib::String Dir = wm->conf.LastCoverPath + "/";
     if (Dir.isEmpty()) {
         Dir = QDir::homePath();
     }
@@ -2631,7 +2631,7 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
     if (newfile.isNull()) return;
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    wm->conf.LastCoverPath = ppl7::File::getPath(newfile);
+    wm->conf.LastCoverPath = pplib::File::getPath(newfile);
     wm->conf.trySave();
 
     QPixmap GlobalCover;
@@ -2657,13 +2657,13 @@ void Edit::on_contextLoadCoverAllTracks_triggered()
             if (ti) {
                 DataTitle Title;
                 Title.CopyFrom(*ti);
-                ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
+                pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, i);
                 saveCover(Path, GlobalCover);
                 Title.CoverPreview.copy(bytes.data(), bytes.size());
                 try {
                     wm->TitleStore.Put(Title);
                 }
-                catch (const ppl7::Exception& exp) {
+                catch (const pplib::Exception& exp) {
                     ShowException(exp, tr("Could not save Title in TitleStore"));
                     return;
                 }
@@ -2678,7 +2678,7 @@ void Edit::on_contextCopyCover_triggered()
 {
     const DataTitle* t = wm->GetTitle(currentTrackListItem->Id);
     if (t != NULL) {
-        ppl7::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
+        pplib::String Path = wm->GetAudioFilename(t->DeviceType, t->DeviceId, t->Page, t->Track);
         if (Path.isEmpty()) return;
         loadCoverToClipboard(Path);
     }
@@ -2710,7 +2710,7 @@ void Edit::on_contextFindMoreTitle_triggered()
 
 void Edit::on_contextPlayTrack_triggered()
 {
-    ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
+    pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
     if (Path.isEmpty()) return;
     // printf ("Play Device %i, Track: %i: %s\n",DeviceId, currentTrackListItem->Track, (const char*)Path);
     wm->PlayFile(Path);
@@ -2719,7 +2719,7 @@ void Edit::on_contextPlayTrack_triggered()
 void Edit::on_contextEditTrack_triggered()
 {
     showEditor();
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%i", currentTrackListItem->Track);
     TrackNum = 0;
     ui.track->setFocus();
@@ -2735,7 +2735,7 @@ void Edit::on_contextCopyTrack_triggered()
 void Edit::on_contextCopyFile_triggered()
 {
     if (currentTrackListItem->Track > 0) {
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, currentTrackListItem->Track);
         if (Path.isEmpty()) return;
         QClipboard* clipboard = QApplication::clipboard();
         QList<QUrl> list;
@@ -2759,7 +2759,7 @@ void Edit::on_contextDeleteTrack_triggered()
     if (w) {
         trackList->scrollToItem(w);
     }
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%u", currentTrackListItem->Track);
     ui.track->setText(Tmp);
     ui.track->setFocus();
@@ -2774,7 +2774,7 @@ void Edit::on_contextInsertTrack_triggered()
     if (w) {
         trackList->scrollToItem(w);
     }
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%u", currentTrackListItem->Track);
     ui.track->setText(Tmp);
     ui.track->setFocus();
@@ -2784,13 +2784,13 @@ void Edit::on_coverSearchAmazon_clicked()
 {
     FixFocus();
     if (position < 3) return;
-    ppl7::String Url;
+    pplib::String Url;
     // Interpret und Titel
-    ppl7::String Artist = ui.artist->text();
+    pplib::String Artist = ui.artist->text();
     Artist.trim();
-    ppl7::String Title = ui.title->text();
+    pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
+    Url = "http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2798,13 +2798,13 @@ void Edit::on_coverSearchGoogle_clicked()
 {
     FixFocus();
     if (position < 3) return;
-    ppl7::String Url;
+    pplib::String Url;
     // Interpret und Titel
-    ppl7::String Artist = ui.artist->text();
+    pplib::String Artist = ui.artist->text();
     Artist.trim();
-    ppl7::String Title = ui.title->text();
+    pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "https://www.google.com/search?num=10&site=imghp&tbm=isch&q=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
+    Url = "https://www.google.com/search?num=10&site=imghp&tbm=isch&q=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2812,17 +2812,17 @@ void Edit::on_coverSearchDiscogs_clicked()
 {
     FixFocus();
     if (position < 3) return;
-    ppl7::String Url;
+    pplib::String Url;
     // Interpret und Titel
-    ppl7::String Artist = ui.artist->text();
+    pplib::String Artist = ui.artist->text();
     Artist.trim();
-    ppl7::String Title = ui.title->text();
+    pplib::String Title = ui.title->text();
     Title.trim();
-    ppl7::String Version = ui.version->text();
+    pplib::String Version = ui.version->text();
     Version.trim();
-    ppl7::String Query = Artist + " " + Title + " " + Version;
+    pplib::String Query = Artist + " " + Title + " " + Version;
     Query.replace("&", " ");
-    Url = "http://www.discogs.com/search/?q=" + ppl7::UrlEncode(Query);
+    Url = "http://www.discogs.com/search/?q=" + pplib::UrlEncode(Query);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2830,13 +2830,13 @@ void Edit::on_coverSearchBeatport_clicked()
 {
     FixFocus();
     if (position < 3) return;
-    ppl7::String Url;
+    pplib::String Url;
     // Interpret und Titel
-    ppl7::String Artist = ui.artist->text();
+    pplib::String Artist = ui.artist->text();
     Artist.trim();
-    ppl7::String Title = ui.title->text();
+    pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "http://www.beatport.com/search?query=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
+    Url = "http://www.beatport.com/search?query=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2844,13 +2844,13 @@ void Edit::on_coverSearchSoundcloud_clicked()
 {
     FixFocus();
     if (position < 3) return;
-    ppl7::String Url;
+    pplib::String Url;
     // Interpret und Titel
-    ppl7::String Artist = ui.artist->text();
+    pplib::String Artist = ui.artist->text();
     Artist.trim();
-    ppl7::String Title = ui.title->text();
+    pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "https://soundcloud.com/search?q=" + ppl7::UrlEncode(Artist) + "+" + ppl7::UrlEncode(Title);
+    Url = "https://soundcloud.com/search?q=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2881,7 +2881,7 @@ void Edit::on_hideEditor_clicked()
 void Edit::on_deviceIcon_clicked()
 {
     // printf ("Edit::on_deviceIcon_clicked\n");
-    ppl7::String path = wm->GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String path = wm->GetAudioPath(DeviceType, DeviceId, Page);
     if (path.notEmpty()) {
         QDesktopServices::openUrl(QUrl::fromLocalFile(path));
     }
@@ -2914,16 +2914,16 @@ void Edit::on_contextDeleteID3Tags_triggered()
 {
     QList<QTreeWidgetItem*> Items = trackList->selectedItems();
     if (Items.count() < 1) return;
-    // ppl7::PrintDebug("Edit::on_contextDeleteID3Tags_triggered\n");
+    // pplib::PrintDebug("Edit::on_contextDeleteID3Tags_triggered\n");
     if (QMessageBox::question(this, tr("WinMusik: delete ID3-Tags"), tr("Do you want to delete all ID3-Tags from the selected files?"),
                               QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
         return;
     for (int i = 0; i < Items.size(); i++) {
         WMTreeItem* item = (WMTreeItem*)Items[i];
-        ppl7::String Filename = wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
+        pplib::String Filename = wm->GetAudioFilename(DeviceType, DeviceId, Page, item->Track);
         if (Filename.notEmpty()) {
-            // ppl7::PrintDebug("File: %s\n", (const char*)Filename);
-            ppl7::ID3Tag Tag;
+            // pplib::PrintDebug("File: %s\n", (const char*)Filename);
+            pplib::ID3Tag Tag;
             try {
                 Tag.load(Filename);
                 Tag.clearTags();

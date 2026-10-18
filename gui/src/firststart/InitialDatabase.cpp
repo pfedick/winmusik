@@ -17,37 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 #include "winmusik3.h"
 
 #include "ppl7-audio.h"
 
-static const char* versions[] ={
-		"Single",
-		"Maxi",
-		"Album",
-		"Original Version",
-		"Original Mix",
-		"Club Mix",
-		"Extended Mix",
-		"Remix",
-		"Radio Edit",
-		"Radio Mix",
+static const char* versions[] = {"Single",   "Maxi",         "Album", "Original Version", "Original Mix",
+                                 "Club Mix", "Extended Mix", "Remix", "Radio Edit",       "Radio Mix",
 
-		NULL
-};
+                                 NULL};
 
-typedef struct {
-	const char* shortcut;
-	const char* artist;
+typedef struct
+{
+    const char* shortcut;
+    const char* artist;
 } ARTISTSHORTCUTS;
 
-static ARTISTSHORTCUTS shortcuts[] ={
-		{ "psb","Pet Shop Boys" },
-		{ "tafkap","The Artist formerly known as Prince" },
-		{ NULL,NULL }
-};
+static ARTISTSHORTCUTS shortcuts[] = {{"psb", "Pet Shop Boys"}, {"tafkap", "The Artist formerly known as Prince"}, {NULL, NULL}};
 
 int CWmClient::CreateInitialDatabase()
 /*!\brief Initiale Datenbank anlegen
@@ -62,32 +47,34 @@ int CWmClient::CreateInitialDatabase()
  *
  */
 {
-	Storage.DeleteDatabase();
-	// First, we create some common used versions
-	for (int i=0;;i++) {
-		if (versions[i] == NULL) break;
-		DataVersion v;
-		v.SetValue(versions[i]);
-		VersionStore.Put(v);
-	}
+    Storage.DeleteDatabase();
+    // First, we create some common used versions
+    for (int i = 0;; i++) {
+        if (versions[i] == NULL) break;
+        DataVersion v;
+        v.SetValue(versions[i]);
+        VersionStore.Put(v);
+    }
 
-	// Now the default genres defined by http://www.id3.org/
-	try {
-		for (int i=0;;i++) {
-			ppl7::String genre=ppl7::GetID3GenreName(i);
-			if (genre.isEmpty()) break;
-			DataGenre g;
-			g.SetValue(genre);
-			GenreStore.Put(g);
-		}
-	} catch (const ppl7::InvalidGenreException&) {}
+    // Now the default genres defined by http://www.id3.org/
+    try {
+        for (int i = 0;; i++) {
+            pplib::String genre = pplib::GetID3GenreName(i);
+            if (genre.isEmpty()) break;
+            DataGenre g;
+            g.SetValue(genre);
+            GenreStore.Put(g);
+        }
+    }
+    catch (const pplib::InvalidGenreException&) {
+    }
 
-	// A few artist shortcuts
-	for (int i=0;;i++) {
-		if (!shortcuts[i].shortcut) break;
-		DataShortcut s;
-		s.SetValue(shortcuts[i].shortcut, shortcuts[i].artist);
-		ShortcutStore.Put(s);
-	}
-	return 1;
+    // A few artist shortcuts
+    for (int i = 0;; i++) {
+        if (!shortcuts[i].shortcut) break;
+        DataShortcut s;
+        s.SetValue(shortcuts[i].shortcut, shortcuts[i].artist);
+        ShortcutStore.Put(s);
+    }
+    return 1;
 }

@@ -80,8 +80,8 @@ void CWmClient::Init(int argc, char** argv, QApplication* app)
     this->app = app;
     this->argc = argc;
     this->argv = argv;
-    ppl7::String Tmp;
-    Tmp = ppl7::GetArgv(argc, argv, "-c");
+    pplib::String Tmp;
+    Tmp = pplib::GetArgv(argc, argv, "-c");
     if (Tmp.notEmpty()) {
         conf.setConfigFile(Tmp);
     }
@@ -105,8 +105,8 @@ int CWmClient::RaiseError(QWidget* parent, const QString& msg, const QString& er
 
 int CWmClient::Start()
 {
-    ppl7::String filename;
-    ppl7::String path = app->applicationDirPath();
+    pplib::String filename;
+    pplib::String path = app->applicationDirPath();
 
     try {
         conf.load();
@@ -118,7 +118,7 @@ int CWmClient::Start()
         try {
             conf.load();
         }
-        catch (const ppl7::Exception& exp) {
+        catch (const pplib::Exception& exp) {
             ShowException(exp, tr("could not load configuration file"));
             return 0;
         }
@@ -160,12 +160,12 @@ void CWmClient::InitLogging()
     Mutex.lock();
     if (conf.bEnableDebug) {
         if (!wmlog) {
-            wmlog = new ppl7::Logger;
+            wmlog = new pplib::Logger;
         }
-        wmlog->setLogfile(ppl7::Logger::DEBUG, (const char*)conf.Logfile);
-        wmlog->setLogLevel(ppl7::Logger::DEBUG, conf.Debuglevel);
+        wmlog->setLogfile(pplib::Logger::DEBUG, (const char*)conf.Logfile);
+        wmlog->setLogLevel(pplib::Logger::DEBUG, conf.Debuglevel);
         wmlog->setLogRotate((uint64_t)conf.LogfileSize * 1024 * 1024, conf.LogfileGenerations);
-        wmlog->printf(ppl7::Logger::DEBUG, 1, "CWmClient", "InitLogging", __FILE__, __LINE__,
+        wmlog->printf(pplib::Logger::DEBUG, 1, "CWmClient", "InitLogging", __FILE__, __LINE__,
                       "Logfile initialized, Debuglevel: %i, Maxsize: %i MB, Generations: %i", conf.Debuglevel, conf.LogfileSize,
                       conf.LogfileGenerations);
         ID3TagSaver.SetLogger(wmlog);
@@ -185,7 +185,7 @@ void CWmClient::UpdateMenue()
 
 QByteArray CWmClient::GetGeometry(const char* name)
 {
-    ppl7::String File = WM_APPNAME;
+    pplib::String File = WM_APPNAME;
     File += "-Geometry";
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION, File);
     settings.beginGroup("geometry");
@@ -194,7 +194,7 @@ QByteArray CWmClient::GetGeometry(const char* name)
 
 void CWmClient::SaveGeometry(const char* name, QByteArray Geometry)
 {
-    ppl7::String File = WM_APPNAME;
+    pplib::String File = WM_APPNAME;
     File += "-Geometry";
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, WM_ORGANISATION, File);
     settings.beginGroup("geometry");
@@ -241,8 +241,8 @@ int CWmClient::SelectLanguage()
 
 int CWmClient::LoadTranslation()
 {
-    ppl7::String filename;
-    // ppl7::String path=app->applicationDirPath();
+    pplib::String filename;
+    // pplib::String path=app->applicationDirPath();
     // printf ("conf.Locale=%s\n",(const char*)conf.Locale);
     if (conf.Locale == "de") {
         setlocale(LC_CTYPE, "de_DE.UTF-8");
@@ -299,7 +299,7 @@ int CWmClient::FirstStartDialog()
     try {
         conf.save();
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not load the WinMusik configuration!"));
         return 0;
     }
@@ -307,12 +307,12 @@ int CWmClient::FirstStartDialog()
     return 1;
 }
 
-bool CWmClient::isValidDataPath(const ppl7::String& Path)
+bool CWmClient::isValidDataPath(const pplib::String& Path)
 {
     // Der Pfad muss existieren
-    if (!ppl7::Dir::exists(Path)) return false;
-    ppl7::String s = Path + "/winmusik.dat";
-    if (!ppl7::File::exists(s)) return false;
+    if (!pplib::Dir::exists(Path)) return false;
+    pplib::String s = Path + "/winmusik.dat";
+    if (!pplib::File::exists(s)) return false;
     // TODO: Es muss geprüft werden, ob es sich um eine gültige WinMusik-Daten-Datei handelt
     CWMFile ff;
     try {
@@ -405,7 +405,7 @@ void CWmClient::OpenSearchlistOverview()
     w->show();
 }
 
-void CWmClient::OpenSearchlistDialog(const ppl7::String Filename)
+void CWmClient::OpenSearchlistDialog(const pplib::String Filename)
 {
     // printf ("Open Playlists\n");
     SearchlistDialog* w = new SearchlistDialog((Menue*)MainMenue, this, Filename);
@@ -510,7 +510,7 @@ int CWmClient::LoadDatabase()
     try {
         Storage.LoadDatabase(splash);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, tr("Could not load database"));
         return 0;
     }
@@ -539,9 +539,9 @@ uint32_t CWmClient::GetHighestDeviceId(int DeviceType)
     return DeviceStore.GetHighestDevice(DeviceType);
 }
 
-ppl7::String CWmClient::GetDeviceName(int DeviceType)
+pplib::String CWmClient::GetDeviceName(int DeviceType)
 {
-    ppl7::String s;
+    pplib::String s;
     switch (DeviceType) {
     case 1:
         s = tr("Music Cassette");
@@ -646,9 +646,9 @@ QIcon CWmClient::GetDeviceIcon(int DeviceType)
     return pix;
 }
 
-ppl7::String CWmClient::GetDeviceNameShort(uint8_t DeviceType)
+pplib::String CWmClient::GetDeviceNameShort(uint8_t DeviceType)
 {
-    ppl7::String s;
+    pplib::String s;
     switch (DeviceType) {
     case 1:
         s = tr("CAS");
@@ -730,7 +730,7 @@ const DataVersion* CWmClient::GetVersion(uint32_t Id)
     return (const DataVersion*)VersionStore.GetPtr(Id);
 }
 
-const ppl7::String& CWmClient::GetVersionText(uint32_t Id)
+const pplib::String& CWmClient::GetVersionText(uint32_t Id)
 {
     const DataVersion* v = (const DataVersion*)VersionStore.GetPtr(Id);
     if (v) return v->Value;
@@ -742,7 +742,7 @@ const DataGenre* CWmClient::GetGenre(uint32_t Id)
     return (const DataGenre*)GenreStore.GetPtr(Id);
 }
 
-const ppl7::String& CWmClient::GetGenreText(uint32_t Id)
+const pplib::String& CWmClient::GetGenreText(uint32_t Id)
 {
     const DataGenre* v = (const DataGenre*)GenreStore.GetPtr(Id);
     if (v) return v->Value;
@@ -754,16 +754,16 @@ const DataLabel* CWmClient::GetLabel(uint32_t Id)
     return (const DataLabel*)LabelStore.GetPtr(Id);
 }
 
-const ppl7::String& CWmClient::GetLabelText(uint32_t Id)
+const pplib::String& CWmClient::GetLabelText(uint32_t Id)
 {
     const DataLabel* v = (const DataLabel*)LabelStore.GetPtr(Id);
     if (v) return v->Value;
     return Str_Unknown;
 }
 
-ppl7::String CWmClient::getXmlTitle(uint32_t TitleId)
+pplib::String CWmClient::getXmlTitle(uint32_t TitleId)
 {
-    ppl7::String r;
+    pplib::String r;
     if (!TitleStore.Exists(TitleId)) return r;
     const DataTitle ti = TitleStore.Get(TitleId);
     r.setf("<titleId>%u</titleId>\n", TitleId);
@@ -771,12 +771,12 @@ ppl7::String CWmClient::getXmlTitle(uint32_t TitleId)
     r.appendf("<deviceId>%i</deviceId>\n", ti.DeviceId);
     r.appendf("<devicePage>%i</devicePage>\n", ti.Page);
     r.appendf("<trackNum>%i</trackNum>\n", ti.Track);
-    r += "<Artist>" + ppl7::EscapeHTMLTags(ti.Artist) + "</Artist>\n";
-    r += "<Title>" + ppl7::EscapeHTMLTags(ti.Title) + "</Title>\n";
-    r += "<Version>" + ppl7::EscapeHTMLTags(GetVersionText(ti.VersionId)) + "</Version>\n";
-    r += "<Genre>" + ppl7::EscapeHTMLTags(GetGenreText(ti.GenreId)) + "</Genre>\n";
-    r += "<Label>" + ppl7::EscapeHTMLTags(GetLabelText(ti.LabelId)) + "</Label>\n";
-    r += "<Album>" + ppl7::EscapeHTMLTags(ti.Album) + "</Album>\n";
+    r += "<Artist>" + pplib::EscapeHTMLTags(ti.Artist) + "</Artist>\n";
+    r += "<Title>" + pplib::EscapeHTMLTags(ti.Title) + "</Title>\n";
+    r += "<Version>" + pplib::EscapeHTMLTags(GetVersionText(ti.VersionId)) + "</Version>\n";
+    r += "<Genre>" + pplib::EscapeHTMLTags(GetGenreText(ti.GenreId)) + "</Genre>\n";
+    r += "<Label>" + pplib::EscapeHTMLTags(GetLabelText(ti.LabelId)) + "</Label>\n";
+    r += "<Album>" + pplib::EscapeHTMLTags(ti.Album) + "</Album>\n";
     r.appendf("<bpm>%i</bpm>\n", (int)ti.BPM);
     r.appendf("<bitrate>%i</bitrate>\n", (int)ti.Bitrate);
     r.appendf("<rating>%i</rating>\n", (int)ti.Rating);
@@ -796,7 +796,7 @@ const DataRecordSource* CWmClient::GetRecordSource(uint32_t Id)
     return (const DataRecordSource*)RecordSourceStore.GetPtr(Id);
 }
 
-const ppl7::String& CWmClient::GetRecordSourceText(uint32_t Id)
+const pplib::String& CWmClient::GetRecordSourceText(uint32_t Id)
 {
     const DataRecordSource* v = (const DataRecordSource*)RecordSourceStore.GetPtr(Id);
     if (v) return v->Value;
@@ -808,7 +808,7 @@ const DataRecordDevice* CWmClient::GetRecordDevice(uint32_t Id)
     return (const DataRecordDevice*)RecordDeviceStore.GetPtr(Id);
 }
 
-const ppl7::String& CWmClient::GetRecordDeviceText(uint32_t Id)
+const pplib::String& CWmClient::GetRecordDeviceText(uint32_t Id)
 {
     const DataRecordDevice* v = (const DataRecordDevice*)RecordDeviceStore.GetPtr(Id);
     if (v) return v->Value;
@@ -820,10 +820,10 @@ QString CWmClient::Unknown()
     return Str_Unknown;
 }
 
-ppl7::String CWmClient::GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page)
+pplib::String CWmClient::GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page)
 {
-    ppl7::String DevicePath = conf.DevicePath[DeviceType];
-    ppl7::String Path;
+    pplib::String DevicePath = conf.DevicePath[DeviceType];
+    pplib::String Path;
     if (DevicePath.isEmpty()) return Path;
     Path = DevicePath;
     Path.trimRight("/");
@@ -839,30 +839,30 @@ ppl7::String CWmClient::GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint
     return Path;
 }
 
-ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
+pplib::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__,
+        wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__,
                       "Search for audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-    ppl7::String Pattern;
-    ppl7::String Path = GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String Pattern;
+    pplib::String Path = GetAudioPath(DeviceType, DeviceId, Page);
     if (Path.isEmpty()) return Path;
-    ppl7::Dir Dir;
+    pplib::Dir Dir;
     try {
-        Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE);
+        Dir.open(Path, pplib::Dir::SORT_FILENAME_IGNORCASE);
     }
     catch (...) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "could not open directory: %s",
+            wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "could not open directory: %s",
                           (const char*)Path);
-        return ppl7::String();
+        return pplib::String();
     }
     Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i", Track);
-    ppl7::DirEntry de;
-    ppl7::Dir::Iterator it;
+    pplib::DirEntry de;
+    pplib::Dir::Iterator it;
     if (Dir.getFirstRegExp(de, it, Pattern)) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
+            wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
                           (const char*)de.File);
         return de.File;
     }
@@ -870,69 +870,70 @@ ppl7::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, 
     Pattern.setf("/^%03u\\.(mp3|aiff|aif)$/i", Track);
     if (Dir.getFirstRegExp(de, it, Pattern)) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
+            wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
                           (const char*)de.File);
         return de.File;
     }
     Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i8", Track);
     if (Dir.getFirstRegExp(de, it, Pattern)) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
+            wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
                           (const char*)de.File);
         return de.File;
     }
-    if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Nicht gefunden");
-    return ppl7::String();
+    if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Nicht gefunden");
+    return pplib::String();
 }
 
-ppl7::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
+pplib::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 3, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
+        wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
                       "Find next audio file: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-    ppl7::String Filename;
-    ppl7::String Pattern;
-    ppl7::String Path = GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String Filename;
+    pplib::String Pattern;
+    pplib::String Path = GetAudioPath(DeviceType, DeviceId, Page);
     if (Path.isEmpty()) return Path;
-    ppl7::Dir Dir;
+    pplib::Dir Dir;
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Öffne Verzeichnis: %s", (const char*)Path);
+        wmlog->printf(pplib::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Öffne Verzeichnis: %s",
+                      (const char*)Path);
     try {
-        Dir.open(Path, ppl7::Dir::SORT_FILENAME_IGNORCASE);
+        Dir.open(Path, pplib::Dir::SORT_FILENAME_IGNORCASE);
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
+            wmlog->printf(pplib::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
                           "%i Dateien vorhanden, suche nach Pattern...", Dir.num());
         try {
-            ppl7::Dir::Iterator it;
+            pplib::Dir::Iterator it;
             Dir.reset(it);
             while (true) {
-                const ppl7::DirEntry& entry = Dir.getNext(it);
+                const pplib::DirEntry& entry = Dir.getNext(it);
                 Filename = entry.Filename;
                 // Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
-                if (!ppl7::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
+                if (!pplib::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
                     // Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als
                     // Platzhalter angelegt)
                     if (entry.Size > 256) {
-                        if (ppl7::RegEx::match("/^.*\\.(mp3|aiff|aif|wav)$/i", Filename) == true) {
+                        if (pplib::RegEx::match("/^.*\\.(mp3|aiff|aif|wav)$/i", Filename) == true) {
                             // Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
                             if (wmlog)
-                                wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
+                                wmlog->printf(pplib::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
                                               "Datei passt auf Pattern: %s", (const char*)Filename);
-                            ppl7::String newFilename;
+                            pplib::String newFilename;
                             newFilename.setf("%s/%03u-%s", (const char*)entry.Path, Track, (const char*)Filename);
                             if (wmlog)
-                                wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s",
+                                wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Rename %s => %s",
                                               (const char*)entry.File, (const char*)newFilename);
                             // Wir versuchen sie umzubenennen
                             try {
-                                ppl7::File::rename(entry.File, newFilename);
+                                pplib::File::rename(entry.File, newFilename);
                                 return newFilename;
                             }
                             catch (...) {
                             }
                             // if (wmlog) wmlog->LogError();
                             if (wmlog)
-                                wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
+                                wmlog->printf(pplib::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
                                               "Error, versuche nächste Datei");
                             // Fehlgeschlagen, vielleicht gibt's ja noch andere Dateien
                         }
@@ -947,18 +948,18 @@ ppl7::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uin
     }
 
     // Nichts passendes gefunden, wir geben einen leeren String zurück
-    if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Nichts passendes gefunden");
+    if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Nichts passendes gefunden");
     Path.clear();
     return Path;
 }
 
-ppl7::String CWmClient::NormalizeFilename(
-    uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const ppl7::String& Suffix)
+pplib::String CWmClient::NormalizeFilename(
+    uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const pplib::String& Suffix)
 {
     // TODO: Übergabeparameter für Audio-Format oder Suffix
-    ppl7::String Filename = GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String Filename = GetAudioPath(DeviceType, DeviceId, Page);
     if (Filename.isEmpty()) return Filename;
-    ppl7::String Tmp;
+    pplib::String Tmp;
     Tmp.setf("%03u-", Track);
     if (Ti.Artist.notEmpty())
         Tmp += Ti.Artist;
@@ -970,30 +971,30 @@ ppl7::String CWmClient::NormalizeFilename(
     else
         Tmp += "unknown";
     // Version holen
-    ppl7::String Version = GetVersionText(Ti.VersionId);
+    pplib::String Version = GetVersionText(Ti.VersionId);
     if (Version != "Single") {
         Tmp += " (" + Version + ")";
     }
     Tmp += ".";
     Tmp += Suffix;
     normalizer.NormalizeFilename(Tmp);
-    ppl7::WideString s = Tmp;
+    pplib::WideString s = Tmp;
     if (s.size() > (size_t)conf.MaxFilenameLength) {
         s.cut(conf.MaxFilenameLength - Suffix.size() - 1);
         Tmp = s;
         Tmp += ".";
-        Tmp += ppl7::String(Suffix);
+        Tmp += pplib::String(Suffix);
     }
     Filename += Tmp;
     return Filename;
 }
 
 int CWmClient::SaveID3Tags(
-    uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const ppl7::String& Filename)
+    uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const pplib::String& Filename)
 {
     if (conf.bWriteID3Tags == false) return 0;
-    ppl7::String InternalFilename;
-    ppl7::String Tmp;
+    pplib::String InternalFilename;
+    pplib::String Tmp;
     if (Filename.notEmpty())
         InternalFilename = Filename;
     else
@@ -1004,14 +1005,14 @@ int CWmClient::SaveID3Tags(
         return 0;
     }
 
-    ppl7::AssocArray Job;
+    pplib::AssocArray Job;
 
     if (conf.bNormalizeFilename) {
         // Unter Windows würde ein rename an dieser Stelle fehlschlagen, wenn die Datei
         // bereits geöffnet ist (z.B. im MP3-Player). Daher geben wir die Aufgabe an den
         // TagSaver
-        std::vector<ppl7::String> matches;
-        if (ppl7::RegEx::capture("/.*\\.(.*?)$/", InternalFilename, matches)) {
+        std::vector<pplib::String> matches;
+        if (pplib::RegEx::capture("/.*\\.(.*?)$/", InternalFilename, matches)) {
             Tmp = NormalizeFilename(DeviceType, DeviceId, Page, Track, Ti, matches.at(1));
             Job.set("renamefile", Tmp);
         }
@@ -1020,11 +1021,11 @@ int CWmClient::SaveID3Tags(
     ID3TagSaver.SetPaddingSize(conf.ID3v2Padding);
     ID3TagSaver.SetRetryIntervall(conf.TagSaverRetryIntervall);
 
-    ppl7::String comment, version;
+    pplib::String comment, version;
     version = GetVersionText(Ti.VersionId);
 
     Job.set("artist", (const char*)Ti.Artist);
-    if (ppl7::LowerCase(version) != "single")
+    if (pplib::LowerCase(version) != "single")
         Job.setf("title", "%s (%s)", (const char*)Ti.Title, (const char*)version);
     else
         Job.setf("title", "%s", (const char*)Ti.Title);
@@ -1055,7 +1056,7 @@ int CWmClient::SaveID3Tags(
 
 int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, CTrackList* list, DataDevice* device)
 {
-    ppl7::String Filename, Tmp, Minuten, FilePath;
+    pplib::String Filename, Tmp, Minuten, FilePath;
     const DataTrack* track;
     const DataTitle* Ti;
     if (!DeviceId) {
@@ -1066,7 +1067,7 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
         // ppl6::SetError(20041);
         return 0;
     }
-    ppl7::String Path = GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String Path = GetAudioPath(DeviceType, DeviceId, Page);
     if (Path.isEmpty()) {
         // ppl6::SetError(20042);
         return 0;
@@ -1075,17 +1076,17 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
     Minuten = tr("min", "Minutes in Tracklisting of Playlist");
 
     try {
-        ppl7::File m3u;
-        m3u.open(ppl7::ToString("%s/000index.m3u", (const char*)Path), ppl7::File::WRITE);
+        pplib::File m3u;
+        m3u.open(pplib::ToString("%s/000index.m3u", (const char*)Path), pplib::File::WRITE);
 
-        ppl7::File pls;
-        pls.open(ppl7::ToString("%s/000index.pls", (const char*)Path), ppl7::File::WRITE);
+        pplib::File pls;
+        pls.open(pplib::ToString("%s/000index.pls", (const char*)Path), pplib::File::WRITE);
 
-        ppl7::File txt;
-        txt.open(ppl7::ToString("%s/000index.txt", (const char*)Path), ppl7::File::WRITE);
+        pplib::File txt;
+        txt.open(pplib::ToString("%s/000index.txt", (const char*)Path), pplib::File::WRITE);
 
-        ppl7::File xspf;
-        xspf.open(ppl7::ToString("%s/000index.xspf", (const char*)Path), ppl7::File::WRITE);
+        pplib::File xspf;
+        xspf.open(pplib::ToString("%s/000index.xspf", (const char*)Path), pplib::File::WRITE);
 
         m3u.puts("#EXTM3U\n");
         pls.puts("[playlist]\n");
@@ -1132,7 +1133,7 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
                     Tmp += ")";
 
                     FilePath = GetAudioFilename(DeviceType, DeviceId, Page, i);
-                    Filename = ppl7::File::getFilename(FilePath);
+                    Filename = pplib::File::getFilename(FilePath);
                     m3u.putsf("#EXTINF:%u,%s\n", Ti->Length, (const char*)Tmp);
                     m3u.putsf("%s\n", (const char*)Filename);
 
@@ -1142,21 +1143,21 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 
                     xspf.putsf("  <track>\n");
                     xspf.putsf("     <trackNum>%u</trackNum>\n", i);
-                    ppl7::String TmpTxt = Tmp;
+                    pplib::String TmpTxt = Tmp;
                     TmpTxt.chop(1);
                     txt.putsf("%3u. %s, %0i:%02i %s)\r\n", i, (const char*)TmpTxt, (int)(Ti->Length / 60), Ti->Length % 60,
                               (const char*)Minuten);
 
                     // Tmp=ppl6::UrlEncode(FilePath);
                     // Tmp.Replace("+","%20");
-                    xspf.putsf("     <location>file://%s</location>\n", (const char*)ppl7::EscapeHTMLTags(FilePath));
-                    if (Ti->Artist.notEmpty()) xspf.putsf("     <creator>%s</creator>\n", (const char*)ppl7::EscapeHTMLTags(Ti->Artist));
+                    xspf.putsf("     <location>file://%s</location>\n", (const char*)pplib::EscapeHTMLTags(FilePath));
+                    if (Ti->Artist.notEmpty()) xspf.putsf("     <creator>%s</creator>\n", (const char*)pplib::EscapeHTMLTags(Ti->Artist));
                     if (Ti->Title.notEmpty())
-                        xspf.putsf("     <title>%s - %s (%s)</title>\n", (const char*)ppl7::EscapeHTMLTags(Ti->Artist),
-                                   (const char*)ppl7::EscapeHTMLTags(Ti->Title),
-                                   (const char*)ppl7::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
+                        xspf.putsf("     <title>%s - %s (%s)</title>\n", (const char*)pplib::EscapeHTMLTags(Ti->Artist),
+                                   (const char*)pplib::EscapeHTMLTags(Ti->Title),
+                                   (const char*)pplib::EscapeHTMLTags(GetVersionText(Ti->VersionId)));
                     // xspf.Putsf("     <annotation>%s</annotation>\n",GetVersionText(Ti->VersionId));
-                    if (Ti->Album.notEmpty()) xspf.putsf("     <album>%s</album>\n", (const char*)ppl7::EscapeHTMLTags(Ti->Album));
+                    if (Ti->Album.notEmpty()) xspf.putsf("     <album>%s</album>\n", (const char*)pplib::EscapeHTMLTags(Ti->Album));
                     xspf.putsf("     <duration>%u</duration>\n", Ti->Length * 1000); // Bringt VLC zum Absturz
                     xspf.putsf("  </track>\n");
                 }
@@ -1175,7 +1176,7 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 
 int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, CTrackList* list)
 {
-    ppl7::String Path, Filename, Tmp, Minuten;
+    pplib::String Path, Filename, Tmp, Minuten;
     const DataTrack* track;
     const DataTitle* Ti;
     if (!DeviceId) {
@@ -1186,7 +1187,7 @@ int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
         // ppl6::SetError(20041);
         return 0;
     }
-    ppl7::String DevicePath = conf.DevicePath[DeviceType];
+    pplib::String DevicePath = conf.DevicePath[DeviceType];
     if (DevicePath.isEmpty()) {
         // ppl6::SetError(20042);
         return 0;
@@ -1205,25 +1206,25 @@ int CWmClient::UpdateID3Tags(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
     return 1;
 }
 
-int CWmClient::PlayFile(const ppl7::String& Filename)
+int CWmClient::PlayFile(const pplib::String& Filename)
 {
-    ppl7::String Player = conf.MP3Player;
-    std::vector<ppl7::String> matches;
-    if (ppl7::RegEx::capture("/\\.aif[f]{0,2}$/i", Filename, matches)) Player = conf.AIFFPlayer;
+    pplib::String Player = conf.MP3Player;
+    std::vector<pplib::String> matches;
+    if (pplib::RegEx::capture("/\\.aif[f]{0,2}$/i", Filename, matches)) Player = conf.AIFFPlayer;
     if (Player.isEmpty()) Player = conf.MP3Player;
 
 #ifdef _WIN32
-    ppl7::WideString f = Filename;
+    pplib::WideString f = Filename;
     // Windows mag keine Vorwärts-Slashes
     f.replace(L"/", L"\\");
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %ls", (const wchar_t*)f);
+        wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %ls", (const wchar_t*)f);
     if (Player.isEmpty()) {
         ShellExecuteW(NULL, L"open", (const wchar_t*)f, L"", L"", SW_SHOWNORMAL);
     } else {
         f = L"\"" + f;
         f += L"\"";
-        ppl7::WideString prog = Player;
+        pplib::WideString prog = Player;
         ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f, L"", SW_SHOWNORMAL);
     }
 #else
@@ -1235,8 +1236,8 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
         return 0;
     }
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %s", (const char*)Filename);
-    ppl7::String cmd;
+        wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "PlayFile", __FILE__, __LINE__, "Datei abspielen: %s", (const char*)Filename);
+    pplib::String cmd;
     cmd.setf("%s \"%s\" > /dev/null 2>&1 &", (const char*)Player, (const char*)Filename);
     system((const char*)cmd);
 #endif
@@ -1246,100 +1247,100 @@ int CWmClient::PlayFile(const ppl7::String& Filename)
 int CWmClient::TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track)
 {
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
+        wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
                       "Delete track: DeviceId=%u, Page=%u, Track=%u", DeviceId, Page, Track);
-    ppl7::String Path = GetAudioPath(DeviceType, DeviceId, Page);
+    pplib::String Path = GetAudioPath(DeviceType, DeviceId, Page);
     if (Path.isEmpty()) {
-        if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 6, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
+        if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 6, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
         return 0;
     }
     Path.append("/Trash");
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path for deleted files: %s",
+        wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path for deleted files: %s",
                       (const char*)Path);
-    if (!ppl7::File::exists(Path)) {
+    if (!pplib::File::exists(Path)) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
+            wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
                           "Path does not exists and will be created");
         try {
-            ppl7::Dir::mkDir(Path, true);
+            pplib::Dir::mkDir(Path, true);
         }
-        catch (const ppl7::Exception& exp) {
+        catch (const pplib::Exception& exp) {
             if (wmlog) {
-                wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "create path failed");
+                wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "create path failed");
                 wmlog->printException(__FILE__, __LINE__, "CWMClient", "TrashAudioFile", exp);
             }
         }
-        if (!ppl7::File::exists(Path)) {
+        if (!pplib::File::exists(Path)) {
             if (wmlog)
-                wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
+                wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__,
                               "Path was created, but its still doesn't exist");
             return 0;
         }
     }
-    if (!ppl7::File::isDir(Path)) {
+    if (!pplib::File::isDir(Path)) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path is not a directory: %s",
+            wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Path is not a directory: %s",
                           (const char*)Path);
         return 0;
     }
-    ppl7::String old = GetAudioFilename(DeviceType, DeviceId, Page, Track);
+    pplib::String old = GetAudioFilename(DeviceType, DeviceId, Page, Track);
     if (old.isEmpty()) return 1;
-    ppl7::String file = Path;
+    pplib::String file = Path;
     file.appendf("/%03u-%02u-", DeviceId, Page);
-    file += ppl7::File::getFilename(old);
+    file += pplib::File::getFilename(old);
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s", (const char*)old,
-                      (const char*)file);
+        wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s",
+                      (const char*)old, (const char*)file);
     try {
-        ppl7::File::rename(old, file);
+        pplib::File::rename(old, file);
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         if (wmlog) {
-            wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
+            wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
             wmlog->printException(__FILE__, __LINE__, "CWMClient", "TrashAudioFile", exp);
         }
         return 0;
     }
-    if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Erfolgreich");
+    if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "TrashAudioFile", __FILE__, __LINE__, "Erfolgreich");
     return 1;
 }
 
 int CWmClient::RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t OldTrack, uint32_t NewTrack)
 {
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__,
+        wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__,
                       "Datei umbenennen: DeviceId=%u, Page=%u, OldTrack=%u, NewTrack=%u", DeviceId, Page, OldTrack, NewTrack);
-    ppl7::String DevicePath = conf.DevicePath[DeviceType];
+    pplib::String DevicePath = conf.DevicePath[DeviceType];
     if (DevicePath.isEmpty()) {
-        if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
+        if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Kein MP3-Pfad angegeben");
         return 0;
     }
-    ppl7::String Old = GetAudioFilename(DeviceType, DeviceId, Page, OldTrack);
+    pplib::String Old = GetAudioFilename(DeviceType, DeviceId, Page, OldTrack);
     if (Old.isEmpty()) {
         if (wmlog)
-            wmlog->printf(ppl7::Logger::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Alter Track %u ist nicht vorhanden",
+            wmlog->printf(pplib::Logger::DEBUG, 6, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Alter Track %u ist nicht vorhanden",
                           OldTrack);
         return 1;
     }
 
-    ppl7::String Path = ppl7::File::getPath(Old);
-    ppl7::String Filename = ppl7::File::getFilename(Old);
+    pplib::String Path = pplib::File::getPath(Old);
+    pplib::String Filename = pplib::File::getFilename(Old);
     Filename = Filename.mid(4);
-    ppl7::String NewFile;
+    pplib::String NewFile;
     NewFile.setf("%s/%03u-%s", (const char*)Path, NewTrack, (const char*)Filename);
     if (wmlog)
-        wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s",
+        wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Umbenennung: %s ==> %s",
                       (const char*)Old, (const char*)NewFile);
     try {
-        ppl7::File::rename(Old, NewFile);
+        pplib::File::rename(Old, NewFile);
     }
-    catch (const ppl7::Exception& exp) {
-        if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
+    catch (const pplib::Exception& exp) {
+        if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 9, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Rename fehlgeschlagen");
         wmlog->printException(__FILE__, __LINE__, "CWMClient", "RenameAudioFile", exp);
         return 0;
     }
-    if (wmlog) wmlog->printf(ppl7::Logger::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Erfolgreich");
+    if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 1, "CWMClient", "RenameAudioFile", __FILE__, __LINE__, "Erfolgreich");
     return 1;
 }
 
@@ -1357,9 +1358,9 @@ void CWmClient::UnRegisterWindow(WindowType type, QWidget* widget)
     Mutex.unlock();
 }
 
-ppl7::String CWmClient::GetWmVersion() const
+pplib::String CWmClient::GetWmVersion() const
 {
-    ppl7::String Tmp = tr("WinMusik %v%");
+    pplib::String Tmp = tr("WinMusik %v%");
     Tmp.replace("%v%", WM_VERSION);
     return Tmp;
 }

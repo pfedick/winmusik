@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef SEARCHLISTS_H
 #define SEARCHLISTS_H
 
@@ -30,16 +29,15 @@
 class SearchlistTreeItem : public QTreeWidgetItem
 {
 public:
-    ppl7::String	Filename;
+    pplib::String Filename;
 };
-
 
 class Searchlists : public QWidget
 {
     Q_OBJECT
 
 public:
-    Searchlists(QWidget* parent = 0, CWmClient* wm=NULL);
+    Searchlists(QWidget* parent = 0, CWmClient* wm = NULL);
     ~Searchlists();
     void ReloadTranslation();
     void Update();
@@ -53,14 +51,10 @@ private:
     void closeEvent(QCloseEvent* event);
     void Resize();
 
-
 public slots:
     void on_newSearchlistButton_clicked();
     void on_deleteSearchlistButton_clicked();
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
-
-
 };
-
 
 #endif // SEARCHLISTS_H

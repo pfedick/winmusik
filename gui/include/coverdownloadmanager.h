@@ -11,8 +11,8 @@
 class DownloadTask
 {
 public:
-    ppl7::String uuid;
-    ppl7::String shopUrl;
+    pplib::String uuid;
+    pplib::String shopUrl;
 };
 
 class CoverDownloadManager : public QObject
@@ -26,7 +26,7 @@ public:
     CoverDownloadManager();
     ~CoverDownloadManager();
 
-    void addDownload(const ppl7::String& uuid, const ppl7::String& url);
+    void addDownload(const pplib::String& uuid, const pplib::String& url);
 
 signals:
     void downloadFinished(QString uuid, QString localPath);

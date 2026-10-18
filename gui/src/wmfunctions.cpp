@@ -26,32 +26,32 @@
 #include <QString>
 #include "ppl7-audio.h"
 
-static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename);
-static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7::File& File);
-static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7::File& File);
+static bool CopyFromFilename(TrackInfo& info, const pplib::String& Filename);
+static bool CopyFromID3v1Tag(TrackInfo& info, const pplib::String& Filename, pplib::File& File);
+static bool CopyFromID3v2Tag(TrackInfo& info, const pplib::String& Filename, pplib::File& File);
 
-uint32_t Time2Int(const ppl7::String& Time)
+uint32_t Time2Int(const pplib::String& Time)
 {
-    ppl7::String t = Time;
+    pplib::String t = Time;
     t.replace(",", ":");
     t.replace(".", ":");
     t.trim();
     if (t.isEmpty()) return 0;
-    ppl7::Array a;
+    pplib::Array a;
     a.explode(Time, ":");
     return a.get(0).toInt() * 60 + a.get(1).toInt();
 }
 
-ppl7::String Int2Time(uint32_t Time)
+pplib::String Int2Time(uint32_t Time)
 {
-    ppl7::String a;
+    pplib::String a;
     a.setf("%0i:%02i", (int)(Time / 60), Time % 60);
     return a;
 }
 
-ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date)
+pplib::String Long2Date(const pplib::String& Format, uint32_t Date)
 {
-    ppl7::String ret, Tmp;
+    pplib::String ret, Tmp;
     if (!Date) return ret;
     Tmp.setf("%u", Date);
     int day = Tmp.right(2).toInt();
@@ -71,7 +71,7 @@ ppl7::String Long2Date(const ppl7::String& Format, uint32_t Date)
     return ret;
 }
 
-void NormalizeImportString(ppl7::String& Buffer)
+void NormalizeImportString(pplib::String& Buffer)
 {
     Buffer.replace("_", " ");
     Buffer.replace("'", "'");
@@ -79,14 +79,14 @@ void NormalizeImportString(ppl7::String& Buffer)
     Buffer.trim();
 }
 
-static void fixArtistAndTitle(const ppl7::String& prefix, TrackInfo& info, const ppl7::String prefix_replace)
+static void fixArtistAndTitle(const pplib::String& prefix, TrackInfo& info, const pplib::String prefix_replace)
 {
-    ppl7::String regex = "/(.*?)\\s" + prefix + "\\s+(.*)$/i";
-    std::vector<ppl7::String> Matches;
-    ppl7::String Title = info.Ti.Title;
-    ppl7::String Artist = info.Ti.Artist;
-    if (ppl7::RegEx::capture(regex, Title, Matches)) {
-        ppl7::String feat = Matches.at(2);
+    pplib::String regex = "/(.*?)\\s" + prefix + "\\s+(.*)$/i";
+    std::vector<pplib::String> Matches;
+    pplib::String Title = info.Ti.Title;
+    pplib::String Artist = info.Ti.Artist;
+    if (pplib::RegEx::capture(regex, Title, Matches)) {
+        pplib::String feat = Matches.at(2);
         feat.trim();
         Title = Matches[1];
         Artist.replace(feat, "");
@@ -109,9 +109,9 @@ static void fixIt(TrackInfo& info)
     fixArtistAndTitle("presents", info, "pres.");
 }
 
-static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7::File& File)
+static bool CopyFromID3v1Tag(TrackInfo& info, const pplib::String& Filename, pplib::File& File)
 {
-    ppl7::String Tmp, Title;
+    pplib::String Tmp, Title;
     // ID3v1-Tag einlesen falls vorhanden
     if (File.size() < 128) return CopyFromFilename(info, Filename);
     const char* buffer = NULL;
@@ -131,14 +131,14 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
         Tmp.set(id3.SongName, 30);
         NormalizeImportString(Tmp);
         // Sind Klammern enthalten?
-        std::vector<ppl7::String> matches;
-        if (ppl7::RegEx::capture("/^(.*)\\((.*)\\).*$/", Tmp, matches)) {
+        std::vector<pplib::String> matches;
+        if (pplib::RegEx::capture("/^(.*)\\((.*)\\).*$/", Tmp, matches)) {
             Title = matches.at(1);
             Title.trim();
             info.Ti.SetTitle(Title);
             info.Version = matches.at(2);
             info.Version.trim();
-        } else if (ppl7::RegEx::capture("/^(.*)\\[(.*)\\].*$/", Tmp, matches)) {
+        } else if (pplib::RegEx::capture("/^(.*)\\[(.*)\\].*$/", Tmp, matches)) {
             Title = matches.at(1);
             Title.trim();
             info.Ti.SetTitle(Title);
@@ -155,7 +155,7 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
         Tmp.set(id3.Comment, 29);
         NormalizeImportString(Tmp);
         info.Ti.SetRemarks(Tmp);
-        info.Genre = ppl7::GetID3GenreName(id3.Genre);
+        info.Genre = pplib::GetID3GenreName(id3.Genre);
         NormalizeImportString(info.Genre);
         fixIt(info);
         return true;
@@ -163,11 +163,11 @@ static bool CopyFromID3v1Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
     return CopyFromFilename(info, Filename);
 }
 
-static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7::File& File)
+static bool CopyFromID3v2Tag(TrackInfo& info, const pplib::String& Filename, pplib::File& File)
 {
-    ppl7::String Tmp;
-    ppl7::ID3Tag Tag;
-    ppl7::String Title, Version, Genre, Comment, Artist;
+    pplib::String Tmp;
+    pplib::ID3Tag Tag;
+    pplib::String Title, Version, Genre, Comment, Artist;
     try {
         Tag.load(File);
     }
@@ -220,22 +220,22 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
     }
 
     // Remixer
-    std::vector<ppl7::String> matches;
-    if (ppl7::RegEx::capture("/^(.*?)\\s*\\((.*?)\\)\\s*\\((.*?)\\).*$/", Title, matches)) {
+    std::vector<pplib::String> matches;
+    if (pplib::RegEx::capture("/^(.*?)\\s*\\((.*?)\\)\\s*\\((.*?)\\).*$/", Title, matches)) {
         // printf ("Match 0\n");
-        ppl7::String Tmp1 = matches.at(2);
-        ppl7::String Tmp2 = matches.at(3);
+        pplib::String Tmp1 = matches.at(2);
+        pplib::String Tmp2 = matches.at(3);
         Title = matches.at(1);
         Tmp1.trim();
         Tmp2.trim();
         Title.trim();
         // printf ("Tmp1=%s, Tmp2=%s\n",(const char*)Tmp1,(const char*)Tmp2);
-        if (ppl7::RegEx::match("/feat\\.\\s+/i", Tmp1)) {
+        if (pplib::RegEx::match("/feat\\.\\s+/i", Tmp1)) {
             // printf ("xxx 1\n");
             Tmp = Tmp2;
             Artist += " " + Tmp1;
             info.Ti.SetArtist(Artist);
-        } else if (ppl7::RegEx::match("/feat\\.\\s+/i", Tmp2)) {
+        } else if (pplib::RegEx::match("/feat\\.\\s+/i", Tmp2)) {
             // printf ("xxx 2\n");
             Tmp = Tmp1;
             Artist += " " + Tmp2;
@@ -245,13 +245,13 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
             Title += " (" + Tmp1 + ")";
             Tmp = Tmp2;
         }
-    } else if (ppl7::RegEx::capture("/^(.*)\\((.*?)\\).*$/", Title, matches)) {
+    } else if (pplib::RegEx::capture("/^(.*)\\((.*?)\\).*$/", Title, matches)) {
         // printf ("Match 1\n");
         Tmp = matches.at(2);
         Title = matches.at(1);
         Tmp.trim();
         Title.trim();
-    } else if (ppl7::RegEx::capture("/^(.*)\\[(.*?)\\].*$/", Title, matches)) {
+    } else if (pplib::RegEx::capture("/^(.*)\\[(.*?)\\].*$/", Title, matches)) {
         // printf ("Match 2\n");
         Tmp = matches.at(2);
         Title = matches.at(1);
@@ -262,7 +262,7 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
         Tmp = Tag.getRemixer();
         NormalizeImportString(Tmp);
     }
-    Tmp = ppl7::RegEx::replace("/\\brmx\\b/i", Tmp, " Remix");
+    Tmp = pplib::RegEx::replace("/\\brmx\\b/i", Tmp, " Remix");
     Tmp.trim();
     Version = Tmp;
     info.Version = Version;
@@ -300,33 +300,33 @@ static bool CopyFromID3v2Tag(TrackInfo& info, const ppl7::String& Filename, ppl7
     return CopyFromFilename(info, Filename);
 }
 
-static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
+static bool CopyFromFilename(TrackInfo& info, const pplib::String& Filename)
 {
     // Vielleicht können wir mit dem Dateinamen was anfangen
-    ppl7::String Name = ppl7::File::getFilename(Filename);
-    ppl7::String Tmp;
-    ppl7::String Title, Version;
+    pplib::String Name = pplib::File::getFilename(Filename);
+    pplib::String Tmp;
+    pplib::String Title, Version;
     NormalizeImportString(Name);
-    Name = ppl7::RegEx::replace("/.mp3$/i", Name, "");
-    Name = ppl7::RegEx::replace("/.wav$/i", Name, "");
-    Name = ppl7::RegEx::replace("/.aif$/i", Name, "");
-    Name = ppl7::RegEx::replace("/.aiff$/i", Name, "");
-    if (ppl7::RegEx::match("/^[0-9]{3}-/", Name)) {
-        std::vector<ppl7::String> matches;
+    Name = pplib::RegEx::replace("/.mp3$/i", Name, "");
+    Name = pplib::RegEx::replace("/.wav$/i", Name, "");
+    Name = pplib::RegEx::replace("/.aif$/i", Name, "");
+    Name = pplib::RegEx::replace("/.aiff$/i", Name, "");
+    if (pplib::RegEx::match("/^[0-9]{3}-/", Name)) {
+        std::vector<pplib::String> matches;
         Name.shl(0, 4);
-        if (ppl7::RegEx::capture("/^(.*)-(.*)$/u", Name, matches)) {
+        if (pplib::RegEx::capture("/^(.*)-(.*)$/u", Name, matches)) {
             Tmp = matches.at(1);
             Tmp.trim();
             info.Ti.SetArtist(Tmp);
             Title = matches.at(2);
             // Hier könnte die Version drinstehen
-            if (ppl7::RegEx::capture("/^(.*)\\((.*)\\)", Title, matches)) {
+            if (pplib::RegEx::capture("/^(.*)\\((.*)\\)", Title, matches)) {
                 Tmp = matches.at(1);
                 Tmp.trim();
                 info.Ti.SetTitle(Tmp);
                 info.Version = matches.at(2);
                 info.Version.trim();
-            } else if (ppl7::RegEx::capture("/^(.*)\\[(.*)\\]", Title, matches)) {
+            } else if (pplib::RegEx::capture("/^(.*)\\[(.*)\\]", Title, matches)) {
                 Tmp = matches.at(1);
                 Tmp.trim();
                 info.Ti.SetTitle(Tmp);
@@ -342,10 +342,10 @@ static bool CopyFromFilename(TrackInfo& info, const ppl7::String& Filename)
     return true;
 }
 
-bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int preferedId3Version)
+bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int preferedId3Version)
 {
-    ppl7::DirEntry de;
-    if (ppl7::File::tryStatFile(Filename, de)) {
+    pplib::DirEntry de;
+    if (pplib::File::tryStatFile(Filename, de)) {
         info.Ti.Size = de.Size;
     } else
         return false;
@@ -355,21 +355,21 @@ bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int pre
     info.Ti.ReleaseDate = 0;
     info.Ti.LabelId = 0;
 
-    ppl7::File File;
+    pplib::File File;
     try {
         File.open(Filename);
     }
     catch (...) {
         return false;
     }
-    ppl7::AudioInfo ai;
-    if (!ppl7::IdentAudioFile(File, ai)) return false;
+    pplib::AudioInfo ai;
+    if (!pplib::IdentAudioFile(File, ai)) return false;
     // printf ("Ok\n");
     info.Ti.Length = ai.Length / 1000;
     info.Ti.Bitrate = ai.Bitrate;
     // info.Ti.Channels=pmp3.
     int ret = 0;
-    if (ai.Format == ppl7::AudioInfo::MP3 && preferedId3Version == 1)
+    if (ai.Format == pplib::AudioInfo::MP3 && preferedId3Version == 1)
         ret = CopyFromID3v1Tag(info, Filename, File);
     else if (preferedId3Version == 2)
         ret = CopyFromID3v2Tag(info, Filename, File);
@@ -386,22 +386,22 @@ bool getTrackInfoFromFile(TrackInfo& info, const ppl7::String& Filename, int pre
     return true;
 }
 
-uint32_t findTitleIdByFilename(const ppl7::String& Filename)
+uint32_t findTitleIdByFilename(const pplib::String& Filename)
 {
-    ppl7::String LowerFilename = Filename;
+    pplib::String LowerFilename = Filename;
     LowerFilename.lowerCase();
     for (int DeviceType = 0; DeviceType < MAX_DEVICE_TYPES; DeviceType++) {
-        ppl7::String path = wm_main->conf.DevicePath[DeviceType];
-        ppl7::String LowerPath = path;
+        pplib::String path = wm_main->conf.DevicePath[DeviceType];
+        pplib::String LowerPath = path;
         LowerPath.lowerCase();
         if (path.notEmpty()) {
             int p = LowerFilename.instr(LowerPath);
             if (p >= 0) {
-                ppl7::String f = Filename.mid(p);
+                pplib::String f = Filename.mid(p);
                 f.replace(path, "");
                 // printf ("versuche match: %s\n",(const char*)f);
-                std::vector<ppl7::String> matches;
-                if (ppl7::RegEx::capture("/\\/([0-9]{3})\\/([0-9]+)\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
+                std::vector<pplib::String> matches;
+                if (pplib::RegEx::capture("/\\/([0-9]{3})\\/([0-9]+)\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
                     int myDeviceId = matches.at(1).toInt();
                     int myPage = matches.at(2).toInt();
                     int myTrack = matches.at(3).toInt();
@@ -410,7 +410,7 @@ uint32_t findTitleIdByFilename(const ppl7::String& Filename)
                     if (tr) {
                         return tr->TitleId;
                     }
-                } else if (ppl7::RegEx::capture("/\\/([0-9]{3})\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
+                } else if (pplib::RegEx::capture("/\\/([0-9]{3})\\/([0-9]{3})[^0-9]+.*$/", f, matches)) {
                     int myDeviceId = matches.at(1).toInt();
                     int myTrack = matches.at(2).toInt();
                     // printf ("myDeviceId=%i, myTrack=%i\n",myDeviceId,myTrack);
@@ -425,13 +425,13 @@ uint32_t findTitleIdByFilename(const ppl7::String& Filename)
     return 0;
 }
 
-void saveCover(const ppl7::String& filename, const QPixmap& Cover)
+void saveCover(const pplib::String& filename, const QPixmap& Cover)
 {
     if (!wm_main->conf.bWriteID3Tags) return;
     if (filename.isEmpty()) return;
     if (Cover.isNull()) return;
-    ppl7::ID3Tag Tag;
-    // ppl7::PrintDebug("saveCover, Loading Tag\n");
+    pplib::ID3Tag Tag;
+    // pplib::PrintDebug("saveCover, Loading Tag\n");
     try {
         Tag.load(filename);
         // Tag.listFrames();
@@ -442,7 +442,7 @@ void saveCover(const ppl7::String& filename, const QPixmap& Cover)
     saveCover(Tag, Cover);
 }
 
-void saveCover(ppl7::ID3Tag& Tag, const QPixmap& Cover)
+void saveCover(pplib::ID3Tag& Tag, const QPixmap& Cover)
 {
     if (Cover.isNull()) return;
     try {
@@ -450,24 +450,24 @@ void saveCover(ppl7::ID3Tag& Tag, const QPixmap& Cover)
         QBuffer buffer(&bytes);
         buffer.open(QIODevice::WriteOnly);
         Cover.save(&buffer, "JPEG", wm_main->conf.JpegQualityCover);
-        ppl7::ByteArray bin;
+        pplib::ByteArray bin;
         bin.copy(bytes.data(), bytes.size());
         Tag.setPicture(3, bin, "image/jpeg");
         Tag.save();
     }
-    catch (const ppl7::Exception& exp) {
+    catch (const pplib::Exception& exp) {
         ShowException(exp, QObject::tr("Could not save cover!"));
     }
 }
 
-void saveCoverToFile(const ppl7::String& filename, const QPixmap& Cover)
+void saveCoverToFile(const pplib::String& filename, const QPixmap& Cover)
 {
     if (Cover.isNull()) return;
-    ppl7::Dir::mkDir(ppl7::File::getPath(filename), true);
+    pplib::Dir::mkDir(pplib::File::getPath(filename), true);
     Cover.save(filename, "JPEG", wm_main->conf.JpegQualityCover);
 }
 
-void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover)
+void getIconFromCover(pplib::ByteArray& bin, const QPixmap& Cover)
 {
     QPixmap icon;
     icon = Cover.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -478,12 +478,12 @@ void getIconFromCover(ppl7::ByteArray& bin, const QPixmap& Cover)
     bin.copy(bytes.data(), bytes.size());
 }
 
-void loadCoverToClipboard(const ppl7::String& Filename)
+void loadCoverToClipboard(const pplib::String& Filename)
 {
-    ppl7::ID3Tag Tag;
+    pplib::ID3Tag Tag;
     try {
         Tag.load(Filename);
-        ppl7::ByteArray Cover;
+        pplib::ByteArray Cover;
         Tag.getPicture(3, Cover);
         if (Cover.size() > 0) {
             QPixmap pix;
@@ -503,21 +503,21 @@ void setReadableLength(QLabel* label, int length)
     label->setText(getReadableTimeFromSeconds(length));
 }
 
-void SetWindowGeometry(QWidget* widget, const ppl7::String& name)
+void SetWindowGeometry(QWidget* widget, const pplib::String& name)
 {
     widget->restoreGeometry(wm_main->GetGeometry(name));
     if (widget->pos().x() < 0) widget->move(0, widget->pos().y());
     if (widget->pos().y() < 0) widget->move(widget->pos().x(), 0);
 }
 
-void SaveWindowGeometry(QWidget* widget, const ppl7::String& name)
+void SaveWindowGeometry(QWidget* widget, const pplib::String& name)
 {
     wm_main->SaveGeometry(name, widget->saveGeometry());
 }
 
-ppl7::String getReadableTimeFromSeconds(int seconds)
+pplib::String getReadableTimeFromSeconds(int seconds)
 {
-    ppl7::String Tmp;
+    pplib::String Tmp;
     int hours = (int)(seconds / 3600);
     int rest = seconds - (hours * 3600);
     int minutes = (int)(rest / 60);
@@ -526,10 +526,10 @@ ppl7::String getReadableTimeFromSeconds(int seconds)
     return Tmp;
 }
 
-ppl7::String ToString(const QString& fmt, ...)
+pplib::String ToString(const QString& fmt, ...)
 {
     const char* utf8fmt = fmt.toUtf8().constData();
-    ppl7::String s;
+    pplib::String s;
     va_list args;
     va_start(args, fmt);
     s.vasprintf(utf8fmt, args);
@@ -537,7 +537,7 @@ ppl7::String ToString(const QString& fmt, ...)
     return s;
 }
 
-void ShowException(const ppl7::Exception& exp, const QString& msg)
+void ShowException(const pplib::Exception& exp, const QString& msg)
 {
     QString m;
     if (!msg.isEmpty()) {

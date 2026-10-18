@@ -84,7 +84,7 @@ void SearchlistTrackDialog::set(const SearchlistItem& track)
     }
 
     ui.releaseDateEdit->setText(track.ReleaseDate.get("%Y-%m-%d"));
-    if (track.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", track.Length / 60, track.Length % 60));
+    if (track.Length > 0) ui.lengthEdit->setText(pplib::ToString("%i:%02i", track.Length / 60, track.Length % 60));
     ui.rating->setCurrentIndex(track.Rating);
 }
 
@@ -104,14 +104,14 @@ void SearchlistTrackDialog::setFromClipboard()
         ui.shopURLEdit->setText(match.ShopURL);
         // ui.tagsEdit->setText(match.Tags);
         // ui.commentEdit->setText(match.Comment);
-        if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
+        if (match.Length > 0) ui.lengthEdit->setText(pplib::ToString("%i:%02i", match.Length / 60, match.Length % 60));
 
         if (match.ShopURL.notEmpty()) {
-            ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-            ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+            pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
             MetaData meta;
             if (CoverDownload(match.ShopURL, coverfile, meta)) {
-                ui.lengthEdit->setText(ppl7::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
+                ui.lengthEdit->setText(pplib::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
                 Track.CoverFilename = meta.CoverFile;
                 ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
                 if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
@@ -122,10 +122,10 @@ void SearchlistTrackDialog::setFromClipboard()
     }
 }
 
-void SearchlistTrackDialog::setFromUrl(const ppl7::String& url)
+void SearchlistTrackDialog::setFromUrl(const pplib::String& url)
 {
-    ppl7::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    ppl7::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+    pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
     MetaData meta;
     if (CoverDownload(url, coverfile, meta)) {
         RegExpMatch match;
@@ -151,7 +151,7 @@ void SearchlistTrackDialog::setFromUrl(const ppl7::String& url)
         ui.shopURLEdit->setText(match.ShopURL);
         // ui.tagsEdit->setText(match.Tags);
         // ui.commentEdit->setText(match.Comment);
-        if (match.Length > 0) ui.lengthEdit->setText(ppl7::ToString("%i:%02i", match.Length / 60, match.Length % 60));
+        if (match.Length > 0) ui.lengthEdit->setText(pplib::ToString("%i:%02i", match.Length / 60, match.Length % 60));
 
         Track.CoverFilename = meta.CoverFile;
         ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
@@ -168,26 +168,26 @@ SearchlistItem SearchlistTrackDialog::get() const
     track.found = Track.found;
     track.selected = Track.selected;
     track = Track; // Bisherige Daten übernehmen, insbesondere Datum der Anlage
-    track.Artist = ppl7::Trim(ppl7::String(ui.artistEdit->text()));
-    track.Title = ppl7::Trim(ppl7::String(ui.titleEdit->text()));
-    track.Version = ppl7::Trim(ppl7::String(ui.versionEdit->text()));
-    track.Genre = ppl7::Trim(ppl7::String(ui.genreEdit->text()));
-    track.Comment = ppl7::Trim(ppl7::String(ui.commentEdit->text()));
-    track.Label = ppl7::Trim(ppl7::String(ui.labelEdit->text()));
-    track.ShopURL = ppl7::Trim(ppl7::String(ui.shopURLEdit->text()));
-    track.Tags = ppl7::Trim(ppl7::String(ui.tagsEdit->text()));
-    track.Key = ppl7::Trim(ppl7::String(ui.keyEdit->text()));
-    track.Bpm = ppl7::Trim(ppl7::String(ui.bpmEdit->text()));
+    track.Artist = pplib::Trim(pplib::String(ui.artistEdit->text()));
+    track.Title = pplib::Trim(pplib::String(ui.titleEdit->text()));
+    track.Version = pplib::Trim(pplib::String(ui.versionEdit->text()));
+    track.Genre = pplib::Trim(pplib::String(ui.genreEdit->text()));
+    track.Comment = pplib::Trim(pplib::String(ui.commentEdit->text()));
+    track.Label = pplib::Trim(pplib::String(ui.labelEdit->text()));
+    track.ShopURL = pplib::Trim(pplib::String(ui.shopURLEdit->text()));
+    track.Tags = pplib::Trim(pplib::String(ui.tagsEdit->text()));
+    track.Key = pplib::Trim(pplib::String(ui.keyEdit->text()));
+    track.Bpm = pplib::Trim(pplib::String(ui.bpmEdit->text()));
     try {
-        track.ReleaseDate.set(ppl7::Trim(ppl7::String(ui.releaseDateEdit->text())));
+        track.ReleaseDate.set(pplib::Trim(pplib::String(ui.releaseDateEdit->text())));
     }
     catch (...) {
         track.ReleaseDate.clear();
     }
     track.Rating = ui.rating->currentIndex();
-    ppl7::String Tmp = ppl7::Trim(ppl7::String(ui.lengthEdit->text()));
-    std::vector<ppl7::String> matches;
-    if (ppl7::RegEx::capture("/^([0-9]+):([0-9]{2})$/", Tmp, matches)) {
+    pplib::String Tmp = pplib::Trim(pplib::String(ui.lengthEdit->text()));
+    std::vector<pplib::String> matches;
+    if (pplib::RegEx::capture("/^([0-9]+):([0-9]{2})$/", Tmp, matches)) {
         track.Length = matches.at(1).toInt() * 60 + matches.at(2).toInt();
     } else {
         track.Length = 0;
@@ -207,7 +207,7 @@ void SearchlistTrackDialog::on_cancelButton_clicked()
 
 void SearchlistTrackDialog::on_coverwidget_imageChanged(const QPixmap& NewCover)
 {
-    // ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageChanged\n");
+    // pplib::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageChanged\n");
     /*
     Cover = NewCover;
     UpdateCover();
@@ -216,20 +216,20 @@ void SearchlistTrackDialog::on_coverwidget_imageChanged(const QPixmap& NewCover)
 
 void SearchlistTrackDialog::on_coverwidget_imageDeleted()
 {
-    // ppl7::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageDeleted\n");
+    // pplib::PrintDebug("SearchlistTrackDialog::on_coverwidget_imageDeleted\n");
     /*
     Cover = QPixmap();
     wm->UpdateCoverViewer(Cover);
     if (wm_main->conf.bWriteID3Tags == true) {
-        ppl7::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
+        pplib::String Path = wm->GetAudioFilename(DeviceType, DeviceId, Page, TrackNum);
         if (Path.notEmpty()) {
             try {
-                ppl7::ID3Tag Tag;
+                pplib::ID3Tag Tag;
                 Tag.load(Path);
                 Tag.removePicture(3);
                 Tag.save();
             }
-            catch (const ppl7::Exception& exp) {
+            catch (const pplib::Exception& exp) {
                 ShowException(exp, tr("could not remove cover picture from audio file"));
             }
         }

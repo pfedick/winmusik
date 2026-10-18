@@ -37,7 +37,7 @@ public:
 
     void set(const SearchlistItem& track);
     void setFromClipboard();
-    void setFromUrl(const ppl7::String& url);
+    void setFromUrl(const pplib::String& url);
     SearchlistItem get() const;
 
 private:
