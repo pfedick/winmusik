@@ -69,6 +69,9 @@ WinMusik verwendet set_locale, um die Locale-Einstellungen der Anwendung auf UTF
 
 Noch ungestestet sind die "ifdefs" in pplib/types/string.h für Qt6. Diese sorgend dafür, dass QString in pplib::String gewandelt wird und umgekehrt. Hier könnten noch Fehler vorhanden sein.
 
+# Entscheidungen
+- AudioCD / CDDB: Dieses Feature wurde in der GUI lange nicht mehr benutzt. Die CDDB und freedb.org existieren nicht mehr. Das Feature wird daher hier ausgebaut und in pplib8 nicht mehr implementiert. Falls wir es in Zukunft wieder benötigen, können wir eine passende Implementierung in der Gui oder in wmlib nachreichen.
+
 
 # Projektphasen
 - wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
