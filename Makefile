@@ -54,24 +54,16 @@ PPLIB8_CMAKE_FLAGS = \
 ###########################################################################
 
 
-.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure translations
+.PHONY: gui release debug all wmlib update_version clean distclean history gui_release gui_debug wmlib_release wmlib_debug configure translations
 
 
-release: ppl7_release pplib8_release wmlib_release gui_release
+release: pplib8_release wmlib_release gui_release
 
-debug: ppl7_debug pplib8_debug wmlib_debug gui_debug
+debug: pplib8_debug wmlib_debug gui_debug
 
-configure: autoconf_configure pplib8_configure wmlib_configure
-
-autoconf_configure:
-	./configure --enable-gtest=`pwd`/wmlib/tests/googletest-release-1.10.0
-	#cmake -S pplib -B pplib/build -DCMAKE_BUILD_TYPE=Release
-
+configure: pplib8_configure wmlib_configure
 
 all: release debug
-
-ppl7: ppl7_release ppl7_debug
-
 
 wmlib: wmlib_release wmlib_debug
 
@@ -88,7 +80,6 @@ update_version:
 	@diff tmp/version.h gui/include/version.h > /dev/null 2>&1; if [ $$? -ne 0 ] ; then cp tmp/version.h gui/include/version.h; fi
 
 mingw: update_version
-	mingw32-make -j8 ppl7_release
 	mingw32-make -j8 wmlib_release
 	mingw32-make -j8 gui_release
 	mingw32-make translations
@@ -106,7 +97,7 @@ mingw: update_version
 		> setup.iss
 
 mingw_debug: update_version
-	mingw32-make -j8 ppl7_debug
+
 	mingw32-make -j8 wmlib_debug
 	mingw32-make -j8 gui_debug
 	
@@ -156,8 +147,6 @@ wmlib_tests: pplib8_debug
 		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=OFF
 	cmake --build build/wmlib-tests --target wmlib_test
 
-	
-
 wmlib_coverage:
 	cmake -B build/wmlib-coverage -DCMAKE_BUILD_TYPE=Debug \
 		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=ON
@@ -170,26 +159,16 @@ wmlib_coverage:
 	@echo "Report: coverage_html/index.html"
 
 
-###########################################################################
-### RELEASE
-###########################################################################
-ppl7_release:
-	$(MAKE) --directory=pplib release/libppl7-core.a release/libppl7-crypto.a release/libppl7-inet.a release/libppl7-audio.a
-	ar -r pplib/release/libpplib.a pplib/release/*.o
 
+###########################################################################
+### GUI
+###########################################################################
 
 gui_release: update_version
 	cmake -S . -B build/gui-release -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
 	cmake --build build/gui-release --target WinMusik
 	mkdir -p release
 	cp build/gui-release/WinMusik$(EXE) release/WinMusik$(EXE)
-
-###########################################################################
-### DEBUG
-###########################################################################
-ppl7_debug:
-	$(MAKE) --directory=pplib debug/libppl7-core.a debug/libppl7-crypto.a debug/libppl7-inet.a debug/libppl7-audio.a
-	ar -r pplib/debug/libpplib.a pplib/debug/*.o
 
 gui_debug: update_version
 	cmake -S . -B build/gui-debug -DCMAKE_BUILD_TYPE=Debug -DWINMUSIK_BUILD_GUI=ON
