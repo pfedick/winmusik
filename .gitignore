@@ -64,3 +64,4 @@ autoconf/autom4te.cache
 configure~
 history.tmp
 .github/copilot-instructions.md
+compile_commands.json

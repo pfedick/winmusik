@@ -69,24 +69,26 @@ PPLIB8_CMAKE_FLAGS = \
 .PHONY: gui release debug all ppl7 wmlib update_version clean distclean history qmake-info gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure
 
 
+release: ppl7_release pplib8_release wmlib_release gui_release
+
+debug: ppl7_debug pplib8_debug wmlib_debug gui_debug
+
 qmake-info:
 	@echo "QMAKE = $(QMAKE)"
 	@$(QMAKE) -query QT_VERSION
 	@$(QMAKE) -query QT_INSTALL_BINS
 
-configure: autoconf_configure pplib8_configure
+configure: autoconf_configure pplib8_configure wmlib_configure
 
 autoconf_configure:
 	./configure --enable-gtest=`pwd`/wmlib/tests/googletest-release-1.10.0
 	#cmake -S pplib -B pplib/build -DCMAKE_BUILD_TYPE=Release
 
-release: ppl7_release pplib8_release wmlib_release gui_release
-
-debug: ppl7_debug pplib8_debug wmlib_debug gui_debug
 
 all: release debug
 
 ppl7: ppl7_release ppl7_debug
+
 
 wmlib: wmlib_release wmlib_debug
 
@@ -156,13 +158,35 @@ pplib8_test: pplib8_debug
 ### wmlib
 ###########################################################################
 
-wmlib_release: pplib8_release ppl7_release
+wmlib_configure:
+	cmake -S wmlib -B build/wmlib-debug -DCMAKE_BUILD_TYPE=Debug
+	cmake -S wmlib -B build/wmlib-release -DCMAKE_BUILD_TYPE=Release
+
+wmlib_release: pplib8_release
 	cmake -S wmlib -B build/wmlib-release -DCMAKE_BUILD_TYPE=Release
 	cmake --build build/wmlib-release -j
 
-wmlib_debug: pplib8_debug ppl7_debug
+wmlib_debug: pplib8_debug
 	cmake -S wmlib -B build/wmlib-debug -DCMAKE_BUILD_TYPE=Debug
 	cmake --build build/wmlib-debug -j
+
+wmlib_tests: pplib8_debug
+	cmake -B build/wmlib-tests -DCMAKE_BUILD_TYPE=Debug \
+		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=OFF
+	cmake --build build/wmlib-tests --target wmlib_test
+
+	
+
+wmlib_coverage:
+	cmake -B build/wmlib-coverage -DCMAKE_BUILD_TYPE=Debug \
+		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=ON
+	ln -sf build/wmlib-coverage/compile_commands.json compile_commands.json
+	cmake --build build/wmlib-coverage --target wmlib_test
+	cd wmlib/tests && ../../build/wmlib-coverage/tests/wmlib_test
+	mkdir -p coverage_html
+	gcovr --root . build/wmlib-coverage --filter wmlib/src --medium-threshold 70 \
+		--exclude-throw-branches --html-details coverage_html/index.html --xml-pretty -o coverage.xml
+	@echo "Report: coverage_html/index.html"
 
 
 ###########################################################################
@@ -215,14 +239,12 @@ clean:
 	@rm -rf gui/release gui/debug gui/Makefile* release debug pplib/debug lib/compile
 	@rm -rf gui/ui_*.h
 	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
-	-@ $(MAKE) --directory=wmlib clean > /dev/null 2>&1
 
 distclean: clean
 	@rm -rf gui/Makefile* gui/WinMusik.pro .qmake.stash autom4te.cache
 	@rm -rf config.log config.status
 	@rm -rf Package/WinMusik.desktop
 	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
-	-@ $(MAKE) --directory=wmlib distclean > /dev/null 2>&1
 
 
 gui/Makefile: gui/WinMusik.pro

@@ -22,7 +22,11 @@
 #define WM_ID3TAGSAVER_H
 
 #include <list>
-#include <ppl7.h>
+#include <pplib/core/thread.h>
+#include <pplib/core/time.h>
+#include <pplib/core/logging.h>
+#include <pplib/types/string.h>
+#include <pplib/types/assocarray.h>
 
 namespace de
 {
@@ -31,23 +35,23 @@ namespace pfp
 namespace winmusik
 {
 
-class CID3TagSaver : public ppl7::Thread
+class CID3TagSaver : public pplib::Thread
 {
 private:
     class WorkItem
     {
     public:
-        ppl7::String Filename;
-        ppl7::AssocArray Tags;
-        ppl7::ppl_time_t retry;
+        pplib::String Filename;
+        pplib::AssocArray Tags;
+        pplib::ppl_time_t retry;
         int retry_counter;
         bool cleartag;
         WorkItem();
-        WorkItem(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag = false);
+        WorkItem(const pplib::String& filename, const pplib::AssocArray& Tags, bool cleartag = false);
     };
-    ppl7::Mutex Mutex;
+    pplib::Mutex Mutex;
     std::list<WorkItem> Queue;
-    ppl7::Logger* logger;
+    pplib::Logger* logger;
     int PaddingSize;
     int RetryIntervall;
     void UpdateNow(CID3TagSaver::WorkItem& item);
@@ -56,12 +60,12 @@ private:
 public:
     CID3TagSaver();
     ~CID3TagSaver();
-    void SetLogger(ppl7::Logger* logger);
+    void SetLogger(pplib::Logger* logger);
 
     void SetPaddingSize(int bytes);
     void SetRetryIntervall(int seconds);
     virtual void run();
-    void Add(const ppl7::String& filename, const ppl7::AssocArray& Tags, bool cleartag = false);
+    void Add(const pplib::String& filename, const pplib::AssocArray& Tags, bool cleartag = false);
 };
 
 } // namespace winmusik

@@ -66,12 +66,38 @@ Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier b
 
 
 # Projektphasen
-1. pplib8 einbinden
-3. wmlib auf CMake umstellen
-4. wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
+- wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
+
+## Migration auf pplib8
+- Namespace ändert sich von ppl7 auf pplib
+- Klassennamen sind weitestgehnd gleich
+- Includes sind zwar weiterhin über zentrale Aggregate-Dateien verfügbar, ähnlich wie vorher über "ppl7.h", es wird aber empfohlen, die spezifischen Header-Dateien direkt einzubinden, um Abhängigkeiten klar zu machen.
+- Größere, API-brechende Änderungen sind in pplib::File und pplib::Dir erfolgt.
+- Unter Umständen sind in pplib mehr Funktionen verfügbar oder für spezielle Anwendungsfälle bessere Alternativen vorhanden (std-kompatible Itteratoren zum Beispiel)
+- pplib8 hat eine hohe Testabdeckung und ein Großteil des Codes wurde mehreren Code-Reviews unterzogen. WinMusik ist aber der erste größere Verbraucher der Bibliothek, es könnten also noch unerwartete Probleme oder subtile Fehler auftreten.
+
+Wichtige Klassen mit ihren Header-Dateien:
+- pplib::String - <pplib/types/string.h>
+- pplib::WideString - <pplib/types/widestring.h>
+- pplib::AssocArray - <pplib/types/assocarray.h>
+- pplib::ByteArray - <pplib/types/bytearray.h>
+- pplib::ByteArrayPtr - <pplib/types/bytearrayptr.h>
+- pplib::DateTime - <pplib/types/datetime.h>
+- pplib::Variant - <pplib/types/variant.h>
+
+- pplib::Mutex - <pplib/core/mutex.h>
+- pplib::Logger - <pplib/core/logging.h>
+- pplib::Thread - <pplib/core/thread.h>
+- pplib::ppl_time_t - <pplib/core/time.h>
+
+Verschiedene Funktionen:
+- <pplib/core/functions.h>
+- <pplib/core/stringfunctions.h>
+
 
 
 # Erledigt
 - Vorhandener Code muss wieder kompilieren
 - Zentrales Makefile anpassen
 - Einbindung von pplib8 in das bestehende WinMusik-Projekt
+- wmlib auf CMake umstellen
