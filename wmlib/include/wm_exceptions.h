@@ -1,7 +1,8 @@
-/*
- * This file is part of WinMusik 3 by Patrick Fedick
+/*******************************************************************************
+ * This file is part of WinMusik 4 by Patrick Fedick
+ * Web: https://github.com/pfedick/winmusik
  *
- * Copyright (c) 2024, Patrick Fedick
+ * Copyright (c) 2026, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,18 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
+ *******************************************************************************/
 
 #ifndef WM_EXCEPTIONS_H
 #define WM_EXCEPTIONS_H
 
 #include <ppl7.h>
 
-namespace de {
-namespace pfp {
-namespace winmusik {
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 PPL7EXCEPTION(InvalidDatabaseFileException, Exception);
 PPL7EXCEPTION(DatabaseFileNotOpenException, Exception);
@@ -43,12 +45,10 @@ PPL7EXCEPTION(InvalidTrackNumberException, Exception);
 PPL7EXCEPTION(TrackDoesNotExistException, Exception);
 PPL7EXCEPTION(DeviceAlreadyExistsException, Exception);
 
-
-
 PPL7EXCEPTION(DatabaseRecordWasModifiedException, Exception)
 PPL7EXCEPTION(CouldNotReadDatabaseRecordException, Exception)
 
-}
-}
-}	// EOF Namespace de.pfp.winmusik
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 #endif // WM_EXCEPTIONS_H

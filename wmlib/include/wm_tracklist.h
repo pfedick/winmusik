@@ -1,7 +1,8 @@
-/*
- * This file is part of WinMusik 3 by Patrick Fedick
+/*******************************************************************************
+ * This file is part of WinMusik 4 by Patrick Fedick
+ * Web: https://github.com/pfedick/winmusik
  *
- * Copyright (c) 2024, Patrick Fedick
+ * Copyright (c) 2026, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *******************************************************************************/
 
 #ifndef WM_TRACKLIST_H
 #define WM_TRACKLIST_H
@@ -23,11 +24,12 @@
 #include <ppl7.h>
 #include <map>
 
-
-
-namespace de {
-namespace pfp {
-namespace winmusik {
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 class DataTrack;
 class CTrackStore;
@@ -36,18 +38,18 @@ class CTitleStore;
 class CTrackList
 {
     friend class CTrackStore;
+
 private:
     std::map<int, DataTrack> Tracks;
     CTrackStore* storage;
-    uint32_t	DeviceId;
-    uint8_t	DeviceType;
-    uint8_t	Page;
+    uint32_t DeviceId;
+    uint8_t DeviceType;
+    uint8_t Page;
 
     DataTrack* SaveToMemory(const DataTrack& t);
     void SaveToStorage(DataTrack& t);
     void Add(uint16_t Track, const DataTrack& t);
     void copy(const CTrackList& other);
-
 
 public:
     typedef std::map<int, DataTrack>::iterator iterator;
@@ -68,20 +70,17 @@ public:
     bool Exists(int track) const;
     const DataTrack& Put(const DataTrack& entry);
     void Delete(int track);
-    //void DeleteShift(int track, CTitleStore* tistore);
-    //void InsertShift(int track, CTitleStore* tistore);
+    // void DeleteShift(int track, CTitleStore* tistore);
+    // void InsertShift(int track, CTitleStore* tistore);
 
     iterator begin();
     iterator end();
     const_iterator begin() const;
     const_iterator end() const;
-
-
 };
 
-
-}
-}
-}
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 
 #endif // WM_TRACKLIST_H

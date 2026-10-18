@@ -1,7 +1,8 @@
-/*
- * This file is part of WinMusik 3 by Patrick Fedick
+/*******************************************************************************
+ * This file is part of WinMusik 4 by Patrick Fedick
+ * Web: https://github.com/pfedick/winmusik
  *
- * Copyright (c) 2024, Patrick Fedick
+ * Copyright (c) 2026, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *******************************************************************************/
 
 #ifndef WM_NORMALIZER_H
 #define WM_NORMALIZER_H
@@ -26,44 +27,39 @@
 #include <map>
 #include <ppl7.h>
 
-
-namespace de {
-namespace pfp {
-namespace winmusik {
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 class WMNormalizer
 {
 private:
-	std::map<wchar_t, wchar_t> letterReplacements;
-	std::map<wchar_t, wchar_t> filenameLetterReplacements;
+    std::map<wchar_t, wchar_t> letterReplacements;
+    std::map<wchar_t, wchar_t> filenameLetterReplacements;
 
-	void initLetterReplacements();
-	void initFilenameLetterReplacements();
-	void addLetterReplacement(wchar_t letter, wchar_t replacement);
-	void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
-	void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
-	void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term) const;
-
+    void initLetterReplacements();
+    void initFilenameLetterReplacements();
+    void addLetterReplacement(wchar_t letter, wchar_t replacement);
+    void addLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
+    void addFilenameLetterReplacement(const ppl7::WideString& letters, wchar_t replacement);
+    void NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, ppl7::WideString& term) const;
 
 public:
-	WMNormalizer();
+    WMNormalizer();
 
-	void NormalizeTerm(ppl7::String& term) const;
-	void NormalizeFilename(ppl7::String& term) const;
+    void NormalizeTerm(ppl7::String& term) const;
+    void NormalizeFilename(ppl7::String& term) const;
 
-	size_t GetWords(const ppl7::String& str, ppl7::Array& words) const;
-
-
-
+    size_t GetWords(const ppl7::String& str, ppl7::Array& words) const;
 };
-
 
 const WMNormalizer& GetNormalizer();
 
-
-}
-}
-}	// EOF Namespace de.pfp.winmusik
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 
 #endif /* WM_NORMALIZER_H */

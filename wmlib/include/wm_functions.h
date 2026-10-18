@@ -1,7 +1,8 @@
-/*
- * This file is part of WinMusik 3 by Patrick Fedick
+/*******************************************************************************
+ * This file is part of WinMusik 4 by Patrick Fedick
+ * Web: https://github.com/pfedick/winmusik
  *
- * Copyright (c) 2024, Patrick Fedick
+ * Copyright (c) 2026, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +16,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *******************************************************************************/
 
 #ifndef WM_FUNCTIONS_H
 #define WM_FUNCTIONS_H
 #include <ppl7.h>
 
-namespace de {
-namespace pfp {
-namespace winmusik {
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 uint8_t Peek8(const ppl7::ByteArrayPtr& buffer, size_t offset);
 uint16_t Peek16(const ppl7::ByteArrayPtr& buffer, size_t offset);
@@ -33,8 +37,8 @@ uint64_t Peek64(const ppl7::ByteArrayPtr& buffer, size_t offset);
 ppl7::ByteArrayPtr SubBuffer(const ppl7::ByteArrayPtr& buffer, size_t offset, size_t size);
 ppl7::String PeekString(const ppl7::ByteArrayPtr& buffer, size_t offset, size_t size);
 
-}
-}
-}	// EOF Namespace de.pfp.winmusik
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 
 #endif // WM_FUNCTIONS_H

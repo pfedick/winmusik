@@ -1,7 +1,8 @@
-/*
- * This file is part of WinMusik 3 by Patrick Fedick
+/*******************************************************************************
+ * This file is part of WinMusik 4 by Patrick Fedick
+ * Web: https://github.com/pfedick/winmusik
  *
- * Copyright (c) 2024, Patrick Fedick
+ * Copyright (c) 2026, Patrick Fedick
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,41 +16,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *******************************************************************************/
 
 #ifndef LIBWINMUSIK3_H_
 #define LIBWINMUSIK3_H_
 
-#include <ppl7.h>
-#include <ppl7-config.h>
 #include <map>
 #include <wm_musicalkeys.h>
 #include <wm_cwmfile.h>
 #include <wm_storage.h>
 
-
-namespace de {
-namespace pfp {
-namespace winmusik {
-
-
-
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 class CProgressUpdate
 {
 public:
-	virtual void ProgressUpdate(int progress)=0;
+    virtual void ProgressUpdate(int progress) = 0;
 };
 
-
-
-
-
-}
-}
-}
-
-
+} // namespace winmusik
+} // namespace pfp
+} // namespace de
 
 #endif /* LIBWINMUSIK3_H_ */
