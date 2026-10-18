@@ -4,8 +4,9 @@ Stand: 2026-10-18. Erzeugt durch Auswertung aller `ppl7::`-Vorkommen in `wmlib/`
 sowie Vergleich der Header von `pplib/include/ppl7*` mit `pplib8/include/pplib*`.
 
 **Status:** wmlib ist vollständig auf pplib8 umgestellt — `make wmlib_tests` baut durch, alle
-53 Tests grün. Offene Punkte: CDDB/AudioCD in pplib8 (nur GUI betreffend, siehe Abschnitt 7)
-und die GUI als Ganzes.
+53 Tests grün. Die GUI ist jetzt in CMake eingebunden (siehe Abschnitt 8); ihre Migration ist
+der nächste Schritt. Offene Punkte: CDDB/AudioCD in pplib8 (nur GUI betreffend, siehe
+Abschnitt 7) und die GUI als Ganzes.
 
 ## 1. Ausgangslage
 
@@ -214,3 +215,47 @@ Für die erste Phase zurückgestellt. Besondere Brocken: `Dir`-Iteration (6 Date
   einen Typ `pplib::Curl`, den es in pplib8 nicht gibt. wmlib braucht nur `ID3Tag`, daher
   dort `<pplib/audio/id3tag.h>` statt des Aggregat-Headers. Betrifft die GUI erst, wenn
   CDDB/AudioCD umgesetzt wird.
+- Der Sweep hat `#include <ppl7.h>` übersehen (nur `ppl7-*.h` wurden getauscht). Neun GUI-
+  Dateien include-n weiterhin `ppl7.h`: `include/winmusik3.h`, `include/coverdownloadmanager.h`,
+  `include/csearchlist.h`, `include/musickey.h`, `include/resultfilter.h`,
+  `src/editor/edit-functions.cpp`, `src/playlist/playlistprint.cpp`, `src/regexpcapture.cpp`,
+  `widgets/wmcoverwidget.cpp`.
+
+## 8. GUI-Build mit CMake
+
+`gui/WinMusik.pro` (qmake) ist durch `gui/CMakeLists.txt` ersetzt; die Qt-Codegenerierung
+übernimmt CMake (`AUTOMOC`, `AUTOUIC`, `AUTORCC`). `gui/WinMusik.pro` wird von `configure`
+aus `gui/WinMusik.pro.in` erzeugt — mit dem qmake-Pfad entfallen `AC_CONFIG_FILES([gui/WinMusik.pro])`
+in `configure.ac` sowie `WinMusik.pro.in`/`WinMusik.pro.header`.
+
+Build (Root-`Makefile`):
+
+- `make gui_debug` → konfiguriert `build/gui-debug` mit `-DWINMUSIK_BUILD_GUI=ON`, baut
+  `pplib8` + `wmlib` + `WinMusik` und kopiert nach `debug/WinMusik`
+- `make gui_release` → analog in `build/gui-release`, Kopie nach `release/WinMusik`
+- `make translations` → `lupdate`/`lrelease` über die eingecheckten `.ts`-Dateien (setzt
+  Qt6 LinguistTools voraus; ohne dieses Paket meldet CMake nur eine Statusmeldung)
+
+Wichtige Punkte der neuen Konfiguration:
+
+- Qt-Module: `Core Gui Widgets Xml Network PrintSupport` (`Xml` wegen `QDomDocument` in
+  `editor/edit.cpp` und den Searchlists, `PrintSupport` wegen `coverprinter`/`playlistprint`).
+- Include-Verzeichnisse: `gui/` (selbst, wegen `#include "src/menue/menue.h"`), `gui/include`,
+  `gui/widgets`. Die alten Pfade `../pplib/include` (pplib7) und `../lib/include` sind entfallen.
+- `target_compile_definitions(... PPL_WITH_QT6 PPL_QT_STRING_UTF8)`: erst diese Makros
+  aktivieren in `pplib/types/string.h` und `widestring.h` die QString-/QVariant-Konstruktoren
+  und -Operatoren. `PPL_WITH_QT6` definiert `WITH_QT` dabei selbst; `PPL_QT_STRING_UTF8`
+  stellt die Konvertierung von `QString` ↔ `WideString` auf UTF-8 um (statt `toLocal8Bit()`),
+  was zum UTF-8-Encoding aller WinMusik-Strings passt. Es sind ausschließlich Inline-Funktionen,
+  die Datendarstellung von `String`/`WideString` ändert sich nicht — die Definition nur im
+  GUI-Target ist damit ABI-verträglich. **Diese Ifdefs sind damit erstmals real übersetzt und
+  müssen beim GUI-Test besonders beobachtet werden.**
+- Externe Bibliotheken (`z`, `bz2`, `pcre2`, `ssl`, `crypto`, `curl`) werden über die
+  pplib8-Targets propagiert und sind nicht mehr separat zu nennen. `-lcdio` ist entfallen
+  (pplib8 kennt cdio nicht; nach CDDB/AudioCD-Rauswurf braucht die GUI es nicht mehr).
+- `resource.rc` (Icon) und `winmm` sind nur unter `WIN32` aktiv, `add_executable(... WIN32)`
+  erzeugt wie bisher eine Windows-Anwendung ohne Konsole.
+- Die `.qm`-Dateien bleiben eingecheckt und werden über `resources.qrc` (Präfix `/translation`)
+  eingebettet; CMake erzeugt sie nicht automatisch.
+- Toter Ballast, der beim ersten sauberen Build auffällt: `gui/src/player/player.{h,ui}` und
+  `gui/src/exporttracks/exporttracks.ui` gehören zu keiner übersetzten Quelle.

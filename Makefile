@@ -66,7 +66,7 @@ PPLIB8_CMAKE_FLAGS = \
 ###########################################################################
 
 
-.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history qmake-info gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure
+.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history qmake-info gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure translations
 
 
 release: ppl7_release pplib8_release wmlib_release gui_release
@@ -107,9 +107,8 @@ update_version:
 mingw: update_version
 	mingw32-make -j8 ppl7_release
 	mingw32-make -j8 wmlib_release
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 	mingw32-make -j8 gui_release
-	cd gui && lupdate.exe WinMusik.pro
+	mingw32-make translations
 	rm -rf release/deploy
 	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
 	ldd release/WinMusik.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
@@ -126,7 +125,6 @@ mingw: update_version
 mingw_debug: update_version
 	mingw32-make -j8 ppl7_debug
 	mingw32-make -j8 wmlib_debug
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 	mingw32-make -j8 gui_debug
 	
 setup: mingw
@@ -197,13 +195,11 @@ ppl7_release:
 	ar -r pplib/release/libpplib.a pplib/release/*.o
 
 
-gui_release: gui/Makefile update_version
-	mkdir -p gui/release
-	rm -rf gui/release/WinMusik
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
-	$(MAKE) --directory=gui release
+gui_release: update_version
+	cmake -S . -B build/gui-release -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
+	cmake --build build/gui-release --target WinMusik
 	mkdir -p release
-	cp gui/release/WinMusik release/WinMusik
+	cp build/gui-release/WinMusik$(EXE) release/WinMusik$(EXE)
 
 ###########################################################################
 ### DEBUG
@@ -212,13 +208,11 @@ ppl7_debug:
 	$(MAKE) --directory=pplib debug/libppl7-core.a debug/libppl7-crypto.a debug/libppl7-inet.a debug/libppl7-audio.a
 	ar -r pplib/debug/libpplib.a pplib/debug/*.o
 
-gui_debug: gui/Makefile update_version
-	mkdir -p gui/debug
-	rm -rf gui/debug/WinMusik
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
-	$(MAKE) --directory=gui debug
+gui_debug: update_version
+	cmake -S . -B build/gui-debug -DCMAKE_BUILD_TYPE=Debug -DWINMUSIK_BUILD_GUI=ON
+	cmake --build build/gui-debug --target WinMusik
 	mkdir -p debug
-	cp gui/debug/WinMusik debug/WinMusik
+	cp build/gui-debug/WinMusik$(EXE) debug/WinMusik$(EXE)
 
 ###########################################################################
 ### Tests
@@ -229,26 +223,28 @@ test:
 
 
 ###########################################################################
+### Uebersetzungen
+###########################################################################
+translations:
+	cmake -S . -B build/gui-release -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
+	cmake --build build/gui-release --target translations
+
+
+###########################################################################
 ### MISC
 ###########################################################################
 
 clean:
 	@rm -rf documentation release debug build
 	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
-	-@ $(MAKE) --directory=gui clean > /dev/null 2>&1
-	@rm -rf gui/release gui/debug gui/Makefile* release debug pplib/debug lib/compile
-	@rm -rf gui/ui_*.h
+	@rm -rf gui/release gui/debug release debug pplib/debug lib/compile
 	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
 
 distclean: clean
-	@rm -rf gui/Makefile* gui/WinMusik.pro .qmake.stash autom4te.cache
+	@rm -rf .qmake.stash autom4te.cache
 	@rm -rf config.log config.status
 	@rm -rf Package/WinMusik.desktop
 	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
-
-
-gui/Makefile: gui/WinMusik.pro
-	cd gui; $(QMAKE) INCLUDEPATH+=../pplib/include INCLUDEPATH+=../lib/include WinMusik.pro
 
 
 history:
