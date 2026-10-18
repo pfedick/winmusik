@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "wm_cwmfile.h"
 #include "wm_storage.h"
 #include "wm_exceptions.h"
@@ -153,6 +155,7 @@ DataDevice::DataDevice()
     DeviceId = 0;
     Length = 0;
     Recorded = 0;
+    LabelId = 0;
     PurchaseDate = 0;
     DateCreated = 0;
     FirstDate = 0;

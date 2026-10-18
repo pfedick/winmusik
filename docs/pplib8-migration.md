@@ -3,6 +3,10 @@
 Stand: 2026-10-18. Erzeugt durch Auswertung aller `ppl7::`-Vorkommen in `wmlib/` und `gui/`
 sowie Vergleich der Header von `pplib/include/ppl7*` mit `pplib8/include/pplib*`.
 
+**Status:** wmlib ist vollständig auf pplib8 umgestellt — `make wmlib_tests` baut durch, alle
+53 Tests grün. Offene Punkte: CDDB/AudioCD in pplib8 (nur GUI betreffend, siehe Abschnitt 7)
+und die GUI als Ganzes.
+
 ## 1. Ausgangslage
 
 - `wmlib` ist auf CMake umgestellt und verlinkt bereits `pplib::core`, `pplib::audio`,
@@ -89,7 +93,8 @@ vermerkt.
 ### File / FileObject — kompatibel bis auf zwei Punkte
 - `read(buf, bytes, fileposition)` / `write(buf, bytes, fileposition)` existieren weiterhin in
   `pplib::FileObject` → `wmlib/src/CWMFile.cpp` ist übertragbar.
-- **`File::FileMode` ist jetzt `enum class`**: `ppl7::File::WRITE` → `pplib::FileMode::WRITE`
+- **`File::FileMode` ist jetzt `enum class`** (innerhalb von `File` verschachtelt):
+  `ppl7::File::WRITE` → `pplib::File::FileMode::WRITE`
   (20 Fundstellen: 7 in wmlib, 13 in gui).
 - **`map()`-Signatur geändert**: alt `const char* map(uint64_t, size_t)`,
   neu `char* map(uint64_t position, size_t size, MapProtection prot = MapProtection::READ)`.
@@ -193,6 +198,19 @@ Für die erste Phase zurückgestellt. Besondere Brocken: `Dir`-Iteration (6 Date
 
 - Nach Sweep, aber vor Include-Tausch, fehlt weiterhin `ppl7.h` → erst ab Batch 1 bauen.
 - `pplib::String` hat kein `toUtf8()`; in wmlib nicht genutzt, in gui schon.
-- `enum class FileMode` akzeptiert keine impliziten Vergleiche/Integer.
+- `enum class FileMode` akzeptiert keine impliziten Vergleiche/Integer. Schreibweise ist
+  `pplib::File::FileMode::WRITE` (FileMode ist in `File` verschachtelt, nicht auf Namespace-Ebene).
 - `DirEntry`-Felder (`Filename`, `Path`, `File`, `Size`) sind unverändert öffentliche Member.
 - pplib8-`String::toInt()`-Familie unverändert; `int64_t`/`uint64_t`-Overloads neu.
+- pplib8-Header ziehen keine C-Standard-Header mehr (`ppl7.h` tat das). Quellen, die
+  `memcpy`/`strlen`/`strcmp` nutzen, brauchen jetzt explizit `<string.h>`.
+- `AssocArray::get(key)` liefert `const Variant&` (nicht `String&`) → `.toString()` nötig.
+- pplib8-JSON-Parser legt Zahlen als `Int64`-Variant an, pplib7 speicherte sie als String.
+  `getString()` auf ein Zahlenfeld wirft deshalb `TypeConversionException` → `getInt()`
+  verwenden (betrifft `coverdownload.cpp`: `track_length_ms`, `length_ms`, `bpm`).
+- `WideString(const String&)` ist `explicit` → `WideString s = term;` kompiliert nicht,
+  `WideString s(term);` schon (`normalizer.cpp`).
+- `<pplib-audio.h>` ist derzeit nicht einbindbar: die deklarierte `CDDB`-Klasse referenziert
+  einen Typ `pplib::Curl`, den es in pplib8 nicht gibt. wmlib braucht nur `ID3Tag`, daher
+  dort `<pplib/audio/id3tag.h>` statt des Aggregat-Headers. Betrifft die GUI erst, wenn
+  CDDB/AudioCD umgesetzt wird.

@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
-#include "ppl7.h"
+#include <pplib.h>
 #include <gtest/gtest.h>
 #include "wmlib-tests.h"
 

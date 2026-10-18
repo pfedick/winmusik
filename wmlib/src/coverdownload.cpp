@@ -93,14 +93,14 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
 
         // 2. Länge (ms -> s)
         if (track.exists("track_length_ms")) {
-            meta.Length = track.getString("track_length_ms").toInt() / 1000;
+            meta.Length = track.getInt("track_length_ms") / 1000;
         } else if (track.exists("length_ms")) {
-            meta.Length = track.getString("length_ms").toInt() / 1000;
+            meta.Length = track.getInt("length_ms") / 1000;
         }
 
         // 3. BPM
         if (track.exists("bpm")) {
-            meta.Bpm = track.getString("bpm");
+            meta.Bpm = pplib::ToString("%d", track.getInt("bpm"));
         }
 
         // 4. Genre
@@ -149,7 +149,7 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
             while (track.exists(pplib::ToString("artists/%d", i))) {
                 const pplib::AssocArray& artist = track.getAssocArray(pplib::ToString("artists/%d", i));
                 if (meta.Artist.size() > 0) meta.Artist += ", ";
-                meta.Artist.append(artist.get("name"));
+                meta.Artist.append(artist.get("name").toString());
                 i++;
             }
         }
@@ -175,7 +175,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
         pplib::PrintDebug("HTTP-Error: %s\n", (const char*)response.error);
         // pplib::PrintDebug("HTTP-Body: %s\n", (const char*)response.body);
         response.body.toString().printnl();
-        pplib::File ff("tmp/beatport.html", pplib::File::WRITE);
+        pplib::File ff("tmp/beatport.html", pplib::File::FileMode::WRITE);
         ff.write(response.body);
         ff.close();
     }
@@ -187,7 +187,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
                               match)) {
         if (beatport_debug) {
             pplib::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
-            pplib::File ff("tmp/data.json", pplib::File::WRITE);
+            pplib::File ff("tmp/data.json", pplib::File::FileMode::WRITE);
             ff.write(pplib::ByteArrayPtr(match[1]));
             ff.close();
         }
@@ -209,7 +209,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
         pplib::HttpResponse coverResponse = pplib::HttpClient::get(meta.CoverUrl, req);
         if (coverResponse.statusCode == 200) {
             // pplib::PrintDebug("Cover download\n");
-            pplib::File ff(targetfile, pplib::File::WRITE);
+            pplib::File ff(targetfile, pplib::File::FileMode::WRITE);
             ff.write(coverResponse.body);
             ff.close();
             meta.CoverFile = targetfile;
@@ -240,7 +240,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
     if (pplib::RegEx::capture("/script id=\"__NEXT_DATA__\" type=\"application\\/json\">(.*?)<\\/script>/", pplib::String(response.body),
                               match)) {
         // pplib::PrintDebug("Found __NEXT_DATA__ script tag, parsing JSON data...");
-        // pplib::File ff("tmp/data.json", pplib::File::WRITE);
+        // pplib::File ff("tmp/data.json", pplib::File::FileMode::WRITE);
         // ff.write(match[1]);
         // ff.close();
         try {
@@ -278,7 +278,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
         pplib::HttpResponse coverResponse = pplib::HttpClient::get(CoverUrl, req);
         if (coverResponse.statusCode == 200) {
             // pplib::PrintDebug("Cover download\n");
-            pplib::File ff(targetfile, pplib::File::WRITE);
+            pplib::File ff(targetfile, pplib::File::FileMode::WRITE);
             ff.write(coverResponse.body);
             ff.close();
             return true;

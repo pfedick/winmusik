@@ -139,7 +139,7 @@ void WMNormalizer::NormalizeLetters(const std::map<wchar_t, wchar_t>& letters, p
 void WMNormalizer::NormalizeTerm(pplib::String& term) const
 {
     if (term.isEmpty()) return;
-    pplib::WideString s = term;
+    pplib::WideString s(term);
     pplib::WideString search, replace;
     s.lowerCase();
     replace.set(L" ");
@@ -170,7 +170,7 @@ void WMNormalizer::NormalizeTerm(pplib::String& term) const
 void WMNormalizer::NormalizeFilename(pplib::String& term) const
 {
     if (term.isEmpty()) return;
-    pplib::WideString s = term;
+    pplib::WideString s(term);
     s.replace(L"ß", L"ss");
     s.trim();
     NormalizeLetters(filenameLetterReplacements, s);

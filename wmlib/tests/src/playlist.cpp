@@ -25,7 +25,7 @@
 #include "libwinmusik3.h"
 #include "wm_playlist.h"
 
-#include "ppl7.h"
+#include <pplib.h>
 #include "wmlib-tests.h"
 
 namespace

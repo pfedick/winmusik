@@ -27,8 +27,7 @@
 #include <map>
 
 #include "wm_id3tagsaver.h"
-#include "ppl7.h"
-#include "ppl7-audio.h"
+#include <pplib.h>
 
 namespace {
 

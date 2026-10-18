@@ -24,7 +24,7 @@
 #include <gtest/gtest.h>
 #include "libwinmusik3.h"
 
-#include "ppl7.h"
+#include <pplib.h>
 #include "wmlib-tests.h"
 
 namespace

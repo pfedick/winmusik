@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "wm_storage.h"
 #include "wm_cwmfile.h"
 #include "wm_exceptions.h"

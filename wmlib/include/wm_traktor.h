@@ -23,7 +23,7 @@
 #include <map>
 #include <list>
 #include <pplib.h>
-#include <pplib-audio.h>
+#include <pplib/audio/id3tag.h>
 
 namespace de
 {

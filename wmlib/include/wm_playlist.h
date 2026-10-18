@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <list>
 #include <pplib.h>
-#include <pplib-audio.h>
 
 namespace de
 {

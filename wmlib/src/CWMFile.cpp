@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include "wm_cwmfile.h"
 #include "wm_exceptions.h"
 
@@ -174,7 +176,7 @@ void CWMFile::Open(const char* filename)
     if (!pplib::File::exists(filename)) {
         pplib::ByteArray Buffer(32);
         // Wenn die Datei noch nicht existiert, legen wir sie an
-        ff.open(filename, pplib::File::WRITE);
+        ff.open(filename, pplib::File::FileMode::WRITE);
         try {
             char* header = (char*)Buffer.ptr();
             memcpy(header, "PFP-File", 8);
@@ -206,7 +208,7 @@ void CWMFile::Open(const char* filename)
             throw;
         }
     }
-    ff.open(filename, pplib::File::READWRITE);
+    ff.open(filename, pplib::File::FileMode::READWRITE);
     ff.setMapReadAhead(1024 * 1024 * 10);
     // Header einlesen und prüfen
 

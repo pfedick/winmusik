@@ -27,8 +27,8 @@
 #include <map>
 
 #include "wm_traktor.h"
-#include "ppl7.h"
-#include "ppl7-audio.h"
+#include <pplib.h>
+#include <pplib/audio/id3tag.h>
 
 namespace
 {

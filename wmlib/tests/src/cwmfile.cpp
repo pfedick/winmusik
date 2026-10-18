@@ -27,7 +27,7 @@
 #include "wm_exceptions.h"
 #include "wmlib-tests.h"
 #include <map>
-#include "ppl7.h"
+#include <pplib.h>
 
 namespace
 {
