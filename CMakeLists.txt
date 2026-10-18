@@ -11,6 +11,16 @@ option(WINMUSIK_BUILD_GUI   "GUI (Qt6) mitbauen"        OFF)
 option(WINMUSIK_BUILD_TESTS "Unit-Tests fuer wmlib"     OFF)
 option(WMLIB_ENABLE_COVERAGE "Code-Coverage fuer wmlib" OFF)
 
+if(WINMUSIK_BUILD_TESTS AND NOT WMLIB_BUILD_TESTS)
+  set(WMLIB_BUILD_TESTS ON)
+endif()
+
+# enable_testing() muss auf Top-Level-Ebene stehen, damit ctest im Superbuild
+# die Tests aus wmlib/tests (und pplib8) findet.
+if(WMLIB_BUILD_TESTS)
+  enable_testing()
+endif()
+
 # ---------------- pplib8 als Submodul einbinden ----------------
 set(PPLIB_ENABLE_CORE     ON  CACHE BOOL "" FORCE)
 set(PPLIB_ENABLE_AUDIO    ON  CACHE BOOL "" FORCE)

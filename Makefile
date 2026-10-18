@@ -38,30 +38,42 @@ else
 EXE =
 endif
 
-### PPLIB8 CMake Flags
-PPLIB8_CMAKE_FLAGS = \
-	-DPPLIB_ENABLE_CORE=ON \
-	-DPPLIB_ENABLE_AUDIO=ON \
-	-DPPLIB_ENABLE_INTERNET=ON \
-	-DPPLIB_ENABLE_CRYPTO=OFF \
-	-DPPLIB_ENABLE_GRAFIX=OFF \
-	-DPPLIB_ENABLE_DATABASE=OFF \
-	-DPPLIB_ENABLE_PICO=OFF \
-	-DPPLIB_BUILD_TESTS=ON
+### CMake Superbuild (Root-CMakeLists: pplib8 + wmlib + GUI)
+CMAKE ?= cmake
+CTEST ?= ctest
+
+BUILD_RELEASE = build/release
+BUILD_DEBUG   = build/debug
+BUILD_TESTS   = build/wmlib-tests
+BUILD_COV     = build/wmlib-coverage
+
+CMAKE_REL = -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
+CMAKE_DBG = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=ON
+CMAKE_TST = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD_TESTS=ON
+CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=ON
 
 ###########################################################################
 ### Targets
 ###########################################################################
 
 
-.PHONY: gui release debug all wmlib update_version clean distclean history gui_release gui_debug wmlib_release wmlib_debug configure translations
+.PHONY: gui release debug all wmlib update_version clean distclean history \
+	configure pplib8_configure wmlib_configure pplib8 pplib8_debug pplib8_release \
+	wmlib_release wmlib_debug wmlib_tests wmlib_coverage \
+	gui_release gui_debug test translations
 
 
-release: pplib8_release wmlib_release gui_release
+release: gui_release
 
-debug: pplib8_debug wmlib_debug gui_debug
+debug: gui_debug
 
-configure: pplib8_configure wmlib_configure
+configure:
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
+
+pplib8_configure: configure
+
+wmlib_configure: configure
 
 all: release debug
 
@@ -106,90 +118,74 @@ setup: mingw
 
 
 ###########################################################################
-### PPLIB8
+### pplib8 (nur die Bibliotheks-Libs; pplib8-eigene Tests: make -C pplib8 test)
 ###########################################################################
-pplib8_configure:
-	cmake -S pplib8 -B build/pplib8-debug   -DCMAKE_BUILD_TYPE=Debug   $(PPLIB8_CMAKE_FLAGS)
-	cmake -S pplib8 -B build/pplib8-release -DCMAKE_BUILD_TYPE=Release $(PPLIB8_CMAKE_FLAGS)
-
-pplib8: pplib8_debug pplib8_release
-
 pplib8_debug:
-	cmake -S pplib8 -B build/pplib8-debug   -DCMAKE_BUILD_TYPE=Debug   $(PPLIB8_CMAKE_FLAGS)
-	cmake --build build/pplib8-debug -j
+	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
+	$(CMAKE) --build $(BUILD_DEBUG) --target pplib_core pplib_audio pplib_internet -j
 
 pplib8_release:
-	cmake -S pplib8 -B build/pplib8-release -DCMAKE_BUILD_TYPE=Release $(PPLIB8_CMAKE_FLAGS)
-	cmake --build build/pplib8-release -j
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	$(CMAKE) --build $(BUILD_RELEASE) --target pplib_core pplib_audio pplib_internet -j
 
-pplib8_test: pplib8_debug
-	-build/pplib8-debug/tests/test_all$(EXE) --gtest_color=yes
+pplib8: pplib8_debug pplib8_release
 
 
 ###########################################################################
 ### wmlib
 ###########################################################################
+wmlib_release:
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	$(CMAKE) --build $(BUILD_RELEASE) --target wmlib -j
 
-wmlib_configure:
-	cmake -S wmlib -B build/wmlib-debug -DCMAKE_BUILD_TYPE=Debug
-	cmake -S wmlib -B build/wmlib-release -DCMAKE_BUILD_TYPE=Release
+wmlib_debug:
+	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
+	$(CMAKE) --build $(BUILD_DEBUG) --target wmlib -j
 
-wmlib_release: pplib8_release
-	cmake -S wmlib -B build/wmlib-release -DCMAKE_BUILD_TYPE=Release
-	cmake --build build/wmlib-release -j
-
-wmlib_debug: pplib8_debug
-	cmake -S wmlib -B build/wmlib-debug -DCMAKE_BUILD_TYPE=Debug
-	cmake --build build/wmlib-debug -j
-
-wmlib_tests: pplib8_debug
-	cmake -B build/wmlib-tests -DCMAKE_BUILD_TYPE=Debug \
-		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=OFF
-	cmake --build build/wmlib-tests --target wmlib_test
+wmlib_tests:
+	$(CMAKE) -S . -B $(BUILD_TESTS) $(CMAKE_TST)
+	$(CMAKE) --build $(BUILD_TESTS) --target wmlib_test -j
+	$(CTEST) --test-dir $(BUILD_TESTS) --output-on-failure
 
 wmlib_coverage:
-	cmake -B build/wmlib-coverage -DCMAKE_BUILD_TYPE=Debug \
-		-DWMLIB_BUILD_TESTS=ON -DWMLIB_ENABLE_COVERAGE=ON
-	ln -sf build/wmlib-coverage/compile_commands.json compile_commands.json
-	cmake --build build/wmlib-coverage --target wmlib_test
-	cd wmlib/tests && ../../build/wmlib-coverage/tests/wmlib_test
+	$(CMAKE) -S . -B $(BUILD_COV) $(CMAKE_COV)
+	ln -sf $(BUILD_COV)/compile_commands.json compile_commands.json
+	$(CMAKE) --build $(BUILD_COV) --target wmlib_test -j
+	$(CTEST) --test-dir $(BUILD_COV) --output-on-failure
 	mkdir -p coverage_html
-	gcovr --root . build/wmlib-coverage --filter wmlib/src --medium-threshold 70 \
+	gcovr --root . $(BUILD_COV) --filter wmlib/src --medium-threshold 70 \
 		--exclude-throw-branches --html-details coverage_html/index.html --xml-pretty -o coverage.xml
 	@echo "Report: coverage_html/index.html"
-
 
 
 ###########################################################################
 ### GUI
 ###########################################################################
-
 gui_release: update_version
-	cmake -S . -B build/gui-release -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
-	cmake --build build/gui-release --target WinMusik
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	$(CMAKE) --build $(BUILD_RELEASE) --target WinMusik -j
 	mkdir -p release
-	cp build/gui-release/WinMusik$(EXE) release/WinMusik$(EXE)
+	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
 
 gui_debug: update_version
-	cmake -S . -B build/gui-debug -DCMAKE_BUILD_TYPE=Debug -DWINMUSIK_BUILD_GUI=ON
-	cmake --build build/gui-debug --target WinMusik
+	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
+	$(CMAKE) --build $(BUILD_DEBUG) --target WinMusik -j
 	mkdir -p debug
-	cp build/gui-debug/WinMusik$(EXE) debug/WinMusik$(EXE)
+	cp $(BUILD_DEBUG)/WinMusik$(EXE) debug/WinMusik$(EXE)
+
 
 ###########################################################################
 ### Tests
 ###########################################################################
-test:
-	echo "TODO"
-	#cd wmlib/tests && ./testsuite$(EXE)
+test: wmlib_tests
 
 
 ###########################################################################
 ### Uebersetzungen
 ###########################################################################
 translations:
-	cmake -S . -B build/gui-release -DCMAKE_BUILD_TYPE=Release -DWINMUSIK_BUILD_GUI=ON
-	cmake --build build/gui-release --target translations
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	$(CMAKE) --build $(BUILD_RELEASE) --target translations
 
 
 ###########################################################################
@@ -197,17 +193,13 @@ translations:
 ###########################################################################
 
 clean:
-	@rm -rf documentation release debug build
-	@-find ./ -name 'stamp-h*' -exec rm -rf {} \;
-	@rm -rf gui/release gui/debug release debug pplib/debug lib/compile
-	-@ $(MAKE) --directory=pplib clean > /dev/null 2>&1
+	@rm -rf documentation release debug build coverage_html coverage.xml
+	@rm -rf gui/release gui/debug release debug
 
 distclean: clean
 	@rm -rf .qmake.stash autom4te.cache
 	@rm -rf config.log config.status
 	@rm -rf Package/WinMusik.desktop
-	-@ $(MAKE) --directory=pplib distclean > /dev/null 2>&1
-
 
 history:
 	@echo "Git history between Tag $(PREVIOUS_TAG) and head" >  history.tmp

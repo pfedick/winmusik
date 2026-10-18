@@ -65,3 +65,5 @@ configure~
 history.tmp
 .github/copilot-instructions.md
 compile_commands.json
+coverage_html
+coverage.xml

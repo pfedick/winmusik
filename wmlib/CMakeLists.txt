@@ -14,6 +14,13 @@ target_include_directories(wmlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(wmlib PRIVATE -Wall -Wextra -Wno-unknown-pragmas
                                      -Wno-unused-variable -Wno-unused-function)
 
+# Coverage fuer die Bibliotheks-Quellen selbst (das Coverage-Target der Tests
+# instrumentiert nur deren eigene Uebersetzungseinheiten).
+if(WMLIB_ENABLE_COVERAGE)
+    target_compile_options(wmlib PRIVATE --coverage -O0 -g)
+    target_link_options(wmlib PUBLIC --coverage)
+endif()
+
 target_link_libraries(wmlib PUBLIC pplib::core pplib::audio pplib::internet)
 
 if(WMLIB_BUILD_TESTS)

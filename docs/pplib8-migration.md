@@ -252,11 +252,31 @@ vollständig entfernt: `gui/WinMusik.pro.in` und `gui/WinMusik.pro.header` sind 
 ist aus dem Root-`Makefile` entfernt. `configure` prüft Qt weiterhin nur noch für die
 Ausgabeumgebung (Report), der Bau läuft über CMake.
 
-Build (Root-`Makefile`):
+Build (Root-`Makefile`, alles über den Root-CMake-Superbuild `cmake -S . -B build/<baum>`):
 
-- `make gui_debug` → konfiguriert `build/gui-debug` mit `-DWINMUSIK_BUILD_GUI=ON`, baut
-  `pplib8` + `wmlib` + `WinMusik` und kopiert nach `debug/WinMusik`
-- `make gui_release` → analog in `build/gui-release`, Kopie nach `release/WinMusik`
+Der Grund: `pplib8` exportiert sein CMake-Paket ausschließlich in den Installationsprefix
+(`install(EXPORT pplib8Targets …)` in `pplib8/CMakeLists.txt`), es gibt keine Build-Baum-Config.
+Ein Solo-`cmake -S wmlib` kann `find_package(pplib8)` daher nicht gegen einen Build-Baum
+auflösen. Alle Bäume werden aus dem Root-`CMakeLists.txt` erzeugt, das `pplib8` und `wmlib`
+per `add_subdirectory()` einbindet und die `PPLIB_ENABLE_*`-Flags setzt.
+
+- `make configure` → konfiguriert `build/release` (`-DWINMUSIK_BUILD_GUI=ON`) und `build/debug`
+- `make release` / `make debug` → baut pplib8 + wmlib + `WinMusik` in einem Durchlauf,
+  Kopie nach `release/WinMusik` bzw. `debug/WinMusik`
+- `make pplib8_release` / `pplib8_debug` → Teilbau nur der Bibliotheks-Libs
+  (`pplib_core`, `pplib_audio`, `pplib_internet`); pplib8-eigene Tests laufen über die
+  Toolchain des Submoduls (`make -C pplib8 test`)
+- `make wmlib_release` / `wmlib_debug` → Teilbau nur `libwinmusik4.a`
+- `make wmlib_tests` → eigener Baum `build/wmlib-tests`
+  (`-DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD_TESTS=ON`), baut `wmlib_test` und führt `ctest`
+  aus. `enable_testing()` dazu muss im Root-`CMakeLists.txt` stehen, sonst findet ctest im
+  Superbuild keine Tests. Der Test läuft mit `WORKING_DIRECTORY wmlib/tests` (relative
+  Testdatenpfade) — der Binary direkt aus dem Repo-Root zu starten gibt 20 Fehltests.
+- `make wmlib_coverage` → analog mit `-DWMLIB_ENABLE_COVERAGE=ON`, danach gcovr. Die
+  Instrumentierung der Bibliotheksquellen steckt jetzt in `wmlib/CMakeLists.txt` selbst
+  (`--coverage` am Target `wmlib`); `wmlib/tests/CMakeLists.txt` instrumentiert nur die
+  Test-Quellen. Ohne die Target-Flags meldet gcovr „All coverage data is filtered out",
+  weil der Filter `wmlib/src` ins Leere läuft.
 - `make translations` → `lupdate`/`lrelease` über die eingecheckten `.ts`-Dateien. Das
   Qt6LinguistTools-CMake-Paket fehlt auf manchen Distributionen (Fedora: `qt6-linguist`
   ohne `Qt6LinguistToolsConfig.cmake`; die CMake-Dateien stecken im `-devel`-Paket). In dem
@@ -321,11 +341,11 @@ und in `wmlib`/`gui` kommt `ppl7` nicht mehr vor.
 
 Was Autoconf derzeit noch am Leben hält:
 
-- `ppl7_release` / `ppl7_debug` im Root-`Makefile` (hängen noch an `release` bzw. `debug`)
-- `autoconf_configure` im Target `configure`
+- `autoconf`-Aufruf selbst (eingechecktes `configure`-Skript) — das Root-`Makefile` ruft es
+  nicht mehr auf; `ppl7_release`/`ppl7_debug` und `autoconf_configure` sind entfernt
 - `wmlib/tests/Makefile.in` (Legacy, verlinkt `../../pplib/debug/libpplib.a`) — ersetzt durch
   `wmlib/tests/CMakeLists.txt`, wird aber nicht mehr von `configure` erzeugt
-- `distclean` mit `$(MAKE) --directory=pplib distclean`, sowie der Umgebungs-Report
+- `clean`/`distclean` mit `$(MAKE) --directory=pplib clean|distclean`, sowie der Umgebungs-Report
   (Größen von `int`/`long`/`wchar_t`, Qt/PCRE2/pthreads-Prüfung mit Abbruch)
 
 Sobald pplib7 (Submodul `pplib`) aus dem Build genommen wird, können `configure.ac`,
