@@ -64,11 +64,19 @@ Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier b
   - widgets: Eigene GUI-Widgets der Anwendung
 - docs: Dokumentation, insbesondere auch das Fileformat der Datenbank
 
+# Technische Feinheiten
+WinMusik verwendet set_locale, um die Locale-Einstellungen der Anwendung auf UTF-8 zu setzen, sowohl unter Windows als auch unter anderen Betriebssystemen. Wir können also davon ausgehen, dass Inhalte in der Klasse pplib::String immer im UTF-8 Encoding vorliegen.
+
+Noch ungestestet sind die "ifdefs" in pplib/types/string.h für Qt6. Diese sorgend dafür, dass QString in pplib::String gewandelt wird und umgekehrt. Hier könnten noch Fehler vorhanden sein.
+
 
 # Projektphasen
 - wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
 
 ## Migration auf pplib8
+Ausführliche Landkarte (verwendete Symbole, API-Brüche, Datei- und Batch-Reihenfolge):
+[docs/pplib8-migration.md](docs/pplib8-migration.md)
+
 - Namespace ändert sich von ppl7 auf pplib
 - Klassennamen sind weitestgehnd gleich
 - Includes sind zwar weiterhin über zentrale Aggregate-Dateien verfügbar, ähnlich wie vorher über "ppl7.h", es wird aber empfohlen, die spezifischen Header-Dateien direkt einzubinden, um Abhängigkeiten klar zu machen.
@@ -93,6 +101,7 @@ Wichtige Klassen mit ihren Header-Dateien:
 Verschiedene Funktionen:
 - <pplib/core/functions.h>
 - <pplib/core/stringfunctions.h>
+
 
 
 
