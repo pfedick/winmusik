@@ -18,11 +18,11 @@
  */
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 
 #include "properties.h"
 #include "regexpedit.h"
 #include <QTableWidgetItem>
-#include "ppl7-audio.h"
 
 #include "wm_coverdownload.h"
 
@@ -186,34 +186,6 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     ui.customMusicalKey_23->setText(c->customMusicKey[23]);
     ui.customMusicalKey_24->setText(c->customMusicKey[24]);
     ui.customMusicalKey_25->setText(c->customMusicKey[25]);
-
-    // CDDB
-    if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
-        ui.cddbServer->setText(c->cddb.server);
-        Tmp.setf("%i", c->cddb.port);
-        ui.cddbPort->setText(Tmp);
-        ui.cdioDevice->clear();
-        std::list<pplib::String> devices = pplib::AudioCD::getDevices();
-        ui.cdioDevice->addItem(tr("Default"), "default");
-        std::list<pplib::String>::const_iterator it;
-        for (it = devices.begin(); it != devices.end(); ++it) {
-            ui.cdioDevice->addItem((*it), (*it));
-        }
-        index = ui.cdioDevice->findData(c->cddb.cddevice);
-        if (index >= 0) ui.cdioDevice->setCurrentIndex(index);
-
-        ui.cddbQueryPath->setText(c->cddb.querypath);
-        ui.cddbUserName->setText(c->cddb.username);
-        ui.cddbHostName->setText(c->cddb.hostname);
-        ui.cddbProxyServer->setText(c->cddb.proxy_server);
-        Tmp.setf("%i", c->cddb.proxy_port);
-        ui.cddbProxyPort->setText(Tmp);
-        ui.cddbUseProxy->setChecked(c->cddb.useProxy);
-        ui.cddbProxyLayout_2->setEnabled(c->cddb.useProxy);
-
-    } else {
-        ui.tab_cddb->setEnabled(false);
-    }
 
     // Beatport
     ui.beatport_clearance->setPlainText(c->beatport.clearance);
@@ -493,21 +465,6 @@ int Properties::Save()
     c->customMusicKey[23] = ui.customMusicalKey_23->text();
     c->customMusicKey[24] = ui.customMusicalKey_24->text();
     c->customMusicKey[25] = ui.customMusicalKey_25->text();
-
-    // CDDB
-    if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
-        c->cddb.server = ui.cddbServer->text();
-        c->cddb.port = ui.cddbPort->text().toInt();
-        index = ui.cdioDevice->currentIndex();
-        if (index >= 0) c->cddb.cddevice = ui.cdioDevice->itemData(index).toString();
-
-        c->cddb.proxy_server = ui.cddbProxyServer->text();
-        c->cddb.proxy_port = ui.cddbProxyPort->text().toInt();
-        c->cddb.username = ui.cddbUserName->text();
-        c->cddb.hostname = ui.cddbHostName->text();
-        c->cddb.querypath = ui.cddbQueryPath->text();
-        c->cddb.useProxy = ui.cddbUseProxy->isChecked();
-    }
 
     // Beatport
     c->beatport.clearance = ui.beatport_clearance->toPlainText();
@@ -801,10 +758,4 @@ void Properties::on_JpegQualityCover_valueChanged(int value)
     pplib::String Tmp;
     Tmp.setf("%d", value);
     ui.JpegQualityCoverValue->setText(Tmp);
-}
-
-void Properties::on_cddbUseProxy_toggled(bool)
-{
-    Change();
-    ui.cddbProxyLayout_2->setEnabled(ui.cddbUseProxy->isChecked());
 }

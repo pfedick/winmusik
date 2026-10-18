@@ -36,7 +36,7 @@ AC_CONFIG_FILES([pplib/ppl7-config])
 AC_CONFIG_FILES([pplib/tests/Makefile])
 AC_CONFIG_HEADERS([pplib/include/ppl7-config.h])
 AC_CONFIG_HEADERS([pplib/include/config_ppl7.h])
-AC_CONFIG_FILES([gui/WinMusik.pro])
+# Die GUI wird nicht mehr von qmake, sondern von CMake gebaut (gui/CMakeLists.txt)
 
 
 ###############################################################################

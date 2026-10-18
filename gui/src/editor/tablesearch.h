@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEARCH_H
-#define SEARCH_H
+#ifndef TABLESEARCH_H
+#define TABLESEARCH_H
 
 #include "winmusik3.h"
 #include <QWidget>
@@ -47,4 +47,4 @@ private slots:
     void on_list_itemDoubleClicked(QTreeWidgetItem* item, int column);
 };
 
-#endif // SEARCH_H
+#endif // TABLESEARCH_H

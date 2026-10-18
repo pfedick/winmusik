@@ -27,7 +27,6 @@
 #include "search.h"
 #include "resultfilter.h"
 #include <vector>
-#include "ppl7-audio.h"
 
 Search::Search(QWidget* parent, CWmClient* wm)
     : QWidget(parent)
@@ -1296,15 +1295,12 @@ void Search::RecursiveDirSearch(pplib::Array& search, const pplib::String& dir)
     pplib::String File, Tmp;
     // const char* tmp;
     try {
-        Dir.open(dir, pplib::Dir::SORT_NONE);
+        Dir.open(dir, pplib::Dir::Sort::None);
     }
     catch (...) {
         return;
     }
-    pplib::Dir::Iterator it;
-    pplib::DirEntry entry;
-    Dir.reset(it);
-    while (Dir.getNext(entry, it)) {
+    for (const pplib::DirEntry& entry : Dir) {
         if (entry.isDir()) {
             if (entry.Filename != "." && entry.Filename != "..") RecursiveDirSearch(search, entry.File);
         } else if (entry.isFile()) {

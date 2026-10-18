@@ -240,7 +240,7 @@ void SearchlistDialog::renderTrack(SearchlistTreeItem* item)
                 icon.save(&buffer, "JPEG", wm_main->conf.JpegQualityPreview);
                 pplib::File f;
                 try {
-                    f.open(thumb, pplib::File::WRITE);
+                    f.open(thumb, pplib::File::FileMode::WRITE);
                     f.write(bytes.data(), bytes.size());
                     f.close();
                 }

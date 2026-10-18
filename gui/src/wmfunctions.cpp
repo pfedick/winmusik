@@ -24,7 +24,8 @@
 #include <QLabel>
 #include <QClipboard>
 #include <QString>
-#include "ppl7-audio.h"
+#include <pplib/audio/id3tag.h>
+#include <pplib/audio/audioinfo.h>
 
 static bool CopyFromFilename(TrackInfo& info, const pplib::String& Filename);
 static bool CopyFromID3v1Tag(TrackInfo& info, const pplib::String& Filename, pplib::File& File);

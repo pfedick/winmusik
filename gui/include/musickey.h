@@ -23,7 +23,7 @@
 #include <set>
 #include <map>
 #include "winmusik3.h"
-#include "ppl7.h"
+#include <pplib.h>
 
 int getMusicKeyId(const pplib::String& name);
 pplib::String keyNameSharps(int id);

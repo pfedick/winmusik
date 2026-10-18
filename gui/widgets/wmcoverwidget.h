@@ -21,11 +21,8 @@
 #define WMCOVERWIDGET_H
 
 #include <QWidget>
-#define PPL_QT_STRING_UTF8
-#define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
-#define PPL_WITH_QT6
 
-#include <pplib-audio.h>
+#include <pplib/audio/id3tag.h>
 #include <QEvent>
 #include <QDragEnterEvent>
 #include <QDropEvent>

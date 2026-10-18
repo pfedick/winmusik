@@ -37,7 +37,7 @@ About::About(QWidget* parent)
     Tmp += "<div align=\"center\" style=\"font-size: 12pt;\"><b>" + pplib::String(tr("Credits:")) + "</b></div>\n";
     Tmp += pplib::String(tr("This program makes use of the following Open Source Libraries:"));
     Tmp.append("<ul>");
-    Tmp.appendf("<li>PPL %d.%d.%d, %s</li>\n", PPL7_VERSION_MAJOR, PPL7_VERSION_MINOR, PPL7_VERSION_BUILD, PPL7_COPYRIGHT);
+    Tmp.appendf("<li>PPL %d.%d.%d, %s</li>\n", PPLIB_VERSION_MAJOR, PPLIB_VERSION_MINOR, PPLIB_VERSION_BUILD, PPLIB_COPYRIGHT);
     Tmp.appendf("<li>Qt %s", qVersion());
 
     Tmp.append("</li>\n");

@@ -36,23 +36,22 @@ pplib::String ToString(const QString& fmt, ...);
         {                                                                                                                                  \
             va_list args;                                                                                                                  \
             va_start(args, msg);                                                                                                           \
-            copyText(msg, args);                                                                                                           \
+            initFromFormat(msg, args);                                                                                                     \
             va_end(args);                                                                                                                  \
         }                                                                                                                                  \
-        name(const pplib::String& msg) noexcept                                                                                            \
+        name(const pplib::String& msg) noexcept : inherit(msg)                                                                             \
         {                                                                                                                                  \
-            copyText((const char*)msg);                                                                                                    \
         }                                                                                                                                  \
-        virtual const char* what() const noexcept                                                                                          \
+        virtual const char* className() const noexcept override                                                                            \
         {                                                                                                                                  \
-            return (STR_VALUE(name));                                                                                                      \
+            return #name;                                                                                                                  \
         }                                                                                                                                  \
         name(const QString& format, ...) noexcept                                                                                          \
         {                                                                                                                                  \
             QByteArray a = format.toUtf8();                                                                                                \
             va_list args;                                                                                                                  \
             va_start(args, format);                                                                                                        \
-            copyText((const char*)a, args);                                                                                                \
+            initFromFormat((const char*)a, args);                                                                                          \
             va_end(args);                                                                                                                  \
         }                                                                                                                                  \
     };

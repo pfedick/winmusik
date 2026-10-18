@@ -68,12 +68,9 @@ void Searchlists::Update()
     // vorhandene Suchlisten anzeigen
     CSearchlist sl;
     pplib::Dir Dir;
-    pplib::Dir::Iterator dirit;
     try {
         Dir.open(wm->conf.DataPath);
-        Dir.reset(dirit);
-        pplib::DirEntry entry;
-        while (Dir.getNextRegExp(entry, dirit, "/^searchlist.*\\.xml$/")) {
+        for (const pplib::DirEntry& entry : Dir.filterRegExp("/^searchlist.*\\.xml$/")) {
             try {
                 sl.load(entry.File);
                 SearchlistTreeItem* item = new SearchlistTreeItem;
@@ -130,12 +127,9 @@ void Searchlists::on_newSearchlistButton_clicked()
     int highest = 1;
     int id;
     pplib::Dir Dir;
-    pplib::Dir::Iterator dirit;
     try {
         Dir.open(wm->conf.DataPath);
-        Dir.reset(dirit);
-        pplib::DirEntry entry;
-        while (Dir.getNextRegExp(entry, dirit, "/^searchlist[0-9]+\\.xml$/")) {
+        for (const pplib::DirEntry& entry : Dir.filterRegExp("/^searchlist[0-9]+\\.xml$/")) {
             std::vector<pplib::String> Matches;
             if (pplib::RegEx::capture("/searchlist([0-9]+)\\.xml$/", entry.Filename, Matches)) {
                 id = Matches[1].toInt();

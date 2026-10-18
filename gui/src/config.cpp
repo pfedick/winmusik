@@ -18,6 +18,7 @@
  */
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "exceptions.h"
 #include <QSettings>
 #include <QDir>
@@ -83,17 +84,6 @@ Config::Config()
     JpegQualityCover = 95;
     JpegQualityPreview = 90;
     MaxFilenameLength = 255;
-}
-
-Config::CDDB::CDDB()
-{
-    port = 80;
-    server = "freedb.org";
-    proxy_port = 8080;
-    username = "anonymous";
-    hostname = "localhost";
-    querypath = "/~cddb/cddb.cgi";
-    useProxy = false;
 }
 
 Config::PlaylistExport::PlaylistExport()
@@ -239,17 +229,6 @@ void Config::save()
     for (int i = 0; i < 26; i++)
         c.add("musicKey", pplib::ToString("customMusicKey[%i]", i), (const char*)customMusicKey[i]);
 
-    // CDDB
-    c.add("cddb", "cddevice", (const char*)cddb.cddevice);
-    c.add("cddb", "server", (const char*)cddb.server);
-    c.add("cddb", "port", cddb.port);
-    c.add("cddb", "useProxy", cddb.useProxy);
-    c.add("cddb", "proxy_server", (const char*)cddb.proxy_server);
-    c.add("cddb", "proxy_port", cddb.proxy_port);
-    c.add("cddb", "username", (const char*)cddb.username);
-    c.add("cddb", "hostname", (const char*)cddb.hostname);
-    c.add("cddb", "querypath", (const char*)cddb.querypath);
-
     // PlaylistExport
     c.add("playlistExport", "TargetPath", (const char*)playlist_export.TargetPath);
     c.add("playlistExport", "option_copy_files", playlist_export.option_copy_files);
@@ -386,17 +365,6 @@ void Config::load()
     for (int i = 0; i < 26; i++)
         customMusicKey[i] = c.getFromSection("musicKey", (const char*)pplib::ToString("customMusicKey[%i]", i),
                                              (const char*)wm_main->MusicKeys.keyName(i, musicKeyTypeMusicalSharps));
-
-    // CDDB
-    cddb.cddevice = c.getFromSection("cddb", "cddevice", "");
-    cddb.server = c.getFromSection("cddb", "server", "freedb.freedb.org");
-    cddb.port = c.getIntFromSection("cddb", "port", 80);
-    cddb.useProxy = c.getBoolFromSection("cddb", "useProxy", false);
-    cddb.proxy_server = c.getFromSection("cddb", "proxy_server", "");
-    cddb.proxy_port = c.getIntFromSection("cddb", "proxy_port", 8080);
-    cddb.username = c.getFromSection("cddb", "username", "anonymous");
-    cddb.hostname = c.getFromSection("cddb", "hostname", "localhost");
-    cddb.querypath = c.getFromSection("cddb", "querypath", "/~cddb/cddb.cgi");
 
     // PlaylistExport
     Tmp = QDir::homePath();

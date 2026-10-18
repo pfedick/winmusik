@@ -31,18 +31,6 @@ PREVIOUS_TAG = REL_3_7_2
 BUILD_NUMBER := $(shell git rev-list --all --count)
 BUILDDATE := $(shell date '+%Y%m%d')
 
-# Qt6-qmake finden: Name ist distroabhaengig, Version ist eindeutig
-ifeq ($(OS),Windows_NT)
-QMAKE ?= qmake6
-else
-QMAKE ?= $(shell for c in qmake6 qmake-qt6 qmake; do \
-                v=$$($$c -query QT_VERSION 2>/dev/null | cut -d. -f1); \
-                test "$$v" = 6 && { echo $$c; break; }; done)
-ifeq ($(QMAKE),)
-QMAKE = qmake6
-endif
-endif
-
 # Executable file extension based on OS
 ifeq ($(OS),Windows_NT)
 EXE = .exe
@@ -66,17 +54,12 @@ PPLIB8_CMAKE_FLAGS = \
 ###########################################################################
 
 
-.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history qmake-info gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure translations
+.PHONY: gui release debug all ppl7 wmlib update_version clean distclean history gui_release gui_debug wmlib_release wmlib_debug ppl7_release ppl7_debug configure translations
 
 
 release: ppl7_release pplib8_release wmlib_release gui_release
 
 debug: ppl7_debug pplib8_debug wmlib_debug gui_debug
-
-qmake-info:
-	@echo "QMAKE = $(QMAKE)"
-	@$(QMAKE) -query QT_VERSION
-	@$(QMAKE) -query QT_INSTALL_BINS
 
 configure: autoconf_configure pplib8_configure wmlib_configure
 

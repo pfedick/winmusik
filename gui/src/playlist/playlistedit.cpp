@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include "wm_traktor.h"
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "musickey.h"
 
 using namespace de::pfp::winmusik;

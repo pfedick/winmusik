@@ -88,11 +88,8 @@ bool RenumberDialog::isTargetPathUsable(uint8_t DeviceType, uint32_t newDeviceId
             QMessageBox::critical(NULL, tr("Error"), Tmp, QMessageBox::Ok, QMessageBox::Ok);
             return false;
         }
-        pplib::DirEntry e;
-        pplib::Dir::Iterator it;
-        dir.reset(it);
         int count = 0;
-        while ((dir.getNext(e, it))) {
+        for (const pplib::DirEntry& e : dir) {
             if (e.Filename != "." && e.Filename != "..") {
                 count++;
                 break;

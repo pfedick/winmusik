@@ -24,7 +24,7 @@
 #include <QDomElement>
 #include "winmusik3.h"
 
-#include "ppl7-audio.h"
+#include <pplib/audio/id3tag.h>
 
 class Playlist;
 

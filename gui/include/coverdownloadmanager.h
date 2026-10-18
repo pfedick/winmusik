@@ -1,11 +1,17 @@
 #ifndef COVERDOWNLOADMANAGER_H
 #define COVERDOWNLOADMANAGER_H
-#define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#ifndef WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#define WITH_QT
+#endif
+#ifndef PPL_WITH_QT6
 #define PPL_WITH_QT6
+#endif
+#ifndef PPL_QT_STRING_UTF8
 #define PPL_QT_STRING_UTF8
+#endif
 
 #include <QObject>
-#include "ppl7.h"
+#include <pplib.h>
 #include <queue>
 
 class DownloadTask

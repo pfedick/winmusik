@@ -29,9 +29,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)              # gnu++20, wie im Root-CMakeLists
 
-# Qt-Codegenerierung: moc / uic / rcc
+# Qt-Codegenerierung: moc / rcc automatisch, uic explizit (siehe unten)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport)
@@ -49,22 +49,47 @@ if(NOT TARGET wmlib)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../wmlib ${CMAKE_BINARY_DIR}/wmlib)
 endif()
 
-file(GLOB GUI_SOURCES   CONFIGURE_DEPENDS "src/*.cpp" "widgets/*.cpp")
-file(GLOB GUI_HEADERS   CONFIGURE_DEPENDS "src/*.h" "widgets/*.h" "include/*.h")
+file(GLOB_RECURSE GUI_SOURCES CONFIGURE_DEPENDS "src/*.cpp" "widgets/*.cpp")
+file(GLOB_RECURSE GUI_HEADERS CONFIGURE_DEPENDS "src/*.h" "widgets/*.h" "include/*.h")
 set(GUI_RESOURCES "resources.qrc")
+
+# Die ui_-Header werden nicht von AUTOUIC erzeugt: AUTOUIC wird pro
+# Uebersetzungseinheit aktiv und findet eine .ui-Datei nur, wenn sie im
+# Verzeichnis der Einheit liegt. WinMusik-Header binden ihren ui_-Header aber
+# aus anderen Verzeichnissen ein (z.B. CWmClient.cpp -> src/menue/menue.h,
+# oder mocs_compilation.cpp). Deshalb erzeugt uic alle Header zentral in ein
+# Verzeichnis, das fuer alle Uebersetzungseinheiten im Include-Pfad liegt.
+file(GLOB_RECURSE GUI_UI_FILES CONFIGURE_DEPENDS "src/*.ui" "widgets/*.ui" "include/*.ui")
+set(GUI_UI_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/ui")
+file(MAKE_DIRECTORY "${GUI_UI_GENERATED_DIR}")
+set(GUI_UI_GENERATED_HEADERS "")
+foreach(ui_file IN LISTS GUI_UI_FILES)
+    get_filename_component(ui_name "${ui_file}" NAME_WE)
+    set(ui_header "${GUI_UI_GENERATED_DIR}/ui_${ui_name}.h")
+    add_custom_command(
+        OUTPUT "${ui_header}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${GUI_UI_GENERATED_DIR}"
+        COMMAND Qt6::uic "${ui_file}" -o "${ui_header}"
+        MAIN_DEPENDENCY "${ui_file}"
+        COMMENT "uic ${ui_name}.ui")
+    list(APPEND GUI_UI_GENERATED_HEADERS "${ui_header}")
+endforeach()
+add_custom_target(WinMusik_uic DEPENDS ${GUI_UI_GENERATED_HEADERS})
 
 if(WIN32)
     add_executable(WinMusik WIN32 ${GUI_SOURCES} ${GUI_HEADERS} ${GUI_RESOURCES} resource.rc)
 else()
     add_executable(WinMusik ${GUI_SOURCES} ${GUI_HEADERS} ${GUI_RESOURCES})
 endif()
+add_dependencies(WinMusik WinMusik_uic)
 
 # "src/menue/menue.h" wird aus anderen Unterverzeichnissen mit diesem Pfad
 # eingebunden, daher muss gui/ selbst Teil des Include-Pfades sein.
 target_include_directories(WinMusik PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/widgets)
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets
+    ${GUI_UI_GENERATED_DIR})
 
 # pplib8 schaltet die QString-/QVariant-Konstruktoren und Konvertierungs-
 # operatoren von pplib::String und pplib::WideString erst ueber diese Makros

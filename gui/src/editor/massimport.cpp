@@ -24,6 +24,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "massimport.h"
+#include <pplib/audio/id3tag.h>
 #include "edittrackdialog.h"
 
 MassImport::MassImport(QWidget* parent, CWmClient* wm)
@@ -204,15 +205,13 @@ int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16
     Path.appendf("/%02u/%03u/", (uint32_t)(DeviceId / 100), DeviceId);
     Pattern.setf("*.mp3");
     pplib::Dir Dir;
-    pplib::DirEntry entry;
     int count = 0;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     qApp->processEvents();
     ui.treeWidget->setSortingEnabled(false);
 
-    if (Dir.tryOpen(Path, pplib::Dir::SORT_FILENAME_IGNORCASE)) {
-        pplib::Dir::Iterator it;
-        while ((Dir.getNextPattern(entry, it, Pattern, true))) {
+    if (Dir.tryOpen(Path, pplib::Dir::Sort::FilenameIgnoreCase)) {
+        for (const pplib::DirEntry& entry : Dir.filterPattern(Pattern, true)) {
             Filename = entry.Filename;
             // Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
             if (!pplib::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {

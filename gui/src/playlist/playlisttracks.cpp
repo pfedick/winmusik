@@ -609,7 +609,7 @@ bool PlaylistTracks::saveWMP(const pplib::String& Filename)
 {
     pplib::File ff;
     try {
-        ff.open(Filename, pplib::File::WRITE);
+        ff.open(Filename, pplib::File::FileMode::WRITE);
 
         pplib::String xml;
         xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";

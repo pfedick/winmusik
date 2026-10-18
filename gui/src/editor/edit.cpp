@@ -18,6 +18,7 @@
  */
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include <stdio.h>
 #include "edit.h"
 #include "editdevice.h"
@@ -721,9 +722,6 @@ void Edit::UpdateFkeys()
             ui.fkeys->setFkey(9, ":/fkeys/resources/fkeys/f-key-2009.png", tr("save all ID3"));
             ui.fkeys->setFkey(6, ":/fkeys/resources/fkeys/f-key-3006.png", tr("mass import"));
         }
-        if (pplib::AudioCD::isSupported() == true && pplib::CDDB::isSupported() == true) {
-            ui.fkeys->setFkey(5, ":/fkeys/resources/fkeys/f-key-4005.png", tr("cddb import"));
-        }
         ui.fkeys->setFkey(3, ":/fkeys/resources/fkeys/f-key-2003.png", tr("renumber"));
         break;
     case 4: // Interpret
@@ -1228,12 +1226,9 @@ static void addFileIfSuitable(const pplib::String& filename, std::list<pplib::St
 static void traverseDirectoryForFiles(const pplib::String& path, std::list<pplib::String>& fileList)
 {
     pplib::Dir dir;
-    if (dir.tryOpen(path, pplib::Dir::SORT_FILENAME)) {
-        pplib::DirEntry entry;
-        pplib::Dir::Iterator it;
-        dir.reset(it);
-        while ((dir.getNext(entry, it))) {
-            // printf ("DIREntgry: >>%s<<\n",(const char*)entry->Filename);
+    if (dir.tryOpen(path, pplib::Dir::Sort::Filename)) {
+        for (const pplib::DirEntry& entry : dir) {
+            // printf ("DIREntgry: >>%s<<\n",(const char*)entry.Filename);
             if (entry.Filename == "." || entry.Filename == "..") continue;
             if (entry.isDir()) {
                 traverseDirectoryForFiles(entry.File, fileList);
@@ -1248,13 +1243,10 @@ static int getHighestIdOfDirectory(const pplib::String& path)
 {
     int max = 0;
     pplib::Dir dir;
-    if (dir.tryOpen(path, pplib::Dir::SORT_FILENAME)) {
+    if (dir.tryOpen(path, pplib::Dir::Sort::Filename)) {
         std::vector<pplib::String> matches;
-        pplib::Dir::Iterator it;
-        dir.reset(it);
-        pplib::DirEntry entry;
-        while ((dir.getNext(entry, it))) {
-            if (pplib::RegEx::capture("/^([0-9]{3}_.*$", entry.Filename, matches)) {
+        for (const pplib::DirEntry& entry : dir) {
+            if (pplib::RegEx::capture("/^([0-9]{3})_.*$/", entry.Filename, matches)) {
                 int v = matches.at(1).toInt();
                 if (v > max) max = v;
                 // printf("match: %d\n", v);
@@ -1421,9 +1413,6 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
         return on_f5_ShortCut(modifier);
     } else if (key == Qt::Key_F5 && position > 7) {
         return on_f5_CheckDupes(target);
-    } else if (key == Qt::Key_F5 && position == 3) {
-        importFromCddb();
-        return true;
         // *************************************************************************** F6
     } else if (key == Qt::Key_F6 && modifier == Qt::ControlModifier && ui.fkeys->isEnabled(6) == true && position > 3 &&
                wm->conf.DevicePath[DeviceType].notEmpty() == true) {
@@ -2054,7 +2043,6 @@ void Edit::on_f4_clicked()
 }
 void Edit::on_f5_clicked()
 {
-    if (position == 3) importFromCddb();
     if (position == 4)
         on_f5_ShortCut(Qt::NoModifier);
     else if (position > 7)

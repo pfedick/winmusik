@@ -32,7 +32,6 @@
 #include "playlistexport.h"
 #include "colorscheme.h"
 
-#include "ppl7-audio.h"
 
 class PlaylistTracks;
 

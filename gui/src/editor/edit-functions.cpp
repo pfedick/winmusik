@@ -18,14 +18,13 @@
  */
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "edit.h"
 #include "editdevice.h"
 #include "tablesearch.h"
 #include "shortcutdialog.h"
 #include "massimport.h"
 #include "renumberdialog.h"
-#include "cddbimport.h"
-#include "cddbselect.h"
 #include <QString>
 #include <QScrollBar>
 #include <QClipboard>
@@ -44,8 +43,8 @@
 #include "src/asynchronousMessage/asynchronousMessage.h"
 #include "version.h"
 
-#include "ppl7.h"
-#include "ppl7-inet.h"
+#include <pplib.h>
+#include <pplib-inet.h>
 
 void Edit::UpdateDevice()
 {
@@ -948,68 +947,6 @@ void Edit::showEditorWithoutFocusChange()
     ui.titleEdit->setVisible(true);
     ui.titleEdit->setEnabled(true);
     ui.hideEditor->setIcon(QIcon(":/icons/resources/1downarrow.png"));
-}
-
-void Edit::importFromCddb()
-{
-    if (pplib::AudioCD::isSupported() != true || pplib::CDDB::isSupported() != true) return;
-    pplib::CDDB::Matches matches;
-    asynchronousMessage msg;
-    msg.setMessageText(tr("Reading and querying cd in internet database, please wait."));
-    msg.show();
-    QCoreApplication::processEvents();
-    QCoreApplication::sendPostedEvents();
-    QCoreApplication::processEvents();
-
-    pplib::CDDB cddb;
-    cddb.setHttpServer(wm->conf.cddb.server, wm->conf.cddb.port);
-    cddb.setUser(wm->conf.cddb.username, wm->conf.cddb.hostname);
-    cddb.setClient(WM_APPNAME, WM_VERSION);
-    if (wm->conf.cddb.useProxy) {
-        cddb.setProxy(wm->conf.cddb.proxy_server, wm->conf.cddb.proxy_port);
-    }
-
-    try {
-        pplib::AudioCD cd;
-        QCoreApplication::processEvents();
-        cd.openDevice();
-        QCoreApplication::processEvents();
-        cddb.query(cd, matches);
-        QCoreApplication::processEvents();
-    }
-    catch (const pplib::Exception& e) {
-        msg.setVisible(false);
-        ShowException(e, tr("An error occured, when trying to access the audio cd or querying the internet database"));
-        return;
-    }
-    msg.setVisible(false);
-    // If we don't have any results, we show a message and exit
-    if (matches.size() < 1) {
-        QMessageBox::information(NULL, tr("audio cd not found"), tr("The audio cd was not found in the internet cd database"),
-                                 QMessageBox::Ok, QMessageBox::Ok);
-        return;
-    }
-    pplib::CDDB::Disc disc;
-    // If we have more than one result, we show a selection dialog
-    if (matches.size() > 1) {
-        CDDBSelect cddbselect(this, wm);
-        cddbselect.setMatches(matches);
-        if (!cddbselect.exec()) return;
-        disc = cddbselect.getSelected();
-    } else {
-        disc = matches.front();
-    }
-
-    // Now we can show the import dialog
-    CDDBImport Dialog(this, wm);
-    Dialog.setModal(false);
-    Dialog.setDisc(disc);
-    if (!Dialog.exec()) return;
-    if (Dialog.checkAndConfirmOverwrite(DeviceType, DeviceId, Page) != true) return;
-    // Now lets to the import
-    Dialog.startImport(disc, DeviceType, DeviceId, Page);
-    // reopen this device
-    OpenTrack(DeviceId, Page, 0);
 }
 
 void Edit::renumber()

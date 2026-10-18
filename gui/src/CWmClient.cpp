@@ -23,6 +23,7 @@
 
 #include <locale.h>
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "version.h"
 
 #include "src/menue/menue.h"
@@ -849,7 +850,7 @@ pplib::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId,
     if (Path.isEmpty()) return Path;
     pplib::Dir Dir;
     try {
-        Dir.open(Path, pplib::Dir::SORT_FILENAME_IGNORCASE);
+        Dir.open(Path, pplib::Dir::Sort::FilenameIgnoreCase);
     }
     catch (...) {
         if (wmlog)
@@ -858,28 +859,26 @@ pplib::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId,
         return pplib::String();
     }
     Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i", Track);
-    pplib::DirEntry de;
-    pplib::Dir::Iterator it;
-    if (Dir.getFirstRegExp(de, it, Pattern)) {
+    if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
-                          (const char*)de.File);
-        return de.File;
+                          (const char*)entry->File);
+        return entry->File;
     }
 
     Pattern.setf("/^%03u\\.(mp3|aiff|aif)$/i", Track);
-    if (Dir.getFirstRegExp(de, it, Pattern)) {
+    if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
-                          (const char*)de.File);
-        return de.File;
+                          (const char*)entry->File);
+        return entry->File;
     }
     Pattern.setf("/^%03u-.*\\.(mp3|aiff|aif)$/i8", Track);
-    if (Dir.getFirstRegExp(de, it, Pattern)) {
+    if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
-                          (const char*)de.File);
-        return de.File;
+                          (const char*)entry->File);
+        return entry->File;
     }
     if (wmlog) wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Nicht gefunden");
     return pplib::String();
@@ -899,15 +898,12 @@ pplib::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, ui
         wmlog->printf(pplib::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__, "Öffne Verzeichnis: %s",
                       (const char*)Path);
     try {
-        Dir.open(Path, pplib::Dir::SORT_FILENAME_IGNORCASE);
+        Dir.open(Path, pplib::Dir::Sort::FilenameIgnoreCase);
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 5, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
-                          "%i Dateien vorhanden, suche nach Pattern...", Dir.num());
+                          "%zu Dateien vorhanden, suche nach Pattern...", Dir.size());
         try {
-            pplib::Dir::Iterator it;
-            Dir.reset(it);
-            while (true) {
-                const pplib::DirEntry& entry = Dir.getNext(it);
+            for (const pplib::DirEntry& entry : Dir) {
                 Filename = entry.Filename;
                 // Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
                 if (!pplib::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
@@ -978,7 +974,10 @@ pplib::String CWmClient::NormalizeFilename(
     Tmp += ".";
     Tmp += Suffix;
     normalizer.NormalizeFilename(Tmp);
-    pplib::WideString s = Tmp;
+    // Hinweis: pplib::String::toWideString() ist in pplib8 deklariert, aber
+    // nicht implementiert. Der explizite Konstruktor von WideString macht
+    // dasselbe.
+    pplib::WideString s(Tmp);
     if (s.size() > (size_t)conf.MaxFilenameLength) {
         s.cut(conf.MaxFilenameLength - Suffix.size() - 1);
         Tmp = s;
@@ -1077,16 +1076,16 @@ int CWmClient::WritePlaylist(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page
 
     try {
         pplib::File m3u;
-        m3u.open(pplib::ToString("%s/000index.m3u", (const char*)Path), pplib::File::WRITE);
+        m3u.open(pplib::ToString("%s/000index.m3u", (const char*)Path), pplib::File::FileMode::WRITE);
 
         pplib::File pls;
-        pls.open(pplib::ToString("%s/000index.pls", (const char*)Path), pplib::File::WRITE);
+        pls.open(pplib::ToString("%s/000index.pls", (const char*)Path), pplib::File::FileMode::WRITE);
 
         pplib::File txt;
-        txt.open(pplib::ToString("%s/000index.txt", (const char*)Path), pplib::File::WRITE);
+        txt.open(pplib::ToString("%s/000index.txt", (const char*)Path), pplib::File::FileMode::WRITE);
 
         pplib::File xspf;
-        xspf.open(pplib::ToString("%s/000index.xspf", (const char*)Path), pplib::File::WRITE);
+        xspf.open(pplib::ToString("%s/000index.xspf", (const char*)Path), pplib::File::FileMode::WRITE);
 
         m3u.puts("#EXTM3U\n");
         pls.puts("[playlist]\n");

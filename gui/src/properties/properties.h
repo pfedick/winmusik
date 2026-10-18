@@ -415,41 +415,6 @@ private slots:
         Change();
     };
 
-    // CDDB
-    void on_cdioDevice_currentIndexChanged(int)
-    {
-        Change();
-    };
-    void on_cddbServer_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbPort_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbQueryPath_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbUserName_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbHostName_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbProxyServer_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbProxyPort_textChanged(const QString&)
-    {
-        Change();
-    };
-    void on_cddbUseProxy_toggled(bool);
-
     // Beatport
     void on_beatport_clearance_plainTextChanged()
     {

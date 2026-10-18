@@ -107,9 +107,16 @@ Verschiedene Funktionen:
 
 
 
+# Refactoring
+- exceptions.h: Benutzt eigene Definition "WMEXCEPTION". Sollten wir hier nicht besser PPPLIBEXCEPTION verwenden?
+
+
 
 # Erledigt
 - Vorhandener Code muss wieder kompilieren
 - Zentrales Makefile anpassen
 - Einbindung von pplib8 in das bestehende WinMusik-Projekt
 - wmlib auf CMake umstellen
+
+
+

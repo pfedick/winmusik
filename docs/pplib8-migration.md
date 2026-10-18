@@ -219,14 +219,38 @@ Für die erste Phase zurückgestellt. Besondere Brocken: `Dir`-Iteration (6 Date
   Dateien include-n weiterhin `ppl7.h`: `include/winmusik3.h`, `include/coverdownloadmanager.h`,
   `include/csearchlist.h`, `include/musickey.h`, `include/resultfilter.h`,
   `src/editor/edit-functions.cpp`, `src/playlist/playlistprint.cpp`, `src/regexpcapture.cpp`,
-  `widgets/wmcoverwidget.cpp`.
+  `widgets/wmcoverwidget.cpp`. *(erledigt — `grep -rn ppl7 gui/` ist leer)*
+- `Dir`-Iteration: die ppl7-Zugriffe `Iterator`, `reset()`, `getNext()`, `getNextPattern()`,
+  `getNextRegExp()`, `getFirstRegExp()` und die `SORT_*`-Konstanten gibt es in pplib8 nicht.
+  Muster: `for (const pplib::DirEntry& entry : Dir)` bzw. `Dir.filterPattern(Pattern, true)`,
+  `Dir.filterRegExp(Pattern)`, `Dir.findRegExp(Pattern)` (`std::optional<DirEntry>`),
+  `Dir.num()` → `Dir.size()` (bei `printf` Format `%zu`), Sortierung als
+  `Dir::Sort::Filename` / `FilenameIgnoreCase` / `None`. Betrifft in der GUI: `CWmClient.cpp`,
+  `editor/edit.cpp`, `editor/massimport.cpp`, `editor/renumberdialog.cpp`, `search/search.cpp`,
+  `searchlists/searchlists.cpp`.
+- `pplib::String::toWideString()` ist in pplib8 deklariert, aber nirgends implementiert →
+  Linker-Fehler. Ersatzweise `pplib::WideString s(Tmp);` verwenden (`explicit`-Konstruktor in
+  `pplib/types/widestring.h`). **Offener Punkt an die Bibliothek.**
+- `pplib::InvalidGenreException` gibt es in pplib8 nicht; `pplib::GetID3GenreName(int)` liefert
+  für eine ungültige ID einen leeren String. In `firststart/InitialDatabase.cpp` ist der
+  try/catch-Block deshalb entfallen, die Abbruchbedingung `genre.isEmpty()` bleibt.
+- Das `WMEXCEPTION`-Makro in `gui/include/exceptions.h` musste an die pplib8-Basis angepasst
+  werden: `copyText(...)` → `initFromFormat(const char*, va_list)` (protected), und die
+  Klassenname-Ausgabe läuft nicht mehr über ein `what()`-Override mit `STR_VALUE(name)`,
+  sondern über `virtual const char* className() const noexcept`.
+- `RegEx` akzeptiert in pplib8 weiterhin die ppl7-Syntax `/muster/flags` (die Implementierung
+  schneidet die Flags hinter dem letzten Slash ab), alle bestehenden GUI-Pattern bleiben gültig.
+  Achtung bei `Dir::filterRegExp()`: dort gilt dieselbe Slash-Syntax, ein Pattern wie
+  `/^([0-9]{3}_.*$/` (in `edit.cpp` fehlerhaft) führt zu Fehlinterpretation der Flags.
 
 ## 8. GUI-Build mit CMake
 
-`gui/WinMusik.pro` (qmake) ist durch `gui/CMakeLists.txt` ersetzt; die Qt-Codegenerierung
-übernimmt CMake (`AUTOMOC`, `AUTOUIC`, `AUTORCC`). `gui/WinMusik.pro` wird von `configure`
-aus `gui/WinMusik.pro.in` erzeugt — mit dem qmake-Pfad entfallen `AC_CONFIG_FILES([gui/WinMusik.pro])`
-in `configure.ac` sowie `WinMusik.pro.in`/`WinMusik.pro.header`.
+`gui/WinMusik.pro` (qmake) ist durch `gui/CMakeLists.txt` ersetzt. Der qmake-Pfad ist
+vollständig entfernt: `gui/WinMusik.pro.in` und `gui/WinMusik.pro.header` sind gelöscht,
+`AC_CONFIG_FILES([gui/WinMusik.pro])` ist aus `configure.ac` herausgenommen (der eingecheckte
+`configure` wurde mit autoconf 2.72 neu erzeugt), und die qmake-Suche samt Target `qmake-info`
+ist aus dem Root-`Makefile` entfernt. `configure` prüft Qt weiterhin nur noch für die
+Ausgabeumgebung (Report), der Bau läuft über CMake.
 
 Build (Root-`Makefile`):
 
@@ -240,6 +264,25 @@ Wichtige Punkte der neuen Konfiguration:
 
 - Qt-Module: `Core Gui Widgets Xml Network PrintSupport` (`Xml` wegen `QDomDocument` in
   `editor/edit.cpp` und den Searchlists, `PrintSupport` wegen `coverprinter`/`playlistprint`).
+- Quellen-Globs sind `GLOB_RECURSE` über `src/`, `widgets/` und `include/`. Mit
+  `GLOB` allein (`src/*.cpp`) wären alle Unterverzeichnisse (`src/editor/`, `src/search/`, …)
+  nicht Teil des Targets — das äußert sich ausschließlich als lange Liste von Linker-Fehlern.
+- `AUTOUIC` ist abgeschaltet. CMake erzeugt `ui_*.h` nur, wenn die Quelldatei das Header-
+  Include direkt enthält und die `.ui` in ihrem Verzeichnis (oder in `AUTOUIC_SEARCH_PATHS`)
+  liegt; die GUI bindet die generierten Header aber aus anderen Verzeichnissen ein
+  (`#include "ui_edit.h"` in `src/editor/edit.cpp`, `.ui` liegt in `include/`). Stattdessen
+  läuft eine eigene Regel: alle 33 `.ui`-Dateien werden mit `Qt6::uic` in
+  `${CMAKE_CURRENT_BINARY_DIR}/ui` erzeugt (Target `WinMusik_uic`, Verzeichnis vorab mit
+  `cmake -E make_directory` angelegt, weil `uic` keine Verzeichnisse anlegt) und dieses
+  Verzeichnis liegt im Include-Pfad des Targets.
+- `AUTOMOC` kompiliert alle moctierten Header in `mocs_compilation.cpp` gemeinsam in einer
+  TU. Duplizierte Include-Guards, die im normalen Build harmlos sind, werden dort tödlich.
+  Gefunden: `src/editor/tablesearch.h` und `src/search/search.h` nutzten beide `SEARCH_H`;
+  `tablesearch.h` verwendet jetzt `TABLESEARCH_H`.
+- Die Makros `WITH_QT`, `PPL_WITH_QT6` und `PPL_QT_STRING_UTF8` kommen jetzt ausschließlich
+  aus `target_compile_definitions`. Die handgeschriebenen `#define`s in den Quellen sind
+  entfernt bzw. `#ifndef`-gekapselt (`winmusik3.h`, `coverdownloadmanager.h`); ohne das
+  entstehen Warnungen wegen Makro-Redefinition.
 - Include-Verzeichnisse: `gui/` (selbst, wegen `#include "src/menue/menue.h"`), `gui/include`,
   `gui/widgets`. Die alten Pfade `../pplib/include` (pplib7) und `../lib/include` sind entfallen.
 - `target_compile_definitions(... PPL_WITH_QT6 PPL_QT_STRING_UTF8)`: erst diese Makros
@@ -257,5 +300,8 @@ Wichtige Punkte der neuen Konfiguration:
   erzeugt wie bisher eine Windows-Anwendung ohne Konsole.
 - Die `.qm`-Dateien bleiben eingecheckt und werden über `resources.qrc` (Präfix `/translation`)
   eingebettet; CMake erzeugt sie nicht automatisch.
-- Toter Ballast, der beim ersten sauberen Build auffällt: `gui/src/player/player.{h,ui}` und
-  `gui/src/exporttracks/exporttracks.ui` gehören zu keiner übersetzten Quelle.
+- Toter Ballast ist entfernt: `gui/src/player/player.{h,ui}` und
+  `gui/src/exporttracks/exporttracks.ui` gehörten zu keiner übersetzten Quelle.
+- CDDB/AudioCD ist aus der GUI ausgebaut (`editor/cddbimport.{h,cpp,ui}`,
+  `editor/cddbselect.{h,cpp,ui}` gelöscht, F5-Handler und zugehörige Includes in
+  `editor/edit.{h,cpp}` entfernt). In pplib8 entfällt die CDDB-Klasse ebenfalls.

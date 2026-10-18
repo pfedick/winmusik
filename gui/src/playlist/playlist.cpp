@@ -45,7 +45,7 @@
 #include "editstring.h"
 #include <stdio.h>
 
-#include "ppl7-audio.h"
+#include <pplib/audio/id3tag.h>
 
 using namespace de::pfp::winmusik;
 
@@ -1815,7 +1815,7 @@ void Playlist::exportCoverIcon(const pplib::String& TargetFile, const pplib::Str
             buffer.open(QIODevice::WriteOnly);
             icon.save(&buffer, "JPEG", 90);
             pplib::File file;
-            file.open(TargetFile, pplib::File::WRITE);
+            file.open(TargetFile, pplib::File::FileMode::WRITE);
             file.write(bytes.data(), bytes.size());
         }
     }
@@ -1829,7 +1829,7 @@ void Playlist::exportM3U()
     pplib::File m3u;
     pplib::String Tmp;
     try {
-        m3u.open(pplib::ToString("%s/000index.m3u", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::WRITE);
+        m3u.open(pplib::ToString("%s/000index.m3u", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::FileMode::WRITE);
         m3u.puts("#EXTM3U\n");
         for (int i = 0; i < ui.tracks->topLevelItemCount(); i++) {
             PlaylistItem* item = (PlaylistItem*)ui.tracks->topLevelItem(i);
@@ -1852,7 +1852,7 @@ void Playlist::exportPLS()
     pplib::File pls;
     pplib::String Tmp;
     try {
-        pls.open(pplib::ToString("%s/000index.pls", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::WRITE);
+        pls.open(pplib::ToString("%s/000index.pls", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::FileMode::WRITE);
         pls.puts("[playlist]\n");
         for (int i = 0; i < ui.tracks->topLevelItemCount(); i++) {
             PlaylistItem* item = (PlaylistItem*)ui.tracks->topLevelItem(i);
@@ -1878,7 +1878,7 @@ void Playlist::exportXSPF()
     pplib::File xspf;
     pplib::String Tmp;
     try {
-        xspf.open(pplib::ToString("%s/000index.xspf", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::WRITE);
+        xspf.open(pplib::ToString("%s/000index.xspf", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::FileMode::WRITE);
         xspf.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xspf.puts("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n");
         Tmp = tr("Playlist created by WinMusik");
@@ -1912,7 +1912,7 @@ void Playlist::exportTXT(bool withStartTimes)
     pplib::String Tmp;
     pplib::String Minuten = tr("min", "Minutes in Tracklisting of Playlist");
     try {
-        txt.open(pplib::ToString("%s/000index.txt", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::WRITE);
+        txt.open(pplib::ToString("%s/000index.txt", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::FileMode::WRITE);
         Tmp = ui.tracks->getName();
         if (Tmp.isEmpty()) {
             Tmp = tr("Playlist");
@@ -2006,7 +2006,7 @@ void Playlist::exportJSON()
     total.setf("trackCount", "%d", count);
     pplib::File file;
     try {
-        file.open(pplib::ToString("%s/000index.json", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::WRITE);
+        file.open(pplib::ToString("%s/000index.json", (const char*)wm->conf.playlist_export.TargetPath), pplib::File::FileMode::WRITE);
         pplib::Json::dump(file, total);
     }
     catch (const pplib::Exception& exp) {

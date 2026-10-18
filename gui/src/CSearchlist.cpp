@@ -327,7 +327,7 @@ pplib::String CSearchlist::toXML() const
 void CSearchlist::save(const pplib::String& filename) const
 {
     pplib::File ff;
-    ff.open(filename, pplib::File::WRITE);
+    ff.open(filename, pplib::File::FileMode::WRITE);
     ff.puts(toXML());
 }
 

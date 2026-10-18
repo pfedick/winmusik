@@ -21,6 +21,7 @@
 #define EDIT_H
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "tablecontrol.h"
 #include <QDialog>
 #include <QKeyEvent>
@@ -29,7 +30,6 @@
 #include "fkeys.h"
 #include "ui_edit.h"
 #include "colorscheme.h"
-#include "ppl7-audio.h"
 
 class Edit;
 
@@ -224,7 +224,6 @@ private:
     void CheckDupes();
     void UpdateCover();
     // void index_LostFocus();
-    void importFromCddb();
     void renumber();
     void DeleteShift(int track);
     void InsertShift(int track);

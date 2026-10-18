@@ -40,12 +40,26 @@
 #include <list>
 #include <queue>
 
+// Die Makros werden auch vom Buildsystem (gui/CMakeLists.txt) gesetzt. Die
+// Abfrage ermoeglicht es, die GUI auch ohne diese Definitionen zu bauen,
+// ohne dass es zu Warnungen wegen doppelter Definition kommt.
+#ifndef WITH_QT
 #define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
+#endif
+#ifndef PPL_WITH_QT6
 #define PPL_WITH_QT6
+#endif
+#ifndef PPL_QT_STRING_UTF8
 #define PPL_QT_STRING_UTF8
+#endif
 
-#include "ppl7.h"
+#include <pplib.h>
 #include "exceptions.h"
+
+namespace pplib
+{
+class ID3Tag;
+}
 
 #include "wm_id3tagsaver.h"
 #include "libwinmusik3.h"
@@ -228,22 +242,6 @@ public:
     MusicKeyType musicKeyDisplay;
     MusicKeyType musicKeyTag;
     int playlistView;
-
-    class CDDB
-    {
-    public:
-        CDDB();
-        pplib::String cddevice;
-        pplib::String server;
-        pplib::String proxy_server;
-        pplib::String username;
-        pplib::String hostname;
-        pplib::String querypath;
-        int proxy_port;
-        int port;
-        bool useProxy;
-    };
-    CDDB cddb;
 
     class PlaylistExport
     {

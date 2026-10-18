@@ -17,11 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define PPL_QT_STRING_UTF8
-#define WITH_QT // Sorgt dafür, dass die PPL-String-Klasse mit QT interaggieren kann
-#define PPL_WITH_QT6
-#include "ppl7.h"
-#include "ppl7-inet.h"
+#include <pplib.h>
+#include <pplib-inet.h>
 #include "wmcoverwidget.h"
 #include "ui_wmcoverwidget.h"
 
@@ -36,6 +33,7 @@
 #include <QPixmap>
 #include <QUuid>
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 #include "wm_coverdownload.h"
 
 WMCoverWidget::WMCoverWidget(QWidget* parent)

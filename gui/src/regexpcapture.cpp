@@ -24,8 +24,8 @@
 #include <exception>
 #include <stdexcept>
 
-#include "ppl7.h"
-#include "ppl7-types.h"
+#include <pplib.h>
+#include <pplib-types.h>
 
 void copyFromClipboard(de::pfp::winmusik::RegExpClipboard& clip)
 {

@@ -25,6 +25,7 @@
 #include <QMimeData>
 #include <QMouseEvent>
 #include "searchlisttrackdialog.h"
+#include <pplib/audio/id3tag.h>
 #include "csearchlist.h"
 #include "regexpcapture.h"
 #include "wm_coverdownload.h"

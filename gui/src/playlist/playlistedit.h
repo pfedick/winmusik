@@ -25,7 +25,7 @@
 #include "ui_playlistedit.h"
 #include "winmusik3.h"
 
-#include "ppl7-audio.h"
+#include <pplib/audio/id3tag.h>
 #include "playlisttracks.h"
 
 class PlaylistEdit : public QDialog

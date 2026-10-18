@@ -21,7 +21,7 @@
 #define RESULTFILTER_H_
 
 #include <set>
-#include "ppl7.h"
+#include <pplib.h>
 
 class ResultFilter
 {

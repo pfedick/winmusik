@@ -18,8 +18,8 @@
  */
 
 #include "winmusik3.h"
+#include <pplib/audio/id3tag.h>
 
-#include "ppl7-audio.h"
 
 static const char* versions[] = {"Single",   "Maxi",         "Album", "Original Version", "Original Mix",
                                  "Club Mix", "Extended Mix", "Remix", "Radio Edit",       "Radio Mix",
@@ -57,16 +57,14 @@ int CWmClient::CreateInitialDatabase()
     }
 
     // Now the default genres defined by http://www.id3.org/
-    try {
-        for (int i = 0;; i++) {
-            pplib::String genre = pplib::GetID3GenreName(i);
-            if (genre.isEmpty()) break;
-            DataGenre g;
-            g.SetValue(genre);
-            GenreStore.Put(g);
-        }
-    }
-    catch (const pplib::InvalidGenreException&) {
+    // Now the default genres defined by http://www.id3.org/
+    // pplib8 liefert fuer eine ungueltige Genre-ID einen leeren String
+    for (int i = 0;; i++) {
+        pplib::String genre = pplib::GetID3GenreName(i);
+        if (genre.isEmpty()) break;
+        DataGenre g;
+        g.SetValue(genre);
+        GenreStore.Put(g);
     }
 
     // A few artist shortcuts

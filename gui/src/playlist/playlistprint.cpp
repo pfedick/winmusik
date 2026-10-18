@@ -17,9 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define WITH_QT
-#define PPL_QT_STRING_UTF8
-#include "ppl7.h"
+#include <pplib.h>
 #include "winmusik3.h"
 #include "playlisttracks.h"
 #include "playlist.h"
