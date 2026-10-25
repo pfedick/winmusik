@@ -245,11 +245,6 @@ int CWmClient::LoadTranslation()
     pplib::String filename;
     // pplib::String path=app->applicationDirPath();
     // printf ("conf.Locale=%s\n",(const char*)conf.Locale);
-    if (conf.Locale == "de") {
-        setlocale(LC_CTYPE, "de_DE.UTF-8");
-    } else {
-        setlocale(LC_CTYPE, "en_US.UTF-8");
-    }
     filename = ":/translation/qt_" + conf.Locale;
     if (qtTranslator.load(filename)) {
         app->installTranslator(&qtTranslator);

@@ -66,7 +66,12 @@ CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD
 release: configure_release pplib8_release wmlib_release gui_release
 	
 
-debug: gui_debug
+debug: update_version
+	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
+	ln -sf build/debug/compile_commands.json compile_commands.json
+	$(CMAKE) --build $(BUILD_DEBUG) --target translations WinMusik -j
+	mkdir -p debug
+	cp $(BUILD_DEBUG)/WinMusik$(EXE) debug/WinMusik$(EXE)
 
 configure_release:
 	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
