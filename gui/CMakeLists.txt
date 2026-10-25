@@ -130,7 +130,7 @@ endif()
 if(LUPDATE_EXECUTABLE AND LRELEASE_EXECUTABLE)
     add_custom_target(translations
         COMMAND ${LUPDATE_EXECUTABLE} -no-obsolete
-                ${GUI_SOURCES} ${GUI_HEADERS}
+                ${GUI_SOURCES} ${GUI_HEADERS} ${GUI_UI_FILES}
                 -ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_de.ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_en.ts
         COMMAND ${LRELEASE_EXECUTABLE}
                 ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_de.ts ${CMAKE_CURRENT_SOURCE_DIR}/winmusik_en.ts

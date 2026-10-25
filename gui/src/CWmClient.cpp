@@ -243,16 +243,15 @@ int CWmClient::SelectLanguage()
 int CWmClient::LoadTranslation()
 {
     pplib::String filename;
-    // pplib::String path=app->applicationDirPath();
-    // printf ("conf.Locale=%s\n",(const char*)conf.Locale);
     filename = ":/translation/qt_" + conf.Locale;
     if (qtTranslator.load(filename)) {
         app->installTranslator(&qtTranslator);
     }
     filename = ":/translation/winmusik_" + conf.Locale;
     if (wmTranslator.load(filename)) {
-        // printf ("Übersetzung nicht geladen!\n");
         app->installTranslator(&wmTranslator);
+    } else {
+        qWarning("WinMusik: Konnte Uebersetzung nicht laden: %s", (const char*)filename);
     }
 
     Str_Unknown = tr("unknown");
