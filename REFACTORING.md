@@ -14,11 +14,15 @@ intelligenten Editor und eine einfach zu bedienende Suchoberfläche. Jeder Audio
 - "DJ-Modus" in Playlists mit Unterstützung für Native Instrument's Traktor 3 Cue-Points
 - Läuft unter Windows 10/11, Linux, FreeBSD und anderen Unixen
 
-# Ziele
-- Upgrade von pplib (Version 7) auf pplib8 (Version 8)
-- Verwendung von CMake zum Bauen von pplib8
-- Eventuell kompletter Umstieg auf CMake?
-- Anpassung des Codes an die neuen Strukturen und Funktionen von pplib8
+## Ziele
+
+**Erledigt:**
+- Upgrade von pplib (Version 7) auf pplib8 (Version 8) => DONE
+- Verwendung von CMake zum Bauen von pplib8 => DONE
+- Eventuell kompletter Umstieg auf CMake? => DONE
+- Anpassung des Codes an die neuen Strukturen und Funktionen von pplib8 => DONE
+
+**Offen:**
 - Modernisierung des Codes und Nutzung moderner C++-Features
 - Refactoring der Datenbank
 - Filehandling verbessern:
@@ -27,28 +31,31 @@ intelligenten Editor und eine einfach zu bedienende Suchoberfläche. Jeder Audio
 - Doku aktualisieren
 - Nicht mehr benutzte Features entfernen
 
-
-
 ## Datenbank
-Aktuell ein monolithisches File, welches via Nextcloud synchronisiert wird. Das File ist >200 MB groß, bei jeder kleinsten Änderung muss die gesamte Datei synchronisiert werden.
+Aktuell ein monolithisches File, welches via Nextcloud synchronisiert wird. Das File ist >200 MB groß, bei jeder kleinsten Änderung muss die gesamte Datei synchronisiert werden. Das File selber besteht aus einem PFPFile-Header und den eigentlichen Datenblöcken als Chunks mit Header und Payload. Formatbeschreibung: docs/fileformat31.dox und docs/chunks.dox
 
-Ich überlege, ob ich dieses File in kleinere Dateien aufsplitte, so dass mein Editieren in der Regel nur das neuste oder betroffene Segment verändert und nicht die gesamte Datei synchronisiert werden muss.
+Ich überlege, ob ich dieses File in kleinere Chunks aufsplitte, so dass beim Editieren in der Regel nur das neuste oder betroffene Segment verändert und nicht mehr die gesamte Datenbank synchronisiert werden muss. Dazu muss intern im CStorageItem neben der Position im File auch vermerkt werden, aus welcher Datei der Datensatz stammt. Dateien sollten vielleicht einfach durchnummeriert werden, dann kann man mit Integern arbeiten.
+
+Beim Start der Anwendung müssen die alte Datenbank automatisch migriert werden.
 
 Ein Augenmerk sollte auch auf die Struktur und Verwaltung der Datenobjekte gelegt werden. Hier sehe ich zum Teil Pointer auf Pointer, wo wahrscheinlich ein Vector oder ein anderes Container-Objekt sinnvoller wäre.
+
+### Zukünftige Architektur
+Es wird ein kleines File geben mit Metadaten. Hier wird insbesondere die Transaxtion-ID (künftig 8 Byte) gespeichert, die für die Konsistenz und Nachverfolgbarkeit der Datenbankänderungen wichtig ist.
+
+Daten werden auf mehrere Dateien aufgesplittet, wobei jede Datei eine fortlaufende Nummer erhält. Die Datensätze werden in der Reihenfolge der Dateien und Chunks eingelesen.
+
+Bei Änderungen werden die vorhandenen Daten nicht angefasst, sondern in eine Logfile (WAL, Write-Ahead-Log) geschrieben. Beim Einlesen wird zunächst die Hauptdatenbank eingelesen und anschließend die Änderungen aus dem Logfile angewendet, um den aktuellen Zustand zu rekonstruieren.
+
+Die WAL-Datei sollte hin und wieder in die Hauptdatenbank integriert werden, um die Performance beim Einlesen zu verbessern. Dazu könnte man beim Einlesen ermitteln, wieviele Datensätze oder wieviel Speicherplatz durch Änderungen überschrieben wurden und entsprechend einen Compact-Vorgang anbieten, bei dem die Hauptdatenbank inklusive aller Änderungen neu geschrieben wird. Auch bei überschreiten einer bestimmten Größe der WAL-Datei könnte man das anbieten.
 
 ## pplib8
 Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier bisher verwendet wird. Sie bringt unter anderem eine modernisierte und besser getestete Codebasis mit sich, und eine modernisierte API. Einige der Änderungen brechen bewust die alte API, zum Beispiel pplib::Dir, die hier ebenfalls verwendet wird. Ein großteil der anderen Klassen und Funktionen ist unverändert oder erweitert worden. Ferner werden mehr Features von modernem C++20 genutzt.
 
 
-# Ausgangsbasis
-- pplib (Version 7) verwendet Autoconf. Winmusik hat sein eigenes Autoconf Configure-Skript, welches auch pplib7 konfiguriert.
-- pplib8 verwendet CMake
-- wmlib wird ebenfalls über das Configure-Skriot von Winmusik konfiguriert
-- Winmusik selbst (GUI) wird über das Configure-Skript von Winmusik konfiguriert, verwendet aber qmake zum Bauen der GUI.
 
 
-# Projektstruktur
-- pplib: Alte Version der Bibliothek (pplib7)
+## Projektstruktur
 - pplib8: Neue Version der Bibliothek (pplib8)
   - CMakeLists.txt: CMake-Konfigurationsdatei für pplib8
   - include: Header-Dateien der Bibliothek, inklusive API-Dokumentation
@@ -64,59 +71,14 @@ Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier b
   - widgets: Eigene GUI-Widgets der Anwendung
 - docs: Dokumentation, insbesondere auch das Fileformat der Datenbank
 
-# Technische Feinheiten
+## Technische Feinheiten
+**Encoding: UTF-8**
 WinMusik verwendet set_locale, um die Locale-Einstellungen der Anwendung auf UTF-8 zu setzen, sowohl unter Windows als auch unter anderen Betriebssystemen. Wir können also davon ausgehen, dass Inhalte in der Klasse pplib::String immer im UTF-8 Encoding vorliegen.
 
+**Qt6 String Konvertierung**
 Noch ungestestet sind die "ifdefs" in pplib/types/string.h für Qt6. Diese sorgend dafür, dass QString in pplib::String gewandelt wird und umgekehrt. Hier könnten noch Fehler vorhanden sein.
 
-# Entscheidungen
+## Entscheidungen
 - AudioCD / CDDB: Dieses Feature wurde in der GUI lange nicht mehr benutzt. Die CDDB und freedb.org existieren nicht mehr. Das Feature wird daher hier ausgebaut und in pplib8 nicht mehr implementiert. Falls wir es in Zukunft wieder benötigen, können wir eine passende Implementierung in der Gui oder in wmlib nachreichen.
-
-
-# Projektphasen
-- wmlib auf pplib8 portieren. Ab hier ist die GUI wahrscheinlich kaputt. Vielleicht brauchen wir einen Konvertierungslayer, der zum Beispiel ppl7::String in pplib::String konvertiert.
-
-## Migration auf pplib8
-Ausführliche Landkarte (verwendete Symbole, API-Brüche, Datei- und Batch-Reihenfolge):
-[docs/pplib8-migration.md](docs/pplib8-migration.md)
-
-- Namespace ändert sich von ppl7 auf pplib
-- Klassennamen sind weitestgehnd gleich
-- Includes sind zwar weiterhin über zentrale Aggregate-Dateien verfügbar, ähnlich wie vorher über "ppl7.h", es wird aber empfohlen, die spezifischen Header-Dateien direkt einzubinden, um Abhängigkeiten klar zu machen.
-- Größere, API-brechende Änderungen sind in pplib::File und pplib::Dir erfolgt.
-- Unter Umständen sind in pplib mehr Funktionen verfügbar oder für spezielle Anwendungsfälle bessere Alternativen vorhanden (std-kompatible Itteratoren zum Beispiel)
-- pplib8 hat eine hohe Testabdeckung und ein Großteil des Codes wurde mehreren Code-Reviews unterzogen. WinMusik ist aber der erste größere Verbraucher der Bibliothek, es könnten also noch unerwartete Probleme oder subtile Fehler auftreten.
-
-Wichtige Klassen mit ihren Header-Dateien:
-- pplib::String - <pplib/types/string.h>
-- pplib::WideString - <pplib/types/widestring.h>
-- pplib::AssocArray - <pplib/types/assocarray.h>
-- pplib::ByteArray - <pplib/types/bytearray.h>
-- pplib::ByteArrayPtr - <pplib/types/bytearrayptr.h>
-- pplib::DateTime - <pplib/types/datetime.h>
-- pplib::Variant - <pplib/types/variant.h>
-
-- pplib::Mutex - <pplib/core/mutex.h>
-- pplib::Logger - <pplib/core/logging.h>
-- pplib::Thread - <pplib/core/thread.h>
-- pplib::ppl_time_t - <pplib/core/time.h>
-
-Verschiedene Funktionen:
-- <pplib/core/functions.h>
-- <pplib/core/stringfunctions.h>
-
-
-
-# Refactoring
-- exceptions.h: Benutzt eigene Definition "WMEXCEPTION". Sollten wir hier nicht besser PPPLIBEXCEPTION verwenden?
-
-
-
-# Erledigt
-- Vorhandener Code muss wieder kompilieren
-- Zentrales Makefile anpassen
-- Einbindung von pplib8 in das bestehende WinMusik-Projekt
-- wmlib auf CMake umstellen
-
 
 
