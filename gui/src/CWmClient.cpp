@@ -1210,7 +1210,7 @@ int CWmClient::PlayFile(const pplib::String& Filename)
     if (Player.isEmpty()) Player = conf.MP3Player;
 
 #ifdef _WIN32
-    pplib::WideString f = Filename;
+    pplib::WideString f = Filename.toWideString();
     // Windows mag keine Vorwärts-Slashes
     f.replace(L"/", L"\\");
     if (wmlog)
@@ -1220,7 +1220,7 @@ int CWmClient::PlayFile(const pplib::String& Filename)
     } else {
         f = L"\"" + f;
         f += L"\"";
-        pplib::WideString prog = Player;
+        pplib::WideString prog = Player.toWideString();
         ShellExecuteW(NULL, L"open", (const wchar_t*)prog, (const wchar_t*)f, L"", SW_SHOWNORMAL);
     }
 #else

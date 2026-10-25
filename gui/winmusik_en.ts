@@ -2103,12 +2103,12 @@ Attention: Changing this directory can result in loss of data!</translation>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="src/main.cpp" line="105"/>
+        <location filename="src/main.cpp" line="108"/>
         <source>Could not initialize WinMusik</source>
         <translation>Could not initialize WinMusik</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="117"/>
+        <location filename="src/main.cpp" line="120"/>
         <source>Could not run WinMusik</source>
         <translation>An unexpected error occured</translation>
     </message>

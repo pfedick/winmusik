@@ -85,13 +85,16 @@ int main(int argc, char* argv[])
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 #ifdef WIN32
-    pplib::String::setGlobalEncoding("UTF-8");
-#endif
-
-    if (setlocale(LC_CTYPE, "") == NULL) {
+    if (setlocale(LC_ALL, ".UTF-8") == NULL) {
         printf("setlocale fehlgeschlagen\n");
         throw std::exception();
     }
+#else
+    if (setlocale(LC_ALL, "UTF-8") == NULL) {
+        printf("setlocale fehlgeschlagen\n");
+        throw std::exception();
+    }
+#endif
     if (setlocale(LC_NUMERIC, "C") == NULL) {
         printf("setlocale fuer LC_NUMERIC fehlgeschlagen\n");
         throw std::exception();

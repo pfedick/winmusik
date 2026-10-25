@@ -2105,12 +2105,12 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="src/main.cpp" line="105"/>
+        <location filename="src/main.cpp" line="108"/>
         <source>Could not initialize WinMusik</source>
         <translation>Konnte WinMusik nicht initialisieren</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="117"/>
+        <location filename="src/main.cpp" line="120"/>
         <source>Could not run WinMusik</source>
         <translation>Ein unerwarteter Fehler ist aufgetreten</translation>
     </message>
