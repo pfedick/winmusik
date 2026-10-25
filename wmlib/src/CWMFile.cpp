@@ -209,7 +209,7 @@ void CWMFile::Open(const char* filename)
         }
     }
     ff.open(filename, pplib::File::FileMode::READWRITE);
-    ff.setMapReadAhead(1024 * 1024 * 10);
+    ff.setMapWindowSize(1024 * 1024 * 10);
     // Header einlesen und prüfen
 
     const char* header = (const char*)ff.map(0, 32);
@@ -387,7 +387,7 @@ void CWMFile::DeleteChunk(CWMFileChunk& chunk)
         throw InvalidDatabaseChunkException(pplib::ToString("unknown chunk type [%s]"), chunk.chunkname);
     }
     if (chunk.filepos) {
-        ff.setMapReadAhead(0);
+        ff.setMapWindowSize(0);
         ff.read(header, 4, chunk.filepos);
         // Wir kennzeichnen den alten Datensatz als gelöscht
         memcpy(header, "FREE", 4);

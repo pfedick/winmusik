@@ -17,19 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "wm_storage.h"
 #include "wm_tracklist.h"
 #include "wm_exceptions.h"
 #include <map>
 
-
-namespace de {
-namespace pfp {
-namespace winmusik {
-
-
-
+namespace de
+{
+namespace pfp
+{
+namespace winmusik
+{
 
 /*!\class CTrackList
  * \brief Tracklisting
@@ -65,17 +63,16 @@ namespace winmusik {
  * \brief Pointer auf die CTrackStore Klasse, von der diese Liste erstellt wurde
  */
 
-
 CTrackList::CTrackList()
 /*!\brief Konstruktor der Klasse
  *
  * Der Konstruktor setzt alle Variablen auf 0.
  */
 {
-	storage=NULL;
-	DeviceId=0;
-	DeviceType=0;
-	Page=0;
+    storage = NULL;
+    DeviceId = 0;
+    DeviceType = 0;
+    Page = 0;
 }
 
 CTrackList::CTrackList(CTrackStore* storage)
@@ -84,32 +81,31 @@ CTrackList::CTrackList(CTrackStore* storage)
  * Der Konstruktor setzt alle Variablen auf 0.
  */
 {
-	this->storage=storage;
-	DeviceId=0;
-	DeviceType=0;
-	Page=0;
+    this->storage = storage;
+    DeviceId = 0;
+    DeviceType = 0;
+    Page = 0;
 }
-
 
 CTrackList::CTrackList(const CTrackList& other)
 /*!\brief Copy Konstruktor der Klasse
  */
 {
-	storage=NULL;
-	DeviceId=0;
-	DeviceType=0;
-	Page=0;
-	copy(other);
+    storage = NULL;
+    DeviceId = 0;
+    DeviceType = 0;
+    Page = 0;
+    copy(other);
 }
 
 void CTrackList::copy(const CTrackList& other)
 {
-	Clear();
-	storage=other.storage;
-	DeviceId=other.DeviceId;
-	DeviceType=other.DeviceType;
-	Page=other.Page;
-	Tracks=other.Tracks;
+    Clear();
+    storage = other.storage;
+    DeviceId = other.DeviceId;
+    DeviceType = other.DeviceType;
+    Page = other.Page;
+    Tracks = other.Tracks;
 }
 
 CTrackList::~CTrackList()
@@ -118,13 +114,13 @@ CTrackList::~CTrackList()
  * Der Destruktor löscht den internen binären Suchbaum und gibt dessen Speicher wieder frei.
  */
 {
-	Clear();
+    Clear();
 }
 
 CTrackList& CTrackList::operator=(const CTrackList& other)
 {
-	copy(other);
-	return *this;
+    copy(other);
+    return *this;
 }
 
 void CTrackList::Clear()
@@ -134,7 +130,7 @@ void CTrackList::Clear()
  * Alle Variablen werden auf 0 gesetzt.
  */
 {
-	Tracks.clear();
+    Tracks.clear();
 }
 
 int CTrackList::GetMin() const
@@ -145,18 +141,18 @@ int CTrackList::GetMin() const
  * \returns Track-Nummer
  */
 {
-	if (Tracks.empty()) return 0;
-	return Tracks.begin()->first;
+    if (Tracks.empty()) return 0;
+    return Tracks.begin()->first;
 }
 
 int CTrackList::Num() const
 {
-	return (int)Tracks.size();
+    return (int)Tracks.size();
 }
 
 size_t CTrackList::Size() const
 {
-	return Tracks.size();
+    return Tracks.size();
 }
 
 int CTrackList::GetMax() const
@@ -167,19 +163,19 @@ int CTrackList::GetMax() const
  * \returns Track-Nummer
  */
 {
-	if (Tracks.empty()) return 0;
-	return Tracks.rbegin()->first;
+    if (Tracks.empty()) return 0;
+    return Tracks.rbegin()->first;
 }
 
 const DataTrack& CTrackList::Get(int track) const
 {
-	if (track < 1 || track >65535) {
-		throw InvalidTrackNumberException("Track must be between 1 and 65535");
-	}
-	std::map<int, DataTrack>::const_iterator it;
-	it=Tracks.find(track);
-	if (it == Tracks.end()) throw RecordDoesNotExistException();
-	return it->second;
+    if (track < 1 || track > 65535) {
+        throw InvalidTrackNumberException("Track must be between 1 and 65535");
+    }
+    std::map<int, DataTrack>::const_iterator it;
+    it = Tracks.find(track);
+    if (it == Tracks.end()) throw RecordDoesNotExistException();
+    return it->second;
 }
 
 const DataTrack* CTrackList::GetPtr(int track) const
@@ -193,60 +189,59 @@ const DataTrack* CTrackList::GetPtr(int track) const
  * gefunden, wird NULL zurückgegeben.
  */
 {
-	if (track < 1 || track >65535) {
-		return NULL;
-	}
-	std::map<int, DataTrack>::const_iterator it;
-	it=Tracks.find(track);
-	if (it == Tracks.end()) return NULL;
-	return &(*it).second;
+    if (track < 1 || track > 65535) {
+        return NULL;
+    }
+    std::map<int, DataTrack>::const_iterator it;
+    it = Tracks.find(track);
+    if (it == Tracks.end()) return NULL;
+    return &(*it).second;
 }
 
 bool CTrackList::Exists(int track) const
 {
-	const DataTrack* t=GetPtr(track);
-	if (t) return true;
-	return false;
+    const DataTrack* t = GetPtr(track);
+    if (t) return true;
+    return false;
 }
-
 
 CTrackList::iterator CTrackList::begin()
 {
-	return Tracks.begin();
+    return Tracks.begin();
 }
 
 CTrackList::iterator CTrackList::end()
 {
-	return Tracks.end();
+    return Tracks.end();
 }
 
 CTrackList::const_iterator CTrackList::begin() const
 {
-	return Tracks.begin();
+    return Tracks.begin();
 }
 
 CTrackList::const_iterator CTrackList::end() const
 {
-	return Tracks.end();
+    return Tracks.end();
 }
 
 DataTrack* CTrackList::SaveToMemory(const DataTrack& t)
 {
-	std::pair<std::map<int, DataTrack>::iterator, bool> new_it;
-	new_it=Tracks.insert(std::pair<int, DataTrack>(t.Track, t));
-	return &new_it.first->second;
+    std::pair<std::map<int, DataTrack>::iterator, bool> new_it;
+    new_it = Tracks.insert(std::pair<int, DataTrack>(t.Track, t));
+    return &new_it.first->second;
 }
 
 void CTrackList::Add(uint16_t Track, const DataTrack& t)
 {
-	Tracks.insert(std::pair<int, DataTrack>(Track, t));
+    Tracks.insert(std::pair<int, DataTrack>(Track, t));
 }
 
 void CTrackList::SaveToStorage(DataTrack& t)
 {
-	if (storage) {
-		storage->Put(t);
-	}
+    if (storage) {
+        storage->Put(t);
+    }
 }
 
 const DataTrack& CTrackList::Put(const DataTrack& entry)
@@ -265,15 +260,16 @@ const DataTrack& CTrackList::Put(const DataTrack& entry)
  *
  */
 {
-	if (entry.Track < 1 || entry.Track >65535) {
-		throw InvalidTrackNumberException("Track must be between 1 and 65535");
-	}
-	if (storage) {
-		const DataTrack& memtrack=storage->Put(entry);
-		return *SaveToMemory(memtrack);
-	} else {
-		return *SaveToMemory(entry);
-	}
+    // entry.Track ist uint16_t, kann also nicht größer als 65535 sein.
+    if (entry.Track < 1) {
+        throw InvalidTrackNumberException("Track must be between 1 and 65535");
+    }
+    if (storage) {
+        const DataTrack& memtrack = storage->Put(entry);
+        return *SaveToMemory(memtrack);
+    } else {
+        return *SaveToMemory(entry);
+    }
 }
 
 void CTrackList::Delete(int track)
@@ -286,18 +282,16 @@ void CTrackList::Delete(int track)
  * \param[in] track Nummer des Tracks
  */
 {
-	if (track < 1 || track>65535) return;
-	if (storage) {
-		const DataTrack* t=GetPtr(track);
-		if (t) {
-			storage->Delete(*t);
-		}
-	}
-	Tracks.erase(track);
+    if (track < 1 || track > 65535) return;
+    if (storage) {
+        const DataTrack* t = GetPtr(track);
+        if (t) {
+            storage->Delete(*t);
+        }
+    }
+    Tracks.erase(track);
 }
 
-
-
-}
-}
-}
+} // namespace winmusik
+} // namespace pfp
+} // namespace de

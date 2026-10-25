@@ -63,12 +63,16 @@ CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD
 	gui_release gui_debug test translations
 
 
-release: gui_release
+release: configure_release pplib8_release wmlib_release gui_release
+	
 
 debug: gui_debug
 
-configure:
+configure_release:
 	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	ln -sf build/release/compile_commands.json compile_commands.json
+
+configure_debug:
 	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
 
 pplib8_configure: configure
@@ -92,9 +96,15 @@ update_version:
 	@diff tmp/version.h gui/include/version.h > /dev/null 2>&1; if [ $$? -ne 0 ] ; then cp tmp/version.h gui/include/version.h; fi
 
 mingw: update_version
-	mingw32-make -j8 wmlib_release
-	mingw32-make -j8 gui_release
-	mingw32-make translations
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	ln -sf build/release/compile_commands.json compile_commands.json
+	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik -j
+	# $(CMAKE) --build $(BUILD_RELEASE) --target pplib_core pplib_audio pplib_internet -j
+	# $(CMAKE) --build $(BUILD_RELEASE) --target wmlib -j
+	# $(CMAKE) --build $(BUILD_RELEASE) --target translations
+	# $(CMAKE) --build $(BUILD_RELEASE) --target WinMusik -j
+	mkdir -p release
+	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
 	rm -rf release/deploy
 	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
 	ldd release/WinMusik.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
