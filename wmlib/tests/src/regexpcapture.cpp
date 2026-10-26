@@ -208,4 +208,19 @@ TEST_F(RegExpCaptureTest, Beatport2025_2)
     ASSERT_EQ(pplib::String("2025-07-25"), match.ReleaseDate);
 }
 
+TEST_F(RegExpCaptureTest, Beatport2026_2)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2026_2.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    EXPECT_EQ(pplib::String("Saguaro"), match.Title);
+    EXPECT_EQ(pplib::String("Extended Mix"), match.Version);
+    EXPECT_EQ(pplib::String("David Surok"), match.Artist);
+    EXPECT_EQ(pplib::String("State Control Records"), match.Label);
+    EXPECT_EQ(pplib::String("Trance"), match.Genre);
+    EXPECT_EQ(pplib::String("2026-08-07"), match.ReleaseDate);
+}
+
 } // namespace

@@ -100,6 +100,14 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
             Version = matches[2].trimmed();
             // printf("Match Title: >>%s<<, >>%s<<!\n", (const char*)Title, (const char*)Version);
             found++;
+        } else if (pplib::RegEx::capture("/^(.*?)<span .*?>(.*?)<\\/span>/is", todo, matches)) {
+            // Beatport 2026_2
+            Title = matches[1].trimmed();
+            Version = matches[2].trimmed();
+            found++;
+        } else if (!todo.isEmpty()) {
+            Title = todo.trimmed();
+            found++;
         }
     }
     pplib::Array artists;
@@ -114,6 +122,15 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
                 // printf("MATCH! >>%s<<\n", (const char*)matches[1]);
                 artists.add(matches[1].trimmed());
                 // have_artist=true;
+            }
+        }
+    } else if (pplib::RegEx::capture("/(<div class=.*?InfoColumn.*?<div class=.*?CatalogColumn)/is", html, matches)) {
+        pplib::String Block = matches[1];
+        pplib::Array links(Block, "</a>");
+        for (size_t i = 0; i < links.size(); i++) {
+            pplib::String row = links[i] + "</a>";
+            if (pplib::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?artist\\/.*?>(.*?)</a>/is", row, matches)) {
+                artists.add(matches[1].trimmed());
             }
         }
     }
@@ -158,7 +175,7 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
         } else if (pplib::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?genre\\/.*?\\/([0-9]+)\".*?>(.*?)</a>/is", row,
                                          matches)) {
             Genre = BeatportGetGenreFromId(matches[1].toInt());
-            if (Genre.isEmpty()) Genre = matches[2].trimmed();
+            if (Genre.isEmpty() || Genre == "Trance") Genre = matches[2].trimmed();
         }
     }
     if (pplib::RegEx::capture("/.*\\|.*<span>.*</span>(.*)$/", Genre, matches)) {
@@ -170,7 +187,15 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
         Artist = artists.implode(", ");
         found++;
     }
-    if (pplib::RegEx::capture("/<div class.*?date.*?>([0-9\\-]+)</div>/is", html, matches)) {
+    if (pplib::RegEx::capture("/<div class=[^>]*DateColumn[^>]*>.*?<div class=[^>]*Text[^>]*>(.*?)<\\/div>/is", html, matches)) {
+        try {
+            pplib::Date d;
+            d.set(matches[1].trimmed());
+            Released = d.toString();
+        } catch (...) {
+            Released = matches[1].trimmed();
+        }
+    } else if (pplib::RegEx::capture("/<div class=[^>]*date[^>]*>([0-9\\-]+)<\\/div>/is", html, matches)) {
         Released = matches[1].trimmed();
     }
 

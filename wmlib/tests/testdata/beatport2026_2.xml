@@ -1,0 +1,73 @@
+<html>
+    <body>
+        <!--StartFragment-->
+        <div class="RowCell-style__RowCellBase-sc-c2ffc65c-0 ArtCell-style__Stylized-sc-d458dea9-0 kabAik JczRF" style="box-sizing: border-box; border: 0px solid; grid-column: 2; justify-self: start; overflow: hidden; border-radius: 0.125rem; width: 3rem; height: 3rem; color: rgb(255, 255, 255); font-family: aeonikFont, &quot;aeonikFont Fallback&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <div class="ArtCell-style__ArtColumn-sc-d458dea9-1 pLznW" style="box-sizing: border-box; border: 0px solid; position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+                <br class="Apple-interchange-newline">
+                    <div class="ArtCell-style__ArtOverlay-sc-d458dea9-2 irxagW" style="box-sizing: border-box; border: 0px solid; position: absolute; inset: 0px; z-index: 2; border-radius: 0.125rem; pointer-events: none; opacity: 0.8; transition: opacity 0.15s; background: rgb(52, 52, 52);"></div>
+                    <span class="RowCell-style__ClickBarrier-sc-c2ffc65c-1 fKzMMX" style="box-sizing: border-box; border: 0px solid; display: contents;">
+                        <button type="button" class="ArtCell-style__ArtOverlayIcon-sc-d458dea9-3 hJeHVy" aria-label="Pause" style="box-sizing: border-box; border-width: medium; border-style: none; border-color: currentcolor; border-image: none; font-family: inherit; font-size: 16px; font-weight: inherit; line-height: inherit; color: rgb(1, 255, 149); margin: 0px; padding: 0px; text-transform: none; appearance: button; background: none; cursor: pointer; position: absolute; inset: 0px; z-index: 2; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.3s;">
+                            <svg width="32" height="32" aria-hidden="true">
+                                <use href="/icons/sprite.svg#v2_pause"></use>
+                            </svg>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="RowCell-style__RowCellBase-sc-c2ffc65c-0 DetailsCell-style__Stylized-sc-bd2c887d-0 jIUKWt krvEKR" style="box-sizing: border-box; border: 0px solid; grid-column: 3 / 6; display: grid; flex-direction: column; justify-content: center; height: auto; overflow: visible; padding: 0px 0.25rem; grid-template-columns: subgrid; align-items: center; color: rgb(255, 255, 255); font-family: aeonikFont, &quot;aeonikFont Fallback&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+                <div class="DetailsCell-style__InfoColumn-sc-bd2c887d-1 iJsQxW" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; flex: unset; overflow: hidden; padding: 0px; height: 3rem;">
+                    <div class="DetailsCell-style__Text-sc-bd2c887d-7 DetailsCell-style__Title-sc-bd2c887d-11 jmdcmo jxnVKo" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(230, 230, 230); transition: color 0.15s; display: flex; align-items: center; font-weight: 500;">
+                        <span class="DetailsCell-style__TitleText-sc-bd2c887d-14 kkAEMJ" style="box-sizing: border-box; border: 0px solid; flex: 1 1 0%; min-width: 0px;">
+                            <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 gqTBLm marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 328.172px;">
+                                <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 kdmLOu" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 328.172px; white-space: nowrap;">
+                                    <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 fXlBMY" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 328.172px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                        <a title="Saguaro " aria-disabled="false" class="DetailsCell-style__TitleLink-sc-bd2c887d-8 gWHqIa" href="https://www.beatport.com/de/track/saguaro/29557335" style="box-sizing: border-box; border: 0px solid; color: rgb(230, 230, 230); text-decoration: none; display: inline; height: 1.25rem; overflow: hidden;">Saguaro <span class="DetailsCell-style__MixName-sc-bd2c887d-12 iWSkiC" style="box-sizing: border-box; border: 0px solid; font-weight: 400;">Extended Mix</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="DetailsCell-style__Text-sc-bd2c887d-7 jmdcmo" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                        <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 gqTBLm marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 328.172px;">
+                            <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 kdmLOu" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 328.172px; white-space: nowrap;">
+                                <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 fXlBMY" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 328.172px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                    <a title="David Surok" aria-disabled="false" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 iYOAEn" href="https://www.beatport.com/de/artist/david-surok/298023" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">David Surok</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="DetailsCell-style__CatalogColumn-sc-bd2c887d-3 kogRLY" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; height: 3rem; overflow: hidden;">
+                    <div class="DetailsCell-style__Text-sc-bd2c887d-7 jmdcmo" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                        <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 gqTBLm marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 221.469px;">
+                            <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 kdmLOu" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 221.469px; white-space: nowrap;">
+                                <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 fXlBMY" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 221.469px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                    <a title="State Control Records" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 iYOAEn" href="https://www.beatport.com/de/label/state-control-records/48748" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">State Control Records</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="DetailsCell-style__Text-sc-bd2c887d-7 jmdcmo" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                        <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 gqTBLm marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 221.469px;">
+                            <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 kdmLOu" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 221.469px; white-space: nowrap;">
+                                <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 fXlBMY" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 221.469px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                    <a title="Trance (Main Floor)" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 iYOAEn" href="https://www.beatport.com/de/genre/trance-main-floor/7" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">Trance (Main Floor)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="DetailsCell-style__DateColumn-sc-bd2c887d-4 eVjnMW" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; height: 3rem; overflow: hidden;">
+                    <div class="DetailsCell-style__DateRow-sc-bd2c887d-5 bjbgUe" style="box-sizing: border-box; border: 0px solid; display: flex; align-items: center; gap: 0.25rem; overflow: hidden;">
+                        <div class="DetailsCell-style__Text-sc-bd2c887d-7 jmdcmo" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">Aug 07, 2026</div>
+                    </div>
+                </div>
+            </div>
+            <div class="RowCell-style__RowCellBase-sc-c2ffc65c-0 MetaCell-style__Stylized-sc-ce3fb0b5-0 bWHhLw gLuMEq" style="box-sizing: border-box; border: 0px solid; grid-column: 6 / 9; display: grid; flex-direction: column; align-items: center; height: auto; padding: 0px; grid-template-columns: subgrid; color: rgb(255, 255, 255); font-family: aeonikFont, &quot;aeonikFont Fallback&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+                <div class="MetaCell-style__MetaDataColumn-sc-ce3fb0b5-1 VOosj" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">140</div>
+                <div class="MetaCell-style__MetaDataColumn-sc-ce3fb0b5-1 VOosj" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">Db Maj</div>
+                <div class="MetaCell-style__MetaDataColumn-sc-ce3fb0b5-1 elEDCP" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">6:10</div>
+            </div>            <!--EndFragment-->
+        </body>
+    </html>
