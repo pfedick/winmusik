@@ -30,6 +30,11 @@ intelligenten Editor und eine einfach zu bedienende Suchoberfläche. Jeder Audio
 - Neben mp3 und Aiff auch Unterstützung von Wave, Flac und Opus? Eventuel Ogg?
 - Doku aktualisieren
 - Nicht mehr benutzte Features entfernen
+- Signierung der ausführbaren Dateien und Installationspakete
+- Tonart-Erkennung
+- BPM-Erkennung
+- Traktor-Style Waveforms
+- Integrierter Audio-Player
 
 ## Datenbank
 Aktuell ein monolithisches File, welches via Nextcloud synchronisiert wird. Das File ist >200 MB groß, bei jeder kleinsten Änderung muss die gesamte Datei synchronisiert werden. Das File selber besteht aus einem PFPFile-Header und den eigentlichen Datenblöcken als Chunks mit Header und Payload. Formatbeschreibung: docs/fileformat31.dox und docs/chunks.dox
@@ -52,7 +57,53 @@ Die WAL-Datei sollte hin und wieder in die Hauptdatenbank integriert werden, um 
 ## pplib8
 Dies ist eine überarbeitete Version der Bibliothek pplib, Version 7, die hier bisher verwendet wird. Sie bringt unter anderem eine modernisierte und besser getestete Codebasis mit sich, und eine modernisierte API. Einige der Änderungen brechen bewust die alte API, zum Beispiel pplib::Dir, die hier ebenfalls verwendet wird. Ein großteil der anderen Klassen und Funktionen ist unverändert oder erweitert worden. Ferner werden mehr Features von modernem C++20 genutzt.
 
+## Signierung der ausführbaren Dateien und Installationspakete
+Über die gemeinnützige **SignPath Foundation** (https://about.signpath.io/open-source/free-code-signing) können Open-Source-Projekte kostenlos offizielle Code-Signing-Zertifikate nutzen, um Warnungen von Windows Defender SmartScreen und UAC zu vermeiden.
 
+### Voraussetzungen:
+- Öffentliches GitHub-Repository mit anerkannter Open-Source-Lizenz (GPL v3 erfüllt).
+- Builds müssen reproduzierbar über CI (GitHub Actions) laufen, damit sichergestellt ist, dass das Binärpaket aus dem Quellcode gebaut wurde.
+
+### Ablauf & Schritte zur Integration:
+1. **Bewerbung:** Antrag auf kostenloses Signieren bei der SignPath Foundation einreichen (Projektlink + Open-Source-Nachweis).
+2. **Organisation & Projekt in SignPath anlegen:** Zertifikatsverwaltung und Vertrauensstufe konfigurieren.
+3. **GitHub Actions Workflow einrichten:**
+   - Windows-Runner (`windows-latest`) baut `WinMusik.exe`.
+   - SignPath GitHub Action signiert `WinMusik.exe`.
+   - Inno Setup baut das Installationsprogramm (`setup64.iss`).
+   - SignPath signiert das fertige Installer-Binary (`WinMusik-...-Setup.exe`).
+   - Veröffentlichung des signierten Installers in den GitHub Releases.
+
+## Tonart-Erkennung
+- **Ziel:** Automatische Erkennung von Tonart (Key), BPM und Energy direkt in WinMusik, um externe Tools wie *Mixed in Key* zu ersetzen.
+- **Prinzip:**
+  1. Audio decodieren (z. B. über `pplib::AudioDecoder`).
+  2. FFT pro Zeitfenster zur Frequenzanalyse.
+  3. Frequenzen auf die 12 Halbtöne der Tonleiter falten $\rightarrow$ Chromagramm (Pitch Class Profile, PCP).
+  4. Mit den 24 Krumhansl-Schmuckler-Tonartprofilen (12 Dur, 12 Moll) korrelieren; das Profil mit der höchsten Korrelation bestimmt die Tonart.
+  5. Mapping über die bestehende Klasse `MusicalKeys` (Camelot z. B. 8A/8B, OpenKey oder Standard-Notation).
+- **Referenz / Vorlage:** [`libKeyFinder`](https://github.com/ibsh/libKeyFinder) (schlanke, freie C++-Bibliothek, wird u. a. von *Mixxx* genutzt).
+
+## 3-Band-Farb-Waveform (Traktor-Style) & Preview
+- **Ziel:** Visuelle Vorschau des Tracks, an der man musikalische Struktur, Drops, Vocals und Rhythmus auf einen Blick erkennt.
+- **Prinzip (Frequenzweiche per IIR-Filter):**
+  Statt langsamer FFT werden 3 performante digitale Biquad-Filter (Linkwitz-Riley Crossover) verwendet:
+  - **Tiefpass (< 200 Hz):** Bassdrum, Bassline $\rightarrow$ **Rot**
+  - **Bandpass (200 Hz – 2.5 kHz):** Melodie, Vocals, Snare $\rightarrow$ **Grün**
+  - **Hochpass (> 2.5 kHz):** Hi-Hats, Cymbals, Air $\rightarrow$ **Blau**
+- **Speicherung als Preview:**
+  - Aggregation z. B. alle 1.000 Samples (~44 Punkte/Sekunde): Speichern von Amplitude (`uint8_t`) und Farbanteilen (R, G, B je `uint8_t`).
+  - Ein 5-Minuten-Track belegt nur ca. 50 KB Daten.
+  - Kann als eigener kleiner Datenbank-Chunk (z. B. `WAVF`) gespeichert werden und muss nur einmalig berechnet werden.
+- **Darstellung:** Eigenes `QWidget` mit `QPainter`, das vertikale farbige Linien rendert.
+
+## Integrierter Audio-Player
+- **Ziel:** Schnelles Vorhören von Tracks direkt in der Oberfläche, nahtlos mit der Waveform gekoppelt.
+- **Umsetzung mit Qt 6:**
+  - `QMediaPlayer` und `QAudioOutput` nutzen (unterstützt MP3, FLAC, WAV, AAC nativ über die Multimedia-Backends des Betriebssystems).
+- **Interaktion mit der Waveform:**
+  - Klick in die Waveform ruft `player->setPosition(ms)` auf zum sofortigen Spulen.
+  - Das Signal `player->positionChanged(qint64)` steuert eine vertikale Playhead-Linie über der Waveform.
 
 
 ## Projektstruktur
