@@ -63,8 +63,12 @@ CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD
 	gui_release gui_debug test translations
 
 
-release: configure_release pplib8_release wmlib_release gui_release
-	
+release: pplib8_release wmlib_release gui_release
+	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
+	ln -sf build/release/compile_commands.json compile_commands.json
+	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik -j
+	mkdir -p release
+	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
 
 debug: update_version
 	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
@@ -73,22 +77,10 @@ debug: update_version
 	mkdir -p debug
 	cp $(BUILD_DEBUG)/WinMusik$(EXE) debug/WinMusik$(EXE)
 
-configure_release:
-	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
-	ln -sf build/release/compile_commands.json compile_commands.json
-
-configure_debug:
-	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
-
-pplib8_configure: configure
-
-wmlib_configure: configure
 
 all: release debug
 
 wmlib: wmlib_release wmlib_debug
-
-gui: release
 
 update_version:
 	@mkdir -p tmp
@@ -100,16 +92,7 @@ update_version:
 	@echo "#endif" >> tmp/version.h
 	@diff tmp/version.h gui/include/version.h > /dev/null 2>&1; if [ $$? -ne 0 ] ; then cp tmp/version.h gui/include/version.h; fi
 
-mingw: update_version
-	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
-	ln -sf build/release/compile_commands.json compile_commands.json
-	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik -j
-	# $(CMAKE) --build $(BUILD_RELEASE) --target pplib_core pplib_audio pplib_internet -j
-	# $(CMAKE) --build $(BUILD_RELEASE) --target wmlib -j
-	# $(CMAKE) --build $(BUILD_RELEASE) --target translations
-	# $(CMAKE) --build $(BUILD_RELEASE) --target WinMusik -j
-	mkdir -p release
-	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
+mingw: release
 	rm -rf release/deploy
 	windeployqt.exe --dir release/deploy --translations de,en release/WinMusik.exe
 	ldd release/WinMusik.exe  | grep -v WINDOWS | grep ucrt64 | awk '{print $$3}' | while read line  ; do cp $${line} release/deploy; done
@@ -122,51 +105,30 @@ mingw: update_version
 		| sed "s/^VersionInfoVersion=.*/VersionInfoVersion=${VERSION}/"  \
 		| sed "s/^OutputBaseFilename=.*/OutputBaseFilename=WinMusik-${VERSION}-Setup-64bit/"  \
 		> setup.iss
-
-mingw_debug: update_version
-
-	mingw32-make -j8 wmlib_debug
-	mingw32-make -j8 gui_debug
 	
 setup: mingw
 	"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" setup.iss
 
 
-###########################################################################
-### pplib8 (nur die Bibliotheks-Libs; pplib8-eigene Tests: make -C pplib8 test)
-###########################################################################
-pplib8_debug:
-	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
-	$(CMAKE) --build $(BUILD_DEBUG) --target pplib_core pplib_audio pplib_internet -j
-
-pplib8_release:
-	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
-	$(CMAKE) --build $(BUILD_RELEASE) --target pplib_core pplib_audio pplib_internet -j
-
-pplib8: pplib8_debug pplib8_release
-
 
 ###########################################################################
-### wmlib
+### wmlib Tests & Coverage
 ###########################################################################
-wmlib_release:
-	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
-	$(CMAKE) --build $(BUILD_RELEASE) --target wmlib -j
-
-wmlib_debug:
-	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
-	$(CMAKE) --build $(BUILD_DEBUG) --target wmlib -j
+FILTER ?=
+GTEST_ARGS = --gtest_color=yes $(if $(FILTER),--gtest_filter="$(FILTER)") $(ARGS)
 
 wmlib_tests:
 	$(CMAKE) -S . -B $(BUILD_TESTS) $(CMAKE_TST)
 	$(CMAKE) --build $(BUILD_TESTS) --target wmlib_test -j
-	$(CTEST) --test-dir $(BUILD_TESTS) --output-on-failure
+	cd wmlib/tests && ../../$(BUILD_TESTS)/wmlib/tests/wmlib_test$(EXE) $(GTEST_ARGS)
+
+tests: wmlib_tests
 
 wmlib_coverage:
 	$(CMAKE) -S . -B $(BUILD_COV) $(CMAKE_COV)
 	ln -sf $(BUILD_COV)/compile_commands.json compile_commands.json
 	$(CMAKE) --build $(BUILD_COV) --target wmlib_test -j
-	$(CTEST) --test-dir $(BUILD_COV) --output-on-failure
+	cd wmlib/tests && ../../$(BUILD_COV)/wmlib/tests/wmlib_test$(EXE) $(GTEST_ARGS)
 	mkdir -p coverage_html
 	gcovr --root . $(BUILD_COV) --filter wmlib/src --medium-threshold 70 \
 		--exclude-throw-branches --html-details coverage_html/index.html --xml-pretty -o coverage.xml

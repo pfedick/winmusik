@@ -22,5 +22,6 @@ if(WMLIB_ENABLE_COVERAGE)
     target_link_options(wmlib_test PRIVATE --coverage)
 endif()
 
-add_test(NAME wmlib_test COMMAND wmlib_test)
-set_tests_properties(wmlib_test PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+gtest_discover_tests(wmlib_test
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
