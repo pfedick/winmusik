@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
         throw std::exception();
     }
 #else
-    if (setlocale(LC_ALL, "UTF-8") == NULL) {
+    if (setlocale(LC_ALL, "C.UTF-8") == NULL) {
         printf("setlocale fehlgeschlagen\n");
         throw std::exception();
     }
