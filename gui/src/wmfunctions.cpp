@@ -370,7 +370,7 @@ bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int pr
     info.Ti.Bitrate = ai.Bitrate;
     // info.Ti.Channels=pmp3.
     int ret = 0;
-    if (ai.Format == pplib::AudioInfo::MP3 && preferedId3Version == 1)
+    if (ai.Format == pplib::AudioInfo::AudioFormat::MP3 && preferedId3Version == 1)
         ret = CopyFromID3v1Tag(info, Filename, File);
     else if (preferedId3Version == 2)
         ret = CopyFromID3v2Tag(info, Filename, File);
