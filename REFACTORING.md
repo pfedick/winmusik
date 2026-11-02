@@ -1,18 +1,4 @@
 # Refactoring WinMusik
-WinMusik ist ein Programm zum Dokumentieren und Archivieren von Musiktiteln auf Audio-CDs, DVDs,
-Audiokassetten, Schallplatten, Festplatten und anderen Audiogeräten. Es verfügt über einen
-intelligenten Editor und eine einfach zu bedienende Suchoberfläche. Jeder Audio-Titel kann auch als Datei im Filesystem abgelegt werden, so dass er beispielsweise im Suchergebnis direkt geöffnet oder abgespielt werden kann.
-
-- Zentrale Verwaltung der Audio-Dateien im Filesystem
-- Durchdachtes Benutzerinterface zum Anlegen, Editieren und Verwalten von Musiktiteln
-- Importiert MP3- und Aiff-Dateien von der Festplatte
-- ID3v2-Tag-support, inklusive Cover-Bilder, Key und Energy
-- Umfangreiche Suchfunktionen
-- Drucken von CD-Covern
-- Suchlisten
-- Playlists
-- "DJ-Modus" in Playlists mit Unterstützung für Native Instrument's Traktor 3 Cue-Points
-- Läuft unter Windows 10/11, Linux, FreeBSD und anderen Unixen
 
 ## Ziele
 
