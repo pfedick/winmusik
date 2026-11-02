@@ -60,10 +60,10 @@ CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD
 .PHONY: gui release debug all wmlib update_version clean distclean history \
 	configure pplib8_configure wmlib_configure pplib8 pplib8_debug pplib8_release \
 	wmlib_release wmlib_debug wmlib_tests wmlib_coverage \
-	gui_release gui_debug test translations
+	test translations
 
 
-release: pplib8_release wmlib_release gui_release
+release: update_version
 	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
 	ln -sf build/release/compile_commands.json compile_commands.json
 	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik -j
@@ -123,6 +123,7 @@ wmlib_tests:
 	cd wmlib/tests && ../../$(BUILD_TESTS)/wmlib/tests/wmlib_test$(EXE) $(GTEST_ARGS)
 
 tests: wmlib_tests
+test: wmlib_tests
 
 wmlib_coverage:
 	$(CMAKE) -S . -B $(BUILD_COV) $(CMAKE_COV)
@@ -133,28 +134,6 @@ wmlib_coverage:
 	gcovr --root . $(BUILD_COV) --filter wmlib/src --medium-threshold 70 \
 		--exclude-throw-branches --html-details coverage_html/index.html --xml-pretty -o coverage.xml
 	@echo "Report: coverage_html/index.html"
-
-
-###########################################################################
-### GUI
-###########################################################################
-gui_release: update_version
-	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
-	$(CMAKE) --build $(BUILD_RELEASE) --target WinMusik -j
-	mkdir -p release
-	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
-
-gui_debug: update_version
-	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
-	$(CMAKE) --build $(BUILD_DEBUG) --target WinMusik -j
-	mkdir -p debug
-	cp $(BUILD_DEBUG)/WinMusik$(EXE) debug/WinMusik$(EXE)
-
-
-###########################################################################
-### Tests
-###########################################################################
-test: wmlib_tests
 
 
 ###########################################################################
