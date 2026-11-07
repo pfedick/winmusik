@@ -113,8 +113,13 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
         }
         // 4a. Subgenre
         if (track.exists("genre/sub_genre/name")) {
-            meta.SubGenre = track.getString("genre/sub_genre/name");
-            meta.Genre = meta.SubGenre;
+            // Scheint immer zu existieren, kann aber Null sein
+            if (track.get("genre/sub_genre/name").isNull()) {
+                meta.SubGenre = "";
+            } else {
+                meta.SubGenre = track.getString("genre/sub_genre/name");
+                meta.Genre = meta.SubGenre;
+            }
         }
         // 5. Key (früher Objekt key/name, jetzt direkt key)
         if (track.exists("key")) {
@@ -181,7 +186,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
         pplib::PrintDebug("HTTP-Response: %d\n", response.statusCode);
         pplib::PrintDebug("HTTP-Error: %s\n", (const char*)response.error);
         // pplib::PrintDebug("HTTP-Body: %s\n", (const char*)response.body);
-        response.body.toString().printnl();
+        // response.body.toString().printnl();
         pplib::File ff("tmp/beatport.html", pplib::File::FileMode::WRITE);
         ff.write(response.body);
         ff.close();
