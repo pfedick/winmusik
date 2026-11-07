@@ -34,6 +34,8 @@ void MetaData::print() const
     pplib::PrintDebug("Title:       %s\n", (const char*)Title);
     pplib::PrintDebug("Version:     %s\n", (const char*)Version);
     pplib::PrintDebug("Genre:       %s\n", (const char*)Genre);
+    pplib::PrintDebug("Main-Genre:  %s\n", (const char*)MainGenre);
+    pplib::PrintDebug("Sub-Genre:   %s\n", (const char*)SubGenre);
     pplib::PrintDebug("Label:       %s\n", (const char*)Label);
     pplib::PrintDebug("Bpm:         %s\n", (const char*)Bpm);
     pplib::PrintDebug("Album:       %s\n", (const char*)Album);
@@ -83,12 +85,12 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
 
         // 1. Titel & Mix
         if (track.exists("track_name")) {
-            meta.Title = track.getString("track_name");
+            meta.Title = track.getString("track_name").trimmed();
         } else if (track.exists("name")) {
-            meta.Title = track.getString("name");
+            meta.Title = track.getString("name").trimmed();
         }
         if (track.exists("mix_name")) {
-            meta.Version = track.getString("mix_name");
+            meta.Version = track.getString("mix_name").trimmed();
         }
 
         // 2. Länge (ms -> s)
@@ -105,10 +107,15 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
 
         // 4. Genre
         if (track.exists("genre/name")) {
-            meta.Genre = track.getString("genre/name");
-            meta.Genre.replace("Trance (Main Floor)", "Trance");
+            meta.MainGenre = track.getString("genre/name");
+            meta.MainGenre.replace("Trance (Main Floor)", "Trance");
+            meta.Genre = meta.MainGenre;
         }
-
+        // 4a. Subgenre
+        if (track.exists("genre/sub_genre/name")) {
+            meta.SubGenre = track.getString("genre/sub_genre/name");
+            meta.Genre = meta.SubGenre;
+        }
         // 5. Key (früher Objekt key/name, jetzt direkt key)
         if (track.exists("key")) {
             meta.Key = track.getString("key");

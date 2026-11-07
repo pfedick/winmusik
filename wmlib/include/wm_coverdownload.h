@@ -51,6 +51,8 @@ public:
     pplib::String Key;
     pplib::String CoverUrl;
     pplib::String CoverFile;
+    pplib::String MainGenre;
+    pplib::String SubGenre;
 
     int Length = 0; // in Sekunden
 

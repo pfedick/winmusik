@@ -1,0 +1,65 @@
+<html>
+    <body>
+        <!--StartFragment-->
+        <div class="RowCell-style__RowCellBase-sc-c2ffc65c-0 DetailsCell-style__Stylized-sc-bd2c887d-0 fJbFPr dfVaML" style="box-sizing: border-box; border: 0px solid; grid-column: 3 / 6; display: grid; flex-direction: column; justify-content: center; height: auto; overflow: visible; padding: 0px 0.25rem; grid-template-columns: subgrid; align-items: center; color: rgb(255, 255, 255); font-family: aeonikFont, &quot;aeonikFont Fallback&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <div class="DetailsCell-style__InfoColumn-sc-bd2c887d-1 ljYQQs" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; flex: unset; overflow: hidden; padding: 0px; height: 3rem;">
+                <div class="DetailsCell-style__Text-sc-bd2c887d-7 DetailsCell-style__Title-sc-bd2c887d-11 iWplAG hTLiIA" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s; display: flex; align-items: center; font-weight: 500;">
+                    <span class="DetailsCell-style__TitleText-sc-bd2c887d-14 kYjacv" style="box-sizing: border-box; border: 0px solid; flex: 1 1 0%; min-width: 0px;">
+                        <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 hIZWiM marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 328.172px;">
+                            <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 ccWzYk" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 328.172px; white-space: nowrap;">
+                                <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 jZKAKS" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 328.172px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                    <a title="Chase The Sun " aria-disabled="false" class="DetailsCell-style__TitleLink-sc-bd2c887d-8 gqA-ddI" href="https://www.beatport.com/de/track/chase-the-sun/30197900" style="box-sizing: border-box; border: 0px solid; color: rgb(230, 230, 230); text-decoration: none; display: inline; height: 1.25rem; overflow: hidden;">Chase The Sun <span class="DetailsCell-style__MixName-sc-bd2c887d-12 kXAuQs" style="box-sizing: border-box; border: 0px solid; font-weight: 400;">Extended Mix</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+                <div class="DetailsCell-style__Text-sc-bd2c887d-7 iWplAG" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                    <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 hIZWiM marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 328.172px;">
+                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 ccWzYk" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 328.172px; white-space: nowrap;">
+                            <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 jZKAKS" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 328.172px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                <a title="U-Mount" aria-disabled="false" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/artist/u-mount/370169" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">U-Mount</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="DetailsCell-style__CatalogColumn-sc-bd2c887d-3 jFbmZF" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; height: 3rem; overflow: hidden;">
+                <div class="DetailsCell-style__Text-sc-bd2c887d-7 iWplAG" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                    <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 hIZWiM marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 221.469px;">
+                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 ccWzYk" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 221.469px; white-space: nowrap;">
+                            <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 jZKAKS" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 221.469px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                <a title="Extrema Global Music" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/label/extrema-global-music/58995" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">Extrema Global Music</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="DetailsCell-style__Text-sc-bd2c887d-7 iWplAG" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">
+                    <div class="Marquee-style__MarqueeGrid-sc-9805cecf-2 hIZWiM marquee-grid" style="box-sizing: border-box; border: 0px solid; display: grid; grid-template-columns: 1fr; width: 221.469px;">
+                        <div data-testid="marquee-parent" class="Marquee-style__MarqueeWrapper-sc-9805cecf-1 khpCMp" style="box-sizing: border-box; border: 0px solid; overflow: hidden; width: 221.469px; white-space: nowrap;">
+                            <div class="Marquee-style__MarqueeElement-sc-9805cecf-0 jZKAKS" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 221.469px; display: inline-block; vertical-align: top; white-space: nowrap;">
+                                <a title="Trance (Main Floor)" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/genre/trance-main-floor/7" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">Trance (Main Floor)</a>
+                                <a title="Uplifting Trance" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/genre/trance-main-floor/7/tracks?sub_genre_id=128" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;">Uplifting Trance</a>
+                            </div>
+                            <div data-testid="marquee-pseudo" class="Marquee-style__MarqueeElement-sc-9805cecf-0 jZKAKS" style="box-sizing: border-box; border: 0px solid; text-overflow: ellipsis; overflow: hidden; width: 221.469px; display: inline-block; vertical-align: top; white-space: nowrap; margin-left: 16px; visibility: hidden;">
+                                <a title="Trance (Main Floor)" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/genre/trance-main-floor/7" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;"></a>
+                                <a title="Uplifting Trance" class="DetailsCell-style__InlineLink-sc-bd2c887d-9 kPlXXf" href="https://www.beatport.com/de/genre/trance-main-floor/7/tracks?sub_genre_id=128" style="box-sizing: border-box; border: 0px solid; color: inherit; text-decoration: none;"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="DetailsCell-style__DateColumn-sc-bd2c887d-4 fozrXb" style="box-sizing: border-box; border: 0px solid; display: flex; flex-direction: column; justify-content: center; height: 3rem; overflow: hidden;">
+                <div class="DetailsCell-style__DateRow-sc-bd2c887d-5 cxtEvw" style="box-sizing: border-box; border: 0px solid; display: flex; align-items: center; gap: 0.25rem; overflow: hidden;">
+                    <div class="DetailsCell-style__Text-sc-bd2c887d-7 iWplAG" style="box-sizing: border-box; border: 0px solid; font-size: 0.875rem; line-height: 1.25rem; height: 1.25rem; min-width: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0px; color: rgb(184, 184, 184); transition: color 0.15s;">Sep 18, 2026</div>
+                </div>
+            </div>
+        </div>
+        <div class="RowCell-style__RowCellBase-sc-c2ffc65c-0 MetaCell-style__Stylized-sc-73298b87-0 iwtNJl gzWPLo" style="box-sizing: border-box; border: 0px solid; grid-column: 6 / 9; display: grid; flex-direction: column; align-items: center; height: auto; padding: 0px; grid-template-columns: subgrid; color: rgb(255, 255, 255); font-family: aeonikFont, &quot;aeonikFont Fallback&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">
+            <div class="MetaCell-style__MetaDataColumn-sc-73298b87-1 cVEMsy" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">140</div>
+            <div class="MetaCell-style__MetaDataColumn-sc-73298b87-1 cVEMsy" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">G Min</div>
+            <div class="MetaCell-style__MetaDataColumn-sc-73298b87-1 gsmLju" style="box-sizing: border-box; border: 0px solid; width: 3.125rem; justify-self: start; height: 1.25rem; font-size: 0.875rem; line-height: 1.25rem; color: rgb(184, 184, 184); transition: color 0.15s;">7:01</div>
+        </div>        <!--EndFragment-->
+    </body>
+</html>

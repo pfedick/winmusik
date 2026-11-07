@@ -60,4 +60,29 @@ TEST_F(CoverDownloadTest, Beatport2026SmallCover)
     ASSERT_TRUE(pplib::File::exists(targetFile));
 }
 
+TEST_F(CoverDownloadTest, Beatport2026TranceSubgenre)
+{
+    //
+    // https://www.beatport.com/de/track/waxed-future/26843848
+    pplib::String targetFile = "tmp/beatport2026_cover.jpg";
+    pplib::File::unlink(targetFile);
+    MetaData meta;
+    ASSERT_TRUE(CoverDownload("https://www.beatport.com/de/track/chase-the-sun/30197900", targetFile, meta));
+    ASSERT_TRUE(pplib::File::exists(targetFile));
+    // meta.print();
+    EXPECT_EQ(pplib::String("U-Mount"), meta.Artist);
+    EXPECT_EQ(pplib::String("Chase The Sun"), meta.Title);
+    EXPECT_EQ(pplib::String("Extended Mix"), meta.Version);
+    EXPECT_EQ(pplib::String("Uplifting Trance"), meta.Genre);
+    EXPECT_EQ(pplib::String("Extrema Global Music"), meta.Label);
+    EXPECT_EQ(pplib::String("140"), meta.Bpm);
+    EXPECT_EQ(pplib::String("Chase The Sun"), meta.Album);
+    EXPECT_EQ(pplib::String("2026-09-18"), meta.ReleaseDate);
+    EXPECT_EQ(pplib::String("https://www.beatport.com/de/track/chase-the-sun/30197900"), meta.ShopURL);
+    EXPECT_EQ(pplib::String("G Minor"), meta.Key);
+    EXPECT_EQ(pplib::String("https://geo-media.beatport.com/image_size/1400x1400/28d275ff-d812-4769-ab6d-26511ec5a99d.jpg"), meta.CoverUrl);
+    EXPECT_EQ(pplib::String("tmp/beatport2026_cover.jpg"), meta.CoverFile);
+    EXPECT_EQ(421, meta.Length);
+}
+
 } // namespace

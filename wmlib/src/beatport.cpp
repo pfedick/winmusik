@@ -154,9 +154,14 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
         } else if (pplib::RegEx::capture("/<a title=.*?href=.*?www.beatport.com\\/.*?label\\/.*?>(.*?)</a>/is", row, matches)) {
             Label = matches[1].trimmed();
         }
-        if (pplib::RegEx::capture(
-                "/<a title=\"(.*?)\" href=.*?www.beatport.com\\/.*?\\/genre\\/.*?\\/([0-9]+)\".*?>.*?<div class.*?>(.*?)</div>.*?</a>/is",
-                row, matches)) {
+        if (pplib::RegEx::capture("/<a title=\"(.*?)\" href=.*?www.beatport.com\\/.*?\\/genre\\/.*?sub_genre_id=([0-9]+)\"/is", row,
+                                  matches)) {
+            Genre = BeatportGetGenreFromId(matches[2].toInt());
+            if (Genre.isEmpty() || Genre == "Trance") Genre = matches[1].trimmed();
+
+        } else if (pplib::RegEx::capture("/<a title=\"(.*?)\" href=.*?www.beatport.com\\/.*?\\/genre\\/.*?\\/([0-9]+)\".*?>.*?<div "
+                                         "class.*?>(.*?)</div>.*?</a>/is",
+                                         row, matches)) {
             // Beatport 2025_2
             Genre = BeatportGetGenreFromId(matches[2].toInt());
             if (Genre.isEmpty() || Genre == "Trance") Genre = matches[1].trimmed();
@@ -192,7 +197,8 @@ bool matchBeatPort2023(const pplib::String& html, RegExpMatch& match)
             pplib::Date d;
             d.set(matches[1].trimmed());
             Released = d.toString();
-        } catch (...) {
+        }
+        catch (...) {
             Released = matches[1].trimmed();
         }
     } else if (pplib::RegEx::capture("/<div class=[^>]*date[^>]*>([0-9\\-]+)<\\/div>/is", html, matches)) {

@@ -114,13 +114,11 @@ setup: mingw
 ###########################################################################
 ### wmlib Tests & Coverage
 ###########################################################################
-FILTER ?=
-GTEST_ARGS = --gtest_color=yes $(if $(FILTER),--gtest_filter="$(FILTER)") $(ARGS)
 
 wmlib_tests:
 	$(CMAKE) -S . -B $(BUILD_TESTS) $(CMAKE_TST)
 	$(CMAKE) --build $(BUILD_TESTS) --target wmlib_test -j
-	cd wmlib/tests && ../../$(BUILD_TESTS)/wmlib/tests/wmlib_test$(EXE) $(GTEST_ARGS)
+	cd wmlib/tests && ../../$(BUILD_TESTS)/wmlib/tests/wmlib_test$(EXE) --gtest_color=yes $(TEST_ARGS)
 
 tests: wmlib_tests
 test: wmlib_tests
@@ -129,7 +127,7 @@ wmlib_coverage:
 	$(CMAKE) -S . -B $(BUILD_COV) $(CMAKE_COV)
 	ln -sf $(BUILD_COV)/compile_commands.json compile_commands.json
 	$(CMAKE) --build $(BUILD_COV) --target wmlib_test -j
-	cd wmlib/tests && ../../$(BUILD_COV)/wmlib/tests/wmlib_test$(EXE) $(GTEST_ARGS)
+	cd wmlib/tests && ../../$(BUILD_COV)/wmlib/tests/wmlib_test$(EXE) --gtest_color=yes $(TEST_ARGS)
 	mkdir -p coverage_html
 	gcovr --root . $(BUILD_COV) --filter wmlib/src --medium-threshold 70 \
 		--exclude-throw-branches --html-details coverage_html/index.html --xml-pretty -o coverage.xml

@@ -223,4 +223,19 @@ TEST_F(RegExpCaptureTest, Beatport2026_2)
     EXPECT_EQ(pplib::String("2026-08-07"), match.ReleaseDate);
 }
 
+TEST_F(RegExpCaptureTest, Beatport2026_3_Trance_Subgenre)
+{
+    pplib::String html;
+    pplib::File::load(html, "testdata/beatport2026_3_trance_subgenre.xml");
+    RegExpMatch match;
+    ASSERT_TRUE(repexpmatch::matchBeatPort(html, match));
+
+    EXPECT_EQ(pplib::String("Chase The Sun"), match.Title);
+    EXPECT_EQ(pplib::String("Extended Mix"), match.Version);
+    EXPECT_EQ(pplib::String("U-Mount"), match.Artist);
+    EXPECT_EQ(pplib::String("Extrema Global Music"), match.Label);
+    EXPECT_EQ(pplib::String("Uplifting Trance"), match.Genre);
+    EXPECT_EQ(pplib::String("2026-09-18"), match.ReleaseDate);
+}
+
 } // namespace

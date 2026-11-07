@@ -67,3 +67,4 @@ history.tmp
 compile_commands.json
 coverage_html
 coverage.xml
+wmlib/tests/cmake_test_discovery*.json
