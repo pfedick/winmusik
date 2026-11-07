@@ -397,7 +397,7 @@ void SearchlistDialog::on_trackList_itemClicked(QTreeWidgetItem* item, int colum
         SearchlistItem it = ((SearchlistTreeItem*)item)->Track;
         QClipboard* clipboard = QApplication::clipboard();
         pplib::String Text;
-        Text = it.Artist + " " + it.Title;
+        Text = it.Artist + " - " + it.Title;
         LastClipboardString = Text; // Verhindern, dass eine Suche ausgelöst wird
         clipboard->setText(Text, QClipboard::Clipboard);
         clipboard->setText(Text, QClipboard::Selection);
