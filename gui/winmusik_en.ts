@@ -4179,28 +4179,28 @@ Attention: Changing this directory can result in loss of data!</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="src/wmfunctions.cpp" line="460"/>
+        <location filename="src/wmfunctions.cpp" line="465"/>
         <source>Could not save cover!</source>
         <translation>Could not save cover!</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="548"/>
+        <location filename="src/wmfunctions.cpp" line="553"/>
         <source>Exception:</source>
         <translation>Exception:</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="552"/>
+        <location filename="src/wmfunctions.cpp" line="557"/>
         <source>Description:</source>
         <translation>Description:</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="555"/>
-        <location filename="src/wmfunctions.cpp" line="566"/>
+        <location filename="src/wmfunctions.cpp" line="560"/>
+        <location filename="src/wmfunctions.cpp" line="571"/>
         <source>WinMusik Error</source>
         <translation>WinMusik Error</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="564"/>
+        <location filename="src/wmfunctions.cpp" line="569"/>
         <source>an error occured</source>
         <translation>an error occured</translation>
     </message>
