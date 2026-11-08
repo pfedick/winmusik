@@ -126,11 +126,11 @@ bool buildinMatch(const pplib::String& data, RegExpMatch& match)
         match.Artist = pplib::Trim(Matches[3]);
         match.Title = pplib::Trim(Matches[1]);
         match.Version = pplib::Trim(Matches[2]);
-    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)\\((.*?)\\).*$/", data, Matches)) {
+    } else if (pplib::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)\\((.*?)\\).*$/", data, Matches)) {
         match.Artist = pplib::Trim(Matches[1]);
         match.Title = pplib::Trim(Matches[2]);
         match.Version = pplib::Trim(Matches[3]);
-    } else if (pplib::RegEx::capture("/^(.*?)\\-(.*?)$/", data, Matches)) {
+    } else if (pplib::RegEx::capture("/^(.*?)\\s+\\-\\s+(.*?)$/", data, Matches)) {
         match.Artist = pplib::Trim(Matches[1]);
         match.Title = pplib::Trim(Matches[2]);
     } else {
