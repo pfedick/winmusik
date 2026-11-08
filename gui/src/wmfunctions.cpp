@@ -40,6 +40,11 @@ uint32_t Time2Int(const pplib::String& Time)
     if (t.isEmpty()) return 0;
     pplib::Array a;
     a.explode(t, ":");
+    if (a.size() < 2 || a.size() > 2) return 0;
+    // Beide Teile müssen Integer sein
+    for (int i = 0; i < 2; ++i) {
+        if (!a.get(i).isDigits()) return 0;
+    }
     return a.get(0).toInt() * 60 + a.get(1).toInt();
 }
 
