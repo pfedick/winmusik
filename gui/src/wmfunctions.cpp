@@ -39,7 +39,7 @@ uint32_t Time2Int(const pplib::String& Time)
     t.trim();
     if (t.isEmpty()) return 0;
     pplib::Array a;
-    a.explode(Time, ":");
+    a.explode(t, ":");
     return a.get(0).toInt() * 60 + a.get(1).toInt();
 }
 
