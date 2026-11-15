@@ -62,6 +62,8 @@ private slots:
     void on_wmDataPathButton_clicked();
     void on_mp3PlayerButton_clicked();
     void on_aiffPlayerButton_clicked();
+    void on_flacPlayerButton_clicked();
+
     void on_tmpPathButton_clicked();
     void on_addDirectory_clicked();
     void on_deleteDirectory_clicked();
@@ -177,6 +179,10 @@ private slots:
         Change();
     };
     void on_aiffPlayer_textChanged(const QString&)
+    {
+        Change();
+    };
+    void on_flacPlayer_textChanged(const QString&)
     {
         Change();
     };

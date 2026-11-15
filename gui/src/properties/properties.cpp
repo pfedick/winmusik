@@ -61,6 +61,7 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     // MP3
     ui.mp3Player->setText(c->MP3Player);
     ui.aiffPlayer->setText(c->AIFFPlayer);
+    ui.flacPlayer->setText(c->FlacPlayer);
     if (c->ReadId3Tag == 1) ui.readID3v1->setChecked(true);
     if (c->ReadId3Tag == 2) ui.readID3v2->setChecked(true);
     ui.writeID3->setChecked(c->bWriteID3Tags);
@@ -340,6 +341,7 @@ int Properties::Save()
     // MP3
     c->MP3Player = ui.mp3Player->text();
     c->AIFFPlayer = ui.aiffPlayer->text();
+    c->FlacPlayer = ui.flacPlayer->text();
     if (ui.readID3v1->isChecked())
         c->ReadId3Tag = 1;
     else
@@ -565,6 +567,19 @@ void Properties::on_aiffPlayerButton_clicked()
     QString file = QFileDialog::getOpenFileName(this, tr("Select the program with which you want to use for playing AIFF-Files"), p);
     if (file.length()) {
         ui.aiffPlayer->setText(file);
+        Change();
+    }
+}
+
+void Properties::on_flacPlayerButton_clicked()
+{
+    QString p = ui.flacPlayer->text();
+    if (p.length() == 0) {
+        p = QDir::homePath();
+    }
+    QString file = QFileDialog::getOpenFileName(this, tr("Select the program with which you want to use for playing FLAC-Files"), p);
+    if (file.length()) {
+        ui.flacPlayer->setText(file);
         Change();
     }
 }

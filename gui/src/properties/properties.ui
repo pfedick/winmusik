@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>795</width>
-    <height>457</height>
+    <height>511</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -36,7 +36,7 @@
       <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
@@ -257,7 +257,7 @@
             <x>0</x>
             <y>0</y>
             <width>741</width>
-            <height>396</height>
+            <height>422</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -269,15 +269,8 @@
              <property name="verticalSpacing">
               <number>0</number>
              </property>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="mp3Player"/>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_21">
-               <property name="text">
-                <string>MP3-Player:</string>
-               </property>
-              </widget>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="aiffPlayer"/>
              </item>
              <item row="0" column="2">
               <widget class="QPushButton" name="mp3PlayerButton">
@@ -296,6 +289,9 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="mp3Player"/>
+             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_58">
                <property name="text">
@@ -303,11 +299,42 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="aiffPlayer"/>
-             </item>
              <item row="1" column="2">
               <widget class="QPushButton" name="aiffPlayerButton">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../resources.qrc">
+                 <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_21">
+               <property name="text">
+                <string>MP3-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_65">
+               <property name="text">
+                <string>FLAC-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="flacPlayer"/>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="flacPlayerButton">
                <property name="text">
                 <string/>
                </property>
@@ -2278,6 +2305,10 @@
   <tabstop>cancelButton</tabstop>
   <tabstop>mp3Player</tabstop>
   <tabstop>mp3PlayerButton</tabstop>
+  <tabstop>aiffPlayer</tabstop>
+  <tabstop>aiffPlayerButton</tabstop>
+  <tabstop>flacPlayer</tabstop>
+  <tabstop>flacPlayerButton</tabstop>
   <tabstop>readID3v1</tabstop>
   <tabstop>readID3v2</tabstop>
   <tabstop>saveOriginalTags</tabstop>
@@ -2361,6 +2392,15 @@
   <tabstop>directoryList</tabstop>
   <tabstop>addDirectory</tabstop>
   <tabstop>deleteDirectory</tabstop>
+  <tabstop>SearchListCoverPath</tabstop>
+  <tabstop>SearchListCoverPathButton</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>JpegQualityPreview</tabstop>
+  <tabstop>writeID3</tabstop>
+  <tabstop>removeOriginalTags</tabstop>
+  <tabstop>JpegQualityCover</tabstop>
+  <tabstop>beatport_userAgent</tabstop>
+  <tabstop>beatport_clearance</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
