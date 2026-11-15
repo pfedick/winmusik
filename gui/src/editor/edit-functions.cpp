@@ -390,9 +390,11 @@ void Edit::UpdateTrackListing()
     ui.statsLength->setText(Tmp);
     Tmp.setf("%0.1f", (double)size / 1048576.0);
     ui.statsSize->setText(Tmp);
-    resizeEvent(NULL);
+    // resizeEvent(NULL);
     trackList->sortByColumn(0, Qt::AscendingOrder);
     trackList->setSortingEnabled(true);
+
+    QTimer::singleShot(0, this, [this]() { resizeEvent(NULL); });
 }
 
 void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)

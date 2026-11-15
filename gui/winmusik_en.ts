@@ -1172,7 +1172,7 @@ Please check if the file exists, is readable and contains an image format, which
 Please check if the file exists, is readable and contains an image format, which is supported by WinMusik (.png, .jpg or .bmp)</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="402"/>
+        <location filename="src/editor/edit-functions.cpp" line="404"/>
         <source>unknown</source>
         <translation>unknown</translation>
     </message>
@@ -1192,7 +1192,7 @@ Please check if the file exists, is readable and contains an image format, which
         <translation>playlist</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="787"/>
+        <location filename="src/editor/edit-functions.cpp" line="789"/>
         <location filename="src/editor/edit.cpp" line="2238"/>
         <location filename="src/editor/edit.cpp" line="2587"/>
         <source>Could not save ID3 Tags</source>
@@ -1247,44 +1247,44 @@ Please check if the file exists, is readable and contains an image format, which
         <translation>file not found</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="581"/>
+        <location filename="src/editor/edit-functions.cpp" line="583"/>
         <source>WinMusik: Attention</source>
         <translation>WinMusik: Attention</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="581"/>
+        <location filename="src/editor/edit-functions.cpp" line="583"/>
         <source>Artist and title are empty!
 Do you realy want to save this track?</source>
         <translation>Artist and title are empty!
 Do you realy want to save this track?</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="970"/>
+        <location filename="src/editor/edit-functions.cpp" line="972"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="985"/>
+        <location filename="src/editor/edit-functions.cpp" line="987"/>
         <source>could not create device directory in filesystem</source>
         <translation>could not create device directory in filesystem</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="1010"/>
+        <location filename="src/editor/edit-functions.cpp" line="1012"/>
         <source>could not rename audio file</source>
         <translation>could not rename audio file</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="1028"/>
+        <location filename="src/editor/edit-functions.cpp" line="1030"/>
         <source>could not renumber Device</source>
         <translation>could not renumber Device</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="1052"/>
+        <location filename="src/editor/edit-functions.cpp" line="1054"/>
         <source>could not remove cover picture from audio file</source>
         <translation>could not remove cover picture from audio file</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="970"/>
+        <location filename="src/editor/edit-functions.cpp" line="972"/>
         <source>Invalid number</source>
         <translation>Invalid number</translation>
     </message>
@@ -1337,7 +1337,7 @@ Do you realy want to save this track?</translation>
         <translation>Insert Track</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="741"/>
+        <location filename="src/editor/edit-functions.cpp" line="743"/>
         <location filename="src/editor/edit.cpp" line="2231"/>
         <location filename="src/editor/edit.cpp" line="2475"/>
         <location filename="src/editor/edit.cpp" line="2491"/>
@@ -1348,7 +1348,7 @@ Do you realy want to save this track?</translation>
         <translation>Could not save Title in TitleStore</translation>
     </message>
     <message>
-        <location filename="src/editor/edit-functions.cpp" line="756"/>
+        <location filename="src/editor/edit-functions.cpp" line="758"/>
         <source>Could not save Track in TrackList</source>
         <oldsource>Konnte Track nicht in TrackList speichern</oldsource>
         <translation>Could not save Track in TrackList</translation>
