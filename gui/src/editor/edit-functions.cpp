@@ -1088,6 +1088,7 @@ void Edit::DeleteShift(int track)
                 }
             }
             wm->RenameAudioFile(DeviceType, DeviceId, Page, i, i - 1);
+            wm->RenameCoverFile(DeviceType, DeviceId, Page, i, i - 1);
         }
     }
 }
@@ -1116,6 +1117,7 @@ void Edit::InsertShift(int track)
                 }
             }
             wm->RenameAudioFile(DeviceType, DeviceId, Page, i, i + 1);
+            wm->RenameCoverFile(DeviceType, DeviceId, Page, i, i + 1);
         }
     }
 }

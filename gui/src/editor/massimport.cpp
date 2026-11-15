@@ -203,7 +203,7 @@ int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16
     Path.trimRight("/");
     Path.trimRight("\\");
     Path.appendf("/%02u/%03u/", (uint32_t)(DeviceId / 100), DeviceId);
-    Pattern.setf("*.mp3");
+    Pattern = "/^.*\\.(mp3|aiff?|flac|wav)$/i";
     pplib::Dir Dir;
     int count = 0;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -211,16 +211,12 @@ int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16
     ui.treeWidget->setSortingEnabled(false);
 
     if (Dir.tryOpen(Path, pplib::Dir::Sort::FilenameIgnoreCase)) {
-        for (const pplib::DirEntry& entry : Dir.filterPattern(Pattern, true)) {
+        for (const pplib::DirEntry& entry : Dir.filterRegExp(Pattern)) {
             Filename = entry.Filename;
             // Der Dateiname darf nicht mit drei Ziffern und Bindestrich beginnen
             if (!pplib::RegEx::match("/^[0-9]{3}\\-.*/", Filename)) {
-                // Muss aber mit .mp3 enden
-                if (pplib::RegEx::match("/^.*\\.mp3$/i", Filename)) {
-                    // printf ("%s\n",(const char*)Filename);
-                    addTrack(entry.File);
-                    count++;
-                }
+                addTrack(entry.File);
+                count++;
             }
         }
     }

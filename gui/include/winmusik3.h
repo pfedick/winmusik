@@ -504,8 +504,12 @@ public:
     pplib::String GetAudioPath(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page);
     pplib::String GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
 
-    int TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
-    int RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t OldTrack, uint32_t NewTrack);
+    void TrashAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
+    void RenameAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t OldTrack, uint32_t NewTrack);
+
+    void TrashCoverFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
+    void RenameCoverFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t OldTrack, uint32_t NewTrack);
+
     pplib::String NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track);
     int SaveID3Tags(
         uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint32_t Track, const DataTitle& Ti, const pplib::String& Filename = "");

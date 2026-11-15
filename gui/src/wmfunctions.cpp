@@ -380,7 +380,8 @@ bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int pr
         ret = CopyFromID3v1Tag(info, Filename, File);
     else if (ai.Format == pplib::AudioInfo::AudioFormat::MP3 && preferedId3Version == 2)
         ret = CopyFromID3v2Tag(info, Filename, File);
-    else if (ai.Format == pplib::AudioInfo::AudioFormat::AIFF || ai.Format == pplib::AudioInfo::AudioFormat::FLAC)
+    else if (ai.Format == pplib::AudioInfo::AudioFormat::AIFF || ai.Format == pplib::AudioInfo::AudioFormat::FLAC ||
+             ai.Format == pplib::AudioInfo::AudioFormat::WAVE)
         ret = CopyFromID3v2Tag(info, Filename, File);
     else
         ret = CopyFromFilename(info, Filename);

@@ -1211,7 +1211,9 @@ static void addFileIfSuitable(const pplib::String& filename, std::list<pplib::St
         fileList.push_back(filename);
     else if (lowerFile.right(5) == ".aiff")
         fileList.push_back(filename);
-    else if (lowerFile.right(5) == ".wav")
+    else if (lowerFile.right(4) == ".wav")
+        fileList.push_back(filename);
+    else if (lowerFile.right(5) == ".flac")
         fileList.push_back(filename);
 }
 
@@ -1408,9 +1410,15 @@ bool Edit::on_KeyPress(QObject* target, int key, int modifier)
         // *************************************************************************** F6
     } else if (key == Qt::Key_F6 && modifier == Qt::ControlModifier && ui.fkeys->isEnabled(6) == true && position > 3 &&
                wm->conf.DevicePath[DeviceType].notEmpty() == true) {
-        wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
-        return on_f6_Pressed(target, Qt::NoModifier);
-
+        try {
+            wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
+            wm->TrashCoverFile(DeviceType, DeviceId, Page, Track.Track);
+            return on_f6_Pressed(target, Qt::NoModifier);
+        }
+        catch (pplib::Exception& exp) {
+            ShowException(exp, tr("Could not delete or import audio track"));
+            return false;
+        }
     } else if (key == Qt::Key_F6 && ui.fkeys->isEnabled(6) == true && position > 3 && wm->conf.DevicePath[DeviceType].notEmpty() == true) {
         return on_f6_Pressed(target, modifier);
 
@@ -1840,6 +1848,7 @@ bool Edit::on_f6_Pressed(QObject*, int modifier)
     Songname = pplib::RegEx::replace("/\\.mp3$/i", Songname, "");
     Songname = pplib::RegEx::replace("/\\.aiff$/i", Songname, "");
     Songname = pplib::RegEx::replace("/\\.aif$/i", Songname, "");
+    Songname = pplib::RegEx::replace("/\\.flac$/i", Songname, "");
     Songname = pplib::RegEx::replace("/\\.wav$/i", Songname, "");
     Songname = pplib::RegEx::replace("/^[0-9]+-/", Songname, "");
     Songname.replace("_", " ");
@@ -1882,10 +1891,17 @@ bool Edit::on_f7_DeleteTrack()
             ui.artist->setFocus();
         } else {
             // Track löschen
-            wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
-            // Nachfolgende Tracks nach oben rücken
-            // TODO
-            DeleteShift(Track.Track); //, &wm->TitleStore
+            try {
+                wm->TrashAudioFile(DeviceType, DeviceId, Page, Track.Track);
+                wm->TrashCoverFile(DeviceType, DeviceId, Page, Track.Track);
+                // Nachfolgende Tracks nach oben rücken
+                DeleteShift(Track.Track); //, &wm->TitleStore
+            }
+            catch (pplib::Exception& exp) {
+                ShowException(exp, tr("Could not delete audio track"));
+                return false;
+            }
+
             UpdateTrackListing();
             QTreeWidgetItem* w = trackList->topLevelItem(Track.Track);
             if (w) {
@@ -1904,7 +1920,14 @@ bool Edit::on_f8_InsertTrack()
 {
     if (Track.Track > 0) {
         // TODO
-        InsertShift(Track.Track);
+        try {
+            InsertShift(Track.Track);
+        }
+        catch (pplib::Exception& exp) {
+            ShowException(exp, tr("Could not insert audio track"));
+            UpdateTrackListing();
+            return false;
+        }
         UpdateTrackListing();
         QTreeWidgetItem* w = trackList->topLevelItem(Track.Track);
         if (w) {
@@ -2733,7 +2756,14 @@ void Edit::on_contextDeleteTrack_triggered()
 {
     if (!currentTrackListItem->Track) return;
     // Track löschen und nachfolgende nach oben rücken
-    DeleteShift(currentTrackListItem->Track);
+    try {
+        DeleteShift(currentTrackListItem->Track);
+    }
+    catch (pplib::Exception& exp) {
+        ShowException(exp, tr("Could not delete audio track"));
+        UpdateTrackListing();
+        return;
+    }
     UpdateTrackListing();
     QTreeWidgetItem* w = trackList->topLevelItem(currentTrackListItem->Track);
     if (w) {
@@ -2748,7 +2778,15 @@ void Edit::on_contextDeleteTrack_triggered()
 void Edit::on_contextInsertTrack_triggered()
 {
     if (!currentTrackListItem->Track) return;
-    InsertShift(currentTrackListItem->Track);
+    try {
+        InsertShift(currentTrackListItem->Track);
+    }
+    catch (pplib::Exception& exp) {
+        ShowException(exp, tr("Could not insert audio track"));
+        UpdateTrackListing();
+        return;
+    }
+
     UpdateTrackListing();
     QTreeWidgetItem* w = trackList->topLevelItem(currentTrackListItem->Track);
     if (w) {
