@@ -315,6 +315,7 @@ void Edit::setTracklistCaptions()
     trackList->headerItem()->setText(TRACKLIST_NAME_ROW, tr("Artist - Title", "trackList"));
     trackList->headerItem()->setText(TRACKLIST_VERSION_ROW, tr("Version", "trackList"));
     trackList->headerItem()->setText(TRACKLIST_GENRE_ROW, tr("Genre", "trackList"));
+    trackList->headerItem()->setText(TRACKLIST_LABEL_ROW, tr("Label", "trackList"));
     trackList->headerItem()->setText(TRACKLIST_LENGTH_ROW, tr("Length", "trackList"));
     trackList->headerItem()->setText(TRACKLIST_BPM_ROW, tr("BPM", "trackList"));
     trackList->headerItem()->setText(TRACKLIST_KEY_ROW, tr("Key", "trackList"));
@@ -413,19 +414,6 @@ void Edit::SetupTrackList()
     connect(trackList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(on_trackList_itemDoubleClicked(QTreeWidgetItem*, int)));
     connect(trackList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(on_trackList_itemClicked(QTreeWidgetItem*, int)));
 
-    /*
-    QString Style="QTreeView::item {\n"
-            "border-right: 1px solid #b9b9b9;\n"
-            "border-bottom: 1px solid #b9b9b9;\n"
-            "}\n"
-            "QTreeView::item:selected {\n"
-            //"border-top: 1px solid #80c080;\n"
-            //"border-bottom: 1px solid #80c080;\n"
-            "background: #d0d0ff;\n"
-            "color: #000000;\n"
-            "}\n"
-            "";
-            */
     QString Style = "QTreeWidget::item {\n"
                     "margin: 0px;\n"
                     "padding-top: 0px;\n"
@@ -626,12 +614,13 @@ void Edit::resizeEvent(QResizeEvent* event)
  * Inhalt der Trackliste ändert.
  */
 {
-    int w = trackList->width();
-    int space = 8;
+    // int w = trackList->width();
+    int w = trackList->viewport()->width();
+    int space = 0;
     trackList->setColumnWidth(TRACKLIST_TRACK_ROW, 50);
     w -= (50 + space);
-    trackList->setColumnWidth(TRACKLIST_COVER_ROW, 64);
-    w -= (60 + space);
+    trackList->setColumnWidth(TRACKLIST_COVER_ROW, 70);
+    w -= (70 + space);
     trackList->setColumnWidth(TRACKLIST_LENGTH_ROW, 60);
     w -= (60 + space);
     trackList->setColumnWidth(TRACKLIST_BPM_ROW, 35);
@@ -645,11 +634,14 @@ void Edit::resizeEvent(QResizeEvent* event)
     trackList->setColumnWidth(TRACKLIST_BITRATE_ROW, 30);
     w -= (30 + space);
 
-    trackList->setColumnWidth(TRACKLIST_RATING_ROW, 55);
-    w -= (55 + space);
-    trackList->setColumnWidth(TRACKLIST_NAME_ROW, w * 55 / 100 - 6);
-    trackList->setColumnWidth(TRACKLIST_VERSION_ROW, w * 30 / 100 - 6);
-    trackList->setColumnWidth(TRACKLIST_GENRE_ROW, w * 15 / 100 - 6);
+    trackList->setColumnWidth(TRACKLIST_RATING_ROW, 70);
+    w -= (70 + space);
+
+    // Name, Version, Genre
+    trackList->setColumnWidth(TRACKLIST_NAME_ROW, w * 45 / 100 - space);
+    trackList->setColumnWidth(TRACKLIST_VERSION_ROW, w * 25 / 100 - space);
+    trackList->setColumnWidth(TRACKLIST_GENRE_ROW, w * 15 / 100 - space);
+    trackList->setColumnWidth(TRACKLIST_LABEL_ROW, w * 15 / 100 - space);
     QWidget::resizeEvent(event);
 }
 

@@ -66,14 +66,14 @@ CMAKE_COV = -DCMAKE_BUILD_TYPE=Debug   -DWINMUSIK_BUILD_GUI=OFF -DWINMUSIK_BUILD
 release: update_version
 	$(CMAKE) -S . -B $(BUILD_RELEASE) $(CMAKE_REL)
 	ln -sf build/release/compile_commands.json compile_commands.json
-	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik -j
+	$(CMAKE) --build $(BUILD_RELEASE) --target translations WinMusik --verbose -j
 	mkdir -p release
 	cp $(BUILD_RELEASE)/WinMusik$(EXE) release/WinMusik$(EXE)
 
 debug: update_version
 	$(CMAKE) -S . -B $(BUILD_DEBUG) $(CMAKE_DBG)
 	ln -sf build/debug/compile_commands.json compile_commands.json
-	$(CMAKE) --build $(BUILD_DEBUG) --target translations WinMusik -j
+	$(CMAKE) --build $(BUILD_DEBUG) --target translations WinMusik --verbose -j
 	mkdir -p debug
 	cp $(BUILD_DEBUG)/WinMusik$(EXE) debug/WinMusik$(EXE)
 

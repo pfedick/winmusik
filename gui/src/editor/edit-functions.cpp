@@ -425,6 +425,15 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
     else
         Text.set(unknown);
     item->setText(TRACKLIST_GENRE_ROW, Text);
+
+    // Label holen
+    const DataLabel* label = wm->GetLabel(title.LabelId);
+    if (label)
+        Text.set(label->Value);
+    else
+        Text.set(unknown);
+    item->setText(TRACKLIST_LABEL_ROW, Text);
+
     Text.setf("%4i:%02i", (int)(title.Length / 60), title.Length % 60);
     item->setTextAlignment(TRACKLIST_LENGTH_ROW, Qt::AlignRight | Qt::AlignCenter);
     item->setText(TRACKLIST_LENGTH_ROW, Text);
