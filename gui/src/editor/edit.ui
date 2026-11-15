@@ -1983,6 +1983,8 @@
   <tabstop>index</tabstop>
   <tabstop>page</tabstop>
   <tabstop>track</tabstop>
+  <tabstop>artist</tabstop>
+  <tabstop>title</tabstop>
   <tabstop>versionId</tabstop>
   <tabstop>version</tabstop>
   <tabstop>genreId</tabstop>
@@ -2002,6 +2004,8 @@
   <tabstop>recordSource</tabstop>
   <tabstop>recordDeviceId</tabstop>
   <tabstop>recordDevice</tabstop>
+  <tabstop>remarks</tabstop>
+  <tabstop>tags</tabstop>
   <tabstop>filename</tabstop>
   <tabstop>complete</tabstop>
   <tabstop>realTitle</tabstop>
@@ -2019,6 +2023,8 @@
   <tabstop>statsTracks</tabstop>
   <tabstop>statsSize</tabstop>
   <tabstop>displayMusicKey</tabstop>
+  <tabstop>deviceIcon</tabstop>
+  <tabstop>coverSearchDiscogs</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
