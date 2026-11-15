@@ -63,6 +63,7 @@ private slots:
     void on_mp3PlayerButton_clicked();
     void on_aiffPlayerButton_clicked();
     void on_flacPlayerButton_clicked();
+    void on_wavePlayerButton_clicked();
 
     void on_tmpPathButton_clicked();
     void on_addDirectory_clicked();
@@ -178,11 +179,20 @@ private slots:
     {
         Change();
     };
+
+    // Aiff
     void on_aiffPlayer_textChanged(const QString&)
     {
         Change();
     };
+
+    // Flac
     void on_flacPlayer_textChanged(const QString&)
+    {
+        Change();
+    };
+    // Wave
+    void on_wavePlayer_textChanged(const QString&)
     {
         Change();
     };
