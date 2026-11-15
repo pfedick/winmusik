@@ -2,6 +2,18 @@
 
 \section WM3History_ WinMusik 3 Historie
 
+Version 4.0.0
+  - Update from pplib version 7 to 8
+  - use cmake instead of autoconf
+  - support for wav and flac files
+  - added support vor cover in searchlists
+  - enhanced drag'n'drop functionality with files from Beatport. All metadata is now extracted
+    from the shop, including length, bpm and key
+  - drag'n'drop from searchlist into editor now also copies the cover without the need for the
+    audio file to be already present
+  - added column for label name in editor
+
+
 Version 3.8.0,
     - Updated pplib and replaced old pcre library by pcre2
 

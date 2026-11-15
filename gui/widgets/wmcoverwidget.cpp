@@ -352,6 +352,9 @@ void WMCoverWidget::loadImageFromUri(const QString& uri)
 void WMCoverWidget::downloadFromShopUrl(const QString& url)
 {
     pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    // TODO: Das würde nur Sinn machen, wenn die Methode nur innerhalb der Searchlist verwendet würde
+    // Sie kommt aber auch aus dem Editor oder anderen Stellen! Ein Temp-Verzeichnis wäre besser, da wir das File
+    // ja nur temporär benötigen
     pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
     MetaData meta;
     QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
