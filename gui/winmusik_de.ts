@@ -5225,7 +5225,7 @@ Sind Sie sicher, dass Sie diese alle löschen wollen?</translation>
     </message>
     <message>
         <location filename="widgets/wmcoverwidget.cpp" line="220"/>
-        <location filename="widgets/wmcoverwidget.cpp" line="448"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="451"/>
         <source>Error: could not load Cover</source>
         <translation>Fehler: Konnte Cover nicht laden</translation>
     </message>
@@ -5256,7 +5256,7 @@ Bitte prüfen Sie, ob das Zielverzeichnis vorhanden und schreibbar ist.
 Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und .bmp</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="448"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="451"/>
         <source>An error occured, when loading the file.
 
 </source>

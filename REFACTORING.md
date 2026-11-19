@@ -7,13 +7,13 @@
 - Verwendung von CMake zum Bauen von pplib8 => DONE
 - Eventuell kompletter Umstieg auf CMake? => DONE
 - Anpassung des Codes an die neuen Strukturen und Funktionen von pplib8 => DONE
+- Unterstützung für wav und flac Dateien => DONE
 
 **Offen:**
 - Modernisierung des Codes und Nutzung moderner C++-Features
 - Refactoring der Datenbank
 - Filehandling verbessern:
   - Zentrales Modul zum schreiben, lesen und auffinden von Audio-Dateien
-- Neben mp3 und Aiff auch Unterstützung von Wave, Flac und Opus? Eventuel Ogg?
 - Doku aktualisieren
 - Nicht mehr benutzte Features entfernen
 - Signierung der ausführbaren Dateien und Installationspakete

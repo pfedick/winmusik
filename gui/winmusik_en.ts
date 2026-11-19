@@ -5222,7 +5222,7 @@ Are you sure, you want to delete them?</translation>
     </message>
     <message>
         <location filename="widgets/wmcoverwidget.cpp" line="220"/>
-        <location filename="widgets/wmcoverwidget.cpp" line="448"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="451"/>
         <source>Error: could not load Cover</source>
         <translation>Error: could not load Cover</translation>
     </message>
@@ -5253,7 +5253,7 @@ Please check if the target directory exists and is writable.
 Please also check the file extension. WinMusik only supports .png, .jpg and .bmp</translation>
     </message>
     <message>
-        <location filename="widgets/wmcoverwidget.cpp" line="448"/>
+        <location filename="widgets/wmcoverwidget.cpp" line="451"/>
         <source>An error occured, when loading the file.
 
 </source>
