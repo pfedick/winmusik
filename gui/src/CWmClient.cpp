@@ -904,7 +904,7 @@ pplib::String CWmClient::NextAudioFile(uint8_t DeviceType, uint32_t DeviceId, ui
                     // Muss aber mit .mp3 oder .aiff enden und Daten enthalten (beim Download per Firefox wird eine leere Datei als
                     // Platzhalter angelegt)
                     if (entry.Size > 256) {
-                        if (pplib::RegEx::match("/^.*\\.(mp3|aiff?|wav|flac)$/i", Filename) == true) {
+                        if (pplib::RegEx::match("/^.*\\.(mp3|aiff?|wav|flac|ogg)$/i", Filename) == true) {
                             // Sehr schön. Nun benennen wir die Datei um und hängen die Track-Nummer davor
                             if (wmlog)
                                 wmlog->printf(pplib::Logger::DEBUG, 8, "CWMClient", "NextAudioFile", __FILE__, __LINE__,
@@ -1203,6 +1203,7 @@ int CWmClient::PlayFile(const pplib::String& Filename)
     if (pplib::RegEx::capture("/\\.aiff?$/i", Filename, matches)) Player = conf.AIFFPlayer;
     if (pplib::RegEx::capture("/\\.flac$/i", Filename, matches)) Player = conf.FlacPlayer;
     if (pplib::RegEx::capture("/\\.wav$/i", Filename, matches)) Player = conf.WavePlayer;
+    if (pplib::RegEx::capture("/\\.ogg$/i", Filename, matches)) Player = conf.OggPlayer;
     if (Player.isEmpty()) Player = conf.MP3Player;
 
 #ifdef _WIN32

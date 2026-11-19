@@ -318,6 +318,7 @@ static bool CopyFromFilename(TrackInfo& info, const pplib::String& Filename)
     Name = pplib::RegEx::replace("/.aif$/i", Name, "");
     Name = pplib::RegEx::replace("/.aiff$/i", Name, "");
     Name = pplib::RegEx::replace("/.flac$/i", Name, "");
+    Name = pplib::RegEx::replace("/.ogg$/i", Name, "");
     if (pplib::RegEx::match("/^[0-9]{3}-/", Name)) {
         std::vector<pplib::String> matches;
         Name.shl(0, 4);
@@ -381,7 +382,7 @@ bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int pr
     else if (ai.Format == pplib::AudioInfo::AudioFormat::MP3 && preferedId3Version == 2)
         ret = CopyFromID3v2Tag(info, Filename, File);
     else if (ai.Format == pplib::AudioInfo::AudioFormat::AIFF || ai.Format == pplib::AudioInfo::AudioFormat::FLAC ||
-             ai.Format == pplib::AudioInfo::AudioFormat::WAVE)
+             ai.Format == pplib::AudioInfo::AudioFormat::WAVE || ai.Format == pplib::AudioInfo::AudioFormat::OGG)
         ret = CopyFromID3v2Tag(info, Filename, File);
     else
         ret = CopyFromFilename(info, Filename);

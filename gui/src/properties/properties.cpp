@@ -63,6 +63,7 @@ Properties::Properties(QWidget* parent, CWmClient* wm)
     ui.aiffPlayer->setText(c->AIFFPlayer);
     ui.flacPlayer->setText(c->FlacPlayer);
     ui.wavePlayer->setText(c->WavePlayer);
+    ui.oggPlayer->setText(c->OggPlayer);
     if (c->ReadId3Tag == 1) ui.readID3v1->setChecked(true);
     if (c->ReadId3Tag == 2) ui.readID3v2->setChecked(true);
     ui.writeID3->setChecked(c->bWriteID3Tags);
@@ -344,6 +345,7 @@ int Properties::Save()
     c->AIFFPlayer = ui.aiffPlayer->text();
     c->FlacPlayer = ui.flacPlayer->text();
     c->WavePlayer = ui.wavePlayer->text();
+    c->OggPlayer = ui.oggPlayer->text();
     if (ui.readID3v1->isChecked())
         c->ReadId3Tag = 1;
     else
@@ -595,6 +597,19 @@ void Properties::on_flacPlayerButton_clicked()
     QString file = QFileDialog::getOpenFileName(this, tr("Select the program with which you want to use for playing FLAC-Files"), p);
     if (file.length()) {
         ui.flacPlayer->setText(file);
+        Change();
+    }
+}
+
+void Properties::on_oggPlayerButton_clicked()
+{
+    QString p = ui.oggPlayer->text();
+    if (p.length() == 0) {
+        p = QDir::homePath();
+    }
+    QString file = QFileDialog::getOpenFileName(this, tr("Select the program with which you want to use for playing OGG-Files"), p);
+    if (file.length()) {
+        ui.oggPlayer->setText(file);
         Change();
     }
 }

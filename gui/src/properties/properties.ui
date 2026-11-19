@@ -256,8 +256,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>753</width>
-            <height>450</height>
+            <width>741</width>
+            <height>474</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -269,6 +269,47 @@
              <property name="verticalSpacing">
               <number>0</number>
              </property>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_65">
+               <property name="text">
+                <string>FLAC-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_21">
+               <property name="text">
+                <string>MP3-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_66">
+               <property name="text">
+                <string>Wave-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="wavePlayer"/>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="wavePlayerButton">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../resources.qrc">
+                 <normaloff>:/icons/resources/folder-open-16.png</normaloff>:/icons/resources/folder-open-16.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="2">
               <widget class="QPushButton" name="flacPlayerButton">
                <property name="text">
@@ -286,9 +327,6 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="aiffPlayer"/>
-             </item>
              <item row="0" column="2">
               <widget class="QPushButton" name="mp3PlayerButton">
                <property name="text">
@@ -303,23 +341,6 @@
                  <width>16</width>
                  <height>16</height>
                 </size>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="mp3Player"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_58">
-               <property name="text">
-                <string>AIFF-Player:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_65">
-               <property name="text">
-                <string>FLAC-Player:</string>
                </property>
               </widget>
              </item>
@@ -340,28 +361,34 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_66">
-               <property name="text">
-                <string>Wave-Player:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_21">
-               <property name="text">
-                <string>MP3-Player:</string>
-               </property>
-              </widget>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="mp3Player"/>
              </item>
              <item row="2" column="1">
               <widget class="QLineEdit" name="flacPlayer"/>
              </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="wavePlayer"/>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="aiffPlayer"/>
              </item>
-             <item row="3" column="2">
-              <widget class="QPushButton" name="wavePlayerButton">
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_58">
+               <property name="text">
+                <string>AIFF-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_67">
+               <property name="text">
+                <string>Ogg-Player:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="oggPlayer"/>
+             </item>
+             <item row="4" column="2">
+              <widget class="QPushButton" name="oggPlayerButton">
                <property name="text">
                 <string/>
                </property>

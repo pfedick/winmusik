@@ -203,7 +203,7 @@ int MassImport::load(uint8_t DeviceType, uint32_t DeviceId, uint8_t Page, uint16
     Path.trimRight("/");
     Path.trimRight("\\");
     Path.appendf("/%02u/%03u/", (uint32_t)(DeviceId / 100), DeviceId);
-    Pattern = "/^.*\\.(mp3|aiff?|flac|wav)$/i";
+    Pattern = "/^.*\\.(mp3|aiff?|flac|wav|ogg)$/i";
     pplib::Dir Dir;
     int count = 0;
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));

@@ -187,6 +187,7 @@ public:
     pplib::String AIFFPlayer;
     pplib::String FlacPlayer;
     pplib::String WavePlayer;
+    pplib::String OggPlayer;
     pplib::String Locale;
     pplib::String UserName;
     pplib::String UserCompany;

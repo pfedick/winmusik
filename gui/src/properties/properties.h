@@ -64,6 +64,7 @@ private slots:
     void on_aiffPlayerButton_clicked();
     void on_flacPlayerButton_clicked();
     void on_wavePlayerButton_clicked();
+    void on_oggPlayerButton_clicked();
 
     void on_tmpPathButton_clicked();
     void on_addDirectory_clicked();
@@ -196,6 +197,13 @@ private slots:
     {
         Change();
     };
+
+    // Ogg
+    void on_oggPlayer_textChanged(const QString&)
+    {
+        Change();
+    };
+
     void on_writeID3_stateChanged(int)
     {
         Change();

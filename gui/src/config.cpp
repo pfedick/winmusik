@@ -167,6 +167,7 @@ void Config::save()
     c.add("mp3", "aiffplayer", (const char*)AIFFPlayer);
     c.add("mp3", "flacplayer", (const char*)FlacPlayer);
     c.add("mp3", "waveplayer", (const char*)WavePlayer);
+    c.add("mp3", "oggplayer", (const char*)OggPlayer);
     c.add("mp3", "readid3tag", ReadId3Tag);
     c.add("mp3", "bWriteID3Tags", bWriteID3Tags);
     c.add("mp3", "removeoriginalid3tags", bRemoveOriginalId3Tags);
@@ -302,6 +303,7 @@ void Config::load()
     AIFFPlayer = c.getFromSection("mp3", "aiffplayer", "");
     FlacPlayer = c.getFromSection("mp3", "flacplayer", "");
     WavePlayer = c.getFromSection("mp3", "waveplayer", "");
+    OggPlayer = c.getFromSection("mp3", "oggplayer", "");
     ReadId3Tag = c.getIntFromSection("mp3", "readid3tag", 2);
     bWriteID3Tags = c.getBoolFromSection("mp3", "bWriteID3Tags", true);
     bRemoveOriginalId3Tags = c.getBoolFromSection("mp3", "removeoriginalid3tags", false);
