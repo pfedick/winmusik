@@ -631,8 +631,8 @@ void Edit::resizeEvent(QResizeEvent* event)
     w -= (30 + space);
     trackList->setColumnWidth(TRACKLIST_YEAR, 40);
     w -= (40 + space);
-    trackList->setColumnWidth(TRACKLIST_BITRATE_ROW, 30);
-    w -= (30 + space);
+    trackList->setColumnWidth(TRACKLIST_BITRATE_ROW, 40);
+    w -= (40 + space);
 
     trackList->setColumnWidth(TRACKLIST_RATING_ROW, 70);
     w -= (70 + space);
@@ -1214,6 +1214,8 @@ static void addFileIfSuitable(const pplib::String& filename, std::list<pplib::St
     else if (lowerFile.right(4) == ".wav")
         fileList.push_back(filename);
     else if (lowerFile.right(5) == ".flac")
+        fileList.push_back(filename);
+    else if (lowerFile.right(5) == ".ogg")
         fileList.push_back(filename);
 }
 
@@ -2596,6 +2598,10 @@ void Edit::on_contextSynchronizeKeys_triggered()
                     if (Ti.CoverPreview.size() == 0) {
                         Ti.CoverPreview.copy(tinfo.Ti.CoverPreview);
                     }
+                    if (Ti.AudioFormat != tinfo.Ti.AudioFormat) {
+                        Ti.AudioFormat = tinfo.Ti.AudioFormat;
+                        modified = true;
+                    }
                     if (modified) {
                         try {
                             wm->TitleStore.Put(Ti);
@@ -2808,7 +2814,7 @@ void Edit::on_coverSearchAmazon_clicked()
     Artist.trim();
     pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "http://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
+    Url = "https://www.amazon.de/s/?ie=UTF8&index=digital-music&keywords=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2840,7 +2846,7 @@ void Edit::on_coverSearchDiscogs_clicked()
     Version.trim();
     pplib::String Query = Artist + " " + Title + " " + Version;
     Query.replace("&", " ");
-    Url = "http://www.discogs.com/search/?q=" + pplib::UrlEncode(Query);
+    Url = "https://www.discogs.com/search/?q=" + pplib::UrlEncode(Query);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 
@@ -2854,7 +2860,7 @@ void Edit::on_coverSearchBeatport_clicked()
     Artist.trim();
     pplib::String Title = ui.title->text();
     Title.trim();
-    Url = "http://www.beatport.com/search?query=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
+    Url = "https://www.beatport.com/search?query=" + pplib::UrlEncode(Artist) + "+" + pplib::UrlEncode(Title);
     QDesktopServices::openUrl(QUrl(Url, QUrl::TolerantMode));
 }
 

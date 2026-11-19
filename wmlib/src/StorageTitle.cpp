@@ -43,6 +43,7 @@ namespace winmusik
  * - Version 3: Tags hinzugekommen
  * - Version 4: Tonart (Key) hinzugekommen
  * - Version 5: EnergyLevel hinzugekommen
+ * - Version 6: AudioFormat hinzugekommen
  */
 
 /*!\var DataTitle::Artist
@@ -280,13 +281,13 @@ DataTitle::DataTitle()
  */
 {
     Clear();
-    formatversion = 5;
+    formatversion = 6;
 }
 
 DataTitle::DataTitle(const DataTitle& other)
     : CStorageItem(other)
 {
-    formatversion = 5;
+    formatversion = 6;
     CopyFrom(other);
 }
 
@@ -301,6 +302,7 @@ DataTitle::~DataTitle()
 
 DataTitle& DataTitle::operator=(const DataTitle& other)
 {
+    formatversion = 6;
     CopyFrom(other);
     return *this;
 }
@@ -339,6 +341,7 @@ bool DataTitle::operator==(const DataTitle& other) const
     if (Flags != other.Flags) return false;
     if (Key != other.Key) return false;
     if (EnergyLevel != other.EnergyLevel) return false;
+    if (AudioFormat != other.AudioFormat) return false;
     return true;
 }
 
@@ -387,9 +390,10 @@ void DataTitle::Clear()
     ImportData = 0;
     CoverPreview.clear();
     CStorageItem::Clear();
-    formatversion = 5;
+    formatversion = 6;
     Key = 0;
     EnergyLevel = 0;
+    AudioFormat = AudioFormatType::Unknown;
 }
 
 void DataTitle::CopyFrom(const DataTitle& other)
@@ -442,6 +446,7 @@ void DataTitle::CopyDataFrom(const DataTitle& other)
     Size = other.Size;
     Key = other.Key;
     EnergyLevel = other.EnergyLevel;
+    AudioFormat = other.AudioFormat;
 }
 
 void DataTitle::SetTitle(const pplib::String& title)
@@ -513,14 +518,14 @@ void DataTitle::Export(pplib::ByteArray& bin)
  */
 {
     // Zunächst den benötigten Speicher berechnen
-    int size = 70;
+    int size = 71;
     int p = 0;
     int lenArtist = 0;
     int lenTitle = 0;
     int lenRemarks = 0;
     int lenAlbum = 0;
     int lenTags = 0;
-    formatversion = 5;
+    formatversion = 6;
 
     lenArtist = static_cast<int>(Artist.size());
     lenTitle = static_cast<int>(Title.size());
@@ -553,7 +558,8 @@ void DataTitle::Export(pplib::ByteArray& bin)
     pplib::Poke32(a + 52, Size);
     pplib::Poke8(a + 56, Key);
     pplib::Poke8(a + 57, EnergyLevel);
-    p = 58;
+    pplib::Poke8(a + 58, static_cast<uint8_t>(AudioFormat));
+    p = 59;
     pplib::Poke16(a + p, lenArtist & 0xffff);
     if (lenArtist) strncpy(a + p + 2, (const char*)Artist, lenArtist);
     p += lenArtist + 2;
@@ -586,7 +592,7 @@ void DataTitle::Import(const pplib::ByteArrayPtr& bin, int version)
  * \returns Konnten die Daten erfolgreich importiert werden, wird 1 zurückgegeben, sonst 0.
  */
 {
-    if (version < 1 || version > 5) {
+    if (version < 1 || version > 6) {
         throw UnknownRecordVersionException("%d", version);
     }
     size_t size = bin.size();
@@ -650,6 +656,10 @@ void DataTitle::Import(const pplib::ByteArrayPtr& bin, int version)
     if (version >= 5) {
         EnergyLevel = pplib::Peek8(a + 57);
         p = 58;
+    }
+    if (version >= 6) {
+        AudioFormat = static_cast<AudioFormatType>(pplib::Peek8(a + 58));
+        p = 59;
     }
     len = pplib::Peek16(a + p);
     if (len) Artist.set(a + p + 2, len);

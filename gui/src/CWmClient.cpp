@@ -852,7 +852,7 @@ pplib::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId,
                           (const char*)Path);
         return pplib::String();
     }
-    Pattern.setf("/^%03u-.*\\.(mp3|aiff?|flac|wav)$/i", Track);
+    Pattern.setf("/^%03u-.*\\.(mp3|aiff?|flac|wav|ogg)$/i", Track);
     if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
@@ -860,14 +860,14 @@ pplib::String CWmClient::GetAudioFilename(uint8_t DeviceType, uint32_t DeviceId,
         return entry->File;
     }
 
-    Pattern.setf("/^%03u\\.(mp3|aiff?|flac|wav)$/i", Track);
+    Pattern.setf("/^%03u\\.(mp3|aiff?|flac|wav|ogg)$/i", Track);
     if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",
                           (const char*)entry->File);
         return entry->File;
     }
-    Pattern.setf("/^%03u-.*\\.(mp3|aiff?|flac|wav)$/i8", Track);
+    Pattern.setf("/^%03u-.*\\.(mp3|aiff?|flac|wav|ogg)$/i8", Track);
     if (auto entry = Dir.findRegExp(Pattern); entry.has_value()) {
         if (wmlog)
             wmlog->printf(pplib::Logger::DEBUG, 3, "CWMClient", "GetAudioFilename", __FILE__, __LINE__, "Gefunden: %s",

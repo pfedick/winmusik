@@ -117,6 +117,15 @@ public:
 /*******************************************************
  * TITLES                                              *
  *******************************************************/
+enum class AudioFormatType : uint8_t
+{
+    Unknown = 0,
+    MP3,
+    AIFF,
+    WAV,
+    FLAC,
+    OGG
+};
 
 class DataTitle : public CStorageItem
 {
@@ -150,6 +159,7 @@ public:
     uint8_t Flags;
     uint8_t Key;
     uint8_t EnergyLevel;
+    AudioFormatType AudioFormat;
 
     DataTitle();
     DataTitle(const DataTitle& other);

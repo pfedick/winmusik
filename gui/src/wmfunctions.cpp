@@ -393,6 +393,26 @@ bool getTrackInfoFromFile(TrackInfo& info, const pplib::String& Filename, int pr
                 info.Version = "Maxi";
         }
     }
+    switch (ai.Format) {
+    case pplib::AudioInfo::AudioFormat::MP3:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::MP3;
+        break;
+    case pplib::AudioInfo::AudioFormat::FLAC:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::FLAC;
+        break;
+    case pplib::AudioInfo::AudioFormat::WAVE:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::WAV;
+        break;
+    case pplib::AudioInfo::AudioFormat::AIFF:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::AIFF;
+        break;
+    case pplib::AudioInfo::AudioFormat::OGG:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::OGG;
+        break;
+    default:
+        info.Ti.AudioFormat = de::pfp::winmusik::AudioFormatType::Unknown;
+        break;
+    }
     return true;
 }
 

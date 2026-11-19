@@ -390,7 +390,7 @@ void Edit::UpdateTrackListing()
     ui.statsLength->setText(Tmp);
     Tmp.setf("%0.1f", (double)size / 1048576.0);
     ui.statsSize->setText(Tmp);
-    // resizeEvent(NULL);
+    resizeEvent(NULL);
     trackList->sortByColumn(0, Qt::AscendingOrder);
     trackList->setSortingEnabled(true);
 
@@ -464,7 +464,18 @@ void Edit::RenderTrack(WMTreeItem* item, const DataTitle& title)
     Text.setf("%d", (int)title.ReleaseDate / 10000);
     item->setText(TRACKLIST_YEAR, Text);
 
-    Text.setf("%d", (int)title.Bitrate);
+    if (title.AudioFormat == AudioFormatType::MP3)
+        Text.setf("%d", (int)title.Bitrate);
+    else if (title.AudioFormat == AudioFormatType::FLAC)
+        Text = "FLAC";
+    else if (title.AudioFormat == AudioFormatType::AIFF)
+        Text = "AIFF";
+    else if (title.AudioFormat == AudioFormatType::WAV)
+        Text = "WAVE";
+    else if (title.AudioFormat == AudioFormatType::OGG)
+        Text = "OGG";
+    else
+        Text.setf("%d", (int)title.Bitrate);
     item->setText(TRACKLIST_BITRATE_ROW, Text);
     item->setTextAlignment(TRACKLIST_BITRATE_ROW, Qt::AlignRight | Qt::AlignCenter);
 
@@ -698,6 +709,7 @@ void Edit::SaveEditorTrack()
         if (tinfo.Ti.Length > 0 && tinfo.Ti.Length != Ti.Length) {
             Ti.Length = tinfo.Ti.Length;
         }
+        Ti.AudioFormat = tinfo.Ti.AudioFormat;
         /*
         if (Cover.isNull()) {
             Ti.CoverPreview.clear();
