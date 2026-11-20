@@ -197,15 +197,23 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
         } else if (track.exists("release/image/uri")) {
             meta.CoverUrl = track.getString("release/image/uri");
         }
-
-        // 9. Artists
+        // 9. Artists (Remixer aus mix_name herausfiltern; Fallback auf alle Artists bei Self-Remix)
         if (track.exists("artists")) {
-            int i = 0;
-            while (track.exists(pplib::ToString("artists/%d", i))) {
-                const pplib::AssocArray& artist = track.getAssocArray(pplib::ToString("artists/%d", i));
-                if (meta.Artist.size() > 0) meta.Artist += ", ";
-                meta.Artist.append(artist.get("name").toString());
-                i++;
+            pplib::String allArtists;
+            pplib::VariantArray artistArray = track.getVariantArray("artists");
+            for (auto& item : artistArray) {
+                const pplib::AssocArray& artist = item.toAssocArray();
+                pplib::String artistName = artist.get("name").toString().trimmed();
+                if (artistName.isEmpty()) continue;
+                if (allArtists.size() > 0) allArtists += ", ";
+                allArtists.append(artistName);
+                if (!meta.Version.contains(artistName, true)) {
+                    if (meta.Artist.size() > 0) meta.Artist += ", ";
+                    meta.Artist.append(artistName);
+                }
+            }
+            if (meta.Artist.isEmpty()) {
+                meta.Artist = allArtists;
             }
         }
     }

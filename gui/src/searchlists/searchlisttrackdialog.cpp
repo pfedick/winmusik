@@ -95,6 +95,27 @@ void SearchlistTrackDialog::setFromClipboard()
     RegExpClipboard clip;
     copyFromClipboard(clip);
     if (wm_main->RegExpCapture.match(clip, match)) {
+        if (match.ShopURL.notEmpty()) {
+            pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
+            MetaData meta;
+            if (CoverDownload(match.ShopURL, coverfile, meta)) {
+                match.Length = meta.Length;
+                Track.CoverFilename = meta.CoverFile;
+                ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
+                if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
+                if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
+                if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
+                match.Genre = meta.Genre;
+                match.Artist = meta.Artist;
+                match.Album = meta.Album;
+                match.Title = meta.Title;
+                match.Version = meta.Version;
+                match.ReleaseDate = meta.ReleaseDate;
+                match.Label = meta.Label;
+            }
+        }
+
         ui.artistEdit->setText(match.Artist);
         ui.titleEdit->setText(match.Title);
         ui.versionEdit->setText(match.Version);
@@ -106,20 +127,6 @@ void SearchlistTrackDialog::setFromClipboard()
         // ui.tagsEdit->setText(match.Tags);
         // ui.commentEdit->setText(match.Comment);
         if (match.Length > 0) ui.lengthEdit->setText(pplib::ToString("%i:%02i", match.Length / 60, match.Length % 60));
-
-        if (match.ShopURL.notEmpty()) {
-            pplib::String uuid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-            pplib::String coverfile = wm_main->conf.SearchListCoverPath + "/" + uuid + ".jpg";
-            MetaData meta;
-            if (CoverDownload(match.ShopURL, coverfile, meta)) {
-                ui.lengthEdit->setText(pplib::ToString("%i:%02i", meta.Length / 60, meta.Length % 60));
-                Track.CoverFilename = meta.CoverFile;
-                ui.coverwidget->setPixmapFromFile(Track.CoverFilename);
-                if (meta.Bpm.notEmpty()) ui.bpmEdit->setText(meta.Bpm);
-                if (meta.Key.notEmpty()) ui.keyEdit->setText(meta.Key);
-                if (meta.Genre.notEmpty()) ui.genreEdit->setText(meta.Genre);
-            }
-        }
     }
 }
 
