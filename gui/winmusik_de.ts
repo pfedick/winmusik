@@ -3518,22 +3518,22 @@ Bitte prüfen Sie auch die Dateiendung. WinMusik unterstützt nur .png, .jpg und
 <context>
     <name>Properties</name>
     <message>
-        <location filename="src/properties/properties.cpp" line="307"/>
+        <location filename="src/properties/properties.cpp" line="308"/>
         <source>WinMusik - Internal error!</source>
         <translation>WinMusik - Interner Fehler!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="308"/>
+        <location filename="src/properties/properties.cpp" line="309"/>
         <source>An internal data pointer is NULL, this should never happen and is a Bug. Please write a bugreport.</source>
         <translation>Ein interner Datenzeiger ist NULL. Dies sollte niemals vorkommen und ist ein Bug. Bitte schreiben Sie eine Bugmeldung.</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="482"/>
+        <location filename="src/properties/properties.cpp" line="484"/>
         <source>Could not save configuration!</source>
         <translation>Konnte Konfigurationsdatei nicht speichern!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="525"/>
+        <location filename="src/properties/properties.cpp" line="527"/>
         <source>Select directory for WinMusik database.
 Attention: Changing this directory can result in loss of data!</source>
         <translation>Bitte geben Sie das Verzeichnis an, in dem sich die WinMusik Datenbank befindet
@@ -3541,57 +3541,62 @@ Attention: Changing this directory can result in loss of data!</source>
 ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="539"/>
+        <location filename="src/properties/properties.cpp" line="541"/>
         <source>Select directory with your files for device type: %s</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, in dem die Dateien von diesem Audiotyp zu finden sind: %s</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="569"/>
+        <location filename="src/properties/properties.cpp" line="571"/>
         <source>Select the program with which you want to use for playing AIFF-Files</source>
         <translation>Bitte wählen Sie das Programm aus, mit dem Sie AIFF-Dateien abspielen wollen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="556"/>
+        <location filename="src/properties/properties.cpp" line="558"/>
         <source>Select the program with which you want to use for playing MP3-Files</source>
         <translation>Bitte wählen Sie einen Player aus, mit dem Sie MP3-Dateien abspielen wollen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="582"/>
+        <location filename="src/properties/properties.cpp" line="584"/>
         <source>Select the program with which you want to use for playing WAV-Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="595"/>
+        <location filename="src/properties/properties.cpp" line="597"/>
         <source>Select the program with which you want to use for playing FLAC-Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="608"/>
+        <location filename="src/properties/properties.cpp" line="610"/>
+        <source>Select the program with which you want to use for playing OGG-Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/properties/properties.cpp" line="623"/>
         <source>Select directory for temporary files</source>
         <translation>Bitte wählen Sie aus, in welchem Verzeichnis temporäre Daten gespeichert werden sollen</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="622"/>
+        <location filename="src/properties/properties.cpp" line="637"/>
         <source>Select directory for searchlist covers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="662"/>
+        <location filename="src/properties/properties.cpp" line="677"/>
         <source>Select the directory you want to add to the harddisk search</source>
         <translation>Bitte wählen Sie das Verzeichnis aus, das bei der Festplattensuche durchsucht werden soll</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="291"/>
+        <location filename="src/properties/properties.cpp" line="292"/>
         <source>WinMusik - Change database directory</source>
         <translation>WinMusik - Datenbank-Verzeichnis ändern</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="292"/>
+        <location filename="src/properties/properties.cpp" line="293"/>
         <source>Are you sure you want to change the directory of the database? This could result in loss of data!</source>
         <translation>Sind Sie sicher, dass Sie das Datenbank-Verzeichnis ändern wollen? Dies kann zu Datenverlust führen!</translation>
     </message>
     <message>
-        <location filename="src/properties/properties.cpp" line="636"/>
+        <location filename="src/properties/properties.cpp" line="651"/>
         <source>Select location and filename for debug logfile</source>
         <translation>Bitte Pfad und Dateinamen für das Logfile auswählen</translation>
     </message>
@@ -4229,28 +4234,28 @@ ACHTUNG: Eine Änderung des Verzeichnisses kann zum Verlust von Daten führen!</
 <context>
     <name>QObject</name>
     <message>
-        <location filename="src/wmfunctions.cpp" line="489"/>
+        <location filename="src/wmfunctions.cpp" line="490"/>
         <source>Could not save cover!</source>
         <translation>Konnte Cover nicht speichern!</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="577"/>
+        <location filename="src/wmfunctions.cpp" line="578"/>
         <source>Exception:</source>
         <translation>Fehler:</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="581"/>
+        <location filename="src/wmfunctions.cpp" line="582"/>
         <source>Description:</source>
         <translation>Beschreibung:</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="584"/>
-        <location filename="src/wmfunctions.cpp" line="595"/>
+        <location filename="src/wmfunctions.cpp" line="585"/>
+        <location filename="src/wmfunctions.cpp" line="596"/>
         <source>WinMusik Error</source>
         <translation>WinMusik Fehler</translation>
     </message>
     <message>
-        <location filename="src/wmfunctions.cpp" line="593"/>
+        <location filename="src/wmfunctions.cpp" line="594"/>
         <source>an error occured</source>
         <translation>Es ist ein Fehler aufgetreten</translation>
     </message>

@@ -53,8 +53,51 @@ static bool beatport_debug = false;
 
 void SetBeatportSession(const pplib::String& clearance, const pplib::String& userAgent)
 {
-    beatport_clearance = clearance;
-    beatport_userAgent = userAgent;
+    beatport_clearance = clearance.trimmed();
+    beatport_userAgent = userAgent.trimmed();
+}
+
+static void initBeatportRequest(pplib::HttpRequest& req)
+{
+    if (beatport_clearance.notEmpty()) {
+        req.cookies["cf_clearance"] = beatport_clearance;
+    }
+    if (beatport_userAgent.notEmpty()) {
+        req.userAgent = beatport_userAgent;
+    }
+
+    pplib::String chromeMajor = "157";
+    pplib::String chromeFull = "157.0.0.0";
+    pplib::RegEx::MatchVector uaMatch;
+    if (pplib::RegEx::capture("/Chrome\\/([0-9]+)\\.([0-9]+\\.[0-9]+\\.[0-9]+)/", req.userAgent, uaMatch)) {
+        chromeMajor = uaMatch[1];
+        chromeFull = uaMatch[1] + "." + uaMatch[2];
+    } else if (pplib::RegEx::capture("/Chrome\\/([0-9]+)/", req.userAgent, uaMatch)) {
+        chromeMajor = uaMatch[1];
+        chromeFull = uaMatch[1] + ".0.0.0";
+    }
+
+    req.headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/jxl,image/avif,image/webp,image/apng,*/"
+                            "*;q=0.8,application/signed-exchange;v=b3;q=0.7";
+    req.headers["Accept-Language"] = "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7";
+    req.headers["Priority"] = "u=0, i";
+    req.headers["Sec-CH-UA"] = pplib::ToString("\"Not-A.Brand\";v=\"99\", \"Google Chrome\";v=\"%s\", \"Chromium\";v=\"%s\"",
+                                               (const char*)chromeMajor, (const char*)chromeMajor);
+    req.headers["Sec-CH-UA-Arch"] = "\"x86\"";
+    req.headers["Sec-CH-UA-Bitness"] = "\"64\"";
+    req.headers["Sec-CH-UA-Full-Version"] = pplib::ToString("\"%s\"", (const char*)chromeFull);
+    req.headers["Sec-CH-UA-Full-Version-List"] =
+        pplib::ToString("\"Not-A.Brand\";v=\"99.0.0.0\", \"Google Chrome\";v=\"%s\", \"Chromium\";v=\"%s\"", (const char*)chromeFull,
+                        (const char*)chromeFull);
+    req.headers["Sec-CH-UA-Mobile"] = "?0";
+    req.headers["Sec-CH-UA-Model"] = "\"\"";
+    req.headers["Sec-CH-UA-Platform"] = "\"Windows\"";
+    req.headers["Sec-CH-UA-Platform-Version"] = "\"19.0.0\"";
+    req.headers["Sec-Fetch-Dest"] = "document";
+    req.headers["Sec-Fetch-Mode"] = "navigate";
+    req.headers["Sec-Fetch-Site"] = "none";
+    req.headers["Sec-Fetch-User"] = "?1";
+    req.headers["Upgrade-Insecure-Requests"] = "1";
 }
 
 bool CoverDownload(const pplib::String& url, const pplib::String& targetfile)
@@ -171,12 +214,7 @@ void getBeatportMetaData(pplib::AssocArray& data, de::pfp::winmusik::MetaData& m
 bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile, MetaData& meta)
 {
     pplib::HttpRequest req;
-    if (beatport_clearance.notEmpty()) {
-        req.cookies["cf_clearance"] = beatport_clearance;
-    }
-    if (beatport_userAgent.notEmpty()) {
-        req.userAgent = beatport_userAgent;
-    }
+    initBeatportRequest(req);
 
     if (beatport_debug) {
         pplib::PrintDebug("Downloading Beatport cover from: %s\n", (const char*)url);
@@ -237,12 +275,7 @@ bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targe
 bool CoverDownload_Beatport(const pplib::String& url, const pplib::String& targetfile)
 {
     pplib::HttpRequest req;
-    if (beatport_clearance.notEmpty()) {
-        req.cookies["cf_clearance"] = beatport_clearance;
-    }
-    if (beatport_userAgent.notEmpty()) {
-        req.userAgent = beatport_userAgent;
-    }
+    initBeatportRequest(req);
 
     pplib::HttpResponse response = pplib::HttpClient::get(url, req);
     if (response.statusCode != 200) return false;

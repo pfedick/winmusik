@@ -473,8 +473,8 @@ int Properties::Save()
     c->customMusicKey[25] = ui.customMusicalKey_25->text();
 
     // Beatport
-    c->beatport.clearance = ui.beatport_clearance->toPlainText();
-    c->beatport.userAgent = ui.beatport_userAgent->text();
+    c->beatport.clearance = ui.beatport_clearance->toPlainText().trimmed();
+    c->beatport.userAgent = ui.beatport_userAgent->text().trimmed();
 
     // Save
     try {
