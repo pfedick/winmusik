@@ -84,4 +84,24 @@ TEST_F(MusicalKeysTest, ID3TagTkeyNamesUseAsciiAccidentals)
     EXPECT_EQ(pplib::String("o"), MusicalKeys::ID3TagTkeyNameFlat(25));
 }
 
+TEST_F(MusicalKeysTest, EnumAliasesAndConversionsMatchLegacyIds)
+{
+    EXPECT_EQ(MusicalKey::GSharpMinor, MusicalKey::AFlatMinor);
+    EXPECT_EQ(MusicalKey::FSharp, MusicalKey::GFlat);
+    EXPECT_EQ(MusicalKey::DFlatMinor, MusicalKey::CSharpMinor);
+    EXPECT_EQ(0, MusicalKeys::toInt(MusicalKey::Unknown));
+    EXPECT_EQ(25, MusicalKeys::toInt(MusicalKey::None));
+
+    EXPECT_EQ(MusicalKey::Unknown, MusicalKeys::toMusicalKey(-1));
+    EXPECT_EQ(MusicalKey::Unknown, MusicalKeys::toMusicalKey(26));
+    EXPECT_EQ(MusicalKey::AMinor, MusicalKeys::toMusicalKey(15));
+    EXPECT_EQ(MusicalKey::AMinor, keys.key("8A"));
+    EXPECT_EQ(pplib::String("A♭m"), MusicalKeys::flatName(MusicalKey::AFlatMinor));
+    EXPECT_EQ(pplib::String("G♯m"), MusicalKeys::sharpName(MusicalKey::GSharpMinor));
+    EXPECT_EQ(pplib::String(" 1m"), MusicalKeys::openKeyName(MusicalKey::AMinor));
+    EXPECT_EQ(pplib::String("Am"), keys.keyName(MusicalKey::AMinor, musicKeyTypeMusicalSharps));
+    EXPECT_EQ(pplib::String("G#m"), MusicalKeys::ID3TagTkeyNameSharp(MusicalKey::GSharpMinor));
+    EXPECT_EQ(pplib::String("Abm"), MusicalKeys::ID3TagTkeyNameFlat(MusicalKey::AFlatMinor));
+}
+
 } // namespace

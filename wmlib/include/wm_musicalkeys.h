@@ -21,6 +21,7 @@
 #ifndef WM_MUSICALKEYS_H
 #define WM_MUSICALKEYS_H
 
+#include <cstdint>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -32,6 +33,46 @@ namespace pfp
 {
 namespace winmusik
 {
+
+enum class MusicalKey : uint8_t
+{
+    Unknown = 0,
+    GSharpMinor = 1,
+    AFlatMinor = GSharpMinor,
+    B = 2,
+    DSharpMinor = 3,
+    EFlatMinor = DSharpMinor,
+    FSharp = 4,
+    GFlat = FSharp,
+    ASharpMinor = 5,
+    BFlatMinor = ASharpMinor,
+    CSharp = 6,
+    DFlat = CSharp,
+    FMinor = 7,
+    GSharp = 8,
+    AFlat = GSharp,
+    CMinor = 9,
+    DSharp = 10,
+    EFlat = DSharp,
+    GMinor = 11,
+    ASharp = 12,
+    BFlat = ASharp,
+    DMinor = 13,
+    F = 14,
+    AMinor = 15,
+    C = 16,
+    EMinor = 17,
+    G = 18,
+    BMinor = 19,
+    D = 20,
+    FSharpMinor = 21,
+    GFlatMinor = FSharpMinor,
+    A = 22,
+    CSharpMinor = 23,
+    DFlatMinor = CSharpMinor,
+    E = 24,
+    None = 25
+};
 
 enum MusicKeyType
 {
@@ -54,14 +95,32 @@ public:
     void setCustomKeyName(int key, const pplib::String& name);
 
     pplib::String keyName(int id, MusicKeyType type) const;
+    pplib::String keyName(MusicalKey key, MusicKeyType type) const;
     int keyId(const pplib::String& name) const;
+    MusicalKey key(const pplib::String& name) const;
+
+    static constexpr MusicalKey toMusicalKey(int id) noexcept
+    {
+        if (id < 0 || id > 25) return MusicalKey::Unknown;
+        return static_cast<MusicalKey>(id);
+    }
+
+    static constexpr int toInt(MusicalKey key) noexcept
+    {
+        return static_cast<int>(key);
+    }
 
     static pplib::String sharpName(int id);
+    static pplib::String sharpName(MusicalKey key);
     static pplib::String flatName(int id);
+    static pplib::String flatName(MusicalKey key);
     static pplib::String openKeyName(int id);
+    static pplib::String openKeyName(MusicalKey key);
 
     static pplib::String ID3TagTkeyNameSharp(int id);
+    static pplib::String ID3TagTkeyNameSharp(MusicalKey key);
     static pplib::String ID3TagTkeyNameFlat(int id);
+    static pplib::String ID3TagTkeyNameFlat(MusicalKey key);
 };
 
 } // namespace winmusik

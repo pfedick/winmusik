@@ -231,9 +231,19 @@ pplib::String MusicalKeys::keyName(int id, MusicKeyType type) const
     return "";
 }
 
+pplib::String MusicalKeys::keyName(MusicalKey key, MusicKeyType type) const
+{
+    return keyName(toInt(key), type);
+}
+
 pplib::String MusicalKeys::sharpName(int id)
 {
     return keyNameSharps(id);
+}
+
+pplib::String MusicalKeys::sharpName(MusicalKey key)
+{
+    return keyNameSharps(toInt(key));
 }
 
 pplib::String MusicalKeys::flatName(int id)
@@ -241,9 +251,19 @@ pplib::String MusicalKeys::flatName(int id)
     return keyNameFlats(id);
 }
 
+pplib::String MusicalKeys::flatName(MusicalKey key)
+{
+    return keyNameFlats(toInt(key));
+}
+
 pplib::String MusicalKeys::openKeyName(int id)
 {
     return keyNameOpenKey(id);
+}
+
+pplib::String MusicalKeys::openKeyName(MusicalKey key)
+{
+    return keyNameOpenKey(toInt(key));
 }
 
 pplib::String MusicalKeys::ID3TagTkeyNameSharp(int id)
@@ -256,6 +276,11 @@ pplib::String MusicalKeys::ID3TagTkeyNameSharp(int id)
     return k;
 }
 
+pplib::String MusicalKeys::ID3TagTkeyNameSharp(MusicalKey key)
+{
+    return ID3TagTkeyNameSharp(toInt(key));
+}
+
 pplib::String MusicalKeys::ID3TagTkeyNameFlat(int id)
 {
     pplib::String k = keyNameFlats(id);
@@ -264,6 +289,16 @@ pplib::String MusicalKeys::ID3TagTkeyNameFlat(int id)
     k.replace("none", "o");
     k.trim();
     return k;
+}
+
+pplib::String MusicalKeys::ID3TagTkeyNameFlat(MusicalKey key)
+{
+    return ID3TagTkeyNameFlat(toInt(key));
+}
+
+MusicalKey MusicalKeys::key(const pplib::String& name) const
+{
+    return toMusicalKey(keyId(name));
 }
 
 int MusicalKeys::keyId(const pplib::String& name) const
