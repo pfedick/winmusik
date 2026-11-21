@@ -88,15 +88,15 @@ static inline pplib::String keyNameFlats(int id)
 {
     switch (id) {
     case 1:
-        return "A♭";
+        return "A♭m";
     case 2:
         return "B";
     case 3:
-        return "E♭";
+        return "E♭m";
     case 4:
         return "G♭";
     case 5:
-        return "B♭";
+        return "B♭m";
     case 6:
         return "D♭";
     case 7:
@@ -128,11 +128,11 @@ static inline pplib::String keyNameFlats(int id)
     case 20:
         return "D";
     case 21:
-        return "G♭";
+        return "G♭m";
     case 22:
         return "A";
     case 23:
-        return "D♭";
+        return "D♭m";
     case 24:
         return "E";
     case 25:
@@ -293,7 +293,7 @@ int MusicalKeys::keyId(const pplib::String& name) const
         return 5;
     else if (k == "c#" || k == "c#maj" || k == "db" || k == "3b" || k == "8d")
         return 6;
-    else if (k == "fm" || k == "fmin" || k == "4a" || k == "6m" || k == "9m")
+    else if (k == "fm" || k == "fmin" || k == "4a" || k == "9m")
         return 7;
     else if (k == "g#" || k == "g#maj" || k == "ab" || k == "4b" || k == "9d")
         return 8;
@@ -315,7 +315,7 @@ int MusicalKeys::keyId(const pplib::String& name) const
         return 16;
     else if (k == "em" || k == "emin" || k == "9a" || k == "2m")
         return 17;
-    else if (k == "g" || k == "gmaj" || k == "2b" || k == "2d")
+    else if (k == "g" || k == "gmaj" || k == "9b" || k == "2d")
         return 18;
     else if (k == "bm" || k == "bmin" || k == "10a" || k == "3m")
         return 19;
